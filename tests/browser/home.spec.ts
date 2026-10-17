@@ -10,8 +10,8 @@ test('health responde JSON pela mesma origem da tela', async ({ request }) => {
 test('tela inicial apresenta o resultado do backend real', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Seu escritório, bem organizado.' })).toBeVisible();
+  await page.goto('/status');
+  await expect(page.getByRole('heading', { name: 'Conexão do sistema' })).toBeVisible();
   await expect(page.getByRole('status')).toContainText('API disponível');
   await expect(page.getByRole('button', { name: 'Verificar novamente' })).toBeEnabled();
   expect(errors).toEqual([]);
@@ -19,7 +19,7 @@ test('tela inicial apresenta o resultado do backend real', async ({ page }) => {
 
 test('falha da API fica visível e permite tentar novamente', async ({ page }) => {
   await page.route('**/api/health', route => route.fulfill({ status: 503, json: { error: { code: 'UNAVAILABLE' } } }));
-  await page.goto('/');
+  await page.goto('/status');
   await expect(page.getByRole('alert')).toContainText('Não foi possível verificar a API');
   await page.unroute('**/api/health');
   await page.getByRole('button', { name: 'Tentar novamente' }).click();
@@ -28,20 +28,20 @@ test('falha da API fica visível e permite tentar novamente', async ({ page }) =
 
 test('HTML no endereço da API não é exibido como sucesso', async ({ page }) => {
   await page.route('**/api/health', route => route.fulfill({ status: 200, contentType: 'text/html', body: '<html>SPA</html>' }));
-  await page.goto('/');
+  await page.goto('/status');
   await expect(page.getByRole('alert')).toBeVisible();
   await expect(page.getByText('API disponível', { exact: true })).toHaveCount(0);
 });
 
 test('JSON sem o contrato esperado é tratado como falha', async ({ page }) => {
   await page.route('**/api/health', route => route.fulfill({ json: { data: { status: 'ok' } } }));
-  await page.goto('/');
+  await page.goto('/status');
   await expect(page.getByRole('alert')).toBeVisible();
 });
 
 test('a consulta tem limite de tempo e permite repetir após timeout', async ({ page }) => {
   await page.route('**/api/health', () => {});
-  await page.goto('/');
+  await page.goto('/status');
   await expect(page.getByRole('alert')).toBeVisible({ timeout: 8000 });
   await page.unroute('**/api/health');
   await page.getByRole('button', { name: 'Tentar novamente' }).click();
@@ -49,7 +49,7 @@ test('a consulta tem limite de tempo e permite repetir após timeout', async ({ 
 });
 
 test('perda de conexão não declara sucesso e permite recuperação', async ({ page, context }) => {
-  await page.goto('/');
+  await page.goto('/status');
   await expect(page.getByRole('status')).toContainText('API disponível');
   await context.setOffline(true);
   await page.getByRole('button', { name: 'Verificar novamente' }).click();
@@ -62,7 +62,7 @@ test('perda de conexão não declara sucesso e permite recuperação', async ({ 
 for (const width of [360, 768, 1440]) {
   test(`tela utilizável sem corte horizontal em ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto('/');
+    await page.goto('/status');
     await expect(page.getByRole('status')).toContainText('API disponível');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await page.getByRole('button', { name: 'Verificar novamente' }).focus();

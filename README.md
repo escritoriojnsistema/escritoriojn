@@ -1,6 +1,6 @@
 # Escritório JN
 
-Base nova da **Etapa 01** do manual v4: React + Vite + TypeScript, API Express `/api` e tela inicial responsiva. O indicador de saúde consulta a API real. Não há login, dados de negócio ou banco conectado nesta etapa.
+Base nova das **Etapas 01 e 02** do manual v4: React + Vite + TypeScript, API Express `/api` e telas públicas responsivas. O indicador de saúde em `/status` consulta a API real. Não há login, dados de negócio ou banco conectado nesta etapa.
 
 ## Executar
 
@@ -12,6 +12,7 @@ npm run dev
 ```
 
 - Aplicação: http://localhost:3000
+- Status da API na interface: http://localhost:3000/status
 - Health: http://localhost:3000/api/health
 - Resposta: `{"data":{"status":"ok","service":"escritorio-jn-api"}}`
 
@@ -35,6 +36,16 @@ npm start
 
 `HOST` e `PORT` são opcionais nesse comando. `.env.example` documenta os nomes; nenhum carregador de `.env` é necessário. Exemplo: `PORT=3002 npm start`. O servidor isolado não serve o frontend.
 
+## Telas e Vercel
+
+As rotas `/`, `/login`, `/login-cliente` e `/recuperar-senha?area=client` seguem a composição pública de https://escritoriojnsite.vercel.app/. A imagem visual foi obtida da própria referência e é servida localmente. As telas internas autenticadas não foram acessadas ou copiadas.
+
+Os formulários de acesso são visuais e explicitamente desativados nesta base; não enviam senhas ou e-mails. Login real pertence à etapa 04, após banco/RLS da 03. Há navegação React sem recarga, carregamento por tela e uma página para URLs desconhecidas.
+
+`vercel.json` fixa Vite, `npm ci`, build e `dist`. `api/index.ts` e `api/[...path].ts` exportam o mesmo Express. O fallback da SPA exclui `/api` e `/assets`. POST `/api/validate` verifica `{ "message": "texto de 1 a 120 caracteres" }` sem persistir ou refletir o conteúdo; erros de tipo/JSON/tamanho/rota retornam JSON seguro.
+
+Reprodução do manifest Git antigo `87d4321`: `esbuild ^0.25` conflita com o Vite atual. A base atual remove a dependência direta desnecessária e usa lockfile; não é necessário `--force` ou `--legacy-peer-deps`.
+
 ## Verificar
 
 ```bash
@@ -46,6 +57,8 @@ npm run test:e2e
 
 Para Chromium já instalado: `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:e2e`. Os testes usam porta 3000 e dados sintéticos sem banco. Falhas geram traces em `test-results/` (ignorado no Git).
 
+Para executar contra um deploy autorizado: `E2E_BASE_URL=https://url-observada-do-deploy npm run test:e2e`. Essa variável elimina a necessidade de servidor local; não incluir barra final. Não usar os testes contra o sistema antigo de referência.
+
 ## Organização e continuidade
 
 - `src/features/home/`: consulta tipada e estado carregando/sucesso/erro com repetição.
@@ -56,4 +69,4 @@ Para Chromium já instalado: `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chrom
 
 O health mede disponibilidade do processo da API. Não comprova Supabase, autenticação ou prontidão de produção. Configuração de publicação/rotas da Vercel pertence à etapa 02; Supabase/banco/RLS à 03; login à 04. Não reutilizar credenciais ou IDs antigos por padrão e nunca colocar secret/service_role em `VITE_*`.
 
-Veja `docs/FONTES.md`, `docs/PLUGINS.md` e `docs/etapas/fecho-01.md`. Próximo passo: **Etapa 02**, após o aceite da 01 e confirmação dos destinos externos.
+Veja `docs/FONTES.md`, `docs/PLUGINS.md` e `LIVRO_RAIZ.md` para o checkpoint verificado e as limitações de publicação técnica.

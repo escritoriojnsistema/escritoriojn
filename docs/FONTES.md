@@ -11,3 +11,10 @@
 O repositório acessível `escritoriojnsistema/escritoriojn` contém uma base React criada em 16/10/2026; o manual identifica o sistema anterior como `escritoriojnsite/escritoriojnsite`. Nenhum código ou estado do sistema anterior foi copiado.
 
 Os arquivos COMECE_AQUI/AGENTS/LIVRO_RAIZ originais citados pelo pacote não foram localizados nos arquivos acessíveis do Drive nem na árvore do repositório. Foram criadas versões curtas novas com essa limitação explícita. Não foram herdadas conclusões de implementação do sistema anterior.
+
+## Referência visual e deploy da etapa 02
+
+- Usuário indicou https://escritoriojnsite.vercel.app/ como referência. Entrada, `/login`, `/login-cliente` e `/recuperar-senha?area=client` observados anonimamente em desktop/mobile; nenhum dado autenticado acessado.
+- Foto pública da própria referência, obtida pelo endpoint de otimização `_next/image` com largura 1920 e formato WebP (80.344 bytes), salva em `public/images/recepcao-jn.webp`. Apenas o asset visual foi reutilizado; nenhuma conta, ID de banco ou estado da aplicação antiga foi copiado.
+- [Vercel Express](https://vercel.com/docs/frameworks/backend/express) e [Vite na Vercel](https://vercel.com/docs/frameworks/frontend/vite) consultados para a integração. A documentação oficial atual admite exportar Express; trechos genéricos de habilidades que recomendam substituir Express/React por Next não se aplicam à stack fixa deste projeto.
+- Vercel novo: projeto `prj_PSltYIXuu3V50lKKVKhFwINMODBq`, escopo `escritorio-jn`, Git `escritoriojnsistema/escritoriojn`. A referência antiga não é destino de publicação.
