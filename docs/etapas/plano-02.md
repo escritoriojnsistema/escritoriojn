@@ -16,3 +16,7 @@ Pedido de 17/10/2026: corrigir Vercel e adaptar entrada/telas como https://escri
 5. npm ci/typecheck/test/build; navegador, preview local, revisão independente; Git push em branch e conferir deploy Git. Reparação técnica do projeto existente autorizada pelo pedido, sem contratar plano ou lançar operação comercial.
 
 Sem SQL, tabelas, conexão a banco antigo ou alteração de Auth. Supabase continua para etapa 03. Atualizar Livro com status real de Git/CI/preview/alias, inclusive bloqueio externo quando houver.
+
+## Encerramento
+
+Itens 1–5 implementados e verificados; evidências e limites em fecho-02.md. A revisão encontrou dois P2, ambos corrigidos com testes RED→GREEN. Git/CI e publicação técnica no alias público passaram; preview protegido/logs internos continuam inacessíveis pelo conector. Não iniciar Etapa 03 automaticamente.

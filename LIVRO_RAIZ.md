@@ -1,9 +1,9 @@
 # Livro Raiz — Escritório JN
 
-- **Atual:** Etapa 02 — correção Vercel e telas públicas responsivas solicitadas pelo usuário; validação local concluindo, entrega Git/preview em andamento. Etapa 01 preservada no commit 9fab3ae.
+- **Atual:** Etapa 02 — APROVÁVEL tecnicamente. Publicação Git e 23 testes de navegador no endereço público comprovados. Etapa 01 preservada no commit 9fab3ae; Etapa 03 não iniciada.
 - **Base:** `/workspace/escritoriojn-etapa-01`, branch `fix/etapa-02-vercel-responsivo`, origem `escritoriojnsistema/escritoriojn`, base anterior 9fab3ae.
 - **Stack:** React + Vite + TypeScript; API Express `/api`; Supabase previsto, sem conexão nesta etapa.
-- **Fonte:** manual v4 e cartão 01 no Drive; ver `docs/FONTES.md`.
+- **Fonte:** manual v4 e cartões 01/02 no Drive; ver docs/FONTES e fecho-02. Referência visual indicada pelo usuário: https://escritoriojnsite.vercel.app/; manter a composição responsiva em React + Vite.
 - **Diagnóstico:** template React existente, sem API/lockfile/README/Livro; três testes utilitários passaram via `node --test`, mas `npm test` não existia.
 - **Escopo:** saúde real da API e tela responsiva; sem login, dados jurídicos, tabelas ou integração paga.
 - **Destinos:** metadados Vercel confirmam vínculo entre projeto novo `escritoriojn` e GitHub `escritoriojnsistema/escritoriojn`. Pedido atual para corrigir esse deploy autoriza sua reparação técnica; preservar `escritoriojnsite.vercel.app` como referência somente leitura. Supabase permanece sem mutação.
@@ -14,6 +14,10 @@
 - **Banco/login:** não se aplica à 01; Supabase/RLS na 03 e login real na 04. Não foram criadas tabelas, credenciais ou contas.
 - **Diagnóstico Vercel:** deploys Git do commit 87d4321 falham em npm install. Reprodução isolada confirma ERESOLVE esbuild ^0.25 versus peer do Vite 8.3.4; base atual remove dependência direta e usa npm ci. Logs detalhados remotos recusados com 403; não afirmar linha remota não lida.
 - **Implementado na 02:** entrada e telas cliente/equipe/recuperação conforme referência pública, router/lazy/PageLoading, /status com health real, Function Express, POST de validação sem persistência e fallback SPA que exclui API/assets. Auth visual desativado explicitamente até 04.
-- **Revisão 02:** dois P2 encontrados (assets inexistentes retornavam HTML e aliases de rota exibiam variante errada); correções com testes RED→GREEN em conferência. Sem P0/P1 identificado.
-- **Próximo checkpoint:** comprovar Git/CI/preview e alias do projeto novo; registrar URL/commit/status reais. Etapa 03 não iniciada.
-- **Retomada mínima:** AGENTS, este Livro, docs/etapas/plano-02.md e cartão 02; depois cartão 03 apenas quando solicitado.
+- **Revisão 02:** dois P2 encontrados (assets inexistentes retornavam HTML e aliases de rota exibiam variante errada); ambos corrigidos com testes RED→GREEN. Sem P0/P1 identificado.
+- **Verificação 02:** npm ci, typecheck, 5 testes Node, build frontend/backend e audit com zero vulnerabilidades; 23 E2E locais + 5 regressões no preview compilado + 23 E2E no endereço público passaram. Conferidos 320/360/768/1440, teclado e CSS zoom 200% (não auditoria WCAG integral).
+- **Git/CI:** PR https://github.com/escritoriojnsistema/escritoriojn/pull/1 integrado após CI SUCCESS; código 38acb25, merge d01702e. CI https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39048398539.
+- **Publicação técnica comprovada:** https://escritoriojn.vercel.app/ ; health /api/health; UI /status. Deploy Git de main dpl_GwRVthDR31ffvwawBdyqZNvvqLNr READY no merge d01702e. Frontend, POST de validação, JSON404, assets404 e recarga profunda provados remotamente. Fecho 02 registra limites e rollback.
+- **Limites:** aliases com escopo/previews mantêm proteção Vercel; conector recusa logs/acesso protegido com 403. URL canônica acima é pública e foi testada, sem desativar proteção. Publicação técnica não equivale a homologação comercial/piloto da etapa 39.
+- **Próximo checkpoint:** Etapa 03 — banco, perfis e barreiras de acesso, apenas mediante nova solicitação. Não ativar login real antes da etapa 04.
+- **Retomada mínima:** AGENTS, este Livro, docs/etapas/fecho-02.md e cartão 03; arquitetura/regras apenas nos tópicos afetados.

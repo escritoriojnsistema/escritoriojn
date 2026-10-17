@@ -27,3 +27,5 @@ Usar os recursos de cada plugin quando pertinentes preserva o escopo e evita cri
 Aplicadas nesta rodada: orquestrar-modulos, diagnosticar-repositorio, especificar-modulo, arquitetar-fullstack, construir-backend-api, frontend-responsivo, automatizar-testes, auditar-seguranca-privacidade, auditoria-final, documentar-continuidade, github-revisao-ci e modo-economico-ia.
 
 Reservadas para as etapas pertinentes: supabase-modelar-banco (03), supabase-auth-permissoes (04), integrar-servicos (integrações autorizadas), vercel-publicacao (02/39, conforme tipo de publicação) e pwa-offline-sync (35). Não foram carregadas apenas para preencher inventário.
+
+Atualização da etapa 02: vercel-publicacao foi aplicada ao diagnóstico/publicação técnica; Firecrawl e navegador leram a referência pública e documentação oficial; GitHub entregou PR/CI/merge e iniciou o deploy Git Vercel. Publicação e 23 E2E remotos comprovados no alias canônico. Logs e previews protegidos retornaram 403 pelo conector, sem alteração da política de proteção. Supabase não recebeu mutações.
