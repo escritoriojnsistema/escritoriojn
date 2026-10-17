@@ -1,0 +1,6 @@
+{
+  "name": "React Vite Base",
+  "description": "Base limpa e modular em React com Vite e TypeScript.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
