@@ -1,6 +1,6 @@
 # Escritório JN
 
-Base nova das **Etapas 01 e 02** do manual v4: React + Vite + TypeScript, API Express `/api` e telas públicas responsivas. O indicador de saúde em `/status` consulta a API real. Não há login, dados de negócio ou banco conectado nesta etapa.
+Base nova das **Etapas 01–03** do manual v4: React + Vite + TypeScript, API Express `/api`, telas públicas compactas e fundação Supabase/RLS versionada. O indicador de saúde em `/status` consulta a API real. A conexão de sessão/login funcional pertence à etapa 04.
 
 ## Executar
 
@@ -61,11 +61,14 @@ Para Chromium já instalado: `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chrom
 
 Para executar contra um deploy autorizado: `E2E_BASE_URL=https://url-observada-do-deploy npm run test:e2e`. Essa variável elimina a necessidade de servidor local; não incluir barra final. Não usar os testes contra o sistema antigo de referência.
 
+Banco: `npm run test:db` requer Docker Linux e executa dois replays em PostgreSQL 17 descartável, com migrador sem superusuário/BYPASSRLS e 64 verificações de ACL/RLS/RPC. O runner não aceita destino remoto; não usa contas reais. Procedimento de aplicação/proprietário e limites em [supabase/README.md](supabase/README.md).
+
 ## Organização e continuidade
 
 - `src/features/home/`: consulta tipada e estado carregando/sucesso/erro com repetição.
 - `server/app.ts`: health público e JSON 404 para `/api` desconhecida, sem dados sensíveis.
 - `shared/api.ts`: contratos seguros; backend não é importado pelo frontend.
+- `supabase/migrations/`: fundação de acesso, seed mínimo e RPC com autorização atual; `tests/database/` contém apenas fixtures isoladas.
 - `docs/etapas/`: cartões oficiais, plano e fecho com evidências.
 - `AGENTS.md` e `LIVRO_RAIZ.md`: regras curtas e ponto exato de retomada.
 
