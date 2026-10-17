@@ -22,17 +22,26 @@ Conferência remota encontrou a função preexistente do provedor `public.rls_au
 
 O teste inicial falhou por ausência das sete tabelas antes da implementação (RED); os dois replays passaram após a migration (GREEN). CI adiciona job database separado; o runner não aceita DATABASE_URL nem destino remoto. Fixtures nunca serão inseridas no projeto hospedado.
 
-## Camadas e pendências de entrega
+Resultado observado nas duas identidades fictícias do contrato Auth isolado:
+
+| Identidade | Contexto no escritório próprio | Contexto no outro escritório |
+| --- | ---: | ---: |
+| A, proprietária de A | 1 linha autorizada | 0 linhas em B |
+| B, proprietária de B | 1 linha autorizada | 0 linhas em A |
+
+Sem vínculo: zero linhas. Vínculo ou perfil A inativo: zero linhas usando os mesmos claims. Tentativa de escrever papel/escritório/ator: negada por ACL e, com grants deliberadamente ampliados somente no teste, também por RLS. São testes de identidade SQL/autoridade do banco, não logins de senha/JWT assinados.
+
+## Camadas e entrega
 
 - Banco/backend: duas migrations aplicadas no projeto novo identificado, sete tabelas com RLS e seed conferidos. Proprietário provisionado pela rotina oficial: um escritório/perfil/vínculo owner ativo e um evento de auditoria; quatro contas Auth preservadas. Conferência como papel SQL authenticated retornou apenas perfil/vínculo/escritório próprios, contexto com foundation.access/audit.read e auditoria autorizada. API não pode alterar vínculo ou executar bootstrap. Esta emulação SQL não comprova login por JWT assinado.
 - Frontend/Express: sem mudança funcional necessária nesta etapa; React + Vite, identidade e cinco telas compactas preservados. Não criar tela artificial de administração nem ativar login antes da 04.
 - SMTP: usuário informou Enable custom SMTP com senha de aplicativo configurado. Preservado no provedor; segredo não lido nem copiado. Envio/entrega de e-mail e templates não testados nesta etapa.
 - Contas existentes: quatro identidades Auth preservadas. Somente proprietário foi vinculado pela rotina desta etapa; outros vínculos administrativos pertencem ao fluxo autorizado posterior. Sem alteração de senha, sessão ou metadata; nenhum UUID/e-mail pessoal incluído no Git público.
-- GitHub/Vercel: branch feat/etapa-03-acesso; CI, revisão e publicação em preparação. Resultado remoto será registrado após evidência.
-- Regressão local: typecheck, cinco testes Node e build frontend/backend passaram. CI dos incrementos anteriores passou com banco e 28 E2E; CI do fechamento será conferido antes de integrar. Nenhuma tela foi alterada.
+- GitHub/Vercel: [PR #3](https://github.com/escritoriojnsistema/escritoriojn/pull/3) integrado após [CI SUCCESS](https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39063615397), incluindo job database e 28 E2E. Código final 9c68cc3, merge b6bf332. Deploy Git de main `dpl_EmThSTAUS5ny5dcF5Mk9HYSFEy4m` READY, alias [escritoriojn.vercel.app](https://escritoriojn.vercel.app/) confirmado e assets iguais ao build local. **28 E2E passaram novamente na URL publicada**. Proteção de previews preservada.
+- Regressão local: typecheck, cinco testes Node e build frontend/backend passaram. Frontend/Express: não se aplica mudança funcional nesta etapa de banco; as cinco telas seguem compactas nas quatro resoluções do manual, com rolagem natural quando necessária.
 - Revisão independente do incremento inicial: sem achados P0/P1/P2/P3; reexecutou os 60 casos. Contrato Auth é mínimo e não prova JWT assinado/login; concorrência do bootstrap foi inspecionada, sem teste simultâneo. Hardening posterior do EXECUTE preexistente tem teste RED→GREEN próprio.
 - Advisor anterior à aplicação: [proteção de senhas vazadas desativada](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection), registrada para configuração de Auth na 04. Não é teste de SMTP e não autoriza trocar plano/configurações automaticamente.
 - PostgREST real com chave publishable e sem sessão: leitura de tabela e execução do RPC negadas com HTTP 401/código 42501; schema private recusado com HTTP 406/PGRST106. Chave não gravada em arquivo/Git.
 - Advisors após aplicação: segurança do banco sem avisos; permanece somente o aviso Auth acima. Desempenho sem WARN, nove índices ainda sem uso (INFO, base recém-instalada); [referência do advisor](https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index). Mantidos índices de FKs/consulta, sem eliminar proteção por ausência inicial de tráfego.
 
-**Status: BANCO VALIDADO; fechamento Git/CI/Vercel em andamento.** Rollback não destrutivo: reverter código e bloquear vínculos quando necessário, preservando tabelas/auditoria. Não executar DROP ou importar estado antigo. Próximo passo oficial: 04, apenas quando solicitado e após fechar o checkpoint 03.
+**Status: APROVÁVEL — implementado, aplicado e entregue tecnicamente em 17/10/2026.** Não equivale à homologação comercial da 39. Rollback não destrutivo: reverter código e bloquear vínculos quando necessário, preservando tabelas/auditoria. Não executar DROP ou importar estado antigo. Próximo passo oficial: 04, apenas quando solicitado.

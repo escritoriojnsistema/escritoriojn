@@ -1,6 +1,6 @@
 # Livro Raiz — Escritório JN
 
-- **Atual:** etapa 03 com banco validado no Supabase; Git/CI/Vercel em fechamento. Etapa 04 não iniciada. Relatório: docs/etapas/fecho-03.md.
+- **Atual:** etapa 03 implementada, aplicada no Supabase e entregue em https://escritoriojn.vercel.app/ . Git/CI/Vercel e 28 E2E publicados conferidos. Etapa 04 não iniciada. Relatório: docs/etapas/fecho-03.md.
 - **Stack fixa:** React + Vite + TypeScript, Express /api, Supabase Auth/PostgreSQL/RLS. Sem Next.js, ORM ou serviço paralelo.
 - **Repositório:** escritoriojnsistema/escritoriojn; base desta etapa e1c5e9d, branch feat/etapa-03-acesso. Diretório /workspace/escritoriojn-etapa-01.
 - **Destinos:** Supabase novo mcsuoxnubpqenyvbefee; Vercel escritoriojn, prj_PSltYIXuu3V50lKKVKhFwINMODBq, escopo escritorio-jn; https://escritoriojn.vercel.app/ . Sistema antigo escritoriojnsite.vercel.app somente referência, sem mutação/importação de estado.
@@ -16,9 +16,9 @@
 - **SMTP:** usuário informou custom SMTP habilitado com senha de aplicativo no Supabase. Preservar e usar na Auth futura; não copiar senha para Git/Vercel/VITE_*, não mudar templates agora. Entrega de e-mail não testada.
 - **Frontend/API:** cinco telas públicas compactas, formulários explicitamente desativados até 04, router/lazy/loading/erros/repetição. Health mede processo Express, não saúde do banco. /api retorna JSON; /assets estático; recarga profunda funciona.
 - **Preferência permanente de UI:** navy/claro/dourado, reduzir espaços/redundâncias para caber em uma tela; alvos 44px/inputs móveis 16px/foco/mensagens preservados. Rolagem natural para conteúdo maior, zoom/janela curta; nunca cortar com overflow hidden ou criar tela só por espaçamento.
-- **Histórico:** fechamentos 01/02 e refino-02-compactacao em docs/etapas preservam diagnósticos/PRs/evidências; 28 E2E publicados passaram na 02. CI inicial da 03 passou; conferir CI do fechamento antes de merge.
+- **Entrega 03:** PR https://github.com/escritoriojnsistema/escritoriojn/pull/3 ; CI SUCCESS https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39063615397 (64 verificações de banco e 28 E2E). Código 9c68cc3, merge b6bf332; deploy dpl_EmThSTAUS5ny5dcF5Mk9HYSFEy4m READY, alias e assets conferidos. Mais 28 E2E passaram na URL publicada. Fechos 01/02/refino em docs/etapas preservam o histórico anterior.
 - **Plugins:** inventário e uso pertinente em docs/PLUGINS.md; 17 habilidades disponíveis, acionadas por necessidade. Sem analytics, pagamentos ou serviços pagos novos nesta etapa.
 - **Limites:** previews/logs Vercel retornam 403 no conector; alias canônico é público. CLI GitHub perdeu credencial nesta rodada; conector segue funcionando e entrega com lease/sem force. Publicação técnica não equivale à homologação comercial da 39.
 - **Rollback:** preservar tabelas/auditoria; se necessário bloquear vínculos e reverter código. Sem DROP/reset ou fixtures no hospedado. Não contratar nem alterar proteção/plano automaticamente.
-- **Próximo checkpoint:** concluir entrega 03; depois 04 somente por nova solicitação: conectar sessão/login, confirmação/recuperação usando SMTP existente e RPC atual. Não ativar MFA por padrão.
+- **Próximo checkpoint:** 04 somente por nova solicitação: conectar sessão/login, confirmação/recuperação usando SMTP existente e RPC atual. Considerar aviso Auth de senhas vazadas; não ativar MFA por padrão nem antecipar templates.
 - **Retomada mínima:** AGENTS, este Livro, fecho-03 e cartão 04; regras/acesso e arquitetura apenas nos tópicos afetados. Fontes oficiais no Drive em docs/FONTES.md.
