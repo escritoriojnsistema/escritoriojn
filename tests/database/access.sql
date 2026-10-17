@@ -17,8 +17,13 @@ SELECT test.assert_true(NOT has_function_privilege('anon','public.access_context
   AND NOT has_function_privilege('authenticated','private.provision_owner(uuid,text,uuid)','EXECUTE')
   AND NOT has_function_privilege('service_role','private.provision_owner(uuid,text,uuid)','EXECUTE'),
   'ACL de RPC e bootstrap restrita');
+SELECT test.assert_true(NOT has_function_privilege('anon','public.rls_auto_enable()','EXECUTE')
+  AND NOT has_function_privilege('authenticated','public.rls_auto_enable()','EXECUTE'),
+  'funcao interna preexistente nao pode ser executada pelos clientes');
 SELECT test.assert_true(NOT EXISTS (SELECT FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
-  WHERE n.nspname='public' AND p.prosecdef), 'nenhum SECURITY DEFINER exposto');
+  WHERE n.nspname='public' AND p.prosecdef AND
+    (has_function_privilege('anon',p.oid,'EXECUTE') OR has_function_privilege('authenticated',p.oid,'EXECUTE'))),
+  'nenhum SECURITY DEFINER publico executavel pela API');
 
 INSERT INTO auth.users(id,email_confirmed_at) VALUES
   ('00000000-0000-4000-a000-000000000001',now()),

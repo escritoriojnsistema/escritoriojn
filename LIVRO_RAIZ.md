@@ -1,6 +1,6 @@
 # Livro Raiz — Escritório JN
 
-- **Atual:** Etapa 03 em implementação: sete tabelas, seed mínimo, RLS, RPC de contexto atual e rotina restrita de proprietário. Dois replays vazios/60 verificações passaram sem superusuário/BYPASSRLS; revisão e aplicação remota pendentes. Base visual publicada preservada. Detalhes em `docs/etapas/fecho-03.md`.
+- **Atual:** Etapa 03 em implementação: sete tabelas, seed mínimo, RLS, RPC de contexto atual e rotina restrita de proprietário. Dois replays vazios/62 verificações passaram sem superusuário/BYPASSRLS; revisão inicial sem bloqueios, hardening de EXECUTE preexistente testado RED→GREEN e aplicação remota pendente. Base visual publicada preservada. Detalhes em `docs/etapas/fecho-03.md`.
 - **Base:** `/workspace/escritoriojn-etapa-01`, origem `escritoriojnsistema/escritoriojn`; refinamento na branch `fix/etapa-02-telas-compactas`, código 681219c integrado a main pelo merge b2869f8. Base anterior 4bd1488 preservada.
 - **Stack:** React + Vite + TypeScript; API Express `/api`; Supabase previsto, sem conexão nesta etapa.
 - **Fonte:** manual v4 e cartões 01/02 no Drive; ver docs/FONTES e fecho-02. Referência visual indicada pelo usuário: https://escritoriojnsite.vercel.app/; manter a composição responsiva em React + Vite.

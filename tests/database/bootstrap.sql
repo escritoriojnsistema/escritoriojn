@@ -12,6 +12,13 @@ $$;
 GRANT USAGE ON SCHEMA auth TO migrator, anon, authenticated;
 GRANT SELECT, REFERENCES ON auth.users TO migrator;
 GRANT EXECUTE ON FUNCTION auth.uid() TO migrator, anon, authenticated;
+-- Existing hosted event-trigger function, including its overly broad defaults.
+SET ROLE migrator;
+CREATE FUNCTION public.rls_auto_enable() RETURNS event_trigger
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$ BEGIN RETURN; END; $$;
+RESET ROLE;
+CREATE EVENT TRIGGER test_provider_rls_default ON ddl_command_end WHEN TAG IN ('CREATE TABLE')
+  EXECUTE FUNCTION public.rls_auto_enable();
 -- Simulate broad hosted defaults. The migration must revoke them explicitly.
 ALTER DEFAULT PRIVILEGES FOR ROLE migrator IN SCHEMA public
   GRANT ALL ON TABLES TO anon, authenticated, service_role;

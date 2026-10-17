@@ -1,5 +1,13 @@
 -- Etapa 03. Catalog seed is versioned here so an empty replay is sufficient.
 -- Apply atomically. No Auth accounts, passwords, SMTP or public signup trigger.
+-- Preserve Supabase's existing RLS event trigger, but remove its unnecessary API EXECUTE.
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace
+    WHERE n.nspname='public' AND p.proname='rls_auto_enable' AND p.pronargs=0
+      AND p.prorettype='pg_catalog.event_trigger'::pg_catalog.regtype) THEN
+    REVOKE ALL ON FUNCTION public.rls_auto_enable() FROM PUBLIC,anon,authenticated,service_role;
+  END IF;
+END $$;
 CREATE SCHEMA IF NOT EXISTS private;
 REVOKE ALL ON SCHEMA private FROM PUBLIC, anon, authenticated, service_role;
 GRANT USAGE ON SCHEMA private TO authenticated;

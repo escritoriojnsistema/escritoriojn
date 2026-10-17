@@ -61,7 +61,7 @@ Para Chromium já instalado: `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chrom
 
 Para executar contra um deploy autorizado: `E2E_BASE_URL=https://url-observada-do-deploy npm run test:e2e`. Essa variável elimina a necessidade de servidor local; não incluir barra final. Não usar os testes contra o sistema antigo de referência.
 
-Banco: `npm run test:db` requer Docker Linux e executa dois replays em PostgreSQL 17 descartável, com migrador sem superusuário/BYPASSRLS e 60 verificações de ACL/RLS/RPC. O runner não aceita destino remoto; não usa contas reais. Procedimento de aplicação/proprietário e limites em [supabase/README.md](supabase/README.md).
+Banco: `npm run test:db` requer Docker Linux e executa dois replays em PostgreSQL 17 descartável, com migrador sem superusuário/BYPASSRLS e 62 verificações de ACL/RLS/RPC. O runner não aceita destino remoto; não usa contas reais. Procedimento de aplicação/proprietário e limites em [supabase/README.md](supabase/README.md).
 
 ## Organização e continuidade
 

@@ -16,7 +16,9 @@ RPC `public.access_context(p_office_id uuid)` é SECURITY INVOKER e retorna linh
 
 `npm run test:db`: container PostgreSQL 17 por digest, sem rede/portas e removido ao final; dois bancos vazios independentes. Provider contract mínimo para auth.users/auth.uid; credenciais, JWT assinado e e-mail reais não são simulados como prova de login. Migrações executadas como migrator NOSUPERUSER/NOBYPASSRLS; RPC e consultas como anon/authenticated, com grants amplos de origem revogados pela migration.
 
-**60 verificações passaram (30 por replay)**: seed sem contas, ACL/EXECUTE, ausência de definer público, bootstrap confirmado e único com auditoria, rollback completo se auditoria falha, A/B em ambas as direções, sem vínculo, metadata forjada, escopo nulo, negação de alteração de papel/ator/auditoria, perfil/vínculo/escritório/papel inativos, banimento Auth, revogação de capacidade e troca de papel com os mesmos claims. RLS também nega INSERT/UPDATE/DELETE depois de ampliar grants somente no banco descartável.
+**62 verificações passaram (31 por replay)**: seed sem contas, ACL/EXECUTE, ausência de definer público executável pela API, bootstrap confirmado e único com auditoria, rollback completo se auditoria falha, A/B em ambas as direções, sem vínculo, metadata forjada, escopo nulo, negação de alteração de papel/ator/auditoria, perfil/vínculo/escritório/papel inativos, banimento Auth, revogação de capacidade e troca de papel com os mesmos claims. RLS também nega INSERT/UPDATE/DELETE depois de ampliar grants somente no banco descartável.
+
+Conferência remota encontrou a função preexistente do provedor `public.rls_auto_enable()`, usada por event trigger, com EXECUTE público. Novo teste reproduziu a exposição (RED); a migration agora revoga somente seu EXECUTE de API quando a função existe, preservando função/gatilho. A fixture inclui esse cenário e os 62 casos passaram (GREEN). O hardening ainda aguarda aplicação remota.
 
 O teste inicial falhou por ausência das sete tabelas antes da implementação (RED); os dois replays passaram após a migration (GREEN). CI adiciona job database separado; o runner não aceita DATABASE_URL nem destino remoto. Fixtures nunca serão inseridas no projeto hospedado.
 
@@ -28,5 +30,7 @@ O teste inicial falhou por ausência das sete tabelas antes da implementação (
 - Contas existentes: preservar as quatro identidades Auth. Somente proprietário é provisionado pela rotina desta etapa; outros vínculos administrativos pertencem ao fluxo autorizado posterior. Sem alteração de senha, sessão ou metadata.
 - GitHub/Vercel: branch feat/etapa-03-acesso; CI, revisão e publicação em preparação. Resultado remoto será registrado após evidência.
 - Regressão local: typecheck, cinco testes Node e build frontend/backend passaram. A suíte de navegador será confirmada pelo CI da entrega; nenhuma tela foi alterada.
+- Revisão independente do incremento inicial: sem achados P0/P1/P2/P3; reexecutou os 60 casos. Contrato Auth é mínimo e não prova JWT assinado/login; concorrência do bootstrap foi inspecionada, sem teste simultâneo. Hardening posterior do EXECUTE preexistente tem teste RED→GREEN próprio.
+- Advisor anterior à aplicação: [proteção de senhas vazadas desativada](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection), registrada para configuração de Auth na 04. Não é teste de SMTP e não autoriza trocar plano/configurações automaticamente.
 
 **Status: APROVÁVEL LOCALMENTE; entrega remota pendente.** Rollback não destrutivo: reverter código e bloquear vínculos quando necessário, preservando tabelas/auditoria. Não executar DROP ou importar estado antigo. Próximo passo oficial: 04, apenas quando solicitado e após fechar o checkpoint 03.
