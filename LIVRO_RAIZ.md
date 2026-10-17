@@ -1,7 +1,7 @@
 # Livro Raiz — Escritório JN
 
-- **Atual:** Etapa 02 — APROVÁVEL tecnicamente. Publicação Git e 23 testes de navegador no endereço público comprovados. Etapa 01 preservada no commit 9fab3ae; Etapa 03 não iniciada.
-- **Base:** `/workspace/escritoriojn-etapa-01`, branch `fix/etapa-02-vercel-responsivo`, origem `escritoriojnsistema/escritoriojn`, base anterior 9fab3ae.
+- **Atual:** Etapa 02 — refinamento de compactação solicitado. Base publicada preservada em 4bd1488; cinco telas padrão já cabem nos quatro tamanhos do manual em teste local. Regressão completa e entrega Git em andamento. Etapa 03 não iniciada.
+- **Base:** `/workspace/escritoriojn-etapa-01`, branch `fix/etapa-02-telas-compactas`, origem `escritoriojnsistema/escritoriojn`, base 4bd1488.
 - **Stack:** React + Vite + TypeScript; API Express `/api`; Supabase previsto, sem conexão nesta etapa.
 - **Fonte:** manual v4 e cartões 01/02 no Drive; ver docs/FONTES e fecho-02. Referência visual indicada pelo usuário: https://escritoriojnsite.vercel.app/; manter a composição responsiva em React + Vite.
 - **Diagnóstico:** template React existente, sem API/lockfile/README/Livro; três testes utilitários passaram via `node --test`, mas `npm test` não existia.
@@ -12,6 +12,8 @@
 - **Verificações reais:** npm ci, typecheck, 4 testes Node, 10 E2E Chromium, build frontend/backend e HTTP dev/preview/API compilada passaram; npm audit reportou zero vulnerabilidades. Fecho em `docs/etapas/fecho-01.md`.
 - **Revisão independente:** somente leitura por outro agente, sem achados P0/P1/P2/P3; não substitui execução remota do CI.
 - **Banco/login:** não se aplica à 01; Supabase/RLS na 03 e login real na 04. Não foram criadas tabelas, credenciais ou contas.
+- **Contas existentes informadas pelo usuário:** quatro cadastros conferidos no Supabase Auth, todos com e-mail confirmado; consultas somente leitura. Papéis pretendidos: proprietário/superadministrador, administrador/superfuncionário, funcionário e cliente. Schema public sem tabelas; business_role/role em app_metadata não definidos. Existência de conta não comprova autorização de negócio nem login funcional. Preservar essas contas e não recriá-las nas próximas etapas.
+- **Privacidade das contas:** repositório público; não registrar e-mails, IDs de usuários, senhas ou tokens no Git/bundle. Usar os endereços fornecidos pelo usuário e consultar Auth em ambiente autorizado ao configurar os vínculos na 03/04.
 - **Diagnóstico Vercel:** deploys Git do commit 87d4321 falham em npm install. Reprodução isolada confirma ERESOLVE esbuild ^0.25 versus peer do Vite 8.3.4; base atual remove dependência direta e usa npm ci. Logs detalhados remotos recusados com 403; não afirmar linha remota não lida.
 - **Implementado na 02:** entrada e telas cliente/equipe/recuperação conforme referência pública, router/lazy/PageLoading, /status com health real, Function Express, POST de validação sem persistência e fallback SPA que exclui API/assets. Auth visual desativado explicitamente até 04.
 - **Revisão 02:** dois P2 encontrados (assets inexistentes retornavam HTML e aliases de rota exibiam variante errada); ambos corrigidos com testes RED→GREEN. Sem P0/P1 identificado.
@@ -19,5 +21,6 @@
 - **Git/CI:** PR https://github.com/escritoriojnsistema/escritoriojn/pull/1 integrado após CI SUCCESS; código 38acb25, merge d01702e. CI https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39048398539.
 - **Publicação técnica comprovada:** https://escritoriojn.vercel.app/ ; health /api/health; UI /status. Deploy Git de main dpl_GwRVthDR31ffvwawBdyqZNvvqLNr READY no merge d01702e. Frontend, POST de validação, JSON404, assets404 e recarga profunda provados remotamente. Fecho 02 registra limites e rollback.
 - **Limites:** aliases com escopo/previews mantêm proteção Vercel; conector recusa logs/acesso protegido com 403. URL canônica acima é pública e foi testada, sem desativar proteção. Publicação técnica não equivale a homologação comercial/piloto da etapa 39.
+- **Preferência permanente de UI:** manter as primeiras telas e a identidade navy/claro/dourado; maximizar o conteúdo em uma tela sem cortar, esconder mensagens ou reduzir controles. Rolagem natural apenas quando necessária para conteúdo maior, zoom ou janela menor; não criar tela adicional só por espaçamento excessivo.
 - **Próximo checkpoint:** Etapa 03 — banco, perfis e barreiras de acesso, apenas mediante nova solicitação. Não ativar login real antes da etapa 04.
 - **Retomada mínima:** AGENTS, este Livro, docs/etapas/fecho-02.md e cartão 03; arquitetura/regras apenas nos tópicos afetados.

@@ -30,3 +30,5 @@ Publicação técnica do projeto novo a pedido do usuário, sem contratação, u
 Rollback de alterações futuras: preservar como ponto conhecido o deploy READY `dpl_GwRVthDR31ffvwawBdyqZNvvqLNr` e o código `d01702e`; preparar reversão Git revisável. Não retornar automaticamente ao manifest 87d4321 que falhava. Sem rollback de banco nesta etapa.
 
 Próxima etapa oficial: **03**, apenas quando solicitada. Ler AGENTS, Livro, este fecho e cartão 03.
+
+Refinamento posterior da mesma etapa: ver `refino-02-compactacao.md` para a preferência de tela única, medições antes/depois e conferência somente leitura das contas existentes.
