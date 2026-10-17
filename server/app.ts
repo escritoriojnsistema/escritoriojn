@@ -1,15 +1,18 @@
-import express, { type ErrorRequestHandler, type Response } from 'express';
-import { randomUUID } from 'node:crypto';
-import { MAX_VALIDATION_MESSAGE_LENGTH, type ApiErrorResponse, type HealthResponse, type ValidationResponse } from '../shared/api.js';
+import express, { type ErrorRequestHandler } from 'express';
+import { MAX_VALIDATION_MESSAGE_LENGTH, type HealthResponse, type ValidationResponse } from '../shared/api.js';
+import { errorResponse } from './errors.js';
+import { authRouter } from './modules/auth/router.js';
 
 export const app = express();
 app.disable('x-powered-by');
+app.use((req, res, next) => {
+  if (req.method === 'GET' && req.accepts('html') && !/^\/(assets|images|src|node_modules|@)/.test(req.path)) {
+    res.setHeader('Cache-Control', 'private, no-store');
+    res.setHeader('Referrer-Policy', 'no-referrer');
+  }
+  next();
+});
 const api = express.Router();
-function errorResponse(res: Response, status: number, code: string, message: string) {
-  const requestId = randomUUID();
-  res.setHeader('X-Request-Id', requestId);
-  res.status(status).json({ error: { code, message, request_id: requestId } } satisfies ApiErrorResponse);
-}
 api.use((_req, res, next) => {
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -18,6 +21,7 @@ api.use((_req, res, next) => {
 api.get('/health', (_req, res) => {
   res.json({ data: { status: 'ok', service: 'escritorio-jn-api' } } satisfies HealthResponse);
 });
+api.use('/auth',authRouter);
 api.post('/validate', (req, res, next) => {
   if (!req.is('application/json')) {
     errorResponse(res, 415, 'UNSUPPORTED_MEDIA_TYPE', 'Envie um corpo JSON.');

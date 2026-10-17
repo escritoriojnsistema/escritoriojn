@@ -1,30 +1,55 @@
-import { ArrowLeft, ArrowRight, Eye, LockKeyhole, Mail, ShieldCheck, UserRound, UsersRound } from 'lucide-react';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { useState, type FormEvent } from 'react';
+import { ArrowRight, Mail, UserRound } from 'lucide-react';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { paths, normalizePathname } from '../../app/routes';
-import { Brand } from '../../ui/Brand';
+import { supabase, callbackUrl, authError } from '../auth/browser';
+import { AccessShell } from './AccessShell';
+import { PasswordField } from './PasswordField';
 export default function AccessPage() {
-  const pathname = normalizePathname(useLocation().pathname);
+  const location = useLocation();
+  const pathname = normalizePathname(location.pathname);
   const [params] = useSearchParams();
+  const navigate = useNavigate();
+  const signup = pathname === paths.signup;
   const recovery = pathname === paths.recovery;
   const team = pathname === paths.team || (recovery && params.get('area') !== 'client');
-  const title = recovery ? 'Esqueceu sua senha?' : team ? 'Área da Equipe' : 'Área do Cliente';
-  const returnPath = team ? paths.team : paths.client;
-  const Icon = team ? UsersRound : UserRound;
-  return <div className="access-layout">
-    <aside className="access-visual" aria-label="Escritório JN"><Brand light /><div className="access-visual-copy"><p className="eyebrow">Escritório JN</p><h2>Seu processo<br />em boas mãos.</h2><p>Organização, cuidado e confiança<br />em cada etapa do seu caminho.</p><span className="gold-rule" /></div><p className="visual-caption">Cuidado nos detalhes. Confiança nos processos.</p></aside>
-    <main id="conteudo" className="access-main"><div className="access-topbar"><Link className="back-link" to={paths.home} aria-label="Voltar ao início" title="Voltar ao início"><ArrowLeft size={16} aria-hidden="true" /><span className="back-label">Voltar ao início</span></Link><div className="mobile-brand"><Brand /></div></div>
-      <section className="access-content" aria-labelledby="access-title"><span className="access-symbol"><Icon size={26} strokeWidth={1.7} aria-hidden="true" /></span>
-        <p className="eyebrow">{recovery ? 'Recuperação de acesso' : 'Acesso individual'}</p><h1 id="access-title">{title}</h1>
-        <p className="access-description">{recovery ? 'Recupere o acesso à sua conta.' : team ? 'Acesse seu ambiente no Escritório JN.' : 'Acesse seu espaço no Escritório JN.'}</p>
-        <div className="preparation-note" id="access-note"><strong>Acesso em preparação</strong><p>Campos e envio desativados nesta versão.</p></div>
-        <form aria-describedby="access-note" onSubmit={event => event.preventDefault()}><fieldset disabled>
-          <label htmlFor="email">E-mail</label><div className="input-wrap"><Mail size={18} aria-hidden="true" /><input id="email" name="email" type="email" autoComplete="off" placeholder="seuemail@exemplo.com" /></div>
-          {!recovery && <><div className="password-label"><label htmlFor="password">Senha</label><Link to={`${paths.recovery}?area=${team ? 'team' : 'client'}`}>Esqueci minha senha</Link></div><div className="input-wrap"><LockKeyhole size={18} aria-hidden="true" /><input id="password" name="password" type="password" autoComplete="off" placeholder="Digite sua senha" /><Eye size={18} aria-hidden="true" /></div></>}
-          <button className="primary-button" type="submit">{recovery ? 'Enviar instruções' : `Entrar na área ${team ? 'da equipe' : 'do cliente'}`}<ArrowRight size={18} aria-hidden="true" /></button>
-        </fieldset></form>
-        {recovery && <Link className="return-login" to={returnPath}>Voltar para entrar</Link>}
-        {!recovery && team && <p className="access-help">O acesso da equipe é gerenciado pelo escritório.</p>}
-      </section><p className="access-security"><ShieldCheck size={16} aria-hidden="true" />Acesso individual e protegido.</p>
-    </main>
-  </div>;
+  const [busy, setBusy] = useState(false);
+  const [feedback, setFeedback] = useState<{ text: string; error: boolean } | null>(null);
+  const title = signup ? 'Crie sua conta' : recovery ? 'Esqueceu sua senha?' : team ? 'Área da Equipe' : 'Área do Cliente';
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault(); if (!supabase || busy) return;
+    const values = new FormData(event.currentTarget);
+    const email = String(values.get('email')).trim();
+    const password = String(values.get('password') ?? '');
+    setBusy(true); setFeedback(null);
+    try {
+      if (recovery) {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: callbackUrl(team ? 'team' : 'client') });
+        if (error) throw error;
+        setFeedback({ text: 'Se houver uma conta para este e-mail, você receberá as instruções. Abra o link neste mesmo navegador.', error: false });
+      } else if (signup) {
+        const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: callbackUrl(), data: { display_name: String(values.get('name')).trim() } } });
+        if (error) throw error;
+        setFeedback({ text: 'Confira seu e-mail para confirmar o cadastro. Abra o link neste mesmo navegador. Se já tem conta, entre ou recupere sua senha.', error: false });
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        navigate(team ? paths.panel : paths.clientPanel, { replace: true });
+      }
+    } catch (error) { setFeedback({ text: authError(error), error: true }); }
+    finally { setBusy(false); }
+  }
+  return <AccessShell title={title} description={signup ? 'Cadastre seu acesso de cliente.' : recovery ? 'Recupere o acesso à sua conta.' : 'Acesse seu ambiente no Escritório JN.'}>
+    {!supabase && <div className="preparation-note" role="status"><strong>Acesso indisponível</strong><p>Configuração pendente pelo escritório.</p></div>}
+    {location.state?.sessionExpired && !feedback && <p className="form-feedback error" role="alert">Sua sessão expirou. Entre novamente para continuar.</p>}
+    {location.state?.passwordUpdated && !feedback && <p className="form-feedback" role="status">Senha atualizada. Entre com sua nova senha.</p>}
+    {feedback && <p className={`form-feedback ${feedback.error ? 'error' : ''}`} role={feedback.error ? 'alert' : 'status'}>{feedback.text}</p>}
+    <form onSubmit={submit} aria-busy={busy}><fieldset disabled={busy}>
+      {signup && <div className="form-field"><label htmlFor="name">Nome</label><div className="input-wrap"><UserRound size={18} aria-hidden="true" /><input id="name" name="name" autoComplete="name" required minLength={2} maxLength={100} placeholder="Como podemos chamar você?" /></div></div>}
+      <label htmlFor="email">E-mail</label><div className="input-wrap"><Mail size={18} aria-hidden="true" /><input id="email" name="email" type="email" autoComplete="email" maxLength={254} required placeholder="seuemail@exemplo.com" /></div>
+      {!recovery && <><div className="password-label"><label htmlFor="password">Senha</label>{!signup && <Link to={`${paths.recovery}?area=${team ? 'team' : 'client'}`}>Esqueci minha senha</Link>}</div><PasswordField fresh={signup} /></>}
+      <button className="primary-button" type="submit" disabled={!supabase || busy}>{busy ? 'Aguarde…' : signup ? 'Criar conta de cliente' : recovery ? 'Enviar instruções' : `Entrar na área ${team ? 'da equipe' : 'do cliente'}`}<ArrowRight size={18} aria-hidden="true" /></button>
+    </fieldset></form>
+    {recovery || signup ? <Link className="return-login" to={signup || !team ? paths.client : paths.team}>Voltar para entrar</Link> : team ? <p className="access-help">O acesso da equipe é gerenciado pelo escritório.</p> : <Link className="return-login" to={paths.signup}>Ainda não tem conta? Cadastre-se</Link>}
+  </AccessShell>;
 }

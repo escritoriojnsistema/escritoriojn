@@ -2,15 +2,27 @@
 CREATE SCHEMA auth;
 CREATE TABLE auth.users (
   id uuid PRIMARY KEY,
+  email text,
+  is_anonymous boolean NOT NULL DEFAULT false,
+  raw_user_meta_data jsonb NOT NULL DEFAULT '{}'::jsonb,
   email_confirmed_at timestamptz,
   banned_until timestamptz,
   deleted_at timestamptz
 );
+CREATE TABLE auth.sessions (
+  id uuid PRIMARY KEY,
+  user_id uuid NOT NULL REFERENCES auth.users(id),
+  not_after timestamptz
+);
+CREATE FUNCTION auth.jwt() RETURNS jsonb LANGUAGE sql STABLE AS $$
+  SELECT coalesce(nullif(current_setting('request.jwt.claims',true),'')::jsonb,'{}'::jsonb);
+$$;
 CREATE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql STABLE AS $$
   SELECT nullif(current_setting('request.jwt.claims', true)::jsonb ->> 'sub', '')::uuid;
 $$;
 GRANT USAGE ON SCHEMA auth TO migrator, anon, authenticated;
-GRANT SELECT, REFERENCES ON auth.users TO migrator;
+GRANT SELECT, REFERENCES, TRIGGER ON auth.users TO migrator;
+GRANT SELECT ON auth.sessions TO migrator;
 GRANT EXECUTE ON FUNCTION auth.uid() TO migrator, anon, authenticated;
 -- Existing hosted event-trigger function, including its overly broad defaults.
 SET ROLE migrator;

@@ -34,6 +34,9 @@ INSERT INTO auth.users(id,email_confirmed_at) VALUES
   ('00000000-0000-4000-a000-000000000002',now()),
   ('00000000-0000-4000-a000-000000000003',now()),
   ('00000000-0000-4000-a000-000000000004',NULL);
+INSERT INTO auth.sessions(id,user_id) VALUES
+  ('00000000-0000-4000-c000-000000000001','00000000-0000-4000-a000-000000000001'),
+  ('00000000-0000-4000-c000-000000000002','00000000-0000-4000-a000-000000000002');
 SET ROLE migrator;
 DO $$ BEGIN
   BEGIN
@@ -85,13 +88,13 @@ RESET ROLE;
 SELECT 'PASS: anon sem acesso a dados ou RPC';
 
 SET ROLE authenticated;
-SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000003","user_metadata":{"role":"owner"}}';
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000003","session_id":"00000000-0000-4000-c000-000000000003","user_metadata":{"role":"owner"}}';
 SELECT test.assert_true((SELECT count(*) FROM public.offices)=0 AND (SELECT count(*) FROM public.profiles)=0
   AND (SELECT count(*) FROM public.memberships)=0 AND (SELECT count(*) FROM public.audit_events)=0,
   'sem vinculo nao le dados mesmo com metadata forjada');
 SELECT test.assert_true((SELECT count(*) FROM public.access_context(:'office_a'))=0,
   'RPC nega usuario sem vinculo');
-SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000001"}';
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000001","session_id":"00000000-0000-4000-c000-000000000001"}';
 SELECT test.assert_true((SELECT count(*) FROM public.access_context(:'office_a'))=1
   AND (SELECT permissions FROM public.access_context(:'office_a')) @> ARRAY['foundation.access','audit.read'],
   'A acessa contexto e capacidades do proprio escritorio');
@@ -119,13 +122,13 @@ RESET ROLE;
 SELECT 'PASS: payload nao altera papel, ator, catalogo ou auditoria';
 
 SET ROLE authenticated;
-SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000002"}';
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000002","session_id":"00000000-0000-4000-c000-000000000002"}';
 SELECT test.assert_true((SELECT count(*) FROM public.access_context(:'office_a'))=0
   AND (SELECT count(*) FROM public.access_context(:'office_b'))=1, 'B isolado de A na direcao inversa');
 RESET ROLE;
 
 -- Keep the exact same claims through deactivation and role/capability changes.
-SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000001","app_metadata":{"role":"owner"}}';
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000001","session_id":"00000000-0000-4000-c000-000000000001","app_metadata":{"role":"owner"}}';
 UPDATE public.memberships SET active=false WHERE office_id=:'office_a';
 SET ROLE authenticated;
 SELECT test.assert_true((SELECT count(*) FROM public.access_context(:'office_a'))=0

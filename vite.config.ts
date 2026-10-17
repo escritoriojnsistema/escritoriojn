@@ -1,6 +1,6 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import { defineConfig, type Plugin } from 'vite';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
 import express from 'express';
 import { resolve } from 'node:path';
 import { app } from './server/app.ts';
@@ -25,4 +25,10 @@ function localApi(): Plugin {
     },
   };
 }
-export default defineConfig({ plugins: [localApi(), react(), tailwindcss()] });
+export default defineConfig(({ mode }) => {
+  const local = loadEnv(mode, process.cwd(), 'VITE_SUPABASE_');
+  for (const key of ['VITE_SUPABASE_URL', 'VITE_SUPABASE_PUBLISHABLE_KEY']) {
+    if (!process.env[key] && local[key]) process.env[key] = local[key];
+  }
+  return { plugins: [localApi(), react(), tailwindcss()] };
+});

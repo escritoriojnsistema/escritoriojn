@@ -10,7 +10,7 @@ export default defineConfig({
     baseURL: remoteBaseURL ?? 'http://127.0.0.1:3000',
     trace: 'retain-on-failure',
     launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH },
-    proxy: remoteBaseURL && process.env.HTTPS_PROXY ? { server: process.env.HTTPS_PROXY } : undefined,
+    proxy: remoteBaseURL && !['127.0.0.1','localhost'].includes(new URL(remoteBaseURL).hostname) && process.env.HTTPS_PROXY ? { server: process.env.HTTPS_PROXY } : undefined,
   },
   webServer: remoteBaseURL ? undefined : {
     command: 'npm run dev -- --host 127.0.0.1',

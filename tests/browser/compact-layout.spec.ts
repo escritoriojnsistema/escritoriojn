@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const screens = ['/', '/login', '/login-cliente', '/recuperar-senha?area=client', '/status'];
+const screens = ['/', '/login', '/login-cliente', '/recuperar-senha?area=client', '/cadastro', '/redefinir-senha', '/auth/callback', '/status'];
 for (const [width, height] of [[320, 568], [360, 640], [768, 1024], [1440, 900]]) {
   test(`conteúdo padrão cabe em uma tela de ${width}x${height}`, async ({ page }) => {
     await page.setViewportSize({ width, height });

@@ -20,7 +20,7 @@ const sql = (database, user, input) => execFileSync('docker', [
 
 let started = false;
 try {
-  docker('run', '--rm', '--detach', '--network=none', '--name', name,
+  docker('run', '--rm', '--detach', '--network=none', '--name', name, '--tmpfs', '/var/lib/postgresql/data:rw,nosuid,noexec,size=512m',
     '-e', 'POSTGRES_HOST_AUTH_METHOD=trust', image);
   started = true;
   let ready = false;
@@ -48,7 +48,8 @@ try {
     for (const migration of migrations) {
       sql(database, 'migrator', `BEGIN;\n${readFileSync(`${root}supabase/migrations/${migration}`, 'utf8')}\nCOMMIT;`);
     }
-    const result = sql(database, 'postgres', readFileSync(`${root}tests/database/access.sql`, 'utf8'));
+    const result = sql(database, 'postgres', readFileSync(`${root}tests/database/access.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/auth.sql`, 'utf8'));
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
   console.log('PASS: dois replays vazios, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.');
