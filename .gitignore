@@ -1,6 +1,11 @@
 node_modules/
 build/
 dist/
+dist-server/
+test-results/
+playwright-report/
+.vercel/
+.superpowers/
 coverage/
 .DS_Store
 *.log
