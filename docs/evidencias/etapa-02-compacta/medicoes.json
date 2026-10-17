@@ -1,0 +1,326 @@
+{
+  "before": [
+    {
+      "width": 320,
+      "viewportHeight": 568,
+      "path": "/",
+      "documentHeight": 757,
+      "verticalOverflow": 189,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 320,
+      "viewportHeight": 568,
+      "path": "/login",
+      "documentHeight": 801,
+      "verticalOverflow": 233,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 320,
+      "viewportHeight": 568,
+      "path": "/login-cliente",
+      "documentHeight": 752,
+      "verticalOverflow": 184,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 320,
+      "viewportHeight": 568,
+      "path": "/recuperar-senha?area=client",
+      "documentHeight": 702,
+      "verticalOverflow": 134,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 320,
+      "viewportHeight": 568,
+      "path": "/status",
+      "documentHeight": 740,
+      "verticalOverflow": 172,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 360,
+      "viewportHeight": 640,
+      "path": "/",
+      "documentHeight": 757,
+      "verticalOverflow": 117,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 360,
+      "viewportHeight": 640,
+      "path": "/login",
+      "documentHeight": 801,
+      "verticalOverflow": 161,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 360,
+      "viewportHeight": 640,
+      "path": "/login-cliente",
+      "documentHeight": 731,
+      "verticalOverflow": 91,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 360,
+      "viewportHeight": 640,
+      "path": "/recuperar-senha?area=client",
+      "documentHeight": 702,
+      "verticalOverflow": 62,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 360,
+      "viewportHeight": 640,
+      "path": "/status",
+      "documentHeight": 640,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 768,
+      "viewportHeight": 1024,
+      "path": "/",
+      "documentHeight": 1038,
+      "verticalOverflow": 14,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 768,
+      "viewportHeight": 1024,
+      "path": "/login",
+      "documentHeight": 1024,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 768,
+      "viewportHeight": 1024,
+      "path": "/login-cliente",
+      "documentHeight": 1024,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 768,
+      "viewportHeight": 1024,
+      "path": "/recuperar-senha?area=client",
+      "documentHeight": 1024,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 768,
+      "viewportHeight": 1024,
+      "path": "/status",
+      "documentHeight": 1024,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 1440,
+      "viewportHeight": 900,
+      "path": "/",
+      "documentHeight": 900,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 1440,
+      "viewportHeight": 900,
+      "path": "/login",
+      "documentHeight": 900,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 1440,
+      "viewportHeight": 900,
+      "path": "/login-cliente",
+      "documentHeight": 900,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 1440,
+      "viewportHeight": 900,
+      "path": "/recuperar-senha?area=client",
+      "documentHeight": 900,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 1440,
+      "viewportHeight": 900,
+      "path": "/status",
+      "documentHeight": 900,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    }
+  ],
+  "after": [
+    {
+      "width": 320,
+      "viewportHeight": 568,
+      "path": "/",
+      "documentHeight": 568,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 320,
+      "viewportHeight": 568,
+      "path": "/login",
+      "documentHeight": 568,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 320,
+      "viewportHeight": 568,
+      "path": "/login-cliente",
+      "documentHeight": 568,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 320,
+      "viewportHeight": 568,
+      "path": "/recuperar-senha?area=client",
+      "documentHeight": 568,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 320,
+      "viewportHeight": 568,
+      "path": "/status",
+      "documentHeight": 568,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 360,
+      "viewportHeight": 640,
+      "path": "/",
+      "documentHeight": 640,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 360,
+      "viewportHeight": 640,
+      "path": "/login",
+      "documentHeight": 640,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 360,
+      "viewportHeight": 640,
+      "path": "/login-cliente",
+      "documentHeight": 640,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 360,
+      "viewportHeight": 640,
+      "path": "/recuperar-senha?area=client",
+      "documentHeight": 640,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 360,
+      "viewportHeight": 640,
+      "path": "/status",
+      "documentHeight": 640,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 768,
+      "viewportHeight": 1024,
+      "path": "/",
+      "documentHeight": 1024,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 768,
+      "viewportHeight": 1024,
+      "path": "/login",
+      "documentHeight": 1024,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 768,
+      "viewportHeight": 1024,
+      "path": "/login-cliente",
+      "documentHeight": 1024,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 768,
+      "viewportHeight": 1024,
+      "path": "/recuperar-senha?area=client",
+      "documentHeight": 1024,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 768,
+      "viewportHeight": 1024,
+      "path": "/status",
+      "documentHeight": 1024,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 1440,
+      "viewportHeight": 900,
+      "path": "/",
+      "documentHeight": 900,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 1440,
+      "viewportHeight": 900,
+      "path": "/login",
+      "documentHeight": 900,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 1440,
+      "viewportHeight": 900,
+      "path": "/login-cliente",
+      "documentHeight": 900,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 1440,
+      "viewportHeight": 900,
+      "path": "/recuperar-senha?area=client",
+      "documentHeight": 900,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    },
+    {
+      "width": 1440,
+      "viewportHeight": 900,
+      "path": "/status",
+      "documentHeight": 900,
+      "verticalOverflow": 0,
+      "horizontalOverflow": 0
+    }
+  ]
+}

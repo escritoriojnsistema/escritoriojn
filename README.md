@@ -42,6 +42,8 @@ As rotas `/`, `/login`, `/login-cliente` e `/recuperar-senha?area=client` seguem
 
 Os formulários de acesso são visuais e explicitamente desativados nesta base; não enviam senhas ou e-mails. Login real pertence à etapa 04, após banco/RLS da 03. Há navegação React sem recarga, carregamento por tela e uma página para URLs desconhecidas.
 
+O conteúdo padrão das cinco telas foi compactado para caber em 320×568, 360×640, 768×1024 e 1440×900. Mensagens longas, zoom e janelas mais baixas podem usar rolagem natural, preservando os controles. Veja `docs/etapas/refino-02-compactacao.md` para medições e limites.
+
 `vercel.json` fixa Vite, `npm ci`, build e `dist`. `api/index.ts` e `api/[...path].ts` exportam o mesmo Express. O fallback da SPA exclui `/api` e `/assets`. POST `/api/validate` verifica `{ "message": "texto de 1 a 120 caracteres" }` sem persistir ou refletir o conteúdo; erros de tipo/JSON/tamanho/rota retornam JSON seguro.
 
 Reprodução do manifest Git antigo `87d4321`: `esbuild ^0.25` conflita com o Vite atual. A base atual remove a dependência direta desnecessária e usa lockfile; não é necessário `--force` ou `--legacy-peer-deps`.
