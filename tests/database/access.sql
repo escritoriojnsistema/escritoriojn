@@ -5,6 +5,10 @@ SELECT test.assert_true((SELECT NOT rolsuper AND NOT rolbypassrls FROM pg_roles 
 SELECT test.assert_true((SELECT bool_and(c.relowner='migrator'::regrole AND c.relrowsecurity)
   FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND c.relkind='r'),
   'tabelas do migrador com RLS');
+SELECT test.assert_true(NOT EXISTS (SELECT p.polrelid FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+  JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND p.polpermissive
+    AND p.polcmd IN ('*','r') AND 'authenticated'::regrole=ANY(p.polroles)
+  GROUP BY p.polrelid HAVING count(*)>1), 'SELECT sem policies permissivas redundantes');
 SELECT test.assert_true((SELECT count(*) FROM public.roles)=4 AND (SELECT count(*) FROM public.permissions)=2
   AND (SELECT count(*) FROM public.role_permissions)=5, 'seed minimo completo sem cadastro posterior');
 SELECT test.assert_true((SELECT array_agg(role_code ORDER BY role_code) FROM public.role_permissions

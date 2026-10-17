@@ -16,7 +16,7 @@ Objetivo: instalar a fundação de autorização vigente, isolada por escritóri
 
 1. [x] Testes antes da migration: banco PostgreSQL 17 descartável, duas instalações vazias, migrador NOSUPERUSER/NOBYPASSRLS, grants semelhantes ao hospedado e papéis anon/authenticated/service_role.
 2. [x] Migration gerada pelo CLI oficial e versionada com seed mínimo; constraints, índices pertinentes, RLS, ACL e RPC. Testes A/B, sem vínculo, payload forjado, inatividade e mudança de capacidade sem renovar claims.
-3. [ ] CI com `npm run test:db`, revisão independente e replay. Confirmar hosted schema/migrations antes da aplicação incremental; nenhum dado sintético no remoto.
+3. [x] CI com `npm run test:db`, revisão independente e replay. Confirmar hosted schema/migrations antes da aplicação incremental; nenhum dado sintético no remoto.
 4. [ ] Conferir tabelas/ACL/RLS, advisors e proprietário pelo procedimento restrito. Verificar Git/CI/Vercel e manter frontend/API pública estáveis. Atualizar Livro/fecho com evidências e limites.
 
 Foco da revisão: bypass do helper, EXECUTE herdado de PUBLIC, autor forjado, claim antigo e inatividade, seed/replay sem superusuário. A suíte deve exercitar cada caso, inclusive privilégios mais amplos no teste isolado para provar a camada RLS.

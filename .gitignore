@@ -5,6 +5,7 @@ dist-server/
 test-results/
 playwright-report/
 .vercel/
+supabase/.temp/
 .superpowers/
 docs/evidencias/referencia/
 coverage/
