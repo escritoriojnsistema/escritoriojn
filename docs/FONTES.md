@@ -18,3 +18,8 @@ Os arquivos COMECE_AQUI/AGENTS/LIVRO_RAIZ originais citados pelo pacote não for
 - Foto pública da própria referência, obtida pelo endpoint de otimização `_next/image` com largura 1920 e formato WebP (80.344 bytes), salva em `public/images/recepcao-jn.webp`. Apenas o asset visual foi reutilizado; nenhuma conta, ID de banco ou estado da aplicação antiga foi copiado.
 - [Vercel Express](https://vercel.com/docs/frameworks/backend/express) e [Vite na Vercel](https://vercel.com/docs/frameworks/frontend/vite) consultados para a integração. A documentação oficial atual admite exportar Express; trechos genéricos de habilidades que recomendam substituir Express/React por Next não se aplicam à stack fixa deste projeto.
 - Vercel novo: projeto `prj_PSltYIXuu3V50lKKVKhFwINMODBq`, escopo `escritorio-jn`, Git `escritoriojnsistema/escritoriojn`. A referência antiga não é destino de publicação.
+
+## Etapa 03
+
+- [Cartão 03](https://drive.google.com/file/d/1QLuUAdrEM7vxn84nZ2Qgdy6ZuxVJPo0d/view) e [regras de acesso](https://drive.google.com/file/d/1xn4cMTGlCneQODBBeZQq3k9pss-MFjM3/view): cópias em `etapas/etapa-03.md` e `regras/acesso.md`.
+- [Changelog Supabase](https://supabase.com/changelog.md) consultado em 17/10/2026; aviso TLS de 10/11/2026 não exige mudança do SQL da fundação. Documentação de [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security), incluindo schemas privados e EXECUTE, consultada pelo conector oficial.
