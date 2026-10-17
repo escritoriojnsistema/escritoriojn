@@ -8,8 +8,8 @@ Inventário em 17/10/2026: catálogo de habilidades da sessão, ferramentas disp
 | Superpowers | Planejamento proporcional, isolamento, teste antes da implementação, verificação e revisão. |
 | Google Drive | Manual, regras e cartões oficiais lidos. |
 | GitHub | Perfil/repositório/origem verificados; preservar main e histórico; entrega revisável em branch quando destino confirmado. |
-| Supabase | Listagem de projetos executada; um projeto ativo encontrado. Sem ler dados, obter chaves, conectar SDK ou criar tabelas na 01. Banco/RLS: etapa 03. |
-| Vercel | Listagem de projetos/equipes executada; projeto escritoriojn encontrado. Sem alterar configuração ou publicar. Transporte hospedado: etapa 02; produção/elegibilidade: etapa 39. |
+| Supabase | Projeto ativo identificado na 01; quatro contas existentes conferidas somente em leitura no refinamento 02. Sem obter chaves, conectar SDK ou alterar contas/schema. Banco/RLS: etapa 03. |
+| Vercel | Projeto/equipe conferidos; publicação técnica por Git autorizada na 02, build READY e 28 E2E remotos no refinamento. Homologação comercial/elegibilidade: etapa 39. |
 | Cloud Environment | Estado, rede e runtime verificados. Sem credenciais de serviços configuradas no ambiente. |
 | Context7 | Documentação oficial Vite consultada para montar Express antes do fallback HTML. |
 | Firecrawl | Disponível para documentação pública quando necessário; sem coleta externa nesta base. |
@@ -26,7 +26,7 @@ Usar os recursos de cada plugin quando pertinentes preserva o escopo e evita cri
 
 Aplicadas nesta rodada: orquestrar-modulos, diagnosticar-repositorio, especificar-modulo, arquitetar-fullstack, construir-backend-api, frontend-responsivo, automatizar-testes, auditar-seguranca-privacidade, auditoria-final, documentar-continuidade, github-revisao-ci e modo-economico-ia.
 
-Reservadas para as etapas pertinentes: supabase-modelar-banco (03), supabase-auth-permissoes (04), integrar-servicos (integrações autorizadas), vercel-publicacao (02/39, conforme tipo de publicação) e pwa-offline-sync (35). Não foram carregadas apenas para preencher inventário.
+Reservadas para implementação nas etapas pertinentes: supabase-modelar-banco (03), supabase-auth-permissoes (04), integrar-servicos (integrações autorizadas), vercel-publicacao (02/39, conforme tipo de publicação) e pwa-offline-sync (35). No refinamento 02, supabase-auth-permissoes também foi consultada para a conferência segura das contas, sem ativar autenticação. Não carregar habilidades apenas para preencher inventário.
 
 Atualização da etapa 02: vercel-publicacao foi aplicada ao diagnóstico/publicação técnica; Firecrawl e navegador leram a referência pública e documentação oficial; GitHub entregou PR/CI/merge e iniciou o deploy Git Vercel. Publicação e 23 E2E remotos comprovados no alias canônico. Logs e previews protegidos retornaram 403 pelo conector, sem alteração da política de proteção. Supabase não recebeu mutações.
 

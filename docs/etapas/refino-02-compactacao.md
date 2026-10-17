@@ -26,10 +26,10 @@ As cinco telas padrão também cabem em 360×640, 768×1024 e 1440×900, sem rol
 - Supabase: consultas somente leitura confirmaram quatro contas existentes com e-mail confirmado. Public não contém tabelas e os campos business_role/role de app_metadata não estão definidos. Não equivale a testar login ou autorização. Contas, senhas, sessões e permissões preservadas; endereços/IDs pessoais não foram incluídos no Git público.
 - Papéis informados pelo usuário: proprietário/superadministrador, administrador/superfuncionário, funcionário e cliente. Sua implementação confiável pertence à 03/04; não inferir permissão pelo e-mail no navegador.
 - Revisão independente: sem achados P0/P1/P2/P3. Inspeções adicionais em alturas curtas mantiveram rolagem natural, foco visível e ausência de sobreposição. CSS zoom 200% conferido separadamente; não é auditoria WCAG integral nem teste em teclado físico de celular.
-- GitHub/Vercel: entrega pela branch de refinamento, CI e deploy Git; resultado remoto será registrado após publicação, sem desligar proteção dos previews.
+- GitHub/Vercel: [PR #2](https://github.com/escritoriojnsistema/escritoriojn/pull/2) integrado após [CI SUCCESS](https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39051283104). Código 681219c, merge b2869f8. Deploy Git de main `dpl_2gpYNb4pFyZ8Kr9fAk2jr9Gy8SWt` READY, alias público [escritoriojn.vercel.app](https://escritoriojn.vercel.app/) confirmado nos metadados e assets iguais ao build local. **28 E2E passaram no endereço publicado**, incluindo compactação, navegação, recarga profunda, API real, POST, JSON404 e assets404. Proteção dos previews preservada.
 
 ## Continuidade
 
-**Status local: APROVÁVEL; entrega remota em preparação.** Não criar novas telas por excesso de espaçamento e não cortar conteúdo para aparentar caber. A preferência de compactação foi incorporada ao AGENTS/Livro para os próximos incrementos.
+**Status técnico: VALIDADO E ENTREGUE em 17/10/2026.** Não equivale à homologação comercial da etapa 39. Não criar novas telas por excesso de espaçamento e não cortar conteúdo para aparentar caber. A preferência de compactação foi incorporada ao AGENTS/Livro para os próximos incrementos.
 
 Rollback: base anterior conhecida 4bd1488, preservada no histórico. Nenhum rollback de banco necessário. Próxima etapa oficial continua sendo 03, somente quando solicitada.

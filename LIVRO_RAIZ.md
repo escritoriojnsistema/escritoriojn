@@ -1,7 +1,7 @@
 # Livro Raiz — Escritório JN
 
-- **Atual:** Etapa 02 — refinamento de compactação solicitado. Base publicada preservada em 4bd1488; cinco telas padrão já cabem nos quatro tamanhos do manual em teste local. Regressão completa e entrega Git em andamento. Etapa 03 não iniciada.
-- **Base:** `/workspace/escritoriojn-etapa-01`, branch `fix/etapa-02-telas-compactas`, origem `escritoriojnsistema/escritoriojn`, base 4bd1488.
+- **Atual:** Etapa 02 — refinamento de compactação entregue em https://escritoriojn.vercel.app/ . Cinco telas padrão cabem nos quatro tamanhos do manual; 28 E2E locais e 28 no endereço publicado passaram. Etapa 03 não iniciada. Detalhes em `docs/etapas/refino-02-compactacao.md`.
+- **Base:** `/workspace/escritoriojn-etapa-01`, origem `escritoriojnsistema/escritoriojn`; refinamento na branch `fix/etapa-02-telas-compactas`, código 681219c integrado a main pelo merge b2869f8. Base anterior 4bd1488 preservada.
 - **Stack:** React + Vite + TypeScript; API Express `/api`; Supabase previsto, sem conexão nesta etapa.
 - **Fonte:** manual v4 e cartões 01/02 no Drive; ver docs/FONTES e fecho-02. Referência visual indicada pelo usuário: https://escritoriojnsite.vercel.app/; manter a composição responsiva em React + Vite.
 - **Diagnóstico:** template React existente, sem API/lockfile/README/Livro; três testes utilitários passaram via `node --test`, mas `npm test` não existia.
@@ -21,6 +21,7 @@
 - **Git/CI:** PR https://github.com/escritoriojnsistema/escritoriojn/pull/1 integrado após CI SUCCESS; código 38acb25, merge d01702e. CI https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39048398539.
 - **Publicação técnica comprovada:** https://escritoriojn.vercel.app/ ; health /api/health; UI /status. Deploy Git de main dpl_GwRVthDR31ffvwawBdyqZNvvqLNr READY no merge d01702e. Frontend, POST de validação, JSON404, assets404 e recarga profunda provados remotamente. Fecho 02 registra limites e rollback.
 - **Limites:** aliases com escopo/previews mantêm proteção Vercel; conector recusa logs/acesso protegido com 403. URL canônica acima é pública e foi testada, sem desativar proteção. Publicação técnica não equivale a homologação comercial/piloto da etapa 39.
+- **Entrega do refinamento 02:** PR https://github.com/escritoriojnsistema/escritoriojn/pull/2 integrado após CI SUCCESS https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39051283104 . Deploy Git de main `dpl_2gpYNb4pFyZ8Kr9fAk2jr9Gy8SWt` READY, merge b2869f8, alias canônico confirmado e assets iguais ao build local. npm ci, typecheck, 5 testes Node, build, 28 E2E locais, 5 testes no preview compilado e 28 E2E remotos passaram. Revisão independente sem achados P0/P1/P2/P3. Nenhuma mutação de backend/banco/Auth.
 - **Preferência permanente de UI:** manter as primeiras telas e a identidade navy/claro/dourado; maximizar o conteúdo em uma tela sem cortar, esconder mensagens ou reduzir controles. Rolagem natural apenas quando necessária para conteúdo maior, zoom ou janela menor; não criar tela adicional só por espaçamento excessivo.
 - **Próximo checkpoint:** Etapa 03 — banco, perfis e barreiras de acesso, apenas mediante nova solicitação. Não ativar login real antes da etapa 04.
 - **Retomada mínima:** AGENTS, este Livro, docs/etapas/fecho-02.md e cartão 03; arquitetura/regras apenas nos tópicos afetados.
