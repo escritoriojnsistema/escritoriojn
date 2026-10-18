@@ -17,14 +17,13 @@ test('entrada segue a referência e navega sem recarregar a SPA', async ({ page 
 for (const [path, heading] of [
   ['/login', 'Área da Equipe'], ['/login-cliente', 'Área do Cliente'], ['/recuperar-senha?area=client', 'Esqueceu sua senha?'],
 ]) {
-  test(`recarga direta e acesso não simulado: ${path}`, async ({ page }) => {
+  test(`recarga direta não envia credenciais: ${path}`, async ({ page }) => {
     const requests: string[] = [];
     page.on('request', request => { if (request.method() !== 'GET') requests.push(request.url()); });
     await page.goto(path);
     await page.reload();
     await expect(page.getByRole('heading', { name: heading })).toBeVisible();
-    await expect(page.getByText('Acesso em preparação', { exact: true })).toBeVisible();
-    await expect(page.getByLabel('E-mail', { exact: true })).toBeDisabled();
+    await expect(page.getByLabel('E-mail', { exact: true })).toBeEditable();
     expect(requests).toEqual([]);
   });
 }
@@ -32,7 +31,7 @@ for (const [path, heading] of [
 for (const width of [320, 360, 768, 1440]) {
   test(`telas públicas responsivas em ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: width < 500 ? 640 : 900 });
-    for (const path of ['/', '/login', '/login-cliente', '/recuperar-senha?area=client', '/status', '/nao-existe']) {
+    for (const path of ['/', '/login', '/login-cliente', '/recuperar-senha?area=client', '/cadastro', '/redefinir-senha', '/auth/callback', '/status', '/nao-existe']) {
       await page.goto(path);
       await expect(page.locator('h1')).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), path).toBe(true);

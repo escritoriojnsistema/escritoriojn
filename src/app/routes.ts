@@ -1,6 +1,6 @@
-export const paths = { home: '/', team: '/login', client: '/login-cliente', recovery: '/recuperar-senha', status: '/status' } as const;
+export const paths = { home: '/', team: '/login', client: '/login-cliente', recovery: '/recuperar-senha', status: '/status', signup: '/cadastro', callback: '/auth/callback', reset: '/redefinir-senha', panel: '/painel', clientPanel: '/area-cliente', authenticated: '/acesso' } as const;
 export function normalizePathname(pathname: string): string { return pathname.replace(/\/+$/, '').toLowerCase() || '/'; }
 export const pageTitles: Record<string, string> = {
   [paths.home]: 'Seu processo em boas mãos', [paths.team]: 'Área da Equipe',
-  [paths.client]: 'Área do Cliente', [paths.recovery]: 'Recuperação de acesso', [paths.status]: 'Status do sistema',
+  [paths.client]: 'Área do Cliente', [paths.recovery]: 'Recuperação de acesso', [paths.status]: 'Status do sistema', [paths.signup]: 'Cadastro de cliente', [paths.callback]: 'Confirmação de acesso', [paths.reset]: 'Nova senha', [paths.panel]: 'Painel da equipe', [paths.clientPanel]: 'Meu espaço', [paths.authenticated]: 'Verificação de acesso',
 };

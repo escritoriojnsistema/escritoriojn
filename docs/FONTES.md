@@ -23,3 +23,9 @@ Os arquivos COMECE_AQUI/AGENTS/LIVRO_RAIZ originais citados pelo pacote não for
 
 - [Cartão 03](https://drive.google.com/file/d/1QLuUAdrEM7vxn84nZ2Qgdy6ZuxVJPo0d/view) e [regras de acesso](https://drive.google.com/file/d/1xn4cMTGlCneQODBBeZQq3k9pss-MFjM3/view): cópias em `etapas/etapa-03.md` e `regras/acesso.md`.
 - [Changelog Supabase](https://supabase.com/changelog.md) consultado em 17/10/2026; aviso TLS de 10/11/2026 não exige mudança do SQL da fundação. Documentação de [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security), incluindo schemas privados e EXECUTE, consultada pelo conector oficial.
+
+## Etapa 04
+
+- [Cartão 04](https://drive.google.com/file/d/1B3H-aL9nn1e0pmWUpbuUA_ktFomxvChP/view), copiado em etapas/etapa-04.md. Regras de acesso vigentes preservadas.
+- Documentação Supabase consultada via conector oficial: [getUser](https://supabase.com/docs/reference/javascript/auth-getuser), [PKCE](https://supabase.com/docs/guides/auth/sessions/pkce-flow), [exchangeCodeForSession](https://supabase.com/docs/reference/javascript/auth-exchangecodeforsession), [resetPasswordForEmail](https://supabase.com/docs/reference/javascript/auth-resetpasswordforemail), [sessões](https://supabase.com/docs/guides/auth/sessions), [URLs](https://supabase.com/docs/guides/auth/redirect-urls) e [custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp). Versão SDK fixada 2.118.0, CLI 2.121.0. Assinaturas/fluxo de PASSWORD_RECOVERY também conferidos no código instalado.
+- Ambiente oficial reduzido GoTrue 2.197.0/PostgREST 16.4/Mailpit 1.31.3/PostgreSQL 17, imagens fixadas por digest. Projeto local é somente laboratório descartável. Não comprova a entrega SMTP externa.

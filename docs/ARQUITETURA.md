@@ -15,3 +15,13 @@ Fixar Node compatível e versões/lockfile uma vez; npm ci reproduz. Scripts pro
 Envelope seguro: data/meta ou error.code, message e request_id. Nunca retornar SQL, cookie, segredo, token, CPF integral ou conteúdo jurídico em log. 401 não autenticado,403 sem capacidade,409 conflito,422 validação,503 dependência indisponível. Estado vazio não é erro. Falha em grants internos não muda papel comercial nem deve abrir RLS como correção.
 ## Ambientes e restrições
 Não reutilizar IDs/segredos/projetos antigos por conveniência. Definir destino novo antes de mutação e custo antes de criar serviço. Se a conta gratuita não comportar outro ambiente, usar local oficial/isolado e registrar limitação; não usar produção para fixtures. Hobby da Vercel é para uso pessoal não comercial: confirmar opção elegível antes de operação do escritório; não contratar automaticamente. Sem IA ou integrações bancárias automáticas iniciais.
+
+## Contrato Auth implementado na 04
+
+Browser usa somente chave publicável/anon e um SDK com PKCE; API recebe Bearer explícito e verifica getUser antes de RPC invoker my_access_context. Não há cookie próprio de autenticação nem service_role no produto. O SDK gerencia armazenamento/refresh; nenhuma cópia de token em cache de negócio/PWA. Respostas protegidas são privadas/no-store e não abrem CORS.
+
+A autorização no banco também exige auth.sessions vigente pelo session_id do JWT. Somente helper privado lê sessões; as roles da API não recebem SELECT nelas. Perfil/vínculo/escritório/role/capacidade e confirmação/banimento continuam atuais em toda operação. Descoberta de contexto retorna somente escritórios próprios autorizados.
+
+Cadastro mínimo passa por trigger privado transacional e gera somente client no escritório configurado por operador. Role/office em metadata são ignorados. Se cadastro estiver desabilitado ou sem escritório único, Auth pode criar credencial sem vínculo; não recebe acesso ao produto. Não há associação de acervo/CPF/e-mail. As quatro contas anteriores não são reclassificadas pelo trigger.
+
+Callback troca código PKCE pelo SDK, limpa URL e usa destinos internos fixos. Marcador de recuperação em sessionStorage, limitado a15 min e session_id, restaura apenas o formulário após reload; não concede autorização nem substitui verificação do provedor. Atualização de senha continua autenticada pelo Supabase. SMTP/templates/MFA não foram alterados.
