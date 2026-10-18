@@ -1,4 +1,5 @@
 import { supabase } from '../auth/browser';
+import { sessionScope } from '../auth/sessionScope';
 import type { ArchiveEntry, AuditEvent, AuditExport, AuditFilters, GovernancePage } from '../../../shared/governance';
 export class GovernanceError extends Error {
  constructor(public status: number, code?: string) { super(status === 401 ? 'Sua sessão expirou ou foi encerrada. Entre novamente para continuar.' : status === 403 ? 'Seu acesso não permite esta operação. Verifique com o proprietário.' : status === 409 ? 'O registro já mudou. Atualize a lista antes de continuar.' : code === 'EXPORT_LIMIT' ? 'Selecione filtros mais específicos. O limite é de 1000 eventos por exportação.' : status === 422 ? 'Confira os filtros e tente novamente.' : 'Serviço indisponível no momento. Confira sua conexão e tente novamente.'); }
@@ -14,7 +15,8 @@ async function request<T>(path: string, body?: unknown, signal?: AbortSignal): P
   signal?.throwIfAborted();
   const current=await supabase.auth.getSession();
   signal?.throwIfAborted();
-  if(current.error||current.data.session?.access_token!==data.session.access_token)throw new GovernanceError(401);
+  if(current.error||!current.data.session||current.data.session.user.id!==data.session.user.id
+    ||sessionScope(current.data.session)!==sessionScope(data.session))throw new GovernanceError(401);
   return result.data as T;
  } catch(cause) {if(signal?.aborted)throw cause;throw cause instanceof GovernanceError?cause:new GovernanceError(503);}
 }

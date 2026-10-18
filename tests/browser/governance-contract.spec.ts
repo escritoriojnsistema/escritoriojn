@@ -17,6 +17,50 @@ async function setup(page:Page,permissions=capabilities,role='owner'){
   return route.fulfill({json:{data:{items,total:6,page:pageNo,page_size:size}}});
  });
 }
+test('consulta lenta de auditoria continua após rotação do token da mesma sessão',async({page})=>{
+ await setup(page);await page.goto('/auditoria');
+ await expect(page.getByRole('list',{name:'Eventos de auditoria'})).toBeVisible();
+ let release!:()=>void;const pending=new Promise<void>(resolve=>{release=resolve;});
+ await page.route('**/api/governance/audit?**',async route=>{await pending;await route.fallback();});
+ await Promise.all([page.waitForRequest('**/api/governance/audit?**'),page.getByRole('button',{name:'Próxima',exact:true}).click()]);
+ try{
+  // Fictitious provider transport: exercise the official SDK event/storage path.
+  // Only token bytes rotate; the provider session and user remain the same.
+  expect(await page.evaluate(async()=>{
+   const modulePath='/src/features/auth/browser.ts';const {supabase}=await import(modulePath);
+   const {data}=await supabase.auth.getSession();const parts=data.session.access_token.split('.');
+   const claims=JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
+   parts[1]=btoa(JSON.stringify({...claims,jti:'rotation-fixture'})).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+   const {error}=await supabase.auth.setSession({access_token:parts.join('.'),refresh_token:'rotated-fixture'});return !error;
+  })).toBe(true);
+  await expect(page.getByRole('complementary',{name:'Navegação principal'})).toBeVisible();
+ }finally{release();}
+ await expect(page.getByText(/Página 2/)).toBeVisible();
+ await expect(page.getByRole('alert')).toHaveCount(0);
+});
+for(const change of ['logout','nova sessão'])test(`resposta antiga de auditoria é recusada após ${change}`,async({page})=>{
+ await setup(page);await page.goto('/auditoria');
+ await expect(page.getByRole('list',{name:'Eventos de auditoria'})).toBeVisible();
+ let release!:()=>void;const pending=new Promise<void>(resolve=>{release=resolve;});
+ await page.route('**/api/governance/audit?**',async route=>{await pending;await route.fallback();});
+ const requested=page.waitForRequest('**/api/governance/audit?**');
+ const result=page.evaluate(async office=>{
+  const modulePath='/src/features/governance/api.ts';const {governanceApi}=await import(modulePath);
+  try{await governanceApi.audit(office,1,5,{});return 200;}catch(error){return (error as {status:number}).status;}
+ },office);
+ await requested;
+ try{
+  expect(await page.evaluate(async change=>{
+   const modulePath='/src/features/auth/browser.ts';const {supabase}=await import(modulePath);
+   if(change==='logout')return !(await supabase.auth.signOut({scope:'local'})).error;
+   const {data}=await supabase.auth.getSession();const parts=data.session.access_token.split('.');
+   const claims=JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
+   parts[1]=btoa(JSON.stringify({...claims,session_id:'99999999-9999-4999-8999-999999999999'})).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+   return !(await supabase.auth.setSession({access_token:parts.join('.'),refresh_token:'new-session-fixture'})).error;
+  },change)).toBe(true);
+ }finally{release();}
+ expect(await result).toBe(401);
+});
 for(const [width,height] of [[320,568],[360,640],[768,1024],[1440,900]])test(`auditoria e arquivados compactos, ícones e foco em ${width}px`,async({page})=>{
  await page.setViewportSize({width,height});await setup(page);await page.goto('/auditoria');
  await expect(page.getByRole('heading',{name:'Auditoria',exact:true})).toBeVisible();

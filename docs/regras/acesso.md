@@ -1,5 +1,7 @@
 # Acesso, equipe, auditoria e privacidade
 
+**Ajuste posterior06:** navegação/renovação da mesma sessão não encerra conta nem apaga o shell. Logo e Início respeitam o painel autenticado; resposta de outra identidade/session_id é descartada. Detalhes e contrato de prazo individual futuro (10/15/30padrão/60/nunca) em [ajuste-06-navegacao-sessao.md](../etapas/ajuste-06-navegacao-sessao.md). Não confundir preparação documental com prazo automático já ativo no provedor/aplicação.
+
 Referência de negócio e integridade. Leia apenas este arquivo quando a etapa o indicar; decisões vigentes abaixo prevalecem sobre propostas antigas.
 
 ### Decisões vigentes incorporadas ao recomeço

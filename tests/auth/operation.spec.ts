@@ -28,6 +28,39 @@ for (const profile of profiles) test(`login real abre operação, Conta e menu p
   await expect(page.getByRole('link', { name: 'Recuperar senha', exact: true })).toHaveAttribute('href', `/recuperar-senha?area=${profile.client ? 'client' : 'team'}`);
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Conta', exact: true })).toBeVisible();
+  const home = profile.client ? '/area-cliente' : '/painel';
+  await page.goto('/');
+  await expect(page).toHaveURL(home);
+  await page.getByRole('link', { name: 'Abrir conta', exact: true }).click();
+  await page.getByRole('link', { name: 'Recuperar senha', exact: true }).click();
+  await page.locator('.mobile-brand').getByRole('link', { name: 'Escritório JN — início', exact: true }).click();
+  await expect(page).toHaveURL(home);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const sidebar = page.getByRole('complementary', { name: 'Navegação principal' });
+  await sidebar.getByRole('link', { name: 'Conta', exact: true }).click();
+  await sidebar.getByRole('link', { name: 'Escritório JN — início', exact: true }).click();
+  await expect(page).toHaveURL(home);
+  await sidebar.getByRole('link', { name: 'Início', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();
+  // Token rotation for the same real provider session must keep the shell.
+  let release!: () => void;
+  const pending = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/api/auth/context', async route => { await pending; await route.continue(); });
+  const refreshing = page.evaluate(async () => {
+    const modulePath = '/src/features/auth/browser.ts';
+    const { supabase } = await import(modulePath);
+    const { error } = await supabase.auth.refreshSession();
+    return !error;
+  });
+  try {
+    await page.waitForRequest('**/api/auth/context');
+    await expect(sidebar).toBeVisible();
+    await sidebar.getByRole('link', { name: 'Conta', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Conta', exact: true })).toBeVisible();
+    await expect(page.getByText(/Carregando|Verificando seu acesso/)).toHaveCount(0);
+  } finally { release(); }
+  expect(await refreshing).toBe(true);
+  await page.unroute('**/api/auth/context');
   if (!profile.manage) {
     const result = await page.evaluate(async office => {
       const modulePath = '/src/features/auth/browser.ts';
@@ -37,6 +70,7 @@ for (const profile of profiles) test(`login real abre operação, Conta e menu p
     }, process.env.AUTH_LAB_OFFICE!);
     expect(result).toBe(403);
   }
+  await page.setViewportSize({ width: 360, height: 640 });
   await page.getByRole('button', { name: 'Abrir menu' }).click();
   await drawer.getByRole('button', { name: 'Sair da conta' }).click();
   await expect(page).toHaveURL(profile.client ? '/login-cliente' : '/login');
