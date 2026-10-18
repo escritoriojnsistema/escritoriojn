@@ -1,11 +1,11 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { ArrowLeft, UserPlus, ArrowRight, Mail, UserRound } from 'lucide-react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { paths, normalizePathname } from '../../app/routes';
-import { uuidPattern } from '../../../shared/access';
 import { supabase, callbackUrl, authError } from '../auth/browser';
 import { AccessShell } from './AccessShell';
 import { PasswordField } from './PasswordField';
+import { portalLogin, PortalAccessError } from '../auth/portalLogin';
 export default function AccessPage() {
   const location = useLocation();
   const pathname = normalizePathname(location.pathname);
@@ -14,6 +14,8 @@ export default function AccessPage() {
   const signup = pathname === paths.signup;
   const recovery = pathname === paths.recovery;
   const team = pathname === paths.team || (recovery && params.get('area') !== 'client');
+  const loginAttempt = useRef<AbortController | null>(null);
+  useEffect(() => () => loginAttempt.current?.abort(), []);
   const [busy, setBusy] = useState(false);
   const [feedback, setFeedback] = useState<{ text: string; error: boolean } | null>(null);
   const title = signup ? 'Crie sua conta' : recovery ? 'Esqueceu sua senha?' : team ? 'Área da Equipe' : 'Área do Cliente';
@@ -33,12 +35,12 @@ export default function AccessPage() {
         if (error) throw error;
         setFeedback({ text: 'Confira seu e-mail para confirmar o cadastro. Abra o link neste mesmo navegador. Se já tem conta, entre ou recupere sua senha.', error: false });
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        const invite=params.get('invite');
-        navigate(invite && uuidPattern.test(invite)?`${paths.invitation}?id=${encodeURIComponent(invite)}` : paths.authenticated, { replace: true });
+        const controller = new AbortController();
+        loginAttempt.current = controller;
+        const destination = await portalLogin(email, password, team, params.get('invite'), controller.signal);
+        if (!controller.signal.aborted) navigate(destination, { replace: true });
       }
-    } catch (error) { setFeedback({ text: authError(error), error: true }); }
+    } catch (error) { if (!loginAttempt.current?.signal.aborted) setFeedback({ text: error instanceof PortalAccessError ? error.message : authError(error), error: true }); }
     finally { setBusy(false); }
   }
   return <AccessShell title={title} description={signup ? 'Cadastre seu acesso de cliente.' : recovery ? 'Recupere o acesso à sua conta.' : 'Acesse seu ambiente no Escritório JN.'}>

@@ -1,14 +1,23 @@
 import { createClient } from '@supabase/supabase-js';
 import { validPublicConnection } from '../../../shared/connection';
+import { sessionStorage } from './sessionStorage';
 const url = import.meta.env.VITE_SUPABASE_URL;
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 export const supabase = validPublicConnection(url, key) ? createClient(url, key, {
   auth: {
-    flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: false,
+    flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storage: sessionStorage,
     // Match each email to its own SDK verifier, including concurrent requests.
     experimental: { appendPkceFlowIdToRedirects: true },
   },
 }) : null;
+// A portal attempt owns its own in-memory session. Rejecting it must never sign
+// out a different session opened in this browser or another tab meanwhile.
+export function createPortalClient() {
+  return validPublicConnection(url, key) ? createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: `jn-portal-${crypto.randomUUID()}` },
+    global: { fetch: (input, init) => fetch(input, { ...init, signal: AbortSignal.any([AbortSignal.timeout(12_000), ...(init?.signal ? [init.signal] : [])]) }) },
+  }) : null;
+}
 export function callbackUrl(area?: 'team' | 'client') { return `${window.location.origin}/auth/callback${area ? `?area=${area}` : ''}`; }
 export function authError(error: unknown): string {
   const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : '';

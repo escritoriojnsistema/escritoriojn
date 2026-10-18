@@ -1,5 +1,7 @@
 # Livro Raiz — Escritório JN
 
+- **Etapa06 em execução por novo pedido:** manual conferido; correção urgente de entrada no portal errado validada localmente, publicação pendente. Plano em docs/etapas/plano-06.md e prova em correcao-06-portais.md. Auditoria/Arquivados ainda não entregues neste checkpoint. Histórico05 abaixo preservado.
+
 - **Atual — Etapa 05, ajuste operação/mobile publicado:** https://escritoriojn.vercel.app/. PR 8 integrado pelo merge 33c27f3, CI 39134991879 SUCCESS nos 3 jobs, Vercel 6DD8kkdg SUCCESS e 34 E2E públicos remotos passaram. Login abre operação pelo perfil verificado; Conta e navegação móvel com ícones. [Ajuste](docs/etapas/ajuste-05-operacao-mobile.md) guarda evidências. Não iniciar a 06 sem aceite/novo pedido.
 - **Destino:** escritoriojnsistema/escritoriojn, main pelo merge 33c27f3 (PR 8), feature e8f1a94, árvore 53b3941 validada pelo CI. Checkout principal /workspace/escritoriojn-etapa-01 atualizado por fast-forward; worktree fix/operacao-mobile preservada em /workspace/escritoriojn-operacao-mobile. Entrega base 05/PR7 e worktree anterior preservadas no fecho-05. Canônico https://escritoriojn.vercel.app; sistema antigo somente referência.
 - **Stack fixa:** React + Vite + TypeScript, Express /api, Supabase Auth/PostgreSQL/RLS; sem Next/ORM/servidor paralelo. GitHub → Vercel projeto prj_PSltYIXuu3V50lKKVKhFwINMODBq/time escritorio-jn. Não copiar ambiente antigo.
