@@ -1,3 +1,4 @@
+import { ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { paths } from '../../app/routes';
@@ -48,5 +49,5 @@ export default function CallbackPage() {
     }).catch(error => { listener.subscription.unsubscribe(); if (active) setFailure(callbackFailure(error)); });
     return () => { active = false; listener.subscription.unsubscribe(); };
   }, [navigate, area]);
-  return <AccessShell title={failure ? 'Confira seu link' : 'Confirmando acesso'}>{failure ? <><p className="form-feedback error" role="alert">{failure}</p><Link className="primary-button" to={invite?`${paths.invitation}?id=${encodeURIComponent(invite)}`:`${paths.recovery}?area=${area}`}>{invite?'Voltar ao convite':'Solicitar novo link'}</Link></> : <p role="status">Aguarde a confirmação do seu acesso…</p>}</AccessShell>;
+  return <AccessShell title={failure ? 'Confira seu link' : 'Confirmando acesso'}>{failure ? <><p className="form-feedback error" role="alert">{failure}</p><Link className="primary-button" to={invite?`${paths.invitation}?id=${encodeURIComponent(invite)}`:`${paths.recovery}?area=${area}`}><ArrowRight size={18} aria-hidden="true" />{invite?'Voltar ao convite':'Solicitar novo link'}</Link></> : <p role="status">Aguarde a confirmação do seu acesso…</p>}</AccessShell>;
 }

@@ -6,7 +6,7 @@ const cpf='52998224725';
 async function login(page:Page,name='manager') {
   await page.goto('/login');await page.getByLabel('E-mail',{exact:true}).fill(`${name}@example.test`);
   await page.getByLabel('Senha',{exact:true}).fill(password);await page.getByRole('button',{name:'Entrar na área da equipe'}).click();
-  await expect(page.getByRole('heading',{name:'Painel da equipe'})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Área de operação'})).toBeVisible();
 }
 async function sdkFor(name='manager') {
   const sdk=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}});
@@ -25,7 +25,7 @@ async function token(page:Page) {
   return page.evaluate(async()=>{const path='/src/features/auth/browser.ts';const {supabase}=await import(path);return (await supabase.auth.getSession()).data.session?.access_token??'';});
 }
 test('convite novo percorre SMTP, identidade, senha, aceite e desativação com JWT antigo',async({page,browser,request})=>{
-  await login(page);await page.getByRole('link',{name:'Equipe e convites'}).click();
+  await login(page);await page.getByRole('navigation',{name:'Navegação da operação'}).getByRole('link',{name:'Equipe e convites',exact:true}).click();
   await expect(page.getByRole('heading',{name:'Equipe e convites'})).toBeVisible();
   await page.getByRole('button',{name:'Novo convite',exact:true}).click();
   await page.getByLabel('Nome completo',{exact:true}).fill('Pessoa Nova Fictícia');
@@ -46,7 +46,7 @@ test('convite novo percorre SMTP, identidade, senha, aceite e desativação com 
     await recipient.getByLabel('Nome completo',{exact:true}).fill('Pessoa Nova Fictícia');await recipient.getByRole('button',{name:'Conferir dados'}).click();
     await expect(recipient.getByLabel('Nova senha',{exact:true})).toBeVisible();await recipient.reload();await expect(recipient.getByLabel('Nova senha',{exact:true})).toBeVisible();
     await recipient.getByLabel('Nova senha',{exact:true}).fill(password);await recipient.getByLabel('Confirmar nova senha',{exact:true}).fill(password);
-    await recipient.getByRole('button',{name:'Aceitar convite e entrar'}).click();await expect(recipient.getByRole('heading',{name:'Painel da equipe'})).toBeVisible();
+    await recipient.getByRole('button',{name:'Aceitar convite e entrar'}).click();await expect(recipient.getByRole('heading',{name:'Área de operação'})).toBeVisible();
     await expect(recipient.getByRole('link',{name:'Equipe e convites'})).toHaveCount(0);
     const oldToken=await token(recipient);
     expect((await request.post(`/api/team/invitations/${invite.id}/accept`,{headers:{Authorization:`Bearer ${oldToken}`},data:{}})).status()).toBe(410);
@@ -65,7 +65,7 @@ test('conta existente recebe link SMTP e pode manter senha após conferência',a
   await page.goto(await mailLink('existingstaff@example.test'));await expect(page.getByLabel('Nome completo',{exact:true})).toBeVisible();
   await page.getByLabel('Nome completo',{exact:true}).fill('Pessoa Existente Fictícia');await page.getByLabel('CPF',{exact:true}).fill(cpf);await page.getByRole('button',{name:'Conferir dados'}).click();
   await expect(page.getByLabel('Manter minha senha atual')).toBeChecked();await expect(page.getByLabel('Nova senha',{exact:true})).toHaveCount(0);
-  await page.getByRole('button',{name:'Aceitar convite e entrar'}).click();await expect(page.getByRole('heading',{name:'Painel da equipe'})).toBeVisible();await sdk.auth.signOut({scope:'local'});
+  await page.getByRole('button',{name:'Aceitar convite e entrar'}).click();await expect(page.getByRole('heading',{name:'Área de operação'})).toBeVisible();await sdk.auth.signOut({scope:'local'});
 });
 test('delegação limita administrador e revogação vale com o mesmo token',async({request})=>{
   const owner=await sdkFor(),admin=await sdkFor('delegate'),employee=await sdkFor('worker');

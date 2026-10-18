@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { ArrowRight, Mail, UserRound } from 'lucide-react';
+import { ArrowLeft, UserPlus, ArrowRight, Mail, UserRound } from 'lucide-react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { paths, normalizePathname } from '../../app/routes';
 import { uuidPattern } from '../../../shared/access';
@@ -36,7 +36,7 @@ export default function AccessPage() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         const invite=params.get('invite');
-        navigate(invite && uuidPattern.test(invite)?`${paths.invitation}?id=${encodeURIComponent(invite)}`:team ? paths.panel : paths.clientPanel, { replace: true });
+        navigate(invite && uuidPattern.test(invite)?`${paths.invitation}?id=${encodeURIComponent(invite)}` : paths.authenticated, { replace: true });
       }
     } catch (error) { setFeedback({ text: authError(error), error: true }); }
     finally { setBusy(false); }
@@ -52,6 +52,6 @@ export default function AccessPage() {
       {!recovery && <><div className="password-label"><label htmlFor="password">Senha</label>{!signup && <Link to={`${paths.recovery}?area=${team ? 'team' : 'client'}`}>Esqueci minha senha</Link>}</div><PasswordField fresh={signup} /></>}
       <button className="primary-button" type="submit" disabled={!supabase || busy}>{busy ? 'Aguarde…' : signup ? 'Criar conta de cliente' : recovery ? 'Enviar instruções' : `Entrar na área ${team ? 'da equipe' : 'do cliente'}`}<ArrowRight size={18} aria-hidden="true" /></button>
     </fieldset></form>
-    {recovery || signup ? <Link className="return-login" to={signup || !team ? paths.client : paths.team}>Voltar para entrar</Link> : team ? <p className="access-help">O acesso da equipe é gerenciado pelo escritório.</p> : <Link className="return-login" to={paths.signup}>Ainda não tem conta? Cadastre-se</Link>}
+    {recovery || signup ? <Link className="return-login" to={signup || !team ? paths.client : paths.team}><ArrowLeft size={17} aria-hidden="true" />Voltar para entrar</Link> : team ? <p className="access-help">O acesso da equipe é gerenciado pelo escritório.</p> : <Link className="return-login" to={paths.signup}><UserPlus size={17} aria-hidden="true" />Ainda não tem conta? Cadastre-se</Link>}
   </AccessShell>;
 }

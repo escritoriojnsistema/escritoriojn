@@ -27,14 +27,14 @@ test('senha errada, login, layout do painel e logout com JWT antigo bloqueado', 
   await login(page, 'owner', 'Senha-incorreta!');
   await expect(page.getByRole('alert')).toContainText('E-mail ou senha incorretos');
   await login(page, 'owner');
-  await expect(page.getByRole('heading', { name: 'Painel da equipe' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Área de operação' })).toBeVisible();
   await page.evaluate(async () => {
     const modulePath = '/src/features/auth/browser.ts';
     const { supabase } = await import(modulePath);
     const { error } = await supabase.auth.updateUser({ data: { role: 'owner' } });
     if (error) throw new Error('Local SDK metadata update failed.');
   });
-  await expect(page.getByRole('heading', { name: 'Painel da equipe' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Área de operação' })).toBeVisible();
   const session = await page.evaluate(() => {
     const stored = Object.entries(localStorage).find(([k]) => k.endsWith('-auth-token'));
     return stored ? JSON.parse(stored[1]).access_token as string : '';
@@ -64,13 +64,13 @@ for (const name of ['unlinked','inactive']) test(`conta ${name} autentica mas na
 });
 test('sessao recusada e indisponibilidade da API possuem recuperacao clara', async ({page}) => {
   await login(page,'owner');
-  await expect(page.getByRole('heading',{name:'Painel da equipe'})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Área de operação'})).toBeVisible();
   await page.route('**/api/auth/context', route => route.fulfill({status:503,json:{error:{code:'AUTH_UNAVAILABLE'}}}));
   await page.reload();
   await expect(page.getByRole('heading',{name:'Acesso indisponível'})).toBeVisible();
   await page.unroute('**/api/auth/context');
   await page.getByRole('button',{name:'Verificar novamente'}).click();
-  await expect(page.getByRole('heading',{name:'Painel da equipe'})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Área de operação'})).toBeVisible();
   await page.route('**/api/auth/context', route => route.fulfill({status:401,json:{error:{code:'AUTH_REQUIRED'}}}));
   await page.reload();
   await expect(page).toHaveURL(/\/login$/);
@@ -105,7 +105,7 @@ test('cadastro confirma pelo SMTP local e continua somente cliente', async ({pag
   await expect(page.getByRole('status')).toContainText('Confira seu e-mail');
   const link=await emailLink('signup@example.test');
   await page.goto(link);
-  await expect(page.getByRole('heading',{name:'Meu espaço'})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Área de operação'})).toBeVisible();
   await expect(page.getByText('Cliente',{exact:true})).toBeVisible();
   await page.goto('/painel');
   await expect(page.getByRole('heading',{name:'Acesso não autorizado'})).toBeVisible();
@@ -127,7 +127,7 @@ test('recuperacao PKCE altera senha; link reutilizado e codigo invalido recusado
   await login(page,'owner');
   await expect(page.getByRole('alert')).toContainText('E-mail ou senha incorretos');
   await login(page,'owner',`${password}-new`);
-  await expect(page.getByRole('heading',{name:'Painel da equipe'})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Área de operação'})).toBeVisible();
   await page.goto(link);
   await expect(page.getByRole('alert')).toContainText('expirou ou já foi utilizado');
   await page.goto('/auth/callback?code=invalid&next=https://example.org');
