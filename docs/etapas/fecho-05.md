@@ -53,3 +53,5 @@ Conferência protege o aceite da equipe no banco. **Não** alegar barreira globa
 Recebimento externo de recuperação foi confirmado pelo usuário antes da correção da 04; consumo pessoal de um link novo ainda não confirmado. Mailpit e CI não comprovam SMTP externo. Não enviar mensagens/links de contas reais nem criar fixtures hospedadas automaticamente. O cartão05 pede conferência pessoal: convidar pessoa de teste autorizada com acesso básico, aceitar, desativar e tentar a sessão já aberta. Não compartilhar senha, CPF ou link no chat.
 
 Rollout: CI/revisão → migration aditiva → Edge → merge Git/Vercel → verificação pública. Rollback de código preserva banco/auditoria; nenhuma remoção/reset. Conector Vercel permanece403 para env/logs/preview protegido, limitação anterior; Git e HTTP público permitem publicação técnica. Não reduzir proteção para contornar acesso. Etapa 06 depende do aceite05 e de novo pedido.
+
+Ajuste posterior solicitado: entrada direta na operação, Conta e navegação responsiva para os quatro perfis. Contrato, validação e publicação estão em [ajuste-05-operacao-mobile.md](ajuste-05-operacao-mobile.md). Não inicia a06.

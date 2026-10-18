@@ -31,7 +31,7 @@ async function dashboard(page: Page, data = roster()) {
 test('capacidade controla entrada do painel e rota de gestão recusa funcionário', async ({ page }) => {
   await session(page, ['foundation.access'], 'employee');
   await page.goto('/painel');
-  await expect(page.getByRole('heading', { name: 'Painel da equipe' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Área de operação' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Gerenciar equipe e convites' })).toHaveCount(0);
   await page.goto('/equipe');
   await expect(page.getByRole('heading', { name: 'Acesso não autorizado' })).toBeVisible();
@@ -112,7 +112,7 @@ for (const [width, height] of [[320, 568], [360, 640], [768, 1024], [1440, 900]]
   await name.focus();
   await expect(name).toHaveCSS('box-shadow', 'none'); await expect(name).toHaveCSS('outline-style', 'none');
   await expect(name).toHaveCSS('border-top-color', 'rgb(16, 50, 72)');
-  if (width <= 600) { await expect(name).toHaveCSS('font-size', '16px'); await expect(page.locator('.team-mobile-brand')).toBeVisible(); }
+  if (width <= 600) { await expect(name).toHaveCSS('font-size', '16px'); await expect(page.locator('.operation-mobile-bar')).toBeVisible(); }
   const cdp = await context.newCDPSession(page); await cdp.send('DOM.enable'); await cdp.send('CSS.enable');
   const { root } = await cdp.send('DOM.getDocument'); const { nodeIds } = await cdp.send('DOM.querySelectorAll', { nodeId: root.nodeId, selector: '#invite-name' });
   await cdp.send('CSS.forcePseudoState', { nodeId: nodeIds[0], forcedPseudoClasses: ['autofill'] });
@@ -165,6 +165,52 @@ test('alterar acesso não promove funcionário para proprietário; criação exi
   await expect(role.locator('option[value=admin]')).toHaveCount(1);
 });
 
+for (const [role, manager] of [['owner', true], ['admin', false], ['employee', false], ['client', false]] as const) {
+  test(`operação direta e menu móvel com Conta para ${role}`, async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 640 });
+    await session(page, ['foundation.access', ...(manager ? ['users.manage'] : [])], role);
+    await page.goto(role === 'client' ? '/area-cliente' : '/painel');
+    await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();
+    await expect(page.locator('.access-visual')).toHaveCount(0);
+    if (process.env.TEAM_UI_CAPTURE) await page.screenshot({ path: `/workspace/shared/operacao-${role}-360.png` });
+    const menu = page.getByRole('button', { name: 'Abrir menu' });
+    await expect(menu).toBeVisible();
+    await expect(menu.locator('svg')).toHaveCount(1);
+    expect((await menu.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await menu.click();
+    const drawer = page.getByRole('dialog', { name: 'Menu de navegação' });
+    await expect(drawer).toBeVisible();
+    if (process.env.TEAM_UI_CAPTURE && role === 'owner') await page.screenshot({ path: '/workspace/shared/operacao-menu-360.png' });
+    await expect(drawer.getByRole('link', { name: 'Equipe e convites', exact: true })).toHaveCount(manager ? 1 : 0);
+    await drawer.getByRole('link', { name: 'Conta', exact: true }).click();
+    await expect(page).toHaveURL(role === 'client' ? '/minha-conta' : '/conta');
+    await expect(page.getByRole('heading', { name: 'Conta', exact: true })).toBeVisible();
+    if (process.env.TEAM_UI_CAPTURE && role === 'owner') await page.screenshot({ path: '/workspace/shared/operacao-conta-360.png', fullPage: true });
+    await expect(page.getByRole('dialog')).not.toBeVisible();
+    await page.getByRole('button', { name: 'Abrir menu' }).click();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).not.toBeVisible();
+    await expect(page.getByRole('button', { name: 'Abrir menu' })).toBeFocused();
+    await page.getByRole('navigation', { name: 'Atalhos do aplicativo' }).getByRole('link', { name: 'Início', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth && document.documentElement.scrollHeight <= innerHeight + 1)).toBe(true);
+  });
+}
+
+test('menu móvel acompanha a gestão, fecha pelo fundo e mantém ações com ícones', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await session(page); await dashboard(page); await page.goto('/equipe');
+  await page.getByRole('button', { name: 'Abrir menu' }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.mouse.click(318, 150);
+  await expect(page.getByRole('dialog')).not.toBeVisible();
+  for (const button of await page.locator('button:visible').all()) await expect(button.locator('svg')).not.toHaveCount(0);
+  await page.getByRole('button', { name: 'Novo convite', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Abrir menu' })).toBeVisible();
+  await expect(page.getByLabel('Nome completo', { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
 test('reativar conta com permissões efetivas vazias envia o acesso básico obrigatório', async ({ page }) => {
   await session(page);
   const data = roster();
@@ -184,4 +230,88 @@ test('reativar conta com permissões efetivas vazias envia o acesso básico obri
     page.getByRole('button', { name: 'Salvar acesso', exact: true }).click(),
   ]);
   expect(request.postDataJSON()).toEqual({ office_id: office, role_code: 'employee', active: true, permissions: ['foundation.access'] });
+});
+
+test('sidebar desktop navega Conta e gestão; zoom mantém menu e conteúdo acessíveis', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 }); await session(page); await dashboard(page); await page.goto('/painel');
+  const sidebar = page.getByRole('complementary', { name: 'Navegação principal' });
+  await expect(sidebar).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Abrir menu' })).toBeHidden();
+  await sidebar.getByRole('link', { name: 'Conta', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Conta', exact: true })).toBeVisible();
+  await expect(sidebar.getByRole('link', { name: 'Conta', exact: true })).toHaveAttribute('aria-current', 'page');
+  await sidebar.getByRole('link', { name: 'Equipe e convites', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Equipe e convites', exact: true })).toBeVisible();
+  await page.setViewportSize({ width: 720, height: 450 }); // Effective CSS viewport at 200% desktop zoom.
+  await expect(page.getByRole('button', { name: 'Abrir menu' })).toBeVisible();
+  await page.getByRole('button', { name: 'Abrir menu' }).click();
+  const drawer = page.getByRole('dialog');
+  await page.keyboard.press('Tab');
+  expect(await drawer.evaluate(element => element.contains(document.activeElement))).toBe(true);
+  await page.keyboard.press('Shift+Tab');
+  expect(await drawer.evaluate(element => element.contains(document.activeElement))).toBe(true);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(drawer).not.toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('tablet de toque usa menu móvel mesmo com viewport largo e mantém Conta do cliente', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 980, height: 720 }, isMobile: true, hasTouch: true });
+  try {
+    const page = await context.newPage(); await session(page, ['foundation.access', 'users.manage'], 'client');
+    await page.goto('/area-cliente');
+    await expect(page.getByRole('button', { name: 'Abrir menu' })).toBeVisible();
+    await expect(page.locator('.operation-sidebar')).toBeHidden();
+    await page.getByRole('button', { name: 'Abrir menu' }).click();
+    await expect(page.getByRole('dialog').getByRole('link', { name: 'Equipe e convites', exact: true })).toHaveCount(0);
+    await page.getByRole('dialog').getByRole('link', { name: 'Conta', exact: true }).click();
+    await expect(page).toHaveURL('/minha-conta');
+  } finally { await context.close(); }
+});
+
+test('Conta protege área e contexto revogado remove ambiente e navegação', async ({ page }) => {
+  await session(page, ['foundation.access'], 'client'); await page.goto('/conta');
+  await expect(page.getByRole('heading', { name: 'Acesso não autorizado' })).toBeVisible();
+  await page.getByRole('link', { name: 'Ir para minha área' }).click();
+  await expect(page).toHaveURL('/area-cliente');
+  await page.route('**/api/auth/context', route => route.fulfill({ status: 403, json: { error: { code: 'ACCESS_DENIED' } } }));
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'Acesso não autorizado' })).toBeVisible();
+  await expect(page.locator('.operation-layout')).toHaveCount(0);
+});
+
+test('falha ao sair permanece visível e acessível dentro do menu móvel', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 640 }); await session(page); await page.goto('/painel');
+  // This SDK version clears the local session even on HTTP 500. Fault before that
+  // step to exercise the recoverable UI error while the session remains active.
+  await page.evaluate(async () => {
+    const modulePath = '/src/features/auth/browser.ts';
+    const { supabase } = await import(modulePath);
+    supabase.auth.signOut = async () => ({ error: new Error('Local contract failure before session removal') });
+  });
+  await page.getByRole('button', { name: 'Abrir menu' }).click();
+  const drawer = page.getByRole('dialog');
+  await drawer.getByRole('button', { name: 'Sair da conta' }).click();
+  await expect(drawer.getByRole('alert')).toContainText('Não foi possível sair');
+  await expect(drawer.getByRole('button', { name: 'Sair da conta' })).toBeEnabled();
+  await page.getByRole('button', { name: 'Fechar menu' }).click();
+  await expect(page.getByRole('alert')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Abrir menu' })).toBeFocused();
+});
+
+test('rotas do cliente aceitam barra final e caixa sem confundir a área', async ({ page }) => {
+  await session(page, ['foundation.access'], 'client');
+  for (const path of ['/minha-conta/', '/MINHA-CONTA']) {
+    await page.goto(path); await expect(page.getByRole('heading', { name: 'Conta', exact: true })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Recuperar senha', exact: true })).toHaveAttribute('href', '/recuperar-senha?area=client');
+  }
+  await page.goto('/AREA-CLIENTE/'); await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();
+});
+
+test('Conta compacta mantém recuperação acima dos atalhos em 360x640', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 640 }); await session(page); await page.goto('/conta');
+  const recovery = page.getByRole('link', { name: 'Recuperar senha', exact: true });
+  await expect(recovery).toBeVisible();
+  expect((await recovery.boundingBox())!.y + (await recovery.boundingBox())!.height).toBeLessThanOrEqual((await page.getByRole('navigation', { name: 'Atalhos do aplicativo' }).boundingBox())!.y);
+  expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1)).toBe(true);
 });
