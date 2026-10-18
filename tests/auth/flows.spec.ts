@@ -59,8 +59,9 @@ test('senha errada, login, layout do painel e logout com JWT antigo bloqueado', 
 });
 for (const name of ['unlinked','inactive']) test(`conta ${name} autentica mas nao recebe acesso`, async ({page}) => {
   await login(page,name);
-  await expect(page.getByRole('heading',{name:'Acesso não autorizado'})).toBeVisible();
-  await expect(page.getByRole('button',{name:'Sair da conta'})).toBeVisible();
+  await expect(page.getByRole('alert')).toContainText('Este portal não está disponível para esta conta');
+  await expect(page).toHaveURL('/login');
+  await expect(page.locator('.operation-layout')).toHaveCount(0);
 });
 test('sessao recusada e indisponibilidade da API possuem recuperacao clara', async ({page}) => {
   await login(page,'owner');

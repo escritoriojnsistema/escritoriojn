@@ -52,6 +52,11 @@ test('acesso verifica identidade, contexto vigente e escopo no servidor', async 
     mode='valid';
     assert.equal((await fetch(`${api}?office_id=00000000-0000-4000-b000-000000000002`,{headers:auth})).status,403);
     assert.equal((await fetch(`${api}?role=owner`,{headers:auth})).status,422);
+    for (const teamRole of ['owner','admin','employee']) {
+      role=teamRole;
+      assert.equal((await fetch(`${api}?area=client`,{headers:auth})).status,403);
+      assert.equal((await fetch(`${api}?area=team`,{headers:auth})).status,200);
+    }
     role='client';
     assert.equal((await fetch(`${api}?area=team`,{headers:auth})).status,403);
     assert.equal((await fetch(`${api}?area=client`,{headers:auth})).status,200);

@@ -9,11 +9,11 @@ const profiles = [
 ];
 for (const profile of profiles) test(`login real abre operação, Conta e menu para ${profile.name}`, async ({ page, request }) => {
   await page.setViewportSize({ width: 360, height: 640 });
-  // Deliberately use the opposite entry: verified membership determines the area.
-  await page.goto(profile.client ? '/login' : '/login-cliente');
+  // The selected portal and the server-verified membership must both match.
+  await page.goto(profile.client ? '/login-cliente' : '/login');
   await page.getByLabel('E-mail', { exact: true }).fill(`${profile.name}@example.test`);
   await page.getByLabel('Senha', { exact: true }).fill(process.env.AUTH_LAB_PASSWORD!);
-  await page.getByRole('button', { name: profile.client ? 'Entrar na área da equipe' : 'Entrar na área do cliente' }).click();
+  await page.getByRole('button', { name: profile.client ? 'Entrar na área do cliente' : 'Entrar na área da equipe' }).click();
   await expect(page).toHaveURL(profile.client ? '/area-cliente' : '/painel');
   await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();
   await expect(page.locator('.operation-role')).toHaveText(profile.role);
@@ -43,4 +43,94 @@ for (const profile of profiles) test(`login real abre operação, Conta e menu p
   await page.goto(profile.client ? '/minha-conta' : '/conta');
   await expect(page).toHaveURL(profile.client ? '/login-cliente' : '/login');
   expect((await request.get('/api/auth/context')).status()).toBe(401);
+});
+
+for (const profile of profiles) test(`portal incorreto recusa ${profile.name} e encerra a sessão local`, async ({ page }) => {
+  const wrongPortal = profile.client ? '/login' : '/login-cliente';
+  await page.goto(wrongPortal);
+  await page.getByLabel('E-mail', { exact: true }).fill(`${profile.name}@example.test`);
+  await page.getByLabel('Senha', { exact: true }).fill(process.env.AUTH_LAB_PASSWORD!);
+  await page.getByRole('button', { name: profile.client ? 'Entrar na área da equipe' : 'Entrar na área do cliente' }).click();
+  await expect(page.getByRole('alert')).toContainText('Este portal não está disponível para esta conta');
+  await expect(page).toHaveURL(wrongPortal);
+  await expect(page.locator('.operation-layout')).toHaveCount(0);
+  expect(await page.evaluate(async () => {
+    const modulePath = '/src/features/auth/browser.ts';
+    const { supabase } = await import(modulePath);
+    return Boolean((await supabase.auth.getSession()).data.session);
+  })).toBe(false);
+});
+
+test('tentativa recusada não encerra outra sessão válida já aberta', async ({ page }) => {
+  await page.goto('/login');
+  await page.getByLabel('E-mail', { exact: true }).fill('worker@example.test');
+  await page.getByLabel('Senha', { exact: true }).fill(process.env.AUTH_LAB_PASSWORD!);
+  await page.getByRole('button', { name: 'Entrar na área da equipe' }).click();
+  await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();
+  await page.goto('/login-cliente');
+  await page.getByLabel('E-mail', { exact: true }).fill('manager@example.test');
+  await page.getByLabel('Senha', { exact: true }).fill(process.env.AUTH_LAB_PASSWORD!);
+  await page.getByRole('button', { name: 'Entrar na área do cliente' }).click();
+  await expect(page.getByRole('alert')).toContainText('Este portal não está disponível para esta conta');
+  expect(await page.evaluate(async () => {
+    const modulePath = '/src/features/auth/browser.ts';
+    const { supabase } = await import(modulePath);
+    return (await supabase.auth.getUser()).data.user?.email === 'worker@example.test';
+  })).toBe(true);
+});
+
+test('adoção abandonada não sobrescreve a identidade de um login posterior', async ({ page }) => {
+  const endpoint = `${process.env.AUTH_LAB_URL}/auth/v1/user`;
+  let release!: () => void;
+  let holding!: () => void;
+  const pending = new Promise<void>(resolve => { release = resolve; });
+  const held = new Promise<void>(resolve => { holding = resolve; });
+  let first = true;
+  let heldRequest: import('@playwright/test').Request;
+  await page.route(endpoint, async route => {
+    if (first) { first = false; heldRequest = route.request(); holding(); await pending; }
+    await route.continue();
+  });
+  await page.goto('/login');
+  await page.getByLabel('E-mail', { exact: true }).fill('manager@example.test');
+  await page.getByLabel('Senha', { exact: true }).fill(process.env.AUTH_LAB_PASSWORD!);
+  await page.getByRole('button', { name: 'Entrar na área da equipe' }).click();
+  await held;
+  await page.getByRole('link', { name: 'Voltar ao início', exact: true }).click();
+  await page.getByRole('link', { name: 'Acesso da equipe', exact: true }).click();
+  await page.getByLabel('E-mail', { exact: true }).fill('worker@example.test');
+  await page.getByLabel('Senha', { exact: true }).fill(process.env.AUTH_LAB_PASSWORD!);
+  await page.getByRole('button', { name: 'Entrar na área da equipe' }).click();
+  await expect(page.locator('.operation-role')).toHaveText('Funcionário');
+  const oldResponse = page.waitForResponse(response => response.request() === heldRequest);
+  release();
+  await (await oldResponse).finished();
+  expect(await page.evaluate(async () => {
+    const modulePath = '/src/features/auth/browser.ts';
+    const { supabase } = await import(modulePath);
+    return (await supabase.auth.getUser()).data.user?.email === 'worker@example.test';
+  })).toBe(true);
+});
+
+test('cliente ignora convite na URL e permanece exclusivamente na própria área', async ({ page }) => {
+  await page.goto('/login-cliente?invite=11111111-1111-4111-8111-111111111111');
+  await page.getByLabel('E-mail', { exact: true }).fill('portalclient@example.test');
+  await page.getByLabel('Senha', { exact: true }).fill(process.env.AUTH_LAB_PASSWORD!);
+  await page.getByRole('button', { name: 'Entrar na área do cliente' }).click();
+  await expect(page).toHaveURL('/area-cliente');
+  await expect(page.locator('.operation-role')).toHaveText('Cliente');
+});
+
+test('falha na verificação do portal não persiste a sessão da tentativa', async ({ page }) => {
+  await page.route('**/api/auth/context?area=team', route => route.fulfill({ status: 503, json: { error: { code: 'AUTH_UNAVAILABLE' } } }));
+  await page.goto('/login');
+  await page.getByLabel('E-mail', { exact: true }).fill('manager@example.test');
+  await page.getByLabel('Senha', { exact: true }).fill(process.env.AUTH_LAB_PASSWORD!);
+  await page.getByRole('button', { name: 'Entrar na área da equipe' }).click();
+  await expect(page.getByRole('alert')).toContainText('Não foi possível verificar seu acesso');
+  expect(await page.evaluate(async () => {
+    const modulePath = '/src/features/auth/browser.ts';
+    const { supabase } = await import(modulePath);
+    return Boolean((await supabase.auth.getSession()).data.session);
+  })).toBe(false);
 });
