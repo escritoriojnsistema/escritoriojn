@@ -315,3 +315,12 @@ test('Conta compacta mantém recuperação acima dos atalhos em 360x640', async 
   expect((await recovery.boundingBox())!.y + (await recovery.boundingBox())!.height).toBeLessThanOrEqual((await page.getByRole('navigation', { name: 'Atalhos do aplicativo' }).boundingBox())!.y);
   expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1)).toBe(true);
 });
+test('arquivo pendente mantém o escritório de início bloqueado para troca',async({page})=>{
+ await session(page,['foundation.access','users.manage','archives.manage']);
+ const second='55555555-5555-4555-8555-555555555555';
+ await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[office,second].map((office_id,i)=>({office_id,user_id:user,role_code:'owner',permissions:['foundation.access','users.manage','archives.manage'],office_name:`Escritório ${i+1}`,display_name:'Pessoa de Teste'}))}}}));
+ await dashboard(page);let release!:()=>void,holding!:()=>void;const pending=new Promise<void>(r=>release=r),held=new Promise<void>(r=>holding=r);
+ await page.route('**/api/governance/members/*/archive',async r=>{holding();await pending;await r.fulfill({status:403,json:{error:{code:'GOVERNANCE_FORBIDDEN'}}});});
+ await page.goto('/equipe');page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Arquivar acesso de Pessoa da Equipe 3'}).click();await held;
+ try{await expect(page.getByRole('combobox',{name:'Escritório',exact:true})).toBeDisabled();}finally{release();}
+});

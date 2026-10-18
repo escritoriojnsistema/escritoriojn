@@ -25,3 +25,9 @@ O callback de convite é `/auth/callback?area=team&invite=<uuid>`, dentro da all
 GoTrue pode criar senha temporária ao confirmar convite. Para conta nova, o aceite exige mudança do hash do provedor **após** a conferência: guarda-se apenas fingerprint SHA256 privada, nunca senha ou uma cópia do bcrypt. Conta anterior confiável pode manter senha. Isso protege o aceite da equipe; não representa bloqueio global da API de alteração de senha por CPF para todos os clientes/fluxos.
 
 Rollout compatível: migration aditiva → Edge → frontend/API pela integração Git Vercel. Rollback de código preserva schema, vínculos e auditoria; não executar DROP/reset nem restaurar permissões antigas automaticamente. Testes de envio usam somente SMTP local; conferência externa é do proprietário com convite autorizado.
+
+## Etapa06
+
+Migration20261018195511_audit_privacy_archives aplicada e versionada com SQL idêntico ao testado. RPCs audit_page/audit_export/archives_page/archive_membership/restore_archive exigem sessão/capacidades atuais e escritório; API pública não lê audit_events ou private.archived_records diretamente. Seed audit.export/archives.manage somente owner. Arquivar desativa e invalida convites; restaurar mantém conta inativa. Referência mínima na tabela, nome resolvido apenas no DTO autorizado. Falha de auditoria crítica reverte operação.
+
+Validação final:342 SQL em dois replays,30 Auth reais no laboratório e30 Node; nenhum teste de escrita no hospedado. Retenção/titulares/incidentes e contrato de eventos em docs/privacidade. Rollback só código, sem apagar referências/auditoria; sem migrations destrutivas, purge, mudança SMTP ou conta real.

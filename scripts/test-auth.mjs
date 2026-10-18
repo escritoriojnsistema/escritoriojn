@@ -12,7 +12,7 @@ try {
   const admin = createClient(lab.url, lab.serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const users = {};
   // Registration has no office yet: identities do not acquire permissions here.
-  for (const name of ['owner','unlinked','inactive','other','expired','manager','existingstaff','delegate','worker','portalclient']) {
+  for (const name of ['owner','unlinked','inactive','other','expired','manager','existingstaff','delegate','worker','portalclient','archiveworker','auditreader']) {
     const { data, error } = await admin.auth.admin.createUser({ email: `${name}@example.test`, password, email_confirm: true });
     if (error || !data.user) throw new Error('Could not create local Auth fixture.');
     users[name] = data.user.id;
@@ -24,8 +24,9 @@ try {
     INSERT INTO public.offices(id,name) VALUES ('${otherOffice}','Escritório de teste B');
     INSERT INTO public.profiles(id,display_name,active) VALUES ('${users.inactive}','Conta inativa',false),('${users.other}','Pessoa B',true);
     INSERT INTO public.memberships(office_id,user_id,role_code) VALUES ('${office}','${users.inactive}','employee'),('${otherOffice}','${users.other}','owner');
-    INSERT INTO public.profiles(id,display_name) VALUES ('${users.manager}','Gestor de teste'),('${users.delegate}','Administrador de teste'),('${users.worker}','Funcionário de teste'),('${users.portalclient}','Cliente de teste');
-    INSERT INTO public.memberships(office_id,user_id,role_code) VALUES ('${office}','${users.manager}','owner'),('${office}','${users.delegate}','admin'),('${office}','${users.worker}','employee'),('${office}','${users.portalclient}','client');
+    INSERT INTO public.profiles(id,display_name) VALUES ('${users.manager}','Gestor de teste'),('${users.delegate}','Administrador de teste'),('${users.worker}','Funcionário de teste'),('${users.portalclient}','Cliente de teste'),('${users.archiveworker}','Arquivo de teste'),('${users.auditreader}','Auditor de teste');
+    INSERT INTO public.memberships(office_id,user_id,role_code) VALUES ('${office}','${users.manager}','owner'),('${office}','${users.delegate}','admin'),('${office}','${users.worker}','employee'),('${office}','${users.portalclient}','client'),('${office}','${users.archiveworker}','employee'),('${office}','${users.auditreader}','employee');
+    INSERT INTO private.team_member_permissions(membership_id,permission_code) SELECT id,'audit.read' FROM public.memberships WHERE user_id='${users.auditreader}';
     SELECT private.configure_client_registration('${office}',true);
   `, 'migrator');
   const expiredClient = createClient(lab.url, lab.anonKey, { auth: { flowType: 'pkce', persistSession: false, autoRefreshToken: false } });

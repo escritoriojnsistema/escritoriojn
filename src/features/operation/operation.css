@@ -77,3 +77,7 @@
  .operation-details { gap: 14px; margin-top: 18px; }
  .operation-security { padding-top: 18px; }
 }
+
+@media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
+ .operation-main .team-field input, .operation-main .team-field select { font-size: 16px; }
+}

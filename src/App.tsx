@@ -13,6 +13,7 @@ const PanelPage = lazy(() => import('./features/auth/PanelPage'));
 const TeamPage = lazy(() => import('./features/team/TeamPage'));
 const InvitationPage = lazy(() => import('./features/team/InvitationPage'));
 const AccountPage = lazy(() => import('./features/operation/AccountPage'));
+const GovernancePage = lazy(() => import('./features/governance/GovernancePage'));
 function AppRoutes() {
   const { pathname } = useLocation();
   useEffect(() => { document.title = `Escritório JN | ${pageTitles[normalizePathname(pathname)] ?? 'Página não encontrada'}`; window.scrollTo(0, 0); }, [pathname]);
@@ -29,6 +30,8 @@ function AppRoutes() {
     <Route path={paths.authenticated} element={<PanelPage />} />
     <Route path={paths.teamManagement} element={<TeamPage />} />
     <Route path={paths.invitation} element={<InvitationPage />} />
+    <Route path={paths.audit} element={<GovernancePage key="audit" mode="audit" />} />
+    <Route path={paths.archives} element={<GovernancePage key="archives" mode="archives" />} />
     <Route path={paths.account} element={<AccountPage />} />
     <Route path={paths.clientAccount} element={<AccountPage />} />
     <Route path={paths.status} element={<StatusPage />} />

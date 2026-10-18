@@ -78,3 +78,5 @@ Banco e Auth requerem Docker Linux: dois replays com migrador sem superusuário/
 O health mede disponibilidade do processo da API. Não comprova Supabase, autenticação ou prontidão de produção. Configuração de publicação/rotas da Vercel pertence à etapa 02; Supabase/banco/RLS à 03; login à 04. Não reutilizar credenciais ou IDs antigos por padrão e nunca colocar secret/service_role em `VITE_*`.
 
 Veja `docs/FONTES.md`, `docs/PLUGINS.md` e `LIVRO_RAIZ.md` para o checkpoint verificado e as limitações de publicação técnica.
+
+Etapa06: Auditoria e Arquivados com permissões por escritório, exportação registrada e restauração sem reativar acesso; portais de equipe/cliente separados. Documentação e evidências em [fecho06](docs/etapas/fecho-06.md) e [Livro Raiz](LIVRO_RAIZ.md). React+Vite/Express/Supabase preservados.

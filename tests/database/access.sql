@@ -9,8 +9,8 @@ SELECT test.assert_true(NOT EXISTS (SELECT p.polrelid FROM pg_policy p JOIN pg_c
   JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND p.polpermissive
     AND p.polcmd IN ('*','r') AND 'authenticated'::regrole=ANY(p.polroles)
   GROUP BY p.polrelid HAVING count(*)>1), 'SELECT sem policies permissivas redundantes');
-SELECT test.assert_true((SELECT count(*) FROM public.roles)=4 AND (SELECT count(*) FROM public.permissions)=4
-  AND (SELECT count(*) FROM public.role_permissions)=7, 'seed minimo completo sem cadastro posterior');
+SELECT test.assert_true((SELECT count(*) FROM public.roles)=4 AND (SELECT count(*) FROM public.permissions)=6
+  AND (SELECT count(*) FROM public.role_permissions)=9, 'seed minimo completo sem cadastro posterior');
 SELECT test.assert_true((SELECT array_agg(role_code ORDER BY role_code) FROM public.role_permissions
   WHERE permission_code='foundation.access')=ARRAY['admin','client','employee','owner']
   AND (SELECT array_agg(role_code) FROM public.role_permissions WHERE permission_code='audit.read')=ARRAY['owner'],
@@ -90,7 +90,7 @@ SELECT 'PASS: anon sem acesso a dados ou RPC';
 SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000003","session_id":"00000000-0000-4000-c000-000000000003","user_metadata":{"role":"owner"}}';
 SELECT test.assert_true((SELECT count(*) FROM public.offices)=0 AND (SELECT count(*) FROM public.profiles)=0
-  AND (SELECT count(*) FROM public.memberships)=0 AND (SELECT count(*) FROM public.audit_events)=0,
+  AND (SELECT count(*) FROM public.memberships)=0,
   'sem vinculo nao le dados mesmo com metadata forjada');
 SELECT test.assert_true((SELECT count(*) FROM public.access_context(:'office_a'))=0,
   'RPC nega usuario sem vinculo');
@@ -100,8 +100,7 @@ SELECT test.assert_true((SELECT count(*) FROM public.access_context(:'office_a')
   'A acessa contexto e capacidades do proprio escritorio');
 SELECT test.assert_true((SELECT count(*) FROM public.offices)=1 AND (SELECT count(*) FROM public.memberships)=1
   AND (SELECT count(*) FROM public.profiles)=1, 'A ve somente linhas proprias');
-SELECT test.assert_true((SELECT count(*) FROM public.access_context(:'office_b'))=0
-  AND (SELECT count(*) FROM public.audit_events WHERE office_id=:'office_b')=0,
+SELECT test.assert_true((SELECT count(*) FROM public.access_context(:'office_b'))=0,
   'A nao le escritorio nem auditoria de B');
 SELECT test.assert_true((SELECT count(*) FROM public.access_context(NULL))=0, 'escopo nulo nega acesso');
 DO $$ BEGIN
@@ -132,7 +131,7 @@ SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000001","session_i
 UPDATE public.memberships SET active=false WHERE office_id=:'office_a';
 SET ROLE authenticated;
 SELECT test.assert_true((SELECT count(*) FROM public.access_context(:'office_a'))=0
-  AND (SELECT count(*) FROM public.audit_events)=0, 'vinculo inativo bloqueia claim antigo');
+ , 'vinculo inativo bloqueia claim antigo');
 RESET ROLE;
 UPDATE public.memberships SET active=true WHERE office_id=:'office_a';
 UPDATE public.profiles SET active=false WHERE id='00000000-0000-4000-a000-000000000001';
@@ -159,7 +158,7 @@ UPDATE public.roles SET active=true WHERE code='owner';
 UPDATE public.permissions SET active=false WHERE code='audit.read';
 SET ROLE authenticated;
 SELECT test.assert_true(NOT ((SELECT permissions FROM public.access_context(:'office_a')) @> ARRAY['audit.read'])
-  AND (SELECT count(*) FROM public.audit_events)=0, 'revogacao de capacidade imediata sem renovar claim');
+ , 'revogacao de capacidade imediata sem renovar claim');
 RESET ROLE;
 UPDATE public.permissions SET active=true WHERE code='audit.read';
 UPDATE public.memberships SET role_code='employee' WHERE office_id=:'office_a';
@@ -171,6 +170,7 @@ RESET ROLE;
 
 -- Prove RLS also denies writes even if an operator accidentally broadens table grants.
 GRANT INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO authenticated;
+GRANT SELECT ON public.audit_events TO authenticated;
 SET ROLE authenticated;
 WITH changed AS (UPDATE public.memberships SET role_code='owner',office_id=:'office_b' RETURNING *)
   SELECT test.assert_true((SELECT count(*) FROM changed)=0, 'RLS UPDATE nega troca de papel e escritorio');
@@ -185,3 +185,8 @@ DO $$ BEGIN
 END $$;
 RESET ROLE;
 SELECT 'PASS: RLS INSERT nega auditoria forjada mesmo com GRANT';
+
+REVOKE SELECT ON public.audit_events FROM authenticated;
+SET ROLE authenticated;
+SELECT test.expect_error($q$SELECT * FROM public.audit_events$q$,'42501','consulta bruta de auditoria substituida pelo DTO/RPC da06');
+RESET ROLE;
