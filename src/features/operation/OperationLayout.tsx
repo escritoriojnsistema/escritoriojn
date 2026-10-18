@@ -4,7 +4,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import type { AccessContext } from '../../../shared/access';
 import { Brand } from '../../ui/Brand';
 import { useAuth } from '../auth/AuthProvider';
-import { operationNavigation, operationRoleNames } from './navigation';
+import { operationNavigation, mobileOperationNavigation, operationRoleNames } from './navigation';
 import './operation.css';
 
 const icons = { home: House, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
@@ -44,7 +44,7 @@ export function OperationLayout({ client = false, busy = false, children }: { cl
     finally { setLeaving(false); }
   }
   function navigation(label: string, mobile = false) {
-    return <nav aria-label={label} className={mobile ? 'operation-mobile-nav' : 'operation-navigation'}>{items.map(item => {
+    return <nav aria-label={label} className={mobile ? 'operation-mobile-nav' : 'operation-navigation'}>{(mobile ? mobileOperationNavigation(items) : items).map(item => {
       const Icon = icons[item.key];
       return <NavLink key={item.key} to={item.path} end onClick={closeMenu}><Icon size={21} aria-hidden="true" /><span>{mobile && item.key === 'team' ? 'Equipe' : item.label}</span></NavLink>;
     })}</nav>;

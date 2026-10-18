@@ -9,7 +9,7 @@ test('Auth real conecta Equipe → Arquivados → Auditoria → exportação com
  await page.getByRole('button',{name:'Abrir menu'}).click();await page.getByRole('dialog',{name:'Menu de navegação'}).getByRole('link',{name:'Equipe e convites',exact:true}).click();
  await page.getByLabel('Buscar por nome ou e-mail').fill('archiveworker@example.test');await page.getByRole('button',{name:'Buscar',exact:true}).click();await expect(page.getByText('Arquivo de teste',{exact:true})).toBeVisible();
  page.once('dialog',dialog=>dialog.accept());await page.getByRole('button',{name:'Arquivar acesso de Arquivo de teste'}).click();await expect(page.getByRole('status').filter({hasText:'Acesso arquivado'})).toContainText('Acesso arquivado');
- await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link',{name:'Arquivados',exact:true}).click();await expect(page.getByRole('list',{name:'Referências arquivadas'}).locator('li')).toHaveCount(1);await expect(page.getByText('Arquivo de teste',{exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Abrir menu'}).click();await page.getByRole('dialog',{name:'Menu de navegação'}).getByRole('link',{name:'Arquivados',exact:true}).click();await expect(page.getByRole('list',{name:'Referências arquivadas'}).locator('li')).toHaveCount(1);await expect(page.getByText('Arquivo de teste',{exact:true})).toBeVisible();
  page.once('dialog',dialog=>dialog.accept());await page.getByRole('button',{name:'Restaurar referência',exact:true}).click();await expect(page.getByRole('status').filter({hasText:'O acesso continua inativo'})).toContainText('O acesso continua inativo');
  const sdk=await sdkFor('manager');
  try {

@@ -30,5 +30,12 @@ export default defineConfig(({ mode }) => {
   for (const key of ['VITE_SUPABASE_URL', 'VITE_SUPABASE_PUBLISHABLE_KEY']) {
     if (!process.env[key] && local[key]) process.env[key] = local[key];
   }
-  return { plugins: [localApi(), react(), tailwindcss()] };
+  return {
+    plugins: [localApi(), react(), tailwindcss()],
+    // Static imports keep navigation immediate. Split the provider SDK for
+    // independent browser caching, loaded with the entry (never on route click).
+    build: { rolldownOptions: { output: { codeSplitting: { groups: [
+      { name: 'supabase', test: /node_modules\/@supabase\// },
+    ] } } } },
+  };
 });

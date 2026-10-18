@@ -1,5 +1,7 @@
 import { ArrowRight, Building2, ClipboardList, HeartHandshake, LockKeyhole, ShieldCheck, UserRound } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { useAuth } from '../auth/AuthProvider';
+import { useAccountHome } from '../auth/useAccountHome';
 import { paths } from '../../app/routes';
 import { SiteFooter, SiteHeader } from '../../app/SiteLayout';
 const benefits = [
@@ -9,6 +11,10 @@ const benefits = [
   { icon: ShieldCheck, title: 'Segurança', text: 'Proteção das informações.' },
 ];
 export default function HomePage() {
+  const auth = useAuth();
+  const accountHome = useAccountHome();
+  if (auth.status === 'loading') return null;
+  if (accountHome) return <Navigate replace to={accountHome} />;
   return <div className="public-site"><SiteHeader /><main id="conteudo" className="landing-main">
     <section className="landing-hero" aria-labelledby="welcome-title">
       <div className="landing-content">

@@ -28,6 +28,102 @@ async function dashboard(page: Page, data = roster()) {
   });
 }
 
+test('owner tem quatro atalhos móveis e Arquivados permanece no menu completo', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 640 });
+  await session(page, ['foundation.access', 'users.manage', 'audit.read', 'archives.manage']);
+  await page.goto('/painel');
+  const shortcuts = page.getByRole('navigation', { name: 'Atalhos do aplicativo' });
+  await expect(shortcuts.getByRole('link')).toHaveCount(4);
+  await expect(shortcuts.getByRole('link', { name: 'Conta', exact: true })).toBeVisible();
+  await expect(shortcuts.getByRole('link', { name: 'Arquivados', exact: true })).toHaveCount(0);
+  if (process.env.NAVIGATION_CAPTURE) await page.screenshot({ path: '/workspace/shared/ajuste06-quatro-atalhos-360.png' });
+  await page.getByRole('button', { name: 'Abrir menu' }).click();
+  await expect(page.getByRole('dialog').getByRole('link', { name: 'Arquivados', exact: true })).toBeVisible();
+  if (process.env.NAVIGATION_CAPTURE) await page.screenshot({ path: '/workspace/shared/ajuste06-menu-completo-360.png' });
+});
+
+test('conferência lenta mantém menu e navegação imediata; revogação bloqueia ao retornar', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await session(page); await page.goto('/painel');
+  await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();
+  let release!: () => void;
+  const pending = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/api/auth/context', async route => {
+    await pending;
+    await route.fulfill({ status: 403, json: { error: { code: 'ACCESS_DENIED' } } });
+  });
+  await Promise.all([page.waitForRequest('**/api/auth/context'), page.evaluate(() => window.dispatchEvent(new Event('focus')))]);
+  const sidebar = page.getByRole('complementary', { name: 'Navegação principal' });
+  try {
+    await expect(sidebar).toBeVisible({ timeout: 1000 });
+    await sidebar.getByRole('link', { name: 'Conta', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Conta', exact: true })).toBeVisible({ timeout: 1000 });
+    await expect(sidebar).toBeVisible();
+    await expect(page.getByText(/Carregando|Verificando seu acesso/)).toHaveCount(0);
+  } finally { release(); }
+  await expect(page.getByRole('heading', { name: 'Acesso não autorizado' })).toBeVisible();
+  await expect(sidebar).toHaveCount(0);
+});
+
+for (const role of ['owner', 'admin', 'employee', 'client']) test(`logo em recuperação e raiz respeitam a sessão ${role}`, async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 640 });
+  await session(page, ['foundation.access'], role);
+  const home = role === 'client' ? '/area-cliente' : '/painel';
+  await page.goto(home);
+  await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();
+  await page.goto('/');
+  await expect(page).toHaveURL(home);
+  await page.getByRole('link', { name: 'Abrir conta', exact: true }).click();
+  await page.getByRole('link', { name: 'Recuperar senha', exact: true }).click();
+  await page.locator('.mobile-brand').getByRole('link', { name: 'Escritório JN — início', exact: true }).click();
+  await expect(page).toHaveURL(home);
+  await page.getByRole('link', { name: 'Abrir conta', exact: true }).click();
+  await page.getByRole('link', { name: 'Recuperar senha', exact: true }).click();
+  await page.getByRole('link', { name: 'Voltar ao início', exact: true }).click();
+  await expect(page).toHaveURL(home);
+  await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();
+  const shortcuts = page.getByRole('navigation', { name: 'Atalhos do aplicativo' });
+  expect(await shortcuts.getByRole('link').count()).toBeLessThanOrEqual(4);
+});
+
+test('status consulta em segundo plano sem texto ou ícone de carregamento', async ({ page }) => {
+  let release!: () => void;
+  const pending = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/api/health', async route => { await pending; await route.fulfill({ status: 503, json: {} }); });
+  await page.goto('/status');
+  try {
+    await expect(page.getByText(/Verificando|Carregando/)).toHaveCount(0);
+    await expect(page.locator('.health-icon.loading')).toHaveCount(0);
+  } finally { release(); }
+  await expect(page.getByRole('alert')).toContainText('Não foi possível verificar');
+});
+
+for (const change of ['nova sessão', 'outro usuário', 'outra função']) test(`troca no mesmo escritório descarta formulário e lista anteriores: ${change}`, async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await session(page); await dashboard(page); await page.goto('/equipe');
+  await expect(page.getByText('Pessoa da Equipe 1', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Novo convite', exact: true }).click();
+  await page.getByLabel('Nome completo', { exact: true }).fill('Rascunho da sessão anterior');
+  const nextUser = change === 'outro usuário' ? '77777777-7777-4777-8777-777777777777' : user;
+  const nextToken = `e30.${Buffer.from(JSON.stringify({ sub: nextUser, exp: Math.floor(Date.now() / 1000) + 3600, role: 'authenticated', session_id: '88888888-8888-4888-8888-888888888888' })).toString('base64url')}.fixture`;
+  await page.route('https://team-ui.supabase.co/**', route => route.fulfill({ json: { id: nextUser, aud: 'authenticated', email: 'next@example.test', app_metadata: {}, user_metadata: {} } }));
+  await page.route('**/api/auth/context', route => route.fulfill({ json: { data: { user: { id: nextUser }, contexts: [{ office_id: office, user_id: nextUser, role_code: change === 'outra função' ? 'admin' : 'owner', permissions: ['foundation.access', 'users.manage'], office_name: 'Escritório na nova sessão', display_name: 'Nova sessão' }] } } }));
+  let release!: () => void;
+  const pending = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/api/team?**', async route => { await pending; await route.fallback(); });
+  try {
+    if (change === 'outra função') await page.evaluate(() => window.dispatchEvent(new Event('focus')));
+    else expect(await page.evaluate(async token => {
+      const modulePath = '/src/features/auth/browser.ts';
+      const { supabase } = await import(modulePath);
+      return !(await supabase.auth.setSession({ access_token: token, refresh_token: 'new-session-fixture' })).error;
+    }, nextToken)).toBe(true);
+    await expect(page.getByText('Escritório na nova sessão', { exact: true })).toBeVisible();
+    await expect(page.getByLabel('Nome completo', { exact: true })).toHaveCount(0);
+    await expect(page.getByText('Pessoa da Equipe 1', { exact: true })).toHaveCount(0);
+  } finally { release(); }
+});
+
 test('capacidade controla entrada do painel e rota de gestão recusa funcionário', async ({ page }) => {
   await session(page, ['foundation.access'], 'employee');
   await page.goto('/painel');

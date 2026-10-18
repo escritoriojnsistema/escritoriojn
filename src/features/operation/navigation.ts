@@ -15,3 +15,10 @@ export function operationNavigation(contexts: AccessContext[], client: boolean):
   items.push({ key: 'account', label: 'Conta', path: client ? paths.clientAccount : paths.account });
   return items;
 }
+
+// Shared rule for every current/future operation screen. The complete registry
+// remains in the sidebar; never fill unused slots with unavailable destinations.
+export function mobileOperationNavigation(items: OperationItem[]): OperationItem[] {
+  const account = items.filter(item => item.key === 'account');
+  return [...items.filter(item => item.key !== 'account').slice(0, 4 - account.length), ...account];
+}

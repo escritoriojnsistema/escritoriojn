@@ -105,9 +105,8 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .health-actions button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 14px; background: #103248; color: #fff; border: 0; border-radius: 6px; font-size: 12px; }
 .health-actions button:disabled { opacity: .7; }
 .health-actions a { min-height: 44px; display: inline-flex; align-items: center; gap: 5px; font-size: 12px; }
-.page-loading, .not-found { min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; gap: 20px; text-align: center; }
+.not-found { min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; gap: 20px; text-align: center; }
 .not-found h1 { font-size: 30px; }
-.loading-line { width: 80px; height: 3px; background: #b58b4a; }
 @media (max-width: 900px) { .landing-content { gap: 35px; } .access-layout { grid-template-columns: 38% minmax(0, 1fr); } .access-main { padding: 24px; } .access-visual { padding: 22px; } .access-visual .brand-label small { display: none; } .access-visual .brand { gap: 12px; left: 22px; } .access-visual .brand-label strong { font-size: 11px; letter-spacing: 1.5px; } .access-visual-copy h2 { font-size: 30px; } .status-page { gap: 24px; } }
 @media (max-width: 600px) {
  .site-header { min-height: 60px; padding: 8px 16px; } .brand { gap: 12px; } .brand-monogram { font-size: 34px; letter-spacing: -7px; padding-right: 7px; } .brand-label { border: 0; padding-left: 0; gap: 4px; } .brand-label strong { font-size: 11px; letter-spacing: 1.5px; } .site-header .brand-label small { display: none; } .header-access > span { display: none; }
