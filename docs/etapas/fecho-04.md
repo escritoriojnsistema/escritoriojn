@@ -1,5 +1,7 @@
 # Etapa 04 — checkpoint de autenticação
 
+> Atualização posterior em 18/10: usuário confirmou recebimento externo, mas relatou recusa do link aberto no mesmo navegador. Correção e provas atuais em [correcao-04-recuperacao-campos.md](correcao-04-recuperacao-campos.md). Os checkpoints abaixo conservam o histórico; mensagens anteriores de recebimento ainda não testado foram superadas por esse relato. CPF/nome/função e cadastros/delegação ficam preparados como contrato futuro, sem implantação nesta rodada.
+
 **Estado em 18/10: publicação técnica de frontend/API verificada; conferência humana de login/SMTP externo pendente. Site URL e callback canônicos confirmados.** React + Vite preservado. Não avançar à 05 antes da configuração e prova publicadas.
 
 ## Entregue

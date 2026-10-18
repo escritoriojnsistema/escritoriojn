@@ -3,7 +3,11 @@ import { validPublicConnection } from '../../../shared/connection';
 const url = import.meta.env.VITE_SUPABASE_URL;
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 export const supabase = validPublicConnection(url, key) ? createClient(url, key, {
-  auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: false },
+  auth: {
+    flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: false,
+    // Match each email to its own SDK verifier, including concurrent requests.
+    experimental: { appendPkceFlowIdToRedirects: true },
+  },
 }) : null;
 export function callbackUrl(area?: 'team' | 'client') { return `${window.location.origin}/auth/callback${area ? `?area=${area}` : ''}`; }
 export function authError(error: unknown): string {
