@@ -6,6 +6,8 @@ test('campos da equipe e cliente sem quadro interno ou sombra, inclusive autofil
   for(const path of ['/login','/login-cliente','/cadastro','/recuperar-senha']) {
     await page.goto(path);
     const fields=page.locator('input');
+    // The route is lazy: wait for the form before enumerating its controls.
+    await expect(fields.first()).toBeVisible();
     for(const field of await fields.all()) {
       await field.focus();
       await expect(field).toHaveCSS('outline-style','none');
