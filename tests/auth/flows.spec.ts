@@ -129,11 +129,59 @@ test('recuperacao PKCE altera senha; link reutilizado e codigo invalido recusado
   await login(page,'owner',`${password}-new`);
   await expect(page.getByRole('heading',{name:'Painel da equipe'})).toBeVisible();
   await page.goto(link);
-  await expect(page.getByRole('alert')).toContainText('Link inválido ou expirado');
+  await expect(page.getByRole('alert')).toContainText('expirou ou já foi utilizado');
   await page.goto('/auth/callback?code=invalid&next=https://example.org');
-  await expect(page.getByRole('alert')).toContainText('Link inválido ou expirado');
+  await expect(page.getByRole('alert')).toContainText('Não foi possível reconhecer a solicitação');
   expect(new URL(page.url()).pathname).toBe('/auth/callback');
   expect(new URL(page.url()).search).toBe('');
+});
+
+test('outro navegador nao e confundido com expiracao nem libera nova senha', async ({page,browser}) => {
+  await page.goto('/recuperar-senha?area=team');
+  await page.getByLabel('E-mail',{exact:true}).fill('other@example.test');
+  await page.getByRole('button',{name:'Enviar instruções'}).click();
+  await expect(page.getByRole('status')).toContainText('Se houver uma conta');
+  const link=await emailLink('other@example.test');
+  const isolated=await browser.newContext();
+  try {
+    const otherPage=await isolated.newPage();
+    await otherPage.goto(link);
+    await expect(otherPage.getByRole('alert')).toContainText('Não foi possível reconhecer a solicitação');
+    await expect(otherPage.getByLabel('Nova senha',{exact:true})).toHaveCount(0);
+    await expect(otherPage.getByRole('link',{name:'Solicitar novo link'})).toHaveAttribute('href','/recuperar-senha?area=team');
+    expect(new URL(otherPage.url()).search).toBe('');
+    expect(new URL(otherPage.url()).hash).toBe('');
+  } finally { await isolated.close(); }
+});
+
+test('indisponibilidade na troca nao aparece como link expirado', async ({page}) => {
+  await page.goto('/recuperar-senha');
+  await page.getByLabel('E-mail',{exact:true}).fill('signup@example.test');
+  await page.getByRole('button',{name:'Enviar instruções'}).click();
+  await expect(page.getByRole('status')).toContainText('Se houver uma conta');
+  const link=await emailLink('signup@example.test');
+  // Contract failure at the token exchange; real local SMTP/PKCE request before it.
+  await page.route('**/auth/v1/token?grant_type=pkce',route=>route.fulfill({status:503,json:{code:'unexpected_failure',msg:'Unavailable'}}));
+  await page.goto(link);
+  await expect(page.getByRole('alert')).toContainText('falha de conexão ou do serviço');
+  await expect(page.getByLabel('Nova senha',{exact:true})).toHaveCount(0);
+  expect(new URL(page.url()).search).toBe('');
+});
+
+test('duas recuperacoes pendentes no mesmo navegador preservam cada solicitacao', async ({page}) => {
+  for(const name of ['unlinked','inactive']) {
+    await page.goto('/recuperar-senha?area=team');
+    await page.getByLabel('E-mail',{exact:true}).fill(`${name}@example.test`);
+    await page.getByRole('button',{name:'Enviar instruções'}).click();
+    await expect(page.getByRole('status')).toContainText('Se houver uma conta');
+  }
+  for(const name of ['unlinked','inactive']) {
+    const link=await emailLink(`${name}@example.test`);
+    await page.goto(link);
+    await expect(page).toHaveURL(/\/redefinir-senha\?area=team$/);
+    await expect(page.getByLabel('Nova senha',{exact:true})).toBeVisible();
+    expect(new URL(page.url()).search).toBe('?area=team');
+  }
 });
 
 test('link realmente expirado pelo provedor e recusado', async ({page, request}) => {
@@ -142,7 +190,7 @@ test('link realmente expirado pelo provedor e recusado', async ({page, request})
   const callback = new URL(expired.headers().location);
   expect(callback.searchParams.get('error_code')).toBe('otp_expired');
   await page.goto(callback.toString());
-  await expect(page.getByRole('alert')).toContainText('Link inválido ou expirado');
+  await expect(page.getByRole('alert')).toContainText('expirou ou já foi utilizado');
   expect(new URL(page.url()).pathname).toBe('/auth/callback');
   expect(new URL(page.url()).search).toBe('');
 });
