@@ -2,6 +2,7 @@ import express, { type ErrorRequestHandler } from 'express';
 import { MAX_VALIDATION_MESSAGE_LENGTH, type HealthResponse, type ValidationResponse } from '../shared/api.js';
 import { errorResponse } from './errors.js';
 import { authRouter } from './modules/auth/router.js';
+import { teamRouter } from './modules/team/router.js';
 
 export const app = express();
 app.disable('x-powered-by');
@@ -22,6 +23,7 @@ api.get('/health', (_req, res) => {
   res.json({ data: { status: 'ok', service: 'escritorio-jn-api' } } satisfies HealthResponse);
 });
 api.use('/auth',authRouter);
+api.use('/team',teamRouter);
 api.post('/validate', (req, res, next) => {
   if (!req.is('application/json')) {
     errorResponse(res, 415, 'UNSUPPORTED_MEDIA_TYPE', 'Envie um corpo JSON.');

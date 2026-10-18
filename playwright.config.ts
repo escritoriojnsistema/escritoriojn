@@ -3,6 +3,7 @@ const remoteBaseURL = process.env.E2E_BASE_URL;
 
 export default defineConfig({
   testDir: './tests/browser',
+  testIgnore: process.env.TEAM_UI_CONTRACT ? undefined : '**/team-contract.spec.ts',
   fullyParallel: false,
   workers: 1,
   reporter: 'list',

@@ -12,7 +12,7 @@ try {
   const admin = createClient(lab.url, lab.serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const users = {};
   // Registration has no office yet: identities do not acquire permissions here.
-  for (const name of ['owner','unlinked','inactive','other','expired']) {
+  for (const name of ['owner','unlinked','inactive','other','expired','manager','existingstaff','delegate','worker']) {
     const { data, error } = await admin.auth.admin.createUser({ email: `${name}@example.test`, password, email_confirm: true });
     if (error || !data.user) throw new Error('Could not create local Auth fixture.');
     users[name] = data.user.id;
@@ -24,6 +24,8 @@ try {
     INSERT INTO public.offices(id,name) VALUES ('${otherOffice}','Escritório de teste B');
     INSERT INTO public.profiles(id,display_name,active) VALUES ('${users.inactive}','Conta inativa',false),('${users.other}','Pessoa B',true);
     INSERT INTO public.memberships(office_id,user_id,role_code) VALUES ('${office}','${users.inactive}','employee'),('${otherOffice}','${users.other}','owner');
+    INSERT INTO public.profiles(id,display_name) VALUES ('${users.manager}','Gestor de teste'),('${users.delegate}','Administrador de teste'),('${users.worker}','Funcionário de teste');
+    INSERT INTO public.memberships(office_id,user_id,role_code) VALUES ('${office}','${users.manager}','owner'),('${office}','${users.delegate}','admin'),('${office}','${users.worker}','employee');
     SELECT private.configure_client_registration('${office}',true);
   `, 'migrator');
   const expiredClient = createClient(lab.url, lab.anonKey, { auth: { flowType: 'pkce', persistSession: false, autoRefreshToken: false } });
@@ -44,7 +46,7 @@ try {
     await delay(250);
   }
   const code = await new Promise((resolve, reject) => {
-    const child = spawn('node', ['node_modules/@playwright/test/cli.js','test','--config','playwright.auth.config.ts'], {
+    const child = spawn('node', ['node_modules/@playwright/test/cli.js','test','--config','playwright.auth.config.ts',...process.argv.slice(2)], {
       env: { ...env, AUTH_LAB_EXPIRED_LINK: expiredLink, AUTH_LAB_URL: lab.url, AUTH_LAB_MAIL_URL: lab.mailUrl, AUTH_LAB_PASSWORD: password, AUTH_LAB_OFFICE: office, AUTH_LAB_OTHER_OFFICE: otherOffice }, stdio: 'inherit',
     });
     children.add(child); child.on('error', reject); child.on('exit', code => { children.delete(child); resolve(code); });

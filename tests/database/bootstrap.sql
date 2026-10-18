@@ -3,6 +3,8 @@ CREATE SCHEMA auth;
 CREATE TABLE auth.users (
   id uuid PRIMARY KEY,
   email text,
+  encrypted_password text,
+  invited_at timestamptz,
   is_anonymous boolean NOT NULL DEFAULT false,
   raw_user_meta_data jsonb NOT NULL DEFAULT '{}'::jsonb,
   email_confirmed_at timestamptz,
@@ -48,3 +50,19 @@ END;
 $$;
 GRANT USAGE ON SCHEMA test TO anon, authenticated, migrator, service_role;
 GRANT EXECUTE ON FUNCTION test.assert_true(boolean, text) TO anon, authenticated, migrator, service_role;
+CREATE FUNCTION test.expect_error(statement text, expected_state text, label text) RETURNS text
+LANGUAGE plpgsql SECURITY INVOKER SET search_path = '' AS $$
+DECLARE actual_state text;
+BEGIN
+  BEGIN
+    EXECUTE statement;
+  EXCEPTION WHEN OTHERS THEN
+    GET STACKED DIAGNOSTICS actual_state = RETURNED_SQLSTATE;
+  END;
+  IF actual_state IS DISTINCT FROM expected_state THEN
+    RAISE EXCEPTION 'FAIL: % (expected %, actual %)', label, expected_state, actual_state;
+  END IF;
+  RETURN 'PASS: ' || label;
+END;
+$$;
+GRANT EXECUTE ON FUNCTION test.expect_error(text,text,text) TO authenticated,anon,service_role,migrator;

@@ -1,6 +1,6 @@
 # Escritório JN
 
-Base nova das **Etapas 01–03** do manual v4: React + Vite + TypeScript, API Express `/api`, telas públicas compactas e fundação Supabase/RLS versionada. O indicador de saúde em `/status` consulta a API real. A conexão de sessão/login funcional pertence à etapa 04.
+Base nova das **Etapas 01–05** do manual v4: React + Vite + TypeScript, API Express `/api`, Supabase Auth/RLS e gestão de equipe por convites. O checkpoint de testes/publicação está em [LIVRO_RAIZ.md](LIVRO_RAIZ.md).
 
 ## Executar
 
@@ -16,7 +16,7 @@ npm run dev
 - Health: http://localhost:3000/api/health
 - Resposta: `{"data":{"status":"ok","service":"escritorio-jn-api"}}`
 
-Funciona sem `.env` e sem credenciais externas. A porta deve estar livre; o comando falha sem selecionar outra porta silenciosamente. Se aparecer `vite: not found` ou `ERR_MODULE_NOT_FOUND`, execute `npm ci` na raiz. Para `EBADENGINE`, use a versão indicada em `.nvmrc`.
+As telas públicas e health funcionam sem `.env`. Login e gestão exigem `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` do projeto autorizado. Nunca usar chave privilegiada nessas variáveis. A porta deve estar livre; o comando não seleciona outra silenciosamente. Para dependências ausentes, execute `npm ci`; para `EBADENGINE`, use `.nvmrc`.
 
 ## Build e preview local
 
@@ -40,11 +40,11 @@ npm start
 
 As rotas `/`, `/login`, `/login-cliente` e `/recuperar-senha?area=client` seguem a composição pública de https://escritoriojnsite.vercel.app/. A imagem visual foi obtida da própria referência e é servida localmente. As telas internas autenticadas não foram acessadas ou copiadas.
 
-Os formulários de acesso são visuais e explicitamente desativados nesta base; não enviam senhas ou e-mails. Login real pertence à etapa 04, após banco/RLS da 03. Há navegação React sem recarga, carregamento por tela e uma página para URLs desconhecidas.
+Login, logout, cadastro mínimo de cliente e recuperação usam o SDK oficial Supabase. `/equipe` exige `users.manage`; `/convite?id=<uuid>` exige o destinatário autenticado e conferência no servidor. Nenhum cadastro público escolhe papel da equipe. Identidade e autorização atual continuam obrigatórias mesmo com menu ou sessão já abertos.
 
 O conteúdo padrão das cinco telas foi compactado para caber em 320×568, 360×640, 768×1024 e 1440×900. Mensagens longas, zoom e janelas mais baixas podem usar rolagem natural, preservando os controles. Veja `docs/etapas/refino-02-compactacao.md` para medições e limites.
 
-`vercel.json` fixa Vite, `npm ci`, build e `dist`. `api/index.ts` e `api/[...path].ts` exportam o mesmo Express. O fallback da SPA exclui `/api` e `/assets`. POST `/api/validate` verifica `{ "message": "texto de 1 a 120 caracteres" }` sem persistir ou refletir o conteúdo; erros de tipo/JSON/tamanho/rota retornam JSON seguro.
+`vercel.json` fixa Vite, `npm ci`, build e `dist`. A Function única `api/index.ts` recebe `/api` antes do fallback SPA; rotas aninhadas chegam ao Express. POST `/api/validate` valida sem persistir. `/api/auth` e `/api/team` usam Bearer, identidade verificada e RPCs com autorização atual. Erros retornam JSON seguro com `request_id`.
 
 Reprodução do manifest Git antigo `87d4321`: `esbuild ^0.25` conflita com o Vite atual. A base atual remove a dependência direta desnecessária e usa lockfile; não é necessário `--force` ou `--legacy-peer-deps`.
 
@@ -55,13 +55,16 @@ npm run typecheck
 npm test
 npx playwright install chromium
 npm run test:e2e
+npm run test:team-ui
+npm run test:db
+npm run test:auth
 ```
 
 Para Chromium já instalado: `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:e2e`. Os testes usam porta 3000 e dados sintéticos sem banco. Falhas geram traces em `test-results/` (ignorado no Git).
 
 Para executar contra um deploy autorizado: `E2E_BASE_URL=https://url-observada-do-deploy npm run test:e2e`. Essa variável elimina a necessidade de servidor local; não incluir barra final. Não usar os testes contra o sistema antigo de referência.
 
-Banco: `npm run test:db` requer Docker Linux e executa dois replays em PostgreSQL 17 descartável, com migrador sem superusuário/BYPASSRLS e 64 verificações de ACL/RLS/RPC. O runner não aceita destino remoto; não usa contas reais. Procedimento de aplicação/proprietário e limites em [supabase/README.md](supabase/README.md).
+Banco e Auth requerem Docker Linux: dois replays com migrador sem superusuário/BYPASSRLS, concorrência real e laboratório GoTrue/PostgREST/Mailpit. Não aceitam banco remoto nem usam contas reais. `test:team-ui` sobe Vite3015 com conexão pública fictícia e interceptações explícitas; testa apresentação, não SMTP/banco. Execute as suítes de navegador sequencialmente. Resultados e limites em [fecho-05](docs/etapas/fecho-05.md) e [Supabase](supabase/README.md).
 
 ## Organização e continuidade
 

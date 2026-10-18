@@ -9,6 +9,8 @@ const StatusPage = lazy(() => import('./features/home/StatusPage'));
 const CallbackPage = lazy(() => import('./features/auth/CallbackPage'));
 const ResetPage = lazy(() => import('./features/auth/ResetPage'));
 const PanelPage = lazy(() => import('./features/auth/PanelPage'));
+const TeamPage = lazy(() => import('./features/team/TeamPage'));
+const InvitationPage = lazy(() => import('./features/team/InvitationPage'));
 function AppRoutes() {
   const { pathname } = useLocation();
   useEffect(() => { document.title = `Escritório JN | ${pageTitles[normalizePathname(pathname)] ?? 'Página não encontrada'}`; window.scrollTo(0, 0); }, [pathname]);
@@ -23,6 +25,8 @@ function AppRoutes() {
     <Route path={paths.panel} element={<PanelPage />} />
     <Route path={paths.clientPanel} element={<PanelPage />} />
     <Route path={paths.authenticated} element={<PanelPage />} />
+    <Route path={paths.teamManagement} element={<TeamPage />} />
+    <Route path={paths.invitation} element={<InvitationPage />} />
     <Route path={paths.status} element={<StatusPage />} />
     <Route path="*" element={<main id="conteudo" className="not-found"><h1>Página não encontrada</h1><p>Confira o endereço ou volte ao início.</p><Link to={paths.home} className="primary-button">Voltar ao início</Link></main>} />
   </Routes></Suspense></>;

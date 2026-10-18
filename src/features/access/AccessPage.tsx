@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { ArrowRight, Mail, UserRound } from 'lucide-react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { paths, normalizePathname } from '../../app/routes';
+import { uuidPattern } from '../../../shared/access';
 import { supabase, callbackUrl, authError } from '../auth/browser';
 import { AccessShell } from './AccessShell';
 import { PasswordField } from './PasswordField';
@@ -34,7 +35,8 @@ export default function AccessPage() {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate(team ? paths.panel : paths.clientPanel, { replace: true });
+        const invite=params.get('invite');
+        navigate(invite && uuidPattern.test(invite)?`${paths.invitation}?id=${encodeURIComponent(invite)}`:team ? paths.panel : paths.clientPanel, { replace: true });
       }
     } catch (error) { setFeedback({ text: authError(error), error: true }); }
     finally { setBusy(false); }
