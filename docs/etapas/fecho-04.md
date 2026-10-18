@@ -1,6 +1,6 @@
 # Etapa 04 — checkpoint de autenticação
 
-**Estado: código implementado e banco aplicado; etapa ainda bloqueada para aceite publicado.** React + Vite preservado. Não avançar à 05 antes da configuração e prova publicadas.
+**Estado em 18/10: código e banco entregues, frontend publicado; correção do roteamento da API em andamento e homologação de login/SMTP externo pendente.** React + Vite preservado. Não avançar à 05 antes da configuração e prova publicadas.
 
 ## Entregue
 
@@ -23,7 +23,7 @@
 
 Advisors após aplicação: nenhum WARN de segurança de banco ou desempenho. INFO de RLS sem policy na tabela privada de configuração é intencional (API sem GRANT, operador/helper apenas); [referência do linter](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy). INFO de índices sem uso mantidos por finalidade em base nova. WARN Auth pré-existente listado abaixo.
 
-## Bloqueios publicados
+## Bloqueios na entrega inicial (17/10)
 
 1. Vercel recusou acesso às variáveis por 403/escopo do conector. Necessárias `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` em build e runtime, iguais para frontend/API. Chave publicável apenas, nunca secret/service_role. Não inserir senha SMTP no app. Reconexão/configuração solicitada ao usuário; não contornar proteção.
 2. Conector Supabase não expõe Site URL/allowlist. Usuário precisa confirmar canonical `https://escritoriojn.vercel.app` e callbacks permitidos com query da PKCE/área; configuração do preview também precisa seu próprio destino autorizado. Ver roteiro de configuração 04.
@@ -33,3 +33,13 @@ Advisors após aplicação: nenhum WARN de segurança de banco ou desempenho. IN
 ## Retomada
 
 Resolver conexão/env/URLs, gerar preview com configuração correta, testar callback e SMTP no ambiente autorizado, conferir CI e então liberar publicação técnica pelo fluxo Git existente. Atualizar Livro/fecho com as provas. Sem DROP/reset, fixtures hospedadas, rebootstrap do proprietário ou cópia de dados do sistema anterior. Reverter código mantém a fundação; para suspender novos vínculos, operador pode desabilitar configuração existente, preservando auditoria.
+
+## Retomada e publicação em18/10
+
+Usuário informou todos os passos concluídos. PR4 integrado (merge e60dccb), build Git/Vercel success: https://vercel.com/escritorio-jn/escritoriojn/5zKk78ZQFb3NSFzFoSjY6FwtyMRC. Frontend canônico novo, bundle com configuração pública do projeto correto, Auth/settings200, signup/email habilitados e confirmação obrigatória. Callback explícito canônico com área aceito pelo provedor; verificação com token inválido retornou303/otp_expired. Site URL padrão observado é https://escritoriojn-escritorio-jn.vercel.app/ e deve ser alinhado ao canônico. Não foram enviados e-mails nem criadas contas de teste hospedadas.
+
+30 E2E públicos passaram após a publicação, mas a investigação adicional encontrou /api/auth/context404 da Vercel (sem request_id) enquanto /api/health200 e /api/nao-existe404 da aplicação funcionavam. Causa: api/[...path].ts cobria apenas um segmento na plataforma. Duas regressões remotas RED confirmaram a lacuna antes da correção.
+
+Correção: rewrite explícito /api/(.*) para /api, Function única api/index.ts; remoção do alias dinâmico redundante e teste de transporte usando o entrypoint real. Captura sem nome é intencional: o conversor oficial routing-utils injeta parâmetros nomeados não usados na query do destino, incompatíveis com a validação estrita da Auth. Fonte: https://github.com/vercel/vercel/blob/main/packages/routing-utils/src/superstatic.ts (convertRewrites/replaceSegments). Sem mudanças em Auth/RLS/migrations/contas. Typecheck,6 Node/API,build e4 testes públicos Auth locais passaram; conferir a plataforma depois do deploy.
+
+Conector Vercel continua403 para o time e para acesso ao preview protegido; CLI ausente. Não repetir a mesma operação ou retirar proteção. Publicação por Git e verificações pelo domínio público disponíveis. Usuário declarou **Ainda não testei** login/recebimento; manter entrega SMTP e login real publicado como não verificados até a conferência humana com conta autorizada.

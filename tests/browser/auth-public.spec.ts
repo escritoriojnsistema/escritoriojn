@@ -16,3 +16,23 @@ test('painel direto exige sessao e callback sem codigo nao segue redirect extern
   await expect(page.getByRole('alert')).toContainText('Link inválido ou expirado');
   expect(new URL(page.url()).hostname).not.toBe('example.org');
 });
+
+test('rota aninhada de autenticacao chega a API e exige sessao',async({request})=>{
+  const response=await request.get('/api/auth/context',{headers:{Accept:'application/json'}});
+  expect(response.status()).toBe(401);
+  expect((await response.json()).error.code).toBe('AUTH_REQUIRED');
+  expect(response.headers()['cache-control']).toContain('no-store');
+  expect(response.headers()['x-request-id']).toMatch(/^[a-f0-9-]{36}$/);
+  const invalid=await request.get('/api/auth/context?area=team',{headers:{Authorization:'Bearer invalid.stage4.transport'}});
+  const result={status:invalid.status(),code:(await invalid.json()).error.code};
+  if(process.env.E2E_BASE_URL) expect(result).toEqual({status:401,code:'AUTH_REQUIRED'});
+  else expect([{status:401,code:'AUTH_REQUIRED'},{status:503,code:'AUTH_NOT_CONFIGURED'}]).toContainEqual(result);
+});
+test('rota aninhada desconhecida retorna erro da API com rastreio',async({request})=>{
+  const response=await request.get('/api/modulo/nao-existe',{headers:{Accept:'application/json'}});
+  expect(response.status()).toBe(404);
+  const body=await response.json();
+  expect(body.error.code).toBe('NOT_FOUND');
+  expect(body.error.request_id).toBe(response.headers()['x-request-id']);
+  expect(body.error.request_id).toMatch(/^[a-f0-9-]{36}$/);
+});
