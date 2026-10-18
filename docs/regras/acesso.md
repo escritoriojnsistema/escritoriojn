@@ -11,7 +11,7 @@ Evitar hierarquia de papéis técnicos/helper para cada tela. Primeiro usar RLS 
 Cadastro público cria somente cliente, com confirmação e perfil mínimo. Não atribui funcionário/proprietário nem vincula acervo por CPF/e-mail. Conferência pela equipe libera a identidade/vínculo conforme política; permissões de consultar, conferir e configurar regras de documentos são independentes. Configuração de acesso só por proprietário/administrador expressamente autorizado. Sobrescrita documental fica ligada à versão e não remove partes principais sem decisão específica.
 
 
-Proposta de implementação: proprietário, administrador delegado, funcionário e cliente são papéis comerciais. Superadministrador é capacidade técnica separada, concedida com escopo explícito. O proprietário recebe capacidades comerciais previstas, não poder implícito para alterar banco e segredos.
+Proprietário, administrador delegado, funcionário e cliente são papéis comerciais. Conforme o complemento solicitado após a 04, o rótulo **Superadministrador (Proprietário)** designa o papel comercial `owner`; substitui a proposta anterior de reservar esse nome a uma capacidade técnica. Operações técnicas exigem autorização e escopo próprios. O proprietário recebe capacidades comerciais previstas, não poder implícito para alterar banco e segredos.
 
 | Capacidade | Proprietário | Admin delegado | Funcionário | Cliente |
 | --- | --- | --- | --- | --- |
