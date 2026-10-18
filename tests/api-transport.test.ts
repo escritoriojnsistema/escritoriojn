@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { once } from 'node:events';
 import type { AddressInfo } from 'node:net';
-import handler from '../api/[...path].ts';
+import handler from '../api/index.ts';
 
 test('Function Express atende POST público sem persistência e rejeita entradas inválidas', async (t) => {
   const server = createServer(handler);
