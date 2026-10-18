@@ -169,6 +169,7 @@ try {
     const result = sql(database, 'postgres', readFileSync(`${root}tests/database/access.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/auth.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/governance.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
       + await raceLastOwners(database)
       + await raceRevokedSession(database)

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { House, UsersRound, CircleUserRound, LogOut, Menu, X } from 'lucide-react';
+import { House, UsersRound, CircleUserRound, History, Archive, LogOut, Menu, X } from 'lucide-react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import type { AccessContext } from '../../../shared/access';
 import { Brand } from '../../ui/Brand';
@@ -7,7 +7,7 @@ import { useAuth } from '../auth/AuthProvider';
 import { operationNavigation, operationRoleNames } from './navigation';
 import './operation.css';
 
-const icons = { home: House, team: UsersRound, account: CircleUserRound };
+const icons = { home: House, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
 export function OperationLayout({ client = false, busy = false, children }: { client?: boolean; busy?: boolean; children: ReactNode }) {
   const auth = useAuth();
   const items = operationNavigation(auth.contexts, client);

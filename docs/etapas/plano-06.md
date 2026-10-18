@@ -28,3 +28,6 @@ Scripts auxiliares da skill cloud indisponíveis no executor: plano/checkpoints 
 Checkpoint: portais26 Auth reais +2 adicionais,23 Node,build passaram. UI/público/publicação e módulo06 pendentes.
 
 Verificação complementar concluída:23 contratos UI e34 E2E públicos locais passaram. Primeiro ensaio Auth sem executablePath falhou por browser ausente; execução válida usou /usr/bin/chromium e passou. Revisão independente encontrou duas corridas P2; ambas reproduzidas RED e corrigidas com sessão efêmera/guard de commit.
+
+Checkpoint posterior: hotfix publicado PR9/89325f4, CI/Vercel SUCCESS e prova pública. SQL/API/UI06 implementados;336SQL e30Node passaram antes dos ajustes finais,34UI passaram. Revisão final trouxe quatro achados relevantes, reproduzidos RED e corrigidos com testes SQL/UI; quatro UI de regressão já GREEN. Em validação final de ponta a ponta antes do rollout06.
+Decisão: Arquivados guarda referência mínima, mas DTO resolve nome atual no mesmo escritório para restauração segura; sem copiar nome/CPF/e-mail para a tabela. Restauração invalida definitivamente convites anteriores por meio do bloqueio feito no arquivo. Responsáveis jurídicos ainda definem retenção; documentação inicial cumpre registro sem simular módulo de titulares.

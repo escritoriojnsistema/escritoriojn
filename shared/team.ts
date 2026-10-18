@@ -5,10 +5,10 @@ export type TeamRole = Exclude<BusinessRole, 'client'>;
 export const teamRoleNames: Record<TeamRole, string> = {
   owner: 'Superadministrador (Proprietário)', admin: 'Administrador', employee: 'Funcionário',
 };
-export const assignablePermissions = ['foundation.access', 'audit.read'] as const;
+export const assignablePermissions = ['foundation.access', 'audit.read', 'audit.export', 'archives.manage'] as const;
 export type TeamPermission = typeof assignablePermissions[number];
 export const permissionNames: Record<TeamPermission, string> = {
-  'foundation.access': 'Acesso básico', 'audit.read': 'Consultar auditoria',
+  'foundation.access': 'Acesso básico', 'audit.read': 'Consultar auditoria', 'audit.export': 'Exportar auditoria', 'archives.manage': 'Gerenciar arquivados',
 };
 export type TeamScope = {
   role_code: TeamRole; allowed_roles: TeamRole[]; allowed_permissions: TeamPermission[];
@@ -21,7 +21,7 @@ export type TeamDelegation = {
 export type TeamMember = {
   id: string; user_id: string; name: string | null; email: string; role_code: TeamRole;
   active: boolean; access_active: boolean; permissions: string[]; cpf_masked: string | null;
-  can_edit: boolean; protected_owner: boolean; delegation: TeamDelegation | null;
+  can_edit: boolean; archived?: boolean; protected_owner: boolean; delegation: TeamDelegation | null;
 };
 export type DeliveryStatus = 'pending' | 'sending' | 'sent' | 'failed';
 export type TeamInvitation = {

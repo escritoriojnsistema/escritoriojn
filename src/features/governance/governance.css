@@ -1,0 +1,35 @@
+.governance-main { max-width: 1200px; min-width: 0; }
+.governance-main .operation-heading { margin-bottom: 12px; }
+.governance-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-bottom: 1px solid #dce4e8; padding-bottom: 6px; margin-bottom: 4px; }
+.governance-state { margin: 0; min-width: 160px; }
+.governance-list { list-style: none; padding: 0; margin: 0; }
+.governance-list li { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 70px; padding: 8px 0; border-bottom: 1px solid #e1e8ec; }
+.governance-list li > div { display: flex; flex-direction: column; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+.governance-list strong { font-size: 14px; font-weight: 600; line-height: 1.3; }
+.governance-list small { color: #617887; font-size: 11px; line-height: 1.4; }
+.governance-note { color: #617887; font-size: 12px; margin: 6px 0 0; line-height: 1.4; }
+.governance-filters { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 10px; padding: 12px 0; }
+.governance-filters .team-field { margin: 0; }
+.governance-filters .team-hint, .governance-filters .team-actions { grid-column: 1 / -1; margin: 0; }
+.governance-filters .primary-button { width: auto; min-width: 150px; }
+.governance-detail h2 { font-size: 19px; font-weight: 600; margin: 12px 0; }
+.governance-detail h3 { font-size: 15px; margin: 16px 0 8px; font-weight: 600; }
+.governance-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; margin: 12px 0; }
+.governance-detail-grid div { min-width: 0; overflow-wrap: anywhere; }
+.governance-detail-grid dt { font-size: 12px; color: #617887; margin-bottom: 4px; }
+.governance-detail-grid dd { font-size: 13px; line-height: 1.5; margin: 0; }
+@media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
+ .operation-main:has(.governance-main) { padding-top: 12px; }
+ .governance-main .operation-heading { margin-bottom: 8px; }
+ .governance-main .operation-heading h1 { margin-bottom: 3px; }
+ .governance-main .operation-heading p:not(.eyebrow) { font-size: 12px; }
+ .governance-list li { min-height: 68px; padding: 6px 0; }
+ .governance-list strong { font-size: 13px; }
+ .governance-filters { grid-template-columns: 1fr 1fr; }
+ .governance-filters input, .governance-filters select { font-size: 16px; }
+ .governance-main:has(.governance-filters) .governance-results { display: none; }
+ .governance-button-label { display: none; }
+ .governance-detail-grid { grid-template-columns: 1fr; gap: 12px; }
+ .governance-toolbar .team-text-button { padding-inline: 8px; }
+ .governance-state { min-width: 140px; }
+}
