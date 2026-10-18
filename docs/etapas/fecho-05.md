@@ -30,6 +30,15 @@ SMTP customizado existente é usado pela Edge `team-invitations`. JWT da platafo
 
 O novo E2E percorreu owner→convite→SMTP→callback em outro contexto→identidade incorreta/correta→senha→aceite→painel→desativação→JWT antigo negado. Também confirmou manutenção de senha de conta anterior e delegação revogada com token aberto. Revisão independente incluiu RPCs/ACL, fonte oficial GoTrue e correções de UI/transporte; resultado final deve ser registrado após publicação.
 
+## Conferência hospedada e entrega em curso
+
+- [PR7](https://github.com/escritoriojnsistema/escritoriojn/pull/7), implementação16c11d3. [CI39131090606](https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39131090606) SUCCESS:23Node,256SQL,16Auth,34públicos,12UI e build comprovados nos logs. [Build preview Vercel success](https://vercel.com/escritorio-jn/escritoriojn/FddrTVAxWBSV6vikkhkJQzKUWmEo); preview protegido não foi contornado.
+- Migrations20261018132255 e20261018132554 aplicadas no projeto novo. A primeira corresponde exatamente ao SQL revisado/testado(SHA256363015b4a0b89d2d4f6a66df1546cefebf6071cbdf767ce4563dcae50849d603), apenas nome Git alinhado ao históricoMCP. A segunda acrescenta quatro índices de FK apontados pelo advisor; replay completo256 passou novamente. Nenhum registro/ACL/RPC foi alterado pelo ajuste de índices.
+- Conferência SQL: quatro identidades, um vínculo ativo owner preservados, zero convites de teste, quatro tabelas privadas com RLS, onze RPCs invoker, authenticated não finaliza delivery/service_role somente grant estreito de finalização. Sem fixture hospedada.
+- Edge team-invitations ACTIVE/v1, JWT obrigatório mantido e segredo automático do runtime. HTTP anônimo e token inválido401, sem envio. Auth health200 confirmou GoTruev2.197.0, mesma versão do laboratório. Não foi realizado envio externo automatizado.
+- Advisor de [FK sem índice](https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys) zerado após ajuste. [RLS privada sem policy](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy) é intencional: sem GRANT de tabela e somente operações privadas autorizadas. [Índices ainda não usados](https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index) esperado nesta base nova. Aviso preexistente de [proteção contra senhas vazadas desativada](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection) preservado, sem mudança de plano/MFA.
+- Revisão independente final: nenhum achado relevante remanescente; confirmou ACL/RBAC/aceite, senha temporária e quatro índices. Reviewer executou23Node/typecheck; demais provas têm logs do coordenador/CI. Publicação canônica será registrada após merge e verificação HTTP/browser.
+
 ## Limites e continuidade
 
 Conferência protege o aceite da equipe no banco. **Não** alegar barreira global de CPF para alteração direta de senha pelo provedor; cadastro completo/recuperação por identidade de cliente permanecem futuros. Nome/CPF não substituem controle do e-mail e sessão. Templates e MFA não foram alterados.
