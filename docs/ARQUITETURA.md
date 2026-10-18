@@ -18,10 +18,16 @@ Não reutilizar IDs/segredos/projetos antigos por conveniência. Definir destino
 
 ## Contrato Auth implementado na 04
 
-Browser usa somente chave publicável/anon e um SDK com PKCE; API recebe Bearer explícito e verifica getUser antes de RPC invoker my_access_context. Não há cookie próprio de autenticação nem service_role no produto. O SDK gerencia armazenamento/refresh; nenhuma cópia de token em cache de negócio/PWA. Respostas protegidas são privadas/no-store e não abrem CORS.
+Browser usa somente chave publicável/anon e um SDK com PKCE; API recebe Bearer explícito e verifica getUser antes de RPC invoker my_access_context. Não há cookie próprio de autenticação; browser/Express não usam service_role. O SDK gerencia armazenamento/refresh; nenhuma cópia de token em cache de negócio/PWA. Respostas protegidas são privadas/no-store e não abrem CORS.
 
 A autorização no banco também exige auth.sessions vigente pelo session_id do JWT. Somente helper privado lê sessões; as roles da API não recebem SELECT nelas. Perfil/vínculo/escritório/role/capacidade e confirmação/banimento continuam atuais em toda operação. Descoberta de contexto retorna somente escritórios próprios autorizados.
 
 Cadastro mínimo passa por trigger privado transacional e gera somente client no escritório configurado por operador. Role/office em metadata são ignorados. Se cadastro estiver desabilitado ou sem escritório único, Auth pode criar credencial sem vínculo; não recebe acesso ao produto. Não há associação de acervo/CPF/e-mail. As quatro contas anteriores não são reclassificadas pelo trigger.
 
 Callback troca código PKCE pelo SDK, limpa URL e usa destinos internos fixos. Marcador de recuperação em sessionStorage, limitado a15 min e session_id, restaura apenas o formulário após reload; não concede autorização nem substitui verificação do provedor. Atualização de senha continua autenticada pelo Supabase. SMTP/templates/MFA não foram alterados.
+
+## Extensão de equipe implementada na05
+
+`/api/team` verifica identidade uma vez e chama uma RPC de negócio que autoriza com estado atual; sem pré-consulta redundante de contexto. Quatro tabelas privadas com RLS guardam permissões individuais, identidade mínima, delegações e convites. Wrappers públicos invoker executam implementações privadas definer com search_path vazio e grants estreitos. Lock por escritório serializa mutações; identidade/e-mail e prazos são revalidados após esperas.
+
+O envio usa Edge Function do próprio Supabase, com autenticação JWT da plataforma e getUser/RPC do caller. Apenas a chamada Auth admin e a conclusão estreita de delivery usam segredo automático do runtime; não há segredo na Vercel. Convites implicit passam pelo SDK oficial no callback apenas com UUID válido; cadastro/recuperação normais continuam PKCE. CPF bcrypt e fingerprint privada de alteração de senha não saem do banco. Conferência/aceite são transacionais e não associam acervo por e-mail.

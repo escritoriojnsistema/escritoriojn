@@ -4,6 +4,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { createServer, request as httpRequest } from 'node:http';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
+import { createTeamInvitationHandler } from '../../supabase/functions/team-invitations/handler.ts';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const images = {
@@ -39,6 +40,7 @@ export async function createAuthLab() {
   let networkCreated = false;
   let closing;
   let closed = false;
+  let invitationHandler;
 
   // Keep session proxy/CA settings, but never inherit a remote Docker selector.
   const docker = (args, { input, env = {}, timeout = 60000 } = {}) => new Promise((resolve, reject) => {
@@ -85,12 +87,10 @@ export async function createAuthLab() {
       '-U', user, '-d', 'auth_lab'], { input: query });
   };
 
-  const gateway = createServer((request, response) => {
+  const gateway = createServer(async (request, response) => {
     const origin = request.headers.origin;
     const cors = ['http://127.0.0.1:3005', 'http://localhost:3005'].includes(origin)
       ? { 'access-control-allow-origin': origin, vary: 'Origin' } : {};
-    const target = request.url?.match(/^\/(auth|rest)\/v1(?=\/|\?|$)/);
-    if (!target) { response.writeHead(404).end(); return; }
     if (request.method === 'OPTIONS') {
       response.writeHead(204, { ...cors,
         'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
@@ -98,6 +98,20 @@ export async function createAuthLab() {
       }).end();
       return;
     }
+    if (request.url === '/functions/v1/team-invitations' && invitationHandler) {
+      try {
+        let raw='';
+        for await (const chunk of request) { raw+=chunk; if(raw.length>4096) {response.writeHead(413).end();return;} }
+        const result=await invitationHandler(new Request('http://localhost/functions/v1/team-invitations',{
+          method:request.method,headers:request.headers,
+          ...(!['GET','HEAD'].includes(request.method)?{body:raw}:{}),
+        }));
+        response.writeHead(result.status,{...Object.fromEntries(result.headers),...cors});response.end(await result.text());
+      } catch {response.writeHead(503,{'content-type':'application/json',...cors}).end('{"error":{"code":"TEAM_UNAVAILABLE"}}');}
+      return;
+    }
+    const target = request.url?.match(/^\/(auth|rest)\/v1(?=\/|\?|$)/);
+    if (!target) { response.writeHead(404).end(); return; }
     const port = upstreams[target[1]];
     if (!port) { response.writeHead(503).end(); return; }
     let path = request.url.slice(target[0].length);
@@ -171,6 +185,7 @@ export async function createAuthLab() {
       gateway.listen(0, '127.0.0.1', resolve);
     });
     const url = `http://127.0.0.1:${gateway.address().port}`;
+    invitationHandler=createTeamInvitationHandler({url,anonKey,serviceRoleKey,siteUrl:'http://127.0.0.1:3005'});
     await docker(['network', 'create', '--label', `jn.auth-lab=${id}`, network]);
     networkCreated = true;
     await run('postgres', { POSTGRES_PASSWORD: passwords.postgres, POSTGRES_DB: 'auth_lab' },
@@ -262,11 +277,13 @@ export async function createAuthLab() {
       const expected = [...new Set(migrations.flatMap(text => [...text.matchAll(/CREATE(?:\s+OR\s+REPLACE)?\s+FUNCTION\s+public\.([a-z_][a-z0-9_]*)\s*\(/gi)].map(match => match[1])))];
       const deadline = Date.now() + 10000;
       while (Date.now() < deadline) {
-        const response = await fetch(`${url}/rest/v1/`, { headers: { Authorization: `Bearer ${schemaKey}` }, signal: AbortSignal.timeout(2000) });
-        if (response.ok) {
-          const schema = await response.json();
-          if (expected.every(name => schema.paths?.[`/rpc/${name}`])) return;
-        }
+        // OpenAPI is permission-scoped: the mail completion RPC is deliberately
+        // invisible to authenticated users and visible only to service_role.
+        const schemas=await Promise.all([schemaKey,serviceRoleKey].map(async token=>{
+          const response=await fetch(`${url}/rest/v1/`,{headers:{Authorization:`Bearer ${token}`},signal:AbortSignal.timeout(2000)});
+          return response.ok?await response.json():{};
+        }));
+        if(expected.every(name=>schemas.some(schema=>schema.paths?.[`/rpc/${name}`])))return;
         await delay(100);
       }
       throw new Error('Application migrations committed, but PostgREST schema cache did not refresh in 10 seconds.');

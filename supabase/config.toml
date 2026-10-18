@@ -1,0 +1,6 @@
+project_id = "escritoriojn"
+
+[functions.team-invitations]
+verify_jwt = true
+entrypoint = "./functions/team-invitations/index.ts"
+import_map = "./functions/team-invitations/deno.json"

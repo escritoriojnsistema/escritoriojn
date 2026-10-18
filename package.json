@@ -12,7 +12,8 @@
     "test": "node --import tsx --test src/utils/*.test.ts tests/*.test.ts",
     "test:e2e": "playwright test",
     "test:db": "node scripts/test-database.mjs",
-    "test:auth": "node scripts/test-auth.mjs"
+    "test:auth": "node scripts/test-auth.mjs",
+    "test:team-ui": "node scripts/test-team-ui.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.118.0",
