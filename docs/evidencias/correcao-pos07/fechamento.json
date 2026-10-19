@@ -139,5 +139,24 @@
     "Administrative Vercel access returned 403; GitHub status and canonical public content were checked instead.",
     "Hosted signup/invitation/SMTP timing remains unmeasured in this window; no hosted accounts or emails were created for testing.",
     "Direct shell clone could not reach the configured proxy. Sources were read through the GitHub connector; local files are a partial review snapshot."
+  ],
+  "pending_prs": [
+    {
+      "number": 14,
+      "url": "https://github.com/escritoriojnsistema/escritoriojn/pull/14",
+      "head": "736653e4885da60d0067e44b53ad14e9ff50a6be",
+      "status": "open_unmerged",
+      "scope": "One audit action label: Cadastro público recebido",
+      "preview": "ready",
+      "ci": [
+        {
+          "id": 39289046673,
+          "status": "completed",
+          "conclusion": "success",
+          "sha": "736653e4885da60d0067e44b53ad14e9ff50a6be",
+          "url": "https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39289046673"
+        }
+      ]
+    }
   ]
 }
