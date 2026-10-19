@@ -1,4 +1,5 @@
 import { supabase } from '../auth/browser';
+import { authenticatedFetch } from '../auth/authenticatedFetch';
 import { sessionScope } from '../auth/sessionScope';
 import type { ArchiveEntry, AuditEvent, AuditExport, AuditFilters, GovernancePage } from '../../../shared/governance';
 export class GovernanceError extends Error {
@@ -8,7 +9,7 @@ async function request<T>(path: string, body?: unknown, signal?: AbortSignal): P
  if (!supabase) throw new GovernanceError(503);
  try {
   const {data,error}=await supabase.auth.getSession();if(error||!data.session?.access_token)throw new GovernanceError(401);
-  const response=await fetch(`/api/governance${path}`,{method:body===undefined?'GET':'POST',headers:{Authorization:`Bearer ${data.session.access_token}`,...(body===undefined?{}:{'Content-Type':'application/json'})},...(body===undefined?{}:{body:JSON.stringify(body)}),cache:'no-store',signal:AbortSignal.any([AbortSignal.timeout(25_000),...(signal?[signal]:[])])});
+  const response=await authenticatedFetch(`/api/governance${path}`,{method:body===undefined?'GET':'POST',headers:{Authorization:`Bearer ${data.session.access_token}`,...(body===undefined?{}:{'Content-Type':'application/json'})},...(body===undefined?{}:{body:JSON.stringify(body)}),cache:'no-store',signal:AbortSignal.any([AbortSignal.timeout(25_000),...(signal?[signal]:[])])},data.session);
   const result:unknown=await response.json();
   if(!response.ok){const code=result&&typeof result==='object'&&'error' in result&&result.error&&typeof result.error==='object'&&'code' in result.error?String(result.error.code):undefined;throw new GovernanceError(response.status,code);}
   if(!result||typeof result!=='object'||!('data' in result)||!result.data||typeof result.data!=='object')throw new GovernanceError(503);

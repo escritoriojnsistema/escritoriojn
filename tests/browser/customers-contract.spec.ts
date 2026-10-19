@@ -29,6 +29,21 @@ async function setup(page: Page, permissions = capabilities, role = 'owner', mul
   });
 }
 async function noOverflow(page: Page) { expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); }
+for (const width of [360,1440]) for (const materialized of [true,false]) test(`cadastro público ${materialized ? 'com ficha' : 'aguardando conferência'} em ${width}px`,async({page})=>{
+  await page.setViewportSize({width,height:width===360?640:900});
+  await setup(page);
+  const entry = {...customer,identifier:null,identifier_masked:null,source:'client_registration',association_status:'pending',materialized,can_update:materialized};
+  await page.route('**/api/customers**',route=>route.fulfill({json:{data:route.request().url().endsWith('/search')?{items:[entry],total:1,page:1,page_size:width===360?3:5}:entry}}));
+  await page.goto('/clientes');
+  await expect(page.getByRole('list',{name:'Clientes do escritório'})).toContainText('Cadastro pelo cliente');
+  await page.getByRole('button',{name:`Ver ficha de ${entry.name}`,exact:true}).click();
+  await expect(page.getByRole('note')).toContainText(materialized?'dependerá de aprovação':'depende de conferência');
+  await expect(page.getByRole('button',{name:'Editar cliente',exact:true})).toHaveCount(materialized?1:0);
+  await expect(page.getByRole('region',{name:'Dados da ficha'})).toContainText('cliente@example.test');
+  await noOverflow(page);
+  expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1)).toBe(true);
+  if (process.env.TEAM_UI_CAPTURE) await page.screenshot({path:`/workspace/shared/pos07/cadastro-${materialized?'ficha':'pendente'}-${width}.png`,fullPage:true});
+});
 test('painel com Clientes mantém atalhos principais em uma tela desde 320px', async ({ page }) => {
   await setup(page); await page.goto('/painel');
   await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();

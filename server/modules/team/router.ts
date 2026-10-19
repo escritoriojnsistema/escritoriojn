@@ -1,5 +1,6 @@
 import { Router, json, type Request, type Response } from 'express';
 import { randomUUID } from 'node:crypto';
+import { retainBackgroundTask } from '../../background.js';
 import { authenticatedClient } from '../auth/client.js';
 import { errorResponse } from '../../errors.js';
 import { teamRoles } from '../../../shared/team.js';
@@ -44,8 +45,7 @@ async function rpc(res:Response,name:string,args:Record<string,unknown>) {
     return data;
   } catch {errorResponse(res,503,'TEAM_UNAVAILABLE','Não foi possível concluir a operação. Atualize a lista antes de repetir.');return null;}
 }
-async function deliver(res:Response,office_id:string,invitation_id:string):Promise<{delivery:'sent'|'failed'|'pending';status?:number}> {
-  const {url,key,token}=identity(res);
+async function deliver({url,key,token}:Identity,office_id:string,invitation_id:string):Promise<{delivery:'sent'|'failed'|'pending';status?:number}> {
   try {
     const response=await fetch(`${url.replace(/\/$/,'')}/functions/v1/team-invitations`,{
       method:'POST',headers:{Authorization:`Bearer ${token}`,apikey:key,'Content-Type':'application/json'},
@@ -73,12 +73,17 @@ teamRouter.post('/invitations',async(req,res)=>{
   const data=await rpc(res,'team_create_invitation',Object.fromEntries([...Object.entries(b).map(([key,value])=>[`p_${key}`,value]),['p_request_id',randomUUID()]]));
   if(!data)return;
   if(!v.uuid(data.id) || typeof data.expires_at!=='string') {errorResponse(res,503,'TEAM_UNAVAILABLE','Atualize a lista para conferir o convite.');return;}
-  const {delivery}=await deliver(res,b.office_id,data.id);
-  res.status(201).json({data:{id:data.id,expires_at:data.expires_at,delivery}});
+  // The RPC has committed. Delivery retains its own identity and invocation lifetime,
+  // while the caller can continue without waiting for Auth and SMTP round trips.
+  const started=performance.now();
+  retainBackgroundTask(deliver(identity(res),b.office_id,data.id).then(({delivery,status})=>{
+    console.info(JSON.stringify({event:'team_invitation_delivery',delivery,status:status??200,duration_ms:Math.round(performance.now()-started)}));
+  }));
+  res.status(201).json({data:{id:data.id,expires_at:data.expires_at,delivery:'pending'}});
 });
 teamRouter.post('/invitations/:id/send',async(req,res)=>{
   if(!emptyQuery(req) || !v.uuid(req.params.id) || !v.fields(req.body,['office_id']) || !v.uuid(req.body.office_id)) {invalid(res);return;}
-  const {delivery,status}=await deliver(res,req.body.office_id,req.params.id);
+  const {delivery,status}=await deliver(identity(res),req.body.office_id,req.params.id);
   if(status) {
     const codes:Record<number,string>={401:'AUTH_REQUIRED',403:'TEAM_FORBIDDEN',409:'TEAM_CONFLICT',410:'INVITATION_INVALID',422:'TEAM_VALIDATION',429:'TEAM_RATE_LIMIT'};
     const code=codes[status]??'TEAM_UNAVAILABLE';errorResponse(res,status,code,messages[code]??'Não foi possível confirmar o envio. Confira a lista antes de repetir.');return;

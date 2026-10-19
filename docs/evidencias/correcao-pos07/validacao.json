@@ -1,0 +1,29 @@
+{
+  "state": "awaiting_ci_and_publication",
+  "node": 54,
+  "sql": 560,
+  "local_auth_final_selected": 20,
+  "local_auth_previous_full": {
+    "passed": 55,
+    "failed_expectations_corrected": 2
+  },
+  "pending_final_ci_auth": 59,
+  "migration": {
+    "name": "20261019163453_customer_registration_registry",
+    "sha256": "b92751be1ae5bbdc1ccf2eaced56836f25131fd994a4830be8f7a6c6c0d2f9e8",
+    "applied": true
+  },
+  "database_after": {
+    "accounts": 5,
+    "confirmed_accounts": 4,
+    "active_memberships": 5,
+    "customers": 1,
+    "contacts": 1,
+    "registration_origins": 1,
+    "approved_origins": 0,
+    "rls": true,
+    "raw_grants": false
+  },
+  "future_approval_activated": false,
+  "inactivity_policy_activated": false
+}

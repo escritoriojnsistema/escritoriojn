@@ -1,0 +1,66 @@
+{
+  "synthetic": true,
+  "scope": "SDK signUp response delayed to model blocking Auth SMTP, no persisted accounts or actual emails",
+  "samples": [
+    {
+      "smtpDelayMs": 0,
+      "sample": 0,
+      "responseMs": 67,
+      "calls": [
+        "/auth/v1/signup"
+      ],
+      "error": false,
+      "sessionPresent": false
+    },
+    {
+      "smtpDelayMs": 0,
+      "sample": 1,
+      "responseMs": 7,
+      "calls": [
+        "/auth/v1/signup"
+      ],
+      "error": false,
+      "sessionPresent": false
+    },
+    {
+      "smtpDelayMs": 0,
+      "sample": 2,
+      "responseMs": 16,
+      "calls": [
+        "/auth/v1/signup"
+      ],
+      "error": false,
+      "sessionPresent": false
+    },
+    {
+      "smtpDelayMs": 1200,
+      "sample": 0,
+      "responseMs": 1210,
+      "calls": [
+        "/auth/v1/signup"
+      ],
+      "error": false,
+      "sessionPresent": false
+    },
+    {
+      "smtpDelayMs": 1200,
+      "sample": 1,
+      "responseMs": 1323,
+      "calls": [
+        "/auth/v1/signup"
+      ],
+      "error": false,
+      "sessionPresent": false
+    },
+    {
+      "smtpDelayMs": 1200,
+      "sample": 2,
+      "responseMs": 1260,
+      "calls": [
+        "/auth/v1/signup"
+      ],
+      "error": false,
+      "sessionPresent": false
+    }
+  ]
+}

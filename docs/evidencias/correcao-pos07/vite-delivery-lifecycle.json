@@ -1,0 +1,17 @@
+{
+  "synthetic": true,
+  "results": [
+    {
+      "mode": "dev",
+      "queuedResponse": 201,
+      "closeAwaitedDelivery": true,
+      "deliveryFinished": true
+    },
+    {
+      "mode": "preview",
+      "queuedResponse": 201,
+      "closeAwaitedDelivery": true,
+      "deliveryFinished": true
+    }
+  ]
+}

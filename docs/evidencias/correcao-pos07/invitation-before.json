@@ -1,0 +1,91 @@
+{
+  "stage": "before",
+  "synthetic": true,
+  "delaysMs": {
+    "identity": 40,
+    "commit": 60,
+    "edgeDelivery": 1200
+  },
+  "samples": [
+    {
+      "sample": 0,
+      "status": 201,
+      "delivery": "sent",
+      "responseMs": 1430,
+      "callsByResponse": [
+        "/auth/v1/user",
+        "/rest/v1/rpc/team_create_invitation",
+        "/functions/v1/team-invitations"
+      ],
+      "eventualCalls": [
+        "/auth/v1/user",
+        "/rest/v1/rpc/team_create_invitation",
+        "/functions/v1/team-invitations"
+      ]
+    },
+    {
+      "sample": 1,
+      "status": 201,
+      "delivery": "sent",
+      "responseMs": 1390,
+      "callsByResponse": [
+        "/auth/v1/user",
+        "/rest/v1/rpc/team_create_invitation",
+        "/functions/v1/team-invitations"
+      ],
+      "eventualCalls": [
+        "/auth/v1/user",
+        "/rest/v1/rpc/team_create_invitation",
+        "/functions/v1/team-invitations"
+      ]
+    },
+    {
+      "sample": 2,
+      "status": 201,
+      "delivery": "sent",
+      "responseMs": 1444,
+      "callsByResponse": [
+        "/auth/v1/user",
+        "/rest/v1/rpc/team_create_invitation",
+        "/functions/v1/team-invitations"
+      ],
+      "eventualCalls": [
+        "/auth/v1/user",
+        "/rest/v1/rpc/team_create_invitation",
+        "/functions/v1/team-invitations"
+      ]
+    },
+    {
+      "sample": 3,
+      "status": 201,
+      "delivery": "sent",
+      "responseMs": 1321,
+      "callsByResponse": [
+        "/auth/v1/user",
+        "/rest/v1/rpc/team_create_invitation",
+        "/functions/v1/team-invitations"
+      ],
+      "eventualCalls": [
+        "/auth/v1/user",
+        "/rest/v1/rpc/team_create_invitation",
+        "/functions/v1/team-invitations"
+      ]
+    },
+    {
+      "sample": 4,
+      "status": 201,
+      "delivery": "sent",
+      "responseMs": 1329,
+      "callsByResponse": [
+        "/auth/v1/user",
+        "/rest/v1/rpc/team_create_invitation",
+        "/functions/v1/team-invitations"
+      ],
+      "eventualCalls": [
+        "/auth/v1/user",
+        "/rest/v1/rpc/team_create_invitation",
+        "/functions/v1/team-invitations"
+      ]
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import { defineConfig, loadEnv, type Plugin } from 'vite';
 import express from 'express';
 import { resolve } from 'node:path';
 import { app } from './server/app.ts';
+import { drainBackgroundTasks } from './server/background.ts';
 
 function localApi(): Plugin {
   function localAssets(directory: string) {
@@ -23,6 +24,9 @@ function localApi(): Plugin {
       server.middlewares.use('/assets', localAssets(resolve(server.config.root, server.config.build.outDir, 'assets')));
       server.middlewares.use(app);
     },
+    // Vite awaits these hooks before dev restart/shutdown or preview shutdown.
+    closeServer() { return drainBackgroundTasks(); },
+    closePreviewServer() { return drainBackgroundTasks(); },
   };
 }
 export default defineConfig(({ mode }) => {

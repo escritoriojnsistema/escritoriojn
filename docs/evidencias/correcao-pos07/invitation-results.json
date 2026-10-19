@@ -1,0 +1,52 @@
+{
+  "synthetic": true,
+  "productionTimingClaim": false,
+  "invitation": {
+    "beforeMedianMs": 1390,
+    "afterMedianMs": 201,
+    "responseReductionPercent": 85.5,
+    "awaitedExternalCallsBefore": 3,
+    "awaitedExternalCallsAfter": 2,
+    "eventualExternalCallsUnchanged": 3,
+    "fullPipelinePreserved": [
+      "api_getUser",
+      "create_invitation_rpc",
+      "edge_getUser",
+      "claim_delivery_rpc",
+      "auth_invite_or_recovery_smtp",
+      "finish_delivery_rpc"
+    ],
+    "honestCreateResponse": "201 delivery pending",
+    "retrySynchronous": true,
+    "leaseRateLimitsAuthUnchanged": true
+  },
+  "signup": {
+    "diagnosedOnly": true,
+    "onePost": "/auth/v1/signup",
+    "syntheticMedianNoDelayMs": 16,
+    "syntheticMedianWith1200msProviderDelayMs": 1260,
+    "confirmationRequired": true,
+    "hostedSmtpNotMeasured": true
+  },
+  "verification": {
+    "focusedNodeTests": 17,
+    "focusedNodeFailures": 0,
+    "serverTypeScript": true,
+    "productionDependencyVulnerabilities": 0,
+    "runtimeWaitUntilPromiseUntilFinish": true,
+    "standaloneExpressSigterm": true,
+    "viteDevAndPreviewCloseAwaitDelivery": true,
+    "logs": "invitation-green.log"
+  },
+  "sources": [
+    "https://vercel.com/docs/functions/functions-api-reference/vercel-functions-package#waituntil",
+    "https://supabase.com/docs/guides/auth/auth-smtp.md",
+    "https://supabase.com/changelog.md",
+    "https://vite.dev/guide/api-plugin.html#closeserver",
+    "https://vite.dev/guide/api-plugin.html#closepreviewserver"
+  ],
+  "limits": [
+    "waitUntil bounded by Vercel function timeout; committed pending invitation and existing manual retry remain durable recovery",
+    "No real SMTP emails, hosted accounts, deploy, migrations or SQL changes in this subtask"
+  ]
+}
