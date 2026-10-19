@@ -44,6 +44,10 @@ Os números medem somente o tempo upstream do provedor. Não incluem navegador, 
 - GitHub usa lockfile e Node da `.nvmrc`. Vercel executa `npm ci`/`npm run build`, serve `dist` e encaminha `/api` à Function Express antes do fallback da SPA.
 - Migrations são aplicadas separadamente ao Supabase, uma vez, na ordem versionada. Deploy Git não aplica SQL nem republica a Edge automaticamente. Não repetir bootstrap/backfill nem importar estado do sistema anterior.
 
+## Pendência encontrada na conversa anterior
+
+A [PR14](https://github.com/escritoriojnsistema/escritoriojn/pull/14), aberta em19/10 às16:51 UTC, ainda não foi integrada. Altera uma linha em `shared/governance.ts` para exibir “Cadastro público recebido” na lista/detalhe/filtro da Auditoria. O evento já é registrado pela correção publicada; o rótulo legível é esse complemento pendente. CI39289046673 SUCCESS e preview Ready conferidos. Ela não muda cadastro, sessão, autorização ou migrations. Nenhuma integração/publicação foi executada nesta retomada.
+
 ## Habilidades e continuidade
 
 As17 habilidades DEV01–17 já estavam disponíveis e habilitadas na biblioteca MagicPath conectada; não foram duplicadas. As pertinentes a diagnóstico, Auth, testes, segurança e continuidade orientaram esta retomada. Cópia portátil das17 foi exportada e validada separadamente. A sessão não expõe a ferramenta de registro do Plugin Creator; não se afirma instalação global no ChatGPT/Codex.
