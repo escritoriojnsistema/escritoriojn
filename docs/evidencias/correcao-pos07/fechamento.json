@@ -1,0 +1,195 @@
+{
+  "verified_at_utc": "2026-10-19T21:05:51Z",
+  "state": "runtime_published_and_verified",
+  "repository": "escritoriojnsistema/escritoriojn",
+  "implementation_pr": 13,
+  "audit_label": {
+    "pr": 14,
+    "merged": true,
+    "merge_commit": "58eb81a14904c2704b0eb2870dad9991a2aad6d9",
+    "tested_head": "736653e4885da60d0067e44b53ad14e9ff50a6be",
+    "tested_and_merged_tree": "a85e698b801d87de2e2c968be69260d82ac9239a",
+    "identical_trees": true
+  },
+  "documentation_pr": 15,
+  "ci": {
+    "run_id": 39289046673,
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39289046673",
+    "conclusion": "success",
+    "jobs": {
+      "check": "success",
+      "authentication": "success",
+      "database": "success"
+    },
+    "passed": {
+      "node": 54,
+      "sql": 564,
+      "auth_lab": 59,
+      "public_e2e": 34,
+      "presentation_contracts": 96
+    },
+    "typecheck": "success",
+    "build": "success"
+  },
+  "new_verification": {
+    "local_node_passed": 54,
+    "local_node_failed": 0,
+    "local_build": "success",
+    "remote_public_e2e_passed": 34,
+    "remote_public_e2e_failed": 0,
+    "remote_base": "https://escritoriojn.vercel.app",
+    "http": {
+      "base": "https://escritoriojn.vercel.app",
+      "responses": [
+        {
+          "path": "/",
+          "status": 200,
+          "elapsed_ms": 559,
+          "cache_control": "private, no-store"
+        },
+        {
+          "path": "/api/health",
+          "status": 200,
+          "elapsed_ms": 497,
+          "cache_control": "no-store",
+          "result": {
+            "status": "ok",
+            "service": "escritorio-jn-api"
+          }
+        },
+        {
+          "path": "/api/auth/context",
+          "status": 401,
+          "elapsed_ms": 318,
+          "cache_control": "private, no-store",
+          "result": {
+            "error_code": "AUTH_REQUIRED"
+          }
+        },
+        {
+          "path": "/api/team",
+          "status": 401,
+          "elapsed_ms": 301,
+          "cache_control": "private, no-store",
+          "result": {
+            "error_code": "AUTH_REQUIRED"
+          }
+        },
+        {
+          "path": "/api/customers",
+          "status": 401,
+          "elapsed_ms": 294,
+          "cache_control": "private, no-store",
+          "result": {
+            "error_code": "AUTH_REQUIRED"
+          }
+        },
+        {
+          "path": "/api/governance/audit",
+          "status": 401,
+          "elapsed_ms": 343,
+          "cache_control": "private, no-store",
+          "result": {
+            "error_code": "AUTH_REQUIRED"
+          }
+        }
+      ],
+      "bundle": "/assets/index-D4pEJeIW.js",
+      "bundle_markers": {
+        "Cadastro público recebido": true,
+        "jn-auth-session-ended": true,
+        "client_registration": true,
+        "jn-auth-storage": true
+      }
+    },
+    "authenticated_hosted_accounts_used": false
+  },
+  "database": {
+    "project": "mcsuoxnubpqenyvbefee",
+    "migrations": 9,
+    "auth_users": 5,
+    "confirmed_users": 4,
+    "memberships": 5,
+    "customers": 1,
+    "contacts": 1,
+    "registration_origins": 1,
+    "materialized": 1,
+    "approved_origins": 0,
+    "broken_materialized_links": 0,
+    "registration_trigger_active": true,
+    "compatible_lock": true,
+    "rls": true,
+    "raw_anon_or_authenticated_select": false,
+    "mutations_in_this_session": false,
+    "edge": {
+      "name": "team-invitations",
+      "version": 14,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "index_matches_repository": true,
+      "handler_matches_repository": true
+    },
+    "advisors": {
+      "rls_no_policy": "intentional deny-by-default with no raw API grants",
+      "leaked_password_protection": "preexisting disabled; no plan or Auth configuration changed",
+      "remediation_url": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+    }
+  },
+  "migrations": [
+    {
+      "version": "20261019163453",
+      "name": "customer_registration_registry",
+      "sha256": "b92751be1ae5bbdc1ccf2eaced56836f25131fd994a4830be8f7a6c6c0d2f9e8"
+    },
+    {
+      "version": "20261019164337",
+      "name": "customer_registration_lock_compatibility",
+      "sha256": "9534bff0a1d7524b8c3553bd144f1fee947d0a4582c4d16cf0f79f4a38000f3c"
+    }
+  ],
+  "deployment": {
+    "canonical": "https://escritoriojn.vercel.app/",
+    "github_status": "success",
+    "runtime_status_url": "https://vercel.com/escritorio-jn/escritoriojn/2tdkUv5UzTszLUpQQz6ZorZSgQ8e",
+    "runtime_merge": "58eb81a14904c2704b0eb2870dad9991a2aad6d9",
+    "bundle": "/assets/index-D4pEJeIW.js",
+    "method": "existing GitHub to Vercel integration",
+    "administrative_connector_last_status": 403,
+    "manual_deploy_required": false
+  },
+  "performance": {
+    "login_context_calls": "2 to 1 immediate calls; later checks preserved",
+    "invitation_creation": "201 pending after database commit, delivery retained via waitUntil",
+    "signup": "one real Auth POST with required email confirmation",
+    "signup_upstream_last24h": {
+      "requests": 5,
+      "status": 200,
+      "p50_ms": 975,
+      "p95_ms": 1121.7
+    },
+    "signup_log_window": "last24h before tool query near verified_at_utc; not only after deployment",
+    "provider_latency_scope": "upstream service time only; excludes browser and inbox delivery",
+    "prior_invitation_benchmark": "synthetic only: median1390ms to201ms",
+    "hosted_invitation_delivery_latency_measured": false
+  },
+  "skills": {
+    "magicpath_owned": 17,
+    "magicpath_enabled": 17,
+    "created_in_this_session": 0,
+    "portable_export_skills": 17,
+    "portable_archive_structure_valid": true,
+    "account_plugin_registration_tool_available": false,
+    "global_chatgpt_or_codex_activation_verified": false
+  },
+  "future": {
+    "document_approval_active": false,
+    "individual_inactivity_policy_active": false,
+    "stage08_started": false
+  },
+  "remaining_runtime_changes_identified": [],
+  "notes": [
+    "No hosted accounts or messages were created for testing.",
+    "The final documentation PR records verified runtime publication; its own merge and follow-up Git deploy are checked after integration.",
+    "No database migration was repeated; no secrets or SMTP credentials were changed."
+  ]
+}
