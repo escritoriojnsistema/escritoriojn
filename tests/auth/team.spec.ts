@@ -33,7 +33,9 @@ test('convite novo percorre SMTP, identidade, senha, aceite e desativação com 
   const createdPromise=page.waitForResponse(r=>r.url().endsWith('/api/team/invitations')&&r.request().method()==='POST');
   await page.getByRole('button',{name:'Criar e enviar convite'}).click();
   const created=await createdPromise;expect(created.status()).toBe(201);const invite=(await created.json()).data;
-  expect(invite.delivery).toBe('sent');await expect(page.getByRole('status').filter({hasText:'E-mail de convite enviado.'})).toBeVisible();
+  expect(invite.delivery).toBe('pending');
+  await expect(page.getByRole('status').filter({hasText:'Convite criado.'})).toBeVisible();
+  await expect(page.getByRole('list',{name:'Convites da equipe'}).getByRole('listitem').filter({hasText:'newstaff@example.test'})).toContainText('E-mail enviado');
   const isolated=await browser.newContext();
   try {
     const recipient=await isolated.newPage();await recipient.goto(await mailLink('newstaff@example.test'));

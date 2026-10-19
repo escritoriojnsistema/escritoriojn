@@ -1,5 +1,6 @@
 import type { CustomerDetail, CustomerInput, CustomerPage, CustomerSearch } from '../../../shared/customers';
 import { supabase } from '../auth/browser';
+import { authenticatedFetch } from '../auth/authenticatedFetch';
 import { sessionScope } from '../auth/sessionScope';
 
 export class CustomersError extends Error {
@@ -30,11 +31,11 @@ async function request<T>(path: string, method: 'POST' | 'PATCH', body: unknown,
       }
     });
     unsubscribe = () => subscription.data.subscription.unsubscribe();
-    const response = await fetch(`/api/customers${path}`, {
+    const response = await authenticatedFetch(`/api/customers${path}`, {
       method, body: JSON.stringify(body), cache: 'no-store',
       headers: { Authorization: `Bearer ${data.session.access_token}`, 'Content-Type': 'application/json' },
       signal: AbortSignal.any([controller.signal, AbortSignal.timeout(25_000), ...(signal ? [signal] : [])]),
-    });
+    }, data.session);
     const result: unknown = await response.json();
     signal?.throwIfAborted();
     const current = await supabase.auth.getSession();

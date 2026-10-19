@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { app } from '../server/app.js';
+import { drainBackgroundTasks } from '../server/background.js';
 
 test('API de equipe conserva autorização e resultado real do envio', async t => {
   const office='00000000-0000-4000-b000-000000000001';
@@ -19,6 +20,7 @@ test('API de equipe conserva autorização e resultado real do envio', async t =
     }
     if (req.url?.startsWith('/functions/v1/')) {
       if (mode==='mail-denied') {res.statusCode=403;res.end('{"error":{"code":"TEAM_FORBIDDEN"}}');return;}
+      if (mode==='mail-limited') {res.statusCode=429;res.end('{"error":{"code":"TEAM_RATE_LIMIT"}}');return;}
       if (mode==='mail-failed') {res.statusCode=503;res.end('{"error":"private SMTP diagnostic"}');return;}
       res.end('{"data":{"delivery":"sent"}}');return;
     }
@@ -27,6 +29,7 @@ test('API de equipe conserva autorização e resultado real do envio', async t =
       res.end(JSON.stringify({code:mode==='internal'?'XX000':mode==='last-owner'?'PT409':'PT403',message:mode==='internal'?'private SQL diagnostic':mode==='last-owner'?'LAST_OWNER':'TEAM_FORBIDDEN'}));return;
     }
     const name=req.url?.split('/').at(-1);
+    if(name==='team_create_invitation' && mode==='bad-commit') {res.end('{"id":"untrusted","expires_at":"invalid"}');return;}
     const data=name==='team_dashboard'?{kind:'members',items:[],total:0,page:1,page_size:5,counts:{members:0,invitations:0},scope:{role_code:'owner',allowed_roles:['employee','admin','owner'],allowed_permissions:['foundation.access','audit.read'],can_create_owner:true,can_delegate:true}}
       :name==='team_create_invitation'?{id,expires_at:new Date(Date.now()+86400000).toISOString()}
       :name==='team_invitation_state'?{id,office_name:'Teste',verified:false,has_password:false,verified_until:null}
@@ -68,6 +71,7 @@ test('API de equipe conserva autorização e resultado real do envio', async t =
       }
       assert.equal((await fetch(`${base}?office_id=${office}&page=1&page=2`,{headers})).status,422);
       assert.equal((await send('/invitations',invitation).then(r=>r.status)),201);
+      await drainBackgroundTasks();
       assert.equal((await fetch(base+'/invitations',{method:'POST',headers:{...headers,'Content-Type':'text/plain'},body:'{}'})).status,415);
       assert.equal((await send('/invitations',{...invitation,full_name:'x'.repeat(5000)})).status,413);
     });
@@ -83,6 +87,7 @@ test('API de equipe conserva autorização e resultado real do envio', async t =
     await t.test('envio incerto preserva convite sem prometer e-mail enviado',async()=>{
       mode='mail-failed';const response=await send('/invitations',invitation);
       assert.equal(response.status,201);const result=await response.json();assert.equal(result.data.id,id);assert.equal(result.data.delivery,'pending');
+      await drainBackgroundTasks();
       mode='valid';
       const sent=await send(`/invitations/${id}/send`,{office_id:office});assert.equal(sent.status,200);assert.equal((await sent.json()).data.delivery,'sent');
       const edge=calls.filter(c=>c.path==='/functions/v1/team-invitations').at(-1)!;
@@ -90,6 +95,16 @@ test('API de equipe conserva autorização e resultado real do envio', async t =
       assert.equal(edge.authorization,'Bearer verified-test-token');
       assert.ok(!('email' in edge.body) && !('redirect_to' in edge.body));
       mode='mail-denied';const denied=await send(`/invitations/${id}/send`,{office_id:office});assert.equal(denied.status,403);
+      mode='mail-limited';const limited=await send(`/invitations/${id}/send`,{office_id:office});assert.equal(limited.status,429);assert.equal((await limited.json()).error.code,'TEAM_RATE_LIMIT');
+      mode='valid';
+    });
+    await t.test('não agenda transporte sem commit autorizado e validado',async()=>{
+      for(const [next,status] of [['forbidden',403],['bad-commit',503]] as const) {
+        calls.length=0;mode=next;
+        assert.equal((await send('/invitations',invitation)).status,status);
+        await drainBackgroundTasks();
+        assert.equal(calls.filter(c=>c.path.startsWith('/functions/')).length,0);
+      }
       mode='valid';
     });
     await t.test('destinatário verifica e aceita sem contexto de equipe anterior',async()=>{
@@ -102,6 +117,7 @@ test('API de equipe conserva autorização e resultado real do envio', async t =
       mode='valid';
     });
   } finally {
+    await drainBackgroundTasks();
     if(oldUrl===undefined)delete process.env.VITE_SUPABASE_URL;else process.env.VITE_SUPABASE_URL=oldUrl;
     if(oldKey===undefined)delete process.env.VITE_SUPABASE_PUBLISHABLE_KEY;else process.env.VITE_SUPABASE_PUBLISHABLE_KEY=oldKey;
     server.closeAllConnections();server.close();provider.closeAllConnections();provider.close();

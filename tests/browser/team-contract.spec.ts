@@ -28,6 +28,47 @@ async function dashboard(page: Page, data = roster()) {
   });
 }
 
+for (const result of ['sent', 'failed'] as const) test(`convite pendente converge para ${result} sem limpar lista nem exigir navegação`, async ({ page }) => {
+  await session(page);
+  let reads = 0;
+  await page.route('**/api/team?**', route => {
+    const kind = new URL(route.request().url()).searchParams.get('kind');
+    if (kind !== 'invitations') return route.fulfill({json:{data:roster()}});
+    reads++;
+    return route.fulfill({json:{data:{...roster(),kind:'invitations',total:1,items:[{id:invitation,name:'Convite de teste',email:'convite@example.test',role_code:'employee',permissions:['foundation.access'],status:'pending',delivery_status:reads === 1 ? 'sending' : result,expires_at:'2099-10-21T10:00:00Z',created_at:'2026-10-19T10:00:00Z',cpf_masked:'***.***.***-25'}]}}});
+  });
+  await page.goto('/equipe');
+  await page.getByRole('tab', {name:/Convites/}).click();
+  const list = page.getByRole('list', {name:'Convites da equipe'});
+  await expect(list).toContainText('Convite de teste');
+  await expect(list).toContainText(result === 'sent' ? 'E-mail enviado' : 'Falha no envio');
+  await expect(list.getByRole('button', {name:'Reenviar',exact:true})).toBeEnabled();
+  const settled = reads;
+  await page.clock.install();
+  await page.clock.fastForward(20_000);
+  expect(reads).toBe(settled);
+  await expect(page.getByText(/Carregando|Aguarde/)).toHaveCount(0);
+});
+
+test('falha transitória no acompanhamento de convite preserva lista e formulário na mesma sessão',async({page})=>{
+  await session(page);
+  let reads=0, release!:()=>void;
+  const gate=new Promise<void>(resolve=>{release=resolve;});
+  await page.route('**/api/team?**',async route=>{
+    if (new URL(route.request().url()).searchParams.get('kind') !== 'invitations') return route.fulfill({json:{data:roster()}});
+    if (++reads > 1) {await gate;return route.fulfill({status:503,json:{error:{code:'TEAM_UNAVAILABLE'}}});}
+    return route.fulfill({json:{data:{...roster(),kind:'invitations',total:1,items:[{id:invitation,name:'Convite pendente',email:'convite@example.test',role_code:'employee',permissions:['foundation.access'],status:'pending',delivery_status:'sending',expires_at:'2099-10-21T10:00:00Z',created_at:'2026-10-19T10:00:00Z',cpf_masked:'***.***.***-25'}]}}});
+  });
+  await page.goto('/equipe');await page.getByRole('tab',{name:/Convites/}).click();
+  await expect(page.getByRole('list',{name:'Convites da equipe'})).toContainText('Convite pendente');
+  await page.getByRole('button',{name:'Novo convite',exact:true}).click();
+  await page.getByLabel('Nome completo',{exact:true}).fill('Rascunho preservado');
+  release();
+  await expect(page.getByRole('alert')).toContainText('Serviço indisponível');
+  await expect(page.getByLabel('Nome completo',{exact:true})).toHaveValue('Rascunho preservado');
+  await expect(page.getByRole('list',{name:'Convites da equipe'})).toContainText('Convite pendente');
+});
+
 test('owner tem quatro atalhos móveis e Arquivados permanece no menu completo', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 640 });
   await session(page, ['foundation.access', 'users.manage', 'audit.read', 'archives.manage']);
@@ -242,14 +283,20 @@ test('aceite só revela senha após verificação do servidor e restaura confer�
   await expect(page).toHaveURL(/\/painel$/);
 });
 
-test('convite com sessão revogada oferece login com UUID e recusa convite indisponível genericamente', async ({ page }) => {
+test('convite com sessão revogada oferece login com UUID e permanece encerrado após recarga', async ({ page }) => {
   await session(page);
   await page.route(`**/api/team/invitations/${invitation}/state`, route => route.fulfill({ status: 401, json: { error: { code: 'AUTH_REQUIRED' } } }));
   await page.goto(`/convite?id=${invitation}`);
   await expect(page.getByRole('alert')).toContainText('sessão está ausente, expirou ou foi encerrada');
   await expect(page.getByRole('link', { name: 'Entrar para continuar' })).toHaveAttribute('href', `/login?invite=${invitation}`);
+  await page.reload(); await expect(page.getByRole('alert')).toContainText('sessão está ausente, expirou ou foi encerrada');
+  await expect(page.getByLabel('Nova senha', { exact: true })).toHaveCount(0);
+});
+
+test('convite indisponível recusa genericamente uma sessão válida e não revela senha', async ({ page }) => {
+  await session(page);
   await page.route(`**/api/team/invitations/${invitation}/state`, route => route.fulfill({ status: 410, json: { error: { code: 'INVITE_UNAVAILABLE' } } }));
-  await page.reload(); await expect(page.getByRole('alert')).toContainText('Este convite não está disponível');
+  await page.goto(`/convite?id=${invitation}`); await expect(page.getByRole('alert')).toContainText('Este convite não está disponível');
   await expect(page.getByLabel('Nova senha', { exact: true })).toHaveCount(0);
 });
 
@@ -376,23 +423,22 @@ test('Conta protege área e contexto revogado remove ambiente e navegação', as
   await expect(page.locator('.operation-layout')).toHaveCount(0);
 });
 
-test('falha ao sair permanece visível e acessível dentro do menu móvel', async ({ page }) => {
+test('falha remota ao sair não impede encerramento local pelo menu móvel', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 640 }); await session(page); await page.goto('/painel');
-  // This SDK version clears the local session even on HTTP 500. Fault before that
-  // step to exercise the recoverable UI error while the session remains active.
-  await page.evaluate(async () => {
-    const modulePath = '/src/features/auth/browser.ts';
-    const { supabase } = await import(modulePath);
-    supabase.auth.signOut = async () => ({ error: new Error('Local contract failure before session removal') });
-  });
+  await page.route('**/auth/v1/logout?scope=local', route => route.fulfill({ status: 503, json: { code: 'unexpected_failure' } }));
   await page.getByRole('button', { name: 'Abrir menu' }).click();
   const drawer = page.getByRole('dialog');
   await drawer.getByRole('button', { name: 'Sair da conta' }).click();
-  await expect(drawer.getByRole('alert')).toContainText('Não foi possível sair');
-  await expect(drawer.getByRole('button', { name: 'Sair da conta' })).toBeEnabled();
-  await page.getByRole('button', { name: 'Fechar menu' }).click();
-  await expect(page.getByRole('alert')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Abrir menu' })).toBeFocused();
+  await expect(page).toHaveURL('/login');
+  await expect(drawer).toHaveCount(0);
+  await page.reload();
+  expect(await page.evaluate(async () => {
+    const modulePath = '/src/features/auth/browser.ts';
+    const { supabase } = await import(modulePath);
+    return Boolean((await supabase.auth.getSession()).data.session);
+  })).toBe(false);
+  await page.goto('/painel');
+  await expect(page).toHaveURL('/login');
 });
 
 test('rotas do cliente aceitam barra final e caixa sem confundir a área', async ({ page }) => {

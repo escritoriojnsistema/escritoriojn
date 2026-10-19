@@ -8,7 +8,10 @@ function summary(value: unknown): CustomerSummary {
     || typeof value.created_at!=='string' || !Number.isFinite(Date.parse(value.created_at))
     || !(value.identifier_masked===null || (typeof value.identifier_masked==='string'
       && (value.kind==='person'?/^\*{3}\.\*{3}\.\*{3}-\d{2}$/:/^\*{2}\.\*{3}\.\*{3}\/\*{4}-\d{2}$/).test(value.identifier_masked)))) throw new Error('Invalid customer summary');
-  return {id:value.id,kind:value.kind as CustomerSummary['kind'],name:value.name,identifier_masked:value.identifier_masked as string|null,created_at:value.created_at};
+  const portal = value.source !== undefined || value.association_status !== undefined;
+  if (portal && (value.source !== 'client_registration' || value.association_status !== 'pending')) throw new Error('Invalid registration source');
+  return {id:value.id,kind:value.kind as CustomerSummary['kind'],name:value.name,identifier_masked:value.identifier_masked as string|null,created_at:value.created_at,
+    ...(portal ? {source:'client_registration',association_status:'pending'} as const : {})};
 }
 export function customerPage(value: unknown): CustomerPage {
   if (!record(value) || !Array.isArray(value.items) || typeof value.page_size!=='number' || ![3,5].includes(value.page_size)
@@ -21,5 +24,7 @@ export function customerDetail(value: unknown): CustomerDetail {
   if (!record(value) || !(value.identifier===null || (typeof value.identifier==='string' && /^\d{11}(?:\d{3})?$/.test(value.identifier)))
     || !Array.isArray(value.contacts) || value.contacts.length>4 || !value.contacts.every(validContact)
     || !Number.isInteger(value.version) || Number(value.version)<1 || typeof value.can_update!=='boolean') throw new Error('Invalid customer detail');
-  return {...base,identifier:value.identifier as string|null,contacts:value.contacts.map(c=>({kind:c.kind,value:c.value})),version:Number(value.version),can_update:value.can_update};
+  if (base.source && (typeof value.materialized !== 'boolean' || (!value.materialized && (value.kind !== 'person' || value.can_update || value.identifier !== null || value.version !== 1)))) throw new Error('Invalid registration detail');
+  return {...base,identifier:value.identifier as string|null,contacts:value.contacts.map(c=>({kind:c.kind,value:c.value})),version:Number(value.version),can_update:value.can_update,
+    ...(base.source ? {materialized:value.materialized as boolean} : {})};
 }

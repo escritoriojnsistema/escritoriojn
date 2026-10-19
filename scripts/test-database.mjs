@@ -198,6 +198,64 @@ const raceCustomerDuplicate = async database => {
       'clientes: duplicidade concorrente persiste uma ficha e um evento');`);
   } finally { first.child.kill(); second?.child.kill(); }
 };
+const raceCustomerRegistration = async database => {
+  const first = openSql(database);
+  let second;
+  try {
+    sql(database, 'migrator', `SELECT private.configure_client_registration('${customerOffice}',true);`);
+    first.child.stdin.write(`BEGIN;
+      SET ROLE authenticated;
+      SET request.jwt.claims='${customerClaims}';
+      SELECT public.customer_create('${customerOffice}','{"kind":"person","name":"Contato Concorrente Ficticio","contacts":[{"kind":"email","value":"race-registration@example.test"}]}',gen_random_uuid());
+      \\echo CUSTOMER_REGISTRATION_HELD
+    `);
+    await until(() => first.output().includes('CUSTOMER_REGISTRATION_HELD'));
+    second = openSql(database);
+    second.child.stdin.end(`SET application_name='jn_customer_registration_b';
+      INSERT INTO auth.users(id,email,email_confirmed_at,raw_user_meta_data) VALUES
+      ('00000000-0000-4000-a000-000000000070','race-registration@example.test',clock_timestamp(),'{"display_name":"Cadastro Concorrente Ficticio"}');
+    `);
+    await until(() => sql(database, 'postgres', "SELECT EXISTS(SELECT FROM pg_stat_activity WHERE application_name='jn_customer_registration_b' AND wait_event_type='Lock');").trim() === 't');
+    first.child.stdin.end('COMMIT;\n');
+    await first.result;
+    await second.result;
+    return sql(database, 'postgres', `SELECT test.assert_true(
+      NOT EXISTS(SELECT FROM public.customers WHERE created_by='00000000-0000-4000-a000-000000000070')
+      AND (SELECT count(*) FROM private.customer_registrations r JOIN public.memberships m ON m.id=r.membership_id
+       WHERE m.user_id='00000000-0000-4000-a000-000000000070' AND r.materialized_customer_id IS NULL)=1
+      AND (SELECT count(*) FROM public.customer_contacts WHERE office_id='${customerOffice}' AND value='race-registration@example.test')=1,
+      'cadastro integrado: contato interno concorrente deixa entrada pendente sem duplicar ficha');`);
+  } finally {
+    first.child.kill(); second?.child.kill();
+    sql(database, 'migrator', `SELECT private.configure_client_registration('${customerOffice}',false);`);
+  }
+};
+const raceUnconfirmedRegistration = async database => {
+  const first = openSql(database);
+  const user = '00000000-0000-4000-a000-000000000071';
+  try {
+    sql(database, 'migrator', `SELECT private.configure_client_registration('${customerOffice}',true);`);
+    sql(database, 'postgres', `INSERT INTO auth.users(id,email,raw_user_meta_data) VALUES
+      ('${user}','unconfirmed-lock@example.test','{"display_name":"Cadastro Nao Confirmado"}');`);
+    // Bootstrap FKs use KEY SHARE. Intake must not promote that compatible lock
+    // to FOR UPDATE before confirmation, which can deadlock concurrent signups.
+    first.child.stdin.write(`BEGIN;
+      SELECT id FROM public.offices WHERE id='${customerOffice}' FOR KEY SHARE;
+      \\echo UNCONFIRMED_KEY_SHARE_HELD
+    `);
+    await until(() => first.output().includes('UNCONFIRMED_KEY_SHARE_HELD'));
+    sql(database, 'migrator', `SET statement_timeout='750ms'; SELECT private.sync_customer_registration('${user}');`);
+    first.child.stdin.end('COMMIT;\n');
+    await first.result;
+    return sql(database, 'postgres', `SELECT test.assert_true(
+      NOT EXISTS(SELECT FROM public.customers WHERE created_by='${user}')
+      AND NOT EXISTS(SELECT FROM private.customer_registrations r JOIN public.memberships m ON m.id=r.membership_id WHERE m.user_id='${user}'),
+      'cadastro integrado: nao confirmado dispensa upgrade de lock e continua sem ficha');`);
+  } finally {
+    first.child.kill();
+    sql(database, 'migrator', `SELECT private.configure_client_registration('${customerOffice}',false);`);
+  }
+};
 const raceCustomerAuthority = async (database, kind) => {
   const id = customerRecord(database);
   const first = openSql(database);
@@ -236,6 +294,79 @@ const raceCustomerAuthority = async (database, kind) => {
   }
 };
 
+const raceConfirmedRegistration = async database => {
+  const first = openSql(database);
+  const second = openSql(database);
+  const firstUser = '00000000-0000-4000-a000-000000000066';
+  const secondUser = '00000000-0000-4000-a000-000000000061';
+  try {
+    first.child.stdin.write(`SET application_name='jn_confirmed_registration_a';
+      BEGIN;
+      SET LOCAL ROLE migrator;
+      SET LOCAL statement_timeout='750ms';
+      SELECT id FROM public.offices WHERE id='${customerOffice}' FOR KEY SHARE;
+      \\echo CONFIRMED_A_KEY_SHARE_HELD
+    `);
+    second.child.stdin.write(`SET application_name='jn_confirmed_registration_b';
+      BEGIN;
+      SET LOCAL ROLE migrator;
+      SELECT id FROM public.offices WHERE id='${customerOffice}' FOR KEY SHARE;
+      \\echo CONFIRMED_B_KEY_SHARE_HELD
+    `);
+    await until(() => first.output().includes('CONFIRMED_A_KEY_SHARE_HELD')
+      && second.output().includes('CONFIRMED_B_KEY_SHARE_HELD'));
+
+    // The old FOR UPDATE stalls on B's FK-compatible KEY SHARE; NO KEY UPDATE
+    // must complete while B is still inside its original transaction.
+    first.child.stdin.write(`SELECT private.sync_customer_registration('${firstUser}');
+      \\echo CONFIRMED_A_SYNC_HELD
+    `);
+    await Promise.race([
+      first.result,
+      until(() => first.output().includes('CONFIRMED_A_SYNC_HELD')),
+    ]);
+    if (!first.output().includes('CONFIRMED_A_SYNC_HELD')) throw new Error('O primeiro sincronizador terminou antes da barreira.');
+
+    second.child.stdin.write(`SELECT private.sync_customer_registration('${secondUser}');
+      \\echo CONFIRMED_B_SYNC_DONE
+    `);
+    await until(() => sql(database, 'postgres', `SELECT EXISTS(
+      SELECT FROM pg_stat_activity waiter
+      JOIN pg_stat_activity holder ON holder.pid=ANY(pg_blocking_pids(waiter.pid))
+      WHERE waiter.datname=current_database() AND holder.datname=current_database()
+       AND waiter.application_name='jn_confirmed_registration_b'
+       AND holder.application_name='jn_confirmed_registration_a'
+       AND waiter.wait_event_type='Lock');`).trim() === 't');
+    if (second.output().includes('CONFIRMED_B_SYNC_DONE')) throw new Error('O segundo sincronizador ignorou o mutex do escritorio.');
+
+    first.child.stdin.end('COMMIT;\n');
+    await first.result;
+    await Promise.race([
+      second.result,
+      until(() => second.output().includes('CONFIRMED_B_SYNC_DONE')),
+    ]);
+    if (!second.output().includes('CONFIRMED_B_SYNC_DONE')) throw new Error('O segundo sincronizador terminou antes da barreira.');
+    second.child.stdin.end('COMMIT;\n');
+    await second.result;
+
+    return 'PASS: cadastros confirmados conservam KEY SHARE e serializam o mutex em duas conexoes reais\n'
+      + sql(database, 'postgres', `SELECT test.assert_true(
+        (SELECT count(*) FROM public.customers WHERE created_by IN ('${firstUser}','${secondUser}'))=2
+        AND (SELECT count(*) FROM private.customer_registrations r
+          JOIN public.memberships m ON m.id=r.membership_id
+          WHERE m.user_id IN ('${firstUser}','${secondUser}') AND r.materialized_customer_id IS NOT NULL)=2
+        AND (SELECT count(*) FROM public.audit_events e
+          JOIN private.customer_registrations r ON r.id=e.target_id AND r.office_id=e.office_id
+          JOIN public.memberships m ON m.id=r.membership_id
+          WHERE m.user_id IN ('${firstUser}','${secondUser}')
+           AND e.action='auth.customer_registration_received' AND e.target_type='customer_registration')=2,
+        'cadastros confirmados concorrentes preservam duas fichas, origens e eventos idempotentes');`);
+  } finally {
+    first.child.kill();
+    second.child.kill();
+  }
+};
+
 let started = false;
 try {
   docker('run', '--rm', '--detach', '--network=none', '--name', name, '--tmpfs', '/var/lib/postgresql/data:rw,nosuid,noexec,size=512m',
@@ -271,12 +402,16 @@ try {
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/governance.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/customers.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/customer-registration.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
       + await raceLastOwners(database)
       + await raceRevokedSession(database)
       + await raceRecipientEmail(database)
       + await raceCustomerVersion(database)
       + await raceCustomerDuplicate(database)
+      + await raceCustomerRegistration(database)
+      + await raceUnconfirmedRegistration(database)
+      + await raceConfirmedRegistration(database)
       + await raceCustomerAuthority(database, 'session')
       + await raceCustomerAuthority(database, 'read')
       + await raceCustomerAuthority(database, 'capability');

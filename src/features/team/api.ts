@@ -1,4 +1,5 @@
 import { supabase } from '../auth/browser';
+import { authenticatedFetch } from '../auth/authenticatedFetch';
 import type { CreateInvitation, InvitationState, InvitationVerification, SetDelegation, SetMember, TeamDashboard } from '../../../shared/team';
 
 export class TeamError extends Error {
@@ -11,11 +12,11 @@ async function request<T>(path: string, method = 'GET', body?: unknown, signal?:
   try {
     const { data, error } = await supabase.auth.getSession();
     if (error || !data.session?.access_token) throw new TeamError(401);
-    const response = await fetch(`/api/team${path}`, {
+    const response = await authenticatedFetch(`/api/team${path}`, {
       method, headers: { Authorization: `Bearer ${data.session.access_token}`, ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }), cache: 'no-store',
       signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(25_000)]) : AbortSignal.timeout(25_000),
-    });
+    }, data.session);
     if (!response.ok) throw new TeamError(response.status);
     const result: unknown = await response.json();
     if (!result || typeof result !== 'object' || !('data' in result)) throw new TeamError(503);
