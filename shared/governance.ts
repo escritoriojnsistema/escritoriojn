@@ -6,6 +6,7 @@ export type GovernancePage<T> = { items: T[]; total: number; page: number; page_
 export type AuditExport = { items: AuditEvent[]; count: number; office_id: string; exported_at: string; request_id: string };
 export const auditActionNames: Record<string, string> = {
  'foundation.owner_provisioned': 'Proprietário provisionado', 'auth.client_registered': 'Cliente cadastrado', 'auth.registration_configured': 'Cadastro público configurado',
+ 'auth.customer_registration_received': 'Cadastro público recebido',
  'team.member_updated': 'Acesso atualizado', 'team.invitation_created': 'Convite criado', 'team.invitation_sent': 'Convite enviado',
  'team.invitation_delivery_claimed': 'Envio de convite iniciado', 'team.invitation_delivery_failed': 'Falha no envio do convite',
  'team.invitation_revoked': 'Convite revogado', 'team.invitation_verified': 'Identidade do convite conferida', 'team.invitation_accepted': 'Convite aceito',
