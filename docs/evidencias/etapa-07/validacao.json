@@ -1,0 +1,34 @@
+{
+  "ci": {
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39241644141",
+    "status": "success",
+    "node": 42,
+    "sql": 504,
+    "auth_real": 33,
+    "browser_contracts": 88,
+    "public_e2e": 34,
+    "typecheck_build": true
+  },
+  "git": {
+    "pr": 12,
+    "feature": "81f450fcd7ded98c55cb89620e55f1417306b366",
+    "merge": "9a480168ffd38e56720f93966e46158e1c66a68b",
+    "tested_tree": "9c1fdc2d67dc2254ba6ffb4daa65ce6e97b050ef"
+  },
+  "vercel": {
+    "status": "success",
+    "url": "https://vercel.com/escritorio-jn/escritoriojn/9kcoZTvjitozFP9P2pnax2BShtLp",
+    "canonical": "https://escritoriojn.vercel.app/",
+    "public_e2e_after_deploy": 34
+  },
+  "supabase": {
+    "migration": "20261019015927_customers_secure_registry",
+    "sha256": "52b8b668cc8476c2d5f181a981e64e6945cc218fdb120237699c0b95e9b0ad66",
+    "applied": true,
+    "customers_at_verification": 0,
+    "contacts_at_verification": 0,
+    "auth_users_preserved": 4,
+    "active_memberships_preserved": 4,
+    "rls_acl_rpc_verified": true
+  }
+}

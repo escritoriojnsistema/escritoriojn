@@ -1,0 +1,151 @@
+{
+  "origin": "https://escritoriojn.vercel.app",
+  "checked_at": "2026-10-19T11:05:34.410Z",
+  "pages": [
+    {
+      "path": "/clientes",
+      "width": 360,
+      "final_path": "/login",
+      "scrollWidth": 360
+    },
+    {
+      "path": "/equipe",
+      "width": 360,
+      "final_path": "/login",
+      "scrollWidth": 360
+    },
+    {
+      "path": "/auditoria",
+      "width": 360,
+      "final_path": "/login",
+      "scrollWidth": 360
+    },
+    {
+      "path": "/arquivados",
+      "width": 360,
+      "final_path": "/login",
+      "scrollWidth": 360
+    },
+    {
+      "path": "/painel",
+      "width": 360,
+      "final_path": "/login",
+      "scrollWidth": 360
+    },
+    {
+      "path": "/conta",
+      "width": 360,
+      "final_path": "/login",
+      "scrollWidth": 360
+    },
+    {
+      "path": "/area-cliente",
+      "width": 360,
+      "final_path": "/login-cliente",
+      "scrollWidth": 360
+    },
+    {
+      "path": "/minha-conta",
+      "width": 360,
+      "final_path": "/login-cliente",
+      "scrollWidth": 360
+    },
+    {
+      "path": "/clientes",
+      "width": 1440,
+      "final_path": "/login",
+      "scrollWidth": 1440
+    },
+    {
+      "path": "/equipe",
+      "width": 1440,
+      "final_path": "/login",
+      "scrollWidth": 1440
+    },
+    {
+      "path": "/auditoria",
+      "width": 1440,
+      "final_path": "/login",
+      "scrollWidth": 1440
+    },
+    {
+      "path": "/arquivados",
+      "width": 1440,
+      "final_path": "/login",
+      "scrollWidth": 1440
+    },
+    {
+      "path": "/painel",
+      "width": 1440,
+      "final_path": "/login",
+      "scrollWidth": 1440
+    },
+    {
+      "path": "/conta",
+      "width": 1440,
+      "final_path": "/login",
+      "scrollWidth": 1440
+    },
+    {
+      "path": "/area-cliente",
+      "width": 1440,
+      "final_path": "/login-cliente",
+      "scrollWidth": 1440
+    },
+    {
+      "path": "/minha-conta",
+      "width": 1440,
+      "final_path": "/login-cliente",
+      "scrollWidth": 1440
+    }
+  ],
+  "api": [
+    {
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "path": "/api/auth/context",
+      "status": 401
+    },
+    {
+      "path": "/api/team",
+      "status": 401
+    },
+    {
+      "path": "/api/governance/audit",
+      "status": 401
+    },
+    {
+      "path": "/api/governance/archives",
+      "status": 401
+    },
+    {
+      "path": "/api/customers/search",
+      "method": "POST",
+      "status": 401
+    },
+    {
+      "path": "/api/customers",
+      "method": "POST",
+      "status": 401
+    },
+    {
+      "path": "/api/customers/00000000-0000-4000-a000-000000000001/detail",
+      "method": "POST",
+      "status": 401
+    },
+    {
+      "path": "/api/customers/00000000-0000-4000-a000-000000000001",
+      "method": "PATCH",
+      "status": 401
+    }
+  ],
+  "assets": {
+    "entry": "/assets/index-ByAvLfyQ.js",
+    "customers": true,
+    "cpf_mask": true,
+    "old_loading_labels": []
+  },
+  "page_errors": 0
+}
