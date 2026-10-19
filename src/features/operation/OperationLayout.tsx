@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { House, UsersRound, CircleUserRound, History, Archive, LogOut, Menu, X } from 'lucide-react';
+import { House, UserRoundSearch, UsersRound, CircleUserRound, History, Archive, LogOut, Menu, X } from 'lucide-react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import type { AccessContext } from '../../../shared/access';
 import { Brand } from '../../ui/Brand';
@@ -7,7 +7,7 @@ import { useAuth } from '../auth/AuthProvider';
 import { operationNavigation, mobileOperationNavigation, operationRoleNames } from './navigation';
 import './operation.css';
 
-const icons = { home: House, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
+const icons = { home: House, customers: UserRoundSearch, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
 export function OperationLayout({ client = false, busy = false, children }: { client?: boolean; busy?: boolean; children: ReactNode }) {
   const auth = useAuth();
   const items = operationNavigation(auth.contexts, client);
@@ -50,7 +50,7 @@ export function OperationLayout({ client = false, busy = false, children }: { cl
     })}</nav>;
   }
   function exit() {
-    return <button className="operation-exit" disabled={leaving || busy} onClick={() => void logout()}><LogOut size={20} aria-hidden="true" /><span>{leaving ? 'Saindo…' : 'Sair da conta'}</span></button>;
+    return <button className="operation-exit" disabled={leaving || busy} onClick={() => void logout()}><LogOut size={20} aria-hidden="true" /><span>Sair da conta</span></button>;
   }
   return <div className="operation-layout">
     <aside className="operation-sidebar" aria-label="Navegação principal"><Brand light to={home} /><p className="operation-area">{client ? 'Área do cliente' : 'Área da equipe'}</p>{navigation('Navegação da operação')}<div className="operation-sidebar-end">{exit()}<p>Acesso individual e protegido.</p></div></aside>

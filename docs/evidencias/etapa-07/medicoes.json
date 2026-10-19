@@ -1,0 +1,44 @@
+[
+  {
+    "arquivo": "etapa-07-ficha-1440.png",
+    "largura": 1440,
+    "altura_documento": 900,
+    "altura_viewport": 900,
+    "dados": "sinteticos"
+  },
+  {
+    "arquivo": "etapa-07-ficha-360.png",
+    "largura": 360,
+    "altura_documento": 640,
+    "altura_viewport": 640,
+    "dados": "sinteticos"
+  },
+  {
+    "arquivo": "etapa-07-formulario-1440.png",
+    "largura": 1440,
+    "altura_documento": 900,
+    "altura_viewport": 900,
+    "dados": "sinteticos"
+  },
+  {
+    "arquivo": "etapa-07-formulario-360.png",
+    "largura": 360,
+    "altura_documento": 640,
+    "altura_viewport": 640,
+    "dados": "sinteticos"
+  },
+  {
+    "arquivo": "etapa-07-lista-1440.png",
+    "largura": 1440,
+    "altura_documento": 900,
+    "altura_viewport": 900,
+    "dados": "sinteticos"
+  },
+  {
+    "arquivo": "etapa-07-lista-360.png",
+    "largura": 360,
+    "altura_documento": 640,
+    "altura_viewport": 640,
+    "dados": "sinteticos"
+  }
+]

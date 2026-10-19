@@ -11,4 +11,5 @@ export const auditActionNames: Record<string, string> = {
  'team.invitation_revoked': 'Convite revogado', 'team.invitation_verified': 'Identidade do convite conferida', 'team.invitation_accepted': 'Convite aceito',
  'team.delegation_granted': 'Gestão delegada', 'team.delegation_revoked': 'Delegação revogada',
  'audit.exported': 'Auditoria exportada', 'archives.archived': 'Acesso arquivado', 'archives.restored': 'Referência restaurada',
+ 'customers.created': 'Ficha de cliente cadastrada', 'customers.updated': 'Ficha de cliente atualizada',
 };

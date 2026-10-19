@@ -17,7 +17,7 @@ try {
     await delay(200);
   }
   const code=await new Promise((resolve,reject)=>{
-    const child=spawn('node',['node_modules/@playwright/test/cli.js','test','tests/browser/team-contract.spec.ts','tests/browser/governance-contract.spec.ts','--output','test-results/team-ui',...process.argv.slice(2)],{env,stdio:'inherit'});
+    const child=spawn('node',['node_modules/@playwright/test/cli.js','test','tests/browser/team-contract.spec.ts','tests/browser/governance-contract.spec.ts','tests/browser/customers-contract.spec.ts','tests/browser/identifiers-contract.spec.ts','tests/browser/loading-contract.spec.ts','--output','test-results/team-ui',...process.argv.slice(2)],{env,stdio:'inherit'});
     children.add(child);child.on('error',reject);child.on('exit',code=>{children.delete(child);resolve(code);});
   });
   if(code!==0)process.exitCode=1;

@@ -14,7 +14,7 @@ test('Auth real conecta Equipe → Arquivados → Auditoria → exportação com
  const sdk=await sdkFor('manager');
  try {
   const {data:roster,error}=await sdk.rpc('team_dashboard',{p_office_id:office,p_kind:'members',p_page:1,p_query:'archiveworker@example.test',p_status:'all'});expect(error).toBeNull();expect(roster.items[0].active).toBe(false);expect(roster.items[0].archived).toBe(false);
-  const member=roster.items[0];await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link',{name:'Auditoria',exact:true}).click();
+  const member=roster.items[0];await page.getByRole('button',{name:'Abrir menu'}).click();await page.getByRole('dialog',{name:'Menu de navegação'}).getByRole('link',{name:'Auditoria',exact:true}).click();
   await page.getByRole('button',{name:'Filtros',exact:true}).click();await page.getByRole('combobox',{name:'Ação',exact:true}).selectOption('archives.restored');await page.getByRole('button',{name:'Aplicar filtros'}).click();
   await page.getByRole('button',{name:'Ver evento',exact:true}).first().click();await expect(page.getByText('Gestor de teste',{exact:true})).toBeVisible();await expect(page.getByText(member.id,{exact:true})).toBeVisible();await page.getByRole('button',{name:'Voltar à lista'}).click();
   const download=page.waitForEvent('download');await page.getByRole('button',{name:'Exportar JSON'}).click();const file=await (await download).path();expect(file).toBeTruthy();const result=JSON.parse(await readFile(file!,'utf8'));expect(result.count).toBe(1);expect(result.items[0].target_id).toBe(member.id);expect(result.items[0].actor_id).toBe((await sdk.auth.getUser()).data.user!.id);
