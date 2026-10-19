@@ -12,7 +12,7 @@ try {
   const admin = createClient(lab.url, lab.serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const users = {};
   // Registration has no office yet: identities do not acquire permissions here.
-  for (const name of ['owner','unlinked','inactive','other','expired','manager','existingstaff','delegate','worker','portalclient','archiveworker','auditreader']) {
+  for (const name of ['owner','unlinked','inactive','other','expired','manager','existingstaff','delegate','worker','portalclient','archiveworker','auditreader','customerworker']) {
     const { data, error } = await admin.auth.admin.createUser({ email: `${name}@example.test`, password, email_confirm: true });
     if (error || !data.user) throw new Error('Could not create local Auth fixture.');
     users[name] = data.user.id;
@@ -27,6 +27,12 @@ try {
     INSERT INTO public.profiles(id,display_name) VALUES ('${users.manager}','Gestor de teste'),('${users.delegate}','Administrador de teste'),('${users.worker}','Funcionário de teste'),('${users.portalclient}','Cliente de teste'),('${users.archiveworker}','Arquivo de teste'),('${users.auditreader}','Auditor de teste');
     INSERT INTO public.memberships(office_id,user_id,role_code) VALUES ('${office}','${users.manager}','owner'),('${office}','${users.delegate}','admin'),('${office}','${users.worker}','employee'),('${office}','${users.portalclient}','client'),('${office}','${users.archiveworker}','employee'),('${office}','${users.auditreader}','employee');
     INSERT INTO private.team_member_permissions(membership_id,permission_code) SELECT id,'audit.read' FROM public.memberships WHERE user_id='${users.auditreader}';
+    INSERT INTO public.profiles(id,display_name) VALUES ('${users.customerworker}','Funcionário de clientes');
+    INSERT INTO public.memberships(office_id,user_id,role_code) VALUES ('${office}','${users.customerworker}','employee');
+    INSERT INTO private.team_member_permissions(membership_id,permission_code)
+      SELECT m.id,p.code FROM public.memberships m
+      CROSS JOIN unnest(ARRAY['customers.read','customers.create','customers.update']) p(code)
+      WHERE m.office_id='${office}' AND m.user_id='${users.customerworker}';
     SELECT private.configure_client_registration('${office}',true);
   `, 'migrator');
   const expiredClient = createClient(lab.url, lab.anonKey, { auth: { flowType: 'pkce', persistSession: false, autoRefreshToken: false } });

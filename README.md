@@ -1,6 +1,6 @@
 # Escritório JN
 
-Base nova das **Etapas 01–05** do manual v4: React + Vite + TypeScript, API Express `/api`, Supabase Auth/RLS e gestão de equipe por convites. O checkpoint de testes/publicação está em [LIVRO_RAIZ.md](LIVRO_RAIZ.md).
+Base nova das **Etapas 01–07** do manual v4: React + Vite + TypeScript, API Express `/api`, Supabase Auth/RLS, gestão de equipe, governança e cadastro de clientes. O checkpoint de testes/publicação está em [LIVRO_RAIZ.md](LIVRO_RAIZ.md).
 
 ## Executar
 
@@ -80,3 +80,5 @@ O health mede disponibilidade do processo da API. Não comprova Supabase, autent
 Veja `docs/FONTES.md`, `docs/PLUGINS.md` e `LIVRO_RAIZ.md` para o checkpoint verificado e as limitações de publicação técnica.
 
 Etapa06: Auditoria e Arquivados com permissões por escritório, exportação registrada e restauração sem reativar acesso; portais de equipe/cliente separados. Documentação e evidências em [fecho06](docs/etapas/fecho-06.md) e [Livro Raiz](LIVRO_RAIZ.md). React+Vite/Express/Supabase preservados.
+
+Etapa07: `/clientes` cadastra, consulta e edita fichas separadas de contas Auth. CPF/CNPJ e contatos são opcionais; busca POST paginada retorna máscara e respeita escritório/capacidades. Sem `customers.read_all`, a consulta é limitada ao criador até os vínculos da08. Convites de qualquer função reutilizam a máscara automática e validação de CPF. Mobile mantém até quatro atalhos autorizados; demais destinos ficam no menu lateral. Ações mantêm rótulos estáveis durante execução, sem indicadores visuais de carregamento. [Plano07](docs/etapas/plano-07.md).

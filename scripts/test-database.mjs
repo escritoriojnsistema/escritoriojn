@@ -136,6 +136,106 @@ const raceRecipientEmail = async database => {
   }
 };
 
+// Customer mutations must serialize both authority and optimistic versions across real connections.
+const customerOffice = '00000000-0000-4000-e000-000000000041';
+const customerClaims = '{"sub":"00000000-0000-4000-a000-000000000042","session_id":"00000000-0000-4000-c000-000000000042"}';
+const customerRecord = database => {
+  const id = sql(database, 'postgres', "SELECT id FROM public.customers WHERE created_by='00000000-0000-4000-a000-000000000042' ORDER BY created_at LIMIT 1;").trim();
+  if (!/^[0-9a-f-]{36}$/.test(id)) throw new Error('Fixture de cliente concorrente ausente.');
+  return id;
+};
+const raceCustomerVersion = async database => {
+  const id = customerRecord(database);
+  const first = openSql(database);
+  let second;
+  try {
+    first.child.stdin.write(`BEGIN;
+      SET ROLE authenticated;
+      SET request.jwt.claims='${customerClaims}';
+      SELECT public.customer_update('${customerOffice}','${id}','{"kind":"person","name":"Vencedor Concorrente Ficticio","contacts":[{"kind":"phone","value":"11999990000"}]}',2,gen_random_uuid());
+      \\echo CUSTOMER_VERSION_HELD
+    `);
+    await until(() => first.output().includes('CUSTOMER_VERSION_HELD'));
+    second = openSql(database);
+    second.child.stdin.end(`SET application_name='jn_customer_version_b';
+      SET ROLE authenticated;
+      SET request.jwt.claims='${customerClaims}';
+      SELECT test.expect_error($q$SELECT public.customer_update('${customerOffice}','${id}','{"kind":"person","name":"Perdedor Concorrente Ficticio","contacts":[]}',2,gen_random_uuid())$q$,'PT409','clientes: duas conexoes nao sobrescrevem a mesma versao');
+    `);
+    await until(() => sql(database, 'postgres', "SELECT EXISTS(SELECT FROM pg_stat_activity WHERE application_name='jn_customer_version_b' AND wait_event_type='Lock');").trim() === 't');
+    first.child.stdin.end('COMMIT;\n');
+    await first.result;
+    return await second.result + sql(database, 'postgres', `SELECT test.assert_true(
+      (SELECT version=3 AND name='Vencedor Concorrente Ficticio' FROM public.customers WHERE id='${id}')
+      AND (SELECT count(*) FROM public.customer_contacts WHERE customer_id='${id}' AND value='11999990000')=1
+      AND (SELECT count(*) FROM public.audit_events WHERE target_id='${id}' AND action='customers.updated')=2,
+      'clientes: corrida conserva vencedor contatos versao e somente auditoria confirmada');`);
+  } finally { first.child.kill(); second?.child.kill(); }
+};
+const raceCustomerDuplicate = async database => {
+  const first = openSql(database);
+  let second;
+  try {
+    first.child.stdin.write(`BEGIN;
+      SET ROLE authenticated;
+      SET request.jwt.claims='${customerClaims}';
+      SELECT public.customer_create('${customerOffice}','{"kind":"person","name":"Unico Concorrente Ficticio","identifier":"11144477735","contacts":[]}',gen_random_uuid());
+      \\echo CUSTOMER_DUPLICATE_HELD
+    `);
+    await until(() => first.output().includes('CUSTOMER_DUPLICATE_HELD'));
+    second = openSql(database);
+    second.child.stdin.end(`SET application_name='jn_customer_duplicate_b';
+      SET ROLE authenticated;
+      SET request.jwt.claims='${customerClaims}';
+      SELECT test.expect_error($q$SELECT public.customer_create('${customerOffice}','{"kind":"person","name":"Duplicado Concorrente Ficticio","identifier":"111.444.777-35","contacts":[]}',gen_random_uuid())$q$,'PT409','clientes: duas conexoes nao duplicam CPF canonico');
+    `);
+    await until(() => sql(database, 'postgres', "SELECT EXISTS(SELECT FROM pg_stat_activity WHERE application_name='jn_customer_duplicate_b' AND wait_event_type='Lock');").trim() === 't');
+    first.child.stdin.end('COMMIT;\n');
+    await first.result;
+    return await second.result + sql(database, 'postgres', `SELECT test.assert_true(
+      (SELECT count(*) FROM public.customers WHERE office_id='${customerOffice}' AND identifier='11144477735')=1
+      AND (SELECT count(*) FROM public.audit_events e JOIN public.customers c ON c.id=e.target_id WHERE c.identifier='11144477735' AND e.action='customers.created')=1,
+      'clientes: duplicidade concorrente persiste uma ficha e um evento');`);
+  } finally { first.child.kill(); second?.child.kill(); }
+};
+const raceCustomerAuthority = async (database, kind) => {
+  const id = customerRecord(database);
+  const first = openSql(database);
+  let second;
+  const read = kind === 'read';
+  const capability = kind === 'capability';
+  const statement = read ? `SELECT public.customers_page('${customerOffice}','',1,3)`
+    : `SELECT public.customer_update('${customerOffice}','${id}','{"kind":"person","name":"Sessao Revogada Ficticia","contacts":[]}',3,gen_random_uuid())`;
+  try {
+    first.child.stdin.write(`BEGIN;
+      SELECT id FROM public.offices WHERE id='${customerOffice}' FOR UPDATE;
+      \\echo CUSTOMER_AUTHORITY_HELD
+    `);
+    await until(() => first.output().includes('CUSTOMER_AUTHORITY_HELD'));
+    second = openSql(database);
+    second.child.stdin.end(`SET application_name='jn_customer_authority_b';
+      SET ROLE authenticated;
+      SET request.jwt.claims='${customerClaims}';
+      SELECT test.expect_error($q$${statement}$q$,'${capability ? 'PT403' : 'PT401'}','clientes: ${capability ? 'capacidade revogada' : 'logout'} durante lock nega ${read ? 'leitura' : 'mutacao'}');
+    `);
+    await until(() => sql(database, 'postgres', "SELECT EXISTS(SELECT FROM pg_stat_activity WHERE application_name='jn_customer_authority_b' AND wait_event_type='Lock');").trim() === 't');
+    sql(database, 'postgres', capability
+      ? "DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000042' AND permission_code='customers.update';"
+      : "DELETE FROM auth.sessions WHERE id='00000000-0000-4000-c000-000000000042';");
+    first.child.stdin.end('COMMIT;\n');
+    await first.result;
+    return await second.result + sql(database, 'postgres', `SELECT test.assert_true(
+      (SELECT version=3 AND name='Vencedor Concorrente Ficticio' FROM public.customers WHERE id='${id}')
+      AND (SELECT count(*) FROM public.audit_events WHERE target_id='${id}' AND action='customers.updated')=2,
+      'clientes: autoridade revogada nao altera dados ou auditoria');`);
+  } finally {
+    first.child.kill(); second?.child.kill();
+    sql(database, 'postgres', capability
+      ? "INSERT INTO private.team_member_permissions VALUES ('00000000-0000-4000-b000-000000000042','customers.update') ON CONFLICT DO NOTHING;"
+      : "INSERT INTO auth.sessions(id,user_id) VALUES('00000000-0000-4000-c000-000000000042','00000000-0000-4000-a000-000000000042') ON CONFLICT DO NOTHING;");
+  }
+};
+
 let started = false;
 try {
   docker('run', '--rm', '--detach', '--network=none', '--name', name, '--tmpfs', '/var/lib/postgresql/data:rw,nosuid,noexec,size=512m',
@@ -170,10 +270,16 @@ try {
       + sql(database, 'postgres', readFileSync(`${root}tests/database/auth.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/governance.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/customers.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
       + await raceLastOwners(database)
       + await raceRevokedSession(database)
-      + await raceRecipientEmail(database);
+      + await raceRecipientEmail(database)
+      + await raceCustomerVersion(database)
+      + await raceCustomerDuplicate(database)
+      + await raceCustomerAuthority(database, 'session')
+      + await raceCustomerAuthority(database, 'read')
+      + await raceCustomerAuthority(database, 'capability');
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
   console.log('PASS: dois replays vazios, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.');

@@ -31,3 +31,11 @@ Rollout compatível: migration aditiva → Edge → frontend/API pela integraç�
 Migration20261018195511_audit_privacy_archives aplicada e versionada com SQL idêntico ao testado. RPCs audit_page/audit_export/archives_page/archive_membership/restore_archive exigem sessão/capacidades atuais e escritório; API pública não lê audit_events ou private.archived_records diretamente. Seed audit.export/archives.manage somente owner. Arquivar desativa e invalida convites; restaurar mantém conta inativa. Referência mínima na tabela, nome resolvido apenas no DTO autorizado. Falha de auditoria crítica reverte operação.
 
 Validação final:342 SQL em dois replays,30 Auth reais no laboratório e30 Node; nenhum teste de escrita no hospedado. Retenção/titulares/incidentes e contrato de eventos em docs/privacidade. Rollback só código, sem apagar referências/auditoria; sem migrations destrutivas, purge, mudança SMTP ou conta real.
+
+## Etapa07
+
+Migration `customers_secure_registry`: customers/customer_contacts com RLS/ACL sem acesso bruto da API; quatro RPCs públicas invoker sobre implementações privadas autorizadas. customers.read é pré-requisito; create/update adicionais; read_all amplia o escopo apenas dentro do escritório. Owner recebe capacidades por papel, concessões aos demais seguem gestão/delegação atual. Sem read_all, apenas fichas criadas pelo ator; relações ficam na08.
+
+Identificador não vazio normalizado tem índice único por escritório/tipo. Identificador vazio permanece NULL; ficha anônima não é exigida para serviço rápido. Contatos0..4, e-mail lower/trim e telefone com10/11 dígitos ou55+10/11. Validação CPF/CNPJ não consulta fonte oficial. Escritas serializadas por escritório, versão otimista e evento sem PII na mesma transação; sessão/capacidade revalidadas após locks. Rollback só código, preservando as tabelas e a auditoria.
+
+504 checks SQL passaram em dois replays252×2, com migrador sem superusuário/BYPASSRLS e corridas reais. Estado hospedado e testes integrados finais em [fecho07](../docs/etapas/fecho-07.md).

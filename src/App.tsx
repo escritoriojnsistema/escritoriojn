@@ -10,6 +10,7 @@ import CallbackPage from './features/auth/CallbackPage';
 import ResetPage from './features/auth/ResetPage';
 import PanelPage from './features/auth/PanelPage';
 import TeamPage from './features/team/TeamPage';
+import CustomersPage from './features/customers/CustomersPage';
 import InvitationPage from './features/team/InvitationPage';
 import AccountPage from './features/operation/AccountPage';
 import GovernancePage from './features/governance/GovernancePage';
@@ -32,6 +33,7 @@ function AppRoutes() {
     <Route path={paths.panel} element={<PanelPage key={`team:${operationKey}`} />} />
     <Route path={paths.clientPanel} element={<PanelPage key={`client:${operationKey}`} />} />
     <Route path={paths.authenticated} element={<PanelPage key={operationKey} />} />
+    <Route path={paths.customers} element={<CustomersPage key={operationKey} />} />
     <Route path={paths.teamManagement} element={<TeamPage key={operationKey} />} />
     <Route path={paths.invitation} element={<InvitationPage key={auth.sessionKey} />} />
     <Route path={paths.audit} element={<GovernancePage key={`audit:${operationKey}`} mode="audit" />} />

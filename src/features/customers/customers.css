@@ -1,0 +1,54 @@
+.customers-main { max-width: 1200px; min-width: 0; }
+.customers-main .operation-heading { margin-bottom: 12px; }
+.customer-toolbar { display: flex; align-items: end; gap: 6px; border-bottom: 1px solid #dce4e8; padding-bottom: 8px; }
+.customer-search { display: flex; align-items: end; gap: 2px; flex: 1; min-width: 0; }
+.customer-search .team-field { flex: 1; margin: 0; }
+.customer-toolbar .customer-new { width: auto; min-width: 44px; margin: 0; white-space: nowrap; padding-inline: 14px; }
+.customer-new svg { flex-shrink: 0; }
+.customer-list { list-style: none; padding: 0; margin: 0; }
+.customer-list li { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 70px; padding: 8px 0; border-bottom: 1px solid #e1e8ec; }
+.customer-list li > div { display: flex; flex-direction: column; gap: 5px; min-width: 0; overflow-wrap: anywhere; }
+.customer-list strong { font-size: 14px; font-weight: 600; line-height: 1.3; }
+.customer-list small { font-size: 12px; line-height: 1.4; color: #617887; }
+.customer-view-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 8px; border-bottom: 1px solid #dce4e8; padding-bottom: 3px; margin-bottom: 12px; }
+.customer-view-toolbar > :first-child { margin-left: -10px; }
+.customer-form { max-width: 850px; }
+.customer-form fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.customer-form-grid { display: grid; grid-template-columns: minmax(150px, .7fr) minmax(200px, 1.4fr) minmax(160px, 1fr); gap: 12px; }
+.customer-form-grid .team-field { margin-bottom: 0; }
+.customer-note { margin: 8px 0; font-size: 12px; line-height: 1.4; color: #617887; }
+.customer-contact-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.customer-contact-heading h2 { font-size: 16px; margin: 0; font-weight: 600; }
+.customer-contact-heading small { font-size: 12px; font-weight: 400; color: #617887; }
+.customer-contact { display: grid; grid-template-columns: minmax(120px, .6fr) minmax(0, 1.4fr) 44px; align-items: end; gap: 8px; margin-bottom: 10px; }
+.customer-contact .team-field { margin: 0; }
+.customer-submit { width: fit-content; min-width: 180px; margin-top: 12px; }
+.customer-detail { max-width: 850px; }
+.customer-detail dl { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 24px; margin: 16px 0 0; }
+.customer-detail dl > div { min-width: 0; overflow-wrap: anywhere; }
+.customer-detail dt { color: #617887; font-size: 12px; margin-bottom: 5px; }
+.customer-detail dd { margin: 0; font-size: 14px; line-height: 1.5; }
+.customer-detail-contact { display: block; }
+.customer-error .form-feedback { margin-bottom: 0; }
+.customer-office { margin-bottom: 8px; }
+@media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
+ .operation-main:has(.customers-main) { padding-top: 12px; padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+ .customers-main .operation-heading { margin-bottom: 4px; }
+ .customers-main .operation-heading h1 { margin-bottom: 3px; }
+ .customers-main .operation-heading p:not(.eyebrow) { font-size: 12px; }
+ .customer-list li { min-height: 68px; padding-block: 6px; }
+ .customer-list strong { font-size: 13px; }
+ .customer-list small { font-size: 11px; }
+ .customer-search .team-field { font-size: 11px; gap: 4px; }
+ .customer-toolbar .customer-new { width: 44px; padding: 0; gap: 0; flex-shrink: 0; }
+ .customer-new span { display: none; }
+ .customer-form-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+ .customer-name { grid-column: 1 / -1; grid-row: 1; }
+ .customer-contact { grid-template-columns: minmax(94px, .7fr) minmax(0, 1.3fr) 44px; gap: 6px; }
+ .customer-contact .team-field { gap: 4px; font-size: 11px; }
+ .customer-contact input, .customer-contact select { padding-inline: 8px; }
+ .customer-note { font-size: 11px; margin-block: 2px; }
+ .customer-view-toolbar { margin-bottom: 0; padding-bottom: 0; }
+ .customer-submit { width: 100%; margin-top: 4px; }
+ .customer-detail dl { grid-template-columns: 1fr; gap: 14px; }
+}

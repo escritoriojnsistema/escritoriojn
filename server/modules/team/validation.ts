@@ -1,4 +1,5 @@
 import { uuidPattern } from '../../../shared/access.js';
+import { validCpf } from '../../../shared/identifiers.js';
 import { assignablePermissions, teamRoles } from '../../../shared/team.js';
 
 export const uuid=(value:unknown):value is string=>typeof value==='string' && uuidPattern.test(value);
@@ -17,14 +18,7 @@ export function fullName(value:unknown) {
     && /^[\p{L}][\p{L}\p{M}'’-]+(?:\s+[\p{L}][\p{L}\p{M}'’-]*)+$/u.test(value.trim());
 }
 export function cpf(value:unknown) {
-  if(typeof value!=='string' || value.length>20 || !/^[\d.\-\s]+$/.test(value))return false;
-  const digits=value.replace(/\D/g,'');
-  if(digits.length!==11 || /^(\d)\1{10}$/.test(digits))return false;
-  for(const length of [9,10]) {
-    let sum=0;for(let i=0;i<length;i++)sum+=Number(digits[i])*(length+1-i);
-    const remainder=(sum*10)%11;if(Number(digits[length])!==(remainder===10?0:remainder))return false;
-  }
-  return true;
+  return typeof value==='string' && validCpf(value);
 }
 export function expiry(value:unknown,maxDays:number) {
   if(typeof value!=='string' || value.length>35 || !/^\d{4}-\d{2}-\d{2}T/.test(value))return false;
