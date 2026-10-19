@@ -31,6 +31,10 @@ for (const module of ['customers','team','governance'] as const) test(`401 antig
     expect(await page.evaluate(async()=>{
       const path='/src/features/auth/browser.ts';const {supabase}=await import(path);
       const before=(await supabase.auth.getSession()).data.session;
+      // GoTrue signs JWTs at second precision: a refresh in the same issuance
+      // second can legitimately return identical token bytes on a fast runner.
+      const claims=JSON.parse(atob(before.access_token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+      await new Promise(resolve=>setTimeout(resolve,Math.max(0,(claims.iat+1)*1000-Date.now())+20));
       const refresh=await supabase.auth.refreshSession();
       return !refresh.error && refresh.data.session.access_token!==before.access_token;
     })).toBe(true);

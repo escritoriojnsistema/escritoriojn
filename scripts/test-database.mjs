@@ -294,6 +294,79 @@ const raceCustomerAuthority = async (database, kind) => {
   }
 };
 
+const raceConfirmedRegistration = async database => {
+  const first = openSql(database);
+  const second = openSql(database);
+  const firstUser = '00000000-0000-4000-a000-000000000066';
+  const secondUser = '00000000-0000-4000-a000-000000000061';
+  try {
+    first.child.stdin.write(`SET application_name='jn_confirmed_registration_a';
+      BEGIN;
+      SET LOCAL ROLE migrator;
+      SET LOCAL statement_timeout='750ms';
+      SELECT id FROM public.offices WHERE id='${customerOffice}' FOR KEY SHARE;
+      \\echo CONFIRMED_A_KEY_SHARE_HELD
+    `);
+    second.child.stdin.write(`SET application_name='jn_confirmed_registration_b';
+      BEGIN;
+      SET LOCAL ROLE migrator;
+      SELECT id FROM public.offices WHERE id='${customerOffice}' FOR KEY SHARE;
+      \\echo CONFIRMED_B_KEY_SHARE_HELD
+    `);
+    await until(() => first.output().includes('CONFIRMED_A_KEY_SHARE_HELD')
+      && second.output().includes('CONFIRMED_B_KEY_SHARE_HELD'));
+
+    // The old FOR UPDATE stalls on B's FK-compatible KEY SHARE; NO KEY UPDATE
+    // must complete while B is still inside its original transaction.
+    first.child.stdin.write(`SELECT private.sync_customer_registration('${firstUser}');
+      \\echo CONFIRMED_A_SYNC_HELD
+    `);
+    await Promise.race([
+      first.result,
+      until(() => first.output().includes('CONFIRMED_A_SYNC_HELD')),
+    ]);
+    if (!first.output().includes('CONFIRMED_A_SYNC_HELD')) throw new Error('O primeiro sincronizador terminou antes da barreira.');
+
+    second.child.stdin.write(`SELECT private.sync_customer_registration('${secondUser}');
+      \\echo CONFIRMED_B_SYNC_DONE
+    `);
+    await until(() => sql(database, 'postgres', `SELECT EXISTS(
+      SELECT FROM pg_stat_activity waiter
+      JOIN pg_stat_activity holder ON holder.pid=ANY(pg_blocking_pids(waiter.pid))
+      WHERE waiter.datname=current_database() AND holder.datname=current_database()
+       AND waiter.application_name='jn_confirmed_registration_b'
+       AND holder.application_name='jn_confirmed_registration_a'
+       AND waiter.wait_event_type='Lock');`).trim() === 't');
+    if (second.output().includes('CONFIRMED_B_SYNC_DONE')) throw new Error('O segundo sincronizador ignorou o mutex do escritorio.');
+
+    first.child.stdin.end('COMMIT;\n');
+    await first.result;
+    await Promise.race([
+      second.result,
+      until(() => second.output().includes('CONFIRMED_B_SYNC_DONE')),
+    ]);
+    if (!second.output().includes('CONFIRMED_B_SYNC_DONE')) throw new Error('O segundo sincronizador terminou antes da barreira.');
+    second.child.stdin.end('COMMIT;\n');
+    await second.result;
+
+    return 'PASS: cadastros confirmados conservam KEY SHARE e serializam o mutex em duas conexoes reais\n'
+      + sql(database, 'postgres', `SELECT test.assert_true(
+        (SELECT count(*) FROM public.customers WHERE created_by IN ('${firstUser}','${secondUser}'))=2
+        AND (SELECT count(*) FROM private.customer_registrations r
+          JOIN public.memberships m ON m.id=r.membership_id
+          WHERE m.user_id IN ('${firstUser}','${secondUser}') AND r.materialized_customer_id IS NOT NULL)=2
+        AND (SELECT count(*) FROM public.audit_events e
+          JOIN private.customer_registrations r ON r.id=e.target_id AND r.office_id=e.office_id
+          JOIN public.memberships m ON m.id=r.membership_id
+          WHERE m.user_id IN ('${firstUser}','${secondUser}')
+           AND e.action='auth.customer_registration_received' AND e.target_type='customer_registration')=2,
+        'cadastros confirmados concorrentes preservam duas fichas, origens e eventos idempotentes');`);
+  } finally {
+    first.child.kill();
+    second.child.kill();
+  }
+};
+
 let started = false;
 try {
   docker('run', '--rm', '--detach', '--network=none', '--name', name, '--tmpfs', '/var/lib/postgresql/data:rw,nosuid,noexec,size=512m',
@@ -338,6 +411,7 @@ try {
       + await raceCustomerDuplicate(database)
       + await raceCustomerRegistration(database)
       + await raceUnconfirmedRegistration(database)
+      + await raceConfirmedRegistration(database)
       + await raceCustomerAuthority(database, 'session')
       + await raceCustomerAuthority(database, 'read')
       + await raceCustomerAuthority(database, 'capability');

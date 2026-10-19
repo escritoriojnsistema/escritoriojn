@@ -1,7 +1,7 @@
 {
   "state": "awaiting_ci_and_publication",
   "node": 54,
-  "sql": 560,
+  "sql": 564,
   "local_auth_final_selected": 20,
   "local_auth_previous_full": {
     "passed": 55,
@@ -25,5 +25,17 @@
     "raw_grants": false
   },
   "future_approval_activated": false,
-  "inactivity_policy_activated": false
+  "inactivity_policy_activated": false,
+  "local_auth_renewal_after_issuance_second_fix": 3,
+  "local_ui": {
+    "broad_passed": 93,
+    "broad_tests": 95,
+    "focused_passed": 3,
+    "final_cases": 96
+  },
+  "additional_migration": {
+    "name": "20261019164337_customer_registration_lock_compatibility",
+    "sha256": "9534bff0a1d7524b8c3553bd144f1fee947d0a4582c4d16cf0f79f4a38000f3c",
+    "applied": true
+  }
 }

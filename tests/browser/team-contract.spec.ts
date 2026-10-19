@@ -283,14 +283,20 @@ test('aceite só revela senha após verificação do servidor e restaura confer�
   await expect(page).toHaveURL(/\/painel$/);
 });
 
-test('convite com sessão revogada oferece login com UUID e recusa convite indisponível genericamente', async ({ page }) => {
+test('convite com sessão revogada oferece login com UUID e permanece encerrado após recarga', async ({ page }) => {
   await session(page);
   await page.route(`**/api/team/invitations/${invitation}/state`, route => route.fulfill({ status: 401, json: { error: { code: 'AUTH_REQUIRED' } } }));
   await page.goto(`/convite?id=${invitation}`);
   await expect(page.getByRole('alert')).toContainText('sessão está ausente, expirou ou foi encerrada');
   await expect(page.getByRole('link', { name: 'Entrar para continuar' })).toHaveAttribute('href', `/login?invite=${invitation}`);
+  await page.reload(); await expect(page.getByRole('alert')).toContainText('sessão está ausente, expirou ou foi encerrada');
+  await expect(page.getByLabel('Nova senha', { exact: true })).toHaveCount(0);
+});
+
+test('convite indisponível recusa genericamente uma sessão válida e não revela senha', async ({ page }) => {
+  await session(page);
   await page.route(`**/api/team/invitations/${invitation}/state`, route => route.fulfill({ status: 410, json: { error: { code: 'INVITE_UNAVAILABLE' } } }));
-  await page.reload(); await expect(page.getByRole('alert')).toContainText('Este convite não está disponível');
+  await page.goto(`/convite?id=${invitation}`); await expect(page.getByRole('alert')).toContainText('Este convite não está disponível');
   await expect(page.getByLabel('Nova senha', { exact: true })).toHaveCount(0);
 });
 
