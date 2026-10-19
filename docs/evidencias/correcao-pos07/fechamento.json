@@ -1,0 +1,143 @@
+{
+  "verified_at_utc": "2026-10-19T20:50:17Z",
+  "state": "published_corrections_verified_with_documented_limits",
+  "repository": "escritoriojnsistema/escritoriojn",
+  "git": {
+    "pr": 13,
+    "tested_commit": "711294b78882d6f5a91b3e25244da2ef5175416a",
+    "main_commit": "9623919ad71070b0c5a9b7b1a0848a6ca71cd84d",
+    "tested_and_merged_tree": "1d84d5fb7e1fe56c4d89bf2a118bf2f96b2d3ac4",
+    "identical_trees": true
+  },
+  "ci": {
+    "run_id": 39288012538,
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39288012538",
+    "conclusion": "success",
+    "jobs": {
+      "check": "success",
+      "authentication": "success",
+      "database": "success"
+    },
+    "passed": {
+      "node": 54,
+      "sql": 564,
+      "auth_lab": 59,
+      "public_e2e": 34,
+      "presentation_contracts": 96
+    },
+    "typecheck": "success",
+    "build": "success",
+    "reviewed_existing_run": true,
+    "rerun_in_this_session": false
+  },
+  "database": {
+    "project": "mcsuoxnubpqenyvbefee",
+    "migrations": 9,
+    "auth_users": 5,
+    "confirmed_users": 4,
+    "memberships": 5,
+    "customers": 1,
+    "contacts": 1,
+    "registration_origins": 1,
+    "materialized": 1,
+    "approved_origins": 0,
+    "broken_materialized_links": 0,
+    "registration_trigger_active": true,
+    "compatible_lock": true,
+    "rls": true,
+    "raw_anon_or_authenticated_select": false,
+    "mutations_in_this_session": false
+  },
+  "migrations": [
+    {
+      "version": "20261019163453",
+      "name": "customer_registration_registry",
+      "sha256": "b92751be1ae5bbdc1ccf2eaced56836f25131fd994a4830be8f7a6c6c0d2f9e8"
+    },
+    {
+      "version": "20261019164337",
+      "name": "customer_registration_lock_compatibility",
+      "sha256": "9534bff0a1d7524b8c3553bd144f1fee947d0a4582c4d16cf0f79f4a38000f3c"
+    }
+  ],
+  "deployment": {
+    "github_status": "success",
+    "status_url": "https://vercel.com/escritorio-jn/escritoriojn/BqKJJRDtWouTaaU7CjE2U8pKFXcG",
+    "canonical": "https://escritoriojn.vercel.app/",
+    "homepage_status": 200,
+    "api_health_status": 200,
+    "anonymous_context_status": 401,
+    "anonymous_customers_final_path": "/login",
+    "bundle": "/assets/index-HnP-NxlU.js",
+    "bundle_status": 200,
+    "observed_bundle_markers": [
+      "jn-auth-session-ended",
+      "client_registration",
+      "jn-auth-storage",
+      "Session already ended"
+    ],
+    "administrative_connector_status": 403,
+    "cli_available": false,
+    "new_deploy_in_this_session": false
+  },
+  "performance": {
+    "source": "Supabase edge_logs, response.headers.x_envoy_upstream_service_time",
+    "window_start": "2026-10-19T16:49:04Z",
+    "window_end": "tool execution near verified_at_utc",
+    "scope": "provider upstream timings only; not browser or complete API latency",
+    "routes": [
+      {
+        "route": "/auth/v1/token",
+        "note": "login and refresh share this route; not separated by grant_type",
+        "status": 200,
+        "requests": 6,
+        "p50_ms": 170,
+        "p95_ms": 431.6
+      },
+      {
+        "route": "/auth/v1/user",
+        "status": 200,
+        "requests": 140,
+        "p50_ms": 12,
+        "p95_ms": 127.4
+      },
+      {
+        "route": "/auth/v1/user",
+        "status": 403,
+        "requests": 1,
+        "p50_ms": 5,
+        "p95_ms": 5
+      },
+      {
+        "route": "/rest/v1/rpc/my_access_context",
+        "status": 200,
+        "requests": 122,
+        "p50_ms": 38,
+        "p95_ms": 194.8
+      }
+    ],
+    "signup_or_invitation_samples_in_window": 0,
+    "hosted_signup_invitation_smtp_latency_verified": false,
+    "previous_invitation_benchmark": "synthetic only: median 1390ms to 201ms"
+  },
+  "skills": {
+    "magicpath_owned": 17,
+    "magicpath_enabled": 17,
+    "created_in_this_session": 0,
+    "portable_export_skills": 17,
+    "portable_archive_structure_valid": true,
+    "account_plugin_registration_tool_available": false,
+    "global_chatgpt_or_codex_activation_verified": false
+  },
+  "future": {
+    "document_approval_active": false,
+    "individual_inactivity_policy_active": false,
+    "stage08_started": false
+  },
+  "limits": [
+    "Authenticated browser scenarios were verified from the existing final CI, not replayed against hosted personal accounts.",
+    "Administrative Vercel access returned 403; GitHub status and canonical public content were checked instead.",
+    "Hosted signup/invitation/SMTP timing remains unmeasured in this window; no hosted accounts or emails were created for testing.",
+    "Direct shell clone could not reach the configured proxy. Sources were read through the GitHub connector; local files are a partial review snapshot."
+  ]
+}
