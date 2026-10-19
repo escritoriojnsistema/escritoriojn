@@ -1,17 +1,20 @@
 {
-  "verified_at_utc": "2026-10-19T20:50:17Z",
-  "state": "published_corrections_verified_with_documented_limits",
+  "verified_at_utc": "2026-10-19T21:05:51Z",
+  "state": "runtime_published_and_verified",
   "repository": "escritoriojnsistema/escritoriojn",
-  "git": {
-    "pr": 13,
-    "tested_commit": "711294b78882d6f5a91b3e25244da2ef5175416a",
-    "main_commit": "9623919ad71070b0c5a9b7b1a0848a6ca71cd84d",
-    "tested_and_merged_tree": "1d84d5fb7e1fe56c4d89bf2a118bf2f96b2d3ac4",
+  "implementation_pr": 13,
+  "audit_label": {
+    "pr": 14,
+    "merged": true,
+    "merge_commit": "58eb81a14904c2704b0eb2870dad9991a2aad6d9",
+    "tested_head": "736653e4885da60d0067e44b53ad14e9ff50a6be",
+    "tested_and_merged_tree": "a85e698b801d87de2e2c968be69260d82ac9239a",
     "identical_trees": true
   },
+  "documentation_pr": 15,
   "ci": {
-    "run_id": 39288012538,
-    "url": "https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39288012538",
+    "run_id": 39289046673,
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39289046673",
     "conclusion": "success",
     "jobs": {
       "check": "success",
@@ -26,9 +29,80 @@
       "presentation_contracts": 96
     },
     "typecheck": "success",
-    "build": "success",
-    "reviewed_existing_run": true,
-    "rerun_in_this_session": false
+    "build": "success"
+  },
+  "new_verification": {
+    "local_node_passed": 54,
+    "local_node_failed": 0,
+    "local_build": "success",
+    "remote_public_e2e_passed": 34,
+    "remote_public_e2e_failed": 0,
+    "remote_base": "https://escritoriojn.vercel.app",
+    "http": {
+      "base": "https://escritoriojn.vercel.app",
+      "responses": [
+        {
+          "path": "/",
+          "status": 200,
+          "elapsed_ms": 559,
+          "cache_control": "private, no-store"
+        },
+        {
+          "path": "/api/health",
+          "status": 200,
+          "elapsed_ms": 497,
+          "cache_control": "no-store",
+          "result": {
+            "status": "ok",
+            "service": "escritorio-jn-api"
+          }
+        },
+        {
+          "path": "/api/auth/context",
+          "status": 401,
+          "elapsed_ms": 318,
+          "cache_control": "private, no-store",
+          "result": {
+            "error_code": "AUTH_REQUIRED"
+          }
+        },
+        {
+          "path": "/api/team",
+          "status": 401,
+          "elapsed_ms": 301,
+          "cache_control": "private, no-store",
+          "result": {
+            "error_code": "AUTH_REQUIRED"
+          }
+        },
+        {
+          "path": "/api/customers",
+          "status": 401,
+          "elapsed_ms": 294,
+          "cache_control": "private, no-store",
+          "result": {
+            "error_code": "AUTH_REQUIRED"
+          }
+        },
+        {
+          "path": "/api/governance/audit",
+          "status": 401,
+          "elapsed_ms": 343,
+          "cache_control": "private, no-store",
+          "result": {
+            "error_code": "AUTH_REQUIRED"
+          }
+        }
+      ],
+      "bundle": "/assets/index-D4pEJeIW.js",
+      "bundle_markers": {
+        "Cadastro público recebido": true,
+        "jn-auth-session-ended": true,
+        "client_registration": true,
+        "jn-auth-storage": true
+      }
+    },
+    "authenticated_hosted_accounts_used": false
   },
   "database": {
     "project": "mcsuoxnubpqenyvbefee",
@@ -46,7 +120,20 @@
     "compatible_lock": true,
     "rls": true,
     "raw_anon_or_authenticated_select": false,
-    "mutations_in_this_session": false
+    "mutations_in_this_session": false,
+    "edge": {
+      "name": "team-invitations",
+      "version": 14,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "index_matches_repository": true,
+      "handler_matches_repository": true
+    },
+    "advisors": {
+      "rls_no_policy": "intentional deny-by-default with no raw API grants",
+      "leaked_password_protection": "preexisting disabled; no plan or Auth configuration changed",
+      "remediation_url": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+    }
   },
   "migrations": [
     {
@@ -61,64 +148,29 @@
     }
   ],
   "deployment": {
-    "github_status": "success",
-    "status_url": "https://vercel.com/escritorio-jn/escritoriojn/BqKJJRDtWouTaaU7CjE2U8pKFXcG",
     "canonical": "https://escritoriojn.vercel.app/",
-    "homepage_status": 200,
-    "api_health_status": 200,
-    "anonymous_context_status": 401,
-    "anonymous_customers_final_path": "/login",
-    "bundle": "/assets/index-HnP-NxlU.js",
-    "bundle_status": 200,
-    "observed_bundle_markers": [
-      "jn-auth-session-ended",
-      "client_registration",
-      "jn-auth-storage",
-      "Session already ended"
-    ],
-    "administrative_connector_status": 403,
-    "cli_available": false,
-    "new_deploy_in_this_session": false
+    "github_status": "success",
+    "runtime_status_url": "https://vercel.com/escritorio-jn/escritoriojn/2tdkUv5UzTszLUpQQz6ZorZSgQ8e",
+    "runtime_merge": "58eb81a14904c2704b0eb2870dad9991a2aad6d9",
+    "bundle": "/assets/index-D4pEJeIW.js",
+    "method": "existing GitHub to Vercel integration",
+    "administrative_connector_last_status": 403,
+    "manual_deploy_required": false
   },
   "performance": {
-    "source": "Supabase edge_logs, response.headers.x_envoy_upstream_service_time",
-    "window_start": "2026-10-19T16:49:04Z",
-    "window_end": "tool execution near verified_at_utc",
-    "scope": "provider upstream timings only; not browser or complete API latency",
-    "routes": [
-      {
-        "route": "/auth/v1/token",
-        "note": "login and refresh share this route; not separated by grant_type",
-        "status": 200,
-        "requests": 6,
-        "p50_ms": 170,
-        "p95_ms": 431.6
-      },
-      {
-        "route": "/auth/v1/user",
-        "status": 200,
-        "requests": 140,
-        "p50_ms": 12,
-        "p95_ms": 127.4
-      },
-      {
-        "route": "/auth/v1/user",
-        "status": 403,
-        "requests": 1,
-        "p50_ms": 5,
-        "p95_ms": 5
-      },
-      {
-        "route": "/rest/v1/rpc/my_access_context",
-        "status": 200,
-        "requests": 122,
-        "p50_ms": 38,
-        "p95_ms": 194.8
-      }
-    ],
-    "signup_or_invitation_samples_in_window": 0,
-    "hosted_signup_invitation_smtp_latency_verified": false,
-    "previous_invitation_benchmark": "synthetic only: median 1390ms to 201ms"
+    "login_context_calls": "2 to 1 immediate calls; later checks preserved",
+    "invitation_creation": "201 pending after database commit, delivery retained via waitUntil",
+    "signup": "one real Auth POST with required email confirmation",
+    "signup_upstream_last24h": {
+      "requests": 5,
+      "status": 200,
+      "p50_ms": 975,
+      "p95_ms": 1121.7
+    },
+    "signup_log_window": "last24h before tool query near verified_at_utc; not only after deployment",
+    "provider_latency_scope": "upstream service time only; excludes browser and inbox delivery",
+    "prior_invitation_benchmark": "synthetic only: median1390ms to201ms",
+    "hosted_invitation_delivery_latency_measured": false
   },
   "skills": {
     "magicpath_owned": 17,
@@ -134,29 +186,10 @@
     "individual_inactivity_policy_active": false,
     "stage08_started": false
   },
-  "limits": [
-    "Authenticated browser scenarios were verified from the existing final CI, not replayed against hosted personal accounts.",
-    "Administrative Vercel access returned 403; GitHub status and canonical public content were checked instead.",
-    "Hosted signup/invitation/SMTP timing remains unmeasured in this window; no hosted accounts or emails were created for testing.",
-    "Direct shell clone could not reach the configured proxy. Sources were read through the GitHub connector; local files are a partial review snapshot."
-  ],
-  "pending_prs": [
-    {
-      "number": 14,
-      "url": "https://github.com/escritoriojnsistema/escritoriojn/pull/14",
-      "head": "736653e4885da60d0067e44b53ad14e9ff50a6be",
-      "status": "open_unmerged",
-      "scope": "One audit action label: Cadastro público recebido",
-      "preview": "ready",
-      "ci": [
-        {
-          "id": 39289046673,
-          "status": "completed",
-          "conclusion": "success",
-          "sha": "736653e4885da60d0067e44b53ad14e9ff50a6be",
-          "url": "https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39289046673"
-        }
-      ]
-    }
+  "remaining_runtime_changes_identified": [],
+  "notes": [
+    "No hosted accounts or messages were created for testing.",
+    "The final documentation PR records verified runtime publication; its own merge and follow-up Git deploy are checked after integration.",
+    "No database migration was repeated; no secrets or SMTP credentials were changed."
   ]
 }

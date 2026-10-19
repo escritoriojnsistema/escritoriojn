@@ -38,3 +38,7 @@ Rollback técnico somente de código para `750b110`, preservando dados, proveni�
 ## Retomada e fechamento verificado
 
 [Fecho da correção](fecho-correcao-pos07.md): PR13 integrada, CI39288012538 SUCCESS na mesma árvore da main, nove migrations e bundle canônico conferidos. Cadastro/convite/SMTP hospedados permanecem sem amostras de latência na janela após o merge. O fecho distingue resultados anteriores do CI, consultas novas e funcionalidades futuras.
+
+## Conclusão autorizada e publicada
+
+PR14 integrada e publicada em58eb81a; CI39289046673 SUCCESS. Nova execução local54/54 e build passaram;34/34 E2E no canônico passaram. Supabase com nove migrations, RLS/ACL e Edge ACTIVE/v14 com código idêntico ao repositório. [Fecho definitivo](fecho-correcao-pos07.md) e [prova](../evidencias/correcao-pos07/fechamento.json). A PR15 registra a conclusão no Livro; não há complemento de runtime identificado pendente neste escopo.

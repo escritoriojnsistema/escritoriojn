@@ -1,5 +1,5 @@
 {
-  "state": "awaiting_ci_and_publication",
+  "state": "published_and_verified",
   "node": 54,
   "sql": 564,
   "local_auth_final_selected": 20,
@@ -7,7 +7,6 @@
     "passed": 55,
     "failed_expectations_corrected": 2
   },
-  "pending_final_ci_auth": 59,
   "migration": {
     "name": "20261019163453_customer_registration_registry",
     "sha256": "b92751be1ae5bbdc1ccf2eaced56836f25131fd994a4830be8f7a6c6c0d2f9e8",
@@ -37,5 +36,15 @@
     "name": "20261019164337_customer_registration_lock_compatibility",
     "sha256": "9534bff0a1d7524b8c3553bd144f1fee947d0a4582c4d16cf0f79f4a38000f3c",
     "applied": true
+  },
+  "final_ci_auth": 59,
+  "final_ci_url": "https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39289046673",
+  "publication": {
+    "pr14_merged": true,
+    "merge": "58eb81a14904c2704b0eb2870dad9991a2aad6d9",
+    "status_url": "https://vercel.com/escritorio-jn/escritoriojn/2tdkUv5UzTszLUpQQz6ZorZSgQ8e",
+    "bundle": "/assets/index-D4pEJeIW.js",
+    "remote_e2e_passed": 34,
+    "proof": "fechamento.json"
   }
 }
