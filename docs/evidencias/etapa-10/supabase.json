@@ -1,0 +1,37 @@
+{
+  "project": "mcsuoxnubpqenyvbefee",
+  "workflow_migration": "20261020211531_requests_service_workflow",
+  "workflow_statements": 67,
+  "counts_after_workflow": {
+    "users": 5,
+    "memberships": 5,
+    "customers": 1,
+    "contacts": 1,
+    "services": 0,
+    "service_versions": 0,
+    "requests": 0,
+    "request_items": 0,
+    "migrations": 12
+  },
+  "tables": {
+    "rls_enabled": [
+      "public.requests",
+      "public.request_items",
+      "private.request_assignments",
+      "private.request_counters",
+      "private.request_history"
+    ],
+    "raw_api_access": false
+  },
+  "permissions": {
+    "owner_request_capabilities": 6,
+    "other_roles_request_capabilities": 0
+  },
+  "wrappers": {
+    "public_invoker": 5,
+    "anon_execute": false,
+    "authenticated_execute": true,
+    "empty_search_path": true
+  },
+  "helpers_direct_api_execute": false
+}

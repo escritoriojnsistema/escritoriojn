@@ -1,0 +1,35 @@
+{
+  "canonical": "https://escritoriojn.vercel.app",
+  "feature_commit": "073f69baad98984f87e6ba575ef0a23c95f512af",
+  "merge_commit": "4f3a28664deb9cd8707c663354c3eee7f700a02a",
+  "validated_tree": "ec7e72dbdff43978fbc0e669f1dbbe8198b6ec73",
+  "merged_tree": "ec7e72dbdff43978fbc0e669f1dbbe8198b6ec73",
+  "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/20",
+  "delivery": "GitHub→Vercel, no GitHub Actions",
+  "vercel_status": "success",
+  "vercel_deployment": "https://vercel.com/escritorio-jn/escritoriojn/HkbQFDQsHQcyR9KvhZ9jNdZVLfUL",
+  "asset": "/assets/index-CHE9iorx.js",
+  "asset_sha256": "a6762752e64873181a0db600eb3c1b31f164bfb80b3c8748bc5a1bf77b5d5aea",
+  "asset_contains": [
+    "/minhas-solicitacoes",
+    "/api/requests",
+    "/api/services"
+  ],
+  "remote_public_e2e": {
+    "passed": 42,
+    "failed": 0
+  },
+  "database_workflow": {
+    "version": "20261020211531",
+    "automatically_applied_by_git": true,
+    "statements": 67,
+    "sha256": "24c4930aece0adc421b204b51da256008f43dbca7926b5a1c32cb3a9460c75b9",
+    "matching_tested_file": true
+  },
+  "index_follow_up": "three covering indexes for new composite FKs; local replay/publication verification pending",
+  "limitations": [
+    "Authenticated flows use disposable local GoTrue/PostgREST/PostgreSQL; no hosted account credentials.",
+    "Vercel administrative connector403; Git status and canonical HTTP/assets verified.",
+    "No physical-device test; no hosted latency SLA."
+  ]
+}
