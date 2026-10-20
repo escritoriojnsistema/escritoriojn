@@ -1,0 +1,12 @@
+[
+  {
+    "check": "anonymous_rpc",
+    "status": 401,
+    "code": "42501"
+  },
+  {
+    "check": "raw_services",
+    "status": 401,
+    "code": "42501"
+  }
+]

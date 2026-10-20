@@ -39,12 +39,16 @@
     "local_cases": 37,
     "first_run_passed": 36,
     "isolated_retry_passed": 1,
-    "production": "pending"
+    "production": {
+      "passed": 37,
+      "failed": 0
+    }
   },
   "limitations": [
     "Real Auth/PostgREST/SQL/SMTP tested only in disposable local lab",
     "No hosted account/password/email fixture used",
     "Preview protected by Vercel SSO",
     "No physical phone or hosted API latency benchmark"
-  ]
+  ],
+  "status": "APROVÁVEL: implemented, integrated and technically published"
 }
