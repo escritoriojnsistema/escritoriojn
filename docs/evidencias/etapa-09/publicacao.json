@@ -1,0 +1,25 @@
+{
+  "pr": "https://github.com/escritoriojnsistema/escritoriojn/pull/18",
+  "feature": "046d4093405008235beb75561fb2d54e49e71faa",
+  "merge": "c9932ffb4abf1c17dead9434358759967523d43d",
+  "deployment": "https://vercel.com/escritorio-jn/escritoriojn/ESQrTG8HVoEJrwuffUizcjd7b54H",
+  "git_status": "success",
+  "canonical": "https://escritoriojn.vercel.app",
+  "html_status": 200,
+  "asset": "/assets/index-DGIM-GF3.js",
+  "asset_sha256": "f21943c96db8d1a6189885da1e5caa0aedbe9e1c7d13852e8252eb3a2f207384",
+  "markers": {
+    "/servicos": true,
+    "/api/services": true,
+    "SERVICE_DUPLICATE": true
+  },
+  "supabase": "20261020185830 applied by Git integration;38 ordered statements match;accounts and records preserved",
+  "e2e": {
+    "public_production_cases": 37,
+    "passed": 37,
+    "command": "E2E_BASE_URL=https://escritoriojn.vercel.app npm run test:e2e"
+  },
+  "tree": "e4d3bbd7d521f276fcf34cd8a5da60c28790fab6",
+  "hosted_authenticated_flows": "not tested with hosted credentials; real Auth integration verified in disposable laboratory",
+  "css": "/assets/index-DTfcKXH5.css"
+}

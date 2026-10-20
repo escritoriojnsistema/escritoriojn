@@ -1,0 +1,9 @@
+{
+  "version": "20261020185830",
+  "statements": 38,
+  "missing_statements": [],
+  "unmatched_noncomment_characters": 0,
+  "file_sha256": "74bfc42e5b90d5aeb9bb723ff597cb5314264244d826d288acbfeb5f58665385",
+  "exact_ordered_statements_match": true,
+  "application": "Supabase Git integration; explicit manual attempt rejected duplicate and was not repeated"
+}

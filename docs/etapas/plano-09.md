@@ -19,6 +19,6 @@ Objetivo: executar [contrato09](etapa-09.md), com React/Vite, Express e Supabase
 
 - [x] Testar jornada real local Auth→API→PostgREST→banco, revogação e histórico. Medir chamadas/duração e consulta indexada sem alegar latência zero.
 - [x] Typecheck, build, regressões pertinentes e dependências de produção. Revisão independente da branch, corrigir achados relevantes com regressão.
-- [ ] Atualizar Livro/fecho/provas, commit/push da branch e PR. Conferir integração Git→Vercel/preview disponível. Aplicar migration aditiva e publicar tecnicamente via Git conforme autorização permanente documentada e pedido09; registrar bloqueio externo sem alegar publicação.
+- [x] Atualizar Livro/fecho/provas, commit/push da branch e PR. Conferir integração Git→Vercel/preview disponível. Aplicar migration aditiva e publicar tecnicamente via Git conforme autorização permanente documentada e pedido09; registrar bloqueio externo sem alegar publicação.
 
 Focos de revisão: versão futura e fronteira de vigência; números fracionários/overflow/arredondamento; capacidade retirada durante espera; resposta de sessão antiga; política/cotação não permitindo alterar histórico nem burlar aprovação/quitação.

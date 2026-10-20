@@ -1,0 +1,21 @@
+{
+  "project_id": "mcsuoxnubpqenyvbefee",
+  "rls": true,
+  "contacts": 1,
+  "services": 0,
+  "versions": 0,
+  "customers": 1,
+  "auth_users": 5,
+  "memberships": 5,
+  "registrations": 1,
+  "raw_anon_access": false,
+  "public_invoker_count": 5,
+  "private_helper_exposed": false,
+  "raw_authenticated_access": false,
+  "owner_service_permissions": 8,
+  "other_role_service_permissions": 0,
+  "migration": "20261020185830",
+  "source_sha256": "74bfc42e5b90d5aeb9bb723ff597cb5314264244d826d288acbfeb5f58665385",
+  "stored_statements": 38,
+  "statements_match": true
+}

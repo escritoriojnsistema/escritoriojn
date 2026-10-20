@@ -1,0 +1,154 @@
+{
+  "type": "security",
+  "lints": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 14,
+      "findings": [
+        {
+          "detail": "Table \\`private.archived_records\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "archived_records",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        },
+        {
+          "detail": "Table \\`private.client_registration_settings\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "client_registration_settings",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        },
+        {
+          "detail": "Table \\`private.customer_merges\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "customer_merges",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        },
+        {
+          "detail": "Table \\`private.customer_registrations\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "customer_registrations",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        },
+        {
+          "detail": "Table \\`private.customer_relations\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "customer_relations",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        },
+        {
+          "detail": "Table \\`private.customer_snapshots\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "customer_snapshots",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        },
+        {
+          "detail": "Table \\`private.team_delegations\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "team_delegations",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        },
+        {
+          "detail": "Table \\`private.team_invitations\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "team_invitations",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        },
+        {
+          "detail": "Table \\`private.team_member_identities\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "team_member_identities",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        },
+        {
+          "detail": "Table \\`private.team_member_permissions\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "team_member_permissions",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        },
+        {
+          "detail": "Table \\`public.customer_contacts\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "customer_contacts",
+            "type": "table",
+            "schema": "public"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        },
+        {
+          "detail": "Table \\`public.customers\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "customers",
+            "type": "table",
+            "schema": "public"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        },
+        {
+          "detail": "Table \\`public.service_versions\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "service_versions",
+            "type": "table",
+            "schema": "public"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        },
+        {
+          "detail": "Table \\`public.services\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "services",
+            "type": "table",
+            "schema": "public"
+          },
+          "observed_at": "2026-10-20T19:38:04.199Z"
+        }
+      ],
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1,
+      "findings": [
+        {
+          "detail": "Supabase Auth prevents the use of compromised passwords by checking against HaveIBeenPwned.org. Enable this feature to enhance security.",
+          "metadata": {
+            "type": "auth",
+            "entity": "Auth"
+          }
+        }
+      ],
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+    }
+  ]
+}
