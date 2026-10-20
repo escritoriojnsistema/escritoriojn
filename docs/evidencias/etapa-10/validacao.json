@@ -1,0 +1,87 @@
+{
+  "stage09_reconfirmed": {
+    "github_main": "9291fbcf30424cea5ff21f870fcfc625dadc0bdc",
+    "migration": "20261020185830_services_versioned_catalog",
+    "migration_sha256": "74bfc42e5b90d5aeb9bb723ff597cb5314264244d826d288acbfeb5f58665385",
+    "canonical_asset": "/assets/index-DGIM-GF3.js",
+    "catalog_rpcs": 5,
+    "catalog_tables": true,
+    "stage10_absent_before_publication": true,
+    "hosted_counts": {
+      "users": 5,
+      "memberships": 5,
+      "customers": 1,
+      "contacts": 1,
+      "services": 0,
+      "service_versions": 0,
+      "migrations": 11
+    },
+    "migration_file_unmodified": true
+  },
+  "local": {
+    "node_api": {
+      "passed": 79,
+      "failed": 0
+    },
+    "sql": {
+      "passed": 1070,
+      "replays": 2,
+      "limited_migrator": true,
+      "real_concurrency": true,
+      "checks_per_replay": 535,
+      "extra_acceptance": "Contrato09 de R$100 com Maria de Teste,2participantes,campo/checklist e negativas individuais"
+    },
+    "auth_real": {
+      "verified_scenarios": 7,
+      "initial_pass": 6,
+      "initial_failure": "Selector exact service label omitted catalog code; real response was correct. Corrected selector; isolated repeat1 passed.",
+      "repeat_pass": 1
+    },
+    "typecheck_build": true,
+    "production_dependency_vulnerabilities": 0,
+    "preview": {
+      "health": 200,
+      "requests_anonymous": 401,
+      "services_anonymous": 401,
+      "spa": 200
+    },
+    "ui_contract": {
+      "passed": 30,
+      "requests": 13,
+      "services09": 13,
+      "team_navigation": 4,
+      "initial_failures": "Two selectors corrected to accessible textbox/combobox semantics. One trace run discarded because overlapping output directory cleanup; final isolated integrated suite30 passed."
+    },
+    "public_e2e": {
+      "passed": 42,
+      "failed": 0
+    },
+    "auth_regression": {
+      "passed": 15,
+      "scenarios": "operação de proprietário/admin/funcionário/cliente,portais,sessão e renovação"
+    },
+    "authenticated_verified_scenarios_total": 22
+  },
+  "review": {
+    "independent_findings": [
+      "Same-authority refresh reset action drafts through array identity",
+      "Catalog selected before participant lock could cross scheduled effective_from"
+    ],
+    "fixed": [
+      "stable version/status/capability effect dependencies",
+      "participant locks before final current version and policy validation",
+      "mandatory services.read and services.perform after waits",
+      "legacy profile labels normalized by existing08 helper"
+    ],
+    "sql_red_green": [
+      "revoked service capability after participant lock",
+      "effective catalog boundary after participant lock"
+    ]
+  },
+  "limits": [
+    "Authenticated flows verified in disposable real GoTrue/PostgREST/PostgreSQL lab, no hosted credentials or test records.",
+    "Chromium desktop/mobile emulation, no physical device.",
+    "Local benchmark is not hosted latency SLA.",
+    "No GitHub Actions; Vercel administrative connector403."
+  ]
+}

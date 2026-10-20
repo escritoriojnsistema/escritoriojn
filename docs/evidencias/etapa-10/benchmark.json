@@ -1,0 +1,20 @@
+{
+  "environment": "disposable local PostgreSQL17; API role authenticated; no hosted SLA",
+  "additional_requests": 10000,
+  "connections": 10,
+  "samples": 200,
+  "measurements": {
+    "list": {
+      "samples": 100,
+      "median_ms": 28.37,
+      "p95_ms": 79.517,
+      "max_ms": 97.211
+    },
+    "detail": {
+      "samples": 100,
+      "median_ms": 10.833,
+      "p95_ms": 48.739,
+      "max_ms": 64.613
+    }
+  }
+}

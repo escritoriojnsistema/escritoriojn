@@ -573,6 +573,110 @@ const benchmarkServices = async database => {
   }finally{for(const c of connections)c.child.kill();}
 };
 
+// Etapa10: exercise genuine independent PostgreSQL sessions, never a hosted database.
+const requestOffice = '00000000-0000-4000-e000-000000000091';
+const requestOwner = `SET ROLE authenticated; SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';`;
+const requestFixture = database => JSON.parse(sql(database,'postgres',`SELECT jsonb_build_object('origin','presencial','title','Corrida ficticia','customer_id',NULL,'assignee_id',NULL,'priority','normal','priority_reason','','internal_note','','items',jsonb_build_array(jsonb_build_object('service_id',s.id,'quantity',1,'adjustment','{"kind":"none","value":0,"reason":""}'::jsonb,'fields','{}'::jsonb,'participant_ids','[]'::jsonb,'checklist','[]'::jsonb))) FROM public.services s WHERE code='REQUEST-TESTE';`).trim());
+const raceRequestCreate = async (database, sameKey) => {
+  const lock=openSql(database);const callers=[];const key=randomUUID();const payload=JSON.stringify(requestFixture(database)).replaceAll("'","''");
+  const before=Number(sql(database,'postgres',`SELECT last_number FROM private.request_counters WHERE office_id='${requestOffice}';`).trim());
+  try {
+    lock.child.stdin.write(`BEGIN; SELECT id FROM public.offices WHERE id='${requestOffice}' FOR NO KEY UPDATE; \\echo REQUEST_CREATE_HELD\n`);
+    await until(()=>lock.output().includes('REQUEST_CREATE_HELD'));
+    for(let n=0;n<2;n++){
+      const connection=openSql(database);callers.push(connection);
+      connection.child.stdin.end(`SET application_name='jn_request_create_${n}'; ${requestOwner} SELECT public.request_create('${requestOffice}','${payload}','${sameKey?key:randomUUID()}',gen_random_uuid())->>'id';`);
+    }
+    await until(()=>sql(database,'postgres',"SELECT count(*)=2 FROM pg_stat_activity WHERE application_name LIKE 'jn_request_create_%' AND wait_event_type='Lock';").trim()==='t');
+    lock.child.stdin.end('COMMIT;\n');await lock.result;
+    const ids=(await Promise.all(callers.map(c=>c.result))).map(v=>v.trim());
+    if((ids[0]===ids[1])!==sameKey)throw Error('Request idempotency/protocol race returned unexpected IDs.');
+    return sql(database,'postgres',`SELECT test.assert_true((SELECT last_number FROM private.request_counters WHERE office_id='${requestOffice}')=${before+(sameKey?1:2)} AND (SELECT count(*)=count(DISTINCT protocol) FROM public.requests WHERE office_id='${requestOffice}'),'pedidos: corrida ${sameKey?'idempotente cria uma unica abertura':'protocolos distintos sem colisao'}');`);
+  }finally{lock.child.kill();for(const c of callers)c.child.kill();}
+};
+const raceRequestVersion = async database => {
+  const [id,version]=JSON.parse(sql(database,'postgres',`SELECT jsonb_build_array(id,version) FROM public.requests WHERE title='Copias ficticias';`).trim());
+  sql(database,'postgres',`CREATE FUNCTION test.request_version_result(p_id uuid,p_version integer) RETURNS text LANGUAGE plpgsql SECURITY INVOKER AS $test$ BEGIN PERFORM public.request_mutate('${requestOffice}',p_id,p_version,'{"kind":"note","note":"Corrida ficticia"}',gen_random_uuid());RETURN 'winner';EXCEPTION WHEN SQLSTATE 'PT409' THEN RETURN 'conflict';END $test$;`);
+  const callers=[openSql(database),openSql(database)];
+  try{
+    for(const c of callers)c.child.stdin.end(`${requestOwner} SELECT test.request_version_result('${id}',${version});`);
+    const results=(await Promise.all(callers.map(c=>c.result))).map(v=>v.trim()).sort();
+    if(JSON.stringify(results)!==JSON.stringify(['conflict','winner']))throw Error('Request version race did not produce exactly one winner.');
+    return sql(database,'postgres',`SELECT test.assert_true((SELECT version FROM public.requests WHERE id='${id}')=${version+1},'pedidos: versao concorrente conserva somente um vencedor');`);
+  }finally{for(const c of callers)c.child.kill();}
+};
+const raceRequestAuthority = async (database, capability) => {
+  const [id,version]=JSON.parse(sql(database,'postgres',`SELECT jsonb_build_array(id,version) FROM public.requests WHERE title='Copias ficticias';`).trim());
+  const lock=openSql(database);let mutation;
+  try{
+    lock.child.stdin.write(`BEGIN; SELECT id FROM public.requests WHERE id='${id}' FOR UPDATE; \\echo REQUEST_AUTHORITY_HELD\n`);
+    await until(()=>lock.output().includes('REQUEST_AUTHORITY_HELD'));
+    mutation=openSql(database);mutation.child.stdin.end(`SET application_name='jn_request_authority';SET ROLE authenticated;SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000094","session_id":"00000000-0000-4000-c000-000000000094"}'; SELECT test.expect_error($q$SELECT public.request_mutate('${requestOffice}','${id}',${version},'{"kind":"note","note":"Revogacao durante lock"}',gen_random_uuid())$q$,'${capability?'PT403':'PT401'}','pedidos: ${capability?'capacidade':'sessao'} revogada durante lock bloqueia escrita');`);
+    await until(()=>sql(database,'postgres',"SELECT EXISTS(SELECT FROM pg_stat_activity WHERE application_name='jn_request_authority' AND wait_event_type='Lock');").trim()==='t');
+    if(capability)sql(database,'postgres',"DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000094' AND permission_code='requests.update';");
+    else sql(database,'postgres',"DELETE FROM auth.sessions WHERE id='00000000-0000-4000-c000-000000000094';");
+    lock.child.stdin.end('COMMIT;\n');await lock.result;
+    return await mutation.result;
+  }finally{
+    lock.child.kill();mutation?.child.kill();
+    if(capability)sql(database,'postgres',"INSERT INTO private.team_member_permissions(membership_id,permission_code)VALUES('00000000-0000-4000-b000-000000000094','requests.update') ON CONFLICT DO NOTHING;");
+    else sql(database,'postgres',"INSERT INTO auth.sessions(id,user_id)VALUES('00000000-0000-4000-c000-000000000094','00000000-0000-4000-a000-000000000094') ON CONFLICT DO NOTHING;");
+  }
+};
+
+const raceRequestServiceAuthority = async (database,capability) => {
+  const customer=sql(database,'postgres',`INSERT INTO public.customers(office_id,kind,name,created_by)VALUES('${requestOffice}','person','Participante da corrida','00000000-0000-4000-a000-000000000092')RETURNING id;`).trim();
+  sql(database,'postgres',"INSERT INTO private.team_member_permissions(membership_id,permission_code)VALUES('00000000-0000-4000-b000-000000000092','customers.read') ON CONFLICT DO NOTHING;");
+  const definition=JSON.parse(sql(database,'postgres',"SELECT definition||'{\"code\":\"REQ-RACE-EMPTY\",\"effective_from\":null,\"required_capabilities\":[]}'::jsonb FROM public.service_versions v JOIN public.services s ON s.id=v.service_id WHERE s.code='REQUEST-TESTE' AND v.number=1;").trim());
+  const service=sql(database,'postgres',`SELECT id FROM public.services WHERE code='REQ-RACE-EMPTY';`).trim()||sql(database,'postgres',`${requestOwner}SELECT public.service_create('${requestOffice}','${JSON.stringify(definition).replaceAll("'","''")}','Corrida de capacidade',gen_random_uuid())->>'id';`).trim();
+  const payload=requestFixture(database);payload.items[0].service_id=service;payload.items[0].participant_ids=[customer];
+  const lock=openSql(database);let opening;
+  try{
+    lock.child.stdin.write(`BEGIN;SELECT id FROM public.customers WHERE id='${customer}' FOR UPDATE; \\echo REQUEST_PARTICIPANT_HELD\n`);
+    await until(()=>lock.output().includes('REQUEST_PARTICIPANT_HELD'));
+    opening=openSql(database);opening.child.stdin.end(`SET application_name='jn_request_participant';SET ROLE authenticated;SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000092","session_id":"00000000-0000-4000-c000-000000000092"}';SELECT test.expect_error($q$SELECT public.request_create('${requestOffice}','${JSON.stringify(payload).replaceAll("'","''")}',gen_random_uuid(),gen_random_uuid())$q$,'PT403','pedidos: ${capability} revogada apos selecao do catalogo bloqueia snapshot');`);
+    await until(()=>sql(database,'postgres',"SELECT EXISTS(SELECT FROM pg_stat_activity WHERE application_name='jn_request_participant' AND wait_event_type='Lock');").trim()==='t');
+    sql(database,'postgres',`DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000092' AND permission_code='${capability}';`);
+    lock.child.stdin.end('COMMIT;\n');await lock.result;return await opening.result;
+  }finally{
+    lock.child.kill();opening?.child.kill();sql(database,'postgres',`INSERT INTO private.team_member_permissions(membership_id,permission_code)VALUES('00000000-0000-4000-b000-000000000092','${capability}') ON CONFLICT DO NOTHING;`);
+  }
+};
+const raceRequestEffective = async database => {
+  const customer=sql(database,'postgres',`SELECT id FROM public.customers WHERE name='Participante da corrida' ORDER BY id LIMIT 1;`).trim();
+  const [id,version,definition]=JSON.parse(sql(database,'postgres',"SELECT jsonb_build_array(s.id,s.latest_version,v.definition||jsonb_build_object('price_cents',999,'effective_from',to_char((clock_timestamp()+interval '2 seconds')AT TIME ZONE 'UTC','YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"'))) FROM public.services s JOIN public.service_versions v ON v.service_id=s.id AND v.number=s.latest_version WHERE s.code='REQ-RACE-EMPTY';").trim());
+  sql(database,'postgres',`${requestOwner}SELECT public.service_publish('${requestOffice}','${id}','${JSON.stringify(definition).replaceAll("'","''")}',${version},'Fronteira de pedido',gen_random_uuid());`);
+  const payload=requestFixture(database);payload.title='Vigencia apos participante';payload.items[0].service_id=id;payload.items[0].participant_ids=[customer];
+  const lock=openSql(database);let opening;
+  try{
+    lock.child.stdin.write(`BEGIN;SELECT id FROM public.customers WHERE id='${customer}' FOR UPDATE; \\echo REQUEST_EFFECTIVE_HELD\n`);await until(()=>lock.output().includes('REQUEST_EFFECTIVE_HELD'));
+    opening=openSql(database);opening.child.stdin.end(`SET application_name='jn_request_effective';${requestOwner}SELECT public.request_create('${requestOffice}','${JSON.stringify(payload).replaceAll("'","''")}',gen_random_uuid(),gen_random_uuid())->'items'->0->'snapshot'->>'version';`);
+    await until(()=>sql(database,'postgres',"SELECT EXISTS(SELECT FROM pg_stat_activity WHERE application_name='jn_request_effective' AND wait_event_type='Lock');").trim()==='t');
+    sql(database,'postgres',`SELECT pg_sleep(greatest(extract(epoch FROM effective_from-clock_timestamp())+.1,0)) FROM public.service_versions WHERE service_id='${id}' AND number=${version+1};`);
+    lock.child.stdin.end('COMMIT;\n');await lock.result;
+    if((await opening.result).trim()!==String(version+1))throw Error('Request chose stale catalog version before participant wait.');
+    return 'PASS: pedidos: vigencia apos lock de participante usa snapshot vigente\n';
+  }finally{lock.child.kill();opening?.child.kill();}
+};
+const benchmarkRequests = async database => {
+  if(process.env.JN_REQUESTS_BENCHMARK!=='1')return;
+  const [customerRequest]=JSON.parse(sql(database,'postgres',`SELECT jsonb_build_array(id) FROM public.requests WHERE title='Copias ficticias';`).trim());
+  sql(database,'postgres',`INSERT INTO public.requests(office_id,protocol,title,origin,created_by,assignee_id,priority,idempotency_key,payload_digest,triaged_at)
+    SELECT '${requestOffice}','BENCH-'||lpad(n::text,6,'0'),'Pedido Ficticio '||n,'presencial','00000000-0000-4000-a000-000000000091','00000000-0000-4000-b000-000000000094','normal',gen_random_uuid(),'benchmark',clock_timestamp() FROM generate_series(1,10000)n;
+    ANALYZE public.requests;ANALYZE public.request_items;ANALYZE private.request_history;`);
+  const callers=Array.from({length:10},()=>openSql(database));
+  try{
+    for(const c of callers)c.child.stdin.end(`${requestOwner}CREATE TEMP TABLE request_measurements(operation text,ms numeric);DO $bench$DECLARE t timestamptz;n int;BEGIN FOR n IN 1..10 LOOP
+      t:=clock_timestamp();PERFORM public.requests_page('${requestOffice}','','queue','',1,3);INSERT INTO request_measurements VALUES('list',extract(epoch FROM clock_timestamp()-t)*1000);
+      t:=clock_timestamp();PERFORM public.request_detail('${requestOffice}','${customerRequest}',1);INSERT INTO request_measurements VALUES('detail',extract(epoch FROM clock_timestamp()-t)*1000);
+    END LOOP;END $bench$;SELECT jsonb_agg(to_jsonb(m)) FROM request_measurements m;`);
+    const samples=(await Promise.all(callers.map(c=>c.result))).flatMap(v=>JSON.parse(v.trim()));
+    const measurements=Object.fromEntries(['list','detail'].map(operation=>{const values=samples.filter(v=>v.operation===operation).map(v=>Number(v.ms)).sort((a,b)=>a-b);return [operation,{samples:values.length,median_ms:values[Math.floor(values.length/2)],p95_ms:values[Math.ceil(values.length*.95)-1],max_ms:values.at(-1)}];}));
+    console.log(`REQUESTS_BENCHMARK ${JSON.stringify({environment:'disposable local PostgreSQL17; API role authenticated; no hosted SLA',additional_requests:10000,connections:10,samples:samples.length,measurements})}`);
+    if(Object.values(measurements).some(v=>v.p95_ms>2000))throw Error('Request benchmark exceeded local p95 target2s.');
+  }finally{for(const c of callers)c.child.kill();}
+};
+
 let started = false;
 try {
   docker('run', '--rm', '--detach', '--network=none', '--name', name, '--tmpfs', '/var/lib/postgresql/data:rw,nosuid,noexec,size=512m',
@@ -611,6 +715,7 @@ try {
       + sql(database, 'postgres', readFileSync(`${root}tests/database/customer-registration.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/customer-relations.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/services.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/requests.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
       + await raceLastOwners(database)
       + await raceRevokedSession(database)
@@ -631,8 +736,16 @@ try {
       + await raceRelationRegistrationLock(database)
       + await raceServiceAuthority(database)
       + await raceServiceAuthority(database,true)
-      + await raceServiceEffective(database);
-    if (database === 'foundation_replay_b') {await benchmarkCustomerRelations(database);await benchmarkServices(database);}
+      + await raceServiceEffective(database)
+      + await raceRequestCreate(database,true)
+      + await raceRequestCreate(database,false)
+      + await raceRequestVersion(database)
+      + await raceRequestAuthority(database,false)
+      + await raceRequestAuthority(database,true)
+      + await raceRequestServiceAuthority(database,'services.perform')
+      + await raceRequestServiceAuthority(database,'services.read')
+      + await raceRequestEffective(database);
+    if (database === 'foundation_replay_b') {await benchmarkCustomerRelations(database);await benchmarkServices(database);await benchmarkRequests(database);}
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
   console.log('PASS: dois replays vazios, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.');

@@ -1,9 +1,15 @@
-# Catálogo — referência aplicada na Etapa09
+# Catálogo e atendimentos — referência aplicada nas Etapas09–10
 
-Fonte: [atendimento.md do manual no Drive](https://drive.google.com/file/d/1jocMri6quFy_XpKSck8RKlnuTa2jJLCi/view), consultado em20/10/2026. Este recorte cobre somente o catálogo; pedidos/anexos pertencem às próximas etapas.
+Fonte: [atendimento.md do manual no Drive](https://drive.google.com/file/d/1jocMri6quFy_XpKSck8RKlnuTa2jJLCi/view), consultado em20/10/2026. Este recorte cobre catálogo/pedidos; anexos pertencem à11.
 
 Catálogo versionado define código, categoria, unidade de cobrança, preço/regra, vigência, campos, checklist, capacidades, aprovação e política de entrega. Guardar snapshot do serviço e preço no item; alteração de catálogo não recalcula pedidos antigos. Desconto, acréscimo, cortesia e mudança manual de preço dependem de capacidade e motivo.
 
 Serviços de cópia e plastificação podem dispensar pessoa e aprovação de conteúdo, mantendo item, quantidade, valor, operador e lançamento. Conclusão não equivale a quitação. Toda função pronta precisa de menu/rota e estado vazio; dados fictícios não devem ser necessários para fazê-la aparecer.
 
-Na09: catálogo e simulação estão conectados ao servidor/banco. Snapshot calculado não cria pedido/recebimento; a10 deverá persistir a versão e a definição na transação de criação do item e aplicar requisitos de dados/participantes. Aprovação, assinatura e quitação são políticas de elegibilidade, não estados concedidos pela cotação.
+Na09: catálogo e simulação estão conectados ao servidor/banco. Snapshot calculado não cria pedido/recebimento. Na10, a versão/definição são persistidas na transação de criação/classificação do item; dados tipados, pessoa/participantes e checklist seguem a política escolhida pelo banco. Aprovação, assinatura e quitação são políticas de elegibilidade, não estados concedidos pela cotação ou conclusão.
+
+RF-05: protocolo legível único por escritório, origem presencial/whatsapp/portal, criador imutável, responsável atual e atribuições históricas, itens/snapshots, prioridade justificada, datas e histórico. Funcionário sem read_all vê somente criados/atribuídos atuais, sempre com requests.read. Transferência não muda o criador. Estados internos aberto/em_atendimento/aguardando_cliente/aguardando_responsavel/concluido/cancelado possuem projeção pública controlada.
+
+Cliente confirmado abre mensagem própria para triagem sem depender da conferência08. Conta/UID atual e origem do pedido determinam propriedade; nome/CPF/contato ou vínculo de ficha não concedem acesso. Projeção pública contém somente protocolo/título/status público/datas/mensagem própria/nomes de serviços, sem notas, equipe, preços ou terceiros. API e RPC aplicam essa whitelist, sem esconder dados já retornados.
+
+Cancelamento exige motivo e conferência manual de cobranças/reembolsos/entregas/processos externos; esta10 ainda não tem módulos para conferir esses efeitos automaticamente. Histórico/itens são conservados. Futuras etapas devem integrar seus bloqueios transacionais antes de habilitar financeiro/entrega. Atendimento concluído/cancelado não recebe novas alterações nesta etapa. Anexos/Storage/financeiro/WhatsApp automático não se aplicam.

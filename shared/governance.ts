@@ -5,6 +5,7 @@ export type ArchiveEntry = { id: string; target_type: 'membership'; target_id: s
 export type GovernancePage<T> = { items: T[]; total: number; page: number; page_size: number };
 export type AuditExport = { items: AuditEvent[]; count: number; office_id: string; exported_at: string; request_id: string };
 export const auditActionNames: Record<string, string> = {
+ 'requests.created':'Atendimento aberto', 'requests.status_changed':'Etapa do atendimento alterada', 'requests.transferred':'Responsável pelo atendimento alterado', 'requests.note_added':'Nota interna registrada', 'requests.triaged':'Solicitação classificada',
  'services.created':'Serviço cadastrado', 'services.version_published':'Versão de serviço publicada',
  'foundation.owner_provisioned': 'Proprietário provisionado', 'auth.client_registered': 'Cliente cadastrado', 'auth.registration_configured': 'Cadastro público configurado',
  'auth.customer_registration_received': 'Cadastro público recebido',
