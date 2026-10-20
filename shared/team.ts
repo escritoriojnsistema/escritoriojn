@@ -5,9 +5,10 @@ export type TeamRole = Exclude<BusinessRole, 'client'>;
 export const teamRoleNames: Record<TeamRole, string> = {
   owner: 'Superadministrador (Proprietário)', admin: 'Administrador', employee: 'Funcionário',
 };
-export const assignablePermissions = ['foundation.access', 'audit.read', 'audit.export', 'archives.manage', 'customers.read', 'customers.create', 'customers.update', 'customers.read_all', 'customers.relate', 'customers.verify', 'customers.merge'] as const;
+export const assignablePermissions = ['foundation.access', 'audit.read', 'audit.export', 'archives.manage', 'customers.read', 'customers.create', 'customers.update', 'customers.read_all', 'customers.relate', 'customers.verify', 'customers.merge', 'services.read', 'services.manage', 'services.perform', 'services.approve', 'services.discount', 'services.surcharge', 'services.courtesy', 'services.price_override'] as const;
 export type TeamPermission = typeof assignablePermissions[number];
 export const permissionNames: Record<TeamPermission, string> = {
+  'services.read':'Consultar serviços', 'services.manage':'Publicar preços e políticas', 'services.perform':'Executar serviços', 'services.approve':'Aprovar serviços', 'services.discount':'Aplicar descontos', 'services.surcharge':'Aplicar acréscimos', 'services.courtesy':'Conceder cortesia', 'services.price_override':'Alterar preço manualmente',
   'foundation.access': 'Acesso básico', 'audit.read': 'Consultar auditoria', 'audit.export': 'Exportar auditoria', 'archives.manage': 'Gerenciar arquivados',
   'customers.read': 'Consultar clientes do seu escopo', 'customers.create': 'Cadastrar clientes', 'customers.update': 'Editar clientes do seu escopo', 'customers.read_all': 'Consultar todos os clientes do escritório',
   'customers.relate': 'Gerenciar vínculos e representantes', 'customers.verify': 'Conferir identidade de clientes', 'customers.merge': 'Revisar e mesclar fichas duplicadas',

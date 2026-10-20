@@ -12,7 +12,7 @@ try {
   const admin = createClient(lab.url, lab.serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const users = {};
   // Registration has no office yet: identities do not acquire permissions here.
-  for (const name of ['owner','unlinked','inactive','other','expired','manager','existingstaff','delegate','worker','portalclient','archiveworker','auditreader','customerworker','relationworker','relationclient','relationclientnull','relationclientcontrol','relationclientspace','relationteamnull','relationteamcontrol']) {
+  for (const name of ['owner','unlinked','inactive','other','expired','manager','existingstaff','delegate','worker','portalclient','archiveworker','auditreader','customerworker','relationworker','relationclient','relationclientnull','relationclientcontrol','relationclientspace','relationteamnull','relationteamcontrol','serviceworker']) {
     const { data, error } = await admin.auth.admin.createUser({ email: `${name}@example.test`, password, email_confirm: true });
     if (error || !data.user) throw new Error('Could not create local Auth fixture.');
     users[name] = data.user.id;
@@ -41,6 +41,11 @@ try {
     INSERT INTO private.team_member_permissions(membership_id,permission_code)
       SELECT m.id,p.code FROM public.memberships m CROSS JOIN unnest(ARRAY['customers.read','customers.relate']) p(code)
       WHERE m.office_id='${office}' AND m.user_id='${users.relationworker}';
+    INSERT INTO public.profiles(id,display_name) VALUES ('${users.serviceworker}','Funcionário de serviços');
+    INSERT INTO public.memberships(office_id,user_id,role_code) VALUES ('${office}','${users.serviceworker}','employee');
+    INSERT INTO private.team_member_permissions(membership_id,permission_code)
+      SELECT m.id,p.code FROM public.memberships m CROSS JOIN unnest(ARRAY['services.read','services.perform']) p(code)
+      WHERE m.office_id='${office}' AND m.user_id='${users.serviceworker}';
     SELECT private.configure_client_registration('${office}',true);
   `, 'migrator');
   const expiredClient = createClient(lab.url, lab.anonKey, { auth: { flowType: 'pkce', persistSession: false, autoRefreshToken: false } });
