@@ -14,3 +14,7 @@ Uma funcionalidade pequena por rodada, com dados/regra/tela/teste ligados. Após
 Testes proporcionais: edição de docs→links/texto; UI→fluxo/viewport/erro e smoke pertinente; schema/auth→RLS/ACL/seed/migrador real; dinheiro/entrega→idempotência/concorrência/rollback. Build uma vez ao fechar mudança executável; repetir se código/falha justificar. Em marco integrado e produção, executar regressão de risco e jornada completa. Não excluir testes críticos para economizar.
 ## Não prometido
 Não há medição de saldo/tokens das sessões anteriores e não se pode afirmar economia percentual ou erro zero. Comparar duração, chamadas duplicadas, arquivos tocados, testes relevantes e reaberturas, além do saldo da ferramenta escolhida. Stack e quantidade de funções não determinam sozinhas o consumo de créditos.
+
+## Validação sem GitHub Actions —20/10/2026
+
+Por pedido do usuário, não usar GitHub Actions neste repositório. Workflow Qualidade da base desativado manualmente; não reativar nem criar outros. Usar verificações locais proporcionais, revisão/PR e integração GitHub→Vercel. A execução que já havia terminado na entrega08 é evidência histórica; não representa autorização para novas execuções. Nenhum serviço pago foi contratado por esta etapa.

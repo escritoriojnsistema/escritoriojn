@@ -1,0 +1,36 @@
+{
+  "task1": {
+    "head": "0e5c231",
+    "spec": "PASS",
+    "quality": "APPROVED"
+  },
+  "task2": {
+    "head": "4e9b227",
+    "spec": "PASS",
+    "quality": "APPROVED",
+    "fixed": [
+      "invalid kind object returns422",
+      "leading asterisk masked email accepted"
+    ]
+  },
+  "task3": {
+    "head": "eac24a3",
+    "spec": "PASS",
+    "quality": "APPROVED"
+  },
+  "whole_branch": {
+    "reviewed": "7cb357a",
+    "fixed": "56fd1f3",
+    "spec": "PASS",
+    "quality": "APPROVED",
+    "ready": true,
+    "fixed_findings": [
+      "SQL safe display labels for legacy profiles in candidates and state",
+      "clear invisible previous candidate when returning from merge preview"
+    ],
+    "unresolved_critical": 0,
+    "unresolved_important": 0,
+    "unresolved_minor": 0
+  },
+  "method": "Independent reviews; existing test evidence reused; only directed probes for concrete findings."
+}

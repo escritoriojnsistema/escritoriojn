@@ -1,5 +1,5 @@
 {
-  "status": "implemented_tested_reviewed_database_applied_github_release_pending",
+  "status": "completed_integrated_published_verified",
   "base": "535f6ad09d3976dd3796af5349af6e1e1996067d",
   "runtime_commit": "56fd1f30cec07d2a88a043598c62fcfca770c731",
   "tests": {
@@ -20,6 +20,15 @@
     "ui_contracts_synthetic": {
       "passed": 114,
       "executions": "112 full + merge409 directed + returnselection directed"
+    },
+    "public_remote": {
+      "passed": 34
+    },
+    "http_remote": {
+      "passed": 16
+    },
+    "protected_routes_remote": {
+      "passed": 16
     }
   },
   "viewports": [
@@ -57,5 +66,6 @@
     "ai_total_elapsed": null,
     "note": "Not exposed; test durations and exact commands retained in reports, no invented savings."
   },
-  "review": "All task reviews and final scoped review PASS;2final findings addressed"
+  "review": "Spec PASS / Quality APPROVED; all final findings addressed",
+  "github_actions": "disabled_manually by user instruction; future validation local"
 }

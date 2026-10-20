@@ -1,0 +1,114 @@
+[
+  {
+    "width": 360,
+    "path": "/painel",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 360,
+    "path": "/conta",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 360,
+    "path": "/equipe",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 360,
+    "path": "/clientes",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 360,
+    "path": "/auditoria",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 360,
+    "path": "/arquivados",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 360,
+    "path": "/area-cliente",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 360,
+    "path": "/minha-conta",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 1440,
+    "path": "/painel",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 1440,
+    "path": "/conta",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 1440,
+    "path": "/equipe",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 1440,
+    "path": "/clientes",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 1440,
+    "path": "/auditoria",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 1440,
+    "path": "/arquivados",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 1440,
+    "path": "/area-cliente",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  },
+  {
+    "width": 1440,
+    "path": "/minha-conta",
+    "login": true,
+    "logo_home": true,
+    "home_after_reload": true
+  }
+]
