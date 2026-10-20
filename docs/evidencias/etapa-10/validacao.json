@@ -29,7 +29,8 @@
       "limited_migrator": true,
       "real_concurrency": true,
       "checks_per_replay": 535,
-      "extra_acceptance": "Contrato09 de R$100 com Maria de Teste,2participantes,campo/checklist e negativas individuais"
+      "extra_acceptance": "Contrato09 de R$100 com Maria de Teste,2participantes,campo/checklist e negativas individuais",
+      "indexes_followup_replay": "1070 checks passed after additive covering-index migration"
     },
     "auth_real": {
       "verified_scenarios": 7,

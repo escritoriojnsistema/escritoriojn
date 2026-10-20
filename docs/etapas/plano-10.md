@@ -33,5 +33,5 @@
 ## Tarefa4 — Integração e publicação
 - [x] Regressão local Node/SQL/Auth/UI/build; revisão independente e corrigir achados com teste reproduzível.
 - [x] Livro/fecho/README/Supabase atualizados com provas e limites reais.
-- [ ] PR/merge viaGitHub, conferir migration automática ANTES de aplicar manualmente; comparar histórico/arquivo, advisors e integridade.
-- [ ] Verificar status GitHub–Vercel, asset novo, rotas/APIs públicas e E2E canônico. Rollback somente código preservando banco/histórico.
+- [x] PR/merge viaGitHub, conferir migration automática ANTES de aplicar manualmente; comparar histórico/arquivo, advisors e integridade.
+- [x] Verificar status GitHub–Vercel, asset novo, rotas/APIs públicas e E2E canônico. Rollback somente código preservando banco/histórico.
