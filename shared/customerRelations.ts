@@ -1,4 +1,4 @@
-import type { CustomerKind, CustomerSummary } from './customers';
+import type { CustomerKind, CustomerSummary } from './customers.js';
 
 /** These capabilities never imply portal or document authority. */
 export const customerRelationPermissions = ['customers.relate', 'customers.verify', 'customers.merge'] as const;
