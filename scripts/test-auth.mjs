@@ -12,7 +12,7 @@ try {
   const admin = createClient(lab.url, lab.serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const users = {};
   // Registration has no office yet: identities do not acquire permissions here.
-  for (const name of ['owner','unlinked','inactive','other','expired','manager','existingstaff','delegate','worker','portalclient','archiveworker','auditreader','customerworker']) {
+  for (const name of ['owner','unlinked','inactive','other','expired','manager','existingstaff','delegate','worker','portalclient','archiveworker','auditreader','customerworker','relationworker','relationclient','relationclientnull','relationclientcontrol','relationclientspace','relationteamnull','relationteamcontrol']) {
     const { data, error } = await admin.auth.admin.createUser({ email: `${name}@example.test`, password, email_confirm: true });
     if (error || !data.user) throw new Error('Could not create local Auth fixture.');
     users[name] = data.user.id;
@@ -33,6 +33,14 @@ try {
       SELECT m.id,p.code FROM public.memberships m
       CROSS JOIN unnest(ARRAY['customers.read','customers.create','customers.update']) p(code)
       WHERE m.office_id='${office}' AND m.user_id='${users.customerworker}';
+    INSERT INTO public.profiles(id,display_name) VALUES ('${users.relationworker}','Funcionário relações'),('${users.relationclient}','Cliente relações');
+    INSERT INTO public.memberships(office_id,user_id,role_code) VALUES ('${office}','${users.relationworker}','employee'),('${office}','${users.relationclient}','client');
+    -- Synthetic legacy names remain untouched in profiles; only08 presentation may normalize them.
+    INSERT INTO public.profiles(id,display_name) VALUES ('${users.relationclientnull}',NULL),('${users.relationclientcontrol}','Ana'||chr(9)||'Silva'),('${users.relationclientspace}',chr(160)||chr(8199)||chr(65279)),('${users.relationteamnull}',NULL),('${users.relationteamcontrol}','João'||chr(1)||chr(133)||'Silva');
+    INSERT INTO public.memberships(office_id,user_id,role_code) VALUES ('${office}','${users.relationclientnull}','client'),('${office}','${users.relationclientcontrol}','client'),('${office}','${users.relationclientspace}','client'),('${office}','${users.relationteamnull}','employee'),('${office}','${users.relationteamcontrol}','employee');
+    INSERT INTO private.team_member_permissions(membership_id,permission_code)
+      SELECT m.id,p.code FROM public.memberships m CROSS JOIN unnest(ARRAY['customers.read','customers.relate']) p(code)
+      WHERE m.office_id='${office}' AND m.user_id='${users.relationworker}';
     SELECT private.configure_client_registration('${office}',true);
   `, 'migrator');
   const expiredClient = createClient(lab.url, lab.anonKey, { auth: { flowType: 'pkce', persistSession: false, autoRefreshToken: false } });
@@ -59,6 +67,23 @@ try {
     children.add(child); child.on('error', reject); child.on('exit', code => { children.delete(child); resolve(code); });
   });
   if (code !== 0) process.exitCode = 1;
+  if (code === 0) {
+    // A browser merge fixture is optional for filtered runs; when present its real
+    // source row, immutable snapshots and revoked authority must remain intact.
+    await lab.sql(`DO $check$ BEGIN
+      IF EXISTS(SELECT 1 FROM public.customers WHERE name='R08 Origem Mesclada') THEN
+        IF NOT EXISTS(SELECT 1 FROM public.customers s JOIN public.customers t ON t.id=s.merged_into_id
+          JOIN private.customer_merges m ON m.source_id=s.id AND m.target_id=t.id
+          JOIN private.customer_snapshots a ON a.id=m.source_snapshot_id
+          JOIN private.customer_snapshots b ON b.id=m.target_snapshot_id
+          JOIN private.customer_snapshots c ON c.id=m.result_snapshot_id
+          WHERE s.name='R08 Origem Mesclada' AND t.name='R08 Destino Mesclado')
+          OR EXISTS(SELECT 1 FROM private.customer_relations r JOIN public.customers s ON s.id=r.customer_id WHERE s.name='R08 Origem Mesclada' AND r.revoked_at IS NULL)
+        THEN RAISE EXCEPTION 'R08 history or revocation invariant failed'; END IF;
+      END IF;
+    END $check$;`, 'migrator');
+    console.log('Auth laboratory post-check: merged source, snapshots and revoked rights preserved when merge fixture exists.');
+  }
 } catch (error) {
   // SDK/network errors can include sensitive payloads; do not dump objects or URLs.
   console.error('Local Auth verification failed:', String(error.message).replaceAll(password, '[redacted]'));

@@ -367,6 +367,130 @@ const raceConfirmedRegistration = async database => {
   }
 };
 
+const relationOffice = '00000000-0000-4000-e000-000000000081';
+const relationOwner = '{"sub":"00000000-0000-4000-a000-000000000081","session_id":"00000000-0000-4000-c000-000000000081"}';
+const relationStaff = '{"sub":"00000000-0000-4000-a000-000000000086","session_id":"00000000-0000-4000-c000-000000000086"}';
+const relationFixture = n => `00000000-0000-4000-f000-${String(n).padStart(12, '0')}`;
+const prepareRelationRaces = database => sql(database, 'postgres', `
+  INSERT INTO public.customers(id,office_id,kind,name,created_by) SELECT
+  ('00000000-0000-4000-f000-'||lpad(n::text,12,'0'))::uuid,'${relationOffice}','person','Corrida Relacao '||n,
+  '00000000-0000-4000-a000-000000000081' FROM generate_series(81,85) n;
+`);
+const raceRelationAuthority = async (database, kind) => {
+  const id = relationFixture(81);
+  const first = openSql(database);
+  let second;
+  try {
+    // Block after office/membership checks, specifically testing the second check after customer row lock.
+    first.child.stdin.write(`BEGIN; SELECT id FROM public.customers WHERE id='${id}' FOR UPDATE; \\echo RELATION_ROW_HELD\n`);
+    await until(() => first.output().includes('RELATION_ROW_HELD'));
+    second = openSql(database);
+    second.child.stdin.end(`SET application_name='jn_relation_authority'; SET ROLE authenticated;
+      SET request.jwt.claims='${relationStaff}';
+      SELECT test.expect_error($q$SELECT public.customer_relation_command('${relationOffice}','${id}','assignment.grant',
+      '{"membership_id":"00000000-0000-4000-b000-000000000084","valid_from":"2020-01-01T00:00:00Z","valid_until":null}',gen_random_uuid())$q$,
+      '${kind === 'session' ? 'PT401' : 'PT403'}','relacionamentos: ${kind} revogada depois do lock de ficha nega comando');`);
+    await until(() => sql(database, 'postgres', "SELECT EXISTS(SELECT FROM pg_stat_activity WHERE application_name='jn_relation_authority' AND wait_event_type='Lock');").trim() === 't');
+    sql(database, 'postgres', kind === 'session'
+      ? "DELETE FROM auth.sessions WHERE id='00000000-0000-4000-c000-000000000086';"
+      : "DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000086' AND permission_code='customers.relate';");
+    first.child.stdin.end('COMMIT;\n'); await first.result;
+    return await second.result + sql(database, 'postgres', `SELECT test.assert_true(NOT EXISTS(SELECT FROM private.customer_relations WHERE customer_id='${id}'),
+      'relacionamentos: corrida de autoridade nao persiste grant');`);
+  } finally {
+    first.child.kill(); second?.child.kill();
+    sql(database, 'postgres', kind === 'session'
+      ? "INSERT INTO auth.sessions(id,user_id) VALUES('00000000-0000-4000-c000-000000000086','00000000-0000-4000-a000-000000000086') ON CONFLICT DO NOTHING;"
+      : "INSERT INTO private.team_member_permissions VALUES('00000000-0000-4000-b000-000000000086','customers.relate') ON CONFLICT DO NOTHING;");
+  }
+};
+const raceRelationScope = async database => {
+  const id = relationFixture(81);
+  const grant = sql(database, 'postgres', `SET ROLE authenticated; SET request.jwt.claims='${relationOwner}';
+    SELECT public.customer_relation_command('${relationOffice}','${id}','assignment.grant',
+    '{"membership_id":"00000000-0000-4000-b000-000000000084","valid_from":"2020-01-01T00:00:00Z","valid_until":null}',gen_random_uuid())->'assignments'->0->>'id';`).trim();
+  if (!/^[0-9a-f-]{36}$/.test(grant)) throw new Error('Fixture de atribuicao concorrente ausente.');
+  const first = openSql(database); let second;
+  try {
+    first.child.stdin.write(`BEGIN; SET ROLE authenticated; SET request.jwt.claims='${relationOwner}';
+      SELECT public.customer_relation_command('${relationOffice}','${id}','assignment.revoke','{"id":"${grant}","version":1}',gen_random_uuid());
+      \\echo RELATION_REVOKE_HELD\n`);
+    await until(() => first.output().includes('RELATION_REVOKE_HELD'));
+    second = openSql(database);
+    second.child.stdin.end(`SET application_name='jn_relation_scope'; SET ROLE authenticated;
+      SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000084","session_id":"00000000-0000-4000-c000-000000000084"}';
+      SELECT test.expect_error($q$SELECT public.customer_relations_state('${relationOffice}','${id}')$q$,'PT404','relacionamentos: revogacao concorrente nega leitura apos lock');`);
+    await until(() => sql(database, 'postgres', "SELECT EXISTS(SELECT FROM pg_stat_activity WHERE application_name='jn_relation_scope' AND wait_event_type='Lock');").trim() === 't');
+    first.child.stdin.end('COMMIT;\n'); await first.result; return await second.result;
+  } finally { first.child.kill(); second?.child.kill(); }
+};
+const raceCustomerMerge = async database => {
+  const target = relationFixture(82), sourceA = relationFixture(83), sourceB = relationFixture(84);
+  const first = openSql(database); let second;
+  try {
+    first.child.stdin.write(`BEGIN; SET ROLE authenticated; SET request.jwt.claims='${relationOwner}';
+      SELECT public.customer_merge('${relationOffice}','${sourceA}','${target}',1,1,'Corrida A',true,gen_random_uuid());
+      \\echo MERGE_HELD\n`);
+    await until(() => first.output().includes('MERGE_HELD'));
+    second = openSql(database);
+    second.child.stdin.end(`SET application_name='jn_customer_merge'; SET ROLE authenticated; SET request.jwt.claims='${relationOwner}';
+      SELECT test.expect_error($q$SELECT public.customer_merge('${relationOffice}','${sourceB}','${target}',1,1,'Corrida B',true,gen_random_uuid())$q$,
+      'PT409','mesclagem: concorrente com destino obsoleto nao sobrescreve decisao');`);
+    await until(() => sql(database, 'postgres', "SELECT EXISTS(SELECT FROM pg_stat_activity WHERE application_name='jn_customer_merge' AND wait_event_type='Lock');").trim() === 't');
+    first.child.stdin.end('COMMIT;\n'); await first.result;
+    return await second.result + sql(database, 'postgres', `SELECT test.assert_true(
+      (SELECT count(*)=1 FROM private.customer_merges WHERE target_id='${target}')
+      AND (SELECT version=1 AND merged_into_id IS NULL FROM public.customers WHERE id='${sourceB}'),
+      'mesclagem: corrida conserva apenas vencedor historia e snapshots');`);
+  } finally { first.child.kill(); second?.child.kill(); }
+};
+const raceRelationRegistrationLock = async database => {
+  const first = openSql(database);
+  try {
+    first.child.stdin.write(`BEGIN; SELECT id FROM public.offices WHERE id='${relationOffice}' FOR KEY SHARE; \\echo RELATION_FK_HELD\n`);
+    await until(() => first.output().includes('RELATION_FK_HELD'));
+    sql(database, 'postgres', `SET statement_timeout='750ms'; SET ROLE authenticated; SET request.jwt.claims='${relationOwner}';
+      SELECT public.customer_relation_command('${relationOffice}','${relationFixture(85)}','assignment.grant',
+      '{"membership_id":"00000000-0000-4000-b000-000000000084","valid_from":"2020-01-01T00:00:00Z","valid_until":null}',gen_random_uuid());`);
+    first.child.stdin.end('COMMIT;\n'); await first.result;
+    return 'PASS: relacionamentos: escrita compativel com KEY SHARE de cadastro publico em outra conexao\n';
+  } finally { first.child.kill(); }
+};
+
+const benchmarkCustomerRelations = async database => {
+  if (process.env.JN_RELATIONS_BENCHMARK !== '1') return;
+  sql(database, 'postgres', `INSERT INTO public.customers(office_id,kind,name,created_by)
+    SELECT '${relationOffice}','person','Benchmark Pessoa '||lpad(n::text,5,'0'),'00000000-0000-4000-a000-000000000082'
+    FROM generate_series(1,10000) n; ANALYZE public.customers; ANALYZE private.customer_relations;`);
+  const queries = [
+    ['search', `SELECT public.customers_page('${relationOffice}','Benchmark Pessoa 099',1,5);`],
+    ['state', `SELECT public.customer_relations_state('${relationOffice}','${relationFixture(82)}');`],
+    ['candidates', `SELECT public.customer_relation_candidates('${relationOffice}','customers','Benchmark Pessoa 099');`],
+  ];
+  const callers = Array.from({ length: 10 }, () => openSql(database));
+  try {
+    const results = await Promise.all(callers.map(async connection => {
+      connection.child.stdin.end(`SET statement_timeout='30s'; SET ROLE authenticated; SET request.jwt.claims='${relationStaff}';
+        \\timing on
+        ${Array.from({ length: 10 }, () => queries.map(([, query]) => query).join('\n')).join('\n')}`);
+      const output = await connection.result;
+      const values = [...output.matchAll(/Time: ([\d.]+) ms/g)].map(match => Number(match[1]));
+      if (values.length !== 30) throw new Error(`Benchmark incompleto: ${values.length}/30 amostras por conexao.`);
+      return values;
+    }));
+    const percentile = values => values.sort((a, b) => a - b)[Math.ceil(values.length * 0.95) - 1];
+    const measurements = queries.map(([operation], index) => {
+      const samples = results.flatMap(values => values.filter((_, position) => position % 3 === index));
+      return { operation, samples: samples.length, p95_ms: percentile(samples), max_ms: Math.max(...samples) };
+    });
+    const result = { fixture_customers: 10000, concurrent_callers: 10, samples: 300, target_p95_ms: 2000,
+      passed: measurements.every(item => item.p95_ms <= 2000), measurements,
+      scope: 'Disposable local Docker PostgreSQL17; psql statement timing includes query roundtrip; no hosted SLA.' };
+    console.log(`RELATIONS_BENCHMARK ${JSON.stringify(result)}`);
+    if (!result.passed) throw new Error('Meta local p95<=2s nao atingida; ver RELATIONS_BENCHMARK.');
+  } finally { for (const connection of callers) connection.child.kill(); }
+};
+
 let started = false;
 try {
   docker('run', '--rm', '--detach', '--network=none', '--name', name, '--tmpfs', '/var/lib/postgresql/data:rw,nosuid,noexec,size=512m',
@@ -403,6 +527,7 @@ try {
       + sql(database, 'postgres', readFileSync(`${root}tests/database/governance.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/customers.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/customer-registration.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/customer-relations.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
       + await raceLastOwners(database)
       + await raceRevokedSession(database)
@@ -414,7 +539,14 @@ try {
       + await raceConfirmedRegistration(database)
       + await raceCustomerAuthority(database, 'session')
       + await raceCustomerAuthority(database, 'read')
-      + await raceCustomerAuthority(database, 'capability');
+      + await raceCustomerAuthority(database, 'capability')
+      + prepareRelationRaces(database)
+      + await raceRelationAuthority(database, 'session')
+      + await raceRelationAuthority(database, 'capability')
+      + await raceRelationScope(database)
+      + await raceCustomerMerge(database)
+      + await raceRelationRegistrationLock(database);
+    if (database === 'foundation_replay_b') await benchmarkCustomerRelations(database);
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
   console.log('PASS: dois replays vazios, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.');

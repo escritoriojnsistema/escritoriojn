@@ -5,11 +5,12 @@ export type TeamRole = Exclude<BusinessRole, 'client'>;
 export const teamRoleNames: Record<TeamRole, string> = {
   owner: 'Superadministrador (Proprietário)', admin: 'Administrador', employee: 'Funcionário',
 };
-export const assignablePermissions = ['foundation.access', 'audit.read', 'audit.export', 'archives.manage', 'customers.read', 'customers.create', 'customers.update', 'customers.read_all'] as const;
+export const assignablePermissions = ['foundation.access', 'audit.read', 'audit.export', 'archives.manage', 'customers.read', 'customers.create', 'customers.update', 'customers.read_all', 'customers.relate', 'customers.verify', 'customers.merge'] as const;
 export type TeamPermission = typeof assignablePermissions[number];
 export const permissionNames: Record<TeamPermission, string> = {
   'foundation.access': 'Acesso básico', 'audit.read': 'Consultar auditoria', 'audit.export': 'Exportar auditoria', 'archives.manage': 'Gerenciar arquivados',
   'customers.read': 'Consultar clientes do seu escopo', 'customers.create': 'Cadastrar clientes', 'customers.update': 'Editar clientes do seu escopo', 'customers.read_all': 'Consultar todos os clientes do escritório',
+  'customers.relate': 'Gerenciar vínculos e representantes', 'customers.verify': 'Conferir identidade de clientes', 'customers.merge': 'Revisar e mesclar fichas duplicadas',
 };
 export type TeamScope = {
   role_code: TeamRole; allowed_roles: TeamRole[]; allowed_permissions: TeamPermission[];

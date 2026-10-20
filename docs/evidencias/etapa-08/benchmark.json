@@ -1,0 +1,28 @@
+{
+  "fixture_customers": 10000,
+  "concurrent_callers": 10,
+  "samples": 300,
+  "target_p95_ms": 2000,
+  "passed": true,
+  "measurements": [
+    {
+      "operation": "search",
+      "samples": 100,
+      "p95_ms": 733.097,
+      "max_ms": 971.219
+    },
+    {
+      "operation": "state",
+      "samples": 100,
+      "p95_ms": 60.146,
+      "max_ms": 77.219
+    },
+    {
+      "operation": "candidates",
+      "samples": 100,
+      "p95_ms": 613.619,
+      "max_ms": 698.987
+    }
+  ],
+  "scope": "Disposable local Docker PostgreSQL17; psql statement timing includes query roundtrip; no hosted SLA."
+}

@@ -8,7 +8,17 @@ A ficha do cliente não é a conta de login. Não alterar senha de usuário exis
 
 Correção pós07: a confirmação de cadastro público com origem verificável cria uma entrada privada por vínculo/escritório. Se não existe contato de e-mail coincidente no escritório, a entrada gera uma ficha reutilizável de atendimento com nome e contato declarados, sem CPF inventado. Se há coincidência, conserva somente a entrada pendente, sem criar segunda ficha nem escolher uma ficha antiga. A lista/detalhe identificam a origem; entradas sem ficha não permitem edição. `customers.read_all`, junto de `customers.read`, permite consultar essas fichas/entradas de outro criador no mesmo escritório. Apenas leitura mantém o escopo anterior.
 
-O vínculo técnico de origem permanece com `association_status=pending`, sem rota de aprovação ou nova permissão documental. E-mail compartilhado/confirmado ou CPF válido não prova identidade: nenhuma associação de acervo é feita por esses valores. Contatos diferentes não permitem reconhecer automaticamente a mesma pessoa; conferência/mesclagem continuam futuras. O cadastro interno anterior permanece independente da criação posterior do login e da aprovação humana futura.
+O vínculo técnico de origem permanece com `association_status=pending`, sem aprovação documental. E-mail compartilhado/confirmado ou CPF válido não prova identidade: nenhuma associação de acervo é feita por esses valores. A Etapa08 permite conferência humana explícita, com evidência e capacidade `customers.verify`, entre ficha e membership cliente confirmada/ativa. Isso não cria/une contas Auth nem concede portal/documentos. Uma entrada sem ficha deixa a lista de pendências somente enquanto a conferência válida a resolve; revogar faz a pendência reaparecer, preservando origem. Ficha interna e login continuam entidades distintas.
+
+### Aplicação da Etapa08
+
+Contrato detalhado em [relacionamentos08](relacionamentos-08.md). `customers.read` continua obrigatório; criador e `read_all` conservam sua autoridade, e atribuição operacional vigente permite acesso à ficha para o funcionário com leitura. Revogar a atribuição retira somente esse fundamento de acesso. `customers.relate`, `customers.verify` e `customers.merge` são independentes, seed somente owner e concessão explícita pela gestão existente.
+
+Representação entre fichas exige referência privada de evidência, tipo e vigência; não concede leitura operacional/documental por parentesco ou condição de representante. Conferência e revogação são decisões humanas registradas. Nenhuma dessas ações ativa o portal.
+
+Mesclagem exige administrador autorizado, leitura das duas fichas, prévia, versões, evidência e confirmação. Nome/tipo do destino prevalecem; identificador faltante pode ser copiado, contatos normalizados são unidos até4. Colisões de identificador/tipo/identidade exigem revisão. A origem permanece com ponteiro canônico e referências intactas, sai do CRUD ativo e não transfere permissões. Snapshots privados antes/depois e trilha são preservados; documentos e atendimentos históricos não são reescritos.
+
+Participante futuro permanece contrato tipado com snapshot e `portal_visibility=none`; documentos, uploads e portal aguardam suas etapas. Importação em lote não foi implementada na08: quando chegar sua etapa, exige prévia, normalização e relatório de rejeições.
 
 
 RF-04: ficha central de pessoa física e possibilidade de pessoa jurídica quando o catálogo exigir; campos condicionais. Nome é obrigatório para serviços que exigem identificação; CPF/CNPJ, contatos e endereço somente quando necessários. Serviços rápidos podem ser anônimos. Valor vazio não deve virar CPF fictício.
