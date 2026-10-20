@@ -6,6 +6,7 @@ import { governanceRouter } from './modules/governance/router.js';
 import { teamRouter } from './modules/team/router.js';
 import { customersRouter } from './modules/customers/router.js';
 import { customerRelationsRouter } from './modules/customer-relations/router.js';
+import { servicesRouter } from './modules/services/router.js';
 
 export const app = express();
 app.disable('x-powered-by');
@@ -30,6 +31,7 @@ api.use('/team',teamRouter);
 api.use('/governance',governanceRouter);
 api.use('/customers',customersRouter);
 api.use('/customer-relations',customerRelationsRouter);
+api.use('/services',servicesRouter);
 api.post('/validate', (req, res, next) => {
   if (!req.is('application/json')) {
     errorResponse(res, 415, 'UNSUPPORTED_MEDIA_TYPE', 'Envie um corpo JSON.');

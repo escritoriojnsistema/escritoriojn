@@ -1,0 +1,44 @@
+.services-main { max-width: 1200px; min-width: 0; }
+.services-main .operation-heading { margin-bottom: 12px; }
+.service-form, .service-detail { max-width: 900px; min-width: 0; }
+.service-form fieldset, .service-detail fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.service-form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px 12px; }
+.services-main .team-field { margin: 0; min-width: 0; gap: 4px; }
+.service-name { grid-column: 1 / -1; }
+.service-section { border-bottom: 1px solid #dce4e8; margin-top: 4px; }
+.service-section > summary, .service-history summary { min-height: 44px; padding: 12px 0; cursor: pointer; font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
+.service-section[open] { padding-bottom: 8px; }
+.service-section[open] > summary { color: #855e29; }
+.service-policy-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 4px 12px; margin-bottom: 8px; }
+.service-check { display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 12px; cursor: pointer; }
+.service-check input { width: 20px; height: 20px; min-width: 20px; accent-color: #103248; }
+.service-field-row { display: grid; grid-template-columns: minmax(90px,.7fr) minmax(140px,1.2fr) minmax(100px,.8fr) minmax(100px,.8fr) 44px; gap: 6px; align-items: end; margin-bottom: 8px; }
+.service-submit { width: fit-content; min-width: 180px; margin-top: 8px; }
+.service-price { margin: 12px 0 4px; font-size: 24px; font-weight: 650; color: #103248; }
+.service-price span { font-size: 12px; font-weight: 400; color: #617887; }
+.service-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 4px 0; }
+.service-facts > div { min-width: 0; overflow-wrap: anywhere; }
+.service-facts dt { font-size: 12px; color: #617887; margin-bottom: 4px; }
+.service-facts dd { font-size: 13px; line-height: 1.45; margin: 0; }
+.service-history { list-style: none; margin: 0; padding: 0; }
+.service-history li { border-top: 1px solid #e1e8ec; }
+.service-history summary { font-size: 12px; font-weight: 400; }
+.service-quote { font-size: 15px; font-weight: 600; color: #103248; margin: 4px 0; }
+@media (max-width:900px), (hover:none) and (pointer:coarse) and (max-width:1200px) {
+ .operation-main:has(.services-main) { padding-top: 10px; padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+ .services-main .operation-heading { margin-bottom: 4px; }
+ .services-main .operation-heading h1 { margin-bottom: 3px; }
+ .services-main .operation-heading p:not(.eyebrow) { font-size: 12px; }
+ .services-main:has(.service-form) .operation-heading p:not(.eyebrow) { display: none; }
+ .services-main .team-field { font-size: 11px; gap: 3px; }
+ .services-main .team-field input, .services-main .team-field select, .services-main .team-field textarea { font-size: 16px; padding-inline: 8px; }
+ .service-form-grid { gap: 4px 8px; }
+ .service-form .service-section { margin-top: 0; }
+ .service-policy-grid { gap: 0 6px; }
+ .service-check { font-size: 11px; gap: 6px; }
+ .service-field-row { grid-template-columns: repeat(2,minmax(0,1fr)); border-bottom: 1px solid #dce4e8; padding-bottom: 6px; }
+ .service-field-row > button { grid-column: 2; justify-self: end; }
+ .service-submit { width: 100%; margin-top: 6px; }
+ .service-facts { grid-template-columns: 1fr; gap: 10px; }
+ .service-section > summary { font-size: 12px; }
+}

@@ -1,0 +1,30 @@
+{
+  "reviewer": "Independent code-review subagent",
+  "base": "Etapa08/main",
+  "findings": [
+    {
+      "severity": "P2",
+      "issue": "Vigência de lista capturada antes de espera no lock",
+      "fix": "clock_timestamp após services_actor; instante único por consulta",
+      "red": "etapa09-effective-red.log: versão1 em vez de2",
+      "green": "958 checks SQL, inclui fronteira durante lock"
+    },
+    {
+      "severity": "P2",
+      "issue": "Preço manual vazio/fração de centavo convertido silenciosamente",
+      "fix": "Parser decimal estrito compartilhado, conversão por partes",
+      "verification": "PASS: 13 contratos UI09; precisão/chaves/isolamento/zoom/altura e densidade"
+    },
+    {
+      "severity_original": "minor",
+      "severity_final": "P2",
+      "issue": "Remover campo intermediário e adicionar gera chave duplicada",
+      "decision": "Bloqueia salvar sequência válida de ações; reclassificado por efeito para usuário",
+      "fix": "Gerar primeira chave disponível",
+      "red": "3 campos, somente2 chaves distintas",
+      "verification": "PASS: 13 contratos UI09; precisão/chaves/isolamento/zoom/altura e densidade"
+    }
+  ],
+  "limits": "Revisão estática com reproduções pontuais; testes integrados executados pelo agente principal. Nenhum P0/P1 confirmado.",
+  "status": "Os três achados corrigidos com regressões RED→GREEN; nenhum P0/P1 identificado."
+}

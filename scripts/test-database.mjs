@@ -491,6 +491,88 @@ const benchmarkCustomerRelations = async database => {
   } finally { for (const connection of callers) connection.child.kill(); }
 };
 
+const raceServiceAuthority = async (database, capability = false) => {
+  const actor = capability ? '092' : '096';
+  const [serviceId, definition] = JSON.parse(sql(database,'postgres',"SELECT jsonb_build_array(s.id,v.definition||'{\"effective_from\":null}'::jsonb) FROM public.services s JOIN public.service_versions v ON v.service_id=s.id AND v.number=2 WHERE s.code='XEROX-TESTE';").trim());
+  const lock = openSql(database);
+  let mutation;
+  try {
+    lock.child.stdin.write(`BEGIN;
+      SELECT id FROM public.services WHERE office_id='00000000-0000-4000-e000-000000000091' AND code='XEROX-TESTE' FOR UPDATE;
+      \\echo SERVICE_LOCK_HELD
+    `);
+    await until(() => lock.output().includes('SERVICE_LOCK_HELD'));
+    mutation = openSql(database);
+    mutation.child.stdin.end(`SET application_name='jn_service_authority';
+      SET ROLE authenticated;
+      SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000${actor}","session_id":"00000000-0000-4000-c000-000000000${actor}"}';
+      SELECT test.expect_error($q$SELECT public.service_publish('00000000-0000-4000-e000-000000000091','${serviceId}','${JSON.stringify(definition).replaceAll("'","''")}'::jsonb,2,'Concorrente ficticio',gen_random_uuid())$q$,'${capability?'PT403':'PT401'}','servicos: autoridade revogada depois do lock nega publicacao');
+    `);
+    // Raw SELECT is deliberately denied: resolve args before switching to API role.
+    // Rebuild command with literal fixture arguments, never grant test API table access.
+    await until(() => sql(database,'postgres',"SELECT EXISTS(SELECT FROM pg_stat_activity WHERE application_name='jn_service_authority' AND wait_event_type='Lock');").trim()==='t');
+    if (capability) sql(database,'postgres',"DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000092' AND permission_code='services.manage';");
+    else sql(database,'postgres',"DELETE FROM auth.sessions WHERE id='00000000-0000-4000-c000-000000000096';");
+    lock.child.stdin.end('COMMIT;\n');await lock.result;
+    const result=await mutation.result;
+    return result+sql(database,'postgres',"SELECT test.assert_true((SELECT latest_version FROM public.services WHERE code='XEROX-TESTE')=2,'servicos: corrida nao publicou versao sem autoridade');");
+  } finally {lock.child.kill();mutation?.child.kill();}
+};
+
+const raceServiceEffective = async database => {
+  const definition=JSON.parse(sql(database,'postgres',"SELECT definition||'{\"code\":\"TIME-TESTE\",\"name\":\"Fronteira Ficticia\",\"effective_from\":null}'::jsonb FROM public.service_versions v JOIN public.services s ON s.id=v.service_id WHERE s.code='XEROX-TESTE' AND v.number=2;").trim());
+  const literal=JSON.stringify(definition).replaceAll("'","''");
+  const auth=`SET ROLE authenticated; SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';`;
+  const id=sql(database,'postgres',`${auth} SELECT public.service_create('00000000-0000-4000-e000-000000000091','${literal}'::jsonb,'Fronteira ficticia',gen_random_uuid())->>'id';`).trim();
+  sql(database,'postgres',`${auth} SELECT public.service_publish('00000000-0000-4000-e000-000000000091','${id}', '${literal}'::jsonb||jsonb_build_object('price_cents',99,'effective_from',to_char((clock_timestamp()+interval '2 seconds') AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')),1,'Agendamento ficticio',gen_random_uuid());`);
+  const lock=openSql(database);let reader;
+  try{
+    lock.child.stdin.write(`BEGIN; SELECT id FROM public.offices WHERE id='00000000-0000-4000-e000-000000000091' FOR UPDATE; \\echo EFFECTIVE_LOCK_HELD\n`);
+    await until(()=>lock.output().includes('EFFECTIVE_LOCK_HELD'));
+    reader=openSql(database);reader.child.stdin.end(`SET application_name='jn_service_effective'; ${auth} SELECT public.services_page('00000000-0000-4000-e000-000000000091','TIME-TESTE',1,3)->'items'->0->>'version';`);
+    await until(()=>sql(database,'postgres',"SELECT EXISTS(SELECT FROM pg_stat_activity WHERE application_name='jn_service_effective' AND wait_event_type='Lock');").trim()==='t');
+    sql(database,'postgres',`SELECT pg_sleep(greatest(extract(epoch FROM effective_from-clock_timestamp())+.1,0)) FROM public.service_versions WHERE service_id='${id}' AND number=2;`);
+    lock.child.stdin.end('COMMIT;\n');await lock.result;
+    const result=(await reader.result).trim();if(result!=='2')throw Error(`FAIL: catalogo apos lock devolveu versao vencida ${result}, esperada2.`);
+    return 'PASS: servicos: fronteira de vigencia durante lock seleciona versao atual\n';
+  }finally{lock.child.kill();reader?.child.kill();}
+};
+
+const benchmarkServices = async database => {
+  if(process.env.JN_SERVICES_BENCHMARK!=='1')return;
+  sql(database,'postgres',`WITH inserted AS (
+    INSERT INTO public.services(office_id,code,created_by)
+    SELECT '00000000-0000-4000-e000-000000000091','BENCH-'||lpad(n::text,6,'0'),'00000000-0000-4000-a000-000000000091' FROM generate_series(1,10000) n RETURNING *)
+    INSERT INTO public.service_versions(office_id,service_id,number,definition,effective_from,created_by,reason)
+    SELECT i.office_id,i.id,1,v.definition||jsonb_build_object('code',i.code,'name','Servico Ficticio '||i.code),v.effective_from,i.created_by,'Benchmark ficticio'
+    FROM inserted i CROSS JOIN public.services s JOIN public.service_versions v ON v.service_id=s.id AND v.number=2 WHERE s.code='XEROX-TESTE';
+    ANALYZE public.services; ANALYZE public.service_versions;`);
+  const serviceId=sql(database,'postgres',"SELECT id FROM public.services WHERE code='XEROX-TESTE';").trim();
+  const connections=Array.from({length:10},()=>openSql(database));
+  try {
+    const started=Date.now();
+    for(const connection of connections) connection.child.stdin.end(`SET ROLE authenticated;
+      SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';
+      CREATE TEMP TABLE catalog_measurements(operation text,ms numeric);
+      DO $bench$ DECLARE t timestamptz; n integer; BEGIN
+        FOR n IN 1..10 LOOP
+          t:=clock_timestamp(); PERFORM public.services_page('00000000-0000-4000-e000-000000000091','',1,3); INSERT INTO catalog_measurements VALUES('list',extract(epoch from clock_timestamp()-t)*1000);
+          t:=clock_timestamp(); PERFORM public.service_detail('00000000-0000-4000-e000-000000000091','${serviceId}',1); INSERT INTO catalog_measurements VALUES('detail',extract(epoch from clock_timestamp()-t)*1000);
+          t:=clock_timestamp(); PERFORM public.service_quote('00000000-0000-4000-e000-000000000091','${serviceId}',2,'{"kind":"none","value":0,"reason":""}'); INSERT INTO catalog_measurements VALUES('quote',extract(epoch from clock_timestamp()-t)*1000);
+        END LOOP;
+      END $bench$;
+      SELECT jsonb_agg(to_jsonb(m)) FROM catalog_measurements m;
+    `);
+    const samples=(await Promise.all(connections.map(c=>c.result))).flatMap(output=>JSON.parse(output.trim()));
+    const measurements=Object.fromEntries(['list','detail','quote'].map(operation=>{
+      const values=samples.filter(x=>x.operation===operation).map(x=>Number(x.ms)).sort((a,b)=>a-b);
+      return [operation,{samples:values.length,median_ms:values[Math.floor(values.length/2)],p95_ms:values[Math.ceil(values.length*.95)-1],max_ms:values.at(-1)}];
+    }));
+    console.log(`SERVICES_BENCHMARK ${JSON.stringify({environment:'disposable local PostgreSQL17; API role authenticated',additional_services:10000,connections:10,samples:samples.length,wall_ms:Date.now()-started,measurements})}`);
+    if(Object.values(measurements).some(x=>x.p95_ms>2000))throw Error('Catalog benchmark exceeded local p95 target2s.');
+  }finally{for(const c of connections)c.child.kill();}
+};
+
 let started = false;
 try {
   docker('run', '--rm', '--detach', '--network=none', '--name', name, '--tmpfs', '/var/lib/postgresql/data:rw,nosuid,noexec,size=512m',
@@ -528,6 +610,7 @@ try {
       + sql(database, 'postgres', readFileSync(`${root}tests/database/customers.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/customer-registration.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/customer-relations.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/services.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
       + await raceLastOwners(database)
       + await raceRevokedSession(database)
@@ -545,8 +628,11 @@ try {
       + await raceRelationAuthority(database, 'capability')
       + await raceRelationScope(database)
       + await raceCustomerMerge(database)
-      + await raceRelationRegistrationLock(database);
-    if (database === 'foundation_replay_b') await benchmarkCustomerRelations(database);
+      + await raceRelationRegistrationLock(database)
+      + await raceServiceAuthority(database)
+      + await raceServiceAuthority(database,true)
+      + await raceServiceEffective(database);
+    if (database === 'foundation_replay_b') {await benchmarkCustomerRelations(database);await benchmarkServices(database);}
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
   console.log('PASS: dois replays vazios, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.');

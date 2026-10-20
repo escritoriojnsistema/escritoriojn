@@ -39,3 +39,11 @@ Migration `customers_secure_registry`: customers/customer_contacts com RLS/ACL s
 Identificador não vazio normalizado tem índice único por escritório/tipo. Identificador vazio permanece NULL; ficha anônima não é exigida para serviço rápido. Contatos0..4, e-mail lower/trim e telefone com10/11 dígitos ou55+10/11. Validação CPF/CNPJ não consulta fonte oficial. Escritas serializadas por escritório, versão otimista e evento sem PII na mesma transação; sessão/capacidade revalidadas após locks. Rollback só código, preservando as tabelas e a auditoria.
 
 504 checks SQL passaram em dois replays252×2, com migrador sem superusuário/BYPASSRLS e corridas reais. Estado hospedado e testes integrados finais em [fecho07](../docs/etapas/fecho-07.md).
+
+## Etapa09
+
+`services` identifica código por escritório; `service_versions` conserva definição/preço/vigência/autor/motivo, sem UPDATE/DELETE. Cinco RPCs públicas invoker chamam implementações privadas autorizadas, sem acesso bruto às tabelas. Seed de oito capacidades somente owner; concessão aos demais na gestão existente.
+
+`service_quote` escolhe versão vigente no banco e calcula centavos/pontos-base sem confiar no preço do cliente. Ajustes exigem política, capacidade e motivo. O futuro pedido10 deve usar `private.services_snapshot` dentro de sua transação e persistir o resultado; não aceitar snapshot enviado pelo navegador. Sem tabelas fictícias de pedidos ou fixtures hospedadas.
+
+Replay/concorrência: `npm run test:db`. Benchmark descartável: `node scripts/benchmark-services.mjs` (10mil serviços/10conexões/300amostras, sem opção de banco remoto). Estado e limites da publicação em [fecho09](../docs/etapas/fecho-09.md).

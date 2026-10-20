@@ -1,5 +1,5 @@
 SELECT test.assert_true((SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
-  WHERE n.nspname='public' AND c.relkind='r')=9, 'nove tabelas instaladas');
+  WHERE n.nspname='public' AND c.relkind='r')=11, 'onze tabelas instaladas');
 SELECT test.assert_true((SELECT NOT rolsuper AND NOT rolbypassrls FROM pg_roles WHERE rolname='migrator'),
   'migrador sem superusuario e sem BYPASSRLS');
 SELECT test.assert_true((SELECT bool_and(c.relowner='migrator'::regrole AND c.relrowsecurity)
@@ -9,8 +9,8 @@ SELECT test.assert_true(NOT EXISTS (SELECT p.polrelid FROM pg_policy p JOIN pg_c
   JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND p.polpermissive
     AND p.polcmd IN ('*','r') AND 'authenticated'::regrole=ANY(p.polroles)
   GROUP BY p.polrelid HAVING count(*)>1), 'SELECT sem policies permissivas redundantes');
-SELECT test.assert_true((SELECT count(*) FROM public.roles)=4 AND (SELECT count(*) FROM public.permissions)=13
-  AND (SELECT count(*) FROM public.role_permissions)=16, 'seed minimo completo sem cadastro posterior');
+SELECT test.assert_true((SELECT count(*) FROM public.roles)=4 AND (SELECT count(*) FROM public.permissions)=21
+  AND (SELECT count(*) FROM public.role_permissions)=24, 'seed minimo completo sem cadastro posterior');
 SELECT test.assert_true((SELECT array_agg(role_code ORDER BY role_code) FROM public.role_permissions
   WHERE permission_code='foundation.access')=ARRAY['admin','client','employee','owner']
   AND (SELECT array_agg(role_code) FROM public.role_permissions WHERE permission_code='audit.read')=ARRAY['owner'],
