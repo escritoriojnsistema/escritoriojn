@@ -96,6 +96,8 @@ test('API08 autentica uma vez, limita entradas e publica somente o contrato auto
         responseValue = { kind, items: [{ ...item, ...extra, evidence: 'private identity evidence' }], limit: 20, ...extra };
         assert.deepEqual((await (await send('/candidates', { office_id: office, kind, query: '' })).json()).data, { kind, items: [item], limit: 20 });
       }
+      responseValue = { kind: 'team', items: [{ id, name: 'Pessoa fictícia', kind: 'employee', contact_masked: '****@***', identifier_masked: null }], limit: 20 };
+      assert.equal((await send('/candidates', { office_id: office, kind: 'team', query: '' })).status, 200);
       responseValue = { ...preview, ...extra, evidence: 'private merge evidence', source: { ...summary, ...extra }, target: { ...preview.target, ...extra }, expected: { ...preview.expected, ...extra } };
       assert.deepEqual((await (await send('/merge/preview', { office_id: office, source_id: id, target_id: target })).json()).data, preview);
       responseValue = undefined;

@@ -68,7 +68,7 @@ export function relationCandidates(v: unknown): CustomerRelationCandidates {
     requireValid(record(item) && uuid(item.id) && text(item.name, 120));
     if (kind === 'customers') requireValid((item.kind === 'person' || item.kind === 'company') && item.contact_masked === null && masked(item.identifier_masked, item.kind));
     else requireValid((kind === 'client' ? item.kind === 'client' : ['owner', 'admin', 'employee'].includes(String(item.kind))) && item.identifier_masked === null
-      && (item.contact_masked === null || (typeof item.contact_masked === 'string' && /^[^\s@*\u0000-\u001f\u007f-\u009f]\*{3}@\*{3}$/u.test(item.contact_masked))));
+      && (item.contact_masked === null || (typeof item.contact_masked === 'string' && /^[^\s@\u0000-\u001f\u007f-\u009f]\*{3}@\*{3}$/u.test(item.contact_masked))));
     return { id: item.id, name: item.name, kind: item.kind as CustomerRelationCandidates['items'][number]['kind'], contact_masked: item.contact_masked as string | null, identifier_masked: item.identifier_masked as string | null };
   });
   return { kind, items, limit: relationLimits.candidates };

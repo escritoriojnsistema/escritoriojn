@@ -31,8 +31,8 @@ export function relationsRequest(value: unknown): value is CustomerRelationsRequ
   return fields(value, ['office_id', 'customer_id']) && uuid(value.office_id) && uuid(value.customer_id);
 }
 export function candidatesRequest(value: unknown): value is CustomerRelationCandidatesRequest {
-  return fields(value, ['office_id', 'kind', 'query']) && uuid(value.office_id) && ['team', 'client', 'customers'].includes(String(value.kind))
-    && typeof value.kind === 'string' && typeof value.query === 'string' && Array.from(value.query).length <= relationLimits.query && !controls.test(value.query);
+  return fields(value, ['office_id', 'kind', 'query']) && uuid(value.office_id) && typeof value.kind === 'string' && ['team', 'client', 'customers'].includes(value.kind)
+    && typeof value.query === 'string' && Array.from(value.query).length <= relationLimits.query && !controls.test(value.query);
 }
 export function commandRequest(value: unknown): value is CustomerRelationCommand {
   if (!fields(value, ['office_id', 'customer_id', 'action', 'payload']) || !uuid(value.office_id) || !uuid(value.customer_id)) return false;
