@@ -26,10 +26,22 @@
     "sha256": "24c4930aece0adc421b204b51da256008f43dbca7926b5a1c32cb3a9460c75b9",
     "matching_tested_file": true
   },
-  "index_follow_up": "three covering indexes for new composite FKs; local replay/publication verification pending",
+  "index_follow_up": {
+    "version": "20261020232011",
+    "applied_automatically": true,
+    "statements": 3,
+    "sha256": "24db40aee42a8e31a40968cd13de08dde0c75ee9781f7deff819635557abfff3",
+    "readback_indexes": 3,
+    "remaining_unindexed_fks_in_requests": 0,
+    "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/21",
+    "merge_commit": "245e62dc5c2a8c9e04b270851638ea1843342f20",
+    "vercel_status": "success",
+    "vercel_deployment": "https://vercel.com/escritorio-jn/escritoriojn/mTqBe3QExmfZtTix5sM9hVaPfwj1"
+  },
   "limitations": [
     "Authenticated flows use disposable local GoTrue/PostgREST/PostgreSQL; no hosted account credentials.",
     "Vercel administrative connector403; Git status and canonical HTTP/assets verified.",
     "No physical-device test; no hosted latency SLA."
-  ]
+  ],
+  "status": "completed_and_published"
 }
