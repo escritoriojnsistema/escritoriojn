@@ -1,0 +1,38 @@
+import { Plus, Trash2 } from 'lucide-react';
+import { serviceAmountToUnits, serviceMoney, type ServiceAdjustment, type ServiceInput } from '../../../shared/services';
+import type { RequestItemInput, RequestOption } from '../../../shared/requests';
+import { RequestPicker } from './RequestPicker';
+import type { RequestsError } from './api';
+
+export type DraftItem={key:string;option:RequestOption;quantity:string;adjustment:ServiceAdjustment['kind'];amount:string;reason:string;fields:Record<string,string>;participants:RequestOption[];checklist:string[]};
+export const newItem=(option:RequestOption):DraftItem=>({key:crypto.randomUUID(),option,quantity:String(option.definition?.quantity_min??1),adjustment:'none',amount:'',reason:'',fields:{},participants:[],checklist:[]});
+export function itemInputs(items:DraftItem[],customer:RequestOption|undefined):RequestItemInput[]{
+ if(!items.length||items.length>10)throw new Error('Selecione de 1 a 10 serviços para o atendimento.');
+ return items.map(item=>{
+  const d=item.option.definition;if(!d)throw new Error('Escolha novamente o serviço e confira sua versão.');
+  const quantity=Number(item.quantity);if(!Number.isSafeInteger(quantity)||quantity<d.quantity_min||quantity>d.quantity_max)throw new Error(`Confira a quantidade de ${d.name}: ${d.quantity_min} a ${d.quantity_max}.`);
+  if(d.person_required&&!customer)throw new Error(`Selecione a pessoa exigida por ${d.name}.`);
+  if(item.participants.length<d.participants_min)throw new Error(`Selecione pelo menos ${d.participants_min} participantes para ${d.name}.`);
+  for(const field of d.fields){const value=item.fields[field.key]??'';if((field.required&&!value.trim())||value.length>500||/[\u0000-\u001f\u007f]/.test(value))throw new Error(`Confira o campo ${field.label}.`);if(value&&field.type==='number'&&(!/^-?\d+(\.\d+)?$/.test(value)||!Number.isFinite(Number(value))))throw new Error(`Informe um número válido em ${field.label}.`);if(value&&field.type==='date'&&(!/^\d{4}-\d{2}-\d{2}$/.test(value)||!Number.isFinite(Date.parse(value))||new Date(value).toISOString().slice(0,10)!==value))throw new Error(`Informe uma data válida em ${field.label}.`);}
+  if(d.checklist.some(label=>!item.checklist.includes(label)))throw new Error(`Confira todos os itens do checklist de ${d.name}.`);
+  const value=item.adjustment==='none'||item.adjustment==='courtesy'?0:serviceAmountToUnits(item.amount);if(value===null)throw new Error('Informe o ajuste com até duas casas decimais.');
+  if(item.adjustment!=='none'&&!item.reason.trim())throw new Error('Informe o motivo do ajuste.');
+  if(item.adjustment==='discount'&&value>d.max_discount_bps||item.adjustment==='surcharge'&&value>d.max_surcharge_bps)throw new Error('O ajuste excede o limite do serviço.');
+  return {service_id:item.option.id,quantity,adjustment:{kind:item.adjustment,value,reason:item.adjustment==='none'?'':item.reason.trim()},fields:item.fields,participant_ids:item.participants.map(p=>p.id),checklist:item.checklist};
+ });
+}
+export function RequestItems({office,items,permissions,busy,onChange,onFailure}:{office:string;items:DraftItem[];permissions:string[];busy:boolean;onChange:(items:DraftItem[])=>void;onFailure:(failure:RequestsError)=>void}){
+ const patch=(key:string,change:Partial<DraftItem>)=>onChange(items.map(item=>item.key===key?{...item,...change}:item));
+ function adjustments(d:ServiceInput){return [{kind:'none',label:'Sem ajuste'},...(permissions.includes('services.discount')&&d.max_discount_bps>0?[{kind:'discount',label:'Desconto (%)'}]:[]),...(permissions.includes('services.surcharge')&&d.max_surcharge_bps>0?[{kind:'surcharge',label:'Acréscimo (%)'}]:[]),...(permissions.includes('services.courtesy')&&d.allow_courtesy?[{kind:'courtesy',label:'Cortesia'}]:[]),...(permissions.includes('services.price_override')&&d.allow_price_override?[{kind:'override',label:'Preço manual'}]:[])];}
+ return <div className="request-items">
+  {items.map((item,index)=>{const d=item.option.definition;if(!d)return null;return <details className="service-section request-item" key={item.key} open={items.length===1?true:undefined}><summary>{index+1}. {item.option.label} · {item.quantity} {d.unit}</summary><div className="request-item-heading"><p className="customer-note">Referência do catálogo: {serviceMoney(d.price_cents)}/{d.unit}. O valor oficial será registrado na abertura.</p><button type="button" className="operation-icon-button" disabled={busy} aria-label={`Remover serviço ${index+1}`} onClick={()=>onChange(items.filter(x=>x.key!==item.key))}><Trash2 size={18} aria-hidden="true"/></button></div>
+   <div className="request-grid"><label className="team-field">Quantidade {index+1}<input type="number" min={d.quantity_min} max={d.quantity_max} step="1" value={item.quantity} onChange={e=>patch(item.key,{quantity:e.target.value})}/></label><label className="team-field">Ajuste {index+1}<select value={item.adjustment} onChange={e=>patch(item.key,{adjustment:e.target.value as DraftItem['adjustment'],amount:'',reason:''})}>{adjustments(d).map(a=><option value={a.kind} key={a.kind}>{a.label}</option>)}</select></label>
+   {item.adjustment!=='none'&&<>{item.adjustment!=='courtesy'&&<label className="team-field">{item.adjustment==='override'?'Preço unitário (R$)':'Percentual (%)'} {index+1}<input inputMode="decimal" maxLength={12} value={item.amount} onChange={e=>patch(item.key,{amount:e.target.value})}/></label>}<label className="team-field">Motivo do ajuste {index+1}<input maxLength={500} value={item.reason} onChange={e=>patch(item.key,{reason:e.target.value})}/></label></>}
+   {d.fields.map(f=><label className="team-field" key={f.key}>{f.label}{f.required?' (obrigatório)':''}<input type={f.type==='number'?'number':f.type==='date'?'date':'text'} step={f.type==='number'?'any':undefined} maxLength={500} value={item.fields[f.key]??''} onChange={e=>patch(item.key,{fields:{...item.fields,[f.key]:e.target.value}})}/></label>)}</div>
+   {(d.person_required||d.participants_min>0)&&<p className="customer-note">{d.person_required?'Pessoa obrigatória. ':''}Participantes mínimos: {d.participants_min}.</p>}
+   <details className="service-section"><summary>Participantes ({item.participants.length})</summary><ul className="request-option-list">{item.participants.map(p=><li key={p.id}><span>{p.label}</span><button type="button" className="operation-icon-button" aria-label={`Remover participante ${p.label}`} onClick={()=>patch(item.key,{participants:item.participants.filter(x=>x.id!==p.id)})}><Trash2 size={18} aria-hidden="true"/></button></li>)}</ul>{item.participants.length<20&&<RequestPicker office={office} kind="customers" label={`participante do serviço ${index+1}`} busy={busy} onSelect={p=>{if(!item.participants.some(x=>x.id===p.id))patch(item.key,{participants:[...item.participants,p]});}} onFailure={onFailure}/>}</details>
+   {d.checklist.length>0&&<fieldset className="request-checklist"><legend>Checklist de {d.name}</legend>{d.checklist.map(label=><label className="service-check" key={label}><input type="checkbox" checked={item.checklist.includes(label)} onChange={e=>patch(item.key,{checklist:e.target.checked?[...item.checklist,label]:item.checklist.filter(x=>x!==label)})}/><span>{label}</span></label>)}</fieldset>}
+  </details>;})}
+  {items.length<10?<div><RequestPicker office={office} kind="services" label="serviço" busy={busy} onSelect={option=>onChange([...items,newItem(option)])} onFailure={onFailure}/><p className="customer-note"><Plus size={12} aria-hidden="true"/> Até 10 itens; selecione um serviço para acrescentar.</p></div>:<p className="customer-note">Limite de 10 itens atingido.</p>}
+ </div>;
+}

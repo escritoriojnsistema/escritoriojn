@@ -1,4 +1,4 @@
-# Fundação de acesso e equipe — etapas 03–05
+# Banco, acesso e operação — etapas 03–10
 
 `migrations/` é a fonte versionada. O seed mínimo faz parte da migration; não depende de cadastrar um usuário depois nem contém contas/senhas. Não repetir migration aplicada, editar seu histórico ou usar este projeto para fixtures.
 
@@ -44,6 +44,14 @@ Identificador não vazio normalizado tem índice único por escritório/tipo. Id
 
 `services` identifica código por escritório; `service_versions` conserva definição/preço/vigência/autor/motivo, sem UPDATE/DELETE. Cinco RPCs públicas invoker chamam implementações privadas autorizadas, sem acesso bruto às tabelas. Seed de oito capacidades somente owner; concessão aos demais na gestão existente.
 
-`service_quote` escolhe versão vigente no banco e calcula centavos/pontos-base sem confiar no preço do cliente. Ajustes exigem política, capacidade e motivo. O futuro pedido10 deve usar `private.services_snapshot` dentro de sua transação e persistir o resultado; não aceitar snapshot enviado pelo navegador. Sem tabelas fictícias de pedidos ou fixtures hospedadas.
+`service_quote` escolhe versão vigente no banco e calcula centavos/pontos-base sem confiar no preço do cliente. Ajustes exigem política, capacidade e motivo. O pedido10 usa `private.services_snapshot` dentro de sua transação e persiste o resultado; não aceita snapshot enviado pelo navegador. Sem fixtures hospedadas.
 
 Replay/concorrência: `npm run test:db`. Benchmark descartável: `node scripts/benchmark-services.mjs` (10mil serviços/10conexões/300amostras, sem opção de banco remoto). Estado e limites da publicação em [fecho09](../docs/etapas/fecho-09.md).
+
+## Etapa10
+
+Migration `requests_service_workflow`: requests/request_items com RLS e ACL sem acesso bruto; contadores, atribuições e histórico privados. Itens e histórico imutáveis; protocolo único por escritório, abertura idempotente por criador/chave e payload, versão esperada nas mutações. Cinco RPCs públicas invoker chamam implementações privadas autorizadas. Uma RPC por operação, sem pré-consulta de contexto. Seed de seis capacidades somente owner; delegação/concessão explícita aos demais pela gestão atual.
+
+Snapshots são calculados no banco09 na mesma transação. Conta cliente confirmada abre mensagem para triagem e recebe whitelist própria sem preços/notas/atores; classificação interna aplica requisitos do serviço. Escrita revalida sessão/autoridade após locks; transferência pode retornar somente access_lost. Conclusão não cria estado financeiro. Cancelamento exige revisão manual de efeitos externos e não apaga nada. Sem Edge/Storage/SMTP/env novos.
+
+Após publicar Git, consultar schema_migrations antes de qualquer aplicação manual: a integração existente pode já ter aplicado a migration. Conferir comandos/arquivo, ACL/RLS, capacidades, contagens e advisors. Rollback somente de código preservando atendimentos/auditoria; nunca DROP/reset. Provas e limites em [fecho10](../docs/etapas/fecho-10.md).

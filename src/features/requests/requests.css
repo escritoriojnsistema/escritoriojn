@@ -1,0 +1,46 @@
+.requests-main { max-width:1200px; min-width:0; }
+.requests-main .operation-heading { margin-bottom:12px; }
+.request-form,.request-detail { max-width:900px; min-width:0; }
+.request-form fieldset,.request-detail fieldset { border:0; padding:0; margin:0; min-width:0; }
+.requests-main .team-field { margin:0; gap:4px; }
+.request-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px 12px; }
+.request-wide { grid-column:1/-1; }
+.requests-main textarea { width:100%; min-width:0; min-height:74px; border:1px solid #d3dfe6; border-radius:8px; padding:9px 11px; background:#fff; color:#193448; font:inherit; font-size:14px; resize:vertical; box-shadow:none; }
+.requests-main textarea:focus { border-color:#aa7d36; outline:none; }
+.request-submit { width:fit-content; min-width:180px; margin-top:10px; }
+.request-filters { margin:8px 0; }
+.request-picker-current { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:4px 12px; font-size:12px; color:#617887; }
+.request-picker-current > span { min-width:0; overflow-wrap:anywhere; }
+.request-options { border-block:1px solid #dce4e8; padding:8px 0; }
+.request-option-list,.request-history { list-style:none; margin:0; padding:0; }
+.request-option-list li { display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:44px; font-size:13px; border-bottom:1px solid #e1e8ec; }
+.request-option-list li span { overflow-wrap:anywhere; min-width:0; }
+.request-item-heading { display:flex; align-items:center; gap:8px; }
+.request-item-heading > p { flex:1; }
+.request-checklist legend,.request-cancellation legend { color:#617887; font-size:12px; padding-top:8px; }
+.request-protocol { color:#855e29; font-size:13px; font-weight:600; margin:6px 0 12px; }
+.request-total { display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin:12px 0 4px; }
+.request-total span { color:#617887; font-size:12px; }
+.request-total strong { font-size:23px; font-weight:650; }
+.request-message h2,.request-stored-item h2 { font-size:15px; margin:10px 0 4px; }
+.request-message p,.request-message-text,.request-history p { white-space:pre-wrap; overflow-wrap:anywhere; font-size:13px; line-height:1.5; }
+.request-stored-item { border-bottom:1px solid #e1e8ec; padding-bottom:8px; }
+.request-stored-item > p,.request-checklist-read,.request-message ul { font-size:13px; line-height:1.5; margin:4px 0; }
+.request-actions { display:grid; gap:10px; }
+.request-history li { padding:10px 0; border-bottom:1px solid #e1e8ec; }
+.request-history strong,.request-history small { display:block; overflow-wrap:anywhere; font-size:12px; }
+.request-history small { color:#617887; margin-top:4px; }
+.request-history p { margin:6px 0 0; }
+@media (max-width:900px), (hover:none) and (pointer:coarse) and (max-width:1200px) {
+ .operation-main:has(.requests-main) { padding-top:10px; padding-bottom:calc(64px + env(safe-area-inset-bottom)); }
+ .requests-main .operation-heading { margin-bottom:4px; }
+ .requests-main .operation-heading h1 { margin-bottom:3px; }
+ .requests-main .operation-heading p:not(.eyebrow) { font-size:12px; }
+ .requests-main:has(.request-form) .operation-heading p:not(.eyebrow) { display:none; }
+ .requests-main .team-field { font-size:11px; gap:3px; }
+ .requests-main .team-field input,.requests-main .team-field select,.requests-main .team-field textarea { font-size:16px; padding-inline:8px; }
+ .request-grid { gap:6px 8px; }
+ .request-submit { width:100%; margin-top:8px; }
+ .request-item .service-section > summary { font-size:11px; }
+ .request-protocol { margin:6px 0 8px; }
+}
