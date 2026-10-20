@@ -41,3 +41,13 @@ Os arquivos COMECE_AQUI/AGENTS/LIVRO_RAIZ originais citados pelo pacote não for
 
 - [Cartão06 oficial](https://drive.google.com/file/d/1BCd1j9trg6XO7oDnhxfSnmBjFkIVWyk2/view) obtido no Drive e copiado em etapas/etapa-06.md; manual v4 consultado nos tópicos auditoria, Arquivados, titular e retenção. Modelo técnico em privacidade/governanca-06.md não atribui prazos ou bases jurídicas.
 - [SignOut](https://supabase.com/docs/reference/javascript/auth-signout), getUser, setSession e SDK2.118.0 instalados conferidos: setSession não aceita AbortSignal, SupportedStorage é extensão pública; guard é avaliado antes da gravação. Changelog consultado em18/10; TLS de10/11 já documentado na03, stack atual Node24/Chromium e serviço hospedado preservados. CLI2.121.0 gerou migration audit_privacy_archives.
+
+## Etapa08 — fontes oficiais
+- Cartão08: https://drive.google.com/file/d/1_KFfaEHR8-Y_CQeGECnCIDY-F5AxUcAn/view (copiado integralmente para docs/etapas/etapa-08.md).
+- Manual v4: https://drive.google.com/file/d/1PjG_-IkoUxLFxejjoU1mYZhB5X_GxW96/view (p38, Etapa08; regra de clientes p16; ordem do portal p26).
+- Regras clientes: https://drive.google.com/file/d/154gwUIfGaKbSTQ1HxJyF76-ZQJdcIs_n/view; decisões posteriores locais pós07 preservadas.
+- Regras acesso: https://drive.google.com/file/d/1xn4cMTGlCneQODBBeZQq3k9pss-MFjM3/view.
+- Regras operação/qualidade: https://drive.google.com/file/d/1WuCFqJSFGkA3RYArqeCt13ZRIsPEJT3d/view.
+- Cartão09 lido somente como fronteira: https://drive.google.com/file/d/13bnnkDOPTWkZtwqyVegpPhGh3i0Brv2Z/view. Não iniciar catálogo/preços.
+-17 habilidades DEV01–17 existentes na biblioteca MagicPath consultadas; utilizar só as pertinentes. Nenhuma instalação global presumida.
+- Stack/destinos: React/Vite/TS + Express; GitHub escritoriojnsistema/escritoriojn; Supabase mcsuoxnubpqenyvbefee; Vercel prj_PSltYIXuu3V50lKKVKhFwINMODBq/time escritorio-jn; canônico https://escritoriojn.vercel.app/.

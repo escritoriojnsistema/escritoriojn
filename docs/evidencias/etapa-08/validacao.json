@@ -1,0 +1,58 @@
+{
+  "status": "implemented_and_locally_tested_review_and_release_pending",
+  "base": "535f6ad09d3976dd3796af5349af6e1e1996067d",
+  "runtime_commit": "eac24a3231f943b3333d3cc43b5975662a4f5995",
+  "tests": {
+    "node": {
+      "passed": 65,
+      "failed": 0
+    },
+    "database": {
+      "passed": 750,
+      "replays": 2,
+      "checks_per_replay": 375
+    },
+    "auth_real_local": {
+      "passed": 63,
+      "failed": 0
+    },
+    "ui_contracts_synthetic": {
+      "passed": 113,
+      "executions": "112 full + 1 directed after merge409 fix"
+    }
+  },
+  "viewports": [
+    [
+      320,
+      568
+    ],
+    [
+      360,
+      640
+    ],
+    [
+      768,
+      1024
+    ],
+    [
+      1440,
+      900
+    ]
+  ],
+  "zoom": 1.5,
+  "keyboard": "reduced viewport; physical mobile keyboard not tested",
+  "dependencies_production_vulnerabilities": 0,
+  "migration": {
+    "file": "20261019234754_customer_relationships_identity_merge.sql",
+    "sha256": "68e908536d01d47886de4cc9a064e3c9ff92f9000ef12364b8241ea26e90c05a",
+    "applied": false
+  },
+  "hosted_fixtures": false,
+  "portal_enabled": false,
+  "stage09_started": false,
+  "metrics": {
+    "ai_tokens": null,
+    "ai_total_elapsed": null,
+    "note": "Not exposed; test durations and exact commands retained in reports, no invented savings."
+  }
+}
