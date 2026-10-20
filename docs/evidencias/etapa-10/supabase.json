@@ -33,5 +33,22 @@
     "authenticated_execute": true,
     "empty_search_path": true
   },
-  "helpers_direct_api_execute": false
+  "helpers_direct_api_execute": false,
+  "final_counts": {
+    "users": 5,
+    "memberships": 5,
+    "customers": 1,
+    "contacts": 1,
+    "services": 0,
+    "service_versions": 0,
+    "requests": 0,
+    "request_items": 0,
+    "migrations": 13
+  },
+  "index_migration": {
+    "version": "20261020232011",
+    "statements": 3,
+    "matching_tested_file": true,
+    "all_new_composite_foreign_keys_covered": true
+  }
 }
