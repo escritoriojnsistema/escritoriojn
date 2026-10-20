@@ -8,20 +8,20 @@
     {
       "operation": "search",
       "samples": 100,
-      "p95_ms": 1779.656,
-      "max_ms": 1844.036
+      "p95_ms": 733.097,
+      "max_ms": 971.219
     },
     {
       "operation": "state",
       "samples": 100,
-      "p95_ms": 95.162,
-      "max_ms": 376.794
+      "p95_ms": 60.146,
+      "max_ms": 77.219
     },
     {
       "operation": "candidates",
       "samples": 100,
-      "p95_ms": 1684.023,
-      "max_ms": 2038.516
+      "p95_ms": 613.619,
+      "max_ms": 698.987
     }
   ],
   "scope": "Disposable local Docker PostgreSQL17; psql statement timing includes query roundtrip; no hosted SLA."

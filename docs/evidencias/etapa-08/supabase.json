@@ -1,0 +1,615 @@
+{
+  "migration": {
+    "version": "20261020182035",
+    "name": "customer_relationships_identity_merge"
+  },
+  "migration_count": 10,
+  "sql_sha256": "64332c2962940b45fbcd30f389831dbbf8729bfe53104070cd08b11d12175985",
+  "verification": {
+    "merges": 0,
+    "contacts": 1,
+    "customers": 1,
+    "relations": 0,
+    "snapshots": 0,
+    "auth_users": 5,
+    "memberships": 5,
+    "rpc_security": [
+      {
+        "name": "customer_merge",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "public",
+        "definer": false,
+        "anon_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "customer_merge",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "private",
+        "definer": true,
+        "anon_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "customer_merge_preview",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "public",
+        "definer": false,
+        "anon_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "customer_merge_preview",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "private",
+        "definer": true,
+        "anon_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "customer_relation_candidates",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "public",
+        "definer": false,
+        "anon_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "customer_relation_candidates",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "private",
+        "definer": true,
+        "anon_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "customer_relation_command",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "public",
+        "definer": false,
+        "anon_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "customer_relation_command",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "private",
+        "definer": true,
+        "anon_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "customer_relations_state",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "public",
+        "definer": false,
+        "anon_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "customer_relations_state",
+        "config": [
+          "search_path=\"\""
+        ],
+        "schema": "private",
+        "definer": true,
+        "anon_execute": false,
+        "authenticated_execute": true
+      }
+    ],
+    "table_security": [
+      {
+        "rls": true,
+        "table": "private.customer_merges",
+        "anon_raw": false,
+        "service_role_raw": false,
+        "authenticated_raw": false
+      },
+      {
+        "rls": true,
+        "table": "private.customer_relations",
+        "anon_raw": false,
+        "service_role_raw": false,
+        "authenticated_raw": false
+      },
+      {
+        "rls": true,
+        "table": "private.customer_snapshots",
+        "anon_raw": false,
+        "service_role_raw": false,
+        "authenticated_raw": false
+      }
+    ],
+    "confirmed_users": 4,
+    "new_staff_grants": 0,
+    "non_pending_origins": 0,
+    "new_permission_seeds": [
+      {
+        "role_code": "owner",
+        "permission_code": "customers.merge"
+      },
+      {
+        "role_code": "owner",
+        "permission_code": "customers.relate"
+      },
+      {
+        "role_code": "owner",
+        "permission_code": "customers.verify"
+      }
+    ],
+    "registration_origins": 1
+  },
+  "security": {
+    "lints": [
+      {
+        "name": "rls_enabled_no_policy",
+        "title": "RLS Enabled No Policy",
+        "level": "INFO",
+        "facing": "EXTERNAL",
+        "categories": [
+          "SECURITY"
+        ],
+        "description": "Detects cases where row level security (RLS) has been enabled on a table but no RLS policies have been created.",
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy",
+        "count": 12,
+        "findings": [
+          {
+            "detail": "Table \\`private.archived_records\\` has RLS enabled, but no policies exist",
+            "metadata": {
+              "name": "archived_records",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.089Z"
+          },
+          {
+            "detail": "Table \\`private.client_registration_settings\\` has RLS enabled, but no policies exist",
+            "metadata": {
+              "name": "client_registration_settings",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.089Z"
+          },
+          {
+            "detail": "Table \\`private.customer_merges\\` has RLS enabled, but no policies exist",
+            "metadata": {
+              "name": "customer_merges",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.089Z"
+          },
+          {
+            "detail": "Table \\`private.customer_registrations\\` has RLS enabled, but no policies exist",
+            "metadata": {
+              "name": "customer_registrations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.089Z"
+          },
+          {
+            "detail": "Table \\`private.customer_relations\\` has RLS enabled, but no policies exist",
+            "metadata": {
+              "name": "customer_relations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.089Z"
+          },
+          {
+            "detail": "Table \\`private.customer_snapshots\\` has RLS enabled, but no policies exist",
+            "metadata": {
+              "name": "customer_snapshots",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.089Z"
+          },
+          {
+            "detail": "Table \\`private.team_delegations\\` has RLS enabled, but no policies exist",
+            "metadata": {
+              "name": "team_delegations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.089Z"
+          },
+          {
+            "detail": "Table \\`private.team_invitations\\` has RLS enabled, but no policies exist",
+            "metadata": {
+              "name": "team_invitations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.089Z"
+          },
+          {
+            "detail": "Table \\`private.team_member_identities\\` has RLS enabled, but no policies exist",
+            "metadata": {
+              "name": "team_member_identities",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.089Z"
+          },
+          {
+            "detail": "Table \\`private.team_member_permissions\\` has RLS enabled, but no policies exist",
+            "metadata": {
+              "name": "team_member_permissions",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.089Z"
+          },
+          {
+            "detail": "Table \\`public.customer_contacts\\` has RLS enabled, but no policies exist",
+            "metadata": {
+              "name": "customer_contacts",
+              "type": "table",
+              "schema": "public"
+            },
+            "observed_at": "2026-10-20T18:20:46.089Z"
+          },
+          {
+            "detail": "Table \\`public.customers\\` has RLS enabled, but no policies exist",
+            "metadata": {
+              "name": "customers",
+              "type": "table",
+              "schema": "public"
+            },
+            "observed_at": "2026-10-20T18:20:46.089Z"
+          }
+        ]
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "title": "Leaked Password Protection Disabled",
+        "level": "WARN",
+        "facing": "EXTERNAL",
+        "categories": [
+          "SECURITY"
+        ],
+        "description": "Leaked password protection is currently disabled.",
+        "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection",
+        "count": 1,
+        "findings": [
+          {
+            "detail": "Supabase Auth prevents the use of compromised passwords by checking against HaveIBeenPwned.org. Enable this feature to enhance security.",
+            "metadata": {
+              "type": "auth",
+              "entity": "Auth"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "performance": {
+    "lints": [
+      {
+        "name": "unindexed_foreign_keys",
+        "title": "Unindexed foreign keys",
+        "level": "INFO",
+        "facing": "EXTERNAL",
+        "categories": [
+          "PERFORMANCE"
+        ],
+        "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+        "count": 3,
+        "findings": [
+          {
+            "detail": "Table \\`private.customer_merges\\` has a foreign key \\`customer_merges_office_id_source_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+            "metadata": {
+              "name": "customer_merges",
+              "type": "table",
+              "schema": "private",
+              "fkey_name": "customer_merges_office_id_source_id_fkey",
+              "fkey_columns": [
+                2,
+                3
+              ]
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Table \\`private.customer_registrations\\` has a foreign key \\`customer_registrations_office_id_materialized_customer_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+            "metadata": {
+              "name": "customer_registrations",
+              "type": "table",
+              "schema": "private",
+              "fkey_name": "customer_registrations_office_id_materialized_customer_id_fkey",
+              "fkey_columns": [
+                2,
+                6
+              ]
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Table \\`private.customer_registrations\\` has a foreign key \\`customer_registrations_office_id_membership_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+            "metadata": {
+              "name": "customer_registrations",
+              "type": "table",
+              "schema": "private",
+              "fkey_name": "customer_registrations_office_id_membership_id_fkey",
+              "fkey_columns": [
+                2,
+                3
+              ]
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          }
+        ]
+      },
+      {
+        "name": "unused_index",
+        "title": "Unused Index",
+        "level": "INFO",
+        "facing": "EXTERNAL",
+        "categories": [
+          "PERFORMANCE"
+        ],
+        "description": "Detects if an index has never been used and may be a candidate for removal.",
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index",
+        "count": 26,
+        "findings": [
+          {
+            "detail": "Index \\`audit_events_office_time_idx\\` on table \\`public.audit_events\\` has not been used",
+            "metadata": {
+              "name": "audit_events",
+              "type": "table",
+              "schema": "public"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`audit_events_actor_idx\\` on table \\`public.audit_events\\` has not been used",
+            "metadata": {
+              "name": "audit_events",
+              "type": "table",
+              "schema": "public"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`client_registration_office_idx\\` on table \\`private.client_registration_settings\\` has not been used",
+            "metadata": {
+              "name": "client_registration_settings",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`team_delegations_office_idx\\` on table \\`private.team_delegations\\` has not been used",
+            "metadata": {
+              "name": "team_delegations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`team_invitations_office_list_idx\\` on table \\`private.team_invitations\\` has not been used",
+            "metadata": {
+              "name": "team_invitations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`team_invitations_inviter_idx\\` on table \\`private.team_invitations\\` has not been used",
+            "metadata": {
+              "name": "team_invitations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`team_invitations_delegation_idx\\` on table \\`private.team_invitations\\` has not been used",
+            "metadata": {
+              "name": "team_invitations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`team_invitations_role_idx\\` on table \\`private.team_invitations\\` has not been used",
+            "metadata": {
+              "name": "team_invitations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`archived_records_office_time_idx\\` on table \\`private.archived_records\\` has not been used",
+            "metadata": {
+              "name": "archived_records",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`archived_records_target_idx\\` on table \\`private.archived_records\\` has not been used",
+            "metadata": {
+              "name": "archived_records",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`audit_events_office_action_idx\\` on table \\`public.audit_events\\` has not been used",
+            "metadata": {
+              "name": "audit_events",
+              "type": "table",
+              "schema": "public"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`audit_events_office_actor_idx\\` on table \\`public.audit_events\\` has not been used",
+            "metadata": {
+              "name": "audit_events",
+              "type": "table",
+              "schema": "public"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customers_office_time_idx\\` on table \\`public.customers\\` has not been used",
+            "metadata": {
+              "name": "customers",
+              "type": "table",
+              "schema": "public"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customers_created_by_idx\\` on table \\`public.customers\\` has not been used",
+            "metadata": {
+              "name": "customers",
+              "type": "table",
+              "schema": "public"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customers_merge_target_idx\\` on table \\`public.customers\\` has not been used",
+            "metadata": {
+              "name": "customers",
+              "type": "table",
+              "schema": "public"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customer_relations_scope_idx\\` on table \\`private.customer_relations\\` has not been used",
+            "metadata": {
+              "name": "customer_relations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customer_relations_member_idx\\` on table \\`private.customer_relations\\` has not been used",
+            "metadata": {
+              "name": "customer_relations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customer_relations_representative_idx\\` on table \\`private.customer_relations\\` has not been used",
+            "metadata": {
+              "name": "customer_relations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customer_relations_created_by_idx\\` on table \\`private.customer_relations\\` has not been used",
+            "metadata": {
+              "name": "customer_relations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customer_relations_revoked_by_idx\\` on table \\`private.customer_relations\\` has not been used",
+            "metadata": {
+              "name": "customer_relations",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customer_snapshots_customer_idx\\` on table \\`private.customer_snapshots\\` has not been used",
+            "metadata": {
+              "name": "customer_snapshots",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customer_merges_target_idx\\` on table \\`private.customer_merges\\` has not been used",
+            "metadata": {
+              "name": "customer_merges",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customer_merges_source_snapshot_idx\\` on table \\`private.customer_merges\\` has not been used",
+            "metadata": {
+              "name": "customer_merges",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customer_merges_target_snapshot_idx\\` on table \\`private.customer_merges\\` has not been used",
+            "metadata": {
+              "name": "customer_merges",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customer_merges_result_snapshot_idx\\` on table \\`private.customer_merges\\` has not been used",
+            "metadata": {
+              "name": "customer_merges",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          },
+          {
+            "detail": "Index \\`customer_merges_actor_idx\\` on table \\`private.customer_merges\\` has not been used",
+            "metadata": {
+              "name": "customer_merges",
+              "type": "table",
+              "schema": "private"
+            },
+            "observed_at": "2026-10-20T18:20:46.041Z"
+          }
+        ]
+      }
+    ]
+  }
+}

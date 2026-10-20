@@ -1,6 +1,6 @@
 # Relacionamentos, identidade e mesclagem — Etapa08
 
-Contrato do banco e transporte para API/UI. Fonte tipada: `shared/customerRelations.ts`; migração `20261019234754_customer_relationships_identity_merge.sql`. Nenhuma operação deste contrato cria conta Auth, concede portal ou autoriza documento. A evidência é uma referência privada de conferência humana, nunca prova inferida de CPF/e-mail.
+Contrato do banco e transporte para API/UI. Fonte tipada: `shared/customerRelations.ts`; migração `20261020182035_customer_relationships_identity_merge.sql`. Nenhuma operação deste contrato cria conta Auth, concede portal ou autoriza documento. A evidência é uma referência privada de conferência humana, nunca prova inferida de CPF/e-mail.
 
 ## Autorização e persistência
 

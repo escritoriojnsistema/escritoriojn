@@ -46,12 +46,12 @@ React + Vite + TypeScript, Express /api e Supabase; não usar Next.js. Preservar
 - [x] Provar atribuir/revogar, representar/revogar, conferir/revogar e merge completo no Auth lab real, sem portal ativo.
 - [x] Provar mobile/desktop, alturas padrão e rolagem natural em casos extensos; até4 atalhos por papel e isolamento entre sessões/permissões.
 - [x] npm test/build; test:team-ui e test:auth sequenciais; screenshots inspecionados; commit.
-- [ ] Revisão da tarefa e revisão final de toda a branch.
+- [x] Revisão da tarefa e revisão final de toda a branch.
 
 ### Task4 — validação e entrega
 **Files:** docs/etapas/{fecho-08,etapa-08,plano-08}.md, docs/FONTES.md, docs/regras/clientes.md, docs/evidencias/etapa-08/*, LIVRO_RAIZ.md, AGENTS.md.
-- [ ] Conferir todos os requisitos oficiais e completar as regras para próximas telas.
-- [ ] Medir desempenho sintético e executar checks completos apropriados, sem repetir suítes aprovadas sem mudança/falha nova.
+- [x] Conferir todos os requisitos oficiais e completar as regras para próximas telas.
+- [x] Medir desempenho sintético e executar checks completos apropriados, sem repetir suítes aprovadas sem mudança/falha nova.
 - [ ] PR/CI, migration aditiva hospedada com SQL idêntico testado e contagens/ACL/RLS/advisors conferidos; preservar contas/segredos.
 - [ ] Integração/publicação pela autorização permanente desta conversa; validar canônico/rotas/API/bundle e registrar Livro.
 - [ ] Fecho com IDs/URLs reais, limites e próximo09 sem iniciar09.
