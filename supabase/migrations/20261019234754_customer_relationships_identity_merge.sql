@@ -263,6 +263,13 @@ EXCEPTION WHEN unique_violation THEN
  RAISE;
 END $$;
 
+-- Presentation only: legacy profiles may be NULL or contain Unicode whitespace/C0/C1.
+-- Spell out the character set so normalization does not depend on database locale.
+CREATE FUNCTION private.customer_relation_display_label(p_name text) RETURNS text
+LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path='' AS $$
+ SELECT coalesce(nullif(left(btrim(regexp_replace(p_name,
+  U&'[\0001-\0020\007F-\00A0\1680\2000-\200A\2028\2029\202F\205F\3000\FEFF]+',' ','g')),120),''),'Nome não informado');
+$$;
 CREATE FUNCTION private.customer_relations_state(p_office_id uuid,p_customer_id uuid) RETURNS jsonb
 LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $$
 DECLARE caller uuid; c public.customers; caps text[]; a jsonb; r jsonb; i jsonb; h jsonb; counts jsonb;
@@ -271,7 +278,8 @@ BEGIN
  SELECT * INTO c FROM public.customers x WHERE x.office_id=p_office_id AND x.id=p_customer_id AND private.customer_in_scope(x,caller);
  IF c.id IS NULL THEN RAISE EXCEPTION 'CUSTOMER_NOT_FOUND' USING ERRCODE='PT404'; END IF;
  WITH rows AS (SELECT x.*,private.customer_relation_status(x) AS status,
-   coalesce(p.display_name,rc.name,'Cadastro indisponível') AS name,
+   CASE WHEN x.relation_type IN ('assignment','identity') THEN private.customer_relation_display_label(p.display_name)
+    ELSE coalesce(rc.name,'Cadastro indisponível') END AS name,
    row_number() OVER(PARTITION BY x.relation_type ORDER BY (x.revoked_at IS NULL) DESC,x.created_at DESC,x.id) AS n
   FROM private.customer_relations x LEFT JOIN public.memberships m ON m.id=x.membership_id AND m.office_id=x.office_id
   LEFT JOIN public.profiles p ON p.id=m.user_id LEFT JOIN public.customers rc ON rc.id=x.representative_customer_id AND rc.office_id=x.office_id
@@ -319,7 +327,7 @@ BEGIN
    ORDER BY c.name,c.id LIMIT 20) bounded;
  ELSE
   SELECT coalesce(jsonb_agg(value ORDER BY name,id),'[]') INTO result FROM (
-   SELECT m.id,p.display_name AS name,jsonb_build_object('id',m.id,'name',p.display_name,'kind',m.role_code,
+   SELECT m.id,private.customer_relation_display_label(p.display_name) AS name,jsonb_build_object('id',m.id,'name',private.customer_relation_display_label(p.display_name),'kind',m.role_code,
     'contact_masked',CASE WHEN u.email IS NULL THEN NULL ELSE left(u.email,1)||'***@***' END,'identifier_masked',NULL) AS value
    FROM public.memberships m JOIN public.profiles p ON p.id=m.user_id JOIN auth.users u ON u.id=m.user_id
    WHERE m.office_id=p_office_id AND private.customer_relation_member_active(p_office_id,m.id,p_kind='client')

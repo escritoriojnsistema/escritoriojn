@@ -12,7 +12,7 @@ try {
   const admin = createClient(lab.url, lab.serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const users = {};
   // Registration has no office yet: identities do not acquire permissions here.
-  for (const name of ['owner','unlinked','inactive','other','expired','manager','existingstaff','delegate','worker','portalclient','archiveworker','auditreader','customerworker','relationworker','relationclient']) {
+  for (const name of ['owner','unlinked','inactive','other','expired','manager','existingstaff','delegate','worker','portalclient','archiveworker','auditreader','customerworker','relationworker','relationclient','relationclientnull','relationclientcontrol','relationclientspace','relationteamnull','relationteamcontrol']) {
     const { data, error } = await admin.auth.admin.createUser({ email: `${name}@example.test`, password, email_confirm: true });
     if (error || !data.user) throw new Error('Could not create local Auth fixture.');
     users[name] = data.user.id;
@@ -35,6 +35,9 @@ try {
       WHERE m.office_id='${office}' AND m.user_id='${users.customerworker}';
     INSERT INTO public.profiles(id,display_name) VALUES ('${users.relationworker}','Funcionário relações'),('${users.relationclient}','Cliente relações');
     INSERT INTO public.memberships(office_id,user_id,role_code) VALUES ('${office}','${users.relationworker}','employee'),('${office}','${users.relationclient}','client');
+    -- Synthetic legacy names remain untouched in profiles; only08 presentation may normalize them.
+    INSERT INTO public.profiles(id,display_name) VALUES ('${users.relationclientnull}',NULL),('${users.relationclientcontrol}','Ana'||chr(9)||'Silva'),('${users.relationclientspace}',chr(160)||chr(8199)||chr(65279)),('${users.relationteamnull}',NULL),('${users.relationteamcontrol}','João'||chr(1)||chr(133)||'Silva');
+    INSERT INTO public.memberships(office_id,user_id,role_code) VALUES ('${office}','${users.relationclientnull}','client'),('${office}','${users.relationclientcontrol}','client'),('${office}','${users.relationclientspace}','client'),('${office}','${users.relationteamnull}','employee'),('${office}','${users.relationteamcontrol}','employee');
     INSERT INTO private.team_member_permissions(membership_id,permission_code)
       SELECT m.id,p.code FROM public.memberships m CROSS JOIN unnest(ARRAY['customers.read','customers.relate']) p(code)
       WHERE m.office_id='${office}' AND m.user_id='${users.relationworker}';

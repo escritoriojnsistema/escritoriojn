@@ -244,3 +244,62 @@ SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000089","session_i
 SELECT test.expect_error(format('SELECT public.customer_relations_state(%L,%L)',:'office08',:'target08'),'PT401','relacionamentos: Auth anonimo com session_id valido recusado');
 RESET ROLE;
 UPDATE auth.users SET is_anonymous=false WHERE id='00000000-0000-4000-a000-000000000089';
+
+-- Independent, rolled-back fixtures cover names permitted by the legacy profiles domain.
+BEGIN;
+SELECT test.assert_true((SELECT NOT p.prosecdef AND p.proconfig @> ARRAY['search_path=""']
+ AND NOT EXISTS(SELECT FROM aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a WHERE a.grantee=0)
+ AND NOT has_function_privilege('anon',p.oid,'EXECUTE')
+ AND NOT has_function_privilege('authenticated',p.oid,'EXECUTE')
+ AND NOT has_function_privilege('service_role',p.oid,'EXECUTE')
+ FROM pg_proc p WHERE p.oid='private.customer_relation_display_label(text)'::regprocedure),
+ 'nomes legados08: helper invoker privado, search_path vazio e nenhuma ACL de aplicativo/PUBLIC');
+SELECT test.assert_true(private.customer_relation_display_label(NULL)='Nome não informado'
+ AND private.customer_relation_display_label(U&'\0009\000A\000D\0085\00A0\1680\2000\2001\2002\2003\2004\2005\2006\2007\2008\2009\200A\2028\2029\202F\205F\3000\FEFF')='Nome não informado'
+ AND private.customer_relation_display_label(repeat('á',121))=repeat('á',120),
+ 'nomes legados08: fallback Unicode independente de locale e limite120');
+INSERT INTO auth.users(id,email,email_confirmed_at) VALUES
+ ('00000000-0000-4000-a000-000000000091','legacy-team08@example.test',now()),
+ ('00000000-0000-4000-a000-000000000092','legacy-client08@example.test',now());
+INSERT INTO public.profiles(id) VALUES ('00000000-0000-4000-a000-000000000091'),('00000000-0000-4000-a000-000000000092');
+INSERT INTO public.memberships(id,office_id,user_id,role_code) VALUES
+ ('00000000-0000-4000-b000-000000000091',:'office08','00000000-0000-4000-a000-000000000091','employee'),
+ ('00000000-0000-4000-b000-000000000092',:'office08','00000000-0000-4000-a000-000000000092','client');
+CREATE FUNCTION test.relation_legacy_labels() RETURNS SETOF text LANGUAGE plpgsql AS $$
+DECLARE sample record; member record; customer_id uuid; candidate jsonb; broad jsonb; state jsonb; relation jsonb; collection text; action text;
+ office_id constant uuid:='00000000-0000-4000-e000-000000000081';
+BEGIN
+ PERFORM set_config('request.jwt.claims','{"sub":"00000000-0000-4000-a000-000000000081","session_id":"00000000-0000-4000-c000-000000000081"}',true);
+ FOR sample IN SELECT * FROM (VALUES ('null',NULL::text,'Nome não informado'),('tab','Ana'||chr(9)||'Silva','Ana Silva'),
+  ('controls','Ana'||chr(1)||chr(127)||chr(133)||chr(159)||'Silva','Ana Silva'),('spaces',chr(160)||chr(8199)||chr(65279),'Nome não informado'),
+  ('unicode',chr(12288)||'Ana'||chr(8239)||'Silva'||chr(65279),'Ana Silva'),('normal','Ana Silva','Ana Silva'),('limit120',repeat('á',120),repeat('á',120))) v(label,raw_name,expected)
+ LOOP
+  UPDATE public.profiles SET display_name=sample.raw_name WHERE id IN ('00000000-0000-4000-a000-000000000091','00000000-0000-4000-a000-000000000092');
+  EXECUTE 'SET LOCAL ROLE authenticated';
+  customer_id:=(public.customer_create(office_id,jsonb_build_object('kind','person','name','Legado08 '||sample.label,'contacts','[]'::jsonb),gen_random_uuid())->>'id')::uuid;
+  FOR member IN SELECT * FROM (VALUES ('team','00000000-0000-4000-b000-000000000091'::uuid,'legacy-team08@example.test'),('client','00000000-0000-4000-b000-000000000092'::uuid,'legacy-client08@example.test')) v(kind,id,email)
+  LOOP
+   candidate:=public.customer_relation_candidates(office_id,member.kind,member.email);
+   RETURN NEXT test.assert_true(jsonb_array_length(candidate->'items')=1 AND candidate->'items'->0->>'name'=sample.expected
+    AND candidate->'items'->0->>'contact_masked'='l***@***' AND strpos(candidate::text,member.email)=0,'nomes legados08: '||sample.label||' '||member.kind||' contato mascarado');
+   broad:=public.customer_relation_candidates(office_id,member.kind,'');
+   RETURN NEXT test.assert_true(broad->'items' @> jsonb_build_array(jsonb_build_object('id',member.id,'name',sample.expected))
+    AND strpos(broad::text,'@example.test')=0,'nomes legados08: '||sample.label||' '||member.kind||' busca ampla');
+   collection:=CASE WHEN member.kind='team' THEN 'assignments' ELSE 'identities' END;
+   action:=CASE WHEN member.kind='team' THEN 'assignment' ELSE 'identity' END;
+   state:=public.customer_relation_command(office_id,customer_id,action||CASE WHEN member.kind='team' THEN '.grant' ELSE '.verify' END,
+    jsonb_build_object('membership_id',member.id)||CASE WHEN member.kind='team' THEN '{"valid_from":"2020-01-01T00:00:00Z","valid_until":null}'::jsonb ELSE '{"evidence":"REF-LEGADO08"}'::jsonb END,gen_random_uuid());
+   relation:=state->collection->0;
+   RETURN NEXT test.assert_true(relation->>'name'=sample.expected AND strpos(state::text,'@example.test')=0,'nomes legados08: '||sample.label||' '||member.kind||' comando retorna estado seguro');
+   PERFORM public.customer_relation_command(office_id,customer_id,action||'.revoke',jsonb_build_object('id',relation->'id','version',relation->'version'),gen_random_uuid());
+   state:=public.customer_relations_state(office_id,customer_id);
+   RETURN NEXT test.assert_true(state->collection->0->>'name'=sample.expected AND state->collection->0->>'status'='revoked'
+    AND strpos(state::text,'@example.test')=0,'nomes legados08: '||sample.label||' '||member.kind||' leitura historica segura');
+  END LOOP;
+  EXECUTE 'RESET ROLE';
+  RETURN NEXT test.assert_true((SELECT count(*)=2 AND bool_and(display_name IS NOT DISTINCT FROM sample.raw_name) FROM public.profiles WHERE id IN ('00000000-0000-4000-a000-000000000091','00000000-0000-4000-a000-000000000092')),
+   'nomes legados08: '||sample.label||' projecoes preservam profiles');
+ END LOOP;
+END $$;
+SELECT * FROM test.relation_legacy_labels();
+ROLLBACK;

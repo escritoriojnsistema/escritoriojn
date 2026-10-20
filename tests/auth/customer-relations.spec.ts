@@ -10,6 +10,29 @@ async function pick(page:Page,query:string){await page.getByLabel('Buscar pessoa
 async function create(request:APIRequestContext,auth:Record<string,string>,name:string){const r=await request.post('/api/customers',{headers:auth,data:{office_id:office,customer:{kind:'person',name,identifier:'',contacts:[]}}});expect(r.status()).toBe(201);return(await r.json()).data;}
 async function command(request:APIRequestContext,auth:Record<string,string>,id:string,action:string,payload:unknown){return request.post('/api/customer-relations/command',{headers:auth,data:{office_id:office,customer_id:id,action,payload}});}
 
+for(const legacy of [
+ {account:'relationclientnull',kind:'client',label:'Nome não informado'},
+ {account:'relationclientcontrol',kind:'client',label:'Ana Silva'},
+ {account:'relationclientspace',kind:'client',label:'Nome não informado'},
+ {account:'relationteamnull',kind:'team',label:'Nome não informado'},
+ {account:'relationteamcontrol',kind:'team',label:'João Silva'},
+] as const)test(`relações reais: nome legado ${legacy.account} em candidatos, comando e histórico`,async({page,request})=>{
+ test.setTimeout(90_000);const owner=await sdkFor('manager');
+ try{
+  const auth=await headers(owner),contact=`${legacy.account}@example.test`,customer=await create(request,auth,`R08 Legado ${legacy.account}`);
+  // The real RPC proves the projection separately from the Express decoder.
+  const projection=await owner.rpc('customer_relation_candidates',{p_office_id:office,p_kind:legacy.kind,p_query:contact});expect(projection.error).toBeNull();expect.soft(projection.data.items[0]).toMatchObject({name:legacy.label,contact_masked:'r***@***'});
+  await login(page);await open(page,customer.name);await page.getByRole('button',{name:legacy.kind==='client'?'Identidade 0 registros':'Acesso operacional 0 registros'}).click();await page.getByRole('button',{name:legacy.kind==='client'?'Conferir identidade':'Adicionar vínculo'}).click();
+  // A broad search must survive every legacy profile in the collection.
+  const broad=page.waitForResponse('**/api/customer-relations/candidates');await page.getByRole('button',{name:'Buscar candidatos'}).click();const broadResponse=await broad;expect(broadResponse.status()).toBe(200);const broadData=(await broadResponse.json()).data;expect(broadData.items).toContainEqual(projection.data.items[0]);expect(JSON.stringify(broadData)).not.toContain('@example.test');
+  await page.getByLabel('Buscar pessoa').fill(contact);const found=page.waitForResponse('**/api/customer-relations/candidates');await page.getByRole('button',{name:'Buscar candidatos'}).click();const candidates=await found;expect(candidates.status()).toBe(200);const items=(await candidates.json()).data.items;expect(items).toHaveLength(1);expect(items[0]).toMatchObject({name:legacy.label,contact_masked:'r***@***'});expect(JSON.stringify(items)).not.toContain(contact);await page.getByLabel('Selecionar pessoa').selectOption(items[0].id);
+  if(legacy.kind==='client')await page.getByLabel('Referência da conferência').fill('REF-R08-LEGADO');
+  const saved=page.waitForResponse('**/api/customer-relations/command');await page.getByRole('button',{name:legacy.kind==='client'?'Confirmar conferência':'Salvar vínculo'}).click();const response=await saved;expect(response.status()).toBe(200);const collection=legacy.kind==='client'?'identities':'assignments',state=(await response.json()).data;expect(state[collection][0]).toMatchObject({name:legacy.label,membership_id:items[0].id});expect(JSON.stringify(state)).not.toContain(contact);await expect(page.getByRole('status')).toContainText('Vínculo atualizado');
+  const list=page.getByRole('list',{name:legacy.kind==='client'?'Identidade':'Acesso operacional'});await expect(list).toContainText(legacy.label);await page.getByRole('button',{name:`Revogar vínculo de ${legacy.label}`}).click();const revoked=page.waitForResponse('**/api/customer-relations/command');await page.getByRole('button',{name:'Confirmar revogação'}).click();const revokeResponse=await revoked;expect(revokeResponse.status()).toBe(200);expect((await revokeResponse.json()).data[collection][0]).toMatchObject({name:legacy.label,status:'revoked'});
+  const read=await request.post('/api/customer-relations/state',{headers:auth,data:{office_id:office,customer_id:customer.id}});expect(read.status()).toBe(200);const history=(await read.json()).data;expect(history[collection][0]).toMatchObject({name:legacy.label,status:'revoked'});expect(JSON.stringify(history)).not.toContain(contact);
+ }finally{await owner.auth.dispose();}
+});
+
 test('relações reais: UI atribui, funcionário lê e autorrevogação retorna à lista',async({page,request})=>{
  test.setTimeout(90_000);const owner=await sdkFor('manager'),worker=await sdkFor('relationworker');
  try{const auth=await headers(owner),workerAuth=await headers(worker);const customer=await create(request,auth,'R08 Acesso Local');
