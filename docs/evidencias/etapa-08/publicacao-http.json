@@ -1,0 +1,127 @@
+{
+  "checked_at": "2026-10-20T18:28:10.936Z",
+  "base": "https://escritoriojn.vercel.app",
+  "checks": [
+    {
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "no_store": "private, no-store",
+      "html": true
+    },
+    {
+      "path": "/assets/index-By1ePd0S.js",
+      "status": 200,
+      "relations": true,
+      "identity": true,
+      "merge": true
+    },
+    {
+      "path": "/login",
+      "method": "GET",
+      "status": 200,
+      "no_store": "private, no-store",
+      "html": true
+    },
+    {
+      "path": "/login-cliente",
+      "method": "GET",
+      "status": 200,
+      "no_store": "private, no-store",
+      "html": true
+    },
+    {
+      "path": "/clientes",
+      "method": "GET",
+      "status": 200,
+      "no_store": "private, no-store",
+      "html": true
+    },
+    {
+      "path": "/conta",
+      "method": "GET",
+      "status": 200,
+      "no_store": "private, no-store",
+      "html": true
+    },
+    {
+      "path": "/equipe",
+      "method": "GET",
+      "status": 200,
+      "no_store": "private, no-store",
+      "html": true
+    },
+    {
+      "path": "/auditoria",
+      "method": "GET",
+      "status": 200,
+      "no_store": "private, no-store",
+      "html": true
+    },
+    {
+      "path": "/arquivados",
+      "method": "GET",
+      "status": 200,
+      "no_store": "private, no-store",
+      "html": true
+    },
+    {
+      "path": "/painel",
+      "method": "GET",
+      "status": 200,
+      "no_store": "private, no-store",
+      "html": true
+    },
+    {
+      "path": "/api/health",
+      "method": "GET",
+      "status": 200,
+      "no_store": "no-store"
+    },
+    {
+      "path": "/api/customer-relations/state",
+      "method": "POST",
+      "status": 401,
+      "code": "AUTH_REQUIRED",
+      "no_store": "private, no-store",
+      "cdn_no_store": "no-store",
+      "vary": "Authorization"
+    },
+    {
+      "path": "/api/customer-relations/candidates",
+      "method": "POST",
+      "status": 401,
+      "code": "AUTH_REQUIRED",
+      "no_store": "private, no-store",
+      "cdn_no_store": "no-store",
+      "vary": "Authorization"
+    },
+    {
+      "path": "/api/customer-relations/command",
+      "method": "POST",
+      "status": 401,
+      "code": "AUTH_REQUIRED",
+      "no_store": "private, no-store",
+      "cdn_no_store": "no-store",
+      "vary": "Authorization"
+    },
+    {
+      "path": "/api/customer-relations/merge/preview",
+      "method": "POST",
+      "status": 401,
+      "code": "AUTH_REQUIRED",
+      "no_store": "private, no-store",
+      "cdn_no_store": "no-store",
+      "vary": "Authorization"
+    },
+    {
+      "path": "/api/customer-relations/merge",
+      "method": "POST",
+      "status": 401,
+      "code": "AUTH_REQUIRED",
+      "no_store": "private, no-store",
+      "cdn_no_store": "no-store",
+      "vary": "Authorization"
+    }
+  ]
+}

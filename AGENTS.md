@@ -1,5 +1,6 @@
 # Escritório JN — continuidade
 
+- Por pedido explícito do usuário em20/10/2026, NÃO usar GitHub Actions. O único workflow Qualidade da base está disabled_manually; não reativar nem criar novos workflows. Validar localmente com os scripts existentes e publicar pela integração GitHub→Vercel. Execuções anteriores são somente evidência histórica.
 - Stack fixa: React + Vite + TypeScript; API Express sob `/api`; Supabase nas etapas pertinentes. Não migrar para Next.js.
 - Leia `LIVRO_RAIZ.md`, o cartão atual em `docs/etapas/` e somente as regras afetadas. A numeração oficial é Etapa 01–40, sem módulos paralelos.
 - Execute apenas a etapa solicitada. Reaproveite a base nova; preserve sistema anterior, banco, dados, credenciais e deploys.

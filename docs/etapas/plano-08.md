@@ -52,6 +52,6 @@ React + Vite + TypeScript, Express /api e Supabase; não usar Next.js. Preservar
 **Files:** docs/etapas/{fecho-08,etapa-08,plano-08}.md, docs/FONTES.md, docs/regras/clientes.md, docs/evidencias/etapa-08/*, LIVRO_RAIZ.md, AGENTS.md.
 - [x] Conferir todos os requisitos oficiais e completar as regras para próximas telas.
 - [x] Medir desempenho sintético e executar checks completos apropriados, sem repetir suítes aprovadas sem mudança/falha nova.
-- [ ] PR/CI, migration aditiva hospedada com SQL idêntico testado e contagens/ACL/RLS/advisors conferidos; preservar contas/segredos.
-- [ ] Integração/publicação pela autorização permanente desta conversa; validar canônico/rotas/API/bundle e registrar Livro.
-- [ ] Fecho com IDs/URLs reais, limites e próximo09 sem iniciar09.
+- [x] PR/revisão/validação local (Actions desativado por pedido do usuário), migration aditiva hospedada com SQL idêntico testado e contagens/ACL/RLS/advisors conferidos; preservar contas/segredos.
+- [x] Integração/publicação pela autorização permanente desta conversa; validar canônico/rotas/API/bundle e registrar Livro.
+- [x] Fecho com IDs/URLs reais, limites e próximo09 sem iniciar09.

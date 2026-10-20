@@ -1,0 +1,43 @@
+{
+  "status": "published_and_verified",
+  "canonical_url": "https://escritoriojn.vercel.app/",
+  "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/16",
+  "feature_commit": "b843cfb7c37c6a21f35389273bf5e992df9c31e6",
+  "merge_commit": "98109897641e1401e51f2e0645436c6ea7f961f9",
+  "source_tree": "73616102a7f5427d813fba019da4283104e8c08f",
+  "vercel": {
+    "status": "success",
+    "url": "https://vercel.com/escritorio-jn/escritoriojn/3BtSxqnVyb1srYPSZDDxJ19mbfo2",
+    "bundle": "/assets/index-By1ePd0S.js",
+    "verification": "Git commit status + canonical HTTP/browser; no administrative connector retry"
+  },
+  "supabase": {
+    "project": "mcsuoxnubpqenyvbefee",
+    "migration": "20261020182035_customer_relationships_identity_merge",
+    "sql_sha256": "64332c2962940b45fbcd30f389831dbbf8729bfe53104070cd08b11d12175985",
+    "hosted_stored_sql_sha256": "64332c2962940b45fbcd30f389831dbbf8729bfe53104070cd08b11d12175985",
+    "counts_preserved": true
+  },
+  "tests": {
+    "node_api": 65,
+    "sql": 880,
+    "auth_real_local": 68,
+    "ui_synthetic": 114,
+    "public_remote": 34,
+    "http_remote": 16,
+    "protected_route_logo_reload_checks": 16
+  },
+  "github_actions": {
+    "state": "disabled_manually",
+    "workflow_count": 1,
+    "workflow_id": 387780086,
+    "new_runs_authorized": false,
+    "historical_run": "https://github.com/escritoriojnsistema/escritoriojn/actions/runs/39474077155",
+    "historical_run_status": "success",
+    "note": "Completed before user instruction. No new Actions executions; future validation local."
+  },
+  "hosted_fixture_accounts_created": 0,
+  "external_test_email_sent": 0,
+  "portal_enabled": false,
+  "next_stage": "09 only on new instruction"
+}
