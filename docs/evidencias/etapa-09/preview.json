@@ -1,0 +1,10 @@
+{
+  "pr": "https://github.com/escritoriojnsistema/escritoriojn/pull/18",
+  "commit": "1d75960",
+  "deployment": "https://vercel.com/escritorio-jn/escritoriojn/CHsR3xB24gfjwWRNrspF1GEfJMTB",
+  "preview": "https://escritoriojn-git-feat-etapa-09-catalogo-escritorio-jn.vercel.app",
+  "status": "success",
+  "source": "GitHub commit status Vercel and bot deployment table",
+  "production": "not yet published",
+  "http": "302 to Vercel SSO; protected preview not accessed, no bypass"
+}

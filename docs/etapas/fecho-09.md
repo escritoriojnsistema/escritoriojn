@@ -1,6 +1,6 @@
 # Etapa09 — catálogo de serviços, preços e políticas
 
-20/10/2026. Checkpoint: implementação concluída, validação/entrega em andamento. Publicação09 ainda não comprovada. Referências: [cartão/contrato](etapa-09.md), [plano](plano-09.md), [atendimento](../regras/atendimento.md).
+20/10/2026. Checkpoint: implementação e validação local concluídas, entrega em andamento. Publicação09 ainda não comprovada. Referências: [cartão/contrato](etapa-09.md), [plano](plano-09.md), [atendimento](../regras/atendimento.md).
 
 `/servicos` oferece busca paginada3/5, cadastro, publicação de versões, histórico e simulação. Código único por escritório; versão inteira conserva preço em centavos, categoria/unidade, campos/checklist, pessoa/participantes, aprovação/assinatura/quitação, quantidades e políticas de ajuste. Vigência imediata ou futura, sem retroagir/substituir versão. UPDATE/DELETE de versões negados; alteração não recalcula snapshots anteriores.
 
@@ -12,12 +12,14 @@ UI reaproveita shell/cores/tipografia/sidebar e até4atalhos móveis incluindo I
 
 ## Evidências e revisão
 
-- 70Node/API, typecheck e build frontend/servidor passaram no checkpoint; última mudança de CSS ainda em verificação visual final.
+- 70Node/API, typecheck e build frontend/servidor passaram após as alterações.
 - 958SQL (479×2), instalação vazia/migrador sem super/BYPASSRLS, grants/RLS, imutabilidade, vigência futura, arredondamento, quantidade/capacidades, versão obsoleta, rollback de auditoria e corridas de revogação/fronteira de vigência passaram.
-- Auth09 real local3 passou: navegador→Express→GoTrue/PostgREST→SQL, contrato com campos/participantes e funcionário restrito. Regressão final com gestão/operação/renovação em execução.
-- UI09 inicial9 passou; novas regressões de precisão, chaves, isolamento e densidade em validação. Sobreposição acidental de servidores/traces foi interrompida; não contar execuções interrompidas como sucesso. Um seletor de label com opções nativas foi corrigido para combobox acessível.
+- Auth09 real local3 passou: navegador→Express→GoTrue/PostgREST→SQL, contrato com campos/participantes e funcionário restrito. Regressão de22cenários com gestão/operação/quatroperfis/renovação aprovada:21na bateria e1convite SMTP repetido isoladamente após exceder o prazo inicial. Apenas Mailpit local; nenhum e-mail externo.
+- 13UI09 passaram, incluindo precisão, chaves, isolamento, zoom, altura reduzida e densidade. Lista cabe nas quatro larguras; formulário padrão cabe360×640/768×1024/1440×900,320×568 pode exigir rolagem natural curta. Sobreposição acidental de servidores/traces foi interrompida; não contar execuções interrompidas como sucesso. Um seletor de label com opções nativas foi corrigido para combobox acessível.
+- Regressão UI completa:125/127na primeira execução;2casos de vínculos08 passaram na repetição isolada após estabilizar o laboratório. Um deles registrou ERR_NETWORK_CHANGED durante criação/limpeza de rede Docker; não alterar produto para mascarar essa interferência. Total127cenários verificados.
 - Revisão independente identificou2P2 e uma chave de campo classificada inicialmente menor. Esta foi elevada aP2 por bloquear uma sequência válida de edição; os três pontos foram corrigidos com reproduções. [Registro](../evidencias/etapa-09/revisao.json).
 - [Benchmark](../evidencias/etapa-09/benchmark.json):10mil serviços fictícios adicionais,10conexões/300amostras SQL locais; p95 lista772,405ms/detalhe80,669ms/cotação92,883ms. Navegadores/regressões também ativos; não mede rede/API/produção, não éSLA nem promessa de latência zero.
+- 37E2E públicos locais aprovados:36na bateria e1retorno direto360px repetido isoladamente após atraso inicial;3casos novos comprovam `/servicos`→login/reload e API anônima401. [Provas locais](../evidencias/etapa-09/validacao.json).
 - Dependências de produção:0vulnerabilidades. Não há script lint; TypeScript, testes e diff-check são as verificações disponíveis.
 
 ## Entrega e limites
@@ -26,4 +28,4 @@ Autorização técnica permanente documentada nos fechos06/07 e PLUGINS aplica-s
 
 Supabase de destino: `mcsuoxnubpqenyvbefee`, baseline10migrations/5Auth/5vínculos/1ficha/1contato/1origem, services ausente. Migration nova preparada/testada, ainda não aplicada neste checkpoint. GitHub/Vercel de destino preservados. Provas de commit/PR/deploy, migração/readback e HTTP serão registradas após as operações concluírem.
 
-Rollback: desativar descoberta do catálogo por código mantendo tabelas/versões/auditoria; não DROP/reset e não recalcular itens. Etapa10 somente com novo pedido. Status atual: BLOQUEADA para conclusão pública enquanto validações/entrega finais não terminarem.
+Rollback: desativar descoberta do catálogo por código mantendo tabelas/versões/auditoria; não DROP/reset e não recalcular itens. Etapa10 somente com novo pedido. Status local: APROVÁVEL. Entrega pública permanece pendente até Git/Vercel e migration/readback concluírem.

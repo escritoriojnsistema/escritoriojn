@@ -1,0 +1,50 @@
+{
+  "node_api": {
+    "passed": 70,
+    "command": "npm test"
+  },
+  "sql": {
+    "passed": 958,
+    "replays": 2,
+    "checks_per_replay": 479,
+    "limited_migrator": true,
+    "command": "node scripts/benchmark-services.mjs"
+  },
+  "ui": {
+    "cases": 127,
+    "first_run_passed": 125,
+    "first_run_failed": 2,
+    "isolated_retry_passed": 2,
+    "service_cases": 13,
+    "commands": [
+      "node scripts/test-team-ui.mjs",
+      "node scripts/test-team-ui.mjs --last-failed"
+    ]
+  },
+  "auth": {
+    "selected_cases": 22,
+    "first_run_passed": 21,
+    "isolated_retry_passed": 1,
+    "service_cases": 3,
+    "commands": [
+      "npm run test:auth -- tests/auth/services.spec.ts tests/auth/team.spec.ts tests/auth/operation.spec.ts tests/auth/token-renewal.spec.ts",
+      "npm run test:auth -- tests/auth/team.spec.ts --grep conta existente recebe"
+    ]
+  },
+  "build": "passed frontend and server after final code/CSS",
+  "typecheck": "passed",
+  "production_dependency_vulnerabilities": 0,
+  "github_actions": "disabled_manually, confirmed via read-only GitHub API; no workflow runs initiated",
+  "public_e2e": {
+    "local_cases": 37,
+    "first_run_passed": 36,
+    "isolated_retry_passed": 1,
+    "production": "pending"
+  },
+  "limitations": [
+    "Real Auth/PostgREST/SQL/SMTP tested only in disposable local lab",
+    "No hosted account/password/email fixture used",
+    "Preview protected by Vercel SSO",
+    "No physical phone or hosted API latency benchmark"
+  ]
+}
