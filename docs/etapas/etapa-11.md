@@ -1,0 +1,17 @@
+# Etapa 11 — Anexos privados
+
+Fonte: [cartão oficial no Drive](https://drive.google.com/file/d/1K-ZyDvCrvvHmtQgpGlFQdfHfsX3acay6/view), atendimento.md/RF06. Entrada: Etapa10 publicada (PR20/21/22), catálogo09 e autenticação/permissões anteriores preservados.
+
+Adicionar anexos aos pedidos existentes; nenhuma nova abertura de pedido, ficha, login ou cotação paralela. Portal só acessa os próprios envios em pedido próprio. Equipe exige files.read e requests.read, escopo criado/atribuído ou requests.read_all; upload/cópia/gestão são capacidades adicionais e seed somente owner. Cópia exige files.copy para a origem e files.upload para criar o novo arquivo no destino autorizado; nenhuma delas substitui a outra.
+
+Fluxo: intenção persistida → upload direto com JWT no bucket privado request-attachments, sem sobrescrita → Edge valida bytes/limite/extensão/MIME/SHA256 → finalização transacional de metadados. Limite inicial10MiB, PDF/PNG/JPEG; política por serviço em tabela independente, sem reescrever snapshots09/10. Pedido com itens exige item correspondente. Classificação, autor, datas, hash, tamanho e estado persistidos; caminho aleatório sem nome/CPF. Metadados privados e respostas no-store.
+
+Ausência de scanner é explícita: mesmo com formato e hash válidos, arquivo fica em quarentena e não pode ser baixado/distribuído. Esta etapa não implementa liberação antimalware fictícia. Download autenticado exige estado disponível, análise clean e escopo vigente. Cópia usa Storage privado, revalida conteúdo, cria novo objeto e mantém quarentena quando não há scanner; não depende de URL pública.
+
+Banco/Storage não compartilham transação. Leases idempotentes com sessão/autoridade revalidadas após rede, falhas recuperáveis e nenhuma disponibilidade antes da validação. Limpeza exige plano prévio com lista concreta de nomes/estados, reserva sob lock e exclusão confirmada pelo Storage; somente rejeitados ou intenções vencidas. Quarentena, disponíveis, referências, proteção, retenção e legal hold impedem exclusão; referência nova respeita reserva. Proprietário autorizado pode retomar plano de outro gestor sem liberar as reservas, invalidando o token anterior. Objetos desconhecidos são contabilizados e retidos para análise, sem descarte presumido. Não executar expurgo hospedado de dados reais nesta etapa.
+
+UI: rotas /anexos da equipe e /meus-anexos do cliente, menu/cartão Anexos privados, inclusive com zero pedidos; orientar abertura no fluxo10 existente. Reutilizar OperationLayout, listas3/5, até4atalhos móveis, ações extras no menu lateral, rótulos estáveis e nenhum loader. Refresh na mesma sessão preserva seleção/rascunho; troca de sessão/autoridade aborta operações e descarta dados. Retorno de sessão expirada conserva o portal adequado.
+
+Contrato de transporte: shared/attachments.ts; RPCs files_page, files_requests_page, files_begin_upload, files_download, files_policy_get, files_policy_set, files_cleanup_plan, files_process_claim e files_process_complete. Finalização só service_role da Edge, ausente no Express/browser/Vercel. Não criar workflowsActions ou alterar Vercel por CLI/API; publicação pela integração GitHub–Vercel autorizada no pedido.
+
+Aceite: testar upload real PDF fictício no laboratório Storage/Auth, tipo enganoso, excesso, incompleto, A×B, UUID/caminho conhecido, quarentena sem scanner, repetição/falhas e limpeza protegida/referenciada. Registrar limites da prova, preservar contas e ausência de fixtures hospedadas. Próxima etapa12 somente após novo pedido.

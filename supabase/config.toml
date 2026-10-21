@@ -4,3 +4,8 @@ project_id = "escritoriojn"
 verify_jwt = true
 entrypoint = "./functions/team-invitations/index.ts"
 import_map = "./functions/team-invitations/deno.json"
+
+[functions.private-attachments]
+verify_jwt = true
+entrypoint = "./functions/private-attachments/index.ts"
+import_map = "./functions/private-attachments/deno.json"

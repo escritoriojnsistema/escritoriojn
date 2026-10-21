@@ -5,6 +5,7 @@ import { createServer, request as httpRequest } from 'node:http';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 import { createTeamInvitationHandler } from '../../supabase/functions/team-invitations/handler.ts';
+import { createPrivateAttachmentsHandler } from '../../supabase/functions/private-attachments/handler.ts';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const images = {
@@ -12,15 +13,17 @@ const images = {
   // Upstream images, identical digests to ECR mirrors that hit download quotas.
   auth: 'supabase/gotrue:v2.197.0@sha256:1736a63078f5922b198c4cbe50f80ab9a2d3b54fe8b7b6cfb2e9dc5dbbc12c6b',
   rest: 'postgrest/postgrest:v16.4@sha256:d155c6718ed9a9f990d159a2ab7c0a3f16944dbb6d0a0344557421042acfe0df',
+  // Current upstream self-hosted compose, verified 2026-10-21.
+  storage: 'supabase/storage-api:v1.81.0@sha256:98ffec5d0678803783c30e404c27f4ec65e97efbe014088f2a86b4b8b54b9f54',
   mail: 'axllent/mailpit:v1.31.3@sha256:ed9b00c609e77e99c79b93f1178255ebc271868920f2c69a8d166bd5634ed10d',
 };
 
-/** Disposable local Auth, REST and SMTP. It cannot connect to a hosted database. */
+/** Disposable local Auth, REST, Storage and SMTP. No hosted database or objects. */
 export async function createAuthLab() {
   const id = randomUUID();
   const network = `jn-auth-lab-${id}`;
   const names = Object.fromEntries(Object.keys(images).map(key => [key, `${network}-${key}`]));
-  const passwords = Object.fromEntries(['postgres', 'auth', 'rest'].map(key => [key, randomBytes(24).toString('hex')]));
+  const passwords = Object.fromEntries(['postgres', 'auth', 'rest', 'storage'].map(key => [key, randomBytes(24).toString('hex')]));
   const jwtSecret = randomBytes(48).toString('hex');
   const secrets = [jwtSecret, ...Object.values(passwords)];
   const redact = value => secrets.reduce((text, secret) => text.replaceAll(secret, '[redacted]'), String(value));
@@ -41,11 +44,12 @@ export async function createAuthLab() {
   let closing;
   let closed = false;
   let invitationHandler;
+  let attachmentsHandler;
 
   // Keep session proxy/CA settings, but never inherit a remote Docker selector.
   const docker = (args, { input, env = {}, timeout = 60000 } = {}) => new Promise((resolve, reject) => {
     const commandEnv = { ...process.env, ...env };
-    for (const key of Object.keys(commandEnv)) if (key.startsWith('DOCKER_')) delete commandEnv[key];
+    for (const key of ['DOCKER_HOST','DOCKER_CONTEXT','DOCKER_TLS','DOCKER_TLS_VERIFY','DOCKER_CERT_PATH']) delete commandEnv[key];
     const child = spawn('docker', ['--host=unix:///var/run/docker.sock', ...args], {
       env: commandEnv, stdio: ['pipe', 'pipe', 'pipe'],
     });
@@ -80,7 +84,7 @@ export async function createAuthLab() {
 
   const sql = async (query, user = 'postgres') => {
     if (closed) throw new Error('Local Auth laboratory is closed.');
-    if (!['postgres', 'migrator', 'anon', 'authenticated', 'service_role', 'supabase_auth_admin', 'authenticator'].includes(user)) {
+    if (!['postgres', 'migrator', 'anon', 'authenticated', 'service_role', 'supabase_auth_admin', 'supabase_storage_admin', 'authenticator'].includes(user)) {
       throw new Error('Unknown local laboratory database role.');
     }
     return docker(['exec', '-i', names.postgres, 'psql', '-X', '-v', 'ON_ERROR_STOP=1', '-q', '-A', '-t',
@@ -94,23 +98,25 @@ export async function createAuthLab() {
     if (request.method === 'OPTIONS') {
       response.writeHead(204, { ...cors,
         'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-        'access-control-allow-headers': 'apikey, authorization, content-type, x-client-info, x-supabase-api-version, prefer, accept-profile, content-profile',
+        'access-control-allow-headers': 'apikey, authorization, content-type, x-client-info, x-supabase-api-version, prefer, accept-profile, content-profile, x-upsert, cache-control',
       }).end();
       return;
     }
-    if (request.url === '/functions/v1/team-invitations' && invitationHandler) {
+    const edge = request.url === '/functions/v1/team-invitations' ? invitationHandler
+      : request.url === '/functions/v1/private-attachments' ? attachmentsHandler : undefined;
+    if (edge) {
       try {
         let raw='';
         for await (const chunk of request) { raw+=chunk; if(raw.length>4096) {response.writeHead(413).end();return;} }
-        const result=await invitationHandler(new Request('http://localhost/functions/v1/team-invitations',{
+        const result=await edge(new Request(`http://localhost${request.url}`,{
           method:request.method,headers:request.headers,
           ...(!['GET','HEAD'].includes(request.method)?{body:raw}:{}),
         }));
         response.writeHead(result.status,{...Object.fromEntries(result.headers),...cors});response.end(await result.text());
-      } catch {response.writeHead(503,{'content-type':'application/json',...cors}).end('{"error":{"code":"TEAM_UNAVAILABLE"}}');}
+      } catch {response.writeHead(503,{'content-type':'application/json',...cors}).end(JSON.stringify({error:{code:request.url==='/functions/v1/private-attachments'?'FILES_UNAVAILABLE':'TEAM_UNAVAILABLE'}}));}
       return;
     }
-    const target = request.url?.match(/^\/(auth|rest)\/v1(?=\/|\?|$)/);
+    const target = request.url?.match(/^\/(auth|rest|storage)\/v1(?=\/|\?|$)/);
     if (!target) { response.writeHead(404).end(); return; }
     const port = upstreams[target[1]];
     if (!port) { response.writeHead(503).end(); return; }
@@ -186,6 +192,7 @@ export async function createAuthLab() {
     });
     const url = `http://127.0.0.1:${gateway.address().port}`;
     invitationHandler=createTeamInvitationHandler({url,anonKey,serviceRoleKey,siteUrl:'http://127.0.0.1:3005'});
+    attachmentsHandler=createPrivateAttachmentsHandler({url,anonKey,serviceRoleKey});
     await docker(['network', 'create', '--label', `jn.auth-lab=${id}`, network]);
     networkCreated = true;
     await run('postgres', { POSTGRES_PASSWORD: passwords.postgres, POSTGRES_DB: 'auth_lab' },
@@ -202,14 +209,22 @@ export async function createAuthLab() {
       CREATE ROLE service_role NOLOGIN BYPASSRLS;
       CREATE ROLE migrator LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS;
       CREATE ROLE supabase_auth_admin LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS PASSWORD '${passwords.auth}';
+      CREATE ROLE supabase_storage_admin LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS PASSWORD '${passwords.storage}';
       CREATE ROLE authenticator LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS PASSWORD '${passwords.rest}';
       GRANT anon, authenticated, service_role TO authenticator;
+      GRANT anon, authenticated, service_role TO supabase_storage_admin;
       ALTER DATABASE auth_lab OWNER TO migrator;
       ALTER SCHEMA public OWNER TO migrator;
       CREATE SCHEMA auth AUTHORIZATION supabase_auth_admin;
+      CREATE SCHEMA storage AUTHORIZATION supabase_storage_admin;
+      ALTER ROLE supabase_storage_admin SET search_path = storage, public;
       ALTER ROLE supabase_auth_admin SET search_path = auth;
-      GRANT CONNECT ON DATABASE auth_lab TO supabase_auth_admin, authenticator;
+      GRANT CONNECT ON DATABASE auth_lab TO supabase_auth_admin, supabase_storage_admin, authenticator;
       GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+      GRANT USAGE ON SCHEMA storage TO anon, authenticated, service_role;
+      ALTER DEFAULT PRIVILEGES FOR ROLE supabase_storage_admin IN SCHEMA storage GRANT ALL ON TABLES TO anon, authenticated, service_role;
+      ALTER DEFAULT PRIVILEGES FOR ROLE supabase_storage_admin IN SCHEMA storage GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
+      ALTER DEFAULT PRIVILEGES FOR ROLE supabase_storage_admin IN SCHEMA storage GRANT ALL ON FUNCTIONS TO anon, authenticated, service_role;
     `);
     await run('mail', { MP_MAX_MESSAGES: '100' }, ['--publish', '127.0.0.1::8025']);
     const mailUrl = `http://127.0.0.1:${await portFor('mail', 8025)}`;
@@ -268,6 +283,33 @@ export async function createAuthLab() {
     upstreams.rest = await portFor('rest', 3000);
     await ready('PostgREST', () => healthy(`${url}/rest/v1/`), 'rest');
 
+    // Run the official provider migrations before app migrations create a
+    // bucket or RLS policies. Storage bytes live only in this disposable tmpfs.
+    await run('storage', {
+      ANON_KEY: anonKey, SERVICE_KEY: serviceRoleKey, AUTH_JWT_SECRET: jwtSecret,
+      POSTGREST_URL: 'http://rest:3000',
+      DATABASE_URL: `postgres://supabase_storage_admin:${passwords.storage}@postgres:5432/auth_lab?sslmode=disable`,
+      DB_INSTALL_ROLES: 'false', DB_SUPER_USER: 'supabase_storage_admin',
+      STORAGE_BACKEND: 'file', FILE_STORAGE_BACKEND_PATH: '/var/lib/storage',
+      FILE_SIZE_LIMIT: '10485760', GLOBAL_S3_BUCKET: 'auth-lab',
+      TENANT_ID: 'auth-lab', REGION: 'local', ENABLE_IMAGE_TRANSFORMATION: 'false',
+      STORAGE_PUBLIC_URL: `${url}/storage/v1`, REQUEST_ALLOW_X_FORWARDED_PATH: 'true',
+      LOG_LEVEL: 'error',
+    }, ['--publish', '127.0.0.1::5000', '--tmpfs', '/var/lib/storage:rw,nosuid,noexec,size=96m,mode=1777']);
+    upstreams.storage = await portFor('storage', 5000);
+    await ready('Storage', async () => {
+      if (!await healthy(`${url}/storage/v1/status`)) return false;
+      return (await sql("SELECT count(*)>0 FROM storage.migrations;" )).trim() === 't';
+    }, 'storage');
+    // The migrator may define application policies under the real provider
+    // owner, just as a hosted migration operator can, without superuser/BYPASSRLS.
+    await sql(`
+      GRANT supabase_storage_admin TO migrator WITH INHERIT TRUE;
+      GRANT USAGE ON SCHEMA storage TO migrator;
+      GRANT ALL ON storage.buckets, storage.objects TO migrator;
+      GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA storage TO migrator;
+    `);
+
     const migrate = async () => {
       const directory = `${root}supabase/migrations`;
       const files = (await readdir(directory)).filter(name => name.endsWith('.sql')).sort();
@@ -288,7 +330,7 @@ export async function createAuthLab() {
       }
       throw new Error('Application migrations committed, but PostgREST schema cache did not refresh in 10 seconds.');
     };
-    return { url, anonKey, serviceRoleKey, mailUrl, sql, migrate, close };
+    return { url, anonKey, serviceRoleKey, mailUrl, databaseContainer: names.postgres, sql, migrate, close };
   } catch (error) {
     try { await close(); } catch (cleanupError) {
       throw new Error(`${redact(error.message)} Cleanup: ${cleanupError.message}`);

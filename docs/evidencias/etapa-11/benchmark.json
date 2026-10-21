@@ -1,0 +1,20 @@
+{
+  "environment": "disposable local PostgreSQL17; authenticated role; no hosted SLA",
+  "additional_files": 10000,
+  "connections": 10,
+  "samples": 200,
+  "measurements": {
+    "list": {
+      "samples": 100,
+      "median_ms": 120.304,
+      "p95_ms": 191.698,
+      "max_ms": 220.775
+    },
+    "requests": {
+      "samples": 100,
+      "median_ms": 12.515,
+      "p95_ms": 49.037,
+      "max_ms": 59.915
+    }
+  }
+}

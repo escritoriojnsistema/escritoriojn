@@ -8,6 +8,7 @@ import { customersRouter } from './modules/customers/router.js';
 import { customerRelationsRouter } from './modules/customer-relations/router.js';
 import { servicesRouter } from './modules/services/router.js';
 import { requestsRouter } from './modules/requests/router.js';
+import { attachmentsRouter } from './modules/attachments/router.js';
 
 export const app = express();
 app.disable('x-powered-by');
@@ -34,6 +35,7 @@ api.use('/customers',customersRouter);
 api.use('/customer-relations',customerRelationsRouter);
 api.use('/services',servicesRouter);
 api.use('/requests',requestsRouter);
+api.use('/attachments',attachmentsRouter);
 api.post('/validate', (req, res, next) => {
   if (!req.is('application/json')) {
     errorResponse(res, 415, 'UNSUPPORTED_MEDIA_TYPE', 'Envie um corpo JSON.');

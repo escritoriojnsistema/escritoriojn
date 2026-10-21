@@ -1,3 +1,4 @@
+import { raceAttachments, benchmarkAttachments } from './database-attachments.mjs';
 import { execFileSync, spawn } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { readFileSync, readdirSync } from 'node:fs';
@@ -716,6 +717,7 @@ try {
       + sql(database, 'postgres', readFileSync(`${root}tests/database/customer-relations.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/services.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/requests.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/attachments.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
       + await raceLastOwners(database)
       + await raceRevokedSession(database)
@@ -744,8 +746,9 @@ try {
       + await raceRequestAuthority(database,true)
       + await raceRequestServiceAuthority(database,'services.perform')
       + await raceRequestServiceAuthority(database,'services.read')
-      + await raceRequestEffective(database);
-    if (database === 'foundation_replay_b') {await benchmarkCustomerRelations(database);await benchmarkServices(database);await benchmarkRequests(database);}
+      + await raceRequestEffective(database)
+      + await raceAttachments({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+    if (database === 'foundation_replay_b') {await benchmarkCustomerRelations(database);await benchmarkServices(database);await benchmarkRequests(database);await benchmarkAttachments({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});}
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
   console.log('PASS: dois replays vazios, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.');
