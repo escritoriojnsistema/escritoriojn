@@ -1,0 +1,289 @@
+{
+  "seed": [
+    {
+      "role": "owner",
+      "count": 4
+    }
+  ],
+  "counts": {
+    "files": 0,
+    "models": 0,
+    "entries": 0,
+    "history": 0,
+    "contacts": 1,
+    "requests": 0,
+    "services": 0,
+    "customers": 1,
+    "instances": 0,
+    "auth_users": 5,
+    "memberships": 5,
+    "notifications": 0
+  },
+  "tables": [
+    {
+      "rls": true,
+      "name": "checklist_entries",
+      "raw_service_role": false,
+      "raw_authenticated": false
+    },
+    {
+      "rls": true,
+      "name": "checklist_history",
+      "raw_service_role": false,
+      "raw_authenticated": false
+    },
+    {
+      "rls": true,
+      "name": "checklist_instances",
+      "raw_service_role": false,
+      "raw_authenticated": false
+    },
+    {
+      "rls": true,
+      "name": "checklist_model_versions",
+      "raw_service_role": false,
+      "raw_authenticated": false
+    },
+    {
+      "rls": true,
+      "name": "internal_notifications",
+      "raw_service_role": false,
+      "raw_authenticated": false
+    }
+  ],
+  "functions": [
+    {
+      "name": "checklists_actor",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "definer": false,
+      "anon_execute": false,
+      "auth_execute": false,
+      "body_sha256": "448fada47f64a2fb810bf4a2ca5ab21442d068cc91eec2ac505d8e7cfebc0efe"
+    },
+    {
+      "name": "checklists_apply",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "definer": false,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "92083f7a26c326e180b1809c284de813b584412fec3c5e7c2ab3935c5a7bbb79"
+    },
+    {
+      "name": "checklists_apply",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "definer": true,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "4eb34792055132b631fe3a4d026436c0772b7b125d525d7a5607cec2ee810c30"
+    },
+    {
+      "name": "checklists_definition",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "definer": false,
+      "anon_execute": false,
+      "auth_execute": false,
+      "body_sha256": "1f0af9f034d1940c86f9513bdf230dbab52a330aa2fd754d49a6cd550368c7ac"
+    },
+    {
+      "name": "checklists_model",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "definer": false,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "f96bec3504d66d0e1b3260ae9e01d3f9f9680b861b66be9b61c9e9a47fb9f7e9"
+    },
+    {
+      "name": "checklists_model",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "definer": true,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "6a7ab72842fc05719c07c811f2218eef45fd8b999969273ceffdcf52aeacd770"
+    },
+    {
+      "name": "checklists_notice",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "definer": false,
+      "anon_execute": false,
+      "auth_execute": false,
+      "body_sha256": "35e8e42f2b4097d9e9d3bcc9f9a14a3293300fe2791693a15f30f2ac250022f9"
+    },
+    {
+      "name": "checklists_notifications",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "definer": false,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "24a435608866eea339736aaa9de76561faebe62f690b7167ce9af8b047dbdff2"
+    },
+    {
+      "name": "checklists_notifications",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "definer": true,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "aa3c0833263f207a908e51c82b32211393c4e4c47a83d2a911b6d673dcb144b5"
+    },
+    {
+      "name": "checklists_notify",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "definer": false,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "7dd4b2cedeeaa0efe4894c52dd130797a57b837f2cf2db1496050dc27208eb4a"
+    },
+    {
+      "name": "checklists_notify",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "definer": true,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "2ede5d231a7ddd5d0614bf78a2b1b28012216289e2f50dff48f24ff3bacf5bf5"
+    },
+    {
+      "name": "checklists_publish",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "definer": false,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "b2d275c9a944a89ac9387b30f6a135f654c1d2d869f2ae93fbef80950f5a1bf7"
+    },
+    {
+      "name": "checklists_publish",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "definer": true,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "127eb855fbebb2dcb31b8ffd357f0266decbbc1bd7024baed65a769da1e375e6"
+    },
+    {
+      "name": "checklists_read",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "definer": false,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "2e47f33daaa43084e822f37d3a8aba591eb014ac3529331cb08c6c3c5b2728a0"
+    },
+    {
+      "name": "checklists_read",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "definer": true,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "70db10d5df44348f5f520f9ae6e8aab4b7510ffbae6a7acb7e14fdcc601e8527"
+    },
+    {
+      "name": "checklists_request",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "definer": false,
+      "anon_execute": false,
+      "auth_execute": false,
+      "body_sha256": "fd501d5f4d574fd2443032db18d378a272bed611532f15e8a35b657743e5f4e5"
+    },
+    {
+      "name": "checklists_transfer_notice",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "definer": false,
+      "anon_execute": false,
+      "auth_execute": false,
+      "body_sha256": "1f2ca3affa8f575ffee008e2a217c64a3ccd2af2a3a5c5f62e60019d8bc2e06a"
+    },
+    {
+      "name": "checklists_update",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "definer": false,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "3b080ce2e3b2267cb76b11c51495c5fa471ce268f732bcc2fc70e8d52cf4c089"
+    },
+    {
+      "name": "checklists_update",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "definer": true,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "cd92addeb821a1bb859a53788eb220886ac743d3bc21d3e46f38b3f27dd9af90"
+    },
+    {
+      "name": "checklists_view",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "definer": false,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "b26e3791b1377abb4e8f96890cf17662b6099d768ab3ed4203550132759cef16"
+    },
+    {
+      "name": "checklists_view",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "definer": true,
+      "anon_execute": false,
+      "auth_execute": true,
+      "body_sha256": "e253d2daf2ef1827365b825bf1302dfaf65c8caa84a9b4f5e3a8f522b758542b"
+    }
+  ],
+  "migrations": 15,
+  "live_function_bodies_match_tested_migration": true
+}

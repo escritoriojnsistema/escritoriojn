@@ -1,7 +1,7 @@
 {
   "stage": 12,
   "base": "91653cd",
-  "status": "APROVAVEL: local validation complete; publication pending",
+  "status": "APROVAVEL: implemented, integrated and published; hosted public verification passed",
   "node": {
     "passed": 97,
     "failed": 0
@@ -78,6 +78,11 @@
       "case": "UI stale query/access_lost/404/height",
       "reason": "regressions observed before corrections",
       "resolution": "12/12 final UI contracts passed"
+    },
+    {
+      "case": "Optional hosted readback helper",
+      "reason": "Node startup proxy flag was loaded too late from env file; direct connection refused",
+      "resolution": "Set NODE_USE_ENV_PROXY at process startup; same readback completed without product changes"
     }
   ],
   "limits": [
@@ -96,5 +101,20 @@
       "available+clean synthetic metadata permits explicit validated state; no scanner claim",
       "file belonging to another request denied even for owner"
     ]
+  },
+  "public_canonical": {
+    "site": "https://escritoriojn.vercel.app",
+    "passed": 50,
+    "failed": 0
+  },
+  "hosted": {
+    "migrations": 15,
+    "commands_match": 61,
+    "live_function_bodies_match": 21,
+    "private_tables_rls_no_raw_grants": 5,
+    "public_invoker_wrappers": 8,
+    "new_capabilities_owner_only": 4,
+    "accounts_and_registry_counts_preserved": true,
+    "new_domain_fixtures": 0
   }
 }
