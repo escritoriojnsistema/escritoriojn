@@ -9,6 +9,7 @@ import { customerRelationsRouter } from './modules/customer-relations/router.js'
 import { servicesRouter } from './modules/services/router.js';
 import { requestsRouter } from './modules/requests/router.js';
 import { attachmentsRouter } from './modules/attachments/router.js';
+import { notificationsRouter } from './modules/notifications/router.js';
 import { checklistsRouter } from './modules/checklists/router.js';
 
 export const app = express();
@@ -38,6 +39,7 @@ api.use('/services',servicesRouter);
 api.use('/requests',requestsRouter);
 api.use('/attachments',attachmentsRouter);
 api.use('/checklists',checklistsRouter);
+api.use('/notifications',notificationsRouter);
 api.post('/validate', (req, res, next) => {
   if (!req.is('application/json')) {
     errorResponse(res, 415, 'UNSUPPORTED_MEDIA_TYPE', 'Envie um corpo JSON.');

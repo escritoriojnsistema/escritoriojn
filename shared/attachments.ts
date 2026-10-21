@@ -14,7 +14,7 @@ export type AttachmentFile = {
  created_at:string;updated_at:string;can_validate:boolean;can_download:boolean;can_copy:boolean;
 };
 export type AttachmentPage = {items:AttachmentFile[];total:number;page:number;page_size:number;portal:boolean};
-export type AttachmentRequestOption = {id:string;label:string;closed:boolean;items:{id:string;service_id:string;name:string;policy:AttachmentPolicy}[]};
+export type AttachmentRequestOption = {id:string;label:string;closed:boolean;can_work?:boolean;items:{id:string;service_id:string;name:string;policy:AttachmentPolicy}[]};
 export type AttachmentRequestPage = {items:AttachmentRequestOption[];total:number;page:number;page_size:number};
 export type AttachmentUploadInput = {
  request_id:string;request_item_id:string|null;name:string;mime_type:AttachmentMime;size_bytes:number;

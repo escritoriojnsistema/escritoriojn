@@ -17,7 +17,7 @@ export function operationNavigation(contexts: AccessContext[], client: boolean):
   if (!client && contexts.some(c => c.role_code !== 'client' && c.permissions.includes('archives.manage'))) items.push({ key: 'archives', label: 'Arquivados', path: paths.archives });
   if (client || contexts.some(context => context.role_code !== 'client' && context.permissions.includes('files.read') && context.permissions.includes('requests.read'))) items.push({ key: 'attachments', label: 'Anexos privados', path: client ? paths.clientAttachments : paths.attachments });
   if (!client && contexts.some(c => c.role_code !== 'client' && c.permissions.includes('requests.read') && c.permissions.includes('checklists.read'))) items.push({key:'checklists',label:'Checklists e pendências',path:paths.checklists});
-  if (!client && contexts.some(c => c.role_code !== 'client' && c.permissions.includes('requests.read'))) items.push({key:'notifications',label:'Notificações',path:paths.notifications});
+  items.push({key:'notifications',label:'Notificações',path:client?paths.clientNotifications:paths.notifications});
   items.push({ key: 'account', label: 'Conta', path: client ? paths.clientAccount : paths.account });
   return items;
 }

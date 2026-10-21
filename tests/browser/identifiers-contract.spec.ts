@@ -11,7 +11,8 @@ async function session(page: Page) {
   const token = `e30.${Buffer.from(JSON.stringify({ sub: user, exp: Math.floor(Date.now() / 1000) + 3600, role: 'authenticated', session_id: office })).toString('base64url')}.fixture`;
   await page.addInitScript(({ token, user }) => localStorage.setItem('sb-team-ui-auth-token', JSON.stringify({ access_token: token, refresh_token: 'test-only-refresh', token_type: 'bearer', expires_at: Math.floor(Date.now() / 1000) + 3600, expires_in: 3600, user: { id: user, aud: 'authenticated', email: 'fixture@example.test', app_metadata: {}, user_metadata: {}, created_at: '2026-10-18T00:00:00Z' } })), { token, user });
   await page.route('https://team-ui.supabase.co/**', route => route.fulfill({ json: { id: user, email: 'fixture@example.test', aud: 'authenticated', app_metadata: {}, user_metadata: {} } }));
-  await page.route('**/api/auth/context', route => route.fulfill({ json: { data: { user: { id: user }, contexts: [{ office_id: office, user_id: user, role_code: 'owner', permissions: ['foundation.access', 'users.manage'], office_name: 'Escritório de Teste', display_name: 'Pessoa de Teste' }] } } }));
+  await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
+ await page.route('**/api/auth/context', route => route.fulfill({ json: { data: { user: { id: user }, contexts: [{ office_id: office, user_id: user, role_code: 'owner', permissions: ['foundation.access', 'users.manage'], office_name: 'Escritório de Teste', display_name: 'Pessoa de Teste' }] } } }));
 }
 
 async function cpfEntry(page: Page) {

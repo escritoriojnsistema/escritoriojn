@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Copy, LogIn, Mail, Plus, RefreshCw, Search, Users } from 'lucide-react';
 import type { TeamDashboard, TeamInvitation, TeamMember } from '../../../shared/team';
 import { paths } from '../../app/routes';
@@ -16,9 +16,9 @@ import { invitationLink } from './validation';
 import './team.css';
 type Editor = { kind: 'invite' } | { kind: 'member' | 'delegation'; member: TeamMember } | null;
 export default function TeamPage() {
-  const auth = useAuth();
+  const auth = useAuth(),location=useLocation();
   const contexts = auth.contexts.filter(context => context.role_code !== 'client' && context.permissions.includes('users.manage'));
-  const [selectedOffice, setSelectedOffice] = useState('');
+  const [selectedOffice, setSelectedOffice] = useState<string>(typeof location.state?.office_id==='string'?location.state.office_id:'');
   const lastOffice = useRef('');
   const context = contexts.find(item => item.office_id === selectedOffice) ?? contexts[0];
   const office = context?.office_id ?? '';

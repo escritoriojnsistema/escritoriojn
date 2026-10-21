@@ -1,0 +1,26 @@
+{
+  "environment": "disposable local PostgreSQL17; no hosted SLA",
+  "additional_notifications": 10000,
+  "connections": 10,
+  "samples": 300,
+  "measurements": {
+    "notifications": {
+      "samples": 100,
+      "median_ms": 276.332,
+      "p95_ms": 944.589,
+      "max_ms": 1284.473
+    },
+    "checklist": {
+      "samples": 100,
+      "median_ms": 84.355,
+      "p95_ms": 131.51,
+      "max_ms": 193.892
+    },
+    "summary": {
+      "samples": 100,
+      "median_ms": 25.762,
+      "p95_ms": 77.265,
+      "max_ms": 93.848
+    }
+  }
+}

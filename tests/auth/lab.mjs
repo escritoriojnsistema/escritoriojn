@@ -58,7 +58,9 @@ export async function createAuthLab() {
     let size = 0;
     let failure;
     const timer = setTimeout(() => {
-      failure = new Error('Local Auth laboratory Docker command timed out.');
+      const named=args.indexOf('--name');
+      const operation=named>=0?`${args[0]} ${args[named+1]}`:args[0];
+      failure = new Error(`Local Auth laboratory Docker command timed out (${operation}).`);
       child.kill('SIGKILL');
     }, timeout);
     for (const [stream, append] of [[child.stdout, text => { stdout += text; }], [child.stderr, text => { stderr += text; }]]) {
@@ -161,7 +163,7 @@ export async function createAuthLab() {
     const name = names[kind];
     const result = await docker(['run', '--detach', '--pull=missing', '--name', name,
       '--label', `jn.auth-lab=${id}`, '--network', network, '--network-alias', kind,
-      ...Object.keys(env).flatMap(key => ['--env', key]), ...extra, images[kind]], { env });
+      ...Object.keys(env).flatMap(key => ['--env', key]), ...extra, images[kind]], { env, timeout:kind==='storage'?180000:60000 });
     containers.add(name);
     return result;
   };

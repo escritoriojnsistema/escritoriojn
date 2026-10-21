@@ -1,6 +1,6 @@
 import type { ServiceAdjustment, ServiceInput, ServiceQuote } from './services.js';
 
-export const requestPermissions = ['requests.read','requests.create','requests.update','requests.transfer','requests.cancel','requests.read_all'] as const;
+export const requestPermissions = ['requests.read','requests.create','requests.update','requests.transfer','requests.cancel','requests.read_all','requests.reclaim'] as const;
 export const requestStatuses = ['aberto','em_atendimento','aguardando_cliente','aguardando_responsavel','concluido','cancelado'] as const;
 export type RequestStatus = typeof requestStatuses[number];
 export const requestStatusLabels: Record<RequestStatus,string> = {aberto:'Aberto',em_atendimento:'Em atendimento',aguardando_cliente:'Aguardando cliente',aguardando_responsavel:'Aguardando responsável',concluido:'Concluído',cancelado:'Cancelado'};
@@ -14,6 +14,7 @@ export type CreateRequestInput = StaffRequestInput|PortalRequestInput;
 export type CancellationReview = {charges_reviewed:true;refunds_reviewed:true;deliveries_reviewed:true;external_reviewed:true};
 export type RequestMutation =
  | {kind:'status';status:RequestStatus;reason:string;cancellation_review?:CancellationReview}
+ | {kind:'reclaim';reason:string}
  | {kind:'transfer';assignee_id:string;reason:string}
  | {kind:'note';note:string}
  | {kind:'triage';customer_id:string|null;items:RequestItemInput[];reason:string};
@@ -22,10 +23,10 @@ export type StaffRequestSummary = RequestSummary & {status:RequestStatus;origin:
 export type RequestPage = {items:(RequestSummary|StaffRequestSummary)[];total:number;page:number;page_size:number;portal:boolean};
 export type RequestHistory = {id:string;kind:'created'|'status'|'transfer'|'note'|'triage';actor_id:string;actor_name:string|null;reason:string;from_status:RequestStatus|null;to_status:RequestStatus|null;from_assignee:string|null;to_assignee:string|null;created_at:string};
 export type StoredRequestItem = {id:string;snapshot:ServiceQuote;fields:Record<string,string>;participant_ids:string[];checklist:string[]};
-export type PortalRequestDetail = RequestSummary & {portal:true;message:string;services:string[]};
-export type StaffRequestDetail = StaffRequestSummary & {portal:false;customer_id:string|null;message:string;priority_reason:string;items:StoredRequestItem[];history:RequestHistory[];history_page:number;history_total:number;can_update:boolean;can_transfer:boolean;can_cancel:boolean};
+export type PortalRequestDetail = RequestSummary & {portal:true;message:string;services:string[];assignee_name:string|null};
+export type StaffRequestDetail = StaffRequestSummary & {portal:false;customer_id:string|null;message:string;priority_reason:string;items:StoredRequestItem[];history:RequestHistory[];history_page:number;history_total:number;can_update:boolean;can_transfer:boolean;can_cancel:boolean;can_reclaim:boolean;following_only:boolean};
 export type RequestDetail = PortalRequestDetail|StaffRequestDetail;
 export type RequestMutationResult = RequestDetail|{access_lost:true};
-export type RequestOption = {id:string;label:string;definition?:ServiceInput};
+export type RequestOption = {id:string;label:string;role_code?:'owner'|'admin'|'employee';eligible?:boolean;definition?:ServiceInput};
 export type RequestOptions = {items:RequestOption[];total:number;page:number;page_size:number};
 export type RequestOptionKind = 'services'|'customers'|'assignees';

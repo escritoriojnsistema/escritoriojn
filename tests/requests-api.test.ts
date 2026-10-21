@@ -37,7 +37,7 @@ test('atendimentos10: API valida, preserva idempotência e projeta cliente sem d
    const value=await response.json();assert.deepEqual(value.data.items,[summary]);assert.ok(!JSON.stringify(value).includes('PRIVATE'));
   });
   await t.test('abertura mantém chave fornecida e evento gerado no servidor',async()=>{
-   for(let n=0;n<2;n++){const response=await send('',input);assert.equal(response.status,201);assert.deepEqual((await response.json()).data,{...summary,portal:true,message:'Triagem fictícia',services:['Xerox de Teste']});assert.equal(calls.at(-1)?.body.p_idempotency_key,key);assert.notEqual(calls.at(-1)?.body.p_request_id,key);}
+   for(let n=0;n<2;n++){const response=await send('',input);assert.equal(response.status,201);assert.deepEqual((await response.json()).data,{...summary,portal:true,message:'Triagem fictícia',services:['Xerox de Teste'],assignee_name:null});assert.equal(calls.at(-1)?.body.p_idempotency_key,key);assert.notEqual(calls.at(-1)?.body.p_request_id,key);}
    const response=await send(`/${id}/detail`,{office_id:office,page:1});assert.equal(response.status,200);assert.ok(!(await response.text()).includes('PRIVATE'));
   });
   await t.test('portal não aceita responsável, nota, preço ou pessoa arbitrários',async()=>{

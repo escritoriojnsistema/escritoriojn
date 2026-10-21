@@ -25,6 +25,7 @@ export function validCreateRequest(v:unknown):v is CreateRequestInput {
 }
 export function validRequestMutation(v:unknown):v is RequestMutation {
  if(!record(v))return false;
+ if(v.kind==='reclaim')return fields(v,['kind','reason']) && requestText(v.reason,500);
  if(v.kind==='note')return fields(v,['kind','note']) && requestText(v.note,2000,1,true);
  if(v.kind==='transfer')return fields(v,['kind','assignee_id','reason']) && uuid(v.assignee_id) && requestText(v.reason,500);
  if(v.kind==='triage')return fields(v,['kind','customer_id','items','reason']) && (v.customer_id===null||uuid(v.customer_id)) && validRequestItems(v.items) && requestText(v.reason,500);

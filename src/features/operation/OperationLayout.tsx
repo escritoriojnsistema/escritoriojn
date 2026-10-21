@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { House, UserRoundSearch, UsersRound, CircleUserRound, History, Archive, LogOut, Menu, X, ClipboardList, MessagesSquare, Paperclip, ClipboardCheck, Bell } from 'lucide-react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import type { AccessContext } from '../../../shared/access';
+import {NotificationBell} from '../notifications/NotificationBell';
 import { Brand } from '../../ui/Brand';
 import { useAuth } from '../auth/AuthProvider';
 import { operationNavigation, mobileOperationNavigation, operationRoleNames } from './navigation';
@@ -55,7 +56,7 @@ export function OperationLayout({ client = false, busy = false, children }: { cl
   return <div className="operation-layout">
     <aside className="operation-sidebar" aria-label="Navegação principal"><Brand light to={home} /><p className="operation-area">{client ? 'Área do cliente' : 'Área da equipe'}</p>{navigation('Navegação da operação')}<div className="operation-sidebar-end">{exit()}<p>Acesso individual e protegido.</p></div></aside>
     <div className="operation-body">
-      <header className="operation-mobile-bar"><button ref={menuButton} className="operation-icon-button" aria-label="Abrir menu" aria-expanded={open} aria-controls="operation-menu" onClick={() => setOpen(true)}><Menu size={24} aria-hidden="true" /></button><Brand to={home} /><Link to={account} className="operation-icon-button" aria-label="Abrir conta" title="Conta"><CircleUserRound size={25} aria-hidden="true" /></Link></header>
+      <header className="operation-mobile-bar" aria-label="Barra da conta"><button ref={menuButton} className="operation-icon-button" aria-label="Abrir menu" aria-expanded={open} aria-controls="operation-menu" onClick={() => setOpen(true)}><Menu size={24} aria-hidden="true" /></button><Brand to={home} /><div className="operation-header-actions"><NotificationBell client={client}/><Link to={account} className="operation-icon-button" aria-label="Abrir conta" title="Conta"><CircleUserRound size={25} aria-hidden="true" /></Link></div></header>
       <main id="conteudo" className="operation-main">{error && !open && <p role="alert" className="form-feedback error">{error}</p>}{children}</main>
     </div>
     {navigation('Atalhos do aplicativo', true)}

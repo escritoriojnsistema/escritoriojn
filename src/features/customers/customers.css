@@ -1,4 +1,4 @@
-.customers-main { max-width: 1200px; min-width: 0; }
+.customers-main { min-width: 0; }
 .customers-main .operation-heading { margin-bottom: 12px; }
 .customer-toolbar { display: flex; align-items: end; gap: 6px; border-bottom: 1px solid #dce4e8; padding-bottom: 8px; }
 .customer-search { display: flex; align-items: end; gap: 2px; flex: 1; min-width: 0; }
@@ -12,7 +12,7 @@
 .customer-list small { font-size: 12px; line-height: 1.4; color: #617887; }
 .customer-view-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 8px; border-bottom: 1px solid #dce4e8; padding-bottom: 3px; margin-bottom: 12px; }
 .customer-view-toolbar > :first-child { margin-left: -10px; }
-.customer-form { max-width: 850px; }
+.customer-form { }
 .customer-form fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
 .customer-form-grid { display: grid; grid-template-columns: minmax(150px, .7fr) minmax(200px, 1.4fr) minmax(160px, 1fr); gap: 12px; }
 .customer-form-grid .team-field { margin-bottom: 0; }
@@ -23,7 +23,7 @@
 .customer-contact { display: grid; grid-template-columns: minmax(120px, .6fr) minmax(0, 1.4fr) 44px; align-items: end; gap: 8px; margin-bottom: 10px; }
 .customer-contact .team-field { margin: 0; }
 .customer-submit { width: fit-content; min-width: 180px; margin-top: 12px; }
-.customer-detail { max-width: 850px; }
+.customer-detail { }
 .customer-detail dl { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 24px; margin: 16px 0 0; }
 .customer-detail dl > div { min-width: 0; overflow-wrap: anywhere; }
 .customer-detail dt { color: #617887; font-size: 12px; margin-bottom: 5px; }

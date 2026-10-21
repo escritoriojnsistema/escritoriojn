@@ -1,0 +1,49 @@
+{
+  "base": "ab2f1c765752e1655dd40dcb08fb2662154dc67c",
+  "migration": "20261021124414_request_followup_client_notifications",
+  "migration_sha256": "fb3f9c21877dac38be6f9b6916b174e948f9c6da79f8066f44c730f973a83c21",
+  "node_api": {
+    "passed": 101,
+    "targeted_final_passed": 13
+  },
+  "postgres": {
+    "replays": 2,
+    "checks_per_replay": 678,
+    "total": 1356,
+    "limited_migrator": true,
+    "source": "/tmp/jn-adjust-db-release.log"
+  },
+  "ui": {
+    "distinct_passed": 66,
+    "area_viewport_checks": 80,
+    "viewports": [
+      320,
+      360,
+      768,
+      1440,
+      1920
+    ],
+    "first_set_passed": 50,
+    "isolated_final_passed": 4,
+    "requests_passed": 13,
+    "limits": "Auth/API stubs here; real provider proof below. Two Vite load timeouts passed in isolation; no runtime fix for them."
+  },
+  "real_auth_storage": {
+    "distinct_passed": 14,
+    "first_set_passed": 13,
+    "isolated_mobile_upload_passed": 1,
+    "flow": "Browser→API→GoTrue/PostgREST→Storage/Edge→PostgreSQL. Delegation/reclaim/client notices/late upload rejection proved. No hosted fixtures.",
+    "startup": "One Docker Storage startup timeout recovered; cached image and local startup budget adjusted."
+  },
+  "build_typecheck": "passed",
+  "production_dependency_vulnerabilities": 0,
+  "independent_review": {
+    "agent": "/root/review_pos12",
+    "open_p1_p2": 0,
+    "fixed": "Same-route bell office navigation; RED→GREEN."
+  },
+  "public_e2e_local": {
+    "passed": 55
+  },
+  "publication": "pending GitHub→Vercel; no GitHub Actions"
+}

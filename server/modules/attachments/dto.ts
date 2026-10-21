@@ -18,8 +18,8 @@ function page(v:unknown):asserts v is Record<string,unknown>&{items:unknown[];to
 export function attachmentPage(v:unknown):AttachmentPage {page(v);if(typeof v.portal!=='boolean')throw Error('Invalid portal');return {items:v.items.map(attachmentFile),total:v.total,page:v.page,page_size:v.page_size,portal:v.portal};}
 export function attachmentRequests(v:unknown):AttachmentRequestPage {
  page(v);return {items:v.items.map(x=>{
-  if(!record(x)||!uuid(x.id)||!requestText(x.label,260)||typeof x.closed!=='boolean'||!Array.isArray(x.items)||x.items.length>10)throw Error('Invalid request');
-  return {id:x.id,label:x.label,closed:x.closed,items:x.items.map(i=>{if(!record(i)||!uuid(i.id)||!uuid(i.service_id)||!requestText(i.name,120))throw Error('Invalid request item');return {id:i.id,service_id:i.service_id,name:i.name,policy:attachmentPolicy(i.policy)};})};
+  if(!record(x)||!uuid(x.id)||!requestText(x.label,260)||typeof x.closed!=='boolean'||(x.can_work!==undefined&&typeof x.can_work!=='boolean')||!Array.isArray(x.items)||x.items.length>10)throw Error('Invalid request');
+  return {id:x.id,label:x.label,closed:x.closed,can_work:x.can_work!==false,items:x.items.map(i=>{if(!record(i)||!uuid(i.id)||!uuid(i.service_id)||!requestText(i.name,120))throw Error('Invalid request item');return {id:i.id,service_id:i.service_id,name:i.name,policy:attachmentPolicy(i.policy)};})};
  }),total:v.total,page:v.page,page_size:v.page_size};
 }
 export function attachmentIntent(v:unknown):AttachmentIntent {

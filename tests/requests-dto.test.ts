@@ -13,7 +13,7 @@ test('atendimentos10: detalhe interno reconstrói whitelist em todas as camadas'
  const result=requestDetail(detail);assert.equal(result.portal,false);assert.ok(!JSON.stringify(result).includes('secret'));
  assert.ok(!result.portal&&result.items[0].snapshot.total_cents===100);assert.ok(!result.portal&&result.history[0].reason==='Nota interna fictícia');
  const portal=requestDetail({...detail,portal:true,message:'Mensagem própria',services:['Xerox de Teste']});
- assert.deepEqual(Object.keys(portal).sort(),['id','protocol','title','public_status','created_at','updated_at','portal','message','services'].sort());
+ assert.deepEqual(Object.keys(portal).sort(),['id','protocol','title','public_status','created_at','updated_at','portal','message','services','assignee_name'].sort());
  for(const change of [{version:'1'},{customer_id:'bad'},{can_update:1},{items:[{...detail.items[0],snapshot:{...snapshot,total_cents:0.5}}]},{history:[{...detail.history[0],actor_id:'bad'}]}])assert.throws(()=>requestDetail({...detail,...change}));
  assert.throws(()=>requestPage({portal:true,items:[summary],page:1,page_size:100,total:1}));
  assert.throws(()=>requestOptions({items:[{id,label:'Xerox',definition:{...emptyService,price_cents:0.5}}],page:1,page_size:3,total:1}));

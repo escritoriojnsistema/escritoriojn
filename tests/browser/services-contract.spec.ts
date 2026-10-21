@@ -9,6 +9,7 @@ async function setup(page:Page,caps=permissions,empty=false,role='owner'){
  const token=`e30.${Buffer.from(JSON.stringify({sub:user,exp:Math.floor(Date.now()/1000)+3600,role:'authenticated',session_id:office})).toString('base64url')}.fixture`;
  await page.addInitScript(({token,user})=>localStorage.setItem('sb-team-ui-auth-token',JSON.stringify({access_token:token,refresh_token:'fixture',token_type:'bearer',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:user,aud:'authenticated',email:'fixture@example.test',app_metadata:{},user_metadata:{}}})),{token,user});
  await page.route('https://team-ui.supabase.co/**',r=>r.fulfill({json:{id:user,aud:'authenticated',email:'fixture@example.test'}}));
+ await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
  await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,role_code:role,permissions:caps,office_name:'Escritório Fictício',display_name:'Pessoa Fictícia'}]}}}));
  await page.route('**/api/services**',r=>{
   const url=r.request().url(),b=r.request().postDataJSON();
@@ -83,6 +84,7 @@ test('serviços: adicionar campo após remover intermediário gera chave dispon�
 });
 test('serviços: troca de escritório descarta rascunho e resultado tardio',async({page})=>{
  await setup(page);const other='99999999-9999-4999-8999-999999999999';
+ await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
  await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[office,other].map(id=>({office_id:id,user_id:user,role_code:'owner',permissions,office_name:id===office?'Escritório Fictício':'Outro Escritório',display_name:'Pessoa Fictícia'}))}}}));
  await page.goto('/servicos');await page.getByRole('button',{name:'Novo serviço',exact:true}).click();await page.getByLabel('Nome do serviço',{exact:true}).fill('Rascunho do escritório A');await page.getByLabel('Código',{exact:true}).fill('RASCUNHO-A');await page.getByLabel('Categoria',{exact:true}).fill('Fictício');
  let release!:()=>void;const held=new Promise<void>(r=>release=r);await page.route('**/api/services',async r=>{await held;try{await r.fulfill({json:{data:detail}});}catch{/* canceled on office change */}});

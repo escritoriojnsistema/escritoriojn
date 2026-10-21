@@ -6,6 +6,7 @@ async function setup(page:Page,permissions=capabilities,role='owner'){
  const token=`e30.${Buffer.from(JSON.stringify({sub:user,exp:Math.floor(Date.now()/1000)+3600,role:'authenticated',session_id:office})).toString('base64url')}.fixture`;
  await page.addInitScript(({token,user})=>localStorage.setItem('sb-team-ui-auth-token',JSON.stringify({access_token:token,refresh_token:'fixture',token_type:'bearer',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:user,aud:'authenticated',email:'fixture@example.test',app_metadata:{},user_metadata:{}}})),{token,user});
  await page.route('https://team-ui.supabase.co/**',r=>r.fulfill({json:{id:user,aud:'authenticated',email:'fixture@example.test',app_metadata:{},user_metadata:{}}}));
+ await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
  await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,role_code:role,permissions,office_name:'Escritório Fictício',display_name:'Pessoa Fictícia'}]}}}));
  await page.route('**/api/governance/**',route=>{
   const url=new URL(route.request().url());const size=Number(url.searchParams.get('size')||5),pageNo=Number(url.searchParams.get('page')||1);
@@ -121,7 +122,8 @@ for(const reason of ['navegar','revogar'])test(`exportação abandonada não bai
  await page.route('**/api/governance/audit/export',async route=>{holding();await pending;try{await route.fulfill({json:{data:{items:[],count:0,office_id:office,exported_at:'2026-10-18',request_id:target}}});}catch{/* Abort is the expected fix. */}finally{done();}});
  await page.goto('/auditoria');await expect(page.getByRole('list',{name:'Eventos de auditoria'})).toBeVisible();await page.getByRole('button',{name:'Exportar JSON'}).click();await held;
  if(reason==='navegar'){await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link',{name:'Início',exact:true}).click();await expect(page.getByRole('heading',{name:'Área de operação'})).toBeVisible();}
- else {await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,role_code:'owner',permissions:['foundation.access','audit.read'],office_name:'Escritório Fictício',display_name:'Pessoa Fictícia'}]}}}));await page.evaluate(()=>window.dispatchEvent(new Event('focus')));await expect(page.getByRole('button',{name:'Exportar JSON'})).toHaveCount(0);}
+ else {await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
+ await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,role_code:'owner',permissions:['foundation.access','audit.read'],office_name:'Escritório Fictício',display_name:'Pessoa Fictícia'}]}}}));await page.evaluate(()=>window.dispatchEvent(new Event('focus')));await expect(page.getByRole('button',{name:'Exportar JSON'})).toHaveCount(0);}
  release();await complete;
  await expect.poll(()=>page.evaluate(()=>(window as typeof window&{exportSettled?:boolean}).exportSettled)).toBe(true);
  await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Eye, LogIn, Plus, RefreshCw, Search } from 'lucide-react';
 import type { AccessContext } from '../../../shared/access';
 import { publicRequestStatusLabels, requestStatuses, requestStatusLabels, type CreateRequestInput, type RequestDetail as Detail, type RequestMutation, type RequestPage, type RequestFilterStatus } from '../../../shared/requests';
@@ -15,7 +15,7 @@ import '../customers/customers.css';
 import '../services/services.css';
 import './requests.css';
 export default function RequestsPage({client=false}:{client?:boolean}){
- const auth=useAuth(),[selected,setSelected]=useState('');
+ const auth=useAuth(),location=useLocation(),[selected,setSelected]=useState<string>(typeof location.state?.office_id==='string'?location.state.office_id:'');
  const contexts=auth.contexts.filter(c=>client?c.role_code==='client':c.role_code!=='client'&&c.permissions.includes('requests.read'));
  const context=contexts.find(c=>c.office_id===selected)??contexts[0];
  if(auth.status==='loading')return <OperationalFeedback status="loading"/>;
@@ -24,6 +24,7 @@ export default function RequestsPage({client=false}:{client?:boolean}){
  return <RequestsWorkspace key={`${auth.sessionKey}:${context.office_id}:${context.role_code}:${context.permissions.slice().sort().join(',')}`} context={context} contexts={contexts} client={client} onOffice={setSelected}/>;
 }
 function RequestsWorkspace({context,contexts,client,onOffice}:{context:AccessContext;contexts:AccessContext[];client:boolean;onOffice:(id:string)=>void}){
+ const location=useLocation();
  const office=context.office_id,canCreate=client||context.permissions.includes('requests.create');
  const [view,setView]=useState<'list'|'create'|'detail'>('list'),[input,setInput]=useState(''),[query,setQuery]=useState(''),[scope,setScope]=useState<'mine'|'queue'>('mine'),[status,setStatus]=useState<RequestFilterStatus>(''),[page,setPage]=useState(1),[revision,setRevision]=useState(0);
  const media='(max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px)';
@@ -35,12 +36,18 @@ function RequestsWorkspace({context,contexts,client,onOffice}:{context:AccessCon
  const fail=useCallback((failure:RequestsError)=>{setError(failure);if(failure.status===401||failure.status===403){setBlocked(true);setDetail(undefined);setResource({});generation.current++;pending.current?.abort();}},[]);
  useEffect(()=>{if(view!=='list'||blocked)return;const controller=new AbortController();void requestsApi.search(office,query,scope,status,page,size,controller.signal).then(data=>{if(!controller.signal.aborted)setResource({data});}).catch(cause=>{if(!controller.signal.aborted){const failure=requestsError(cause);if(failure.status===401||failure.status===403)fail(failure);else setResource(old=>({...old,error:failure}));}});return()=>controller.abort();},[office,query,scope,status,page,size,revision,view,blocked,fail]);
  useEffect(()=>{const timer=setTimeout(()=>{setQuery(input.trim());setPage(1);},300);return()=>clearTimeout(timer);},[input]);
+ useEffect(()=>{
+  if(!client||view!=='detail'||!detail||blocked)return;const controller=new AbortController(),id=detail.id;let refreshGeneration=0;
+  const refresh=()=>{if(busyRef.current||document.visibilityState!=='visible')return;const started=generation.current,refreshStarted=++refreshGeneration;void requestsApi.detail(office,id,1,controller.signal).then(v=>{if(!controller.signal.aborted&&generation.current===started&&refreshStarted===refreshGeneration)setDetail(v);}).catch(cause=>{if(!controller.signal.aborted&&generation.current===started&&refreshStarted===refreshGeneration)fail(requestsError(cause));});};
+  window.addEventListener('jn:inbox-update',refresh);window.addEventListener('focus',refresh);return()=>{controller.abort();window.removeEventListener('jn:inbox-update',refresh);window.removeEventListener('focus',refresh);};
+ },[client,view,detail?.id,office,blocked,fail]);
  function transition(next:typeof view){generation.current++;pending.current?.abort();pending.current=null;busyRef.current=false;setBusy(false);setError(undefined);setFeedback('');setView(next);window.scrollTo(0,0);}
  async function run<T>(work:(signal:AbortSignal)=>Promise<T>,accept:(result:T)=>void){if(busyRef.current||blocked)return;const started=generation.current,controller=new AbortController();pending.current=controller;busyRef.current=true;setBusy(true);setError(undefined);setFeedback('');try{const result=await work(controller.signal);if(alive.current&&!controller.signal.aborted&&generation.current===started)accept(result);}catch(cause){if(alive.current&&!controller.signal.aborted&&generation.current===started)fail(requestsError(cause));}finally{if(alive.current&&pending.current===controller){pending.current=null;busyRef.current=false;setBusy(false);}}}
  function back(){transition('list');setDetail(undefined);setRevision(n=>n+1);}
  function open(id:string,title:string){transition('detail');setDetail(undefined);setName(title);void run(signal=>requestsApi.detail(office,id,1,signal),setDetail);}
+ useEffect(()=>{const id=location.state?.request_id;if(location.state?.office_id===office&&typeof id==='string'&&id.length===36)open(id,'Solicitação');},[location.key,office]);
  function save(request:CreateRequestInput){if(!canCreate||view!=='create')return;void run(signal=>requestsApi.create(office,request,idempotency.current,signal),result=>{setDetail(result);setName(result.title);setView('detail');setFeedback(client?'Solicitação enviada para triagem.':'Atendimento aberto.');idempotency.current=crypto.randomUUID();});}
- function mutate(mutation:RequestMutation){if(!detail||detail.portal)return;void run(signal=>requestsApi.mutate(office,detail.id,detail.version,mutation,signal),result=>{if('access_lost'in result){setResource({});back();setFeedback('Atendimento transferido e fora do seu escopo.');return;}setDetail(result);setFeedback('Alteração registrada.');});}
+ function mutate(mutation:RequestMutation){if(!detail||detail.portal)return;void run(signal=>requestsApi.mutate(office,detail.id,detail.version,mutation,signal),result=>{if('access_lost'in result){setResource({});back();setFeedback('Atendimento transferido e fora do seu escopo.');return;}setDetail(result);window.dispatchEvent(new Event('jn:notices-changed'));setFeedback('Alteração registrada.');});}
  const data=resource.data;
  return <OperationLayout client={client} busy={busy}><div className="requests-main"><OperationHeading context={context} showRole={false} title={view==='list'?(client?'Minhas solicitações':'Solicitações'):view==='create'?'Nova solicitação':detail?.title??name} description={client?'Envie uma mensagem e acompanhe seu atendimento.':'Abertura, fila e histórico dos atendimentos.'}/>
   {contexts.length>1&&<label className="team-field customer-office">Escritório<select value={office} onChange={e=>onOffice(e.target.value)}>{contexts.map(c=><option key={c.office_id} value={c.office_id}>{c.office_name}</option>)}</select></label>}
