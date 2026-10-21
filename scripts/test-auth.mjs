@@ -12,7 +12,7 @@ try {
   const admin = createClient(lab.url, lab.serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const users = {};
   // Registration has no office yet: identities do not acquire permissions here.
-  for (const name of ['owner','unlinked','inactive','other','expired','manager','existingstaff','delegate','worker','portalclient','archiveworker','auditreader','customerworker','relationworker','relationclient','relationclientnull','relationclientcontrol','relationclientspace','relationteamnull','relationteamcontrol','serviceworker']) {
+  for (const name of ['owner','unlinked','inactive','other','expired','manager','existingstaff','delegate','worker','portalclient','archiveworker','auditreader','customerworker','relationworker','relationclient','relationclientnull','relationclientcontrol','relationclientspace','relationteamnull','relationteamcontrol','serviceworker','fileworker','fileclienta','fileclientb','filerevoked']) {
     const { data, error } = await admin.auth.admin.createUser({ email: `${name}@example.test`, password, email_confirm: true });
     if (error || !data.user) throw new Error('Could not create local Auth fixture.');
     users[name] = data.user.id;
@@ -46,8 +46,20 @@ try {
     INSERT INTO private.team_member_permissions(membership_id,permission_code)
       SELECT m.id,p.code FROM public.memberships m CROSS JOIN unnest(ARRAY['services.read','services.perform']) p(code)
       WHERE m.office_id='${office}' AND m.user_id='${users.serviceworker}';
+    INSERT INTO public.profiles(id,display_name) VALUES ('${users.fileworker}','Equipe anexos fictícios'),('${users.fileclienta}','Portal anexos A fictício'),('${users.fileclientb}','Portal anexos B fictício'),('${users.filerevoked}','Sessão anexos fictícia');
+    INSERT INTO public.memberships(office_id,user_id,role_code) VALUES ('${office}','${users.fileworker}','employee'),('${office}','${users.fileclienta}','client'),('${office}','${users.fileclientb}','client'),('${office}','${users.filerevoked}','client');
+    INSERT INTO private.team_member_permissions(membership_id,permission_code)
+      SELECT m.id,p.code FROM public.memberships m CROSS JOIN unnest(ARRAY['foundation.access','services.read','services.perform','requests.read','requests.create','requests.update','files.read','files.upload','files.copy']) p(code)
+      WHERE m.office_id='${office}' AND m.user_id='${users.fileworker}';
     SELECT private.configure_client_registration('${office}',true);
   `, 'migrator');
+  // A real provider object with no application intent models an unknown orphan.
+  // The cleanup proof must count and retain it, never invent a deletion target.
+  const unknownObjectPath = `${office}/${randomUUID()}/${randomUUID()}`;
+  const unknownUpload = await admin.storage.from('request-attachments').upload(unknownObjectPath,
+    Buffer.from('%PDF-1.4\n% Objeto desconhecido inteiramente ficticio local11\n%%EOF\n'),
+    { contentType: 'application/pdf', upsert: false });
+  if (unknownUpload.error) throw new Error('Could not prepare local Storage orphan fixture.');
   const expiredClient = createClient(lab.url, lab.anonKey, { auth: { flowType: 'pkce', persistSession: false, autoRefreshToken: false } });
   const { error: recoveryError } = await expiredClient.auth.resetPasswordForEmail('expired@example.test', { redirectTo: 'http://127.0.0.1:3005/auth/callback?area=team' });
   if (recoveryError) throw new Error('Could not prepare expired recovery fixture.');
@@ -67,7 +79,7 @@ try {
   }
   const code = await new Promise((resolve, reject) => {
     const child = spawn('node', ['node_modules/@playwright/test/cli.js','test','--config','playwright.auth.config.ts',...process.argv.slice(2)], {
-      env: { ...env, AUTH_LAB_EXPIRED_LINK: expiredLink, AUTH_LAB_URL: lab.url, AUTH_LAB_MAIL_URL: lab.mailUrl, AUTH_LAB_PASSWORD: password, AUTH_LAB_OFFICE: office, AUTH_LAB_OTHER_OFFICE: otherOffice }, stdio: 'inherit',
+      env: { ...env, AUTH_LAB_EXPIRED_LINK: expiredLink, AUTH_LAB_URL: lab.url, AUTH_LAB_MAIL_URL: lab.mailUrl, AUTH_LAB_PASSWORD: password, AUTH_LAB_OFFICE: office, AUTH_LAB_OTHER_OFFICE: otherOffice, AUTH_LAB_DB_CONTAINER: lab.databaseContainer, AUTH_LAB_UNKNOWN_OBJECT_PATH: unknownObjectPath }, stdio: 'inherit',
     });
     children.add(child); child.on('error', reject); child.on('exit', code => { children.delete(child); resolve(code); });
   });

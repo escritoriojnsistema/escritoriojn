@@ -66,3 +66,18 @@ BEGIN
 END;
 $$;
 GRANT EXECUTE ON FUNCTION test.expect_error(text,text,text) TO authenticated,anon,service_role,migrator;
+
+-- Provider-shaped Storage stub. The provider grants the local limited migrator
+-- table ownership here; the application migration never changes provider roles/owners.
+CREATE SCHEMA storage;
+GRANT USAGE,CREATE ON SCHEMA storage TO migrator;
+GRANT USAGE ON SCHEMA storage TO anon,authenticated,service_role;
+SET ROLE migrator;
+CREATE TABLE storage.buckets(id text PRIMARY KEY,name text NOT NULL,public boolean NOT NULL DEFAULT false,file_size_limit bigint,allowed_mime_types text[]);
+CREATE TABLE storage.objects(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),bucket_id text REFERENCES storage.buckets(id),name text NOT NULL,owner_id text,metadata jsonb,UNIQUE(bucket_id,name));
+CREATE FUNCTION storage.operation()RETURNS text LANGUAGE sql STABLE AS $$SELECT current_setting('storage.operation',true);$$;
+CREATE FUNCTION storage.allow_any_operation(operations text[])RETURNS boolean LANGUAGE sql STABLE AS $$SELECT coalesce(regexp_replace(storage.operation(),'^storage\.','')=ANY(operations),false);$$;
+ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
+GRANT SELECT,INSERT,UPDATE,DELETE ON storage.objects TO anon,authenticated,service_role;
+GRANT SELECT ON storage.buckets TO anon,authenticated,service_role;
+RESET ROLE;

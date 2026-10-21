@@ -13,6 +13,7 @@ import TeamPage from './features/team/TeamPage';
 import CustomersPage from './features/customers/CustomersPage';
 import ServicesPage from './features/services/ServicesPage';
 import RequestsPage from './features/requests/RequestsPage';
+import AttachmentsPage from './features/attachments/AttachmentsPage';
 import InvitationPage from './features/team/InvitationPage';
 import AccountPage from './features/operation/AccountPage';
 import GovernancePage from './features/governance/GovernancePage';
@@ -38,6 +39,8 @@ function AppRoutes() {
     <Route path={paths.customers} element={<CustomersPage key={operationKey} />} />
     <Route path={paths.requests} element={<RequestsPage key={`requests:${operationKey}`} />} />
     <Route path={paths.clientRequests} element={<RequestsPage key={`client-requests:${operationKey}`} client />} />
+    <Route path={paths.attachments} element={<AttachmentsPage key={`attachments:${operationKey}`} />} />
+    <Route path={paths.clientAttachments} element={<AttachmentsPage key={`client-attachments:${operationKey}`} client />} />
     <Route path={paths.services} element={<ServicesPage key={operationKey} />} />
     <Route path={paths.teamManagement} element={<TeamPage key={operationKey} />} />
     <Route path={paths.invitation} element={<InvitationPage key={auth.sessionKey} />} />

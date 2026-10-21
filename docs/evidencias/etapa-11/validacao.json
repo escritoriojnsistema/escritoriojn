@@ -1,0 +1,80 @@
+{
+  "stage": 11,
+  "node": {
+    "passed": 94,
+    "failed": 0
+  },
+  "database": {
+    "passed": 1256,
+    "replays": 2,
+    "per_replay": 628,
+    "attachments_per_replay": 93,
+    "races_per_replay": 3,
+    "role": "limited migrator; no superuser/BYPASSRLS"
+  },
+  "auth": {
+    "integrated_passed": 46,
+    "additional_browser_pipeline_passed": 1,
+    "failed": 0,
+    "attachments_scenarios": 8,
+    "provider": "GoTrue/PostgREST/PostgreSQL17 and actual Storage v1.81.0",
+    "storage_image_digest": "sha256:98ffec5d0678803783c30e404c27f4ec65e97efbe014088f2a86b4b8b54b9f54",
+    "storage_provider_migrations": 75,
+    "hosted_credentials_used": false
+  },
+  "ui": {
+    "passed": 21,
+    "failed": 0,
+    "public_attachment_checks": 5,
+    "viewport_widths": [
+      320,
+      360,
+      1440
+    ],
+    "zoom": 2,
+    "synthetic_fixtures": true
+  },
+  "build": {
+    "typecheck": true,
+    "frontend_and_api": true,
+    "production_dependency_vulnerabilities": 0
+  },
+  "review": {
+    "remaining_P1_P2": 0,
+    "scope": "independent static review with corrections tested"
+  },
+  "migration": {
+    "file": "20261021003953_private_attachments_pipeline.sql",
+    "sha256": "99dd5b5c6ef2fb1088ccaf0fca62832a41764c998152a707c648a0ef83af7b85"
+  },
+  "scanner": {
+    "configured": false,
+    "valid_files_state": "quarentena",
+    "download_permitted": false
+  },
+  "publication": "pending separate hosted evidence",
+  "limits": [
+    "No hosted positive authenticated test or physical device",
+    "Local benchmark does not establish hosted SLA",
+    "Structural validation is not antimalware scanning"
+  ],
+  "public_preview": {
+    "passed": 47,
+    "failed": 0,
+    "compiled_build": true,
+    "environment_correction": "Public Supabase connection and NODE_USE_ENV_PROXY=1; no application/test relaxation"
+  },
+  "github_actions": {
+    "workflow_id": 387780086,
+    "state": "disabled_manually",
+    "executed": false
+  },
+  "edge_premerge": {
+    "name": "private-attachments",
+    "version": 1,
+    "status": "ACTIVE",
+    "verify_jwt": true,
+    "source_files_matching": 4,
+    "anonymous_http_status": 401
+  }
+}

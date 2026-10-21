@@ -1,0 +1,49 @@
+.attachments-main { max-width:1200px; min-width:0; }
+.attachments-main .operation-heading { margin-bottom:10px; }
+.attachments-main .team-field { margin:0; gap:4px; }
+.attachment-scanner-note { margin:8px 0; padding:8px 0; border-block:1px solid #e1d6bd; color:#725724; font-size:12px; line-height:1.45; }
+.attachment-grid { display:grid; grid-template-columns:minmax(120px,.7fr) minmax(0,1.3fr); gap:8px 12px; }
+.attachment-upload { max-width:900px; padding:4px 0 10px; border-bottom:1px solid #dce4e8; }
+.attachment-submit { width:fit-content; min-width:180px; margin-top:8px; }
+.attachment-next-upload { display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:12px; }
+.attachment-next-upload span { min-width:0; overflow-wrap:anywhere; }
+.attachment-list-heading { display:flex; align-items:center; gap:8px; margin-top:8px; }
+.attachment-list-heading h2 { font-size:16px; margin:0 auto 0 0; }
+.attachment-list { list-style:none; margin:0; padding:0; }
+.attachment-list li { border-bottom:1px solid #e1e8ec; padding:10px 0 4px; min-width:0; }
+.attachment-file-heading { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px 12px; }
+.attachment-file-heading strong { font-size:13px; overflow-wrap:anywhere; min-width:0; }
+.attachment-status { font-size:11px; color:#617887; }
+.attachment-quarentena,.attachment-aguardando_upload { color:#855e29; }
+.attachment-rejeitado { color:#843c25; }
+.attachment-disponivel { color:#235d43; }
+.attachment-list p,.attachment-empty { font-size:12px; line-height:1.45; color:#617887; margin:5px 0; overflow-wrap:anywhere; }
+.attachment-empty { padding:12px 0; }
+.attachment-file-actions { display:flex; flex-wrap:wrap; gap:4px; align-items:flex-start; }
+.attachment-file-actions details { flex:1; min-width:0; }
+.attachment-file-actions summary { min-height:44px; padding:12px 0; font-size:12px; cursor:pointer; }
+.attachment-hash { word-break:break-all; }
+.attachment-management { max-width:900px; }
+.attachment-plan summary { min-height:44px; padding-block:12px; font-size:12px; cursor:pointer; }
+.attachment-plan ul { list-style:none; margin:0 0 8px; padding:0; }
+.attachment-plan li { display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px 12px; border-bottom:1px solid #e1e8ec; padding-block:8px; font-size:12px; overflow-wrap:anywhere; }
+.attachment-plan li strong { min-width:0; }
+.attachment-plan li span { color:#617887; }
+.attachment-management h2,.attachment-copy h2 { font-size:15px; margin:10px 0 4px; }
+.attachment-mimes { display:flex; flex-wrap:wrap; gap:0 16px; border:0; margin:8px 0; padding:0; }
+.attachment-mimes legend { font-size:12px; color:#617887; }
+.attachment-copy { margin-top:12px; border-block:1px solid #dce4e8; padding-bottom:10px; max-width:900px; }
+.attachments-main input[type=file] { padding:8px; font-size:12px; }
+.attachments-main input[type=file]::file-selector-button { border:0; background:#edf3f5; color:#24475c; border-radius:4px; margin-right:8px; padding:5px 7px; font:inherit; }
+@media (max-width:900px), (hover:none) and (pointer:coarse) and (max-width:1200px) {
+ .operation-main:has(.attachments-main) { padding-top:10px; padding-bottom:calc(64px + env(safe-area-inset-bottom)); }
+ .attachments-main .operation-heading { margin-bottom:4px; }
+ .attachments-main .operation-heading p:not(.eyebrow) { font-size:12px; }
+ .attachments-main .team-field { font-size:11px; }
+ .attachments-main .team-field input,.attachments-main .team-field select { font-size:16px; padding-inline:8px; }
+ .attachment-scanner-note { font-size:11px; margin:6px 0; }
+ .attachment-grid { grid-template-columns:1fr; gap:6px; }
+ .attachment-submit { width:100%; }
+ .attachment-request-picker .request-picker-current { font-size:11px; }
+ .attachment-list-heading { flex-wrap:wrap; }
+}
