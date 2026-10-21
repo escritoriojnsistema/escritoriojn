@@ -235,7 +235,7 @@ test('anexos reais: navegador cliente envia PDF pelo Storage e recebe quarentena
   const stored=page.waitForResponse(r=>r.request().method()==='POST'&&r.url().includes('/storage/v1/object/request-attachments/'));
   const completed=page.waitForResponse(r=>r.url().endsWith('/api/attachments/process'));
   await page.getByRole('button',{name:'Enviar arquivo',exact:true}).click();
-  const intended=await intention;expect(intended.status()).toBe(201);const intent:AttachmentIntent=(await intended.json()).data;expect((await stored).ok()).toBe(true);
+  const intended=await intention;expect(intended.status(),await intended.text()).toBe(201);const intent:AttachmentIntent=(await intended.json()).data;expect((await stored).ok()).toBe(true);
   const processed=await completed;expect(processed.status()).toBe(200);expect((await processed.json()).data.file).toMatchObject({id:intent.file.id,status:'quarentena',scanner_status:'not_configured',sha256:hash(pdf)});
   await expect(page.getByRole('status')).toContainText('mantido em quarentena');await expect(page.getByRole('list',{name:'Arquivos privados'})).toContainText('pdf-ui-ficticio.pdf');
   await expect(page.getByRole('button',{name:/Baixar/})).toHaveCount(0);await expect(page.locator('[role="progressbar"],.spinner,.loading-overlay')).toHaveCount(0);

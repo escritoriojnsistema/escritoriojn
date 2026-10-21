@@ -2,7 +2,7 @@
 SELECT test.assert_true(to_regclass('private.checklist_instances') IS NOT NULL,'checklists12: dominio instalado');
 SELECT test.assert_true((SELECT count(*)=4 FROM public.role_permissions WHERE role_code='owner' AND permission_code LIKE 'checklists.%') AND NOT EXISTS(SELECT FROM public.role_permissions WHERE role_code<>'owner' AND permission_code LIKE 'checklists.%'),'checklists12: seed somente owner');
 INSERT INTO private.team_member_permissions(membership_id,permission_code)SELECT '00000000-0000-4000-b000-000000000092',unnest(ARRAY['checklists.read','checklists.update']);
-INSERT INTO public.requests(office_id,protocol,title,origin,created_by,assignee_id,priority,idempotency_key,payload_digest)VALUES('00000000-0000-4000-e000-000000000091','CHECKLIST-12','Pedido privado ficticio12','presencial','00000000-0000-4000-a000-000000000091','00000000-0000-4000-b000-000000000092','normal',gen_random_uuid(),'fixture12')RETURNING id AS req12 \gset
+INSERT INTO public.requests(office_id,protocol,title,origin,created_by,assignee_id,priority,idempotency_key,payload_digest)VALUES('00000000-0000-4000-e000-000000000091','CHECKLIST-12','Pedido privado ficticio12','presencial','00000000-0000-4000-a000-000000000091','00000000-0000-4000-b000-000000000091','normal',gen_random_uuid(),'fixture12')RETURNING id AS req12 \gset
 INSERT INTO public.request_items(office_id,request_id,service_id,version_id,snapshot,fields,participant_ids,checklist)SELECT office_id,:'req12',service_id,version_id,snapshot,fields,participant_ids,checklist FROM public.request_items ORDER BY created_at LIMIT 1 RETURNING id AS item12,service_id AS service12 \gset
 SELECT '{"name":"Tres arquivos ficticios","items":[{"key":"a","label":"Arquivo A","requirement":"required","condition":null},{"key":"b","label":"Arquivo B","requirement":"required","condition":null},{"key":"c","label":"Arquivo C","requirement":"required","condition":null}]}'::jsonb AS model12 \gset
 SET ROLE anon;
@@ -10,6 +10,7 @@ SELECT test.expect_error($q$SELECT public.checklists_notifications('00000000-000
 SET ROLE authenticated;
 SET request.jwt.claims='{}';
 SELECT test.expect_error($q$SELECT public.checklists_notifications('00000000-0000-4000-e000-000000000091',1,3,false)$q$,'PT401','checklists12: sessao exigida');
+RESET ROLE;SELECT test.fixture_responsible('CHECKLIST-12','00000000-0000-4000-b000-000000000091');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';
 SELECT public.checklists_publish('00000000-0000-4000-e000-000000000091',:'service12',0,:'model12','Modelo ficticio inicial',gen_random_uuid());
 SELECT public.checklists_apply('00000000-0000-4000-e000-000000000091',:'req12',:'item12',gen_random_uuid()) AS applied12 \gset
@@ -27,9 +28,12 @@ SELECT public.checklists_update('00000000-0000-4000-e000-000000000091',:'entry12
 SELECT test.assert_true(:'two12'::jsonb->'instance'->>'pending'='1' AND :'two12'::jsonb->'instance'->>'received'='2','checklists12: dois recebidos e terceiro necessario pendente');
 SELECT test.expect_error(format('SELECT public.checklists_update(%L,%L,2,%L,%L,%L,gen_random_uuid())','00000000-0000-4000-e000-000000000091',:'entry12a','validado',:'file12a','Nao existe scanner'),'PT409','checklists12: quarentena nao valida nem libera');
 SELECT test.expect_error(format('SELECT public.checklists_update(%L,%L,1,%L,NULL,%L,gen_random_uuid())','00000000-0000-4000-e000-000000000091',:'entry12c','dispensado',''),'PT422','checklists12: dispensa exige motivo');
+RESET ROLE;SELECT test.fixture_responsible('CHECKLIST-12','00000000-0000-4000-b000-000000000092');SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000092","session_id":"00000000-0000-4000-c000-000000000092"}';
 SELECT public.checklists_notify('00000000-0000-4000-e000-000000000091',:'instance12');
 SELECT public.checklists_notify('00000000-0000-4000-e000-000000000091',:'instance12');
-SELECT test.assert_true(public.checklists_notifications('00000000-0000-4000-e000-000000000091',1,3,false)->>'total'='0','checklists12: remetente nao le destinatario');
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';
+SELECT test.assert_true(public.checklists_notifications('00000000-0000-4000-e000-000000000091',1,3,false)->>'total'='0','checklists12: gestor nao le avisos de outro destinatario');
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000092","session_id":"00000000-0000-4000-c000-000000000092"}';
 SELECT public.checklists_notifications('00000000-0000-4000-e000-000000000091',1,3,false) AS notices12 \gset
 SELECT test.assert_true(:'notices12'::jsonb->>'total'='1' AND :'notices12'::jsonb->>'unread'='1' AND :'notices12'::jsonb::text !~ 'privado|ficticio|Arquivo|sha256|reason|title','checklists12: alerta deduplicado sem texto sensivel');
@@ -45,6 +49,7 @@ SELECT test.expect_error(format('UPDATE private.checklist_model_versions SET rea
 SELECT test.expect_error(format('DELETE FROM private.checklist_history WHERE entry_id=%L',:'entry12a'),'PT403','checklists12: historico imutavel');
 SELECT test.assert_true((SELECT count(*)=8 AND bool_and(NOT prosecdef AND proconfig @> ARRAY['search_path=""']) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND p.proname LIKE 'checklists_%'),'checklists12: oito wrappers invoker e search_path vazio');
 SET ROLE authenticated;
+RESET ROLE;SELECT test.fixture_responsible('CHECKLIST-12','00000000-0000-4000-b000-000000000091');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';
 SELECT public.checklists_update('00000000-0000-4000-e000-000000000091',:'entry12c',1,'dispensado',NULL,'Dispensa autorizada ficticia',gen_random_uuid());
 SELECT test.expect_error(format('SELECT public.checklists_update(%L,%L,1,%L,NULL,%L,gen_random_uuid())','00000000-0000-4000-e000-000000000091',:'entry12c','pendente','Estado concorrente'),'PT409','checklists12: versao concorrente negada');
@@ -64,7 +69,10 @@ RESET ROLE;
 -- Synthetic metadata fixture only, as in11. This does not simulate or claim a scanner.
 UPDATE public.files SET status='disponivel',scanner_status='clean' WHERE id=:'file12a';
 SET ROLE authenticated;
+RESET ROLE;SELECT test.fixture_responsible('CHECKLIST-12','00000000-0000-4000-b000-000000000091');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';
 SELECT test.assert_true(public.checklists_update('00000000-0000-4000-e000-000000000091',:'entry12a',2,'validado',:'file12a','Conferencia de fixture clean',gen_random_uuid())->'instance'->'entries'->0->>'status'='validado','checklists12: validado registrado somente com fixture disponivel clean');
 SELECT test.expect_error(format('SELECT public.checklists_update(%L,%L,1,%L,%L,%L,gen_random_uuid())','00000000-0000-4000-e000-000000000091',(:'conditional12'::jsonb->'instance'->'entries'->2->>'id'),'recebido',:'file12b','Arquivo de outro pedido'),'PT404','checklists12: arquivo de outro pedido negado mesmo para owner');
 RESET ROLE;
+
+RESET ROLE;SELECT test.fixture_responsible('CHECKLIST-12','00000000-0000-4000-b000-000000000092');

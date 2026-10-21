@@ -17,7 +17,8 @@ async function session(page: Page, permissions = ['foundation.access', 'users.ma
     localStorage.setItem('sb-team-ui-auth-token', JSON.stringify({ access_token: token, refresh_token: 'test-only-refresh-token', token_type: 'bearer', expires_at: Math.floor(Date.now() / 1000) + 3600, expires_in: 3600, user: { id: user, aud: 'authenticated', email: 'fixture@example.test', app_metadata: {}, user_metadata: {}, created_at: '2026-10-18T00:00:00Z' } }));
   }, { token, user });
   await page.route('https://team-ui.supabase.co/**', route => route.fulfill({ json: { id: user, email: 'fixture@example.test', aud: 'authenticated', app_metadata: {}, user_metadata: {} } }));
-  await page.route('**/api/auth/context', route => route.fulfill({ json: { data: { user: { id: user }, contexts: [{ office_id: office, user_id: user, role_code: role, permissions, office_name: 'Escritório de Teste', display_name: 'Pessoa de Teste' }] } } }));
+  await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
+ await page.route('**/api/auth/context', route => route.fulfill({ json: { data: { user: { id: user }, contexts: [{ office_id: office, user_id: user, role_code: role, permissions, office_name: 'Escritório de Teste', display_name: 'Pessoa de Teste' }] } } }));
 }
 async function dashboard(page: Page, data = roster()) {
   await page.route('**/api/team?**', route => {
@@ -89,7 +90,8 @@ test('conferência lenta mantém menu e navegação imediata; revogação bloque
   await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();
   let release!: () => void;
   const pending = new Promise<void>(resolve => { release = resolve; });
-  await page.route('**/api/auth/context', async route => {
+  await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
+ await page.route('**/api/auth/context', async route => {
     await pending;
     await route.fulfill({ status: 403, json: { error: { code: 'ACCESS_DENIED' } } });
   });
@@ -148,7 +150,8 @@ for (const change of ['nova sessão', 'outro usuário', 'outra função']) test(
   const nextUser = change === 'outro usuário' ? '77777777-7777-4777-8777-777777777777' : user;
   const nextToken = `e30.${Buffer.from(JSON.stringify({ sub: nextUser, exp: Math.floor(Date.now() / 1000) + 3600, role: 'authenticated', session_id: '88888888-8888-4888-8888-888888888888' })).toString('base64url')}.fixture`;
   await page.route('https://team-ui.supabase.co/**', route => route.fulfill({ json: { id: nextUser, aud: 'authenticated', email: 'next@example.test', app_metadata: {}, user_metadata: {} } }));
-  await page.route('**/api/auth/context', route => route.fulfill({ json: { data: { user: { id: nextUser }, contexts: [{ office_id: office, user_id: nextUser, role_code: change === 'outra função' ? 'admin' : 'owner', permissions: ['foundation.access', 'users.manage'], office_name: 'Escritório na nova sessão', display_name: 'Nova sessão' }] } } }));
+  await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
+ await page.route('**/api/auth/context', route => route.fulfill({ json: { data: { user: { id: nextUser }, contexts: [{ office_id: office, user_id: nextUser, role_code: change === 'outra função' ? 'admin' : 'owner', permissions: ['foundation.access', 'users.manage'], office_name: 'Escritório na nova sessão', display_name: 'Nova sessão' }] } } }));
   let release!: () => void;
   const pending = new Promise<void>(resolve => { release = resolve; });
   await page.route('**/api/team?**', async route => { await pending; await route.fallback(); });
@@ -417,7 +420,8 @@ test('Conta protege área e contexto revogado remove ambiente e navegação', as
   await expect(page.getByRole('heading', { name: 'Acesso não autorizado' })).toBeVisible();
   await page.getByRole('link', { name: 'Ir para minha área' }).click();
   await expect(page).toHaveURL('/area-cliente');
-  await page.route('**/api/auth/context', route => route.fulfill({ status: 403, json: { error: { code: 'ACCESS_DENIED' } } }));
+  await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
+ await page.route('**/api/auth/context', route => route.fulfill({ status: 403, json: { error: { code: 'ACCESS_DENIED' } } }));
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Acesso não autorizado' })).toBeVisible();
   await expect(page.locator('.operation-layout')).toHaveCount(0);
@@ -460,6 +464,7 @@ test('Conta compacta mantém recuperação acima dos atalhos em 360x640', async 
 test('arquivo pendente mantém o escritório de início bloqueado para troca',async({page})=>{
  await session(page,['foundation.access','users.manage','archives.manage']);
  const second='55555555-5555-4555-8555-555555555555';
+ await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
  await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[office,second].map((office_id,i)=>({office_id,user_id:user,role_code:'owner',permissions:['foundation.access','users.manage','archives.manage'],office_name:`Escritório ${i+1}`,display_name:'Pessoa de Teste'}))}}}));
  await dashboard(page);let release!:()=>void,holding!:()=>void;const pending=new Promise<void>(r=>release=r),held=new Promise<void>(r=>holding=r);
  await page.route('**/api/governance/members/*/archive',async r=>{holding();await pending;await r.fulfill({status:403,json:{error:{code:'GOVERNANCE_FORBIDDEN'}}});});

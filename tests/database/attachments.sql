@@ -1,3 +1,12 @@
+CREATE FUNCTION test.fixture_responsible(p_protocol text,p_member uuid) RETURNS void LANGUAGE plpgsql AS $$
+DECLARE r public.requests;u uuid;
+BEGIN
+ SELECT * INTO r FROM public.requests WHERE protocol=p_protocol;
+ SELECT user_id INTO u FROM public.memberships WHERE id=p_member AND office_id=r.office_id;
+ UPDATE private.request_assignments SET ended_at=clock_timestamp() WHERE request_id=r.id AND ended_at IS NULL;
+ UPDATE public.requests SET assignee_id=p_member WHERE id=r.id;
+ INSERT INTO private.request_assignments(office_id,request_id,membership_id,actor_id) VALUES(r.office_id,r.id,p_member,u);
+END $$;
 -- Metadata-only provider stub; real byte transport is exercised by tests/auth.
 SELECT test.assert_true(to_regclass('public.files') IS NOT NULL AND to_regclass('private.upload_intents') IS NOT NULL,'anexos: pipeline privado instalado');
 SELECT test.assert_true((SELECT count(*)=4 FROM public.role_permissions WHERE role_code='owner' AND permission_code LIKE 'files.%') AND NOT EXISTS(SELECT FROM public.role_permissions WHERE role_code<>'owner' AND permission_code LIKE 'files.%'),'anexos: quatro capacidades independentes seed somente owner');
@@ -6,7 +15,7 @@ SELECT test.assert_true(NOT has_table_privilege('authenticated','public.files','
 SELECT test.assert_true((SELECT NOT public AND file_size_limit=10485760 AND allowed_mime_types=ARRAY['application/pdf','image/png','image/jpeg'] FROM storage.buckets WHERE id='request-attachments'),'anexos: bucket privado limitado a dez MiB e tres tipos');
 INSERT INTO private.team_member_permissions(membership_id,permission_code)SELECT '00000000-0000-4000-b000-000000000092',unnest(ARRAY['files.read','files.upload','files.copy','files.manage']);
 INSERT INTO private.team_member_permissions(membership_id,permission_code)VALUES('00000000-0000-4000-b000-000000000094','files.read');
-INSERT INTO public.requests(office_id,protocol,title,origin,created_by,assignee_id,priority,idempotency_key,payload_digest)VALUES('00000000-0000-4000-e000-000000000091','ANEXO-11','Anexos ficticios11','presencial','00000000-0000-4000-a000-000000000091','00000000-0000-4000-b000-000000000092','normal',gen_random_uuid(),'fixture11')RETURNING id AS request11 \gset
+INSERT INTO public.requests(office_id,protocol,title,origin,created_by,assignee_id,priority,idempotency_key,payload_digest)VALUES('00000000-0000-4000-e000-000000000091','ANEXO-11','Anexos ficticios11','presencial','00000000-0000-4000-a000-000000000091','00000000-0000-4000-b000-000000000091','normal',gen_random_uuid(),'fixture11')RETURNING id AS request11 \gset
 INSERT INTO public.request_items(office_id,request_id,service_id,version_id,snapshot,fields,participant_ids,checklist)SELECT office_id,:'request11',service_id,version_id,snapshot,fields,participant_ids,checklist FROM public.request_items ORDER BY created_at LIMIT 1 RETURNING id AS item11,service_id AS service11 \gset
 INSERT INTO public.requests(office_id,protocol,title,origin,created_by,priority,idempotency_key,payload_digest)VALUES('00000000-0000-4000-e000-000000000091','ANEXO-PORTAL-11','Envio proprio11','portal','00000000-0000-4000-a000-000000000095','normal',gen_random_uuid(),'fixture11')RETURNING id AS portal11 \gset
 SELECT jsonb_build_object('request_id',:'request11','request_item_id',:'item11','name','Documento ficticio.pdf','mime_type','application/pdf','size_bytes',100,'sha256',repeat('a',64),'classification','documento','idempotency_key','intention11')AS upload11 \gset
@@ -17,6 +26,7 @@ SET request.jwt.claims='{}';
 SELECT test.expect_error($q$SELECT public.files_page('00000000-0000-4000-e000-000000000091',NULL,1,3)$q$,'PT401','anexos: identidade e sessao reais obrigatorias');
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000096","session_id":"00000000-0000-4000-c000-000000000096","user_metadata":{"role":"owner"}}';
 SELECT test.expect_error($q$SELECT public.files_page('00000000-0000-4000-e000-000000000091',NULL,1,3)$q$,'PT403','anexos: metadata nao concede files.read');
+RESET ROLE;SELECT test.fixture_responsible('ANEXO-11','00000000-0000-4000-b000-000000000091');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';
 SELECT test.assert_true(public.files_page('00000000-0000-4000-e000-000000000091',NULL,1,3)->>'total'='0','anexos: lista vazia utilizavel');
 SELECT test.expect_error($q$SELECT public.files_page('00000000-0000-4000-e000-000000000091',NULL,0,3)$q$,'PT422','anexos: paginacao limitada');
@@ -43,10 +53,12 @@ SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000094","session_i
 SELECT test.expect_error(format('SELECT public.files_page(%L,%L,1,3)','00000000-0000-4000-e000-000000000091',:'request11'),'PT404','anexos: files.read nao amplia escopo do pedido');
 SELECT test.expect_error(format('SELECT public.files_page(%L,%L,1,3)','00000000-0000-4000-e000-000000000091',:'portal11'),'PT404','anexos: responsavel NULL falha fechado para equipe fora do escopo');
 
+RESET ROLE;SELECT test.fixture_responsible('ANEXO-11','00000000-0000-4000-b000-000000000092');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000092","session_id":"00000000-0000-4000-c000-000000000092"}';
 SELECT test.expect_error(format('SELECT public.files_begin_upload(%L,%L,gen_random_uuid())','00000000-0000-4000-e000-000000000091',(:'upload11'::jsonb||jsonb_build_object('request_id',:'portal11','request_item_id',NULL,'idempotency_key','null-scope11'))::text),'PT404','anexos: responsavel NULL nao concede upload fora de escopo');
 SELECT test.assert_true(public.files_page('00000000-0000-4000-e000-000000000091',:'request11',1,3)->'items'->0->>'intent_id' IS NULL AND NOT(public.files_page('00000000-0000-4000-e000-000000000091',:'request11',1,3)->'items'->0->>'can_validate')::boolean,'anexos: responsavel atual le metadados mas nao valida upload alheio');
 SELECT test.expect_error(format('SELECT public.files_process_claim(%L,%L,%L,gen_random_uuid())','00000000-0000-4000-e000-000000000091','validate',jsonb_build_object('intent_id',:'intention11')),'PT403','anexos: validacao exige autor e sessao da intencao');
+RESET ROLE;SELECT test.fixture_responsible('ANEXO-11','00000000-0000-4000-b000-000000000091');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';
 SELECT public.files_process_claim('00000000-0000-4000-e000-000000000091','validate',jsonb_build_object('intent_id',:'intention11'),gen_random_uuid())AS lease11 \gset
 SELECT test.assert_true(public.files_process_claim('00000000-0000-4000-e000-000000000091','validate',jsonb_build_object('intent_id',:'intention11'),gen_random_uuid())->>'lease_id'=:'lease11'::jsonb->>'lease_id','anexos: lease repetido idempotente');
@@ -69,12 +81,14 @@ RESET ROLE;
 UPDATE public.files SET status='disponivel',scanner_status='clean' WHERE id=:'file11';
 DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000092' AND permission_code='files.upload';
 SET ROLE authenticated;
+RESET ROLE;SELECT test.fixture_responsible('ANEXO-11','00000000-0000-4000-b000-000000000092');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000092","session_id":"00000000-0000-4000-c000-000000000092"}';
 SELECT test.assert_true(NOT(public.files_page('00000000-0000-4000-e000-000000000091',:'request11',1,3)->'items'->0->>'can_copy')::boolean,'anexos: files.copy sem upload nao anuncia copia que exige escrita no destino');
 SELECT test.expect_error(format('SELECT public.files_process_claim(%L,%L,%L,gen_random_uuid())','00000000-0000-4000-e000-000000000091','copy',jsonb_build_object('source_file_id',:'file11','target_request_id',:'request11','target_item_id',:'item11','idempotency_key','copy-without-upload11')),'PT403','anexos: copia exige capacidade adicional de upload no destino');
 RESET ROLE;
 INSERT INTO private.team_member_permissions(membership_id,permission_code)VALUES('00000000-0000-4000-b000-000000000092','files.upload');
 SET ROLE authenticated;
+RESET ROLE;SELECT test.fixture_responsible('ANEXO-11','00000000-0000-4000-b000-000000000091');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';
 SET storage.operation='object.get_authenticated';
 SELECT test.assert_true(public.files_download('00000000-0000-4000-e000-000000000091',:'file11',gen_random_uuid())->>'object_path'=:'path11' AND(SELECT count(*) FROM storage.objects WHERE name=:'path11')=1,'anexos: download JWT exige disponibilidade clean e escopo');
@@ -119,6 +133,7 @@ SELECT test.assert_true(public.files_page('00000000-0000-4000-e000-000000000091'
 SELECT test.expect_error(format('SELECT public.files_download(%L,%L,gen_random_uuid())','00000000-0000-4000-e000-000000000091',:'staff_portal11'::jsonb->'file'->>'id'),'PT404','anexos: portal nao baixa envio da equipe com UUID conhecido');
 SELECT test.expect_error(format('SELECT public.files_policy_get(%L,%L)','00000000-0000-4000-e000-000000000091',:'service11'),'PT403','anexos: portal nao consulta gestao de politica');
 SELECT test.expect_error($q$SELECT public.files_cleanup_plan('00000000-0000-4000-e000-000000000091',gen_random_uuid())$q$,'PT403','anexos: portal nao planeja limpeza');
+RESET ROLE;SELECT test.fixture_responsible('ANEXO-11','00000000-0000-4000-b000-000000000091');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';
 -- Rejected/expired candidates with every retention protection, active validation and unknown objects.
 SELECT public.files_begin_upload('00000000-0000-4000-e000-000000000091',(:'upload11'::jsonb||jsonb_build_object('name','Cleanup'||n||'.pdf','idempotency_key','cleanup11-'||n)),gen_random_uuid())AS cleanup_intent FROM generate_series(1,7)n;
@@ -157,6 +172,7 @@ RESET ROLE;
 SELECT test.assert_true(NOT EXISTS(SELECT FROM public.audit_events WHERE action LIKE 'files.%' AND changes::text ~ 'Documento|Cleanup|object_path|sha256|pdf|mime_type|session_id'),'anexos: auditoria sem nome caminho hash sessao ou PII');
 -- Revalidate the original uploader after network, including independent capabilities and scope.
 SET ROLE authenticated;
+RESET ROLE;SELECT test.fixture_responsible('ANEXO-11','00000000-0000-4000-b000-000000000092');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000092","session_id":"00000000-0000-4000-c000-000000000092"}';
 SELECT public.files_begin_upload('00000000-0000-4000-e000-000000000091',(:'upload11'::jsonb||'{"idempotency_key":"revocation11"}'),gen_random_uuid())AS revoke_intent11 \gset
 SELECT public.files_process_claim('00000000-0000-4000-e000-000000000091','validate',jsonb_build_object('intent_id',:'revoke_intent11'::jsonb->>'intent_id'),gen_random_uuid())AS revoke_lease11 \gset
@@ -173,11 +189,12 @@ RESET ROLE;
 UPDATE auth.sessions SET not_after=NULL WHERE id='00000000-0000-4000-c000-000000000092';
 UPDATE public.requests SET assignee_id='00000000-0000-4000-b000-000000000091' WHERE id=:'request11';
 SET ROLE service_role;
-SELECT test.expect_error(format('SELECT public.files_process_complete(%L,%L,%L,gen_random_uuid())',:'revoke_lease11'::jsonb->>'lease_id',:'revoke_lease11'::jsonb->>'lease_token','{"outcome":"missing","reason":"object_missing"}'),'PT404','anexos: transferencia apos rede impede finalizacao fora de escopo');
+SELECT test.expect_error(format('SELECT public.files_process_complete(%L,%L,%L,gen_random_uuid())',:'revoke_lease11'::jsonb->>'lease_id',:'revoke_lease11'::jsonb->>'lease_token','{"outcome":"missing","reason":"object_missing"}'),'PT403','anexos: transferencia apos rede conserva leitura mas impede finalizacao');
 RESET ROLE;
 UPDATE public.requests SET assignee_id='00000000-0000-4000-b000-000000000092' WHERE id=:'request11';
 UPDATE private.file_process_leases SET expires_at=clock_timestamp()-interval '1 second' WHERE id=(:'copy11'::jsonb->>'lease_id')::uuid;
 SET ROLE authenticated;
+RESET ROLE;SELECT test.fixture_responsible('ANEXO-11','00000000-0000-4000-b000-000000000091');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';
 SELECT test.assert_true(public.files_process_claim('00000000-0000-4000-e000-000000000091','copy',jsonb_build_object('source_file_id',:'file11','target_request_id',:'request11','target_item_id',:'item11','idempotency_key','copy11'),gen_random_uuid())->'result'->'file'->>'status'='quarentena','anexos: lease concluido vencido devolve resultado autorizado sem nova rede');
 RESET ROLE;
@@ -191,11 +208,13 @@ RESET ROLE;
 
 -- A lost or archived planner must not strand a reservation forever.
 SET ROLE authenticated;
+RESET ROLE;SELECT test.fixture_responsible('ANEXO-11','00000000-0000-4000-b000-000000000091');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';
 SELECT public.files_begin_upload('00000000-0000-4000-e000-000000000091',(:'upload11'::jsonb||'{"idempotency_key":"takeover11"}'),gen_random_uuid())AS takeover_intent11 \gset
 RESET ROLE;
 UPDATE public.files SET status='rejeitado' WHERE id=(:'takeover_intent11'::jsonb->'file'->>'id')::uuid;
 SET ROLE authenticated;
+RESET ROLE;SELECT test.fixture_responsible('ANEXO-11','00000000-0000-4000-b000-000000000092');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000092","session_id":"00000000-0000-4000-c000-000000000092"}';
 SELECT public.files_cleanup_plan('00000000-0000-4000-e000-000000000091',gen_random_uuid())AS staff_plan11 \gset
 SELECT public.files_process_claim('00000000-0000-4000-e000-000000000091','cleanup',jsonb_build_object('plan_id',:'staff_plan11'::jsonb->>'id'),gen_random_uuid())AS staff_cleanup_lease11 \gset
@@ -207,6 +226,7 @@ RESET ROLE;
 UPDATE public.requests SET assignee_id='00000000-0000-4000-b000-000000000092' WHERE id=:'request11';
 DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000092' AND permission_code='files.manage';
 SET ROLE authenticated;
+RESET ROLE;SELECT test.fixture_responsible('ANEXO-11','00000000-0000-4000-b000-000000000091');SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000091","session_id":"00000000-0000-4000-c000-000000000091"}';
 SELECT public.files_cleanup_plan('00000000-0000-4000-e000-000000000091',gen_random_uuid())AS owner_plan11 \gset
 SELECT test.assert_true(:'owner_plan11'::jsonb->>'id'=:'staff_plan11'::jsonb->>'id' AND :'owner_plan11'::jsonb->>'count'='1','anexos: owner recupera plano pendente de gestor revogado sem perder caminhos');
@@ -233,3 +253,5 @@ SELECT test.assert_true(:'batch_plan11'::jsonb->>'count'='20' AND jsonb_array_le
 SELECT public.files_process_claim('00000000-0000-4000-e000-000000000091','cleanup',jsonb_build_object('plan_id',:'batch_plan11'::jsonb->>'id'),gen_random_uuid())AS batch_lease11 \gset
 SELECT test.assert_true((SELECT array_agg(i->>'id' ORDER BY i->>'id') FROM jsonb_array_elements(:'batch_plan11'::jsonb->'items')i)=(SELECT array_agg(i->>'file_id' ORDER BY i->>'file_id') FROM jsonb_array_elements(:'batch_lease11'::jsonb->'objects')i),'anexos: worker recebe exatamente os mesmos IDs exibidos na revisao');
 ROLLBACK;
+
+RESET ROLE;SELECT test.fixture_responsible('ANEXO-11','00000000-0000-4000-b000-000000000092');

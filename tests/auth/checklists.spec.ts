@@ -36,7 +36,7 @@ test('checklists reais12: navegador, dois uploads privados, snapshot, aviso dedu
   expect((await result<ChecklistView>(await post('/view',{office_id:office,request_id:own.id,item_id:item}))).instance!.entries).toHaveLength(3);
   // Reuse the existing transfer10, whose transaction now emits the generic handoff.
   expect((await request.post(`/api/requests/${own.id}/actions`,{headers:owner.headers,data:{office_id:office,expected_version:own.version,mutation:{kind:'transfer',assignee_id:member,reason:'Encaminhamento fictício12'}}})).status()).toBe(200);
-  for(let n=0;n<2;n++)await result(await post('/notify',{office_id:office,instance_id:current.instance!.id}));
+  for(let n=0;n<2;n++)await result(await request.post('/api/checklists/notify',{headers:worker.headers,data:{office_id:office,instance_id:current.instance!.id}}));
   const notices=await result<ChecklistNotices>(await request.post('/api/checklists/notifications',{headers:worker.headers,data:{office_id:office,page:1,size:5,unread_only:false}}));const ownNotices=notices.items.filter(n=>n.request_id===own.id);expect(ownNotices.map(n=>n.kind).sort()).toEqual(['handoff','pending']);expect(JSON.stringify(ownNotices)).not.toMatch(/Arquivo|privada|fictício|reason|title|cpf/);
   await result(await request.post('/api/checklists/notifications/read',{headers:worker.headers,data:{office_id:office,id:ownNotices[0].id}}));
   expect((await request.post('/api/checklists/notifications/read',{headers:owner.headers,data:{office_id:office,id:ownNotices[0].id}})).status()).toBe(404);

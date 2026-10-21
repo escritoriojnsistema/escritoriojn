@@ -10,6 +10,7 @@ async function setup(page:Page, state = fixture(), role = 'owner', materialized 
  const token = `e30.${Buffer.from(JSON.stringify({sub:user,exp:Math.floor(Date.now()/1000)+3600,role:'authenticated',session_id:office})).toString('base64url')}.fixture`;
  await page.addInitScript(({token,user}) => localStorage.setItem('sb-team-ui-auth-token', JSON.stringify({access_token:token,refresh_token:'fixture',token_type:'bearer',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:user,aud:'authenticated',email:'fixture@example.test',app_metadata:{},user_metadata:{}}})), {token,user});
  await page.route('https://team-ui.supabase.co/**', r=>r.fulfill({json:{id:user,aud:'authenticated',email:'fixture@example.test',app_metadata:{},user_metadata:{}}}));
+ await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
  await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,role_code:role,permissions,office_name:'Escritório Sintético',display_name:'Pessoa Sintética'}]}}}));
  await page.route('**/api/customers**',r=>r.fulfill({json:{data:r.request().url().endsWith('/search')?{items:[customer],total:1,page:1,page_size:3}:{...customer,...(!materialized?{source:'client_registration',materialized:false,can_update:false}:{})}}}));
  await page.route('**/api/customer-relations/**',r=>{

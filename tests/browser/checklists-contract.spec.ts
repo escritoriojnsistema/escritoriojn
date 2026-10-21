@@ -8,9 +8,11 @@ async function setup(page:Page,{empty=false,client=false}={}){
  const token=`e30.${Buffer.from(JSON.stringify({sub:user,exp:Math.floor(Date.now()/1000)+3600,role:'authenticated',session_id:office})).toString('base64url')}.fixture`;
  await page.addInitScript(({token,user})=>localStorage.setItem('sb-team-ui-auth-token',JSON.stringify({access_token:token,refresh_token:'fixture',token_type:'bearer',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:user,aud:'authenticated',email:'fixture@example.test',app_metadata:{},user_metadata:{}}})),{token,user});
  await page.route('https://team-ui.supabase.co/**',r=>r.fulfill({json:{id:user,aud:'authenticated'}}));
+ await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
  await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,role_code:client?'client':'owner',permissions,office_name:'Escritório Fictício',display_name:'Pessoa Fictícia'}]}}}));
  await page.route('**/api/requests/search',r=>r.fulfill({json:{data:{items:empty?[]:[{id,protocol:data.protocol,title:'Solicitação fictícia'}],total:empty?0:1,page:1,page_size:3,portal:false}}}));
  await page.route('**/api/checklists/**',async r=>{const url=r.request().url();if(url.endsWith('/notifications/read')||url.endsWith('/notify'))return r.fulfill({json:{data:{ok:true}}});if(url.endsWith('/notifications'))return r.fulfill({json:{data:{items:empty?[]:[{id,kind:'pending',created_at:date,read_at:null,request_id:id,protocol:data.protocol,can_open:true}],total:empty?0:1,unread:empty?0:1,page:1,page_size:3}}});return r.fulfill({json:{data}});});
+ await page.route('**/api/notifications/**',r=>r.fulfill({json:{data:r.request().url().endsWith('/read')?{ok:true}:r.request().url().endsWith('/summary')?{unread:0}:{items:empty?[]:[{id,kind:'pending',created_at:date,read_at:null,request_id:id,protocol:data.protocol,can_open:true,attendant_name:null}],total:empty?0:1,unread:empty?0:1,page:1,page_size:3}}}));
  await page.route('**/api/attachments/search',r=>r.fulfill({json:{data:{items:[],total:0,page:1,page_size:3,portal:false}}}));
 }
 for(const width of [320,360,1440])test(`checklists12: dois recebidos, terceiro pendente e layout ${width}`,async({page})=>{

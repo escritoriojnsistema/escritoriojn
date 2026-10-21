@@ -8,7 +8,7 @@ export type ChecklistModel={service_id:string;version:number;definition:Checklis
 export type ChecklistHistory={id:string;entry_id:string;status:ChecklistState;reason:string;actor_name:string|null;created_at:string;file_id:string|null};
 export type ChecklistEntry=ChecklistRule&{id:string;applicable:boolean;status:ChecklistState;file_id:string|null;version:number;reason:string;actor_name:string|null;updated_at:string;file_status:string|null};
 export type ChecklistInstance={id:string;source:string;name:string;entries:ChecklistEntry[];history:ChecklistHistory[];pending:number;received:number;can_update:boolean;can_waive:boolean};
-export type ChecklistView={request_id:string;request_version:number;protocol:string;closed:boolean;assignee_id:string|null;can_transfer:boolean;items:{id:string;name:string;service_id:string}[];selected_item_id:string|null;instance:ChecklistInstance|null};
+export type ChecklistView={request_id:string;request_version:number;protocol:string;closed:boolean;following_only?:boolean;assignee_id:string|null;can_transfer:boolean;items:{id:string;name:string;service_id:string}[];selected_item_id:string|null;instance:ChecklistInstance|null};
 export type ChecklistNotice={id:string;kind:'handoff'|'pending';created_at:string;read_at:string|null;request_id:string|null;protocol:string|null;can_open:boolean};
 export type ChecklistNotices={items:ChecklistNotice[];total:number;unread:number;page:number;page_size:number};
 

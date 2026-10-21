@@ -36,11 +36,13 @@ export function requestDetail(v:unknown):RequestDetail {
  if(!record(v)||typeof v.portal!=='boolean'||!requestText(v.message,2000,0,true))throw Error('Invalid request detail');
  if(v.portal){
   if(!Array.isArray(v.services)||v.services.length>10||!v.services.every(x=>requestText(x,120)))throw Error('Invalid portal services');
-  return {...base,portal:true,message:v.message,services:[...v.services]};
+  if(v.assignee_name!==undefined&&!nullableName(v.assignee_name))throw Error('Invalid attendant');
+  return {...base,portal:true,message:v.message,services:[...v.services],assignee_name:v.assignee_name??null};
  }
+ for(const k of ['can_reclaim','following_only'])if(v[k]!==undefined&&typeof v[k]!=='boolean')throw Error('Invalid authority');
  const staff=staffSummary(v);
  if(!nullableId(v.customer_id)||!requestText(v.priority_reason,500,0)||!Array.isArray(v.items)||v.items.length>10||!Array.isArray(v.history)||v.history.length>3||!positive(v.history_page)||!int(v.history_total,1)||!['can_update','can_transfer','can_cancel'].every(k=>typeof v[k]==='boolean'))throw Error('Invalid staff detail');
- return {...staff,portal:false,customer_id:v.customer_id,message:v.message,priority_reason:v.priority_reason,items:v.items.map(item),history:v.history.map(history),history_page:v.history_page,history_total:v.history_total,can_update:v.can_update as boolean,can_transfer:v.can_transfer as boolean,can_cancel:v.can_cancel as boolean};
+ return {...staff,portal:false,customer_id:v.customer_id,message:v.message,priority_reason:v.priority_reason,items:v.items.map(item),history:v.history.map(history),history_page:v.history_page,history_total:v.history_total,can_update:v.can_update as boolean,can_transfer:v.can_transfer as boolean,can_cancel:v.can_cancel as boolean,can_reclaim:v.can_reclaim===true,following_only:v.following_only===true};
 }
 export function requestMutationResult(v:unknown):RequestMutationResult {
  if(record(v)&&v.access_lost===true)return {access_lost:true};
@@ -50,8 +52,10 @@ export function requestOptions(v:unknown):RequestOptions {
  if(!record(v)||!Array.isArray(v.items)||!int(v.total)||!positive(v.page)||!int(v.page_size)||![3,5].includes(v.page_size)||v.items.length>v.page_size)throw Error('Invalid request options');
  const items=v.items.map(x=>{
   if(!record(x)||!uuid(x.id)||!requestText(x.label,200))throw Error('Invalid option');
+  if(x.role_code!==undefined&&!['owner','admin','employee'].includes(String(x.role_code)))throw Error('Invalid assignee role');
+  if(x.eligible!==undefined&&typeof x.eligible!=='boolean')throw Error('Invalid eligibility');
   if(x.definition!==undefined&&!validService(x.definition))throw Error('Invalid service option');
-  return {id:x.id,label:x.label,...(x.definition===undefined?{}:{definition:x.definition})};
+  return {id:x.id,label:x.label,...(x.role_code===undefined?{}:{role_code:x.role_code as 'owner'|'admin'|'employee'}),...(x.eligible===undefined?{}:{eligible:x.eligible as boolean}),...(x.definition===undefined?{}:{definition:x.definition})};
  });
  return {items,total:v.total,page:v.page,page_size:v.page_size};
 }

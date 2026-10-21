@@ -10,6 +10,7 @@ const fixture=sql=>JSON.parse(sql(`SELECT jsonb_build_object('request_id',r.id,'
 
 export const raceAttachments=async({sql,openSql,until})=>{
  const input=fixture(sql);let result='';
+ sql(`SELECT test.fixture_responsible('ANEXO-11','${member}');`);
  // Permission changes while begin_upload waits for the request must win.
  const lock=openSql();let caller;
  try{
@@ -40,6 +41,7 @@ export const raceAttachments=async({sql,openSql,until})=>{
   result+='PASS: anexos: finalizacao apos rede e lock revalida sessao capturada\n';
  }finally{lock2.child.kill();completion?.child.kill();sql(`UPDATE auth.sessions SET not_after=NULL WHERE id='${session}';`);}
  // Reserve under file lock, then a concurrent new reference must fail after the reservation commits.
+ sql(`SELECT test.fixture_responsible('ANEXO-11','00000000-0000-4000-b000-000000000091');`);
  input.idempotency_key='race-cleanup11';input.name='Corrida limpeza11.pdf';
  const cleanupIntent=JSON.parse(sql(`${owner}SELECT public.files_begin_upload('${office}',${quote(JSON.stringify(input))},gen_random_uuid());`).trim());
  sql(`UPDATE public.files SET status='rejeitado' WHERE id=${quote(cleanupIntent.file.id)};`);

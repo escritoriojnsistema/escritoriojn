@@ -13,6 +13,7 @@ async function setup(page:Page,{client=false,empty=false,caps=permissions}={}){
  const token=`e30.${Buffer.from(JSON.stringify({sub:user,exp:Math.floor(Date.now()/1000)+3600,role:'authenticated',session_id:office})).toString('base64url')}.fixture`;
  await page.addInitScript(({token,user})=>localStorage.setItem('sb-team-ui-auth-token',JSON.stringify({access_token:token,refresh_token:'fixture',token_type:'bearer',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:user,aud:'authenticated',email:'fixture@example.test',app_metadata:{},user_metadata:{}}})),{token,user});
  await page.route('https://team-ui.supabase.co/**',r=>r.fulfill({json:{id:user,aud:'authenticated',email:'fixture@example.test'}}));
+ await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
  await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,role_code:client?'client':'owner',permissions:client?['foundation.access']:caps,office_name:'Escritório Fictício',display_name:'Pessoa Fictícia'}]}}}));
  await page.route('**/api/requests**',r=>{
   const url=r.request().url(),b=r.request().postDataJSON();expect(r.request().headers().authorization).toMatch(/^Bearer /);
@@ -67,7 +68,8 @@ test('solicitações: somente leitura não oferece mutações',async({page})=>{
  await setup(page,{caps:['foundation.access','requests.read']});await page.goto('/solicitacoes');await expect(page.getByRole('button',{name:'Nova solicitação',exact:true})).toHaveCount(0);await page.getByRole('button',{name:`Ver solicitação ${summary.protocol}`,exact:true}).click();await expect(page.getByText('Ações do atendimento',{exact:true})).toHaveCount(0);
 });
 test('solicitações: mudança de escritório descarta rascunho e resultado tardio',async({page})=>{
- await setup(page);await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[office,other].map(value=>({office_id:value,user_id:user,role_code:'owner',permissions,office_name:value===office?'Escritório Fictício':'Outro escritório',display_name:'Pessoa Fictícia'}))}}}));
+ await setup(page);await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
+ await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[office,other].map(value=>({office_id:value,user_id:user,role_code:'owner',permissions,office_name:value===office?'Escritório Fictício':'Outro escritório',display_name:'Pessoa Fictícia'}))}}}));
  await page.goto('/solicitacoes');await page.getByRole('button',{name:'Nova solicitação',exact:true}).click();await page.getByLabel('Título',{exact:true}).fill('Privado do escritório anterior');await page.getByRole('combobox',{name:'Escritório',exact:true}).selectOption(other);await expect(page.getByRole('list',{name:'Solicitações do escritório'})).toBeVisible();await page.getByRole('button',{name:'Nova solicitação',exact:true}).click();await expect(page.getByLabel('Título',{exact:true})).toHaveValue('');
 });
 test('solicitações:320px, altura reduzida e zoom mantêm rolagem e alvos acessíveis',async({page})=>{

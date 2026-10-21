@@ -1,3 +1,4 @@
+import {raceReclaim} from './database-adjustments.mjs';
 import { raceChecklists, benchmarkChecklists } from './database-checklists.mjs';
 import { raceAttachments, benchmarkAttachments } from './database-attachments.mjs';
 import { execFileSync, spawn } from 'node:child_process';
@@ -601,7 +602,7 @@ const raceRequestVersion = async database => {
   sql(database,'postgres',`CREATE FUNCTION test.request_version_result(p_id uuid,p_version integer) RETURNS text LANGUAGE plpgsql SECURITY INVOKER AS $test$ BEGIN PERFORM public.request_mutate('${requestOffice}',p_id,p_version,'{"kind":"note","note":"Corrida ficticia"}',gen_random_uuid());RETURN 'winner';EXCEPTION WHEN SQLSTATE 'PT409' THEN RETURN 'conflict';END $test$;`);
   const callers=[openSql(database),openSql(database)];
   try{
-    for(const c of callers)c.child.stdin.end(`${requestOwner} SELECT test.request_version_result('${id}',${version});`);
+    for(const c of callers)c.child.stdin.end(`SET ROLE authenticated;SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000094","session_id":"00000000-0000-4000-c000-000000000094"}'; SELECT test.request_version_result('${id}',${version});`);
     const results=(await Promise.all(callers.map(c=>c.result))).map(v=>v.trim()).sort();
     if(JSON.stringify(results)!==JSON.stringify(['conflict','winner']))throw Error('Request version race did not produce exactly one winner.');
     return sql(database,'postgres',`SELECT test.assert_true((SELECT version FROM public.requests WHERE id='${id}')=${version+1},'pedidos: versao concorrente conserva somente um vencedor');`);
@@ -720,6 +721,7 @@ try {
       + sql(database, 'postgres', readFileSync(`${root}tests/database/requests.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/attachments.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/checklists.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/adjustments.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
       + await raceLastOwners(database)
       + await raceRevokedSession(database)
@@ -744,6 +746,7 @@ try {
       + await raceRequestCreate(database,true)
       + await raceRequestCreate(database,false)
       + await raceRequestVersion(database)
+      + await raceReclaim({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceRequestAuthority(database,false)
       + await raceRequestAuthority(database,true)
       + await raceRequestServiceAuthority(database,'services.perform')

@@ -22,8 +22,8 @@ function instance(x:unknown):ChecklistInstance{
  return {id:x.id,source:x.source,name:x.name,entries:x.entries.map(entry),history:x.history.map(history),pending:x.pending as number,received:x.received as number,can_update:x.can_update,can_waive:x.can_waive};
 }
 export function view(x:unknown):ChecklistView{
- if(!record(x)||!uuid(x.request_id)||!positive(x.request_version)||!requestText(x.protocol,80)||typeof x.closed!=='boolean'||!nullableId(x.assignee_id)||typeof x.can_transfer!=='boolean'||!Array.isArray(x.items)||x.items.length>10||!nullableId(x.selected_item_id))throw Error('Invalid view');
- return {request_id:x.request_id,request_version:x.request_version,protocol:x.protocol,closed:x.closed,assignee_id:x.assignee_id,can_transfer:x.can_transfer,selected_item_id:x.selected_item_id,items:x.items.map(i=>{if(!record(i)||!uuid(i.id)||!uuid(i.service_id)||!requestText(i.name,120))throw Error('Invalid item');return {id:i.id,service_id:i.service_id,name:i.name};}),instance:x.instance===null?null:instance(x.instance)};
+ if(!record(x)||!uuid(x.request_id)||!positive(x.request_version)||!requestText(x.protocol,80)||typeof x.closed!=='boolean'||(x.following_only!==undefined&&typeof x.following_only!=='boolean')||!nullableId(x.assignee_id)||typeof x.can_transfer!=='boolean'||!Array.isArray(x.items)||x.items.length>10||!nullableId(x.selected_item_id))throw Error('Invalid view');
+ return {request_id:x.request_id,request_version:x.request_version,protocol:x.protocol,closed:x.closed,following_only:x.following_only===true,assignee_id:x.assignee_id,can_transfer:x.can_transfer,selected_item_id:x.selected_item_id,items:x.items.map(i=>{if(!record(i)||!uuid(i.id)||!uuid(i.service_id)||!requestText(i.name,120))throw Error('Invalid item');return {id:i.id,service_id:i.service_id,name:i.name};}),instance:x.instance===null?null:instance(x.instance)};
 }
 export function notices(x:unknown):ChecklistNotices{
  if(!record(x)||!Array.isArray(x.items)||!int(x.total)||!int(x.unread)||!positive(x.page)||![3,5].includes(Number(x.page_size))||x.items.length>Number(x.page_size))throw Error('Invalid notices');
