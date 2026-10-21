@@ -1,0 +1,11 @@
+{
+  "version": "20261021114510",
+  "name": "checklists_pending_notifications",
+  "statements": 61,
+  "ordered_commands_match": true,
+  "unmatched_sql": false,
+  "sha256": "344cdb94a4af9f3a5ac8d2d7850a93fb85aeeb25ad612e4a2c6a932a488af373",
+  "application": "automatic Supabase Git integration afterPR25; no manual apply",
+  "feature_sha": "74c7ae67ae9834ebbf91ba5a7611718486af01d3",
+  "merge_sha": "10161553f9ca87c466a3fc3e62eb5fe225f97544"
+}

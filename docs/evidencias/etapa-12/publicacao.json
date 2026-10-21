@@ -1,0 +1,64 @@
+{
+  "site": "https://escritoriojn.vercel.app",
+  "pr": "https://github.com/escritoriojnsistema/escritoriojn/pull/25",
+  "feature": "74c7ae67ae9834ebbf91ba5a7611718486af01d3",
+  "merge": "10161553f9ca87c466a3fc3e62eb5fe225f97544",
+  "vercel_status": "SUCCESS",
+  "deployment": "https://vercel.com/escritorio-jn/escritoriojn/CWqfExz3ePFU9BkL8ZVXgUPxHUVi",
+  "delivery": "GitHub to Vercel only; no CLI/API deploy",
+  "preview": {
+    "url": "https://escritoriojn-git-feat-etapa-12-checklists-escritorio-jn.vercel.app",
+    "status": 302,
+    "tests": "SSO-protected; local compiled preview50 passed"
+  },
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/pendencias",
+      "status": 200,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/notificacoes",
+      "status": 200,
+      "cache_control": "private, no-store"
+    }
+  ],
+  "asset": "/assets/index-CoUmsL_-.js",
+  "sha256": "ec2474e7599182ce26e433bd84f792ffa21b411b81a20c15cadf33c983e1df81",
+  "markers": {
+    "/pendencias": true,
+    "/notificacoes": true,
+    "/api/checklists": true,
+    "/solicitacoes": true,
+    "/anexos": true
+  },
+  "modulepreload": {
+    "react": true,
+    "supabase": true
+  },
+  "anonymous_rpc": {
+    "status": 401,
+    "code": "42501"
+  },
+  "github_actions": "disabled_manually; not run",
+  "authenticated_proof": "real local Auth/REST/Storage/Edge laboratory; no hosted passwords or fixtures",
+  "public_e2e": {
+    "passed": 50,
+    "failed": 0,
+    "environment": "canonical HTTPS site; anonymous/public only"
+  },
+  "runtime_tree_validated": "8fcd637e0a0b58848907ec1bb9535c0acbef5007",
+  "supabase": {
+    "migrations": 15,
+    "version": "20261021114510",
+    "applied_by": "existing Git integration",
+    "commands_match": 61,
+    "manual_apply": false,
+    "counts_preserved": true
+  }
+}

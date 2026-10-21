@@ -1,6 +1,6 @@
 # Fecho12 — Checklists, pendências e avisos internos
 
-Checkpoint de validação; publicação ainda pendente. [Contrato](etapa-12.md), [plano/evidências](plano-12.md) e [manual oficial](https://drive.google.com/file/d/1P9hsZYbGGHc1f6aSR6u1FzvzEfw513WR/view).
+Etapa12 concluída, integrada e publicada em https://escritoriojn.vercel.app/pendencias e `/notificacoes` pela conexão GitHub→Vercel. [Contrato](etapa-12.md), [plano/evidências](plano-12.md) e [manual oficial](https://drive.google.com/file/d/1P9hsZYbGGHc1f6aSR6u1FzvzEfw513WR/view).
 
 ## Resultado implementado
 
@@ -24,6 +24,13 @@ Desktop/mobile reutilizam OperationLayout;até4atalhos e extras no menu.3/5itens
 
 ## Publicação e continuidade
 
-50E2E públicos no preview compilado passaram. Pendente: publicar PR/Git→Vercel e conferir Supabase após Git. Migration20261021114510, SHA256344cdb94a4af9f3a5ac8d2d7850a93fb85aeeb25ad612e4a2c6a932a488af373. Antes de eventual apply consultar histórico para não duplicar a integração.
+50E2E públicos no preview compilado e50no canônico publicado passaram sem falhas. [PR25](https://github.com/escritoriojnsistema/escritoriojn/pull/25), feature74c7ae6/merge10161553f9ca87c466a3fc3e62eb5fe225f97544; mesma árvore8fcd637e validada. [VercelCWqf](https://vercel.com/escritorio-jn/escritoriojn/CWqfExz3ePFU9BkL8ZVXgUPxHUVi) SUCCESS pela integraçãoGit; asset index-CoUmsL_-.js contém APIs/rotas12e09–11 e preloadsReact/SDK. [Prova](../evidencias/etapa-12/publicacao.json). Preview hospedado é protegido porSSO/302; prova remota foi feita no canônico, sem reduzir proteção. Migration20261021114510, SHA256344cdb94a4af9f3a5ac8d2d7850a93fb85aeeb25ad612e4a2c6a932a488af373. Aplicada automaticamente porSupabase/Git;61comandos correspondem ao arquivo testado, sem SQL restante e sem apply manual duplicado. [Readback](../evidencias/etapa-12/migration-readback.json).21corpos de funções ativos idênticos ao arquivo;8wrappers públicos invoker/ACL mínima e5tabelas privadasRLS/semGRANT bruto conferidos.4capacidades seed somenteowner;helper produtor inacessível à API. RESTanônimo401/42501. [Catálogo/contagens](../evidencias/etapa-12/supabase.json).
 
-Baseline hospedado:14migrations,5Auth/5vínculos/1ficha/1contato e0serviços/pedidos/arquivos, domínio12ausente. Nenhuma fixture ou conta remota alterada. Actions disabled_manually, não reativar; publicação autorizada somente GitHub→Vercel. Sem nova Edge/SMTP/credencial/serviço contratado. Lockfile/envexemplo/vercelconfig preservados. Rollback somente código, conservando snapshots/referências/histórico/avisos. Próxima13 somente por novo pedido; ler AGENTS/Livro/fecho12 e regra afetada.
+Baseline14→15migrations;5Auth/5vínculos/1ficha/1contato e0serviços/pedidos/arquivos preservados;0modelos/instâncias/itens/históricos/avisos fictícios hospedados. Nenhuma fixture ou conta remota alterada. Actions disabled_manually, não reativar; publicação autorizada somente GitHub→Vercel. Sem nova Edge/SMTP/credencial/serviço contratado. Lockfile/envexemplo/vercelconfig preservados. Rollback somente código, conservando snapshots/referências/histórico/avisos. Próxima13 somente por novo pedido; ler AGENTS/Livro/fecho12 e regra afetada.
+
+
+[Advisors](../evidencias/etapa-12/advisors.json) semERROR.30INFO RLSsem policy são compatíveis com a ACL privada,67índices sem uso em base vazia;3FKs antigos de customer_merges/customer_registrations permanecem fora12 ([explicação](https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys)), nenhuma FK12 sem cobertura.Proteção contra senhas vazadas é WARN preexistente ([configuração](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection)); nenhuma configuração Auth/contratação foi alterada.
+
+Auth hospedado e aparelho físico não foram usados; prova autenticada é do laboratório descartável real. Quarentena continua requisito até scanner comprovado. Root/lockfile/envexemplo/Vercelconfig e conta/serviços preservados; única otimização de build separa React eSDK já pré-carregados.50testes públicos remotos após publicação passaram; helper adicional de readback precisou definir proxyNode no início do processo e então completou, sem mudança no produto.
+
+Checklist final: manual12 atendido; Desktop/Mobile consistentes;≤4atalhos/restante sidebar;1workspace porfluxo/rolagem natural mínima;transições e ações sem loader;performance/API↔banco revisados;Backend,Frontend,Supabase,GitHub,Vercel e raiz conferidos. APROVÁVEL. Fechamento seguinte somente documental; não repetir baterias por edição de evidência. Próxima13 exige novo pedido e leitura de AGENTS/Livro/fecho12/regra afetada.
