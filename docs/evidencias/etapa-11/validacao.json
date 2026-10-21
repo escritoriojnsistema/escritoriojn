@@ -52,7 +52,7 @@
     "valid_files_state": "quarentena",
     "download_permitted": false
   },
-  "publication": "pending separate hosted evidence",
+  "publication": "Complete; see publicacao.json and migration-readback.json",
   "limits": [
     "No hosted positive authenticated test or physical device",
     "Local benchmark does not establish hosted SLA",
@@ -76,5 +76,9 @@
     "verify_jwt": true,
     "source_files_matching": 4,
     "anonymous_http_status": 401
+  },
+  "remote_public_e2e": {
+    "passed": 47,
+    "failed": 0
   }
 }

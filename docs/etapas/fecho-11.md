@@ -1,6 +1,6 @@
 # Fecho11 — Anexos privados
 
-Implementação integrada aos pedidos10 e ao catálogo09, conforme [cartão oficial](https://drive.google.com/file/d/1K-ZyDvCrvvHmtQgpGlFQdfHfsX3acay6/view) e RF06. Publicação e conferência hospedada em andamento; atualizar este registro com as provas antes de declarar concluída. [Contrato](etapa-11.md), [plano](plano-11.md).
+Etapa11 concluída, integrada aos pedidos10 e ao catálogo09 e publicada em https://escritoriojn.vercel.app/anexos e `/meus-anexos`, conforme [cartão oficial](https://drive.google.com/file/d/1K-ZyDvCrvvHmtQgpGlFQdfHfsX3acay6/view) e RF06. [Contrato](etapa-11.md), [plano](plano-11.md), [prova hospedada](../evidencias/etapa-11/publicacao.json).
 
 ## Resultado
 
@@ -26,6 +26,14 @@ Desktop/mobile reutilizam OperationLayout, quatro atalhos incluindo Início/Cont
 
 ## Publicação e continuidade
 
-Sem GitHub Actions. Somente GitHub→Vercel no projeto/canônico existente; schema11 aditivo e nova Edge JWT. Depois do merge, ler schema_migrations e comparar comandos antes de qualquer apply manual: integraçãoGit já aplica migrations. Conferir bucket privado, RLS/ACL, função publicada, índices, contagens preservadas e bundle canônico. Nenhum segredo/SMTP/plano contratado/conta real alterado.
+Sem GitHub Actions; workflow387780086 reconfirmado disabled_manually antes e depois da publicação. [PR23](https://github.com/escritoriojnsistema/escritoriojn/pull/23), feature9590ddc/mergeab6ab63, mesma árvoref4e76db validada. [VercelE1WY](https://vercel.com/escritorio-jn/escritoriojn/E1WY9z7f8vNrxLeNBMvmrSeRAPmj) SUCCESS pela integraçãoGit; asset canônico index-DovCgnd9.js contém rotas/APIs11 e09/10.47E2E públicos remotos passaram sem falhas. Raiz, lockfile, envexemplo e Vercelconfig preservados; nenhuma publicação por CLI/API Vercel.
+
+Migration20261021003953 aplicada automaticamente porGit,80comandos correspondentes ao arquivo testado, SHA25699dd5b5c6ef2fb1088ccaf0fca62832a41764c998152a707c648a0ef83af7b85. [Readback](../evidencias/etapa-11/migration-readback.json) preserva literais/corpos de funções; não houve apply manual duplicado.14migrations/5Auth/5vínculos/1ficha/1contato preservados;0serviços/pedidos/arquivos/intenções/objetos fictícios hospedados. Bucket privado10MiB/PDFPNGJPEG,8policiesStorage,7tabelas comRLS/semGRANT bruto,9RPCs invoker comACL mínima e todas FKs novas indexadas conferidos. Quatro capacidades seed apenasowner.
+
+Edge private-attachments ACTIVE/v2/JWT/importmap, três fontes runtime lidas idênticas às locais; v1 inicial incluía deno.json idêntico e integraçãoGit republicou v2. Chamada com JWT da API anônima executou o handler e retornou401AUTH_REQUIRED; RESTtabela/RPC anônimos401/42501. Segredo permanece nativo da Edge. Nenhum segredo/SMTP/plano contratado/conta real alterado; sem expurgo ou fixture hospedada.
+
+Advisors semERROR. RLS privada sempolicy é intencional/semGRANT. Permanecem3FKs antigos fora11 e índices sem uso em base vazia ([explicação](https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys)); proteção contra senhas vazadas é WARN preexistente ([configuração](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection)). Nenhuma FK11 descoberta sem índice.
 
 Autenticado comprovado em laboratório descartável, sem senha hospedada ou aparelho físico. Conector administrativo Vercel403 conhecido: usar statusGit+HTTP/assets públicos. Rollback somente código, preservando metadados/intenções/reservas/auditoria; não abrir bucket nem apagar registros para recuperar falhas. Próxima12 somente por novo pedido.
+
+Checklist final: manual11 atendido; padrões Desktop/Mobile preservados; até4atalhos/restante na sidebar; um workspace por fluxo e rolagem natural mínima; transições/ações sem loader; performance/backend↔frontend revisados; Backend,Frontend,Supabase,GitHub,Vercel e raiz conferidos. Scanner real permanece requisito explícito para futura distribuição, sem falsa aprovação.
