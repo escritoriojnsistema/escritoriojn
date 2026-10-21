@@ -1,6 +1,8 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { requestStatuses, requestStatusLabels, publicRequestStatusLabels, type RequestDetail as Detail, type RequestMutation, type RequestOption, type RequestStatus, type StaffRequestDetail } from '../../../shared/requests';
+import { Link } from 'react-router-dom';
+import { paths } from '../../app/routes';
 import { serviceMoney } from '../../../shared/services';
 import { RequestPicker } from './RequestPicker';
 import { RequestItems, itemInputs, type DraftItem } from './RequestItems';
@@ -16,7 +18,7 @@ export function RequestDetail({office,data,permissions,busy,onHistory,onMutate,o
 }
 function StaffDetail({office,data,permissions,busy,onHistory,onMutate,onFailure}:{office:string;data:StaffRequestDetail;permissions:string[];busy:boolean;onHistory:(page:number)=>void;onMutate:(mutation:RequestMutation)=>void;onFailure:(failure:RequestsError)=>void}){
  const total=data.items.reduce((sum,item)=>sum+item.snapshot.total_cents,0);
- return <>
+ return <>{permissions.includes('checklists.read')&&<Link className="team-text-button" to={paths.checklists} state={{office_id:office,request_id:data.id}}>Ver checklist e pendências</Link>}
   <dl className="service-facts"><div><dt>Origem e prioridade</dt><dd>{originLabels[data.origin]} · {data.priority==='urgent'?'Urgente':'Normal'}{data.priority_reason&&` — ${data.priority_reason}`}</dd></div><div><dt>Responsável atual</dt><dd>{data.assignee_name??'Sem responsável'}</dd></div><div><dt>Criador do atendimento (imutável)</dt><dd>{data.created_by_name??'Criador registrado'}</dd></div><div><dt>Pessoa do atendimento</dt><dd>{data.customer_name??'Não informada'}</dd></div></dl>
   <p className="request-total"><span>Total registrado</span><strong>{serviceMoney(total)}</strong></p><p className="customer-note">Valores preservados na abertura/classificação. Concluir não confirma quitação, aprovação, assinatura ou entrega.</p>
   {data.message&&<details className="service-section"><summary>Mensagem enviada pelo cliente</summary><p className="request-message-text">{data.message}</p></details>}
