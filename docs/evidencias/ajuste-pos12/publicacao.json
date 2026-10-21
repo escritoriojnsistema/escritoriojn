@@ -1,0 +1,93 @@
+{
+  "feature": "37f5f1e2026992ffe8be436d5f95102cae340f8b",
+  "feature_pr": "https://github.com/escritoriojnsistema/escritoriojn/pull/27",
+  "merge": "9728e198c45a427c1f0a3d85ec0ce7b0e9b82ee3",
+  "tree": "45ac4b6824e1310970efb1059b915f3212609571",
+  "vercel_preview": {
+    "id": "Czz6TChk8NFo7u7VueRfCUeTA5MU",
+    "status": "SUCCESS"
+  },
+  "vercel_production": {
+    "id": "7FTJvzdbydm49HwFRQxmZPGh2Sxc",
+    "status": "SUCCESS"
+  },
+  "supabase": {
+    "migration": {
+      "version": "20261021124414",
+      "name": "request_followup_client_notifications",
+      "commands": 44,
+      "functionBodies": 27,
+      "matched": true,
+      "anon_exec": 0,
+      "appliedBy": "Git integration; manual apply skipped after final history guard"
+    },
+    "catalog": {
+      "auth_users": 5,
+      "memberships": 5,
+      "customers": 1,
+      "requests": 0,
+      "files": 0,
+      "notifications": 0,
+      "migrations": 16,
+      "permissions": 36,
+      "role_permissions": 39,
+      "reclaim_roles": [
+        "owner"
+      ],
+      "explicit_reclaim_grants": 0,
+      "notifications_rls": true,
+      "notifications_raw_access": false
+    },
+    "public_rpc": {
+      "wrappers": 3,
+      "least_privilege": true
+    },
+    "advisors": {
+      "security": [
+        {
+          "name": "rls_enabled_no_policy",
+          "level": "INFO",
+          "count": 30
+        },
+        {
+          "name": "auth_leaked_password_protection",
+          "level": "WARN",
+          "count": 1
+        }
+      ],
+      "performance": [
+        {
+          "name": "unindexed_foreign_keys",
+          "level": "INFO",
+          "count": 3
+        },
+        {
+          "name": "unused_index",
+          "level": "INFO",
+          "count": 68
+        }
+      ]
+    }
+  },
+  "github_actions": "disabled_manually; no workflow run requested",
+  "hosted_fixtures": 0,
+  "public_e2e": {
+    "passed": 55
+  },
+  "authenticated_verification": "real disposable GoTrue/PostgREST/Storage/Edge laboratory; hosted accounts were not used",
+  "public_bundle": {
+    "url": "https://escritoriojn.vercel.app",
+    "html_status": 200,
+    "asset": "/assets/index-BIM4zjrY.js",
+    "asset_sha256": "5b390d8728b11ce267f7d15e2fbba5bdd849e398d3ca9c5e098d5a20fad2b786",
+    "markers": [
+      "Retomar atendimento para mim",
+      "Abrir notificações",
+      "Quem está atendendo",
+      "Status da solicitação",
+      "/api/notifications"
+    ],
+    "health": 200,
+    "checked_at": "2026-10-21T19:13:52.992Z"
+  }
+}
