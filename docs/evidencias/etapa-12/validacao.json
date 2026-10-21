@@ -1,0 +1,100 @@
+{
+  "stage": 12,
+  "base": "91653cd",
+  "status": "APROVAVEL: local validation complete; publication pending",
+  "node": {
+    "passed": 97,
+    "failed": 0
+  },
+  "ui_final": {
+    "passed": 12,
+    "failed": 0
+  },
+  "ui_affected_regression": {
+    "passed": 45,
+    "failed": 0
+  },
+  "auth_real_local": {
+    "passed": 3,
+    "failed": 0
+  },
+  "public_compiled_local": {
+    "passed": 50,
+    "failed": 0
+  },
+  "sql_benchmark_run": {
+    "replays": 2,
+    "checks_per_replay": 656,
+    "total": 1312,
+    "checklists_races_per_replay": 2
+  },
+  "build": {
+    "frontend": true,
+    "express": true,
+    "typecheck": true,
+    "static_modulepreload": [
+      "react",
+      "supabase"
+    ],
+    "route_loading_indicator": false
+  },
+  "production_dependencies_vulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "migration": {
+    "version": "20261021114510",
+    "sha256": "344cdb94a4af9f3a5ac8d2d7850a93fb85aeeb25ad612e4a2c6a932a488af373"
+  },
+  "baseline_hosted": {
+    "migrations": 14,
+    "auth_users": 5,
+    "memberships": 5,
+    "customers": 1,
+    "customer_contacts": 1,
+    "services": 0,
+    "requests": 0,
+    "files": 0,
+    "checklists_domain": false
+  },
+  "github_actions": "disabled_manually; never run",
+  "vercel_delivery": "GitHub integration only",
+  "observed_failures": [
+    {
+      "case": "Auth lab first startup",
+      "reason": "official Storage image download exceeded60s; no tests started",
+      "resolution": "same pinned digest98ffec5d downloaded; complete3/3 retry passed"
+    },
+    {
+      "case": "Node build helper",
+      "reason": "Playwright JSONunknown type in new test helper",
+      "resolution": "typed response DTO; build/typecheck passed"
+    },
+    {
+      "case": "UI stale query/access_lost/404/height",
+      "reason": "regressions observed before corrections",
+      "resolution": "12/12 final UI contracts passed"
+    }
+  ],
+  "limits": [
+    "Authenticated hosting and physical device not tested; real local Auth/REST/Storage/Edge plus synthetic UI",
+    "No antimalware provider configured; valid files stay quarantine and cannot become validated",
+    "No hosted fixtures, external email/WhatsApp or account modifications",
+    "Local performance is not hosted SLA"
+  ],
+  "sql_final": {
+    "replays": 2,
+    "checks_per_replay": 658,
+    "total": 1316,
+    "checklists_races_per_replay": 2,
+    "role": "limited migrator; no superuser/BYPASSRLS",
+    "extra_coverage": [
+      "available+clean synthetic metadata permits explicit validated state; no scanner claim",
+      "file belonging to another request denied even for owner"
+    ]
+  }
+}

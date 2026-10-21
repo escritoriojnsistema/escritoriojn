@@ -1,0 +1,17 @@
+# Etapa 12 — Checklists, pendências e avisos internos
+
+Fonte: [manual12](https://drive.google.com/file/d/1P9hsZYbGGHc1f6aSR6u1FzvzEfw513WR/view) e RF05/06 de atendimento. Base verificada: main91653cd, Etapas09–11 publicadas,14migrations remotas. O título/checklist/observação do pedido determinam12; a referência10 no parágrafo é texto reaproveitado.
+
+Objetivo: mostrar exatamente o que falta em cada item de pedido existente, registrar decisões humanas e avisar o responsável sem prévia sensível. Não criar outro pedido, arquivo ou identidade. Execução técnica autorizada pelo pedido e continuidade; publicação somente GitHub→Vercel, sem Actions.
+
+Modelos por serviço têm versões imutáveis, itens com chave/rótulo e regra obrigatório/opcional/condicional. Condições são comparações explícitas de origem ou prioridade do pedido; sem código ou texto sensível na expressão. Aplicar captura a versão/definição/aplicabilidade no item10; atualizações posteriores não mudam instâncias. Na ausência de modelo12, o checklist do snapshot09 pode ser capturado como itens obrigatórios. As marcações preparatórias10 não significam recebimento/validação documental.
+
+Equipe precisa requests.read, escopo10 e checklists.read. Capacidades adicionais checklists.manage publica modelos, checklists.update aplica/atualiza/avisa, checklists.waive dispensa com motivo. Seed somente owner, concessão explícita aos demais. Cliente não recebe o módulo interno nem notificações internas, mesmo com permissões forjadas. Modelos não concedem capacidade documental ou antimalware.
+
+Estados pendente/recebido/validado/dispensado têm versão esperada, autor/data/motivo e histórico imutável. Recebido exige arquivo11 do mesmo pedido/item em quarentena ou disponível; validado exige disponível+scanner clean. Quarentena continua pendência de validação, sem download. Dispensa exige capacidade e motivo. Itens condicionais não aplicáveis aparecem como tais; opcionais não bloqueiam. Anexo vinculado recebe referência protegida11, inclusive no histórico. Um arquivo não supre dois itens da mesma instância.
+
+Encaminhar reutiliza transferência10 e sua trilha, sem alterar status/aprovar conteúdo. Evento de transferência gera aviso genérico ao novo responsável na mesma transação. Avisar pendências usa o evento imutável atual da instância; destinatário+evento+tipo são únicos. Notificações têm somente mensagem fixa, leitura, data e referência autorizada; nenhum título de pedido, nome de arquivo, CPF, saúde, motivo ou texto jurídico na prévia. Leitura só do destinatário atual; referência perde acesso quando escopo/capacidade muda.
+
+UI /pendencias e /notificacoes com entrada no menu e estado vazio, reutilizando OperationLayout, pedidos10, anexos11 e seletores. Um workspace por fluxo, listas3/5 e seções recolhidas para edição/histórico. Até4atalhos principais, extras na sidebar; sem spinner/overlay/rótulo de espera. Troca de sessão/escritório/autoridade descarta estado; refresh da mesma sessão conserva rascunho. Erros de acesso bloqueiam; conflito pede revisão explícita.
+
+Aceite: modelo3arquivos,2recebidos e terceiro pendente; modelo posterior não reescreve instância; motivos/capacidades/escopo/arquivo protegido; aviso repetido único e leitura isolada; transferência preserva criador/histórico. Com scanner ausente, recebido nunca vira validado. Testar local SQL limitado, API, Auth real e UI responsiva; sem fixtures hospedadas. Próxima13 somente por novo pedido.

@@ -1,6 +1,6 @@
 # Escritório JN
 
-Base nova das **Etapas 01–10** do manual v4: React + Vite + TypeScript, API Express `/api`, Supabase Auth/RLS, equipe, governança, clientes/vínculos, catálogo versionado e atendimentos. O checkpoint de testes/publicação está em [LIVRO_RAIZ.md](LIVRO_RAIZ.md).
+Base nova das **Etapas 01–12** do manual v4: React + Vite + TypeScript, API Express `/api`, Supabase Auth/RLS, equipe, governança, clientes/vínculos, catálogo versionado, atendimentos, anexos privados e checklists/pendências/avisos internos. O checkpoint de testes/publicação está em [LIVRO_RAIZ.md](LIVRO_RAIZ.md).
 
 ## Executar
 

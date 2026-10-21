@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => {
     // independent browser caching, loaded with the entry (never on route click).
     build: { rolldownOptions: { output: { codeSplitting: { groups: [
       { name: 'supabase', test: /node_modules\/@supabase\// },
+      { name: 'react', test: /node_modules\/(react|react-dom|react-router|react-router-dom|scheduler)\// },
     ] } } } },
   };
 });

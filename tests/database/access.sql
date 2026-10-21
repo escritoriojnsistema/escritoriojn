@@ -9,8 +9,8 @@ SELECT test.assert_true(NOT EXISTS (SELECT p.polrelid FROM pg_policy p JOIN pg_c
   JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND p.polpermissive
     AND p.polcmd IN ('*','r') AND 'authenticated'::regrole=ANY(p.polroles)
   GROUP BY p.polrelid HAVING count(*)>1), 'SELECT sem policies permissivas redundantes');
-SELECT test.assert_true((SELECT count(*) FROM public.roles)=4 AND (SELECT count(*) FROM public.permissions)=31
-  AND (SELECT count(*) FROM public.role_permissions)=34, 'seed minimo completo sem cadastro posterior');
+SELECT test.assert_true((SELECT count(*) FROM public.roles)=4 AND (SELECT count(*) FROM public.permissions)=35
+  AND (SELECT count(*) FROM public.role_permissions)=38, 'seed minimo completo sem cadastro posterior');
 SELECT test.assert_true((SELECT array_agg(role_code ORDER BY role_code) FROM public.role_permissions
   WHERE permission_code='foundation.access')=ARRAY['admin','client','employee','owner']
   AND (SELECT array_agg(role_code) FROM public.role_permissions WHERE permission_code='audit.read')=ARRAY['owner'],

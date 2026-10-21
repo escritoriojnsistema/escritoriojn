@@ -55,3 +55,11 @@ Migration `requests_service_workflow`: requests/request_items com RLS e ACL sem 
 Snapshots são calculados no banco09 na mesma transação. Conta cliente confirmada abre mensagem para triagem e recebe whitelist própria sem preços/notas/atores; classificação interna aplica requisitos do serviço. Escrita revalida sessão/autoridade após locks; transferência pode retornar somente access_lost. Conclusão não cria estado financeiro. Cancelamento exige revisão manual de efeitos externos e não apaga nada. Sem Edge/Storage/SMTP/env novos.
 
 Após publicar Git, consultar schema_migrations antes de qualquer aplicação manual: a integração existente pode já ter aplicado a migration. Conferir comandos/arquivo, ACL/RLS, capacidades, contagens e advisors. Rollback somente de código preservando atendimentos/auditoria; nunca DROP/reset. Provas e limites em [fecho10](../docs/etapas/fecho-10.md).
+
+## Etapa12
+
+Migration `checklists_pending_notifications` acrescenta cinco tabelas privadas com RLS/ACL fechadas: versões de modelos, instâncias capturadas, estados de itens, histórico imutável e notificações por destinatário. Oito wrappers públicos invoker: checklists_model/publish/view/apply/update/notify/notifications/read. Helpers privados sem EXECUTE para API; autorização reaproveita sessão, capacidades e escopo de pedidos10. Quatro capacidades seed somenteowner; delegação/concessão pela gestão existente.
+
+Snapshot preserva a versão do checklist aplicado; atualizar modelo não recalcula pedidos. Estados com versão esperada/motivo/autor; validação requer arquivo11 disponível e scanner clean. Recebimento de quarentena não libera bytes. Referência11 conserva arquivos vinculados; dispensa não apaga histórico. Transferência10 emite aviso genérico na mesma transação. Evento+destinatário+tipo único e leitura por membro; referência só retorna com escopo atual. Não há canal externo, nova Edge, segredo, Storage público, scanner simulado ou fixture hospedada.
+
+`npm run test:db` inclui replay/concorrência12; `JN_CHECKLISTS_BENCHMARK=1 npm run test:db` acrescenta medição descartável de10mil avisos/10conexões. Contrato/limites em [etapa12](../docs/etapas/etapa-12.md). Publicação deve ser comprovada no Livro/fecho antes de alegar conclusão; consultar migrations após Git antes de qualquer apply.

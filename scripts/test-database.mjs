@@ -1,3 +1,4 @@
+import { raceChecklists, benchmarkChecklists } from './database-checklists.mjs';
 import { raceAttachments, benchmarkAttachments } from './database-attachments.mjs';
 import { execFileSync, spawn } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
@@ -718,6 +719,7 @@ try {
       + sql(database, 'postgres', readFileSync(`${root}tests/database/services.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/requests.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/attachments.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/checklists.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
       + await raceLastOwners(database)
       + await raceRevokedSession(database)
@@ -747,8 +749,9 @@ try {
       + await raceRequestServiceAuthority(database,'services.perform')
       + await raceRequestServiceAuthority(database,'services.read')
       + await raceRequestEffective(database)
+      + await raceChecklists({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceAttachments({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
-    if (database === 'foundation_replay_b') {await benchmarkCustomerRelations(database);await benchmarkServices(database);await benchmarkRequests(database);await benchmarkAttachments({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});}
+    if (database === 'foundation_replay_b') {await benchmarkChecklists({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});await benchmarkCustomerRelations(database);await benchmarkServices(database);await benchmarkRequests(database);await benchmarkAttachments({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});}
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
   console.log('PASS: dois replays vazios, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.');
