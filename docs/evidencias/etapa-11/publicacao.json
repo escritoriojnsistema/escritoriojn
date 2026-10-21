@@ -1,0 +1,372 @@
+{
+  "canonical": "https://escritoriojn.vercel.app",
+  "staff_route": "/anexos",
+  "client_route": "/meus-anexos",
+  "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/23",
+  "feature_commit": "9590ddc8e18455a45677ebe362d1de4a22256d04",
+  "merge_commit": "ab6ab63f2f84c6b5b1cf3b77a2fe59bd4ea8ab69",
+  "validated_tree": "f4e76db055dcf4a14dd0af1fc68aa3a4c7b1a5f4",
+  "merged_tree": "f4e76db055dcf4a14dd0af1fc68aa3a4c7b1a5f4",
+  "delivery": "GitHub→Vercel; no GitHub Actions",
+  "vercel_status": "success",
+  "vercel_deployment": "https://vercel.com/escritorio-jn/escritoriojn/E1WY9z7f8vNrxLeNBMvmrSeRAPmj",
+  "asset": "/assets/index-DovCgnd9.js",
+  "asset_sha256": "cb8b4d6e65dce30e3b9483ee895bb10e67c5bd246dc5c1e15da786fe17c61912",
+  "asset_contains": [
+    "/anexos",
+    "/meus-anexos",
+    "/api/attachments",
+    "/api/requests",
+    "/api/services"
+  ],
+  "remote_public_e2e": {
+    "passed": 47,
+    "failed": 0
+  },
+  "migration": {
+    "version": "20261021003953",
+    "automatically_applied_by_git": true,
+    "manually_applied": false,
+    "statements": 80,
+    "sha256": "99dd5b5c6ef2fb1088ccaf0fca62832a41764c998152a707c648a0ef83af7b85",
+    "matching_tested_file": true
+  },
+  "database": {
+    "bucket": {
+      "id": "request-attachments",
+      "public": false,
+      "file_size_limit": 10485760,
+      "allowed_mime_types": [
+        "application/pdf",
+        "image/png",
+        "image/jpeg"
+      ]
+    },
+    "counts": {
+      "files": 0,
+      "contacts": 1,
+      "requests": 0,
+      "services": 0,
+      "customers": 1,
+      "auth_users": 5,
+      "migrations": 14,
+      "memberships": 5,
+      "request_items": 0,
+      "upload_intents": 0,
+      "storage_objects": 0,
+      "service_versions": 0
+    },
+    "tables": [
+      {
+        "rls": true,
+        "name": "files",
+        "schema": "public",
+        "anon_select": false,
+        "service_select": false,
+        "authenticated_select": false
+      },
+      {
+        "rls": true,
+        "name": "upload_intents",
+        "schema": "private",
+        "anon_select": false,
+        "service_select": false,
+        "authenticated_select": false
+      },
+      {
+        "rls": true,
+        "name": "file_service_policies",
+        "schema": "private",
+        "anon_select": false,
+        "service_select": false,
+        "authenticated_select": false
+      },
+      {
+        "rls": true,
+        "name": "file_cleanup_plans",
+        "schema": "private",
+        "anon_select": false,
+        "service_select": false,
+        "authenticated_select": false
+      },
+      {
+        "rls": true,
+        "name": "file_cleanup_reservations",
+        "schema": "private",
+        "anon_select": false,
+        "service_select": false,
+        "authenticated_select": false
+      },
+      {
+        "rls": true,
+        "name": "file_references",
+        "schema": "private",
+        "anon_select": false,
+        "service_select": false,
+        "authenticated_select": false
+      },
+      {
+        "rls": true,
+        "name": "file_process_leases",
+        "schema": "private",
+        "anon_select": false,
+        "service_select": false,
+        "authenticated_select": false
+      }
+    ],
+    "public_rpcs": [
+      {
+        "anon": false,
+        "name": "files_begin_upload",
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "service_role": false,
+        "authenticated": true
+      },
+      {
+        "anon": false,
+        "name": "files_cleanup_plan",
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "service_role": false,
+        "authenticated": true
+      },
+      {
+        "anon": false,
+        "name": "files_download",
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "service_role": false,
+        "authenticated": true
+      },
+      {
+        "anon": false,
+        "name": "files_page",
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "service_role": false,
+        "authenticated": true
+      },
+      {
+        "anon": false,
+        "name": "files_policy_get",
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "service_role": false,
+        "authenticated": true
+      },
+      {
+        "anon": false,
+        "name": "files_policy_set",
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "service_role": false,
+        "authenticated": true
+      },
+      {
+        "anon": false,
+        "name": "files_process_claim",
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "service_role": false,
+        "authenticated": true
+      },
+      {
+        "anon": false,
+        "name": "files_process_complete",
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "service_role": true,
+        "authenticated": false
+      },
+      {
+        "anon": false,
+        "name": "files_requests_page",
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "service_role": false,
+        "authenticated": true
+      }
+    ],
+    "capabilities": {
+      "owner": 4
+    },
+    "storage_policies": [
+      {
+        "cmd": "INSERT",
+        "name": "attachments_anon_insert_gate",
+        "roles": [
+          "anon"
+        ],
+        "permissive": "RESTRICTIVE"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "attachments_anon_select_gate",
+        "roles": [
+          "anon"
+        ],
+        "permissive": "RESTRICTIVE"
+      },
+      {
+        "cmd": "DELETE",
+        "name": "attachments_delete_gate",
+        "roles": [
+          "public"
+        ],
+        "permissive": "RESTRICTIVE"
+      },
+      {
+        "cmd": "INSERT",
+        "name": "attachments_insert",
+        "roles": [
+          "authenticated"
+        ],
+        "permissive": "PERMISSIVE"
+      },
+      {
+        "cmd": "INSERT",
+        "name": "attachments_insert_gate",
+        "roles": [
+          "authenticated"
+        ],
+        "permissive": "RESTRICTIVE"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "attachments_select",
+        "roles": [
+          "authenticated"
+        ],
+        "permissive": "PERMISSIVE"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "attachments_select_gate",
+        "roles": [
+          "authenticated"
+        ],
+        "permissive": "RESTRICTIVE"
+      },
+      {
+        "cmd": "UPDATE",
+        "name": "attachments_update_gate",
+        "roles": [
+          "public"
+        ],
+        "permissive": "RESTRICTIVE"
+      }
+    ],
+    "unindexed_new_fks": 0
+  },
+  "edge": {
+    "id": "44f829f4-ef96-4d92-8102-5dc424eb4823",
+    "name": "private-attachments",
+    "version": 2,
+    "status": "ACTIVE",
+    "verify_jwt": true,
+    "import_map": true,
+    "matching_source_files": [
+      {
+        "name": "private-attachments/index.ts",
+        "identical": true,
+        "length": 254
+      },
+      {
+        "name": "private-attachments/handler.ts",
+        "identical": true,
+        "length": 9444
+      },
+      {
+        "name": "private-attachments/validation.ts",
+        "identical": true,
+        "length": 3464
+      }
+    ],
+    "initial_deployment": "new function deployed v1; Git merge redeployed identical runtime sources as v2"
+  },
+  "anonymous_http_checks": [
+    {
+      "path": "Edge private-attachments with valid anon API JWT",
+      "status": 401,
+      "code": "AUTH_REQUIRED"
+    },
+    {
+      "path": "REST files table",
+      "status": 401,
+      "code": "42501"
+    },
+    {
+      "path": "REST files_page RPC",
+      "status": 401,
+      "code": "42501"
+    }
+  ],
+  "advisors": [
+    {
+      "type": "security",
+      "lints": [
+        {
+          "name": "rls_enabled_no_policy",
+          "level": "INFO",
+          "count": 25,
+          "url": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+        },
+        {
+          "name": "auth_leaked_password_protection",
+          "level": "WARN",
+          "count": 1,
+          "url": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+        }
+      ],
+      "errors": 0
+    },
+    {
+      "type": "performance",
+      "lints": [
+        {
+          "name": "unindexed_foreign_keys",
+          "level": "INFO",
+          "count": 3,
+          "url": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys"
+        },
+        {
+          "name": "unused_index",
+          "level": "INFO",
+          "count": 59,
+          "url": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+        }
+      ],
+      "errors": 0
+    }
+  ],
+  "github_actions": {
+    "workflow_id": 387780086,
+    "state": "disabled_manually",
+    "executed": false
+  },
+  "limitations": [
+    "No configured antimalware scanner: valid files remain in quarantine; no download or distribution.",
+    "Authenticated positive flow verified in disposable local Auth/Storage laboratory, not using hosted user credentials.",
+    "Browser device emulation; no physical device; local benchmark is not a hosted SLA.",
+    "Unknown orphan objects retained for manual review; no hosted cleanup or fake fixtures."
+  ]
+}

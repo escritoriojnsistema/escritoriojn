@@ -1,0 +1,8 @@
+{
+  "migration": "20261021003953_private_attachments_pipeline.sql",
+  "local_sha256": "99dd5b5c6ef2fb1088ccaf0fca62832a41764c998152a707c648a0ef83af7b85",
+  "remote_statements": 80,
+  "token_count": 2869,
+  "identical_tokens_preserving_strings": true,
+  "comparison": "Ignore only comments, whitespace and statement terminators outside quoted SQL; preserve literal/function bodies exactly."
+}
