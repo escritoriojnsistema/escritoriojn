@@ -87,4 +87,4 @@ Etapa10: `/solicitacoes` abre atendimentos presenciais/WhatsApp, preserva versã
 
 ### Etapa13 — Cobranças
 
-Área `/cobrancas` implementada e validada localmente, aguardando publicação autorizada. Obrigações vinculadas aos itens/snapshots de Solicitações, parcelas exatas em centavos BRL, ajuste/cancelamento com motivo/capacidade/histórico e saldo derivado. Nenhum recebimento ou caixa nesta etapa. Menu lateral por capacidade e quatro atalhos mobile preservados. [Contrato](docs/etapas/etapa-13.md), [plano](docs/etapas/plano-13.md) e [fecho](docs/etapas/fecho-13.md).
+Área [`/cobrancas`](https://escritoriojn.vercel.app/cobrancas) implementada, integrada e publicada pelo PR31; Supabase/Vercel e59testes canônicos verificados. Obrigações vinculadas aos itens/snapshots de Solicitações, parcelas exatas em centavos BRL, ajuste/cancelamento com motivo/capacidade/histórico e saldo derivado. Nenhum recebimento ou caixa nesta etapa. Menu lateral por capacidade e quatro atalhos mobile preservados. [Contrato](docs/etapas/etapa-13.md), [plano](docs/etapas/plano-13.md) e [fecho](docs/etapas/fecho-13.md).

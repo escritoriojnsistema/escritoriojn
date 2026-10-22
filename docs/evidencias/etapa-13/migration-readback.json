@@ -1,0 +1,11 @@
+{
+  "version": "20261022012025",
+  "name": "charges_obligations",
+  "stored_commands": 36,
+  "ordered_commands_match": true,
+  "function_bodies_checked": 15,
+  "function_bodies_match": true,
+  "file_sha256": "09d668b846d69c0c6025e52b013e94bbc643d338be1bd78f6b2ead598a2c9ca2",
+  "application": "automatic Supabase Git integration after PR31; no manual apply",
+  "merge": "fa2995f2ef8a526933d7e092c2c9c2424829662b"
+}

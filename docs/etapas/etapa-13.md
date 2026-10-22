@@ -10,7 +10,7 @@ Criar somente em atendimento aberto com itens; unicidade por atendimento impede 
 
 UI /cobrancas no menu lateral, OperationLayout existente e quatro atalhos mobile preservados. Selecionar atendimento, conferir itens e total, registrar plano, consultar/ajustar/cancelar na mesma área com opções recolhidas. Sem spinner/overlay/texto de espera; estado da sessão atual preservado durante consulta,403/404 bloqueiam detalhe. Feedback seguro, retries idempotentes, troca de sessão/autoridade descarta dados e rascunhos. Listas3mobile/5desktop e histórico paginado5.
 
-Aceite:60+40=100 reais em aberto/zero recebido; catálogo posterior não altera dívida; desconto negado sem capacidade; parcelas somam exatamente; ajustes/cancelamento guardam histórico; saldo não é entrada; duplicidade/concorrência/revogação/escopo/rollback testados. Backend, frontend e Supabase conectados. Publicação só GitHub→Vercel, sem Actions ou deployCLI/API. Nenhuma fixture hospedada. Produção depende da autorização específica prevista em AGENTS; preparar PR e verificações antes de eventual confirmação final.
+Aceite:60+40=100 reais em aberto/zero recebido; catálogo posterior não altera dívida; desconto negado sem capacidade; parcelas somam exatamente; ajustes/cancelamento guardam histórico; saldo não é entrada; duplicidade/concorrência/revogação/escopo/rollback testados. Backend, frontend e Supabase conectados. Publicação só GitHub→Vercel, sem Actions ou deployCLI/API. Nenhuma fixture hospedada. Publicação desta etapa autorizada pelo usuário e concluída pelo PR31, com Git→Supabase/Vercel verificados; não solicitar novamente confirmação para a conclusão13.
 
 ## Interface entre camadas
 

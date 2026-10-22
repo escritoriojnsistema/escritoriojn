@@ -56,7 +56,10 @@
   "migration": {
     "file": "20261022012025_charges_obligations.sql",
     "sha256": "09d668b846d69c0c6025e52b013e94bbc643d338be1bd78f6b2ead598a2c9ca2",
-    "applied_remote": false
+    "applied_remote": true,
+    "automatic_git": true,
+    "ordered_commands_match": true,
+    "function_bodies_equal": 15
   },
   "remote_before": {
     "migrations": 17,
@@ -68,12 +71,14 @@
     "charges_table": false
   },
   "publication": {
-    "status": "awaiting_specific_production_authorization",
+    "status": "published_and_verified",
     "path": "GitHub -> Vercel",
     "github_actions_used": false,
     "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/31",
     "preview_state": "Ready",
-    "preview_functional_test": false
+    "preview_functional_test": false,
+    "production_url": "https://escritoriojn.vercel.app",
+    "merge": "fa2995f2ef8a526933d7e092c2c9c2424829662b"
   },
   "decisions": [
     "Uma obrigacao zerada nao representa recebimento; permite cancelar atendimento e bloqueia reativacao posterior.",
@@ -85,5 +90,10 @@
     "cobrancas-768.png",
     "cobrancas-1440.png",
     "cobrancas-1920.png"
-  ]
+  ],
+  "public_canonical_e2e": {
+    "passed": 59,
+    "failed": 0,
+    "url": "https://escritoriojn.vercel.app"
+  }
 }

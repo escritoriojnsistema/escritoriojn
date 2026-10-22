@@ -1,0 +1,117 @@
+{
+  "security": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 38,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy",
+      "findings": [
+        {
+          "detail": "Table \\`private.charge_commands\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "charge_commands",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-22T12:22:46.228Z"
+        },
+        {
+          "detail": "Table \\`private.charge_events\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "charge_events",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-22T12:22:46.228Z"
+        },
+        {
+          "detail": "Table \\`private.charge_installments\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "charge_installments",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-22T12:22:46.228Z"
+        },
+        {
+          "detail": "Table \\`private.charge_items\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "charge_items",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-22T12:22:46.228Z"
+        },
+        {
+          "detail": "Table \\`private.charges\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "charges",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-22T12:22:46.228Z"
+        }
+      ]
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1,
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection",
+      "findings": []
+    }
+  ],
+  "performance": [
+    {
+      "name": "unindexed_foreign_keys",
+      "level": "INFO",
+      "count": 3,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "findings": []
+    },
+    {
+      "name": "unused_index",
+      "level": "INFO",
+      "count": 72,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index",
+      "findings": [
+        {
+          "detail": "Index \\`charge_items_charge_idx\\` on table \\`private.charge_items\\` has not been used",
+          "metadata": {
+            "name": "charge_items",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-22T12:22:46.191Z"
+        },
+        {
+          "detail": "Index \\`charges_creator_idx\\` on table \\`private.charges\\` has not been used",
+          "metadata": {
+            "name": "charges",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-22T12:22:46.191Z"
+        },
+        {
+          "detail": "Index \\`charge_events_actor_idx\\` on table \\`private.charge_events\\` has not been used",
+          "metadata": {
+            "name": "charge_events",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-22T12:22:46.191Z"
+        },
+        {
+          "detail": "Index \\`charge_commands_actor_idx\\` on table \\`private.charge_commands\\` has not been used",
+          "metadata": {
+            "name": "charge_commands",
+            "type": "table",
+            "schema": "private"
+          },
+          "observed_at": "2026-10-22T12:22:46.191Z"
+        }
+      ]
+    }
+  ]
+}
