@@ -1,0 +1,25 @@
+import {useEffect,useRef,useState,type FormEvent} from 'react';
+import {Check,MailCheck} from 'lucide-react';
+import {validAccountInput,type AccountInput} from '../../../shared/account';
+import {formatCpf} from '../../../shared/identifiers';
+import type {RequestDetail} from '../../../shared/requests';
+import {useAuth} from '../auth/AuthProvider';
+import {AccountFields,normalizeAccountInput} from '../operation/AccountFields';
+import {accountApi,AccountError,confirmAccountEmail} from '../operation/accountApi';
+import {RequestsError} from './api';
+const displayCpf=(v:string|null)=>v?formatCpf(v):'Não informado';
+export function AccountCorrectionDetail({office,data,onUpdated,onFailure}:{office:string;data:RequestDetail;onUpdated:(value:RequestDetail)=>void;onFailure:(error:RequestsError)=>void}){
+ const auth=useAuth(),correction=data.correction!;
+ const [value,setValue]=useState<AccountInput>(correction.proposed),[busy,setBusy]=useState(false),[error,setError]=useState(''),[feedback,setFeedback]=useState(''),[reviewed,setReviewed]=useState(false);
+ const pending=useRef<AbortController|null>(null),busyRef=useRef(false);
+ useEffect(()=>()=>pending.current?.abort(),[]);
+ useEffect(()=>{setValue(correction.applied??correction.proposed);setReviewed(false);setFeedback('');setError('');},[data.updated_at]);
+ async function run(work:(signal:AbortSignal)=>Promise<void>){if(busyRef.current)return;const controller=new AbortController();pending.current=controller;busyRef.current=true;setBusy(true);setError('');try{await work(controller.signal);}catch(cause){if(!controller.signal.aborted){setError(cause instanceof Error?cause.message:'Não foi possível concluir.');if(cause instanceof AccountError&&[401,403].includes(cause.status))onFailure(new RequestsError(cause.status));}}finally{if(!controller.signal.aborted){setBusy(false);busyRef.current=false;}}}
+ function apply(event:FormEvent){event.preventDefault();if(!correction.can_apply||data.portal||!reviewed)return;const input=normalizeAccountInput(value);if(!validAccountInput(input)){setError('Confira nome, CPF e e-mail antes de aplicar.');return;}void run(async signal=>{const result=await accountApi.apply(office,data.id,data.version,input,signal);if(!signal.aborted){onUpdated(result);window.dispatchEvent(new Event('jn:notices-changed'));}});}
+ return <section className="account-correction-detail" aria-labelledby="correction-title"><h2 id="correction-title">Correção dos dados da conta</h2>
+  <p className="customer-note">{correction.status==='pending'?'Aguardando conferência da equipe autorizada.':correction.status==='applied'&&data.public_status==='cancelado'?'Atendimento cancelado após aplicação dos dados pessoais. A troca de e-mail pendente foi cancelada.':correction.status==='rejected'?'Solicitação cancelada. Os dados propostos não foram aplicados.':correction.email_pending?'Dados aplicados. A troca do e-mail aguarda confirmação do titular.':'Alterações aplicadas ao cadastro.'}</p>
+  {error&&<p role="alert" className="form-feedback error">{error}</p>}{feedback&&<p role="status" className="form-feedback">{feedback}</p>}
+  {correction.can_apply&&!data.portal?<form className="request-form" onSubmit={apply} noValidate><details className="service-section"><summary>Dados anteriores</summary><dl className="service-facts"><div><dt>Nome</dt><dd>{correction.before.name}</dd></div><div><dt>CPF</dt><dd>{displayCpf(correction.before.cpf)}</dd></div><div><dt>E-mail</dt><dd>{correction.before.email}</dd></div></dl></details><fieldset disabled={busy}><AccountFields value={value} onChange={setValue}/><label className="service-check"><input type="checkbox" checked={reviewed} onChange={e=>setReviewed(e.target.checked)}/><span>Conferi os dados e autorizo a aplicação ao cadastro deste cliente.</span></label><button className="primary-button" disabled={busy||!reviewed}><Check size={18} aria-hidden="true"/>Aplicar alterações</button></fieldset></form>:<dl className="service-facts"><div><dt>Nome {correction.applied?'aplicado':'proposto'}</dt><dd>{(correction.applied??correction.proposed).name}</dd></div><div><dt>CPF {correction.applied?'aplicado':'proposto'}</dt><dd>{displayCpf((correction.applied??correction.proposed).cpf)}</dd></div><div><dt>E-mail {correction.applied?'aprovado':'proposto'}</dt><dd>{(correction.applied??correction.proposed).email}</dd></div></dl>}
+  {data.portal&&correction.email_pending&&correction.applied&&<button className="primary-button" disabled={busy} onClick={()=>void run(async signal=>{await confirmAccountEmail(correction.applied!.email,auth.sessionKey,true,signal);if(!signal.aborted)setFeedback('Confira as instruções de confirmação no e-mail atual e no novo.');})}><MailCheck size={18} aria-hidden="true"/>Confirmar alteração de e-mail</button>}
+ </section>;
+}

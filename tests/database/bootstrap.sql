@@ -3,6 +3,7 @@ CREATE SCHEMA auth;
 CREATE TABLE auth.users (
   id uuid PRIMARY KEY,
   email text,
+  email_change text,
   encrypted_password text,
   invited_at timestamptz,
   is_anonymous boolean NOT NULL DEFAULT false,

@@ -9,6 +9,7 @@ async function setup(page:Page,role='owner'){
  await page.route('https://team-ui.supabase.co/**',r=>r.fulfill({json:{id:user,aud:'authenticated'}}));
  await page.route('**/api/**',r=>{const url=new URL(r.request().url()),p=url.pathname;
   if(p==='/api/auth/context')return r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,role_code:role,permissions,office_name:'Escritório Fictício',display_name:'Pessoa Fictícia'}]}}});
+  if(p==='/api/account/read')return r.fulfill({json:{data:{name:'Pessoa Fictícia',cpf:null,email:'fixture@example.test',version:'a'.repeat(64),cpf_masked:null,pending_email:null,can_edit:role!=='client'}}});
   if(p==='/api/team')return r.fulfill({json:{data:{kind:'members',scope:{role_code:role,allowed_roles:['employee','admin','owner'],allowed_permissions:permissions,can_create_owner:true,can_delegate:true},total:0,page:1,page_size:5,counts:{members:0,invitations:0},items:[]}}});
   if(p.endsWith('/summary'))return r.fulfill({json:{data:{unread:2}}});
   return r.fulfill({json:{data:{items:[],total:0,unread:0,page:1,page_size:3,portal:role==='client'}}});

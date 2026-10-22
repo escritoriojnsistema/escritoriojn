@@ -1,3 +1,4 @@
+import {raceAccount} from './database-account.mjs';
 import {raceReclaim} from './database-adjustments.mjs';
 import { raceChecklists, benchmarkChecklists } from './database-checklists.mjs';
 import { raceAttachments, benchmarkAttachments } from './database-attachments.mjs';
@@ -722,6 +723,7 @@ try {
       + sql(database, 'postgres', readFileSync(`${root}tests/database/attachments.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/checklists.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/adjustments.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/account.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
       + await raceLastOwners(database)
       + await raceRevokedSession(database)
@@ -747,6 +749,7 @@ try {
       + await raceRequestCreate(database,false)
       + await raceRequestVersion(database)
       + await raceReclaim({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
+      + await raceAccount({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceRequestAuthority(database,false)
       + await raceRequestAuthority(database,true)
       + await raceRequestServiceAuthority(database,'services.perform')

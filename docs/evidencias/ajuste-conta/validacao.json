@@ -1,0 +1,77 @@
+{
+  "at": "2026-10-22T00:41:35.221458+00:00",
+  "status": "APROVAVEL_PARA_PUBLICACAO_AUTORIZADA",
+  "node_api": {
+    "passed": 108,
+    "command": "npm test"
+  },
+  "postgres": {
+    "replays": 2,
+    "checks_each": 716,
+    "total": 1432,
+    "concurrency": [
+      "revoke apply capability while customer row is locked",
+      "concurrent application has one winner and one version conflict"
+    ],
+    "command": "JN_CHECKLISTS_BENCHMARK=1 npm run test:db",
+    "migration_sha256": "3b3fd073d36d3678c1e0b8ea5d270cdbd453682884921a10d260f4b51dd1b603"
+  },
+  "ui": {
+    "unique_contracts_passed": 50,
+    "final_account_geometry_run_passed": 27,
+    "other_unchanged_contracts_passed": 23,
+    "viewports": [
+      320,
+      360,
+      768,
+      1440,
+      1920
+    ],
+    "account_mobile_height": 640,
+    "fake_captures": 11,
+    "regressions_fixed": [
+      "own-assignee test locator",
+      "account height 360x640"
+    ]
+  },
+  "auth": {
+    "real_local_tests_passed": 23,
+    "stack": [
+      "GoTrue",
+      "PostgREST",
+      "Storage",
+      "Edge",
+      "SMTP/Mailpit"
+    ],
+    "new_flows": [
+      "client proposal, permission split, apply, official email confirmation and connected customer",
+      "employee self-edit name, CPF and official email confirmation"
+    ],
+    "hosted_accounts_used": false
+  },
+  "build_typecheck": "PASS",
+  "production_dependency_vulnerabilities": 0,
+  "review": {
+    "independent": true,
+    "p2_fixed": [
+      "pending email participates in account version",
+      "secondary email is consolidated during confirmation"
+    ],
+    "recheck": "no P1/P2 remaining in the two reported points"
+  },
+  "preflight": {
+    "remote_migrations": 16,
+    "accounts": 5,
+    "memberships": 5,
+    "customers": 1,
+    "requests": 0,
+    "permissions": 36,
+    "existing_function_sources_match": 13,
+    "github_actions": "disabled_manually"
+  },
+  "public_local": {
+    "passed": 56,
+    "environment": "compiled Vite preview with public Supabase connection; anonymous flows only"
+  },
+  "production": "PENDING"
+}
