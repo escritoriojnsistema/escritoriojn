@@ -1,3 +1,4 @@
+import type {AccountCorrection} from './account.js';
 import type { ServiceAdjustment, ServiceInput, ServiceQuote } from './services.js';
 
 export const requestPermissions = ['requests.read','requests.create','requests.update','requests.transfer','requests.cancel','requests.read_all','requests.reclaim'] as const;
@@ -23,10 +24,10 @@ export type StaffRequestSummary = RequestSummary & {status:RequestStatus;origin:
 export type RequestPage = {items:(RequestSummary|StaffRequestSummary)[];total:number;page:number;page_size:number;portal:boolean};
 export type RequestHistory = {id:string;kind:'created'|'status'|'transfer'|'note'|'triage';actor_id:string;actor_name:string|null;reason:string;from_status:RequestStatus|null;to_status:RequestStatus|null;from_assignee:string|null;to_assignee:string|null;created_at:string};
 export type StoredRequestItem = {id:string;snapshot:ServiceQuote;fields:Record<string,string>;participant_ids:string[];checklist:string[]};
-export type PortalRequestDetail = RequestSummary & {portal:true;message:string;services:string[];assignee_name:string|null};
-export type StaffRequestDetail = StaffRequestSummary & {portal:false;customer_id:string|null;message:string;priority_reason:string;items:StoredRequestItem[];history:RequestHistory[];history_page:number;history_total:number;can_update:boolean;can_transfer:boolean;can_cancel:boolean;can_reclaim:boolean;following_only:boolean};
+export type PortalRequestDetail = RequestSummary & {portal:true;message:string;services:string[];assignee_name:string|null;correction?:AccountCorrection};
+export type StaffRequestDetail = StaffRequestSummary & {portal:false;customer_id:string|null;message:string;priority_reason:string;items:StoredRequestItem[];history:RequestHistory[];history_page:number;history_total:number;can_update:boolean;can_transfer:boolean;can_cancel:boolean;can_reclaim:boolean;following_only:boolean;correction?:AccountCorrection};
 export type RequestDetail = PortalRequestDetail|StaffRequestDetail;
 export type RequestMutationResult = RequestDetail|{access_lost:true};
-export type RequestOption = {id:string;label:string;role_code?:'owner'|'admin'|'employee';eligible?:boolean;definition?:ServiceInput};
+export type RequestOption = {id:string;label:string;role_code?:'owner'|'admin'|'employee';eligible?:boolean;is_self?:boolean;corrections_eligible?:boolean;definition?:ServiceInput};
 export type RequestOptions = {items:RequestOption[];total:number;page:number;page_size:number};
 export type RequestOptionKind = 'services'|'customers'|'assignees';

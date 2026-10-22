@@ -106,3 +106,18 @@
 @media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
  .operation-main .team-field input, .operation-main .team-field select { font-size: 16px; }
 }
+
+/* Account editing stays compact without concealing inputs, focus or feedback. */
+.operation-account .account-fields .team-field { margin:0; }
+.account-access-info { margin-top:8px; }
+.account-access-info > summary { min-height:44px; display:flex; align-items:center; cursor:pointer; color:#36576b; font-size:13px; }
+.account-access-info > summary::before { content:'▸'; margin-right:8px; }
+.account-access-info[open] > summary::before { content:'▾'; }
+.account-access-info .operation-details { margin-top:4px; }
+@media(max-width:900px) {
+ .operation-main:has(.operation-account) .operation-account { padding:14px; }
+ .operation-main:has(.operation-account) .operation-security { flex-wrap:nowrap; gap:8px; padding-top:14px; }
+ .operation-main:has(.operation-account) .operation-security h2 { font-size:16px; }
+ .operation-main:has(.operation-account) .operation-security p { display:none; }
+ .operation-main:has(.operation-account) .operation-security .secondary-button { flex-shrink:0; font-size:14px; padding-inline:10px; gap:8px; }
+}

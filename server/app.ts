@@ -2,6 +2,7 @@ import express, { type ErrorRequestHandler } from 'express';
 import { MAX_VALIDATION_MESSAGE_LENGTH, type HealthResponse, type ValidationResponse } from '../shared/api.js';
 import { errorResponse } from './errors.js';
 import { authRouter } from './modules/auth/router.js';
+import { accountRouter } from './modules/account/router.js';
 import { governanceRouter } from './modules/governance/router.js';
 import { teamRouter } from './modules/team/router.js';
 import { customersRouter } from './modules/customers/router.js';
@@ -31,6 +32,7 @@ api.get('/health', (_req, res) => {
   res.json({ data: { status: 'ok', service: 'escritorio-jn-api' } } satisfies HealthResponse);
 });
 api.use('/auth',authRouter);
+api.use('/account',accountRouter);
 api.use('/team',teamRouter);
 api.use('/governance',governanceRouter);
 api.use('/customers',customersRouter);
