@@ -40,3 +40,7 @@ Revisão independente do diff, build/testes pertinentes; publicação e verifica
 Validação final agregada e publicação: registrar em verificação/publicação após os respectivos comandos, sem somar reexecuções como novos casos. Tentativas históricas interrompidas/falhas de fixtures não contam como aprovação. Próxima etapa14 somente mediante novo pedido.
 
 Validação final:115Node/API,77UI afetados,59E2E públicos locais,34fluxosAuth reais locais; o cenário de aviso foi reexecutado com assert explícito read_at no banco(1pass, sem somar como caso distinto). Build completo e auditprodução0. Revisão final aprovada sem pendências. [Sumário versionado](../evidencias/ajuste-pos13/verificacao.json). Logs completos locais ignorados porGit; hashes no sumário. Publicação canônica será registrada no fecho.
+
+## Fecho publicado
+
+[PR33](https://github.com/escritoriojnsistema/escritoriojn/pull/33), mergeb70de98b/árvorec2f64f9f. VercelAezWrV58RaR4WujnmN8no15nqEou SUCCESS; bundle público idêntico ao build revisado.59E2E canônicos passaram; contagens Supabase preservadas após os testes. [Fecho](fecho-ajuste-pos13.md), [prova](../evidencias/ajuste-pos13/publicacao.json). Sem novas alterações de runtime neste fecho documental.
