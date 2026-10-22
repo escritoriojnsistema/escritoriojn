@@ -1,0 +1,42 @@
+import {useRef,useState,type FormEvent} from 'react';
+import {Plus,Save,X} from 'lucide-react';
+import {validCashConfigure,type CashAccount,type CashConfiguration,type CashConfigure,type CashPaymentMethod,type CashUnit} from '../../../shared/cash';
+type Kind=CashConfigure['kind'];
+type Draft={kind:Kind;id:string|null;expected_version:number|null;name:string;active:boolean;unit_id:string;type:string;destination_account_id:string};
+const accountTypes={cash:'Espécie',bank:'Bancária',digital:'Digital'};
+const methodTypes={cash:'Dinheiro',pix:'PIX manual',card:'Cartão',transfer:'Transferência'};
+function List({kind,title,items,total,size,disabled,onEdit}:{kind:Kind;title:string;items:(CashUnit|CashAccount|CashPaymentMethod)[];total:number;size:number;disabled:boolean;onEdit:(kind:Kind,value?:CashUnit)=>void}){
+ const [page,setPage]=useState(1),pages=Math.max(1,Math.ceil(items.length/size)),current=Math.min(page,pages);
+ return <details><summary>{title} · {total}</summary><button type="button" className="team-text-button" disabled={disabled} onClick={()=>onEdit(kind)}><Plus size={17} aria-hidden="true"/>Adicionar {kind==='unit'?'unidade':kind==='account'?'conta':'forma'}</button>
+  {!items.length?<p className="customer-note">Nenhum cadastro nesta página.</p>:<ul className="team-list">{items.slice((current-1)*size,current*size).map(item=><li key={item.id} className="cash-config-row"><div><strong>{item.name}</strong><small>{'destination_account_id' in item?methodTypes[item.type]:'type' in item?accountTypes[item.type]:item.active?'Unidade ativa':'Unidade inativa'}{'type' in item&&` · ${item.active?'Ativa':'Inativa'}`}</small></div><button type="button" className="team-text-button" disabled={disabled} onClick={()=>onEdit(kind,item)}>Editar</button></li>)}</ul>}
+  {pages>1&&<nav className="team-pagination" aria-label={`Paginação de ${title.toLowerCase()}`}><button type="button" className="team-text-button" disabled={disabled||current<=1} onClick={()=>setPage(current-1)}>Anterior</button><span>{current}/{pages} nesta página de cadastros</span><button type="button" className="team-text-button" disabled={disabled||current>=pages} onClick={()=>setPage(current+1)}>Próxima</button></nav>}
+ </details>;
+}
+export function CashConfigurationPanel({data,references,busy,size,onSave,onClear,onPage,onUnit,pending}:{data:CashConfiguration;references:CashConfiguration;busy:boolean;size:3|5;onSave:(input:CashConfigure,key:string)=>Promise<boolean>;onClear:()=>void;onPage:(page:number)=>void;onUnit:(id:string|null)=>void;pending:boolean}){
+ const [draft,setDraft]=useState<Draft>(),[error,setError]=useState('');
+ const attempt=useRef<{payload:string;key:string}|undefined>(undefined);
+ const pages=Math.max(1,Math.ceil(Math.max(data.units_total,data.accounts_total,data.payment_methods_total)/data.page_size));
+ function edit(kind:Kind,value?:CashUnit){const resource=value as CashAccount|CashPaymentMethod|undefined;setError('');onClear();attempt.current=undefined;setDraft({kind,id:value?.id??null,expected_version:value?.version??null,name:value?.name??'',active:value?.active??true,unit_id:resource?.unit_id??references.units.find(u=>u.active)?.id??'',type:resource?.type??(kind==='account'?'cash':'pix'),destination_account_id:resource&&'destination_account_id'in resource?resource.destination_account_id:''});}
+ function set<K extends keyof Draft>(key:K,value:Draft[K]){setDraft(previous=>previous?{...previous,[key]:value}:previous);}
+ async function save(e:FormEvent){e.preventDefault();if(!draft||busy)return;
+  const base={id:draft.id,expected_version:draft.expected_version,name:draft.name.trim(),active:draft.active};
+  const input:unknown=draft.kind==='unit'?{kind:'unit',...base}:draft.kind==='account'?{kind:'account',...base,unit_id:draft.unit_id,type:draft.type}:{kind:'payment_method',...base,unit_id:draft.unit_id,type:draft.type,destination_account_id:draft.destination_account_id};
+  if(!validCashConfigure(input)){setError('Confira nome, unidade, tipo e conta de destino.');return;}const payload=JSON.stringify(input);if(attempt.current?.payload!==payload)attempt.current={payload,key:crypto.randomUUID()};setError('');if(await onSave(input,attempt.current.key)){setDraft(undefined);attempt.current=undefined;}
+ }
+ const destinations=draft?references.accounts.filter(a=>a.active&&a.unit_id===draft.unit_id&&(draft.type==='cash'?a.type==='cash':a.type!=='cash')):[];
+ return <section className="cash-configuration" aria-label="Configuração financeira">
+  <p className="customer-note">Cadastre unidades, contas e formas de pagamento. Destinos digitais ficam separados do dinheiro físico.</p>
+  <label className="team-field team-office">Filtrar cadastros por unidade<select disabled={busy||!!draft} value={data.unit_id??''} onChange={e=>onUnit(e.target.value||null)}><option value="">Todas as unidades</option>{references.units.map(u=><option key={u.id} value={u.id}>{u.name}</option>)}</select></label>
+  {draft&&<form className="cash-config-editor" onSubmit={save} noValidate><h2>{draft.id?'Editar':'Adicionar'} {draft.kind==='unit'?'unidade':draft.kind==='account'?'conta':'forma de pagamento'}</h2><fieldset disabled={busy}><div className="cash-config-grid">
+   <label className="team-field cash-wide">Nome<input autoComplete="off" maxLength={120} value={draft.name} onChange={e=>set('name',e.target.value)}/></label>
+   {draft.kind!=='unit'&&<label className="team-field">Unidade do cadastro<select disabled={busy||!!draft.id} value={draft.unit_id} onChange={e=>{set('unit_id',e.target.value);set('destination_account_id','');}}><option value="">Selecione</option>{draft.unit_id&&!references.units.some(u=>u.id===draft.unit_id)&&<option value={draft.unit_id}>Unidade deste cadastro (outra página)</option>}{references.units.map(u=><option key={u.id} value={u.id}>{u.name}{u.active?'':' (inativa)'}</option>)}</select></label>}
+   {draft.kind!=='unit'&&<label className="team-field">Tipo<select disabled={busy||(draft.kind==='account'&&!!draft.id)} value={draft.type} onChange={e=>{set('type',e.target.value);set('destination_account_id','');}}>{Object.entries(draft.kind==='account'?accountTypes:methodTypes).map(([value,label])=><option value={value} key={value}>{label}</option>)}</select></label>}
+   {draft.kind==='payment_method'&&<label className="team-field cash-wide">Conta de destino<select value={draft.destination_account_id} onChange={e=>set('destination_account_id',e.target.value)}><option value="">Selecione a conta compatível</option>{draft.destination_account_id&&!destinations.some(a=>a.id===draft.destination_account_id)&&<option value={draft.destination_account_id}>Destino atual (outra página)</option>}{destinations.map(a=><option value={a.id} key={a.id}>{a.name} · {accountTypes[a.type]}</option>)}</select></label>}
+   <label className="team-check"><input type="checkbox" checked={draft.active} onChange={e=>set('active',e.target.checked)}/>Ativo</label>
+  </div></fieldset>{error&&<p role="alert" className="form-feedback error">{error}</p>}<div className="account-actions"><button className="primary-button" disabled={busy}><Save size={18} aria-hidden="true"/>Salvar configuração</button><button type="button" className="secondary-button" disabled={busy} onClick={()=>{setDraft(undefined);setError('');attempt.current=undefined;onClear();}}><X size={18} aria-hidden="true"/>Cancelar</button></div></form>}
+  <List key={`units:${data.page}:${data.unit_id}`} kind="unit" title="Unidades" items={data.units} total={data.units_total} size={size} disabled={busy||!!draft} onEdit={edit}/>
+  <List key={`accounts:${data.page}:${data.unit_id}`} kind="account" title="Contas de destino" items={data.accounts} total={data.accounts_total} size={size} disabled={busy||!!draft} onEdit={edit}/>
+  <List key={`methods:${data.page}:${data.unit_id}`} kind="payment_method" title="Formas de pagamento" items={data.payment_methods} total={data.payment_methods_total} size={size} disabled={busy||!!draft} onEdit={edit}/>
+  {pages>1&&<nav className="team-pagination" aria-label="Páginas de cadastros financeiros"><button className="team-text-button" disabled={busy||pending||!!draft||data.page<=1} onClick={()=>onPage(data.page-1)}>Cadastros anteriores</button><span>{data.page}/{pages} · até50 por lista</span><button className="team-text-button" disabled={busy||pending||!!draft||data.page>=pages} onClick={()=>onPage(data.page+1)}>Mais cadastros</button></nav>}
+ </section>;
+}

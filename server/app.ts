@@ -11,6 +11,7 @@ import { servicesRouter } from './modules/services/router.js';
 import { requestsRouter } from './modules/requests/router.js';
 import { attachmentsRouter } from './modules/attachments/router.js';
 import { notificationsRouter } from './modules/notifications/router.js';
+import { cashRouter } from './modules/cash/router.js';
 import { chargesRouter } from './modules/charges/router.js';
 import { checklistsRouter } from './modules/checklists/router.js';
 
@@ -43,6 +44,7 @@ api.use('/requests',requestsRouter);
 api.use('/attachments',attachmentsRouter);
 api.use('/checklists',checklistsRouter);
 api.use('/charges',chargesRouter);
+api.use('/cash',cashRouter);
 api.use('/notifications',notificationsRouter);
 api.post('/validate', (req, res, next) => {
   if (!req.is('application/json')) {
