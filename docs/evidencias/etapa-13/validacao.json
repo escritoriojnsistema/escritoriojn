@@ -70,7 +70,10 @@
   "publication": {
     "status": "awaiting_specific_production_authorization",
     "path": "GitHub -> Vercel",
-    "github_actions_used": false
+    "github_actions_used": false,
+    "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/31",
+    "preview_state": "Ready",
+    "preview_functional_test": false
   },
   "decisions": [
     "Uma obrigacao zerada nao representa recebimento; permite cancelar atendimento e bloqueia reativacao posterior.",
