@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-22T00:45:47.667Z",
+  "url": "https://escritoriojn.vercel.app",
+  "html_status": 200,
+  "health_status": 200,
+  "asset": "/assets/index-zU7cyxJI.js",
+  "sha256": "c8cc11de9ed1a612616b74f4199c47ec6b66ba8bbe1d02aaf7f1c1db75348f33",
+  "markers": {
+    "Atribuir a mim": true,
+    "Solicitar correção": true,
+    "accounts.corrections.apply": true,
+    "Para corrigir seus dados, abra uma solicitação.": true
+  },
+  "local_bundle_equal": true,
+  "migration_sha256": "3b3fd073d36d3678c1e0b8ea5d270cdbd453682884921a10d260f4b51dd1b603",
+  "verified_at": "2026-10-22T00:49:02.255362+00:00",
+  "feature_commit": "82aed83faa3289d4cefc4594edea4396f1a64be7",
+  "merge_commit": "f3e7fc0e277c4e381d8e9ad11c6b3314befe3497",
+  "validated_tree": "f678b85510d3e6da2314f7bfb65ca37acecfbdff",
+  "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/29",
+  "preview": "https://vercel.com/escritorio-jn/escritoriojn/8ovTZPiA9gc1BjeNBzUeoVSWUzST",
+  "production_deployment": "https://vercel.com/escritorio-jn/escritoriojn/7psGDkoytBbr2BvTUp8RwPBmnLSG",
+  "github_vercel_status": "SUCCESS",
+  "github_actions": "disabled_manually",
+  "public_local_passed": 56,
+  "public_production_passed": 56,
+  "database_proof": "banco-publicado.json",
+  "manual_migration_apply": false
+}
