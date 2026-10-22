@@ -21,7 +21,7 @@ export function NotificationBell({client}:{client:boolean}){
    if(!force&&cached?.key===key&&Date.now()-cached.at<5000)return;
    inFlight=true;const started=refreshGeneration;
    try{const results=await Promise.all(contexts.map(async c=>[c.office_id,(await notificationsApi.summary(c.office_id,controller.signal)).unread] as const));
-    if(!controller.signal.aborted&&started===refreshGeneration){cached={key,at:Date.now(),counts:Object.fromEntries(results)};setSnapshot(cached);window.dispatchEvent(new Event('jn:inbox-update'));}
+    if(!controller.signal.aborted&&started===refreshGeneration){const previous=cached?.key===key?cached.counts:undefined;const next=Object.fromEntries(results);const changedCounts=previous&&JSON.stringify(previous)!==JSON.stringify(next);cached={key,at:Date.now(),counts:Object.fromEntries(results)};setSnapshot(cached);if(force||changedCounts)window.dispatchEvent(new Event('jn:inbox-update'));}
    }catch(cause){if(!controller.signal.aborted&&cause instanceof NotificationsError&&[401,403].includes(cause.status)){cached=undefined;setSnapshot(undefined);}else if(!controller.signal.aborted&&cached?.key!==key)setSnapshot(undefined);}
    finally{inFlight=false;if(again&&!controller.signal.aborted){again=false;void refresh(true);}}
   }

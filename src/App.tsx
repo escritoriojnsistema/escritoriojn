@@ -1,3 +1,4 @@
+import {NotificationReadProvider} from './features/notifications/NotificationReadProvider';
 import { useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom';
@@ -59,4 +60,4 @@ function AppRoutes() {
     <Route path="*" element={<main id="conteudo" className="not-found"><h1>Página não encontrada</h1><p>Confira o endereço ou volte ao início.</p><Link to={paths.home} className="primary-button"><ArrowLeft size={18} aria-hidden="true" />Voltar ao início</Link></main>} />
   </Routes></>;
 }
-export default function App() { return <BrowserRouter><AuthProvider><AppRoutes /></AuthProvider></BrowserRouter>; }
+export default function App() { return <BrowserRouter><AuthProvider><NotificationReadProvider><AppRoutes /></NotificationReadProvider></AuthProvider></BrowserRouter>; }

@@ -1,3 +1,5 @@
+import {Link} from 'react-router-dom';
+import {paths} from '../../app/routes';
 import {useEffect,useRef,useState,type FormEvent} from 'react';
 import {Send} from 'lucide-react';
 import {validAccountInput,type AccountData,type AccountInput} from '../../../shared/account';
@@ -19,5 +21,5 @@ export function AccountCorrectionForm({office,onCreated,onFailure}:{office:strin
   catch(cause){if(!controller.signal.aborted){setError(cause instanceof Error?cause.message:'Não foi possível enviar. Confira sua lista antes de repetir.');if(cause instanceof AccountError&&[401,403].includes(cause.status)){setBlocked(true);onFailure(new RequestsError(cause.status));}}}
   finally{if(!controller.signal.aborted){setBusy(false);busyRef.current=false;}}
  }
- return <form className="request-form account-correction-form" onSubmit={send} noValidate><p className="customer-note">Altere os dados abaixo para solicitar a correção. O cadastro atual será mantido até a conferência da equipe autorizada. A troca de e-mail exige confirmação do titular após a aprovação.</p>{error&&<p role="alert" className="form-feedback error">{error}</p>}{!blocked&&<fieldset disabled={busy||!data}><AccountFields value={value} onChange={setValue} masked={data?.cpf_masked}/>{changed&&<button className="primary-button" disabled={busy}><Send size={18} aria-hidden="true"/>Enviar</button>}</fieldset>}{error&&!blocked&&<button type="button" className="team-text-button" disabled={busy} onClick={()=>setRevision(n=>n+1)}>Reabrir formulário</button>}</form>;
+ return <form className="request-form account-correction-form" onSubmit={send} noValidate><p className="customer-note">Altere os dados abaixo para solicitar a correção. O cadastro atual será mantido até a conferência da equipe autorizada. A troca de e-mail exige confirmação do titular após a aprovação.</p>{error&&<p role="alert" className="form-feedback error">{error}</p>}{!blocked&&<><fieldset disabled={busy||!data}><AccountFields value={value} onChange={setValue} masked={data?.cpf_masked}/></fieldset><div className="account-actions">{changed&&<button className="primary-button" disabled={busy}><Send size={18} aria-hidden="true"/>Enviar</button>}<Link className="secondary-button" to={paths.clientAccount} onClick={e=>{if(busy)e.preventDefault();}} aria-disabled={busy}>Cancelar</Link></div></>}{error&&!blocked&&<button type="button" className="team-text-button" disabled={busy} onClick={()=>setRevision(n=>n+1)}>Reabrir formulário</button>}</form>;
 }

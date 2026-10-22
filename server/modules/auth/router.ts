@@ -32,13 +32,18 @@ authRouter.get('/context',async(req,res)=>{
         ...init,signal:AbortSignal.any([AbortSignal.timeout(8000),...(init?.signal?[init.signal]:[])]),
       })},
     });
-    const {data:identity,error:identityError}=await client.auth.getUser(token);
+    // Both operations are independent reads with the same Bearer. RLS/session
+    // guards still run in the database; release nothing until BOTH checks pass.
+    // Never apply this overlap to a mutation, which must follow verification.
+    const [{data:identity,error:identityError},{data,error}]=await Promise.all([
+      client.auth.getUser(token),
+      client.rpc('my_access_context'),
+    ]);
     if (identityError || !identity.user) {
       const unavailable=identityError && (!('status' in identityError) || !identityError.status || identityError.status>=429);
       errorResponse(res,unavailable?503:401,unavailable?'AUTH_UNAVAILABLE':'AUTH_REQUIRED',
         unavailable?'Não foi possível verificar o acesso. Tente novamente.':'Entre novamente para continuar.');return;
     }
-    const {data,error}=await client.rpc('my_access_context');
     if (error || !Array.isArray(data) || data.length>100
       || !data.every(row=>isAccessContext(row) && row.user_id===identity.user.id)) {
       errorResponse(res,503,'AUTH_UNAVAILABLE','Não foi possível verificar as permissões. Tente novamente.');return;

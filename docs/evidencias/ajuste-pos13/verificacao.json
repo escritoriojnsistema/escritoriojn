@@ -1,0 +1,82 @@
+{
+  "date_utc": "2026-10-22",
+  "status": "validated locally; approved independent review; awaiting GitHub integration and canonical verification",
+  "node_api": {
+    "passed": 115,
+    "command": "npm test"
+  },
+  "interface": {
+    "passed": 77,
+    "viewports": [
+      320,
+      360,
+      768,
+      1440,
+      1920
+    ],
+    "roles": [
+      "owner",
+      "admin",
+      "employee",
+      "client"
+    ],
+    "command": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:team-ui -- --grep 'pós13:|conta:|ajustes:|charges workspace|charges empty list|retry retains exact command|404 clears private|adjust and cancel|installment exact sum|forged client capabilities|current authority forbids|403 on revalidation|pending command|same session focus|history requests|ação pendente'"
+  },
+  "public_local": {
+    "passed": 59,
+    "command": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:e2e"
+  },
+  "auth_real_local": {
+    "distinct_passed": 34,
+    "command": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:auth -- tests/auth/session.spec.ts tests/auth/operation.spec.ts tests/auth/adjustments.spec.ts tests/auth/account.spec.ts",
+    "stronger_notification_repeat_passed": 1,
+    "repeat_command": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:auth -- tests/auth/adjustments.spec.ts",
+    "database_read_at_confirmed_after_open": true,
+    "hosted_fixtures": false
+  },
+  "build": "npm run build: TypeScript browser + Vite + TypeScript server passed",
+  "dependency_audit_production_vulnerabilities": 0,
+  "review": {
+    "status": "approved",
+    "open_findings": 0,
+    "fixed_p2": "Independent retry remains after opening a second notice"
+  },
+  "supabase": {
+    "project_id": "mcsuoxnubpqenyvbefee",
+    "status": "ACTIVE_HEALTHY",
+    "region": "ca-central-1",
+    "migrations": 18,
+    "auth_users": 5,
+    "memberships": 5,
+    "customers": 1,
+    "requests": 1,
+    "charges": 0,
+    "schema_changes": false,
+    "affected_public_rpcs": {
+      "names": [
+        "my_access_context",
+        "notifications_page",
+        "notifications_read",
+        "notifications_summary"
+      ],
+      "security_invoker": true,
+      "anonymous_execute": false,
+      "authenticated_execute": true
+    }
+  },
+  "deployment_method": "GitHub to Vercel only; no Actions runs, workflow changes or CLI/API deployment",
+  "log_sha256": {
+    "node.log": "0b01d2698394699c4d8dc7c33ab811d8da4b99e3d2ec802c97da5abe774aa35a",
+    "ui-integration.log": "3e5795e19b2facca932cd5725543317ad0eddff754053a07f351426d017a4d97",
+    "public-local.log": "d73b0ec64d73ec92d9af3f4e33a59920c41c56509813a09d6b20b98cbe478560",
+    "auth-real.log": "9ecff0b6ff2bf4aaeaf4a49db1252032018fd0b73245f083aa6b178ff1a8be64",
+    "notification-real.log": "12de2808022e377f481840e20652078387cca0827b42a20b25f91e5faf4c8569",
+    "build-final.log": "acaa9931efe9081547d45bd9756208416207fd6a4da5d314a389717160d25fb2",
+    "dependencies.log": "6d8c5c8f3d7684adb070417bd608d01ae90aa3dc26a65af03ffda4955f38d9a3",
+    "auth-red.log": "2d1f5be427629cb9e0ac43b71f6b9f30d68bbe82083c991b47457da0195c6641",
+    "auth-green.log": "12089fecbae4b730fd3d912485869096965f37bbdb8aa22afb67bc8d9af2f708",
+    "task1-review-p2-red.log": "13d6307223e7ae05e509ee25ebd096253a17b3cb65c770777dc0f76cbc5e104d",
+    "task1-review-p2-green.log": "cf3d6492ad738917b24b65ffb8aec98d28b91cd2f6f5f4684c7d6f35b917f185"
+  },
+  "limits": "Raw logs are local ignored artifacts; this summary, source tests, review, controlled benchmark and fictitious screenshots are versioned. Local timing is not a hosted latency SLA."
+}
