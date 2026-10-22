@@ -83,3 +83,10 @@ test('solicitações: triagem interna exige campos, participantes e checklist do
 test('solicitações: revalidação da mesma autoridade preserva nota em edição',async({page})=>{
  await setup(page);await page.goto('/solicitacoes');await page.getByRole('button',{name:`Ver solicitação ${summary.protocol}`,exact:true}).click();await page.getByText('Ações do atendimento',{exact:true}).click();await page.getByLabel('Nota interna',{exact:true}).fill('Rascunho da mesma sessão');const refreshed=page.waitForResponse(r=>r.url().includes('/api/auth/context'));await page.evaluate(()=>window.dispatchEvent(new Event('focus')));await refreshed;await expect(page.getByRole('textbox',{name:'Nota interna',exact:true})).toHaveValue('Rascunho da mesma sessão');
 });
+test('solicitações13: dívida ativa explica bloqueio de cancelamento',async({page})=>{
+ await setup(page);await page.goto('/solicitacoes');await page.getByRole('button',{name:`Ver solicitação ${summary.protocol}`,exact:true}).click();await page.getByText('Ações do atendimento',{exact:true}).click();
+ await page.route('**/api/requests/*/actions',r=>r.fulfill({status:409,json:{error:{code:'CHARGE_CONFLICT'}}}));
+ await page.getByRole('combobox',{name:'Novo status',exact:true}).selectOption('cancelado');await page.getByLabel('Motivo da mudança',{exact:true}).fill('Cancelamento solicitado');
+ for(const label of ['Conferi cobranças manualmente','Conferi reembolsos manualmente','Conferi entregas manualmente','Conferi processos externos manualmente'])await page.getByLabel(label,{exact:true}).check();
+ await page.getByRole('button',{name:'Alterar status',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Cancele a cobrança ativa');
+});

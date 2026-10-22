@@ -1,0 +1,29 @@
+{
+  "checked_at": "2026-10-22T12:14:33Z",
+  "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/31",
+  "head": "4d1868a6bf1b3274cd4fde7f176a007bf6821299",
+  "tree": "68587c2acb236880eca3a75e15681a99d1b094a1",
+  "local_remote_tree_equal": true,
+  "draft": true,
+  "production_published": false,
+  "production_authorization": "pending",
+  "vercel": {
+    "source": "GitHub integration status and vercel[bot] PR comment",
+    "state": "success / Ready",
+    "deployment": "Fv9E1CqGpB1PZ1suy7xYkBhSQkkG",
+    "dashboard": "https://vercel.com/escritorio-jn/escritoriojn/Fv9E1CqGpB1PZ1suy7xYkBhSQkkG",
+    "preview": "https://escritoriojn-git-feat-etapa-13-cobrancas-escritorio-jn.vercel.app",
+    "http_route": "/cobrancas ->302 Vercel SSO",
+    "functional_hosted_test": false,
+    "management_api": "403 scope escritorio-jn; no settings changed"
+  },
+  "supabase": {
+    "migrations_after_git_branch": 17,
+    "etapa13_applied": false,
+    "preview_check": "skipped: Creating a new preview branch per PR is disabled",
+    "manual_apply": false,
+    "hosted_fixtures_created": false
+  },
+  "github_actions_used": false,
+  "next_action": "specific production authorization; then mergeGit, verify automatic migration history/SQL before any apply, Vercel canonical checks and final closure"
+}

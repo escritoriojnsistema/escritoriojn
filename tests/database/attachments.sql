@@ -1,7 +1,7 @@
 CREATE FUNCTION test.fixture_responsible(p_protocol text,p_member uuid) RETURNS void LANGUAGE plpgsql AS $$
 DECLARE r public.requests;u uuid;
 BEGIN
- SELECT * INTO r FROM public.requests WHERE protocol=p_protocol;
+ SELECT * INTO r FROM public.requests WHERE protocol=p_protocol AND office_id=(SELECT office_id FROM public.memberships WHERE id=p_member);
  SELECT user_id INTO u FROM public.memberships WHERE id=p_member AND office_id=r.office_id;
  UPDATE private.request_assignments SET ended_at=clock_timestamp() WHERE request_id=r.id AND ended_at IS NULL;
  UPDATE public.requests SET assignee_id=p_member WHERE id=r.id;

@@ -1,0 +1,14 @@
+# Plano13 — implementação integrada
+
+Contrato: [etapa-13.md](etapa-13.md). Base c9a1861; branch feat/etapa-13-cobrancas. Execução na sessão autorizada pelo pedido, com revisão independente. Sem Actions.
+
+- [x] Dados: gerar migrationCLI; charges/charge_items/eventos/parcelas/comandos privados com RLS/ACL, wrappers invoker e capacidades; snapshot10, centavos, saldo derivado, idempotência, versão/locks/revalidação, guarda cancelamento10. Teste SQL60+40=100/parcelas/desconto/escopo/histórico/rollback/ACL/corridas em banco descartável com migrador limitado.
+- [x] Backend/contratos: shared/charges.ts, server/modules/charges e registro app; testes API/validação primeiro, whitelist e uma identidade+RPC; catálogo de capacidades em shared/team.ts; erro conflito10 mapeado. Testar npm test/typecheck.
+- [x] Frontend: src/features/charges e rota/menu/ícone; reutilizar seletor10 e shell; opções recolhidas,3/5itens, histórico5,4atalhos. Contratos UI com fixture, erros/retry/sessão/mobile/desktop e sem recebimento. Build/typecheck e suites afetadas.
+- [ ] Revisão e entrega: revisão independente, suites locais SQL/API/UI/E2E e medições; checar Git/Vercel/Supabase reais sem fixtures; PR concreto e documentação Livro/README/Supabase/fecho com limites. Publicação somente se autorizada especificamente, sem inventar sucesso.
+
+Foco: transferir responsável durante espera; chave repetida com payload diferente; resposta perdida/atrasada; total zero e centavo indivisível; cancelamento de pedido concorrente; sem exposição financeira no portal; regressões Conta/Anexos/Checklists. Interfaces e responsabilidades fixadas no contrato, sem arquivos de implementação compartilhados entre agentes.
+
+Checkpoint22/10: revisão independente semP1/P2;766×2SQL com migrador limitado e corridas passaram. Benchmark10milobrigações/10conexões/100amostras:p95local119,785ms.114Node/API/build aprovados;4Auth reais locais passaram antes da retomada do ambiente (cobranças/Conta×2/checklists). Correções verificadas: cancelada sem parcelasDTO, limitefinalversão, pedido cancelado não reativa dívida e consulta de saldo indexada. Aviso específico de dívida no cancelamento10 recebeu teste RED→GREEN na validação final. Nenhuma fixture/DDL hospedada. SuiteUI ampla foi interrompida após23cenários aprovados para cumprir pedido de rapidez; suítes afetadas e públicos executadas por completo, sem atribuir sucesso à execução interrompida.
+
+PR31aberto emdraft com feature4d1868a6/árvore68587c2a igualàlocal; previewGit→VercelReady, protegidoSSO. Falta autorização específica e rolloutdeprodução verificável. SupabasePreview porPR desativado; nenhumapplyremoto.45UIafetados+59E2E públicos finais passaram. SemActions.
