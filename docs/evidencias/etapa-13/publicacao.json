@@ -1,29 +1,42 @@
 {
-  "checked_at": "2026-10-22T12:14:33Z",
+  "checked_at": "2026-10-22T12:25:26.822191+00:00",
   "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/31",
-  "head": "4d1868a6bf1b3274cd4fde7f176a007bf6821299",
-  "tree": "68587c2acb236880eca3a75e15681a99d1b094a1",
+  "head": "c24344d5e40fba8e6246afe87edd4e484e33ca8d",
+  "tree": "c4a170dd5598e383a614ecb0c2aa87202bdaa714",
   "local_remote_tree_equal": true,
-  "draft": true,
-  "production_published": false,
-  "production_authorization": "pending",
+  "draft": false,
+  "production_published": true,
+  "production_authorization": "user explicitly reaffirmed complete implementation and publication in this session; no further confirmation needed",
   "vercel": {
     "source": "GitHub integration status and vercel[bot] PR comment",
     "state": "success / Ready",
-    "deployment": "Fv9E1CqGpB1PZ1suy7xYkBhSQkkG",
-    "dashboard": "https://vercel.com/escritorio-jn/escritoriojn/Fv9E1CqGpB1PZ1suy7xYkBhSQkkG",
+    "deployment": "3aUP28uwgUd9YFop7ZN5NtQdncPo",
+    "dashboard": "https://vercel.com/escritorio-jn/escritoriojn/3aUP28uwgUd9YFop7ZN5NtQdncPo",
     "preview": "https://escritoriojn-git-feat-etapa-13-cobrancas-escritorio-jn.vercel.app",
-    "http_route": "/cobrancas ->302 Vercel SSO",
-    "functional_hosted_test": false,
-    "management_api": "403 scope escritorio-jn; no settings changed"
+    "http_route": "/cobrancas HTTP200 SPA; anonymous APIs401",
+    "functional_hosted_test": "59 public E2E passed; real authenticated workflow tested locally",
+    "management_api": "403 scope escritorio-jn; no settings changed",
+    "canonical": "https://escritoriojn.vercel.app",
+    "bundle": "index-CCi5AO1w.js",
+    "bundle_sha256": "0340a85ff6553dc8b0b791fe0576265b87dd0b658857ff9b7a6e8224ac4472f8",
+    "bundle_exactly_matches_local": true
   },
   "supabase": {
     "migrations_after_git_branch": 17,
-    "etapa13_applied": false,
+    "etapa13_applied": true,
     "preview_check": "skipped: Creating a new preview branch per PR is disabled",
     "manual_apply": false,
-    "hosted_fixtures_created": false
+    "hosted_fixtures_created": false,
+    "migrations_after_merge": 18,
+    "application": "automatic Git integration; no manual apply",
+    "ordered_commands_match": true,
+    "stored_commands": 36,
+    "function_bodies_match": 15,
+    "raw_access_denied": true,
+    "anonymous_rpc_execute": false,
+    "accounts_preserved": true
   },
   "github_actions_used": false,
-  "next_action": "specific production authorization; then mergeGit, verify automatic migration history/SQL before any apply, Vercel canonical checks and final closure"
+  "next_action": "Etapa13 concluida; proxima14 somente por novo pedido; preservar banco/historico",
+  "merge": "fa2995f2ef8a526933d7e092c2c9c2424829662b"
 }
