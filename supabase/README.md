@@ -73,3 +73,5 @@ Cobrança única por atendimento captura snapshots10 imutáveis. Valores BRL em 
 Publicação13 concluída:18migrations;36comandos/15corpos iguais ao SQL testado. Sem applymanual. Em alterações futuras, conferir histórico após mergeGit antes de aplicação manual para impedir duplicação. Preservar contas/dados; rollback somente código e nunca DROP/reset. Limites/resultado em [fecho13](../docs/etapas/fecho-13.md).
 
 Etapa14 acrescenta migration `20261022134044_cash_individual_accounts.sql`: seis tabelas privadas com RLS/ACL, quatro RPCs públicas INVOKER, quatro capacidades seed só owner, índices/locks/idempotência e caixa por operador/unidade. Nenhum dado financeiro real é criado pelo seed. Detalhes e prova hospedada no [fecho14](../docs/etapas/fecho-14.md). Após merge, conferir histórico antes de aplicar; não duplicar migration automaticamente aplicada porGit.
+
+Publicação14 confirmada:19migrations,20261022134044 aplicada automaticamente,54statements/17corpos correspondentes;46capacidades,4cashseed sóowner. Seis tabelas privadas vazias e dados anteriores preservados. Não reaplicar; evidências no fecho14.

@@ -1,0 +1,37 @@
+{
+  "checked_utc": "2026-10-22T17:58:49.440178+00:00",
+  "canonical": "https://escritoriojn.vercel.app",
+  "assets": [
+    {
+      "asset": "/assets/index-CyB7zf2F.css",
+      "sha256": "3a736440b7fa4237c900d596254dfd2e0ab250019ba147e1fa40cc17b22cee6b",
+      "bytes": 61039,
+      "identical_to_reviewed_build": true
+    },
+    {
+      "asset": "/assets/supabase-DtuMx0jC.js",
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "bytes": 214392,
+      "identical_to_reviewed_build": true
+    },
+    {
+      "asset": "/assets/rolldown-runtime-WkwZ5CU-.js",
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "bytes": 599,
+      "identical_to_reviewed_build": true
+    },
+    {
+      "asset": "/assets/react-DYkIpRt7.js",
+      "sha256": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+      "bytes": 259235,
+      "identical_to_reviewed_build": true
+    },
+    {
+      "asset": "/assets/index-B0aK7RSr.js",
+      "sha256": "363591c58a882b13d3b6697f67fc753161d61ae57bce7e15dc7cf1ad92d7b910",
+      "bytes": 315040,
+      "identical_to_reviewed_build": true
+    }
+  ],
+  "all_identical": true
+}

@@ -1,6 +1,6 @@
 {
-  "verified_utc": "2026-10-22T17:52:35.783863+00:00",
-  "status": "local implementation verified; publication pending",
+  "verified_utc": "2026-10-22T18:00:51.803149+00:00",
+  "status": "published and verified",
   "tests": {
     "node_api": 117,
     "database": {
@@ -21,7 +21,8 @@
     },
     "public_local": 62,
     "production_dependencies_vulnerabilities": 0,
-    "build_browser_and_server": "passed"
+    "build_browser_and_server": "passed",
+    "public_canonical": 62
   },
   "additional_rechecks": {
     "configuration_mobile": 2,
