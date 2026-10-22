@@ -1,0 +1,95 @@
+{
+  "verified_utc": "2026-10-22T17:52:35.783863+00:00",
+  "status": "local implementation verified; publication pending",
+  "tests": {
+    "node_api": 117,
+    "database": {
+      "replays": 2,
+      "checks_each": 813,
+      "total": 1626,
+      "cash_checks_each": 47,
+      "real_races_each": 9
+    },
+    "official_auth_lab": 23,
+    "cash_ui_contracts": 22,
+    "prior_ui_contracts": {
+      "distinct_scenarios": 52,
+      "first_run_passed": 50,
+      "first_run_artifact_errors": 2,
+      "isolated_recheck_passed": 2,
+      "cause": "Two concurrent UI runners shared Playwright artifact directory. Both failed only in browserContext.close ENOENT; rerun sequentially passed. No product fix inferred."
+    },
+    "public_local": 62,
+    "production_dependencies_vulnerabilities": 0,
+    "build_browser_and_server": "passed"
+  },
+  "additional_rechecks": {
+    "configuration_mobile": 2,
+    "cash_320": 1
+  },
+  "red_evidence": [
+    "public route/API3 failed before implementation",
+    "opening1 failed before implementation",
+    "independent read error2 failed before correction"
+  ],
+  "limitations": [
+    "UI contracts use explicit synthetic transport interception; real database/auth covered independently in disposable official lab.",
+    "No hosted fixtures or real financial transactions.",
+    "Local benchmark is not a production latency SLA.",
+    "P3: opening unit options exclude own sessions on current3/5 page only; existing session on another page can be offered but server409 forbids duplicate."
+  ],
+  "logs": {
+    "domain-db-full-20261022-1.log": {
+      "sha256": "118f8e99f796c1a8cb908d2b98dc0e1c7c46277b8815365acc278b761dd2462f",
+      "versioned": false
+    },
+    "node.log": {
+      "sha256": "137777a2a5371ffa1b623c652e19aa52afde8158580480e125e59ccfab1b035f",
+      "versioned": false
+    },
+    "auth-real.log": {
+      "sha256": "98a6d489074693f14d662ad51ac33a7c37e00241b0452ebee6990f5295aac220",
+      "versioned": false
+    },
+    "ui-complete.log": {
+      "sha256": "59d2d5fe9ad1f3de984ef220b9562fb104c4e6ddaf6febdadf11449ce46b27f9",
+      "versioned": false
+    },
+    "public-local.log": {
+      "sha256": "a4aa3ce56c492ab9ef809661c54ec2c0a0719befb056f856b3b08f2f33895962",
+      "versioned": false
+    },
+    "ui-regressions.log": {
+      "sha256": "7e41ac24a129bae2d344905338179187cdb79c2e208ffe031a845d47d5bb1bb7",
+      "versioned": false
+    },
+    "ui-isolated-final.log": {
+      "sha256": "6b307450ee9f349041e920d9444d6a28a56df8db9f3418959219c513855e9e0d",
+      "versioned": false
+    },
+    "ui-320-final.log": {
+      "sha256": "26d0876803108eb02d6d2fe0ef34b412078dbad4fb9d3c2dfe0a6d4f2bd8e9a7",
+      "versioned": false
+    },
+    "ui-config-capture-final.log": {
+      "sha256": "f571cd5e0269e897b43b386212ca6cc717bc9c40d62acce999af951a8da1b939",
+      "versioned": false
+    },
+    "build-final.log": {
+      "sha256": "dc7474c1c21fd6749a8bad3dedf32ce75b984c662e3be4e39dc5a055fb6cb0d7",
+      "versioned": false
+    },
+    "dependencies.log": {
+      "sha256": "6d8c5c8f3d7684adb070417bd608d01ae90aa3dc26a65af03ffda4955f38d9a3",
+      "versioned": false
+    },
+    "build-production.log": {
+      "sha256": "f3706ab67fcee317e6ead1bc613416e29ab4a0753bd1382f39b3b5482654a12f",
+      "versioned": false
+    }
+  },
+  "reviews": {
+    "domain_api": "approved, no P0/P1/P2/P3",
+    "ui_integration": "approved, no P0/P1/P2; one documented P3"
+  }
+}

@@ -1,6 +1,6 @@
 # Escritório JN
 
-Base nova das **Etapas 01–12** do manual v4: React + Vite + TypeScript, API Express `/api`, Supabase Auth/RLS, equipe, governança, clientes/vínculos, catálogo versionado, atendimentos, anexos privados e checklists/pendências/avisos internos. O checkpoint de testes/publicação está em [LIVRO_RAIZ.md](LIVRO_RAIZ.md).
+Base nova das **Etapas 01–14** do manual v4: React + Vite + TypeScript, API Express `/api`, Supabase Auth/RLS, equipe, governança, clientes/vínculos, catálogo versionado, atendimentos, anexos privados e checklists/pendências/avisos internos. O checkpoint de testes/publicação está em [LIVRO_RAIZ.md](LIVRO_RAIZ.md).
 
 ## Executar
 
@@ -88,3 +88,5 @@ Etapa10: `/solicitacoes` abre atendimentos presenciais/WhatsApp, preserva versã
 ### Etapa13 — Cobranças
 
 Área [`/cobrancas`](https://escritoriojn.vercel.app/cobrancas) implementada, integrada e publicada pelo PR31; Supabase/Vercel e59testes canônicos verificados. Obrigações vinculadas aos itens/snapshots de Solicitações, parcelas exatas em centavos BRL, ajuste/cancelamento com motivo/capacidade/histórico e saldo derivado. Nenhum recebimento ou caixa nesta etapa. Menu lateral por capacidade e quatro atalhos mobile preservados. [Contrato](docs/etapas/etapa-13.md), [plano](docs/etapas/plano-13.md) e [fecho](docs/etapas/fecho-13.md).
+
+Etapa14: `/caixa` integra abertura individual em espécie, unidades financeiras, contas de destino e formas de pagamento. `cash.read` consulta o próprio; `cash.open` abre; `cash.read_all` consolida; `cash.manage` configura. Seed só owner; demais acessos exigem concessão explícita por Equipe/convite. Fundo inicial não é receita; PIX/cartão/transferência têm destino separado do numerário. Sem recebimentos, fechamento ou recibos15. [Contrato14](docs/etapas/etapa-14.md), [plano](docs/etapas/plano-14.md) e [fecho](docs/etapas/fecho-14.md).
