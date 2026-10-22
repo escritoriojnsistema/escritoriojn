@@ -1,6 +1,6 @@
-# Conta e correções cadastrais — validação concluída
+# Conta e correções cadastrais — publicadas e verificadas
 
-Status: APROVÁVEL para publicação autorizada pela integração GitHub→Vercel. Publicação e readback hospedado serão acrescentados após a integração. GitHub Actions permanece disabled_manually.
+Publicado em https://escritoriojn.vercel.app em22/10/2026 pela integração GitHub→Vercel. [PR29](https://github.com/escritoriojnsistema/escritoriojn/pull/29), feature82aed83/mergef3e7fc0; árvoref678b855 igual à validada. Vercel produção7psGDkoytBbr2BvTUp8RwPBmnLSG SUCCESS. GitHub Actions permanece disabled_manually. Status: APROVADA E PUBLICADA.
 
 ## Entrega
 
@@ -14,7 +14,7 @@ Status: APROVÁVEL para publicação autorizada pela integração GitHub→Verce
 
 ## Validação local
 
-108 testes Node/API,1.432 verificações SQL716×2,50 contratos UI distintos e23 testes Auth reais locais aprovados.56 E2E públicos no preview compilado aprovado, com conexão pública real e somente fluxos anônimos. Build/typecheck aprovados; auditoria de dependências de produção com0 vulnerabilidades. Nenhuma conta hospedada usada para login/testes; fixtures somente em laboratório descartável.
+108 testes Node/API,1.432 verificações SQL716×2,50 contratos UI distintos e23 testes Auth reais locais aprovados.56 E2E públicos no preview compilado e56 no domínio publicado aprovados, com conexão pública real e somente fluxos anônimos. Build/typecheck aprovados; auditoria de dependências de produção com0 vulnerabilidades. Nenhuma conta hospedada usada para login/testes; fixtures somente em laboratório descartável.
 
 Auth real provou cliente→proposta→permissão separada→responsável→aplicação→duas confirmações de e-mail→conta/ficha sincronizadas, além de funcionário editando os próprios três campos e confirmando e-mail. Regressões cobriram login dos quatro perfis, convites, delegação/revogação, portal, protocolos, Storage e acompanhamento.
 
@@ -24,7 +24,13 @@ Benchmark local:10mil avisos,10conexões,300amostras; p95lista257,008ms, resumo7
 
 ## Banco e continuidade
 
-Migração20261021200540_account_data_corrections preparada e testada. Antes da publicação,16migrations/5Auth/5vínculos/1ficha/0pedidos/36permissões;13corpos de funções existentes conferidos com o repositório, sem divergência. Colunas Auth necessárias confirmadas. Não aplicar DDL manual antes de consultar novamente o histórico após Git; evitar duplicar a integração automática.
+Migração20261021200540_account_data_corrections aplicada automaticamente pela integração Git, sem apply manual.79comandos armazenados em ordem e31corpos ativos correspondem ao SQL testado, SHA2563b3fd073d36d3678c1e0b8ea5d270cdbd453682884921a10d260f4b51dd1b603. Quatro novas RPCs públicas invoker, search_path vazio, autenticadas; zero EXECUTE anônimo nas31funções. Três tabelas privadas com RLS, sem acesso bruto authenticated/service_role; dois triggers Auth ativos.
+
+Readback:17migrations,38permissões/41relações de papel; as duas capacidades novas têm seed somente owner e0concessões individuais.5Auth/5vínculos/1ficha preservados;0pedidos/arquivos/avisos e0linhas nas três tabelas novas, sem fixtures hospedadas. Os13corpos preexistentes substituídos haviam sido conferidos antes do merge. Edge Functions existentes permanecem ACTIVE/JWT obrigatório, sem alteração de código neste ajuste. [Prova do banco](../evidencias/ajuste-conta/banco-publicado.json).
+
+Bundle /assets/index-zU7cyxJI.js publicado idêntico ao build local, SHA256c8cc11de9ed1a612616b74f4199c47ec6b66ba8bbe1d02aaf7f1c1db75348f33. HTML/health200 e endpoints privados anônimos401;56 E2E canônicos aprovados. [Publicação](../evidencias/ajuste-conta/publicacao.json).
+
+Advisors semERROR:33INFO de RLS privada sem policy/sem GRANT,71índices sem uso INFO e as mesmas3FKs sem índice preexistentes. O únicoWARN preexistente é [proteção de senha vazada](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection); nenhuma configuração paga ou credencial foi alterada.
 
 Express/browser/Vercel usam somente conexão pública+Bearer; nenhum novo segredo ou worker privilegiado. Edge Functions existentes conservadas; o domínio de Conta usa API/RPC/guards oficiais e os módulos10–12. O retorno de código deve preservar tabelas/solicitações/intenção/histórico e respeitar o guard Auth. Não executar DROP/reset nem editar credenciais diretamente no banco.
 

@@ -1,0 +1,152 @@
+{
+  "checked_at": "2026-10-22T00:47:27.039Z",
+  "project": "mcsuoxnubpqenyvbefee",
+  "application": "Git integration; no manual apply",
+  "migration": "20261021200540",
+  "name": "account_data_corrections",
+  "stored_statements": 79,
+  "ordered_statements_equal": true,
+  "function_bodies_equal": 31,
+  "anonymous_execute_count": 0,
+  "public_wrappers": [
+    {
+      "name": "public.account_correction_apply",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.account_correction_create",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.account_read",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.account_save",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    }
+  ],
+  "integrity": [
+    {
+      "migrations": 17,
+      "accounts": 5,
+      "memberships": 5,
+      "customers": 1,
+      "requests": 0,
+      "files": 0,
+      "notifications": 0,
+      "account_data": 0,
+      "corrections": 0,
+      "email_intents": 0,
+      "permissions": 38,
+      "role_permissions": 41,
+      "individual_account_grants": 0,
+      "account_role_permissions": [
+        {
+          "role": "owner",
+          "permission": "accounts.corrections.apply"
+        },
+        {
+          "role": "owner",
+          "permission": "accounts.corrections.read"
+        }
+      ]
+    }
+  ],
+  "acl_and_triggers": {
+    "tables": [
+      {
+        "rls": true,
+        "name": "private.account_corrections",
+        "service_raw": false,
+        "authenticated_raw": false
+      },
+      {
+        "rls": true,
+        "name": "private.account_data",
+        "service_raw": false,
+        "authenticated_raw": false
+      },
+      {
+        "rls": true,
+        "name": "private.account_email_intents",
+        "service_raw": false,
+        "authenticated_raw": false
+      }
+    ],
+    "triggers": [
+      {
+        "name": "jn_account_email_guard",
+        "enabled": "O"
+      },
+      {
+        "name": "jn_account_email_sync",
+        "enabled": "O"
+      }
+    ]
+  },
+  "advisors": {
+    "security": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "count": 33,
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "level": "WARN",
+        "count": 1,
+        "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+      }
+    ],
+    "performance": [
+      {
+        "name": "unindexed_foreign_keys",
+        "level": "INFO",
+        "count": 3,
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys"
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "count": 71,
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      }
+    ]
+  },
+  "edge_functions": [
+    {
+      "name": "team-invitations",
+      "status": "ACTIVE",
+      "version": 29,
+      "verify_jwt": true
+    },
+    {
+      "name": "private-attachments",
+      "status": "ACTIVE",
+      "version": 8,
+      "verify_jwt": true
+    }
+  ]
+}

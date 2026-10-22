@@ -12,4 +12,4 @@ Aceite: três perfis internos editam dados; cliente abre formulário preparado e
 
 Validação: testes de entrada/DTO/API, SQL em banco descartável/replays/concorrência, contratos responsivos e Auth real local. Build/typecheck, revisão de autorização e publicação exclusivamente GitHub→Vercel, Actions desativado. Não inserir fixtures nem modificar contas reais durante testes. Antes de DDL remota verificar histórico após Git para evitar reaplicação.
 
-Estado: IMPLEMENTADO, EM VERIFICAÇÃO DE PUBLICAÇÃO. 108Node/API,1432SQL,50UI distintos e23Auth locais aprovados. Ajustes anteriores estão publicados e preservados em docs/etapas/fecho-ajuste-pos12.md. Atualizar evidências e fecho após validação real.
+Estado: APROVADA, PUBLICADA E VERIFICADA em22/10/2026. [Fecho](fecho-ajuste-conta.md) e [publicação](../evidencias/ajuste-conta/publicacao.json). 108Node/API,1432SQL,50UI distintos,23Auth locais e56E2E públicos locais+56canônicos aprovados. Supabase aplicou a migração porGit;79comandos/31corpos ativos correspondem ao arquivo testado. Ajustes anteriores preservados em docs/etapas/fecho-ajuste-pos12.md.

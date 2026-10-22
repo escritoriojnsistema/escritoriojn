@@ -1,6 +1,6 @@
 {
   "at": "2026-10-22T00:41:35.221458+00:00",
-  "status": "APROVAVEL_PARA_PUBLICACAO_AUTORIZADA",
+  "status": "APROVADA_PUBLICADA",
   "node_api": {
     "passed": 108,
     "command": "npm test"
@@ -73,5 +73,22 @@
     "passed": 56,
     "environment": "compiled Vite preview with public Supabase connection; anonymous flows only"
   },
-  "production": "PENDING"
+  "production": {
+    "public_tests_passed": 56,
+    "bundle_equal_local": true,
+    "url": "https://escritoriojn.vercel.app",
+    "deployment": "https://vercel.com/escritorio-jn/escritoriojn/7psGDkoytBbr2BvTUp8RwPBmnLSG"
+  },
+  "database_publication": {
+    "migration": "20261021200540",
+    "statements": 79,
+    "function_bodies_equal": 31,
+    "raw_table_access": false,
+    "anonymous_execute": 0,
+    "integration": "Git; no manual apply",
+    "accounts": 5,
+    "memberships": 5,
+    "customers": 1,
+    "new_individual_grants": 0
+  }
 }
