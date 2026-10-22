@@ -1,0 +1,370 @@
+{
+  "comparison": {
+    "history_statements": 54,
+    "history_matches_file": true,
+    "function_bodies": [
+      {
+        "schema": "private",
+        "name": "team_scope_for_member",
+        "matches": true
+      },
+      {
+        "schema": "private",
+        "name": "team_validate_assignment",
+        "matches": true
+      },
+      {
+        "schema": "private",
+        "name": "safe_audit_changes",
+        "matches": true
+      },
+      {
+        "schema": "private",
+        "name": "cash_actor",
+        "matches": true
+      },
+      {
+        "schema": "private",
+        "name": "cash_insert_guard",
+        "matches": true
+      },
+      {
+        "schema": "private",
+        "name": "cash_command_guard",
+        "matches": true
+      },
+      {
+        "schema": "private",
+        "name": "cash_configuration_record",
+        "matches": true
+      },
+      {
+        "schema": "private",
+        "name": "cash_configuration",
+        "matches": true
+      },
+      {
+        "schema": "private",
+        "name": "cash_dashboard_record",
+        "matches": true
+      },
+      {
+        "schema": "private",
+        "name": "cash_dashboard",
+        "matches": true
+      },
+      {
+        "schema": "private",
+        "name": "cash_configuration_guard",
+        "matches": true
+      },
+      {
+        "schema": "private",
+        "name": "cash_configure",
+        "matches": true
+      },
+      {
+        "schema": "private",
+        "name": "cash_open",
+        "matches": true
+      },
+      {
+        "schema": "public",
+        "name": "cash_dashboard",
+        "matches": true
+      },
+      {
+        "schema": "public",
+        "name": "cash_configuration",
+        "matches": true
+      },
+      {
+        "schema": "public",
+        "name": "cash_configure",
+        "matches": true
+      },
+      {
+        "schema": "public",
+        "name": "cash_open",
+        "matches": true
+      }
+    ]
+  },
+  "counts": {
+    "migrations": 19,
+    "latest_migration": "20261022134044",
+    "auth_users": 5,
+    "memberships": 5,
+    "customers": 1,
+    "requests": 1,
+    "charges": 0,
+    "permissions": 46,
+    "role_permissions": 49,
+    "cash_owner_capabilities": 4,
+    "cash_other_role_capabilities": 0,
+    "cash_individual_grants": 0,
+    "cash_units": 0,
+    "financial_accounts": 0,
+    "payment_methods": 0,
+    "cash_sessions": 0,
+    "cash_movements": 0,
+    "cash_commands": 0
+  },
+  "rls": [
+    {
+      "name": "cash_commands",
+      "rls": true,
+      "anon_raw": false,
+      "auth_raw": false,
+      "service_raw": false
+    },
+    {
+      "name": "cash_movements",
+      "rls": true,
+      "anon_raw": false,
+      "auth_raw": false,
+      "service_raw": false
+    },
+    {
+      "name": "cash_sessions",
+      "rls": true,
+      "anon_raw": false,
+      "auth_raw": false,
+      "service_raw": false
+    },
+    {
+      "name": "cash_units",
+      "rls": true,
+      "anon_raw": false,
+      "auth_raw": false,
+      "service_raw": false
+    },
+    {
+      "name": "financial_accounts",
+      "rls": true,
+      "anon_raw": false,
+      "auth_raw": false,
+      "service_raw": false
+    },
+    {
+      "name": "payment_methods",
+      "rls": true,
+      "anon_raw": false,
+      "auth_raw": false,
+      "service_raw": false
+    }
+  ],
+  "functions": [
+    {
+      "schema": "private",
+      "name": "cash_actor",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "cash_command_guard",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "cash_configuration",
+      "definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": true
+    },
+    {
+      "schema": "private",
+      "name": "cash_configuration_guard",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "cash_configuration_record",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "cash_configure",
+      "definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": true
+    },
+    {
+      "schema": "private",
+      "name": "cash_dashboard",
+      "definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": true
+    },
+    {
+      "schema": "private",
+      "name": "cash_dashboard_record",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "cash_insert_guard",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "cash_open",
+      "definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": true
+    },
+    {
+      "schema": "private",
+      "name": "safe_audit_changes",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "team_scope_for_member",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "team_validate_assignment",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": false
+    },
+    {
+      "schema": "public",
+      "name": "cash_configuration",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": true
+    },
+    {
+      "schema": "public",
+      "name": "cash_configure",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": true
+    },
+    {
+      "schema": "public",
+      "name": "cash_dashboard",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": true
+    },
+    {
+      "schema": "public",
+      "name": "cash_open",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "auth_execute": true
+    }
+  ],
+  "open_index": [
+    {
+      "indexname": "cash_sessions_one_open_idx",
+      "indexdef": "CREATE UNIQUE INDEX cash_sessions_one_open_idx ON private.cash_sessions USING btree (office_id, operator_id, unit_id) WHERE (status = 'open'::text)"
+    }
+  ],
+  "advisors": {
+    "security": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "count": 44,
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "level": "WARN",
+        "count": 1,
+        "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+      }
+    ],
+    "performance": [
+      {
+        "name": "unindexed_foreign_keys",
+        "level": "INFO",
+        "count": 3,
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+        "tables": [
+          "customer_merges",
+          "customer_registrations",
+          "customer_registrations"
+        ]
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "count": 79,
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      }
+    ]
+  }
+}

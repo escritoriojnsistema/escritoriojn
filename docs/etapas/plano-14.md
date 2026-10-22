@@ -7,7 +7,7 @@ Base9fce03d; contrato em etapa-14.md; autorização integral já registrada, sem
 - [x] UI: OperationLayout/Equipe, /caixa/sidebar, Meu caixa/Consolidação/Configuração, rascunhos/cancelamento/erros, paginação3/5 e seletoresconfig50, semloader. Todosperfis/320/360/768/1440/1920 e zoom.
 - [x] Integração: laboratório oficialAuth→Express→RPC→Postgres, permissões/isolamentoA/B/owner/cliente/escritório; fundo100=100espécie/zero receita. Regressões13 e pós13.
 - [x] Revisões independentesDB/API e frontend/fluxo; corrigir achados e registrar testes reais. Benchmark/segurança/build/dependências.
-- [ ] GitHubPR/merge→Supabase/Vercel, reconferir histórico antes deapply, source/schema/bundle iguais, dadospreservados e canônicos. Livro/AGENTS/README/fecho/evidências.
+- [x] GitHubPR/merge→Supabase/Vercel, reconferir histórico antes deapply, source/schema/bundle iguais, dadospreservados e canônicos. Livro/AGENTS/README/fecho/evidências.
 
 ## Contrato entre camadas
 
@@ -22,3 +22,5 @@ Domínio e UI conectados;117Node/API,1626SQL(813×2;9corridas14/replay),23Auth r
 1. GitHubPR de runtime/shared/UI/API compatíveis com as quatro capacidades futuras, semmigration/fixturesSQL. Aguardar deployVercel e conferir bundle. Banco18 mantém menu14 oculto até ativação.
 2. GitHubPR da árvore completa validada, incluindo migration. A integração Supabase aplica oSQL; reconferir histórico/corpos/RLS/ACL/permissões/contagens antes de qualquerapply. AguardarVercel e verificar canônico62casos eassetexato.
 3. PR apenas documental registra commits/deploy/schema/evidências reais no Livro/AGENTS/README/fecho. Nenhuma Action, deployCLI/API, fixture hospedada ou operação financeira de teste. Rollback só código compatível, semDROP/remoção de ledger; não voltar API de permissões pré14 com schema já ativado.
+
+Fecho dos gates: PR35código→VercelGmFRKFmjSUCCESS, PR36schema→VercelHkKB6XZrSUCCESS;SQL automático54statements/17corpos idênticos,19migrations/46capacidades, zero fixtures financeiras e dados anteriores preservados.62públicos canônicos passaram;5assets exatos. Evidências em publicacao.json/schema-publicado.json/bundle-publicado.json. PRdocumental final não muda runtime.

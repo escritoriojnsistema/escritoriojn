@@ -1,0 +1,106 @@
+{
+  "status": "published and verified",
+  "canonical": "https://escritoriojn.vercel.app",
+  "code": {
+    "pr": 35,
+    "feature_commit": "931cce5d17292d87fae2188138127f51eda8957f",
+    "merge_commit": "03265e4356cbbef858ecd944295f7e7b4dbd9186",
+    "validated_tree": "f44ddb34a92bf3d7e4b06903b2b1963b2228ca0c",
+    "vercel_status": "success",
+    "deployment_id": "GmFRKFmjQLozLcCHJQiv6DjLa2A4"
+  },
+  "activation": {
+    "pr": 36,
+    "feature_commit": "242ff4447070c8ce3bf1369f405348c45dc555af",
+    "merge_commit": "936d6d7a7601d58145ee2f99883fb1c307504489",
+    "validated_tree": "d226d6cf3515d53ec02fc6e42002f2a46bbc2e44",
+    "vercel": {
+      "statuses": [
+        {
+          "context": "Vercel",
+          "state": "success",
+          "target_url": "https://vercel.com/escritorio-jn/escritoriojn/HkKB6XZrQRrzYtr9zjhSCrqF8nn5"
+        }
+      ]
+    }
+  },
+  "migration": {
+    "version": "20261022134044",
+    "name": "cash_individual_accounts",
+    "sha256": "0e7c56639424cbbf66d80367637224bdfee24dac51e26094fa5be3b0737c0726",
+    "method": "automatic Supabase Git integration after merge; no manual apply",
+    "statements": 54,
+    "history_matches_file": true,
+    "matched_function_bodies": 17
+  },
+  "canonical_public_tests": {
+    "passed": 62,
+    "failed": 0,
+    "command": "E2E_BASE_URL=https://escritoriojn.vercel.app PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:e2e",
+    "log_sha256": "c6397cca0b6be92e6bba4296ef9858a984c056b81ea5fd40384ab95296060751"
+  },
+  "integrity": {
+    "migrations": 19,
+    "latest_migration": "20261022134044",
+    "auth_users": 5,
+    "memberships": 5,
+    "customers": 1,
+    "requests": 1,
+    "charges": 0,
+    "permissions": 46,
+    "role_permissions": 49,
+    "cash_owner_capabilities": 4,
+    "cash_other_role_capabilities": 0,
+    "cash_individual_grants": 0,
+    "cash_units": 0,
+    "financial_accounts": 0,
+    "payment_methods": 0,
+    "cash_sessions": 0,
+    "cash_movements": 0,
+    "cash_commands": 0,
+    "existing_counts_preserved": true
+  },
+  "hosted_fixtures": 0,
+  "actions_runs_requested": 0,
+  "workflow_files_changed": 0,
+  "cli_or_api_deployment": false,
+  "limitations": "Authenticated writes verified in disposable official local Auth/REST/SMTP lab. Hosted checks use public E2E, exact assets, status and read-only SQL. No hosted financial configuration/session created, no existing user or business data changed except intended owner capability seed.",
+  "verified_utc": "2026-10-22T18:00:51.803149+00:00",
+  "public_assets": {
+    "checked_utc": "2026-10-22T17:58:49.440178+00:00",
+    "canonical": "https://escritoriojn.vercel.app",
+    "assets": [
+      {
+        "asset": "/assets/index-CyB7zf2F.css",
+        "sha256": "3a736440b7fa4237c900d596254dfd2e0ab250019ba147e1fa40cc17b22cee6b",
+        "bytes": 61039,
+        "identical_to_reviewed_build": true
+      },
+      {
+        "asset": "/assets/supabase-DtuMx0jC.js",
+        "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+        "bytes": 214392,
+        "identical_to_reviewed_build": true
+      },
+      {
+        "asset": "/assets/rolldown-runtime-WkwZ5CU-.js",
+        "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+        "bytes": 599,
+        "identical_to_reviewed_build": true
+      },
+      {
+        "asset": "/assets/react-DYkIpRt7.js",
+        "sha256": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+        "bytes": 259235,
+        "identical_to_reviewed_build": true
+      },
+      {
+        "asset": "/assets/index-B0aK7RSr.js",
+        "sha256": "363591c58a882b13d3b6697f67fc753161d61ae57bce7e15dc7cf1ad92d7b910",
+        "bytes": 315040,
+        "identical_to_reviewed_build": true
+      }
+    ],
+    "all_identical": true
+  }
+}
