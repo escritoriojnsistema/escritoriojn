@@ -1,6 +1,5 @@
 .charges-main {
   width: 100%;
-  max-width: 1500px;
   margin-inline: auto;
 }
 .charges-main fieldset {
@@ -71,7 +70,7 @@
   min-width: 20px;
   height: 20px;
 }
-.charges-main form {
+.charges-main .charge-editor {
   max-width: 760px;
 }
 .charges-main summary {

@@ -1,0 +1,16 @@
+{
+  "kind": "controlled-local-http-provider",
+  "independent_provider_delay_ms": 125,
+  "samples_per_case": 7,
+  "sequential_sdk_reference": {
+    "median_ms": 256.792,
+    "min_ms": 255.838,
+    "max_ms": 259.188
+  },
+  "current_context_endpoint": {
+    "median_ms": 132.207,
+    "min_ms": 131.421,
+    "max_ms": 137.426
+  },
+  "limits": "Fictitious local provider; demonstrates removal of serial wait. Does not measure hosted login or guarantee internet latency."
+}

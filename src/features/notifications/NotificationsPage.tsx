@@ -1,3 +1,4 @@
+import {useNotificationRead} from './NotificationReadProvider';
 import {useEffect,useRef,useState} from 'react';
 import {Link,useLocation} from 'react-router-dom';
 import {Search} from 'lucide-react';
@@ -27,6 +28,7 @@ function OfficeInbox({contexts,client}:{contexts:AccessContext[];client:boolean}
  </div>;
 }
 function Inbox({office,client}:{office:string;client:boolean}){
+ const markOnOpen=useNotificationRead();
  const [input,setInput]=useState(''),[query,setQuery]=useState(''),[read,setRead]=useState<NotificationRead>('all'),[kind,setKind]=useState<NotificationFilter>('all'),[page,setPage]=useState(1),[revision,setRevision]=useState(0);
  const [data,setData]=useState<AccountNotices>(),[error,setError]=useState<NotificationsError>(),[pending,setPending]=useState(false),[saving,setSaving]=useState(false),[feedback,setFeedback]=useState('');
  const [size,setSize]=useState(()=>matchMedia('(max-width:900px)').matches?3:5),generation=useRef(0),mutation=useRef<AbortController|undefined>(undefined);
@@ -55,7 +57,7 @@ function Inbox({office,client}:{office:string;client:boolean}){
   {data&&<><p className="customer-note">{data.unread} não lidas</p>{!data.items.length?<p className="team-empty">Nenhuma notificação neste filtro.</p>:<ul className="checklist-notices" aria-label={client?'Notificações do atendimento':'Notificações internas'}>{data.items.map(n=><li key={n.id}>
    <strong>{n.kind==='assignee_changed'?`${n.attendant_name} assumiu seu atendimento.`:n.kind==='account_correction'?'Um cliente solicitou correção dos dados da conta.':n.kind==='account_updated'?'A correção dos dados da sua conta foi analisada. Confira o atendimento.':n.kind==='handoff'?'Um atendimento foi encaminhado para você.':'Há pendências em um atendimento sob sua responsabilidade.'}</strong>
    <small>{new Date(n.created_at).toLocaleString('pt-BR')} · {n.read_at?'Lida':'Não lida'}</small><div>
-    {n.can_open&&<Link className="team-text-button" to={client?paths.clientRequests:paths.requests} state={{office_id:office,request_id:n.request_id}}>Abrir {n.protocol}</Link>}
+    {n.can_open&&<Link className="team-text-button" to={client?paths.clientRequests:paths.requests} state={{office_id:office,request_id:n.request_id}} onClick={()=>{if(!n.read_at)markOnOpen(office,n.id);}}>Abrir {n.protocol}</Link>}
     {!n.read_at&&<button className="team-text-button" disabled={saving} onClick={()=>void mark(n.id)}>Marcar como lida</button>}
    </div></li>)}</ul>}
    <nav className="team-pagination" aria-label="Paginação de notificações"><button className="team-text-button" disabled={saving||pending||page<=1} onClick={()=>setPage(n=>n-1)}>Anterior</button><span>{data.page}/{Math.max(1,Math.ceil(data.total/data.page_size))}</span><button className="team-text-button" disabled={saving||pending||page*data.page_size>=data.total} onClick={()=>setPage(n=>n+1)}>Próxima</button></nav>
