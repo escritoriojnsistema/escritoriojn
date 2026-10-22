@@ -1,0 +1,26 @@
+# Etapa 14 — Caixa individual e contas de destino
+
+Fonte: [cartão14](https://drive.google.com/file/d/1PQg9_XuBIRjvMcQTq2uTTdMZ8VjIAdfO/view) e [financeiro.md](https://drive.google.com/file/d/1ewtX2WQlYPax9Dp1s2FsrsoMlLMVuHq1/view), consultados22/10/2026. Base main9fce03d:13 e correções pós13 publicadas;18migrations/42capacidades;5Auth/5vínculos/0cobranças. Repositório limpo e origem coincidente antes das modificações. Não existem unidades organizacionais, contas, formas ou caixas implementados; unidade14 pertence somente ao domínio financeiro, sem alterar cadastro global.
+
+## Objetivo e regras
+
+- Criar financial_accounts, payment_methods, cash_sessions e estrutura cash_movements; unidade financeira auxiliar quando necessária. Cada abertura registra escritório, unidade, operador real, conta em espécie, horárioUTC e fundo em centavosBRL. Uma sessão aberta por operador/unidade garantida por índice único parcial e transação.
+- Operador abre somente para si; identidade/autoria nunca vêm do payload. Não existe fluxo de uso do caixa alheio nesta etapa. Consolidação somente cash.read_all, leitura própria cash.read, abertura cash.open, configuração cash.manage. read é pré-requisito; seed somenteowner, nenhuma concessão individual remota. Cliente não entra mesmo com capacidades forjadas.
+- Contas em espécie, bancárias e digitais têm identidade e unidade/escritório coerentes. Forma separada do destino: dinheiro exige conta em espécie; PIX/cartão/transferência exigem banco/digital. Nunca registrar chavePIX, senha bancária ou integração fictícia. Cadastros vazios orientam configuração pelo gestor; sem dados empresariais fictícios hospedados.
+- Fundo inicial não é receita nem pagamento; movimento de abertura tem natureza própria, valor aplicado zero a serviços e numerário igual ao fundo. Numerário derivado da base de movimentos, sem somar fundo duas vezes. Valores digitais não entram na espécie. Estrutura preparada não libera recebimentos, sangrias, transferências, fechamento ou reabertura, previstos em etapas seguintes.
+- Comandos de abertura/configuração persistem chave/hash/resultado por escritório/tipo e autoria. Retry idêntico repete resultado; payload diferente conflita; chave de outra identidade não é reutilizada. Distintas chaves simultâneas também não duplicam sessão. Locks e revalidação de sessão/capacidade após espera; rollback completo em falha. Nenhuma edição/exclusão de movimentos confirmados.
+- Schema privado comRLS/ACL fechadas; RPCs públicas INVOKER autenticadas e helpers privados restritos, search_path vazio e validação de identidade/sessão ativa. Índices pelas FKs e escritório/unidade/operador; consultas paginadas e configuração limitada com tratamento explícito, sem lista financeira de colega escondida no JSON próprio.
+
+## Experiência
+
+Rota /caixa na sidebar por capacidade, reutilizando OperationLayout/Equipe e convites. Área única com Meu caixa, Consolidação quando autorizada e Configuração quando autorizada; detalhes e ações secundárias recolhidos, listas3mobile/5desktop, formulários claros com Cancelar local e ações fora do quadro de campos. Nenhuma tela paralela de login. Quatro atalhos mobile e no máximo4ações principais, alvos44px, input16px, largura/padding da telaEquipe em320/360/768/1440/1920. Sem loader/overlay/rótulo temporário. Rascunho da mesma sessão conserva-se em falha transitória e foco; troca UID/session_id/autoridade descarta.401/403 bloqueiam e404 fecha recurso. Pendência bloqueia repetição e retry conserva chave+payload.
+
+## Contrato e limites
+
+Frontend/API usam shared/cash.ts como contrato único, validado estritamente no servidor e banco. Leituras e mutações usam uma identidade+umaRPC por operação; não paralelizar mutações com autenticação. Gestão altera somente recursos financeiros desta etapa; sem alterações de Auth, Vercelenv, contratos ou dados13. RN03/RN04/RF11 aplicáveis; RF10/pagamentos/alocações/recibos pertencem15. Fuso de exibição local claramente identificado; timestamps persistemUTC. Fundo100reais resulta100em espécie/zero recebido; conta digital não muda numerário.
+
+Autorização: o usuário pediu implementação completa14, incluindoSupabase/GitHub/Vercel/Livro, e já determinou nesta conversa prosseguir sem novas perguntas de autorização. Publicar somente GitHub→Vercel, semActions, deployCLI/API, migrations destrutivas ou fixtures hospedadas. Após merge consultar históricoSupabase antes de qualquer aplicação manual, pois integraçãoGit aplica automaticamente. Não reaplicar18migrations anteriores.
+
+## Aceite e evidências
+
+Testes DB: índice único,2conexões reais/mesma e diferentes chaves, abertura100→numerário100/receita0;A/B/escritório/cliente/capacidade/consolidação, conta digital incompatível, rollback, imutabilidade, revogação enquanto espera e idempotência persistida. API: autenticação/JSONfechado/DTOsemextras/erros seguros. UI: configurações conectadas, abertura real/consulta/consolidação, cancelamento local, semloaders, falha/retry/troca sessão e padrõesEquipe. LaboratórioAuth real isolado frontend→API→DB; produção sem usuários/caixas fictícios. Build/typecheck/audit, revisão independente, performance medida e fonte/schema/bundle publicados conferidos. Atualizar Livro, fecho curto e evidências reais; próxima15 só por novo pedido.

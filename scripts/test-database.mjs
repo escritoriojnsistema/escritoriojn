@@ -1,3 +1,4 @@
+import {raceCash,benchmarkCash} from './database-cash.mjs';
 import {raceCharges,benchmarkCharges} from './database-charges.mjs';
 import {raceAccount} from './database-account.mjs';
 import {raceReclaim} from './database-adjustments.mjs';
@@ -726,6 +727,7 @@ try {
       + sql(database, 'postgres', readFileSync(`${root}tests/database/adjustments.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/account.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/charges.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/cash.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
       + await raceLastOwners(database)
       + await raceRevokedSession(database)
@@ -752,6 +754,7 @@ try {
       + await raceRequestVersion(database)
       + await raceReclaim({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceAccount({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
+      + await raceCash({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceCharges({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceRequestAuthority(database,false)
       + await raceRequestAuthority(database,true)
@@ -761,6 +764,7 @@ try {
       + await raceChecklists({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceAttachments({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     if (database === 'foundation_replay_b') {await benchmarkChecklists({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});
+    await benchmarkCash({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});
     await benchmarkCharges({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});await benchmarkCustomerRelations(database);await benchmarkServices(database);await benchmarkRequests(database);await benchmarkAttachments({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});}
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }

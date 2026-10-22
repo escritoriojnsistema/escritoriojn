@@ -1,0 +1,82 @@
+{
+  "stage": 14,
+  "scope": "financial domain/API/local database only",
+  "timestamp_utc": "2026-10-22T13:53:18.067018+00:00",
+  "migration": {
+    "path": "supabase/migrations/20261022134044_cash_individual_accounts.sql",
+    "sha256": "0e7c56639424cbbf66d80367637224bdfee24dac51e26094fa5be3b0737c0726",
+    "created_via": "npx --yes supabase@2.102.0 migration new cash_individual_accounts",
+    "remote_applied": false
+  },
+  "tests": {
+    "database": {
+      "command": "JN_CASH_BENCHMARK=1 node scripts/test-database.mjs",
+      "exit_code": 0,
+      "replays": [
+        {
+          "database": "foundation_replay_a",
+          "checks": 813
+        },
+        {
+          "database": "foundation_replay_b",
+          "checks": 813
+        }
+      ],
+      "cash_checks_per_replay": 47,
+      "sql_functional_checks_per_replay": 38,
+      "real_race_checks_per_replay": 9,
+      "log": "docs/evidencias/etapa-14/domain-db-full-20261022-1.log"
+    },
+    "api": {
+      "command": "node --import tsx --test tests/cash-api.test.ts tests/charges-api.test.ts tests/team-api.test.ts",
+      "exit_code": 0,
+      "tests": 11,
+      "log": "docs/evidencias/etapa-14/domain-api-20261022-1.log"
+    },
+    "server_typecheck": {
+      "command": "npx tsc -p tsconfig.server.json --noEmit",
+      "exit_code": 0
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "exit_code": 0
+    },
+    "tdd_red": "cash API test expected401, got404 before route implementation; first SQL focused replay detected missing PL/pgSQL label, fixed before green replays"
+  },
+  "benchmark": {
+    "environment": "disposable local PostgreSQL17; no hosted network SLA",
+    "additional_sessions": 10000,
+    "additional_units": 10000,
+    "connections": 10,
+    "samples": 200,
+    "measurements": {
+      "dashboard_own": {
+        "samples": 100,
+        "median_ms": 25.335,
+        "p95_ms": 77.447,
+        "max_ms": 128.86
+      },
+      "configuration": {
+        "samples": 100,
+        "median_ms": 39.019,
+        "p95_ms": 81.358,
+        "max_ms": 102.054
+      }
+    }
+  },
+  "decisions": [
+    "cash_units is a private financial auxiliary, with no corporate units or business seed",
+    "configuration lists each paginate50 with explicit totals; unit filter available; dashboard sizes3/5",
+    "configuration writes return resource and official first configuration page; open returns official own dashboard first page5",
+    "all financial write commands serialize on existing office lock and revalidate identity/capabilities after waits",
+    "account linked to a session or method cannot change unit/type; no deactivation of units/accounts while affected sessions open; method deactivation blocked while any session in its unit open",
+    "session stores operator/unit/account display snapshots; immutable opening movement counted once; received/applied zero",
+    "private tables have RLS and no raw client/service_role ACL; public wrappers invoker; private privileged entrypoints auth/capabilitychecked with empty search_path",
+    "base has no generated schema client types; shared/cash.ts types and server DTO validate RPC projection without exposing private tables"
+  ],
+  "limitations": [
+    "No hosted mutation, production advisor run, commit or push performed by domain worker",
+    "Hosted network latency and future payment/closing flows are outside this benchmark/task",
+    "UI/browser/Auth end-to-end and publication belong to controller"
+  ]
+}
