@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-22",
+  "base": "c9a1861dbc3b070ad958cfc7181d3e1f9079b6a3",
+  "node_api": {
+    "passed": 114,
+    "failed": 0
+  },
+  "sql": {
+    "replays": 2,
+    "checks_per_replay": 766,
+    "total": 1532,
+    "limited_migrator": true,
+    "real_concurrency": true
+  },
+  "ui_affected": {
+    "passed": 45,
+    "failed": 0,
+    "focused_suite": 42,
+    "extra_charge_suite": 3
+  },
+  "ui_broad_interrupted": {
+    "passed_before_interruption": 23,
+    "total_planned": 225,
+    "completed": false,
+    "reason": "priorizar areas afetadas apos pedido de rapidez; nao conta como suite aprovada"
+  },
+  "public_e2e": {
+    "passed": 59,
+    "failed": 0
+  },
+  "auth_first_execution": {
+    "passed": 4,
+    "environment": "disposable official local Auth/REST/Storage/SMTP",
+    "specs": [
+      "charges.spec.ts",
+      "account.spec.ts (2)",
+      "checklists.spec.ts"
+    ],
+    "logs_available": false,
+    "limitation": "logs temporarios perdidos na retomada do ambiente; resultado observado antes da retomada"
+  },
+  "build": {
+    "passed": true,
+    "typecheck_client_and_server": true
+  },
+  "production_dependencies_vulnerabilities": 0,
+  "benchmark": {
+    "environment": "disposable local PostgreSQL17; no hosted network SLA",
+    "additional_charges": 10000,
+    "connections": 10,
+    "samples": 100,
+    "median_ms": 35.799,
+    "p95_ms": 119.785,
+    "max_ms": 187.382
+  },
+  "migration": {
+    "file": "20261022012025_charges_obligations.sql",
+    "sha256": "09d668b846d69c0c6025e52b013e94bbc643d338be1bd78f6b2ead598a2c9ca2",
+    "applied_remote": false
+  },
+  "remote_before": {
+    "migrations": 17,
+    "auth_accounts": 5,
+    "memberships": 5,
+    "customers": 1,
+    "requests": 1,
+    "services": 0,
+    "charges_table": false
+  },
+  "publication": {
+    "status": "awaiting_specific_production_authorization",
+    "path": "GitHub -> Vercel",
+    "github_actions_used": false
+  },
+  "decisions": [
+    "Uma obrigacao zerada nao representa recebimento; permite cancelar atendimento e bloqueia reativacao posterior.",
+    "Mantidas unidades inteiras do contrato10; numeric(12,3) prepara precisao sem alterar o fluxo anterior."
+  ],
+  "screenshots": [
+    "cobrancas-320.png",
+    "cobrancas-360.png",
+    "cobrancas-768.png",
+    "cobrancas-1440.png",
+    "cobrancas-1920.png"
+  ]
+}

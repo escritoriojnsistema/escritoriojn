@@ -9,6 +9,7 @@ export class RequestsError extends Error {
       : status === 403 ? 'Seu acesso não permite esta operação. Verifique com o proprietário.'
       : status === 404 ? 'Esta solicitação não está disponível. Volte à lista e confira seu acesso.'
       : code === 'REQUEST_IDEMPOTENCY_CONFLICT' ? 'Esta abertura já foi registrada com outros dados. Confira a lista antes de iniciar outra.'
+      : code === 'CHARGE_CONFLICT' ? 'Cancele a cobrança ativa na área Cobranças antes de cancelar o atendimento.'
       : code === 'SERVICE_NOT_EFFECTIVE' ? 'Um serviço não possui versão vigente. Confira o catálogo.'
       : status === 409 ? 'A solicitação mudou. Reabra o atendimento antes de alterar novamente.'
       : status === 422 ? 'Confira os dados, participantes e limites de cada serviço.'

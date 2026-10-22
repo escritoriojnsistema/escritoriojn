@@ -1,0 +1,140 @@
+.charges-main {
+  width: 100%;
+  max-width: 1500px;
+  margin-inline: auto;
+}
+.charges-main fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: grid;
+  gap: 10px;
+}
+.charges-main .team-field {
+  min-width: 0;
+}
+.charges-main input,
+.charges-main select {
+  width: 100%;
+  min-width: 0;
+}
+.charges-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.charges-items {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+}
+.charges-items li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  overflow-wrap: anywhere;
+}
+.charges-items strong {
+  white-space: nowrap;
+}
+.charges-totals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.charges-totals dt {
+  font-size: 13px;
+}
+.charges-totals dd {
+  margin: 6px 0;
+  font-weight: 700;
+  font-size: 20px;
+}
+.charges-plan {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.charges-confirm {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+}
+.charges-confirm input {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+}
+.charges-main form {
+  max-width: 760px;
+}
+.charges-main summary {
+  min-height: 44px;
+  padding-block: 12px;
+  cursor: pointer;
+}
+.charges-main .service-section {
+  margin-top: 12px;
+}
+@media (max-width: 420px) {
+  .charges-totals {
+    gap: 5px;
+  }
+  .charges-totals dd {
+    font-size: 16px;
+  }
+  .charges-items li {
+    font-size: 14px;
+  }
+  .charges-plan {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.charges-snapshot-adjustment {
+  display: block;
+  font-size: 12px;
+  color: #555;
+  margin-top: 4px;
+}
+
+@media (max-width: 900px) {
+  .charges-main .operation-heading {
+    margin-bottom: 6px;
+  }
+  .charges-main > .form-feedback {
+    margin: 4px 0;
+    padding: 4px 8px;
+  }
+  .charges-toolbar {
+    gap: 4px;
+    flex-wrap: nowrap;
+  }
+  .charges-toolbar > strong {
+    font-size: 14px;
+  }
+  .charges-toolbar .team-text-button {
+    padding-inline: 5px;
+  }
+  .charges-refresh {
+    flex: 0 0 44px;
+  }
+  .charges-items {
+    margin-block: 4px;
+  }
+  .charges-items li {
+    padding-block: 5px;
+  }
+  .charges-totals {
+    margin-block: 4px;
+  }
+  .charges-main .service-section {
+    margin-top: 0;
+  }
+}
