@@ -1,0 +1,44 @@
+{
+  "verified_utc": "2026-10-22T13:10:15.310445+00:00",
+  "status": "published and verified",
+  "canonical": "https://escritoriojn.vercel.app",
+  "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/33",
+  "feature_commit": "e471a4c7ece262fa680bab06e23f085ed4b16f5c",
+  "merge_commit": "b70de98b40d4190f819196fc5cfc28ceed7cd6d6",
+  "validated_tree": "c2f64f9f797092aa88bef25ce60b1420ef4ae22c",
+  "vercel": {
+    "status": "success",
+    "deployment_id": "AezWrV58RaR4WujnmN8no15nqEou",
+    "status_url": "https://vercel.com/escritorio-jn/escritoriojn/AezWrV58RaR4WujnmN8no15nqEou",
+    "method": "GitHub integration"
+  },
+  "canonical_public_tests": {
+    "passed": 59,
+    "failed": 0,
+    "command": "E2E_BASE_URL=https://escritoriojn.vercel.app PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:e2e",
+    "log_sha256": "1e60d32381bfb571d3e82a0f195c2d97d0e8c08796d5712662f059c71c9466d2"
+  },
+  "public_bundle": {
+    "checked_utc": "2026-10-22T13:07:28.548100+00:00",
+    "canonical": "https://escritoriojn.vercel.app",
+    "asset": "/assets/index-Yy3JrdO7.js",
+    "sha256": "d303bdf415b56a06e68bc48081e70907a284d09a753cf8a6d7a689668f2b1389",
+    "identical_to_reviewed_build": true
+  },
+  "supabase_post_canonical": {
+    "migrations": 18,
+    "latest_migration": "20261022012025",
+    "auth_users": 5,
+    "memberships": 5,
+    "customers": 1,
+    "requests": 1,
+    "charges": 0,
+    "counts_match_before": true,
+    "schema_changed": false,
+    "hosted_fixtures": 0
+  },
+  "actions_runs_requested": 0,
+  "workflow_files_changed": 0,
+  "cli_or_api_deployment": false,
+  "limitations": "Authenticated write flows verified in disposable local official Auth/REST/Storage/SMTP laboratory. Hosted verification uses public E2E, exact asset comparison, deployment status and read-only SQL; no real user credentials/data changed."
+}

@@ -1,6 +1,6 @@
 {
   "date_utc": "2026-10-22",
-  "status": "validated locally; approved independent review; awaiting GitHub integration and canonical verification",
+  "status": "published and verified",
   "node_api": {
     "passed": 115,
     "command": "npm test"
@@ -78,5 +78,10 @@
     "task1-review-p2-red.log": "13d6307223e7ae05e509ee25ebd096253a17b3cb65c770777dc0f76cbc5e104d",
     "task1-review-p2-green.log": "cf3d6492ad738917b24b65ffb8aec98d28b91cd2f6f5f4684c7d6f35b917f185"
   },
-  "limits": "Raw logs are local ignored artifacts; this summary, source tests, review, controlled benchmark and fictitious screenshots are versioned. Local timing is not a hosted latency SLA."
+  "limits": "Raw logs are local ignored artifacts; this summary, source tests, review, controlled benchmark and fictitious screenshots are versioned. Local timing is not a hosted latency SLA.",
+  "canonical_public": {
+    "passed": 59,
+    "failed": 0,
+    "evidence": "publicacao.json"
+  }
 }

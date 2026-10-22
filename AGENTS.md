@@ -43,3 +43,5 @@
 
 - Correções pós13: ações de Conta fora do quadro; Cancelar restaura snapshot oficial/proposta somente local, sem cancelar pedido já enviado. Ações em linha adaptável, e-mail cliente ocupa linha completa. Abrir aviso usa serviço acima das rotas: leitura automática idempotente por escritório/aviso, sobrevive à navegação e aborta na troca de sessão/autoridade. Cada falha mantém sua retentativa até confirmação. Sino atualiza por resumo oficial; primeiro resumo não dispara outra leitura das páginas recém-abertas.
 - Rapidez pós13: auth/context pode sobrepor getUser e my_access_context (somente leitura), mas só responde após verificar ambos e o UID de todas as linhas. Não estender esse paralelismo a mutações. Nunca trocar verificação vigente por cache de permissões. Cobranças usa largura de Equipe; limite760px somente no editor financeiro, sem restringir a busca.
+
+- Correções pós13 publicadas pelo PR33 (merge b70de98b), verificadas em produção e sem migration. Fecho em docs/etapas/fecho-ajuste-pos13.md. Autorização para implementação, publicação e fecho já concedida nesta conversa; não pedir novamente para estas correções. Etapa14 continua fora do escopo.
