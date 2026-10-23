@@ -1,13 +1,14 @@
-import {useEffect,useState} from 'react';
-import {Link} from 'react-router-dom';
+import {useEffect,useState,useRef} from 'react';
+import {NotificationDrawer} from './NotificationDrawer';
+import './notifications.css';
 import {Bell} from 'lucide-react';
 import {useAuth} from '../auth/AuthProvider';
-import {paths} from '../../app/routes';
 import {notificationsApi,NotificationsError} from './api';
 
 // One short-lived cache for the current authority only; never persisted to disk.
 let cached:{key:string;at:number;counts:Record<string,number>}|undefined;
 export function NotificationBell({client}:{client:boolean}){
+ const [open,setOpen]=useState(false),button=useRef<HTMLButtonElement>(null);
  const auth=useAuth(),contexts=auth.contexts.filter(c=>client?c.role_code==='client':c.role_code!=='client');
  const key=JSON.stringify([auth.sessionKey,contexts.map(c=>[c.office_id,c.user_id,c.role_code,[...c.permissions].sort()])]);
  const [snapshot,setSnapshot]=useState<{key:string;counts:Record<string,number>}>();
@@ -33,5 +34,5 @@ export function NotificationBell({client}:{client:boolean}){
  // eslint-disable-next-line react-hooks/exhaustive-deps
  },[key]);
  const counts=snapshot?.key===key?snapshot.counts:{},total=Object.values(counts).reduce((a,b)=>a+b,0),office=contexts.find(c=>(counts[c.office_id]??0)>0)?.office_id??contexts[0]?.office_id;
- return <Link to={client?paths.clientNotifications:paths.notifications} state={{office_id:office}} className="operation-icon-button operation-bell" aria-label={`Abrir notificações${total?` (${total} não lidas)`:''}`} title="Notificações"><Bell size={23} aria-hidden="true"/>{total>0&&<span className="operation-notice-count" aria-hidden="true">{total>99?'99+':total}</span>}</Link>;
+ return <><button ref={button} type="button" onClick={()=>setOpen(value=>!value)} aria-haspopup="dialog" aria-expanded={open} className="operation-icon-button operation-bell" aria-label={`Abrir notificações${total?` (${total} não lidas)`:''}`} title="Notificações"><Bell size={23} aria-hidden="true"/>{total>0&&<span className="operation-notice-count" aria-hidden="true">{total>99?'99+':total}</span>}</button>{open&&<NotificationDrawer key={key} client={client} contexts={contexts} initialOffice={office} onClose={()=>{setOpen(false);button.current?.focus();}}/>}</>;
 }

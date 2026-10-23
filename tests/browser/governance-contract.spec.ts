@@ -81,7 +81,7 @@ test('auditoria filtra, pagina, mostra referência e exporta com capacidade',asy
  await page.getByRole('combobox',{name:'Ação',exact:true}).selectOption('team.member_updated');
  const from=page.getByLabel('De', {exact:true});await from.fill('2026-10-01');await from.focus();await expect(from).toHaveCSS('box-shadow','none');await expect(from).toHaveCSS('font-size','16px');
  await page.getByRole('button',{name:'Aplicar filtros'}).click();await expect(page.getByText(/Página 1/)).toBeVisible();
- await page.getByRole('button',{name:'Ver evento',exact:true}).first().click();await expect(page.getByRole('heading',{name:'Detalhes do evento'})).toBeVisible();await expect(page.getByText(target,{exact:true}).first()).toBeVisible();
+ await page.getByRole('button',{name:'Ver evento',exact:true}).first().click();await expect(page.getByRole('heading',{name:'Detalhes do evento'})).toBeVisible();await page.getByText('Referências para rastreabilidade',{exact:true}).click();await expect(page.getByText(target,{exact:true}).first()).toBeVisible();
  await page.getByRole('button',{name:'Voltar à lista'}).click();
  const downloaded=page.waitForEvent('download');await page.getByRole('button',{name:'Exportar JSON'}).click();expect((await downloaded).suggestedFilename()).toMatch(/^auditoria-.*\.json$/);await expect(page.getByRole('status').filter({hasText:'Exportação registrada'})).toContainText('Exportação registrada');
 });

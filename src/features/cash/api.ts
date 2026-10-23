@@ -1,3 +1,5 @@
+import type {CashFilters} from '../../../shared/cash';
+import type {FinanceStatement,FinanceOperation,FinanceCharges,ClientFinance} from '../../../shared/finance';
 import type {CashDashboard,CashConfiguration,CashConfigurationResult,CashConfigure,CashOpen} from '../../../shared/cash';
 import { supabase } from "../auth/browser";
 import { authenticatedFetch } from "../auth/authenticatedFetch";
@@ -16,7 +18,7 @@ export class CashError extends Error {
           : status === 404
             ? "Registro indisponível no seu escopo. Confira a seleção."
             : status === 409
-              ? "O registro mudou ou já existe um caixa aberto nesta unidade. Confira o estado antes de repetir."
+              ? "O registro mudou ou a operação não é compatível com o saldo atual. Confira o estado antes de repetir."
               : status === 422
                 ? "Confira unidade, conta, nome e valor em reais."
                 : "Não foi possível concluir. Confira sua conexão e tente novamente.",
@@ -109,6 +111,11 @@ async function request<T>(
   }
 }
 export const cashApi={
+ statement:(office_id:string,session_id:string,page=1,signal?:AbortSignal)=>request<FinanceStatement>('/statement','POST',{office_id,session_id,page},signal),
+ eligibleCharges:(office_id:string,query:string,page=1,signal?:AbortSignal)=>request<FinanceCharges>('/eligible-charges','POST',{office_id,query,page},signal),
+ operate:(office_id:string,operation:FinanceOperation,signal?:AbortSignal)=>request<FinanceStatement>('/operate','POST',{office_id,operation},signal),
+ clientFinance:(office_id:string,page=1,history_page=1,signal?:AbortSignal,request_id:string|null=null)=>request<ClientFinance>('/client-finance','POST',{office_id,page,history_page,request_id},signal),
+ filteredDashboard:(office_id:string,scope:'own'|'all',page:number,page_size:3|5,filters:CashFilters,signal?:AbortSignal)=>request<CashDashboard>('/dashboard-filtered','POST',{office_id,scope,page,page_size,...filters},signal),
  dashboard:(office_id:string,scope:'own'|'all',page:number,page_size:3|5,signal?:AbortSignal)=>request<CashDashboard>('/dashboard','POST',{office_id,scope,page,page_size},signal),
  configuration:(office_id:string,page=1,unit_id:string|null=null,signal?:AbortSignal)=>request<CashConfiguration>('/configuration','POST',{office_id,unit_id,page,page_size:50},signal),
  configure:(office_id:string,configuration:CashConfigure,idempotency_key:string,signal?:AbortSignal)=>request<CashConfigurationResult>('/configure','POST',{office_id,configuration,idempotency_key},signal),

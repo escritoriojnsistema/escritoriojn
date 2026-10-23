@@ -1,3 +1,4 @@
+import PaymentsPage from './features/payments/PaymentsPage';
 import {NotificationReadProvider} from './features/notifications/NotificationReadProvider';
 import { useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
@@ -44,6 +45,7 @@ function AppRoutes() {
     <Route path={paths.customers} element={<CustomersPage key={operationKey} />} />
     <Route path={paths.requests} element={<RequestsPage key={`requests:${operationKey}`} />} />
     <Route path={paths.clientRequests} element={<RequestsPage key={`client-requests:${operationKey}`} client />} />
+    <Route path={paths.clientPayments} element={<PaymentsPage key={`client-payments:${operationKey}`} />} />
     <Route path={paths.cash} element={<CashPage key={`cash:${operationKey}`} />} />
     <Route path={paths.charges} element={<ChargesPage key={`charges:${operationKey}`} />} />
     <Route path={paths.checklists} element={<ChecklistsPage key={`checklists:${operationKey}`} />} />

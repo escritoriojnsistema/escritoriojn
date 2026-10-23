@@ -25,7 +25,7 @@ export function CashConfigurationPanel({data,references,busy,size,onSave,onClear
  }
  const destinations=draft?references.accounts.filter(a=>a.active&&a.unit_id===draft.unit_id&&(draft.type==='cash'?a.type==='cash':a.type!=='cash')):[];
  return <section className="cash-configuration" aria-label="Configuração financeira">
-  <p className="customer-note">Cadastre unidades, contas e formas de pagamento. Destinos digitais ficam separados do dinheiro físico.</p>
+  <ol className="cash-setup-steps" aria-label="Preparação do caixa"><li>Unidade financeira: {references.units.some(u=>u.active)?'cadastrada':'cadastre sua unidade'}</li><li>Conta em espécie: {references.accounts.some(a=>a.active&&a.type==='cash')?'cadastrada':'adicione para abrir caixa'}</li><li>Formas de pagamento: {references.payment_methods.some(m=>m.active)?'cadastradas':'vincule às contas para receber'}</li></ol><p className="customer-note">Cadastre unidades, contas e formas de pagamento. Destinos digitais ficam separados do dinheiro físico.</p>
   <label className="team-field team-office">Filtrar cadastros por unidade<select disabled={busy||!!draft} value={data.unit_id??''} onChange={e=>onUnit(e.target.value||null)}><option value="">Todas as unidades</option>{references.units.map(u=><option key={u.id} value={u.id}>{u.name}</option>)}</select></label>
   {draft&&<form className="cash-config-editor" onSubmit={save} noValidate><h2>{draft.id?'Editar':'Adicionar'} {draft.kind==='unit'?'unidade':draft.kind==='account'?'conta':'forma de pagamento'}</h2><fieldset disabled={busy}><div className="cash-config-grid">
    <label className="team-field cash-wide">Nome<input autoComplete="off" maxLength={120} value={draft.name} onChange={e=>set('name',e.target.value)}/></label>
