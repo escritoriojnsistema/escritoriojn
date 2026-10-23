@@ -1,3 +1,4 @@
+import {raceAudit} from './database-audit.mjs';
 import {raceFinance} from './database-finance.mjs';
 import {raceCash,benchmarkCash} from './database-cash.mjs';
 import {raceCharges,benchmarkCharges} from './database-charges.mjs';
@@ -714,10 +715,16 @@ try {
     for (const migration of migrations) {
       sql(database, 'migrator', `BEGIN;\n${readFileSync(`${root}supabase/migrations/${migration}`, 'utf8')}\nCOMMIT;`);
     }
+    if(process.env.JN_DB_FOCUS_AUDIT==='1'){
+      let result='';for(const suite of ['access','auth','team','governance','audit-reports'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
+      result+=await raceAudit({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+      console.log(`${database} auditoria (${result.split('\n').filter(line=>line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);continue;
+    }
     const result = sql(database, 'postgres', readFileSync(`${root}tests/database/access.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/auth.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/governance.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/audit-reports.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/customers.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/customer-registration.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/customer-relations.sql`, 'utf8'))
@@ -731,6 +738,7 @@ try {
       + sql(database, 'postgres', readFileSync(`${root}tests/database/cash.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/finance.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
+      + await raceAudit({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceLastOwners(database)
       + await raceRevokedSession(database)
       + await raceRecipientEmail(database)

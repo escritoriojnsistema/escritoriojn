@@ -318,7 +318,12 @@ export async function createAuthLab() {
       const migrations = await Promise.all(files.map(name => readFile(`${directory}/${name}`, 'utf8')));
       await sql(`BEGIN;\n${migrations.join('\n')}\nNOTIFY pgrst, 'reload schema';\nCOMMIT;`, 'migrator');
       // PostgREST processes NOTIFY asynchronously. Wait for its own schema cache to see the app RPCs.
-      const expected = [...new Set(migrations.flatMap(text => [...text.matchAll(/CREATE(?:\s+OR\s+REPLACE)?\s+FUNCTION\s+public\.([a-z_][a-z0-9_]*)\s*\(/gi)].map(match => match[1])))];
+      // Retired RPCs can intentionally lose EXECUTE in later migrations. The
+      // provider exposes current executable functions, not every historical CREATE.
+      const expected = JSON.parse((await sql(`SELECT coalesce(json_agg(DISTINCT p.proname),'[]')
+        FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+        WHERE n.nspname='public' AND (has_function_privilege('authenticated',p.oid,'EXECUTE')
+          OR has_function_privilege('service_role',p.oid,'EXECUTE'));`)).trim());
       const deadline = Date.now() + 10000;
       while (Date.now() < deadline) {
         // OpenAPI is permission-scoped: the mail completion RPC is deliberately

@@ -1,0 +1,58 @@
+{
+  "node_api": {
+    "distinct_passed": 139,
+    "scope": "npm test completo; inclui9PDF e13governança/API",
+    "after_dependency_override": {
+      "passed": 16,
+      "scope": "catálogo/adaptador/integraçãoAPI afetada; mesma suite financeira SQL não repetida pelo override"
+    }
+  },
+  "sql": {
+    "full_replay_a": 907,
+    "full_replay_b": 907,
+    "focused_after_timezone_a": 202,
+    "focused_after_timezone_b": 202,
+    "scope": "Migrador limitado sem superusuário/BYPASSRLS, ACL/RLS, rollback,1001/10001eventos, snapshots, datasUTC/DST e revogação real sob lock"
+  },
+  "auth_real_local": {
+    "distinct_passed": 5,
+    "scope": "Política persistida após reload, histórico/autoridade, selo forjado versus canônico, equipe/restauro/PDF/arquivo alterado, JWT/capacidade/revogação e Caixa/financeiro/cliente/avisos/fecho",
+    "hosted_authenticated_business_tested": false
+  },
+  "ui_contracts": {
+    "distinct_passed": 19,
+    "last_recheck_passed": 4,
+    "viewports": [
+      320,
+      360,
+      768,
+      1440
+    ],
+    "scope": "Quatro atalhos, alvos44px/inputs16px, geometria/zoom, labels estáveis, filtros/abas/política e respostas obsoletas"
+  },
+  "typecheck": "passed",
+  "production_build": "passed",
+  "production_dependency_vulnerabilities": 0,
+  "dependency_exception": {
+    "parent": "@vercel/cli-config@0.3.1",
+    "zod_before": "4.1.11",
+    "zod_override": "4.6.6",
+    "reason": "GHSA-mrhx-c7xc-m3w5; override explícito e restrito, mesma major, sem trocar dependências diretas",
+    "compatibility": "Parsers/schemas Vercel e API/Node afetados passaram; npm ci --ignore-scripts e npm audit produção0"
+  },
+  "review": {
+    "Goodall": "DoisP2 e sintoma PT corrigidos/rechecados; sem achado remanescente confirmado",
+    "Epicurus": "Renderer revisado e9testes; inspeção visual primeira/segunda páginas pelo coordenador",
+    "self": "Rechecagem adicionalUTC/DST e metadados financeiros seguros"
+  },
+  "failed_attempts_and_resolution": [
+    "Primeira execução SQL esperavaPT409 para imutabilidade; guarda real éPT403; teste corrigido e replays aprovados.",
+    "Primeiro Chromium não estava no caminho do Playwright; indicado executável instalado sem mexer no produto.",
+    "Uma página no servidor de desenvolvimento não chegou às chamadas privadas; rechecagem isolada dos4novos cenários passou, sem aumentar timeout.",
+    "PreparaçãoAuth esperava RPC histórica audit_export no OpenAPI após revogação; laboratório agora consulta ACLs atuais, sem aumentar timeout.",
+    "FixtureCash usava primeiro resultado de busca por sufixo de e-mail; passou a selecionar pessoa exata paginando. Rechecagem isolada aprovada.",
+    "ContratoUTC/DST e hash antecipado testados com falha antes das correções.",
+    "Auditoria de dependências detectou4high na cadeia Zod preexistente; override restrito validado e resultado final0."
+  ],
+  "publication": "Ainda sem merge neste arquivo; comprovação final será acrescentada após publicação Git."
+}

@@ -35,11 +35,13 @@ SELECT test.expect_error($q$SELECT private.emit_business_event('00000000-0000-40
 SELECT test.expect_error($q$INSERT INTO public.audit_events(office_id,actor_kind,actor_id,action,target_type) VALUES ('00000000-0000-4000-e000-000000000031','user',auth.uid(),'fake.event','membership')$q$,'42501','usuario nao insere eventos diretamente');
 SELECT test.expect_error($q$UPDATE public.audit_events SET action='fake.event'$q$,'42501','usuario nao altera evento');
 SELECT test.expect_error($q$DELETE FROM public.audit_events$q$,'42501','usuario nao apaga evento');
-SELECT test.assert_true((public.audit_export('00000000-0000-4000-e000-000000000031','team.member_updated',NULL,NULL,NULL,gen_random_uuid())->>'count')::int=7,'exportacao JSON limitada usa mesmos filtros');
+SELECT public.audit_report_begin('00000000-0000-4000-e000-000000000031','team.member_updated',NULL,NULL,NULL,'recent',gen_random_uuid())->>'id' AS report06_id \gset
+SELECT test.assert_true((public.audit_report_reference('00000000-0000-4000-e000-000000000031',:'report06_id')->>'count')::int=7,'snapshot completo usa mesmos filtros');
+SELECT public.audit_report_seal('00000000-0000-4000-e000-000000000031',:'report06_id',repeat('a',64),123);
 SELECT test.assert_true((public.audit_page('00000000-0000-4000-e000-000000000031',1,5,'audit.exported',NULL,NULL,NULL)->>'total')::int=1,'exportacao registrada no historico');
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000034","session_id":"00000000-0000-4000-c000-000000000034"}';
-SELECT test.assert_true((public.audit_page('00000000-0000-4000-e000-000000000031',1,5,'',NULL,NULL,NULL)->>'total')::int=8,'auditor explicito pode consultar');
-SELECT test.expect_error($q$SELECT public.audit_export('00000000-0000-4000-e000-000000000031','',NULL,NULL,NULL,gen_random_uuid())$q$,'PT403','audit.read nao permite exportar');
+SELECT test.assert_true((public.audit_page('00000000-0000-4000-e000-000000000031',1,5,'',NULL,NULL,NULL)->>'total')::int=9,'auditor explicito pode consultar');
+SELECT test.expect_error($q$SELECT public.audit_report_begin('00000000-0000-4000-e000-000000000031','',NULL,NULL,NULL,'recent',gen_random_uuid())$q$,'PT403','audit.read nao permite exportar');
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000032","session_id":"00000000-0000-4000-c000-000000000032","user_metadata":{"role":"owner"}}';
 SELECT test.expect_error($q$SELECT public.audit_page('00000000-0000-4000-e000-000000000031',1,5,'',NULL,NULL,NULL)$q$,'PT403','funcionario sem capacidade negado apesar metadata');
 SELECT test.expect_error($q$SELECT public.archives_page('00000000-0000-4000-e000-000000000031',1,3,'archived')$q$,'PT403','funcionario sem archives.manage negado');
@@ -49,10 +51,10 @@ SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000031","session_i
 SELECT test.expect_error($q$SELECT public.archive_membership('00000000-0000-4000-e000-000000000031','00000000-0000-4000-b000-000000000031',gen_random_uuid())$q$,'PT409','ultimo owner nao pode ser arquivado');
 SELECT test.expect_error($q$SELECT public.archive_membership('00000000-0000-4000-e000-000000000031','00000000-0000-4000-b000-000000000033',gen_random_uuid())$q$,'PT403','arquivo nao cruza escritorio');
 RESET ROLE;
-ALTER TABLE public.audit_events ADD CONSTRAINT audit06_fault CHECK (action NOT IN ('archives.archived','audit.exported')) NOT VALID;
+ALTER TABLE public.audit_events ADD CONSTRAINT audit06_fault CHECK (action NOT IN ('archives.archived','audit.exported','audit.report_started')) NOT VALID;
 SET ROLE authenticated;
 SELECT test.expect_error($q$SELECT public.archive_membership('00000000-0000-4000-e000-000000000031','00000000-0000-4000-b000-000000000032',gen_random_uuid())$q$,'23514','falha critica em auditoria reverte arquivo');
-SELECT test.expect_error($q$SELECT public.audit_export('00000000-0000-4000-e000-000000000031','',NULL,NULL,NULL,gen_random_uuid())$q$,'23514','falha critica impede exportacao sem evidencia');
+SELECT test.expect_error($q$SELECT public.audit_report_begin('00000000-0000-4000-e000-000000000031','',NULL,NULL,NULL,'recent',gen_random_uuid())$q$,'23514','falha critica impede exportacao sem evidencia');
 RESET ROLE;
 SELECT test.assert_true((SELECT active FROM public.memberships WHERE id='00000000-0000-4000-b000-000000000032') AND NOT EXISTS(SELECT FROM private.archived_records),'rollback manteve vinculo e nenhum arquivo');
 ALTER TABLE public.audit_events DROP CONSTRAINT audit06_fault;
@@ -85,7 +87,7 @@ ALTER TABLE public.audit_events DROP CONSTRAINT restore06_fault;
 INSERT INTO public.audit_events(office_id,actor_id,actor_kind,action,target_type)
  SELECT '00000000-0000-4000-e000-000000000031','00000000-0000-4000-a000-000000000031','user','test.limit','membership' FROM generate_series(1,1001);
 SET ROLE authenticated;
-SELECT test.expect_error($q$SELECT public.audit_export('00000000-0000-4000-e000-000000000031','test.limit',NULL,NULL,NULL,gen_random_uuid())$q$,'PT422','mais de1000 eventos exige filtro menor');
+SELECT test.assert_true((public.audit_report_begin('00000000-0000-4000-e000-000000000031','test.limit',NULL,NULL,NULL,'recent',gen_random_uuid())->>'count')::int=1001,'snapshot supera antigo limite1000 sem truncamento');
 RESET ROLE;
 SELECT test.assert_true((SELECT count(*) FROM public.audit_events WHERE office_id='00000000-0000-4000-e000-000000000031' AND action='audit.exported')=1,'limite excedido nao registra exportacao falsa');
 SET ROLE migrator;
