@@ -1,5 +1,5 @@
 {
-  "status": "validated_locally_pending_production",
+  "status": "validated_locally_and_production_artifacts_verified",
   "node_api": {
     "command": "npm test",
     "passed": 123,
@@ -270,7 +270,7 @@
     "No authenticated hosted business mutation performed.",
     "Manual payment/refund records; no bank gateway or automatic due-date scheduler.",
     "Vercel connector lacks project access; deploy proof uses existing GitHub status and canonical bundle.",
-    "Production not claimed until merge, schema history and canonical asset verification."
+    "Production artifact/schema and anonymous access barriers verified; authenticated business flow was validated in the local lab, without hosted business mutations."
   ],
   "migration": {
     "file": "supabase/migrations/20261023153038_cash_payments_portal.sql",
@@ -298,5 +298,6 @@
       "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
       "bytes": 214392
     }
-  }
+  },
+  "production_evidence": "publicacao.json"
 }
