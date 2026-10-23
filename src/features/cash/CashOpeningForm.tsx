@@ -1,7 +1,7 @@
 import {useRef,useState,type FormEvent} from 'react';
 import {DoorOpen,X} from 'lucide-react';
 import {cashAmountToCents,type CashConfiguration,type CashOpen,type CashSession} from '../../../shared/cash';
-export function CashOpeningForm({configuration,sessions,busy,onOpen,onClear}:{configuration:CashConfiguration;sessions:CashSession[];busy:boolean;onOpen:(input:CashOpen)=>Promise<boolean>;onClear:()=>void}){
+export function CashOpeningForm({configuration,sessions,busy,onOpen,onClear,canManage=false,onConfigure}:{configuration:CashConfiguration;sessions:CashSession[];busy:boolean;onOpen:(input:CashOpen)=>Promise<boolean>;onClear:()=>void;canManage?:boolean;onConfigure?:()=>void}){
  const units=configuration.units.filter(u=>u.active&&!sessions.some(s=>s.is_self&&s.status==='open'&&s.unit_id===u.id));
  const [unit,setUnit]=useState(()=>units[0]?.id??''),[account,setAccount]=useState(''),[amount,setAmount]=useState('0,00'),[error,setError]=useState('');
  const attempt=useRef<{payload:string;key:string}|undefined>(undefined);
@@ -12,7 +12,7 @@ export function CashOpeningForm({configuration,sessions,busy,onOpen,onClear}:{co
   const input={unit_id:selected.id,cash_account_id:selectedAccount.id,opening_cents:cents},payload=JSON.stringify(input);if(attempt.current?.payload!==payload)attempt.current={payload,key:crypto.randomUUID()};setError('');
   if(await onOpen({...input,idempotency_key:attempt.current.key})){setAmount('0,00');setAccount('');setUnit('');attempt.current=undefined;}
  }
- if(!units.length)return <p className="customer-note">{configuration.units.some(u=>u.active)?'Seu caixa nesta unidade já está aberto.':'Nenhuma unidade ativa disponível. Solicite a configuração ao gestor autorizado.'}</p>;
+ if(!units.length)return <div className="cash-setup-notice"><p className="customer-note">{configuration.units.some(u=>u.active)?'Seu caixa nesta unidade já está aberto.':canManage?'O caixa ainda precisa de uma unidade ativa. Cadastre sua unidade e uma conta em espécie em Configuração.':'Nenhuma unidade ativa disponível. Solicite a configuração ao gestor autorizado.'}</p>{canManage&&!configuration.units.some(u=>u.active)&&<button type="button" className="secondary-button" onClick={onConfigure} disabled={busy}>Configurar caixa</button>}</div>;
  return <form className="cash-opening" onSubmit={submit} noValidate aria-label="Abrir caixa individual">
   <fieldset disabled={busy}><div className="cash-opening-grid">
    <label className="team-field">Unidade<select value={selected?.id??''} onChange={e=>{setUnit(e.target.value);setAccount('');}}>{!selected&&<option value="">Selecione a unidade</option>}{units.map(u=><option value={u.id} key={u.id}>{u.name}</option>)}</select></label>
@@ -20,7 +20,7 @@ export function CashOpeningForm({configuration,sessions,busy,onOpen,onClear}:{co
    <label className="team-field">Fundo inicial (R$)<input autoComplete="off" inputMode="decimal" maxLength={14} value={amount} onChange={e=>setAmount(e.target.value)}/></label>
   </div></fieldset>
   <p className="customer-note">O fundo é dinheiro físico para iniciar seu caixa. Não é receita nem recebimento de serviços.</p>
-  {!accounts.length&&<p className="customer-note">O gestor autorizado deve cadastrar uma conta em espécie para esta unidade.</p>}
+  {!accounts.length&&<p className="customer-note">{canManage?'Cadastre uma conta em espécie para esta unidade em Configuração.':'O gestor autorizado deve cadastrar uma conta em espécie para esta unidade.'}</p>}
   {error&&<p role="alert" className="form-feedback error">{error}</p>}
   <div className="account-actions"><button className="primary-button" disabled={busy||!selected||!selectedAccount}><DoorOpen size={18} aria-hidden="true"/>Abrir meu caixa</button><button type="button" className="secondary-button" disabled={busy} onClick={()=>{setAmount('0,00');setUnit('');setAccount('');setError('');attempt.current=undefined;onClear();}}><X size={18} aria-hidden="true"/>Cancelar</button></div>
  </form>;

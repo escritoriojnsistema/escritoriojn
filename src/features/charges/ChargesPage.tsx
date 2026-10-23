@@ -284,7 +284,7 @@ function Workspace({
                       </div>
                     </dl>
                     <p className="customer-note">
-                      Estado: {data.charge.status}. Saldo é obrigação, não
+                      Estado: {data.charge.status==='cancelada'?'Cancelada':data.charge.due_cents===0?'Sem valor devido':data.charge.balance_cents===0?'Paga':'Em aberto'}. Saldo é obrigação, não
                       entrada de dinheiro.
                     </p>
                     <ul

@@ -7,3 +7,5 @@ test('caixa14 público: nenhuma operação aceita anônimo ou cookie como identi
   const r=await request.post(`/api/cash/${action}`,{data:{},headers:{Cookie:'session=unverified'}});expect(r.status()).toBe(401);expect(r.headers()['cache-control']).toContain('no-store');expect(await r.text()).not.toMatch(/service_role|postgres|STACK|private\./);
  }
 });
+
+test('portal financeiro redireciona visitante para acesso do cliente',async({page})=>{await page.goto('/meus-pagamentos');await expect(page.getByRole('heading',{name:'Área do Cliente',exact:true})).toBeVisible();await expect(page.getByRole('heading',{name:'Resumo financeiro',exact:true})).toHaveCount(0);});

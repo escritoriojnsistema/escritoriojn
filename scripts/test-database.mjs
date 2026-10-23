@@ -1,3 +1,4 @@
+import {raceFinance} from './database-finance.mjs';
 import {raceCash,benchmarkCash} from './database-cash.mjs';
 import {raceCharges,benchmarkCharges} from './database-charges.mjs';
 import {raceAccount} from './database-account.mjs';
@@ -728,6 +729,7 @@ try {
       + sql(database, 'postgres', readFileSync(`${root}tests/database/account.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/charges.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/cash.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/finance.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
       + await raceLastOwners(database)
       + await raceRevokedSession(database)
@@ -755,6 +757,7 @@ try {
       + await raceReclaim({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceAccount({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceCash({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
+      + await raceFinance({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceCharges({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceRequestAuthority(database,false)
       + await raceRequestAuthority(database,true)

@@ -6,7 +6,7 @@ export type ChargeMutation={kind:'adjust';delta_cents:number;reason:string;insta
 export type ChargeItem={request_item_id:string;name:string;quantity:string;unit_price_cents:number;total_cents:number;adjustment:ServiceAdjustment};
 export type ChargeInstallment=InstallmentInput&{number:number};
 export type ChargeEvent={id:string;kind:'created'|'adjusted'|'cancelled';delta_cents:number;reason:string;actor_name:string|null;created_at:string;version:number};
-export type Charge={id:string;version:number;currency:'BRL';status:'aberta'|'cancelada'|'sem_valor';original_cents:number;due_cents:number;allocated_cents:0;balance_cents:number;can_adjust:boolean;can_discount:boolean;can_surcharge:boolean;can_cancel:boolean;installments:ChargeInstallment[];history:ChargeEvent[];history_page:number;history_total:number};
+export type Charge={id:string;version:number;currency:'BRL';status:'aberta'|'cancelada'|'sem_valor';original_cents:number;due_cents:number;allocated_cents:number;balance_cents:number;can_adjust:boolean;can_discount:boolean;can_surcharge:boolean;can_cancel:boolean;installments:ChargeInstallment[];history:ChargeEvent[];history_page:number;history_total:number};
 export type ChargeView={request_id:string;protocol:string;closed:boolean;following_only:boolean;can_create:boolean;items:ChargeItem[];charge:Charge|null};
 const object=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);
 const exact=(v:unknown,keys:string[]):v is Record<string,unknown>=>object(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));

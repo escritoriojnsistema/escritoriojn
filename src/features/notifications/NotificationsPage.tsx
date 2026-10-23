@@ -1,3 +1,4 @@
+import {noticeText,isFinancialNotice} from './presentation';
 import {useNotificationRead} from './NotificationReadProvider';
 import {useEffect,useRef,useState} from 'react';
 import {Link,useLocation} from 'react-router-dom';
@@ -22,7 +23,7 @@ function OfficeInbox({contexts,client}:{contexts:AccessContext[];client:boolean}
  // new navigation; ordinary context/token refresh preserves manual selection.
  useEffect(()=>{if(contexts.some(c=>c.office_id===state?.office_id))setOffice(state!.office_id!);},[location.key,state?.office_id]);
  const context=contexts.find(c=>c.office_id===office)??contexts[0];
- return <div className="notifications-main"><OperationHeading context={context} showRole={false} title="Notificações" description={client?'Acompanhe quem está cuidando do seu atendimento.':'Avisos dos seus atendimentos e pendências.'}/>
+ return <div className="notifications-main"><OperationHeading context={context} showRole={false} title="Notificações" description={client?'Avisos dos seus atendimentos, pagamentos e valores devidos.':'Avisos dos seus atendimentos e pendências.'}/>
   {contexts.length>1&&<label className="team-field team-office">Escritório<select value={office} onChange={e=>setOffice(e.target.value)}>{contexts.map(c=><option value={c.office_id} key={c.office_id}>{c.office_name}</option>)}</select></label>}
   <Inbox key={context.office_id} office={context.office_id} client={client}/>
  </div>;
@@ -51,13 +52,13 @@ function Inbox({office,client}:{office:string;client:boolean}){
   {!blocked&&<><form className="team-filters operation-filters notification-filters" onSubmit={e=>{e.preventDefault();setQuery(input.trim());setPage(1);setRevision(n=>n+1);}}>
    <label className="team-field">Buscar solicitação<input type="search" value={input} maxLength={120} onChange={e=>setInput(e.target.value)} placeholder={client?'Protocolo ou atendente':'Protocolo'}/></label>
    <label className="team-field">Leitura<select value={read} disabled={saving} onChange={e=>{setRead(e.target.value as NotificationRead);setPage(1);}}><option value="all">Todas</option><option value="unread">Não lidas</option><option value="read">Lidas</option></select></label>
-   <label className="team-field">Tipo<select value={kind} disabled={saving} onChange={e=>{setKind(e.target.value as NotificationFilter);setPage(1);}}><option value="all">Todos</option>{client?<><option value="assignee_changed">Atendente</option><option value="account_updated">Dados da conta</option></>:<><option value="handoff">Encaminhamentos</option><option value="pending">Pendências</option><option value="account_correction">Correções cadastrais</option></>}</select></label>
+   <label className="team-field">Tipo<select value={kind} disabled={saving} onChange={e=>{setKind(e.target.value as NotificationFilter);setPage(1);}}><option value="all">Todos</option>{client?<><option value="assignee_changed">Atendente</option><option value="account_updated">Dados da conta</option><option value="charge_created">Nova cobrança</option><option value="charge_adjusted">Ajuste de cobrança</option><option value="charge_cancelled">Cancelamento de cobrança</option><option value="payment_received">Pagamento</option><option value="payment_refunded">Reembolso</option><option value="payment_reversed">Estorno</option></>:<><option value="handoff">Encaminhamentos</option><option value="pending">Pendências</option><option value="account_correction">Correções cadastrais</option></>}</select></label>
    <button className="secondary-button" disabled={saving}><Search size={18} aria-hidden="true"/>Buscar</button>
   </form>
   {data&&<><p className="customer-note">{data.unread} não lidas</p>{!data.items.length?<p className="team-empty">Nenhuma notificação neste filtro.</p>:<ul className="checklist-notices" aria-label={client?'Notificações do atendimento':'Notificações internas'}>{data.items.map(n=><li key={n.id}>
-   <strong>{n.kind==='assignee_changed'?`${n.attendant_name} assumiu seu atendimento.`:n.kind==='account_correction'?'Um cliente solicitou correção dos dados da conta.':n.kind==='account_updated'?'A correção dos dados da sua conta foi analisada. Confira o atendimento.':n.kind==='handoff'?'Um atendimento foi encaminhado para você.':'Há pendências em um atendimento sob sua responsabilidade.'}</strong>
+   <strong>{noticeText(n)}</strong>
    <small>{new Date(n.created_at).toLocaleString('pt-BR')} · {n.read_at?'Lida':'Não lida'}</small><div>
-    {n.can_open&&<Link className="team-text-button" to={client?paths.clientRequests:paths.requests} state={{office_id:office,request_id:n.request_id}} onClick={()=>{if(!n.read_at)markOnOpen(office,n.id);}}>Abrir {n.protocol}</Link>}
+    {n.can_open&&<Link className="team-text-button" to={isFinancialNotice(n.kind)?paths.clientPayments:client?paths.clientRequests:paths.requests} state={{office_id:office,request_id:n.request_id}} onClick={()=>{if(!n.read_at)markOnOpen(office,n.id);}}>Abrir {n.protocol}</Link>}
     {!n.read_at&&<button className="team-text-button" disabled={saving} onClick={()=>void mark(n.id)}>Marcar como lida</button>}
    </div></li>)}</ul>}
    <nav className="team-pagination" aria-label="Paginação de notificações"><button className="team-text-button" disabled={saving||pending||page<=1} onClick={()=>setPage(n=>n-1)}>Anterior</button><span>{data.page}/{Math.max(1,Math.ceil(data.total/data.page_size))}</span><button className="team-text-button" disabled={saving||pending||page*data.page_size>=data.total} onClick={()=>setPage(n=>n+1)}>Próxima</button></nav>

@@ -1,0 +1,31 @@
+# Correções financeiras, portal, notificações e auditoria — 23/10/2026
+
+## Autorização e retomada
+
+Pedido explícito: concluir Caixa/permissões, profissionalizar a operação, integrar pagamentos do cliente e avisos, transformar o sino em painel lateral, apresentar auditoria em português e atualizar o Livro. Publicação autorizada por GitHub→Vercel, sem Actions/deploy CLI/provisionamento. O escopo financeiro deste pedido substitui a restrição histórica da14 de não liberar recebimentos/fecho. Não equivale a declarar concluídas todas as futuras etapas15–40.
+
+Main retomada em564b259. Nenhum PR aberto; branches das etapas anteriores já integradas. A branch antiga de auditoria de segurança contém material de skill, sem correção financeira pendente a reaplicar. AGENTS/Livro/contrato14 lidos antes das alterações. Preservados os contratos de acesso10–14, a API Express e os snapshots de obrigações13.
+
+## Diagnóstico confirmado
+
+Consulta hospedada somente leitura: zero unidades financeiras, zero contas, zero caixas e zero cobranças; um owner ativo com as quatro capacidades cash. A mensagem não era evidência de uma negativa RLS: a14 deliberadamente não semeou cadastros empresariais. O erro de UX era instruir também o gestor a procurar outro gestor. Nenhum dado financeiro, unidade fictícia ou concessão individual foi criado hospedado.
+
+Já existiam abertura individual/fundo em espécie, consolidação de consulta, configurações paginadas, idempotência de comandos, permissões explícitas e obrigações13. Não existiam recebimentos, devoluções, conciliação/fecho nem consulta financeira do cliente. O sino navegava diretamente à página; o catálogo de auditoria omitia Conta, Caixa, Cobranças, Anexos e retomada de atendimento.
+
+## Implementação e limites funcionais
+
+- Meu caixa: extrato paginado, recebimento manual associado à cobrança real, dinheiro separado de banco/digital, reembolso parcial, estorno do restante, conferência com diferença registrada e fecho versionado. Diferença não vira ajuste automático. Fundo não vira receita. Sessões fechadas imutáveis quanto a novos lançamentos. Devolução de recebimento antigo usa novo caixa próprio aberto da mesma unidade, conserva destino/natureza originais e histórico.
+- Configuração: gestor recebe Configurar caixa e checklist dos cadastros; demais recebem orientação correta. Consolidação possui filtros de unidade/situação/operador e totais do filtro no servidor; espécie que inclui caixas fechados é rotulada histórica.
+- Autorização: cash.read consulta própria; cash.read_all consulta colega sem operar; cash.manage configura; cash.open permite operação própria. Receber requer ainda requests.read+charges.read e responsabilidade atual/triagem autorizada; reembolso/estorno adicionam charges.adjust. Mantidas concessão/revogação explícitas da Equipe, sem grants remotos novos. Cliente nunca opera caixa.
+- Livro financeiro: cash_entries privado/RLS/ACL fechados e imutável, ligado por FKs ao escritório/unidade/caixa/destino/cobrança/pedido. charges_amounts passa a derivar alocado/saldo desse ledger. Não duplicar saldos em outra tabela. Obrigações não podem cair abaixo do valor alocado; devolver antes de cancelar/reduzir. Contas com histórico não mudam unidade/tipo mesmo após remapear uma forma.
+- Cada operação usa versão esperada de caixa e, ao receber, de obrigação; chave/hash/resultado idempotentes, transação e locks de escritório/pedido, identidade/capacidades revalidadas após espera. Acumulados seguros independentes do teto de cada operação; antes de gravar, totais de recebimentos/devoluções por caixa ficam limitados à precisão segura do transporte JavaScript.
+- Portal: Meus pagamentos consulta obrigações, parcelas contratuais, pago líquido, devido e histórico próprio. Acesso por origem portal+UID ou identidade08 vigente de cliente para pedido interno, nunca por CPF/e-mail; revogação retira cobranças/histórico/avisos vinculados. Sem notas internas, operador ou conta de destino no DTO cliente. Aviso abre a cobrança selecionada por escritório+pedido, inclusive fora da primeira página; servidor reaplica escopo.
+- Avisos: cobrança criada/ajustada/cancelada pelo evento13 na mesma transação; pagamento/reembolso/estorno pelo ledger. Reutilizada a caixa de notificações e deduplicação existentes. Lista/resumo/read compartilham a visibilidade financeira. Sem agendador ou promessa de lembretes automáticos de vencimento.
+- Sino: dialog lateral compacto, tela atual preservada ao fundo, seleção de escritório, leitura/não lidas, abertura e Ver mais; teclado, Escape, foco restaurado, mobile/desktop e todos os papéis. Falha transitória mantém contexto; 401/403 descarta dados. API de leitura automática existente preservada.
+- Auditoria: formatador central e catálogo PT-BR para produtores literais encontrados nas migrations e famílias dinâmicas reais. Fallback legível por módulo; códigos/IDs conservados em referências recolhidas. Não se promete auditoria de operações que nunca tinham produtor (por exemplo, leitura do sino).
+
+Não há gateway bancário, captura online, recibo fiscal, conciliação bancária automática, integração externa de estorno ou transferência real. Registra-se o que o operador conferiu/efetivou fora do sistema. Não foram executadas operações financeiras hospedadas durante o trabalho.
+
+## Validação e publicação
+
+Evidências finais serão registradas no fecho e em docs/evidencias/correcoes-financeiro-portal/verificacao.json. Migrations antigas preservadas; apenas20261023153038_cash_payments_portal é nova. Antes de qualquer aplicação manual remota, reler schema_migrations após Git e comparar SQL, pois a integração existente costuma aplicar automaticamente. Não publicar por CLI/API Vercel; verificar status GitHub e bundle canônico. O conector Vercel desta sessão não tem acesso ao escopo, o que não prova falta de deploy.

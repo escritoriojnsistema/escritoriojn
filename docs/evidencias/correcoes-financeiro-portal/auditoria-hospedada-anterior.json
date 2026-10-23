@@ -1,0 +1,63 @@
+{
+  "note": "Somente ações e contagens agregadas; leitura anterior à publicação, sem identidades ou alterações de dados.",
+  "actions": [
+    {
+      "count": 1,
+      "action": "accounts.correction_applied"
+    },
+    {
+      "count": 1,
+      "action": "accounts.correction_requested"
+    },
+    {
+      "count": 1,
+      "action": "accounts.self_updated"
+    },
+    {
+      "count": 1,
+      "action": "audit.exported"
+    },
+    {
+      "count": 2,
+      "action": "auth.client_registered"
+    },
+    {
+      "count": 1,
+      "action": "auth.customer_registration_received"
+    },
+    {
+      "count": 1,
+      "action": "foundation.owner_provisioned"
+    },
+    {
+      "count": 1,
+      "action": "requests.created"
+    },
+    {
+      "count": 2,
+      "action": "team.invitation_accepted"
+    },
+    {
+      "count": 2,
+      "action": "team.invitation_created"
+    },
+    {
+      "count": 2,
+      "action": "team.invitation_delivery_claimed"
+    },
+    {
+      "count": 2,
+      "action": "team.invitation_sent"
+    },
+    {
+      "count": 2,
+      "action": "team.invitation_verified"
+    },
+    {
+      "count": 5,
+      "action": "team.member_updated"
+    }
+  ],
+  "migrations": 19,
+  "latest_migration": "20261022134044"
+}
