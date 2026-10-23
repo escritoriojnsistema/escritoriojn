@@ -1,0 +1,278 @@
+{
+  "counts": {
+    "charges": 0,
+    "requests": 1,
+    "customers": 1,
+    "auth_users": 5,
+    "cash_units": 0,
+    "memberships": 5,
+    "permissions": 46,
+    "cash_sessions": 0,
+    "role_permissions": 49,
+    "financial_accounts": 0
+  },
+  "ledger": {
+    "rls": true,
+    "rows": 0,
+    "service_role_table_access": false,
+    "authenticated_table_access": false
+  },
+  "functions": [
+    {
+      "anon": false,
+      "name": "private.cash_client_finance",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "body_md5": "e251b0f61451f5162863022200d9b0ac",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "private.cash_dashboard_filtered",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "body_md5": "74eccd8cfba02d4a7a1fd8dae90f52ef",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "private.cash_dashboard_filtered_record",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "fd3a5c9e34cdb22bcfe71464dc845878",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "private.cash_dashboard_record",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "4ffdbff0ea27f74039f0699e6a4e6690",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "private.cash_eligible_charges",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "body_md5": "7dd0efcc745f917ed56eacbe4bae5611",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "private.cash_entry_guard",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "9b4875640684ce655680c795fd980a48",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "private.cash_history_account_guard",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "8b088cd4f7945a40c0804f46b8d59a8b",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "private.cash_operate",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "body_md5": "d6059382049847c3025bf6fc8bca58fb",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "private.cash_session_guard",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "df1fbabb50062bc5fd88c0e1211d00ce",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "private.cash_statement",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "body_md5": "ddc7b3054e933edb1b416f096aaa82c6",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "private.cash_statement_record",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "b55a865dabe46be474eaef71bc48bf88",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "private.charges_amounts",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "9693ffd8ea7c26cad7c9b90dd418e3bd",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "private.finance_charge_json",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "d5cf422758c426bf3cc72b64af2facc9",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "private.finance_client_request",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "8200fec20df37e14fff18f80820d51fe",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "private.finance_debt_notice",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "bdde96fc47f3b1d3728f33655a197f11",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "private.finance_entry_json",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "17a9b2747ff68aae95d2d41e580d8620",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "private.finance_obligation_guard",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "b14e3bd00099a6b2c11c22641c26d7d5",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "private.notification_visible",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "10339b8f0e4f6697cd987540e4b64f70",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "private.notifications_page",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "body_md5": "ec2dfa522bff39195a2a7a26a12e6e13",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "private.notifications_summary",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "body_md5": "97d45d48d563542838898324949bc880",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "public.cash_client_finance",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "fc34fc2b3c22df70c02899c0e24379cd",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "public.cash_dashboard_filtered",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "fb0df7b18af7b8b98b04fa4e5127e6d0",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "public.cash_eligible_charges",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "4647c847cae37a953161aeeb07644e49",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "public.cash_operate",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "85589ffb1dcd4b6062089319cb3d6329",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "public.cash_statement",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "body_md5": "7aa9019d3d8fcb86902571a1781b2b03",
+      "authenticated": true
+    }
+  ],
+  "function_comparison": {
+    "expected": 25,
+    "actual": 25,
+    "all_bodies_match": true,
+    "public_invoker_authenticated_only": true
+  }
+}

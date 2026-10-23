@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-10-23T21:18:55.285459+00:00",
+  "migration_present": true,
+  "migration_count": 20,
+  "ledger_rows": 0,
+  "units": 0,
+  "accounts": 0,
+  "sessions": 0,
+  "rls": true,
+  "authenticated_table_access": false,
+  "service_role_table_access": false,
+  "public_rpc_count": 5,
+  "public_rpc_invoker_authenticated_only": true,
+  "method": "Fresh read-only Supabase query after runtime merge; no hosted business mutation."
+}

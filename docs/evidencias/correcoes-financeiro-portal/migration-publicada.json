@@ -1,0 +1,8 @@
+{
+  "version": "20261023153038",
+  "statements": 77,
+  "normalization": "SQL comments/whitespace outside quoted strings and dollar bodies only; source order preserved",
+  "all_statements_match": true,
+  "mismatched_statement_numbers": [],
+  "file_sha256": "976810369a82c488b1597ac51893f0bd13922c1a943bd2d0a4e934362381b10e"
+}

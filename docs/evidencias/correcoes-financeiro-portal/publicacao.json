@@ -1,0 +1,39 @@
+{
+  "status": "published_and_verified",
+  "checked_at": "2026-10-23T21:18:55.285459+00:00",
+  "repository": "escritoriojnsistema/escritoriojn",
+  "pull_request": {
+    "number": 38,
+    "title": "Concluir Caixa e portal financeiro, sino lateral e auditoria em português",
+    "merged": true,
+    "head": "ccb1de0490c122842a42cde8b9735803d45e606e",
+    "merge": "6962d7970956e43068b64a979c228ff4cc639395",
+    "runtime_tree": "e42080517266d4773bf6cee8cb94d51ef7b93071"
+  },
+  "deployment": {
+    "method": "GitHub→Vercel existing integration",
+    "github_context": "Vercel",
+    "state": "success",
+    "status_target": "https://vercel.com/escritorio-jn/escritoriojn/GGNSWL6jKoYNiGCFm52JCyzPtSti",
+    "canonical": "https://escritoriojn.vercel.app",
+    "bundle_evidence": "bundle-publicado.json"
+  },
+  "database": {
+    "version": "20261023153038",
+    "migration_count": 20,
+    "statements_match": 77,
+    "function_bodies_match": 25,
+    "manual_reapplication_in_continuation": false,
+    "evidence": [
+      "migration-publicada.json",
+      "schema-publicado.json",
+      "schema-rechecagem-final.json"
+    ]
+  },
+  "validation": "verificacao.json",
+  "hosted_authenticated_business_test": false,
+  "github_actions_used": false,
+  "vercel_cli_or_deploy_api_used": false,
+  "release_scope": "Requested corrections and financial integration of the existing modules; not a claim that future stages15–40 are completed.",
+  "operational_next_step": "Authorized manager must configure the real financial unit, cash account and payment methods. No fictitious financial setup was seeded."
+}

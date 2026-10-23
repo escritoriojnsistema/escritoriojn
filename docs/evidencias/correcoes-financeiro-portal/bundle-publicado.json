@@ -1,0 +1,68 @@
+{
+  "checked_at": "2026-10-23T21:17:19.739006+00:00",
+  "canonical": "https://escritoriojn.vercel.app",
+  "runtime_merge": "6962d7970956e43068b64a979c228ff4cc639395",
+  "home_status": 200,
+  "health_status": 200,
+  "scripts": [
+    "/assets/index-BjydvCvW.js"
+  ],
+  "assets": [
+    {
+      "path": "assets/index-BjydvCvW.js",
+      "status": 200,
+      "sha256": "2f95dc4d591710a8a30b7970323b3cfe01351fc7c71e94e3cb85641dd81a6e3a",
+      "expected_sha256": "2f95dc4d591710a8a30b7970323b3cfe01351fc7c71e94e3cb85641dd81a6e3a",
+      "matches_reviewed": true
+    },
+    {
+      "path": "assets/index-CrlsJIjJ.css",
+      "status": 200,
+      "sha256": "0852608e7f84d4ae168d4d134c8abc1b7cceb41426a41c82de11edd9ce4d55d3",
+      "expected_sha256": "0852608e7f84d4ae168d4d134c8abc1b7cceb41426a41c82de11edd9ce4d55d3",
+      "matches_reviewed": true
+    },
+    {
+      "path": "assets/react-DYkIpRt7.js",
+      "status": 200,
+      "sha256": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+      "expected_sha256": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+      "matches_reviewed": true
+    },
+    {
+      "path": "assets/rolldown-runtime-WkwZ5CU-.js",
+      "status": 200,
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "expected_sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "matches_reviewed": true
+    },
+    {
+      "path": "assets/supabase-DtuMx0jC.js",
+      "status": 200,
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "expected_sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "matches_reviewed": true
+    }
+  ],
+  "all_reviewed_assets_match": true,
+  "private_cash_endpoints": [
+    {
+      "name": "statement",
+      "status": 401
+    },
+    {
+      "name": "eligible-charges",
+      "status": 401
+    },
+    {
+      "name": "operate",
+      "status": 401
+    },
+    {
+      "name": "client-finance",
+      "status": 401
+    }
+  ],
+  "all_private_endpoints_require_auth": true,
+  "authenticated_hosted_business_mutations": false
+}
