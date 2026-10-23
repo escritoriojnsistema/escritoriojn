@@ -1,0 +1,86 @@
+-- Entirely fictitious local rows. Never run against a hosted workspace.
+SELECT test.assert_true((SELECT count(*) FROM public.role_permissions WHERE role_code='owner' AND permission_code IN('audit.manage','audit.archives'))=2 AND NOT EXISTS(SELECT FROM public.role_permissions WHERE role_code<>'owner' AND permission_code IN('audit.manage','audit.archives')),'auditoria: novas capacidades somente owner');
+SELECT test.assert_true(NOT EXISTS(SELECT FROM private.team_member_permissions WHERE permission_code IN('audit.manage','audit.archives')),'auditoria: nenhuma concessao individual automatica');
+INSERT INTO auth.users(id,email_confirmed_at) SELECT ('00000000-0000-4000-a000-'||lpad(i::text,12,'0'))::uuid,now() FROM generate_series(301,305)i;
+INSERT INTO auth.sessions(id,user_id) SELECT ('00000000-0000-4000-c000-'||lpad(i::text,12,'0'))::uuid,('00000000-0000-4000-a000-'||lpad(i::text,12,'0'))::uuid FROM generate_series(301,305)i;
+INSERT INTO public.profiles(id,display_name) SELECT ('00000000-0000-4000-a000-'||lpad(i::text,12,'0'))::uuid,'Pessoa de auditoria '||i FROM generate_series(301,305)i;
+INSERT INTO public.offices(id,name) VALUES('00000000-0000-4000-e000-000000000301','Escritório de auditoria A'),('00000000-0000-4000-e000-000000000302','Escritório de auditoria B');
+INSERT INTO public.memberships(id,office_id,user_id,role_code) SELECT ('00000000-0000-4000-b000-'||lpad(i::text,12,'0'))::uuid,('00000000-0000-4000-e000-'||CASE WHEN i=304 THEN '000000000302' ELSE '000000000301' END)::uuid,('00000000-0000-4000-a000-'||lpad(i::text,12,'0'))::uuid,CASE i WHEN 301 THEN 'owner' WHEN 302 THEN 'admin' WHEN 304 THEN 'owner' WHEN 305 THEN 'client' ELSE 'employee' END FROM generate_series(301,305)i;
+INSERT INTO public.audit_events(office_id,actor_id,actor_kind,action,target_type,occurred_at,changes) SELECT '00000000-0000-4000-e000-000000000301','00000000-0000-4000-a000-000000000301','user','requests.created','request',clock_timestamp()-make_interval(days=>days),'{"cpf":"private-fixture"}' FROM unnest(ARRAY[91,61,31,1])days;
+SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000301","session_id":"00000000-0000-4000-c000-000000000301"}';
+SELECT test.assert_true(public.audit_policy_get('00000000-0000-4000-e000-000000000301')->>'days'='90','auditoria: padrao persistido90 dias');
+SELECT test.assert_true(public.audit_history_page('00000000-0000-4000-e000-000000000301',1,3,'requests.created',NULL,NULL,NULL,'recent')->>'total'='3' AND public.audit_history_page('00000000-0000-4000-e000-000000000301',1,3,'requests.created',NULL,NULL,NULL,'archived')->>'total'='1','auditoria: corte90 no servidor particiona sem apagar');
+SELECT test.assert_true(public.audit_page('00000000-0000-4000-e000-000000000301',1,3,'requests.created',NULL,NULL,NULL)->>'total'='3','auditoria: RPC antiga nao contorna arquivo');
+SELECT test.expect_error($q$SELECT public.audit_export('00000000-0000-4000-e000-000000000301','',NULL,NULL,NULL,gen_random_uuid())$q$,'42501','auditoria: JSON antigo revogado');
+SELECT test.expect_error($q$SELECT public.audit_policy_set('00000000-0000-4000-e000-000000000301',45,1,gen_random_uuid())$q$,'PT422','auditoria: so30/60/90');
+SELECT public.audit_policy_set('00000000-0000-4000-e000-000000000301',60,1,gen_random_uuid());
+SELECT public.audit_policy_set('00000000-0000-4000-e000-000000000301',90,2,gen_random_uuid());
+SELECT test.assert_true(public.audit_history_page('00000000-0000-4000-e000-000000000301',1,5,'requests.created',NULL,NULL,NULL,'archived')->>'total'='2','auditoria: aumentar60 para90 nao desarquiva');
+SELECT test.expect_error($q$SELECT public.audit_policy_set('00000000-0000-4000-e000-000000000301',30,1,gen_random_uuid())$q$,'PT409','auditoria: versao obsoleta nao sobrescreve');
+SELECT test.expect_error($q$SELECT public.audit_report_begin('00000000-0000-4000-e000-000000000301','',NULL,'2026-10-01T12:30:00Z',NULL,'recent',gen_random_uuid())$q$,'PT422','auditoria: RPC direta recusa inicio com hora para nao imprimir periodo enganoso');
+SELECT test.expect_error($q$SELECT public.audit_report_begin('00000000-0000-4000-e000-000000000301','',NULL,NULL,'2026-10-23T23:59:00Z','recent',gen_random_uuid())$q$,'PT422','auditoria: RPC direta recusa fim sem meia-noiteUTC');
+SELECT public.audit_report_begin('00000000-0000-4000-e000-000000000301','requests.created',NULL,NULL,NULL,'archived',gen_random_uuid())->>'id' AS audit301_report \gset
+SELECT test.assert_true(public.audit_report_reference('00000000-0000-4000-e000-000000000301',:'audit301_report')->>'count'='2' AND public.audit_report_chunk('00000000-0000-4000-e000-000000000301',:'audit301_report',0)::text NOT LIKE '%private-fixture%','auditoria: snapshot autorizado sanitiza PII');
+SELECT public.audit_policy_set('00000000-0000-4000-e000-000000000301',30,3,gen_random_uuid());
+SELECT test.assert_true(public.audit_report_chunk('00000000-0000-4000-e000-000000000301',:'audit301_report',0)->>'total'='2' AND public.audit_history_page('00000000-0000-4000-e000-000000000301',1,5,'requests.created',NULL,NULL,NULL,'archived')->>'total'='3','auditoria: snapshot conserva selecao apesar da politica nova');
+SELECT test.expect_error($q$UPDATE private.audit_report_events SET event='{}'$q$,'42501','auditoria: chamador direto nao troca snapshot');
+SELECT test.expect_error($q$UPDATE private.audit_reports SET actor_name='forjado'$q$,'42501','auditoria: metadados oficiais protegidos');
+SELECT test.expect_error($q$DELETE FROM private.audit_policies$q$,'42501','auditoria: politica historica nao pode ser apagada');
+SELECT public.audit_report_seal('00000000-0000-4000-e000-000000000301',:'audit301_report',repeat('f',64),123);
+SELECT test.assert_true((public.audit_report_seal('00000000-0000-4000-e000-000000000301',:'audit301_report',repeat('a',64),123)->>'registered_digest_match')::boolean=false,'auditoria: hash antecipado divergente nao veta PDF canonico');
+SELECT test.expect_error(format('SELECT public.audit_report_reference(%L,%L)','00000000-0000-4000-e000-000000000302',:'audit301_report'),'PT403','auditoria: relatorio nao cruza escritorio');
+SELECT test.expect_error($q$SELECT public.audit_report_chunk('00000000-0000-4000-e000-000000000301',gen_random_uuid(),0)$q$,'PT403','auditoria: referencia ausente nao revela dados');
+RESET ROLE;
+SELECT test.expect_error($q$UPDATE private.audit_policies SET days=90$q$,'PT403','auditoria: politica append-only inclusive dono da tabela');
+SELECT test.expect_error($q$DELETE FROM private.audit_reports$q$,'PT403','auditoria: snapshot append-only inclusive dono da tabela');
+SELECT test.assert_true((SELECT count(*) FROM public.audit_events WHERE office_id='00000000-0000-4000-e000-000000000301' AND action='requests.created')=4 AND NOT EXISTS(SELECT FROM private.archived_records WHERE office_id='00000000-0000-4000-e000-000000000301'),'auditoria: nenhum evento removido ou inserido no arquivo generico');
+UPDATE public.profiles SET display_name='Nome posterior' WHERE id='00000000-0000-4000-a000-000000000301';
+SET ROLE authenticated;
+SELECT test.assert_true(public.audit_report_chunk('00000000-0000-4000-e000-000000000301',:'audit301_report',0)::text LIKE '%Pessoa de auditoria 301%' AND public.audit_report_reference('00000000-0000-4000-e000-000000000301',:'audit301_report')->>'actor_name'='Pessoa de auditoria 301','auditoria: nomes oficiais congelados para reproducao deterministica');
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000302","session_id":"00000000-0000-4000-c000-000000000302"}';
+SELECT test.expect_error($q$SELECT public.audit_policy_get('00000000-0000-4000-e000-000000000301')$q$,'PT403','auditoria: admin sem capacidade nao consulta');
+RESET ROLE;
+INSERT INTO private.team_member_permissions(membership_id,permission_code) SELECT ('00000000-0000-4000-b000-'||lpad(i::text,12,'0'))::uuid,p FROM generate_series(302,303)i CROSS JOIN unnest(ARRAY['audit.read','audit.export','audit.manage','audit.archives'])p;
+SET ROLE authenticated;
+SELECT test.assert_true(public.audit_history_page('00000000-0000-4000-e000-000000000301',1,3,'requests.created',NULL,NULL,NULL,'archived')->>'total'='3','auditoria: admin com concessao explicita consulta arquivo');
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000303","session_id":"00000000-0000-4000-c000-000000000303"}';
+SELECT test.assert_true(public.audit_history_page('00000000-0000-4000-e000-000000000301',1,3,'requests.created',NULL,NULL,NULL,'recent')->>'total'='1','auditoria: funcionario autorizado consulta recentes');
+SELECT test.expect_error($q$SELECT public.audit_history_page('00000000-0000-4000-e000-000000000301',1,3,'',NULL,NULL,NULL,'archived')$q$,'PT403','auditoria: funcionario nao acessa arquivos mesmo com grant');
+SELECT test.expect_error($q$SELECT public.audit_policy_set('00000000-0000-4000-e000-000000000301',60,4,gen_random_uuid())$q$,'PT403','auditoria: funcionario nao configura mesmo com grant');
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000305","session_id":"00000000-0000-4000-c000-000000000305"}';
+SELECT test.expect_error($q$SELECT public.audit_policy_get('00000000-0000-4000-e000-000000000301')$q$,'PT403','auditoria: cliente sempre excluido');
+RESET ROLE;
+DELETE FROM auth.sessions WHERE id='00000000-0000-4000-c000-000000000301';
+SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000301","session_id":"00000000-0000-4000-c000-000000000301"}';
+SELECT test.expect_error(format('SELECT public.audit_report_chunk(%L,%L,0)','00000000-0000-4000-e000-000000000301',:'audit301_report'),'PT401','auditoria: sessao revogada bloqueia lotes');
+RESET ROLE;
+SELECT test.assert_true(NOT has_table_privilege('authenticated','private.audit_reports','SELECT,INSERT,UPDATE,DELETE') AND NOT has_function_privilege('anon','public.audit_report_reference(uuid,uuid)','EXECUTE'),'auditoria: ACLs tabelas e anon fechadas');
+-- More than the new resource limit fails atomically; it never truncates.
+INSERT INTO auth.sessions(id,user_id) VALUES('00000000-0000-4000-c000-000000000301','00000000-0000-4000-a000-000000000301');
+INSERT INTO public.audit_events(office_id,actor_id,actor_kind,action,target_type) SELECT '00000000-0000-4000-e000-000000000301','00000000-0000-4000-a000-000000000301','user','test.volume','office' FROM generate_series(1,10001);
+SET ROLE authenticated;
+SELECT test.expect_error($q$SELECT public.audit_report_begin('00000000-0000-4000-e000-000000000301','test.volume',NULL,NULL,NULL,'recent',gen_random_uuid())$q$,'PT422','auditoria:10001 eventos recusados sem truncamento');
+RESET ROLE;
+SELECT test.assert_true((SELECT count(*) FROM private.audit_reports WHERE office_id='00000000-0000-4000-e000-000000000301')=1,'auditoria: excesso nao deixa relatorio parcial');
+-- Audit failure rolls the policy back together with its revision and cutoff.
+ALTER TABLE public.audit_events ADD CONSTRAINT audit_policy_fault CHECK(action<>'audit.policy_changed') NOT VALID;
+SET ROLE authenticated;
+SELECT test.expect_error($q$SELECT public.audit_policy_set('00000000-0000-4000-e000-000000000301',60,4,gen_random_uuid())$q$,'23514','auditoria: falha de trilha reverte politica');
+RESET ROLE;
+ALTER TABLE public.audit_events DROP CONSTRAINT audit_policy_fault;
+SELECT test.assert_true((SELECT max(version) FROM private.audit_policies WHERE office_id='00000000-0000-4000-e000-000000000301')=4,'auditoria: versao nao mudou sem trilha');
+-- Capabilities are read again for every stored snapshot access, including a saved report.
+DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000302' AND permission_code='audit.archives';
+SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000302","session_id":"00000000-0000-4000-c000-000000000302"}';
+SELECT test.expect_error(format('SELECT public.audit_report_reference(%L,%L)','00000000-0000-4000-e000-000000000301',:'audit301_report'),'PT403','auditoria: revogacao da capacidade impede consultar relatorio arquivado');
+RESET ROLE;
+-- A direct PostgREST caller may choose a timezone. Snapshot metadata and day
+-- arithmetic must remain canonical UTC even across a daylight-saving boundary.
+SET ROLE authenticated;
+SET timezone='Europe/Paris';
+SELECT test.assert_true(public.audit_report_begin('00000000-0000-4000-e000-000000000301','requests.created',NULL,NULL,'2026-10-26T00:00:00Z','recent',gen_random_uuid())->'filters'->>'until'='2026-10-25','auditoria: fuso do chamador nao altera dia final nem contratoUTC');
+RESET timezone;
+RESET ROLE;

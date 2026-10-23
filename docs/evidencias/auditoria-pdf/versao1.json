@@ -1,0 +1,17 @@
+{
+  "renderer_version": 1,
+  "contract_version": 1,
+  "node": "24.19.0",
+  "npm": "11.9.0",
+  "pdfkit": "0.17.2",
+  "files": {
+    "server/modules/governance/auditPdf.ts": "576e4331c524a333605e4d31364a4ea073e975683a3cb25c99e01b90c9866d14",
+    "server/modules/governance/reportV1.ts": "6fbc422a55fb030dd16084502a1b465048ab534a66b17b7a67c6f71ae78df1fb",
+    "server/modules/governance/reportV1Catalog.ts": "0fc280800d96d2c4dd00700d0dad3b8891db1494a1f18ea9c197c0b3c259a4fc",
+    "server/assets/audit-fonts/OpenSans-Regular.ttf": "e64e508b2aa2880f907e470c4550980ec4c0694d103a43f36150ac3f93189bee",
+    "server/assets/audit-fonts/OpenSans-Semibold.ttf": "aa3b0ef53db12e3d45094030cac0e69d384e44cc5978643dd4390041cad546e2",
+    "package-lock.json": "6081005a20a16d5e41ea6fbf393114911738b1b30b3f037d1369600e630afbbc",
+    "supabase/migrations/20261023213625_audit_pdf_archive.sql": "b7a0cda5788d440e37489dffa376831beab7d785c2db05b265b0d102cb76371d"
+  },
+  "preservation": "Preservar o runtime/fontes/biblioteca/adaptador/catálogo da v1; nova apresentação exige versão nova."
+}

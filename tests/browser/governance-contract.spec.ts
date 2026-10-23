@@ -1,7 +1,7 @@
 import {test,expect,type Page} from '@playwright/test';
 test.skip(!process.env.TEAM_UI_CONTRACT,'Fictitious presentation contract, not proof of hosted Auth.');
 const office='11111111-1111-4111-8111-111111111111',user='22222222-2222-4222-8222-222222222222',target='33333333-3333-4333-8333-333333333333';
-const capabilities=['foundation.access','users.manage','audit.read','audit.export','archives.manage'];
+const capabilities=['foundation.access','users.manage','audit.read','audit.export','audit.manage','audit.archives','archives.manage'];
 async function setup(page:Page,permissions=capabilities,role='owner'){
  const token=`e30.${Buffer.from(JSON.stringify({sub:user,exp:Math.floor(Date.now()/1000)+3600,role:'authenticated',session_id:office})).toString('base64url')}.fixture`;
  await page.addInitScript(({token,user})=>localStorage.setItem('sb-team-ui-auth-token',JSON.stringify({access_token:token,refresh_token:'fixture',token_type:'bearer',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:user,aud:'authenticated',email:'fixture@example.test',app_metadata:{},user_metadata:{}}})),{token,user});
@@ -11,7 +11,8 @@ async function setup(page:Page,permissions=capabilities,role='owner'){
  await page.route('**/api/governance/**',route=>{
   const url=new URL(route.request().url());const size=Number(url.searchParams.get('size')||5),pageNo=Number(url.searchParams.get('page')||1);
   expect(route.request().headers().authorization).toMatch(/^Bearer /);
-  if(url.pathname.endsWith('/export'))return route.fulfill({json:{data:{items:[],count:0,office_id:office,exported_at:'2026-10-18T10:00:00Z',request_id:target}}});
+  if(url.pathname.endsWith('/audit/policy'))return route.fulfill({json:{data:{days:90,version:1,cutoff:'2026-07-25T00:00:00Z',effective_at:'2026-10-23T00:00:00Z'}}});
+  if(url.pathname.endsWith('/export'))return route.fulfill({contentType:'application/pdf',headers:{'X-Audit-Count':'0','X-Audit-Protocol':`JN-AUD-${target}`},body:Buffer.from('%PDF-1.7\n% apresentação fictícia\n%%EOF')});
   if(url.pathname.endsWith('/restore'))return route.fulfill({json:{data:{ok:true}}});
   const archive=url.pathname.endsWith('/archives');
   const items=Array.from({length:pageNo===1?size:1},(_,i)=>archive?{id:`44444444-4444-4444-8444-44444444444${i}`,target_id:target,target_label:`Pessoa Arquivada ${i+1}`,target_type:'membership',archived_at:'2026-10-18T10:00:00Z',restored_at:url.searchParams.get('status')==='restored'?'2026-10-18T11:00:00Z':null}:{id:`44444444-4444-4444-8444-44444444444${i}`,actor_id:user,actor_name:'Responsável Fictício',action:'team.member_updated',target_type:'membership',target_id:target,outcome:'success',occurred_at:'2026-10-18T10:00:00Z',request_id:target,changes:{active:false,role_code:'employee'}});
@@ -83,7 +84,7 @@ test('auditoria filtra, pagina, mostra referência e exporta com capacidade',asy
  await page.getByRole('button',{name:'Aplicar filtros'}).click();await expect(page.getByText(/Página 1/)).toBeVisible();
  await page.getByRole('button',{name:'Ver evento',exact:true}).first().click();await expect(page.getByRole('heading',{name:'Detalhes do evento'})).toBeVisible();await page.getByText('Referências para rastreabilidade',{exact:true}).click();await expect(page.getByText(target,{exact:true}).first()).toBeVisible();
  await page.getByRole('button',{name:'Voltar à lista'}).click();
- const downloaded=page.waitForEvent('download');await page.getByRole('button',{name:'Exportar JSON'}).click();expect((await downloaded).suggestedFilename()).toMatch(/^auditoria-.*\.json$/);await expect(page.getByRole('status').filter({hasText:'Exportação registrada'})).toContainText('Exportação registrada');
+ const downloaded=page.waitForEvent('download');await page.getByRole('button',{name:'Exporta'}).click();expect((await downloaded).suggestedFilename()).toMatch(/^JN-AUD-.*\.pdf$/);await expect(page.getByRole('status').filter({hasText:'PDF completo registrado'})).toContainText('PDF completo registrado');
 });
 test('restaurar referência exige confirmação e nunca envia active; histórico restaurado disponível',async({page})=>{
  await setup(page);await page.goto('/arquivados');
@@ -95,7 +96,7 @@ for(const role of ['employee','client'])test(`sem capacidade: ${role} não vê m
  await setup(page,['foundation.access'],role);await page.goto(role==='client'?'/area-cliente':'/painel');await expect(page.getByRole('heading',{name:'Área de operação'})).toBeVisible();await expect(page.getByRole('link',{name:'Auditoria',exact:true})).toHaveCount(0);await page.goto('/auditoria');await expect(page.getByRole('heading',{name:'Acesso não autorizado'})).toBeVisible();await page.goto('/arquivados');await expect(page.getByRole('heading',{name:'Acesso não autorizado'})).toBeVisible();
 });
 test('audit.read permite consultar sem botão de exportação; falha e revogação escondem lista',async({page})=>{
- await setup(page,['foundation.access','audit.read'],'employee');await page.goto('/auditoria');await expect(page.getByRole('list',{name:'Eventos de auditoria'})).toBeVisible();await expect(page.getByRole('button',{name:'Exportar JSON'})).toHaveCount(0);
+ await setup(page,['foundation.access','audit.read'],'employee');await page.goto('/auditoria');await expect(page.getByRole('list',{name:'Eventos de auditoria'})).toBeVisible();await expect(page.getByRole('button',{name:'Exporta'})).toHaveCount(0);
  await page.route('**/api/governance/audit?**',r=>r.fulfill({status:503,json:{error:{code:'GOVERNANCE_UNAVAILABLE'}}}));await page.getByRole('button',{name:'Atualizar lista'}).click();await expect(page.getByRole('alert')).toContainText('Serviço indisponível');await expect(page.getByRole('list',{name:'Eventos de auditoria'})).toHaveCount(0);
  await page.route('**/api/governance/audit?**',r=>r.fulfill({status:403,json:{error:{code:'GOVERNANCE_FORBIDDEN'}}}));await page.getByRole('button',{name:'Tentar novamente'}).click();await expect(page.getByRole('alert')).toContainText('Seu acesso não permite');
 });
@@ -112,20 +113,37 @@ for(const reason of ['navegar','revogar'])test(`exportação abandonada não bai
  await page.addInitScript(()=>{
   const state=window as typeof window&{exportSettled?:boolean;exportDownloads?:number};
   state.exportDownloads=0;
-  const click=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){if(this.download.startsWith('auditoria-'))state.exportDownloads!++;click.call(this);};
+  const click=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){if(this.download.startsWith('JN-AUD-'))state.exportDownloads!++;click.call(this);};
   const original=window.fetch;window.fetch=async(...args)=>{
-   const target=String(args[0]);try {const response=await original(...args);if(target.includes('/audit/export')){const json=response.json.bind(response);response.json=async()=>{try{return await json();}finally{queueMicrotask(()=>{state.exportSettled=true;});}};}return response;}
+   const target=String(args[0]);try {const response=await original(...args);if(target.includes('/audit/export')){const blob=response.blob.bind(response);response.blob=async()=>{try{return await blob();}finally{queueMicrotask(()=>{state.exportSettled=true;});}};}return response;}
    catch(error){if(target.includes('/audit/export'))state.exportSettled=true;throw error;}
   };
  });
  let release!:()=>void,holding!:()=>void,done!:()=>void;const pending=new Promise<void>(r=>release=r),held=new Promise<void>(r=>holding=r),complete=new Promise<void>(r=>done=r);
- await page.route('**/api/governance/audit/export',async route=>{holding();await pending;try{await route.fulfill({json:{data:{items:[],count:0,office_id:office,exported_at:'2026-10-18',request_id:target}}});}catch{/* Abort is the expected fix. */}finally{done();}});
- await page.goto('/auditoria');await expect(page.getByRole('list',{name:'Eventos de auditoria'})).toBeVisible();await page.getByRole('button',{name:'Exportar JSON'}).click();await held;
+ await page.route('**/api/governance/audit/export',async route=>{holding();await pending;try{await route.fulfill({contentType:'application/pdf',headers:{'X-Audit-Count':'0','X-Audit-Protocol':`JN-AUD-${target}`},body:Buffer.from('%PDF-1.7\n%%EOF')});}catch{/* Abort is the expected fix. */}finally{done();}});
+ await page.goto('/auditoria');await expect(page.getByRole('list',{name:'Eventos de auditoria'})).toBeVisible();await page.getByRole('button',{name:'Exporta'}).click();await held;
  if(reason==='navegar'){await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link',{name:'Início',exact:true}).click();await expect(page.getByRole('heading',{name:'Área de operação'})).toBeVisible();}
  else {await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
- await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,role_code:'owner',permissions:['foundation.access','audit.read'],office_name:'Escritório Fictício',display_name:'Pessoa Fictícia'}]}}}));await page.evaluate(()=>window.dispatchEvent(new Event('focus')));await expect(page.getByRole('button',{name:'Exportar JSON'})).toHaveCount(0);}
+ await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,role_code:'owner',permissions:['foundation.access','audit.read'],office_name:'Escritório Fictício',display_name:'Pessoa Fictícia'}]}}}));await page.evaluate(()=>window.dispatchEvent(new Event('focus')));await expect(page.getByRole('button',{name:'Exporta'})).toHaveCount(0);}
  release();await complete;
  await expect.poll(()=>page.evaluate(()=>(window as typeof window&{exportSettled?:boolean}).exportSettled)).toBe(true);
  await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));
  expect(await page.evaluate(()=>(window as typeof window&{exportDownloads?:number}).exportDownloads)).toBe(0);
+});
+for(const width of [320,360,1440])test(`auditoria: arquivo interno, filtros e prazo persistido sem confundir o genérico em ${width}px`,async({page})=>{
+ await page.setViewportSize({width,height:width===1440?900:640});await setup(page);await page.goto('/auditoria');
+ await page.getByRole('button',{name:'Arquivados',exact:true}).click();await expect(page.getByRole('list',{name:'Eventos de auditoria'})).toBeVisible();
+ await page.getByRole('button',{name:'Filtros',exact:true}).click();await page.getByRole('combobox',{name:'Ação',exact:true}).selectOption('cash.payment_received');await page.getByRole('button',{name:'Aplicar filtros'}).click();
+ const sent=page.waitForRequest(r=>r.url().endsWith('/api/governance/audit/export'));
+ await page.getByRole('button',{name:'Exporta',exact:true}).click();expect((await sent).postDataJSON()).toMatchObject({view:'archived',action:'cash.payment_received'});
+ await page.getByRole('button',{name:'Relatórios e prazo'}).click();await page.getByLabel('Arquivar após').selectOption('30');
+ let policy:unknown;await page.route('**/api/governance/audit/policy',r=>{if(r.request().method()==='POST'){policy=r.request().postDataJSON();return r.fulfill({json:{data:{days:30,version:2,cutoff:'2026-09-23T00:00:00Z',effective_at:'2026-10-23T00:00:00Z'}}});}return r.fallback();});
+ await page.getByRole('button',{name:'Salvar prazo'}).click();await expect(page.getByRole('status').filter({hasText:'Todo o histórico'})).toBeVisible();expect(policy).toMatchObject({office_id:office,days:30,version:1});
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await page.getByRole('button',{name:'Relatórios e prazo'}).click();
+ if(process.env.TEAM_UI_CAPTURE)await page.screenshot({path:`docs/evidencias/auditoria-pdf/arquivados-${width}.png`,fullPage:true});
+});
+test('auditoria: funcionário com capacidades não recebe gestão nem arquivo reservado a administradores',async({page})=>{
+ await setup(page,capabilities,'employee');await page.goto('/auditoria');await page.getByRole('button',{name:'Relatórios e prazo'}).click();
+ await expect(page.getByRole('button',{name:'Arquivados',exact:true})).toHaveCount(0);await expect(page.getByLabel('Arquivar após')).toHaveCount(0);await expect(page.getByRole('button',{name:'Exporta',exact:true})).toBeVisible();
 });

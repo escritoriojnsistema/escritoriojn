@@ -4,6 +4,7 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "functions": { "api/index.ts": { "includeFiles": "server/assets/audit-fonts/**", "maxDuration": 120 } },
   "rewrites": [
     {
       "source": "/api/(.*)",

@@ -11,7 +11,7 @@ test('cash14 real: A abre100, B vê só próprio, gestor consolida, PIX separado
  const post=(who:typeof owner,path:string,body:Record<string,unknown>)=>request.post(`/api/cash/${path}`,{headers:who.headers,data:{office_id:office,...body}});
  try{
   for(const email of ['worker@example.test','serviceworker@example.test']){
-   const roster=await owner.sdk.rpc('team_dashboard',{p_office_id:office,p_kind:'members',p_page:1,p_query:email,p_status:'all'});expect(roster.error).toBeNull();const member=roster.data.items[0];restore.push(member);
+   let member;for(let page=1;page<=20;page++){const roster=await owner.sdk.rpc('team_dashboard',{p_office_id:office,p_kind:'members',p_page:page,p_query:email,p_status:'all'});expect(roster.error).toBeNull();member=roster.data.items.find((item:{email:string})=>item.email===email);if(member||page*roster.data.page_size>=roster.data.total)break;}expect(member?.email).toBe(email);restore.push(member);
    expect((await owner.sdk.rpc('team_set_member',{p_office_id:office,p_membership_id:member.id,p_role_code:'employee',p_active:true,p_permissions:['foundation.access','cash.read','cash.open'],p_request_id:randomUUID()})).error).toBeNull();
   }
   const configure=async(configuration:CashConfigure)=>result<CashConfigurationResult>(await post(owner,'configure',{configuration,idempotency_key:randomUUID()}));

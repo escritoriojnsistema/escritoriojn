@@ -1,0 +1,15 @@
+{
+  "source": "Supabase hospedado, somente leitura antes da implementação",
+  "counts": {
+    "migrations": 20,
+    "audit_events": 25,
+    "cash_units": 0,
+    "financial_accounts": 0,
+    "cash_entries": 0,
+    "individual_grants": 17,
+    "auth_users": 5,
+    "memberships": 5,
+    "customers": 1,
+    "requests": 1
+  }
+}

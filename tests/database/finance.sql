@@ -135,3 +135,5 @@ SELECT test.assert_true(public.cash_dashboard_filtered(:'office15','all',1,5,:'u
 SET ROLE anon;
 SELECT test.expect_error(format('SELECT public.cash_client_finance(%L,1,1)',:'office15'),'42501','financeiro: anon nao executa financeiro do cliente');
 RESET ROLE;
+SELECT test.assert_true(EXISTS(SELECT FROM public.audit_events WHERE action='cash.payment_received') AND NOT EXISTS(SELECT FROM public.audit_events WHERE action IN('cash.payment_received','cash.payment_refunded','cash.payment_reversed','cash.reconciliation_recorded','cash.session_closed') AND NOT changes ?& ARRAY['entry_id','amount_cents','version']),'auditoria financeira: ledger referencia valor e versao sem texto pessoal');
+SELECT test.assert_true(NOT EXISTS(SELECT FROM public.audit_events WHERE action IN('charges.created','charges.adjusted','charges.cancelled') AND NOT changes ?& ARRAY['request_id','due_cents','version']),'auditoria financeira: obrigacoes conservam valor e versao');
