@@ -1,3 +1,4 @@
+import {reportInputV3} from './reportV3.js';
 import { Router, json, type Response } from 'express';
 import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 import { authenticatedClient } from '../auth/client.js';
@@ -53,7 +54,7 @@ async function pdf(res:Response,source:Record<string,unknown>):Promise<Buffer|nu
     events.push(...chunk.items as AuditEvent[]);
   }
   if(res.destroyed)return null;
-  const output=Buffer.from(await createAuditPdf((report.renderer_version===2?reportInputV2:reportInputV1)(report,events)));
+  const output=Buffer.from(await createAuditPdf((report.renderer_version===3?reportInputV3:report.renderer_version===2?reportInputV2:reportInputV1)(report,events)));
   if(output.length>auditReportMaxBytes){errorResponse(res,422,'EXPORT_LIMIT',messages.EXPORT_LIMIT);return null;}
   if(output.subarray(0,5).toString()!=='%PDF-')throw new Error('Invalid PDF');
   return output;

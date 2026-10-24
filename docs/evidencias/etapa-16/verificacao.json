@@ -1,0 +1,89 @@
+{
+  "status": "validated_awaiting_github_release",
+  "node": {
+    "distinct_passed": 152,
+    "log": "etapa16-node-full-1.log",
+    "focused_initial": 26,
+    "overlap_note": "26focados fazem parte dos152, nao somar."
+  },
+  "sql": {
+    "empty_replays": [
+      931,
+      932
+    ],
+    "log": "etapa16-sql-races-3.log",
+    "migrator": "NOSUPERUSER NOBYPASSRLS",
+    "coverage": [
+      "backfill imutavel e replay refund legado",
+      "20de60 e devolucao posterior",
+      "taxa cartao separada",
+      "PIX sem alterar especie",
+      "limites idempotencia hash rollback intermediario",
+      "fecho cancelamento ajuste",
+      "corridas entre sessoes autorizadas e revogacao apos locks",
+      "RLS ACL isolamento",
+      "snapshot de quitacao conserva regra apos alteracao do catalogo"
+    ],
+    "focused_final": {
+      "passed": 4,
+      "log": "etapa16-sql-references-money.log",
+      "note": "Delta minimo de referencias de auditoria e projecao monetaria; foco P3 anterior3sobrepoe, nao somar."
+    }
+  },
+  "auth": {
+    "distinct_passed": 4,
+    "api_sdk16": {
+      "passed": 1,
+      "log": "etapa16-auth-api-1.log"
+    },
+    "affected": {
+      "passed": 3,
+      "log": "etapa16-auth-browser-1.log",
+      "flows": [
+        "financeiro navegador e portal/avisos",
+        "recebimentos15 API SDK",
+        "auditoria navegador PDF3 e revogacao"
+      ]
+    },
+    "lab_closed": true,
+    "hosted_auth_business_tests": false
+  },
+  "ui": {
+    "distinct_passed": 98,
+    "log": "etapa16-ui-1.log",
+    "suites": [
+      "cash14",
+      "corrections16",
+      "finance",
+      "payments15"
+    ],
+    "layouts": [
+      320,
+      360,
+      1440
+    ],
+    "zoom": "125%",
+    "new_corrections_cases": 31,
+    "independent_visual_review": "aprovada pelo coordenador, sem achado, nao soma casos",
+    "overlap_note": "Layouts e contratos16 inclusos nos98; nao somar."
+  },
+  "pdf": "pdf-preservado.json",
+  "production_dependencies_vulnerabilities": 0,
+  "package_lock_unchanged": true,
+  "publication": "pending",
+  "hosted_business_operations": 0,
+  "individual_grants_added": 0,
+  "next_stage_17": "not_started",
+  "build": {
+    "passed": true,
+    "log": "etapa16-build-final.log",
+    "configuration": "publica isolada por processo, sem .env.local",
+    "typecheck_client_server": true
+  },
+  "migration": {
+    "version": "20261024133149",
+    "statements_expected": 47,
+    "functions_expected": 19,
+    "applied_hosted": false
+  }
+}

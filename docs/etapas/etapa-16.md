@@ -1,0 +1,21 @@
+# Etapa16 — Estornar, reembolsar e cancelar com histórico
+
+Fonte oficial: [etapa-16.md no Drive](https://drive.google.com/file/d/15mUVj4nY39HNssAPfxyZ3VlyAf8lEAZq/view), lida em24/10/2026; [financeiro oficial](https://drive.google.com/file/d/1ewtX2WQlYPax9Dp1s2FsrsoMlLMVuHq1/view), RN05/RF10 relidos. Entrada15 publicada, main `c0041676`, árvore `d782705d`. Implementação e publicação GitHub→Vercel autorizadas pelo novo pedido, sem Actions/deployCLI/API Vercel. Etapa17 fora do escopo.
+
+| Base preservada | Incremento16 |
+| --- | --- |
+| Payments/alocações imutáveis e ledger único15 | Reversals/refunds explícitos por alocação, com motivo/evidência/operador |
+| Refund/reverse legados alteravam alocação e dinheiro juntos | Estorno lógico parcial/integral separado da devolução efetiva; opção atômica explícita |
+| Chave/hash/resultado, locks/autoridade e caixa próprio | Limites independentes: reversão ≤ original menos reversões; devolução ≤ reversão menos devoluções |
+| Snapshots09/10, obrigação13, cancelamento10 e anexos11 | Sinal financeiro baseado no settlement_required do snapshot, sem liberação de entrega/acervo17 |
+| Portal próprio/avisos/auditoria/PDF1/2 | História sem ambiguidade, passivo pendente explícito; apresentação3 separada |
+
+Decisão de integração: manter cash_entries como fonte única dos efeitos. Um movimento novo de estorno lógico reduz somente applied_cents; a devolução ligada a esse estorno reduz somente numerário/destino, sem novo abatimento da alocação. Dois registros imutáveis explícitos ligam pagamento/alocação/movimento originais. Não introduzir crédito reutilizável. Comando opcional de estornar e devolver cria ambos atomicamente e exige confirmação/evidência da devolução manual. Backfill determinístico de cada refunded/reversed legado registra ambas as intenções já materializadas, sem alterar movimentos/comandos/resultados/avisos/recibos ou inventar metadata.
+
+Operações em caixa próprio atual da mesma unidade; original pode ser de sessão fechada/outro operador. Requer cash.read+cash.open+charges.read+requests.read+charges.adjust e responsabilidade vigente sobre o pedido, inclusive em retry. cash.read_all só amplia leitura. Original e total recebido não são reescritos. Consulta de fontes de correção respeita todas as mesmas capacidades/escopos. Locks ordenados, revalidação depois de esperas e transação única para movimento/limites/auditoria/avisos. Novo refund/reverse legado recusado; replay histórico autorizado preservado.
+
+Saldo continua obrigação vigente menos alocações líquidas; devolver depois do cancelamento não reativa dívida. Cancelar não efetua reembolso nem apaga recibo. Flag financeira em respostas financeiras autorizadas usa snapshot settlement_required e saldo, sem consultar catálogo atual; não significa entrega liberada e não bloqueia consulta de anexos anteriores. Demais aprovações/assinatura/scanner permanecem independentes.
+
+Aceites e provas previstas:20de60, estorno parcial/integral, devolução posterior sem efeito duplicado, taxa cartão separada, excesso/concorrência/rollback, idempotência/colisão, revogação sob lock, fecho/cancelamento/ajuste, backfill/retry legado; dois replays SQL descartáveis com migrador limitado, Node/API/DTO/RPC/Bearer, Auth local, portal/avisos/auditoria/PDF1/2, UI320/360/1440 e zoom. Build público isolado. Nenhuma fixture/negócio/Auth/grant/email hospedado. Baseline relida imediatamente antes e depois do rollout.
+
+Estado: implementação e validação local concluídas.152Node, SQL931+932 antes dos deltas finais e4focados finais,4Auth locais,98UI afetados/layouts+zoom, build aprovado. Revisões estática/visual independentes sem achado pendente apósP3 corrigido. Baseline imediata32eventos/17grants/5Auth/5vínculos/1cliente/1pedido, zero financeiro/history22. Migration16esperada47comandos/19corpos; aplicação hospedada e publicação ainda pendentes, exclusivamente GitHub→Vercel. [Fecho](fecho-16.md).

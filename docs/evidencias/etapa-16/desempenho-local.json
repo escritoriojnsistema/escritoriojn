@@ -1,0 +1,8 @@
+{
+  "scenario": "20 correcoes sequenciais, metade com devolucao conjunta; transacao, ledger, limites, audit, avisos e retorno oficial; inclui processo Docker/psql",
+  "samples": 20,
+  "median_ms": 219.91991399999824,
+  "p95_ms": 258.4508119999955,
+  "max_ms": 299.2076110000053,
+  "limitation": "Laboratorio local; nao mede SLA ou latencia de rede hospedada."
+}

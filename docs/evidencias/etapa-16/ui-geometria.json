@@ -1,0 +1,26 @@
+{
+  "viewports": [
+    {
+      "width": 320,
+      "viewport_height": 740,
+      "confirmation_bottom": 966,
+      "document_height": 1062
+    },
+    {
+      "width": 360,
+      "viewport_height": 740,
+      "confirmation_bottom": 951,
+      "document_height": 1046
+    },
+    {
+      "width": 1440,
+      "viewport_height": 900,
+      "confirmation_bottom": 777,
+      "document_height": 900
+    }
+  ],
+  "zoom": "125%, rolagem e confirmacao apos zoom aprovadas nos3layouts",
+  "overflow_horizontal": false,
+  "targets": "44px; inputs mobile16px",
+  "note": "Capturas ficticias fullPage/viewport; barra fixa em captura fullPage pode aparecer no meio da composicao. Nao e perda de conteudo."
+}

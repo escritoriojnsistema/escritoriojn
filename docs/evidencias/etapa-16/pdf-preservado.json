@@ -1,0 +1,15 @@
+{
+  "presentation1": {
+    "fixture": "amostra PDF anterior15",
+    "byte_equal": true,
+    "sha256": "15f63d398282712d082effcbd9847f29674e5c47f88b43a33a724b3c34010f1f",
+    "bytes": 29027
+  },
+  "presentation2": {
+    "fixture": "snapshot sintetico com adaptador/catalogos da base publicada15 versus workspace16, mesmo engine congelado",
+    "byte_equal": true,
+    "sha256": "166e13431e57b86cecbedfe104c65178dc2af25745783620abe3f13947f4a7db",
+    "bytes": 20309
+  },
+  "manifests": "Todos os hashes do manifesto2 correspondem;1 historico conserva a excecao body-parser ja documentada15. Nenhuma dependencia alterada16."
+}

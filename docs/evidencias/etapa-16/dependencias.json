@@ -1,0 +1,14 @@
+{
+  "command": "npm audit --omit=dev --json",
+  "vulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "package_json_sha256": "6c2e41706e8f0897ccad887b47f8a849f6c353e224367ddaef501c9ff7ab8675",
+  "package_lock_sha256": "ebf1f616abce201e72c2d30959b717d5bbafd973342b83c644563b040050b9bc",
+  "note": "Sem alteracao de dependencias16; body-parser2.4 e override Zod restrito preservados."
+}
