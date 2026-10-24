@@ -1,4 +1,6 @@
 import {validPaymentOperation} from '../../../shared/payments.js';
+import {validCorrectionOperation} from '../../../shared/corrections.js';
+import {correctionSources} from './correctionDto.js';
 import {paymentsPage} from './paymentDto.js';
 import {validFinanceOperation} from '../../../shared/finance.js';
 import {statement,financialCharges,clientFinance} from './financeDto.js';
@@ -30,3 +32,6 @@ cashRouter.post('/dashboard-filtered',async(req,res)=>{const b:unknown=req.body;
 
 cashRouter.post('/payments',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','session_id','page'])||!uuid(b.office_id)||!uuid(b.session_id)||!positive(b.page,100000)){invalid(res);return;}await rpc(res,'cash_payments_page',{p_office_id:b.office_id,p_session_id:b.session_id,p_page:b.page},paymentsPage);});
 cashRouter.post('/payment',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','operation'])||!uuid(b.office_id)||!validPaymentOperation(b.operation)){invalid(res);return;}await rpc(res,'payment_operate',{p_office_id:b.office_id,p_operation:b.operation},statement);});
+
+cashRouter.post('/correction-sources',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','session_id','kind','query','page'])||!uuid(b.office_id)||!uuid(b.session_id)||!['reverse','refund'].includes(String(b.kind))||!requestText(b.query,120,0)||!positive(b.page,100000)){invalid(res);return;}await rpc(res,'correction_sources',{p_office_id:b.office_id,p_session_id:b.session_id,p_kind:b.kind,p_query:b.query,p_page:b.page},correctionSources);});
+cashRouter.post('/correction',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','operation'])||!uuid(b.office_id)||!validCorrectionOperation(b.operation)){invalid(res);return;}await rpc(res,'correction_operate',{p_office_id:b.office_id,p_operation:b.operation},statement);});

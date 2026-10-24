@@ -1,4 +1,4 @@
-import {useEffect,useRef,useState,type FormEvent} from 'react';
+import {useEffect,useRef,useState,type FormEvent,type ReactNode} from 'react';
 import type {CashConfiguration} from '../../../shared/cash';
 import {cashAmountToCents,cashInteger} from '../../../shared/cash';
 import type {FinanceCharge,FinanceCharges,FinanceStatement} from '../../../shared/finance';
@@ -12,16 +12,17 @@ type Props={
  office:string;statement:FinanceStatement;configuration?:CashConfiguration;disabled:boolean;
  onBusy:(busy:boolean)=>void;onEditing:(editing:boolean)=>void;
  onChanged:(statement:FinanceStatement)=>void;onRefresh:()=>void;onUnavailable:(error:CashError)=>void;
+ hidden?:boolean;onCorrect?:()=>void;actions?:ReactNode;
 };
 type AllocationDraft={charge:FinanceCharge;amount:string};
 type Editor={kind:'record'}|{kind:'confirm'|'reject'|'settle';payment:Payment};
-const paymentNames:Record<Payment['status'],string>={pending:'Pendente de confirmação',confirmed:'Confirmado',rejected:'Rejeitado',partially_reversed:'Devolvido parcialmente',reversed:'Devolvido integralmente'};
+const paymentNames:Record<Payment['status'],string>={pending:'Pendente de confirmação',confirmed:'Confirmado',rejected:'Rejeitado',partially_reversed:'Alocação estornada parcialmente',reversed:'Alocação estornada integralmente'};
 const methodNames:Record<Payment['payment_type'],string>={cash:'Dinheiro',pix:'PIX',card:'Cartão',transfer:'Transferência'};
 const moneyInput=(cents:number)=>`${Math.trunc(cents/100)},${String(cents%100).padStart(2,'0')}`;
 const knownMoney=(cents:number|null)=>cents===null?'Sem informação':cashMoney(cents);
 const dateLabel=(date:string)=>date.split('-').reverse().join('/');
 
-export function CashPaymentsPanel({office,statement,configuration,disabled,onBusy,onEditing,onChanged,onRefresh,onUnavailable}:Props){
+export function CashPaymentsPanel({office,statement,configuration,disabled,onBusy,onEditing,onChanged,onRefresh,onUnavailable,hidden=false,onCorrect,actions}:Props){
  const auth=useAuth(),context=auth.contexts.find(c=>c.office_id===office&&c.role_code!=='client'),s=statement.session;
  const [editor,setEditor]=useState<Editor>(),[pickerOpen,setPickerOpen]=useState(true),[allocations,setAllocations]=useState<AllocationDraft[]>([]),[methodId,setMethodId]=useState('');
  const [status,setStatus]=useState<'confirmed'|'pending'>('confirmed'),[presented,setPresented]=useState(''),[fee,setFee]=useState(''),[settlement,setSettlement]=useState<'pending'|'settled'>('pending'),[settledOn,setSettledOn]=useState(''),[reference,setReference]=useState(''),[evidence,setEvidence]=useState('');
@@ -33,6 +34,7 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
  const callbacks=useRef({onBusy,onEditing,onUnavailable});callbacks.current={onBusy,onEditing,onUnavailable};
  const amountFocus=useRef<HTMLInputElement>(null),pickerFocus=useRef<HTMLInputElement>(null);
  const openButton=useRef<HTMLButtonElement>(null),editorHeading=useRef<HTMLHeadingElement>(null),panelHeading=useRef<HTMLHeadingElement>(null);
+ const correctButton=useRef<HTMLButtonElement>(null),wasHidden=useRef(false);
  const hasAuthority=s.is_self&&['cash.open','charges.read','requests.read'].every(p=>context?.permissions.includes(p));
  const canRecord=hasAuthority&&s.status==='open'&&s.can_operate&&statement.can_receive;
  const locked=disabled||busy;
@@ -42,14 +44,15 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
  const presentedCents=cashAmountToCents(presented),feeCents=cashAmountToCents(fee);
 
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;mutation.current?.abort();historyRead.current?.abort();chargeRead.current?.abort();callbacks.current.onBusy(false);callbacks.current.onEditing(false);};},[]);
+ useEffect(()=>{if(hidden){historyRead.current?.abort();chargeRead.current?.abort();setHistoryReading(false);setChargeReading(false);}else if(wasHidden.current){correctButton.current?.focus();if(!historyReady&&!statement.payments)loadHistory(1);}wasHidden.current=hidden;},[hidden]);
  useEffect(()=>{if(editor)editorHeading.current?.focus();else if(restoreFocus.current){restoreFocus.current=false;(openButton.current??panelHeading.current)?.focus();}},[editor]);
  useEffect(()=>{if(editor?.kind==='record'){if(pickerOpen)pickerFocus.current?.focus();else amountFocus.current?.focus();}},[editor?.kind,pickerOpen,allocations.length]);
- useEffect(()=>{if(statement.payments){historyRead.current?.abort();setHistoryReading(false);setHistory(statement.payments);setHistoryReady(true);setHistoryError(undefined);}},[statement]);
+ useEffect(()=>{if(statement.payments){historyRead.current?.abort();setHistoryReading(false);setHistory(statement.payments);setHistoryReady(true);setHistoryError(undefined);}else if(!hidden)loadHistory(1);},[statement]);
  function loadHistory(nextPage:number){
   historyRead.current?.abort();const c=new AbortController();historyRead.current=c;setHistoryReading(true);
   void cashApi.payments(office,s.id,nextPage,c.signal).then(v=>{if(!c.signal.aborted&&alive.current){setHistory(v);setHistoryReady(true);setHistoryError(undefined);}}).catch(cause=>{if(!c.signal.aborted&&alive.current){const e=cashError(cause);setHistoryError(e);if([401,403,404].includes(e.status))callbacks.current.onUnavailable(e);}}).finally(()=>{if(!c.signal.aborted&&alive.current)setHistoryReading(false);});
  }
- useEffect(()=>{if(!statement.payments)loadHistory(1);return()=>historyRead.current?.abort();},[office,s.id]);
+ useEffect(()=>()=>historyRead.current?.abort(),[office,s.id]);
  useEffect(()=>{
   if(editor?.kind!=='record')return;
   const c=new AbortController();chargeRead.current=c;setChargeReading(true);setCandidates(undefined);setChargeError(undefined);
@@ -89,7 +92,7 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
   try{
    const value=await cashApi.payment(office,operation,c.signal);
    if(c.signal.aborted||!alive.current)return;
-   clearEditor();if(value.payments){setHistory(value.payments);setHistoryReady(true);setHistoryError(undefined);}else loadHistory(1);
+   clearEditor();if(value.payments){setHistory(value.payments);setHistoryReady(true);setHistoryError(undefined);}
    onChanged(value);
    setFeedback(operation.kind==='record'&&operation.status==='pending'?'Pagamento pendente registrado. Nenhum saldo foi aplicado.':operation.kind==='reject'?'Pagamento rejeitado. O histórico foi preservado.':operation.kind==='settle'?'Liquidação manual registrada.':'Pagamento confirmado e saldos atualizados.');
   }catch(cause){
@@ -101,8 +104,9 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
  }
 
  const actionTitle=editor?.kind==='record'?'Registrar recebimento':editor?.kind==='confirm'?'Confirmar pagamento':editor?.kind==='reject'?'Rejeitar pagamento':'Registrar liquidação';
+ if(hidden)return null;
  return <section className="cash-payments" aria-label="Recebimentos e pagamentos">
-  {!editor&&<div className="team-section-heading"><h3 ref={panelHeading} tabIndex={-1}>Pagamentos</h3><div className="account-actions">{canRecord&&!editor&&<button ref={openButton} type="button" className="primary-button" disabled={locked} onClick={()=>start({kind:'record'})}>Registrar recebimento</button>}<button type="button" className="team-text-button" disabled={locked||historyReading} onClick={()=>loadHistory(history.page)}>Atualizar pagamentos</button></div></div>}
+  {!editor&&<div className="team-section-heading"><h3 ref={panelHeading} tabIndex={-1}>Pagamentos</h3><div className="account-actions">{canRecord&&<button ref={openButton} type="button" className="primary-button" disabled={locked} onClick={()=>start({kind:'record'})}>Registrar recebimento</button>}{onCorrect&&<button ref={correctButton} type="button" className="secondary-button" disabled={locked} onClick={onCorrect}>Corrigir pagamento</button>}{actions}<button type="button" className="team-text-button" disabled={locked||historyReading} onClick={()=>loadHistory(history.page)}>Atualizar pagamentos</button></div></div>}
   {error&&<p className="form-feedback error" role="alert">{error.message}</p>}{feedback&&<p className="form-feedback" role="status">{feedback}</p>}
   {editor&&<form className="finance-operation cash-payment-editor" onSubmit={submit} noValidate onKeyDown={event=>{if(event.key==='Escape'&&!locked){event.preventDefault();clearEditor(true);setError(undefined);}}}>
    <h4 ref={editorHeading} tabIndex={-1}>{actionTitle}</h4>
@@ -136,9 +140,10 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
   {!editor&&historyReady&&(!history.items.length?<p className="team-empty">Nenhum pagamento registrado neste caixa.</p>:<ul className="cash-payment-history" aria-label="Histórico de pagamentos">{history.items.map(payment=><li key={payment.id}>
    <div className="cash-session-heading"><strong>{payment.method_name} · {cashMoney(payment.amount_cents)}</strong><span className={`cash-payment-status cash-payment-${payment.status}`}>{paymentNames[payment.status]}</span></div>
    <p className="customer-note">{new Date(payment.created_at).toLocaleString('pt-BR')} · {payment.account_name}{payment.legacy&&' · Registro anterior'}</p>
-   <ul className="cash-payment-allocation-summary">{payment.allocations.map(a=><li key={a.charge_id}>{a.protocol} · {cashMoney(a.amount_cents)}</li>)}</ul>
+   <ul className="cash-payment-allocation-summary">{payment.allocations.map(a=><li key={a.id??a.charge_id}>{a.protocol} · Original {cashMoney(a.amount_cents)}{a.reversed_cents!==undefined&&` · Estornado ${cashMoney(a.reversed_cents)}`}{a.refunded_cents!==undefined&&` · Devolvido ${cashMoney(a.refunded_cents)}`}{a.pending_refund_cents!==undefined&&` · Devolução pendente ${cashMoney(a.pending_refund_cents)}`}</li>)}</ul>
+   {(payment.reversed_cents!==undefined||payment.refunded_cents!==undefined||payment.pending_refund_cents!==undefined)&&<dl className="cash-totals cash-payment-corrections" aria-label="Estornos e devoluções do pagamento">{payment.reversed_cents!==undefined&&<div><dt>Estornado da quitação</dt><dd>{cashMoney(payment.reversed_cents)}</dd></div>}{payment.refunded_cents!==undefined&&<div><dt>Devolvido efetivamente</dt><dd>{cashMoney(payment.refunded_cents)}</dd></div>}{payment.pending_refund_cents!==undefined&&<div><dt>Devolução pendente</dt><dd>{cashMoney(payment.pending_refund_cents)}</dd></div>}</dl>}
    {payment.status==='pending'&&<p className="customer-note">Sem efeito nos saldos até a confirmação.</p>}
-   {payment.payment_type==='cash'&&<dl className="cash-totals cash-payment-totals"><div><dt>Aplicado</dt><dd>{cashMoney(payment.amount_cents)}</dd></div><div><dt>Apresentado</dt><dd>{knownMoney(payment.presented_cents)}</dd></div><div><dt>Troco</dt><dd>{knownMoney(payment.change_cents)}</dd></div></dl>}
+   {payment.payment_type==='cash'&&<dl className="cash-totals cash-payment-totals"><div><dt>Aplicado no recebimento original</dt><dd>{cashMoney(payment.amount_cents)}</dd></div><div><dt>Apresentado</dt><dd>{knownMoney(payment.presented_cents)}</dd></div><div><dt>Troco</dt><dd>{knownMoney(payment.change_cents)}</dd></div></dl>}
    {payment.payment_type==='card'&&<><dl className="cash-totals cash-payment-totals"><div><dt>Bruto</dt><dd>{cashMoney(payment.amount_cents)}</dd></div><div><dt>Taxa</dt><dd>{knownMoney(payment.fee_cents)}</dd></div><div><dt>Líquido</dt><dd>{knownMoney(payment.net_cents)}</dd></div></dl><p className="customer-note">{payment.settlement==='settled'?`Liquidado em ${payment.settled_on?dateLabel(payment.settled_on):'data sem informação'}`:payment.settlement==='pending'?'Pendente de liquidação':'Liquidação: sem informação'}</p></>}
    <details className="cash-payment-reference"><summary>Detalhes do pagamento</summary><p>Referência lógica: {payment.reference}</p><p>Evidência: {payment.evidence??'Sem informação'}</p>{payment.external_reference&&<p>Referência externa: {payment.external_reference}</p>}<p>Registro de controle interno, sem emissão de nota fiscal.</p></details>
    {!editor&&hasAuthority&&<div className="account-actions">{payment.status==='pending'&&<>{canRecord&&<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'confirm',payment})}>Confirmar pagamento</button>}<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'reject',payment})}>Rejeitar pagamento</button></>}{payment.payment_type==='card'&&payment.settlement==='pending'&&['confirmed','partially_reversed','reversed'].includes(payment.status)&&<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'settle',payment})}>Registrar liquidação</button>}</div>}

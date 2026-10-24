@@ -1,0 +1,68 @@
+{
+  "counts": {
+    "units": 0,
+    "ledger": 0,
+    "charges": 0,
+    "accounts": 0,
+    "payments": 0,
+    "requests": 1,
+    "customers": 1,
+    "auth_users": 5,
+    "allocations": 0,
+    "memberships": 5,
+    "audit_events": 32,
+    "individual_grants": 17,
+    "legacy_corrections": 0
+  },
+  "aliases": [
+    {
+      "name": "private.cash_operate_before15",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "241826d5001f3cbaf5df4c998c89dc7e",
+      "security_definer": true
+    },
+    {
+      "name": "private.cash_statement_record_before15",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "b55a865dabe46be474eaef71bc48bf88",
+      "security_definer": false
+    }
+  ],
+  "history": [
+    "20261017193833",
+    "20261017194008",
+    "20261017225649",
+    "20261018132255",
+    "20261018132554",
+    "20261018195511",
+    "20261019015927",
+    "20261019163453",
+    "20261019164337",
+    "20261020182035",
+    "20261020185830",
+    "20261020211531",
+    "20261020232011",
+    "20261021003953",
+    "20261021114510",
+    "20261021124414",
+    "20261021200540",
+    "20261022012025",
+    "20261022134044",
+    "20261023153038",
+    "20261023213625",
+    "20261024032407"
+  ],
+  "immutable_hashes": {
+    "ledger": "d751713988987e9331980363e24189ce",
+    "commands": "d751713988987e9331980363e24189ce",
+    "payments": "d751713988987e9331980363e24189ce",
+    "individual_grants": "16478203091a062632d77644b519aa23"
+  },
+  "purpose": "Somente leitura antes da publicacao16. Conferir novamente imediatamente antes do merge; nao tratar grants ou variacao legitima de eventos como fixtures.",
+  "captured_on": "2026-10-24",
+  "independent_confirmation": "Coordenador reconferiu por SELECT imediatamente antes da publicacao: mesmas contagens/history22 e aliasesMD5."
+}

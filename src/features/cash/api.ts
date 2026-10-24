@@ -1,3 +1,4 @@
+import type {CorrectionKind,CorrectionOperation,CorrectionSources} from '../../../shared/corrections';
 import type {PaymentOperation,PaymentsPage} from '../../../shared/payments';
 import type {CashFilters} from '../../../shared/cash';
 import type {FinanceStatement,FinanceOperation,FinanceCharges,ClientFinance} from '../../../shared/finance';
@@ -112,6 +113,8 @@ async function request<T>(
   }
 }
 export const cashApi={
+ correction:(office_id:string,operation:CorrectionOperation,signal?:AbortSignal)=>request<FinanceStatement>('/correction','POST',{office_id,operation},signal),
+ correctionSources:(office_id:string,session_id:string,kind:CorrectionKind,query='',page=1,signal?:AbortSignal)=>request<CorrectionSources>('/correction-sources','POST',{office_id,session_id,kind,query,page},signal),
  payment:(office_id:string,operation:PaymentOperation,signal?:AbortSignal)=>request<FinanceStatement>('/payment','POST',{office_id,operation},signal),
  payments:(office_id:string,session_id:string,page=1,signal?:AbortSignal)=>request<PaymentsPage>('/payments','POST',{office_id,session_id,page},signal),
  statement:(office_id:string,session_id:string,page=1,signal?:AbortSignal)=>request<FinanceStatement>('/statement','POST',{office_id,session_id,page},signal),

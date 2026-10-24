@@ -112,3 +112,27 @@
 }
 .cash-main:has(.cash-payment-editor)>.cash-toolbar { display:none; }
 .cash-statement:has(.cash-payment-editor)>.team-section-heading { margin-block:2px; }
+
+.cash-correction-editor { min-width:0; padding-block:4px 12px; border-top:0; }
+.cash-correction-editor h3 { margin:8px 0 12px; font-size:17px; }
+.cash-correction-editor h3:focus { outline:2px solid #aa7d36; outline-offset:4px; }
+.cash-correction-editor>.account-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.cash-correction-editor .cash-list-filters { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; align-items:end; margin-block:8px; }
+.cash-correction-picker .team-pagination { margin-block:2px; flex-wrap:wrap; }
+.cash-correction-source { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-block:8px; }
+.cash-correction-source>div { min-width:0; display:flex; flex-direction:column; gap:4px; font-size:13px; overflow-wrap:anywhere; }
+.cash-correction-source span { color:#617887; font-size:12px; }
+.cash-correction-values { align-items:end; margin-block:8px; }
+.cash-correction-combined { margin-block:6px; align-items:center; }
+.cash-correction-notes { gap:10px; margin-block:8px; }
+.cash-correction-editor .customer-note { margin-block:6px; }
+.cash-main:has(.cash-correction-editor)>.cash-toolbar { display:none; }
+.cash-main:has(.cash-correction-editor)>.operation-heading { margin-bottom:8px; }
+.cash-main:has(.cash-correction-editor)>.operation-heading p:not(.eyebrow) { display:none; }
+.cash-statement:has(.cash-correction-editor)>.team-section-heading { margin-block:2px; }
+@media(max-width:600px) {
+ .cash-correction-editor .cash-list-filters { grid-template-columns:minmax(0,1fr); }
+ .cash-correction-editor .cash-correction-values { grid-template-columns:minmax(0,1fr); gap:4px; }
+ .cash-correction-editor .cash-correction-notes { grid-template-columns:minmax(0,1fr); }
+ .cash-correction-editor button { white-space:normal; max-width:100%; }
+}
