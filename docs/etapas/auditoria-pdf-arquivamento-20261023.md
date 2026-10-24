@@ -18,7 +18,7 @@ Pedido posterior à entrega financeira já publicada; preservar essa entrega e a
 - PDF: implementação isolada e testes reais de extração/acentuação, texto longo, múltiplas páginas e marca d'água; verificar visualmente páginas.
 - API/UI: exportação binária, verificação, política e abas com filtros; testes de validação, permissões, sessão obsoleta e desktop/mobile.
 - Produção: PR/revisão/testes proporcionais, merge autorizado, status Vercel via GitHub e assets canônicos; reler schema_migrations e comparar SQL antes de qualquer aplicação manual.
-- Fecho: resultados reais, falhas/limites e próxima operação no Livro/fecho/evidências. Estado atual: implementação e revisão integrada concluídas; verificações finais e publicação em andamento, sem merge novo até este registro.
+- Fecho: resultados reais, falhas/limites e próxima operação no Livro/fecho/evidências. Estado atual: publicada/verificada porGitHub→Vercel, PR Profissionalizar auditoria integrado. [Fecho](fecho-auditoria-pdf.md) e [publicação](../evidencias/auditoria-pdf/publicacao.json).
 
 ## Revisão integrada
 Revisora independente Goodall e rechecagem do coordenador: corrigidos limites de período não alinhados à meia-noiteUTC na RPC, conflito de hash antecipado da mesma sessão e código de ação em inglês no PDF. Regressões SQL/API confirmam o contrato. Sem bypass de escritório/capacidade, concessão individual automática ou truncamento confirmado. [Cobertura dos produtores reais](../evidencias/auditoria-pdf/produtores.md).

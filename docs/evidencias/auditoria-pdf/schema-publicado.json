@@ -1,0 +1,422 @@
+{
+  "migration": "20261023213625",
+  "applied_by": "Git integration, no manual reapplication",
+  "sql_sha256": "b7a0cda5788d440e37489dffa376831beab7d785c2db05b265b0d102cb76371d",
+  "statements_identical": 58,
+  "active_function_bodies_identical": 28,
+  "counts": {
+    "policies": [
+      {
+        "days": 90,
+        "version": 1
+      }
+    ],
+    "requests": 1,
+    "customers": 1,
+    "auth_users": 5,
+    "cash_units": 0,
+    "migrations": 21,
+    "memberships": 5,
+    "audit_events": 25,
+    "cash_entries": 0,
+    "individual_grants": 17,
+    "financial_accounts": 0,
+    "new_individual_grants": 0,
+    "owner_new_capabilities": 2
+  },
+  "private_tables": [
+    {
+      "name": "audit_policies",
+      "rls": true,
+      "authenticated_access": false,
+      "anon_access": false,
+      "service_role_access": false
+    },
+    {
+      "name": "audit_report_events",
+      "rls": true,
+      "authenticated_access": false,
+      "anon_access": false,
+      "service_role_access": false
+    },
+    {
+      "name": "audit_report_seals",
+      "rls": true,
+      "authenticated_access": false,
+      "anon_access": false,
+      "service_role_access": false
+    },
+    {
+      "name": "audit_reports",
+      "rls": true,
+      "authenticated_access": false,
+      "anon_access": false,
+      "service_role_access": false
+    }
+  ],
+  "functions": [
+    {
+      "name": "private.audit_history_page",
+      "signature": "p_office_id uuid, p_page integer, p_size integer, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone, p_view text",
+      "definer": true,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "9f7ec619c0099c37102f2e291a52fd94",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_notification_read",
+      "signature": "",
+      "definer": true,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "ef30e1d1950f3509e39e929360bcb243",
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_page",
+      "signature": "p_office_id uuid, p_page integer, p_size integer, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone",
+      "definer": true,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "71cdfc29586bc456f8b840ab266033a4",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_policy_get",
+      "signature": "p_office_id uuid",
+      "definer": true,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "5224ab4109311e5519014f60d4f99987",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_policy_initialize",
+      "signature": "",
+      "definer": true,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "cf30ea1404b55c57b4313affd5067af8",
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_policy_record",
+      "signature": "p_office_id uuid",
+      "definer": false,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "3c38fba8c65498a68fbc40ed8f5f35d1",
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_policy_set",
+      "signature": "p_office_id uuid, p_days integer, p_version integer, p_request_id uuid",
+      "definer": true,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "a6b152ff8db4129e471cbca56dcb05b0",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_privileged",
+      "signature": "p_office_id uuid, p_capability text",
+      "definer": false,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "7e4f025284fee421b51da384013ca9fc",
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_report_access",
+      "signature": "p_office_id uuid, p_report_id uuid",
+      "definer": false,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "edf0b598a762e096454fc24c5cedc7f8",
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_report_begin",
+      "signature": "p_office_id uuid, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone, p_view text, p_request_id uuid",
+      "definer": true,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "bcec7f7957579c06ff40f5a755264915",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_report_chunk",
+      "signature": "p_office_id uuid, p_report_id uuid, p_offset integer",
+      "definer": true,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "066f09593d4eff45742edad94dc63033",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_report_json",
+      "signature": "r private.audit_reports",
+      "definer": false,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "77f7052b68b1a7434dff20fa36c4ee12",
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_report_reference",
+      "signature": "p_office_id uuid, p_report_id uuid",
+      "definer": true,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "7850397f6d89e91bbe093890db4fcf17",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_report_seal",
+      "signature": "p_office_id uuid, p_report_id uuid, p_sha256 text, p_bytes integer",
+      "definer": true,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "44f5521abcba88dc1522ad686c0755c3",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.audit_view_access",
+      "signature": "p_office_id uuid, p_view text",
+      "definer": false,
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "90c3e4b26a0d52f937747575b866bb19",
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.cash_operate",
+      "signature": "p_office_id uuid, p_operation jsonb",
+      "definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "0e703e10974a861763a910f30eedee74",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.charges_create",
+      "signature": "p_office_id uuid, p_request_id uuid, p_installments jsonb, p_idempotency_key uuid",
+      "definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "0aab634c8c15962620a9497d540ab452",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.charges_mutate",
+      "signature": "p_office_id uuid, p_charge_id uuid, p_expected_version integer, p_mutation jsonb, p_idempotency_key uuid",
+      "definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "f43fc626f1aae40b2de82dcc5a35225b",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.safe_audit_changes",
+      "signature": "p_changes jsonb",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "a95f2e27f1ccd23810c3cfec7e9663a8",
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.team_scope_for_member",
+      "signature": "p_membership_id uuid",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "7bf68ace8d5f46454791a59cbcec1a9b",
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.team_validate_assignment",
+      "signature": "p_actor jsonb, p_role text, p_permissions text[], p_creating_owner boolean",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "684bf75d3d9d19edc01b8aefb2d3b80a",
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "public.audit_export",
+      "signature": "p_office_id uuid, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone, p_request_id uuid",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "e1b0e44f54f2e381108de5cd8ee3c70e",
+      "authenticated_execute": false,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "public.audit_history_page",
+      "signature": "p_office_id uuid, p_page integer, p_size integer, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone, p_view text",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "16163f81c1cafbea85fdd54be7342470",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "public.audit_policy_get",
+      "signature": "p_office_id uuid",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "c21906190e619f771f47eda962ab5290",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "public.audit_policy_set",
+      "signature": "p_office_id uuid, p_days integer, p_version integer, p_request_id uuid",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "7a9461696ffe78a58fa38ab937c76bd1",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "public.audit_report_begin",
+      "signature": "p_office_id uuid, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone, p_view text, p_request_id uuid",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "ff0ad83f717ab37c271dab117b6bf80d",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "public.audit_report_chunk",
+      "signature": "p_office_id uuid, p_report_id uuid, p_offset integer",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "73c129ecf278ad70814702e9a2851f67",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "public.audit_report_reference",
+      "signature": "p_office_id uuid, p_report_id uuid",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "35d2cc19e428b72562e2e0886e7f8322",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "public.audit_report_seal",
+      "signature": "p_office_id uuid, p_report_id uuid, p_sha256 text, p_bytes integer",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "f027d4cac6ef033328a8b20c4ffccc83",
+      "authenticated_execute": true,
+      "anon_execute": false,
+      "service_role_execute": false
+    }
+  ]
+}

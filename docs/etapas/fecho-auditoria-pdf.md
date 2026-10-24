@@ -1,6 +1,6 @@
 # Fecho — Auditoria PDF e arquivamento
 
-Entrega técnica concluída e revisão integrada liberada. Publicação GitHub→Vercel em conferência; o resultado verificável será registrado aqui ao concluir o rollout autorizado.
+Publicada e verificada em23/10/2026 por GitHub→Vercel. [Profissionalizar auditoria com PDF verificável e arquivamento por escritório](https://github.com/escritoriojnsistema/escritoriojn/pull/40) integrada; merge56178173ea835c19ebcdd99e05f1be156af41b78, árvore754afad1a685c35db9390aae972fdbfe01eacfa2, VercelSUCCESS. Actions continua disabled_manually; sem deployCLI/API Vercel.
 
 - A entrega financeira anterior foi preservada: Caixa/permissões, configuração guiada, ledger manual, financeiro próprio do cliente, avisos transacionais e sino lateral. Nenhum cadastro financeiro, conta hospedada ou permissão individual foi criado para testar.
 - O pedido novo substitui o JSON pela ação exatamente **Exporta**, com PDF vetorial real, fontes incorporadas/acentos, identidade do escritório, período/filtros/aba/autor/data, detalhes em português, cabeçalhos/rodapés e paginação. Marca d'água ESCRITÓRIO JN discreta em todas as páginas.
@@ -16,3 +16,5 @@ Entrega técnica concluída e revisão integrada liberada. Publicação GitHub�
 - Próxima operação: gestor pode ajustar prazo e usar Exporta/Verificar PDF pela autoridade vigente. A configuração real de unidades/contas do Caixa continua a cargo da gestão; zero fixtures hospedadas. Auth/negócio e PDFs foram exercitados no laboratório local; a conferência hospedada é de schema/ACL/arquivos publicados/saúde/barreiras anônimas, sem operar contas reais.
 
 [Contrato](auditoria-pdf-arquivamento-20261023.md), [validação](../evidencias/auditoria-pdf/verificacao.json), [produtores](../evidencias/auditoria-pdf/produtores.md) e [manifesto da versão1](../evidencias/auditoria-pdf/versao1.json).
+
+Banco hospedado: migration20261023213625 aplicada automaticamente porGit, histórico21,58comandos/28corpos iguais ao arquivo validado. Não reaplicar. Quatro tabelas privadasRLS/ACL, seteRPCs novas públicasINVOKER somenteauthenticated e exportJSON antigo revogado. Política90dias/versão1. Contagens preservadas25eventos/5Auth/5vínculos/1cliente/1pedido,17grants individuais,zero novos e zero unidades/contas/ledger. Canônico/health200, cincoassets idênticos ao build e barreiras de auditoria anônimas401; conferência independente do coordenador concordou. [Publicação](../evidencias/auditoria-pdf/publicacao.json), [schema](../evidencias/auditoria-pdf/schema-publicado.json), [bundle](../evidencias/auditoria-pdf/bundle-publicado.json).

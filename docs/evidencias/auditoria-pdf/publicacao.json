@@ -1,0 +1,34 @@
+{
+  "published": true,
+  "repository": "escritoriojnsistema/escritoriojn",
+  "pull_request": {
+    "title": "Profissionalizar auditoria com PDF verificável e arquivamento por escritório",
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/pull/40",
+    "merged": true
+  },
+  "feature_commit": "5fc3b5284f6a591be80ee9dca3b25f76b72c8deb",
+  "merge_commit": "56178173ea835c19ebcdd99e05f1be156af41b78",
+  "reviewed_tree": "754afad1a685c35db9390aae972fdbfe01eacfa2",
+  "delivery": "GitHub → Vercel",
+  "preview_vercel": "SUCCESS",
+  "production_vercel": "SUCCESS",
+  "production_deployment_url": "https://vercel.com/escritorio-jn/escritoriojn/9ih7VdC6sNNWWbGPwBFH4q14Qtcj",
+  "canonical": "https://escritoriojn.vercel.app",
+  "canonical_assets_match": 5,
+  "canonical_health": 200,
+  "governance_anonymous_barriers": 401,
+  "schema": {
+    "migration": "20261023213625",
+    "history_count": 21,
+    "statements_identical": 58,
+    "active_function_bodies_identical": 28,
+    "applied_by_git": true,
+    "manual_reapplication": false
+  },
+  "no_hosted_business_test_fixtures": true,
+  "no_new_individual_grants": true,
+  "actions_workflow": "disabled_manually",
+  "vercel_cli_or_deploy_api_used": false,
+  "independent_coordinator_recheck": "PR merged, Vercel SUCCESS, canonical assets/health and anonymous barriers independently confirmed",
+  "documentation": "Fecho documental posterior conserva o runtime publicado e as provas acima."
+}
