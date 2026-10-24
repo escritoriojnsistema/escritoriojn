@@ -1,5 +1,5 @@
 {
-  "status": "validated_awaiting_github_release",
+  "status": "published_verified",
   "node": {
     "distinct_passed": 152,
     "log": "etapa16-node-full-1.log",
@@ -70,7 +70,13 @@
   "pdf": "pdf-preservado.json",
   "production_dependencies_vulnerabilities": 0,
   "package_lock_unchanged": true,
-  "publication": "pending",
+  "publication": {
+    "state": "published_verified",
+    "evidence": "publicacao.json",
+    "github_to_vercel": true,
+    "canonical_assets_match": 5,
+    "anonymous_financial_barriers": 8
+  },
   "hosted_business_operations": 0,
   "individual_grants_added": 0,
   "next_stage_17": "not_started",
@@ -84,6 +90,12 @@
     "version": "20261024133149",
     "statements_expected": 47,
     "functions_expected": 19,
-    "applied_hosted": false
+    "applied_hosted": true,
+    "automatic": true,
+    "history_count": 23,
+    "statements_match": 47,
+    "function_bodies_match": 19,
+    "aliases_match": 2,
+    "acl_rls_verified": true
   }
 }

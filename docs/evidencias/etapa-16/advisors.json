@@ -1,0 +1,19 @@
+{
+  "type": "security",
+  "error_findings": 0,
+  "findings": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 55,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1,
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+    }
+  ],
+  "interpretation": "INFO RLS sem policy corresponde a tabelas com ACL fechada e RPC autorizada; novos2objetos16 conferidos. WARN leaked password protection preexistente e inalterado; sem ativacao de servico/configuracao nesta etapa."
+}

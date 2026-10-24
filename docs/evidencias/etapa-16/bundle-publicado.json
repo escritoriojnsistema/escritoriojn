@@ -1,0 +1,48 @@
+{
+  "canonical": "https://escritoriojn.vercel.app",
+  "html": 200,
+  "health": 200,
+  "assets": [
+    {
+      "asset": "index-B4K0OOBE.css",
+      "sha256": "d914adcafb4a6e184883036cb9580226f6951527b508434d00aaf083daf27384",
+      "bytes": 72422,
+      "matches": true
+    },
+    {
+      "asset": "index-BLVsrAWP.js",
+      "sha256": "4dfa85367c7d2913757faf5d43551a4be39bae04b536ee68119b9768d59516ee",
+      "bytes": 388457,
+      "matches": true
+    },
+    {
+      "asset": "react-DYkIpRt7.js",
+      "sha256": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+      "bytes": 259235,
+      "matches": true
+    },
+    {
+      "asset": "rolldown-runtime-WkwZ5CU-.js",
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "bytes": 599,
+      "matches": true
+    },
+    {
+      "asset": "supabase-DtuMx0jC.js",
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "bytes": 214392,
+      "matches": true
+    }
+  ],
+  "anonymous_barriers": {
+    "correction": 401,
+    "correction-sources": 401,
+    "payment": 401,
+    "payments": 401,
+    "operate": 401,
+    "statement": 401,
+    "eligible-charges": 401,
+    "client-finance": 401
+  },
+  "scope": "Hosted read-only health/asset hashes and anonymous denials; authenticated financial business scenarios were exercised only in the disposable laboratory."
+}
