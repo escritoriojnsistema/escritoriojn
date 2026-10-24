@@ -97,5 +97,12 @@
     "function_bodies_match": 19,
     "aliases_match": 2,
     "acl_rls_verified": true
+  },
+  "unicode_patch": {
+    "evidence": "motivo-unicode.json",
+    "node_focused_passed": 11,
+    "auth_sdk_recheck_passed": 1,
+    "build_passed": true,
+    "no_sql_ui_global_reruns": true
   }
 }

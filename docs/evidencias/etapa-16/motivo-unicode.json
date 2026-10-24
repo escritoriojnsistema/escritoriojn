@@ -1,0 +1,42 @@
+{
+  "issue": "SQL aceita500codepoints suplementares no motivo; DTO contavaUTF16 e causava503em cash/statement",
+  "scope": "Somente reason na leitura de FinanceEntry em financeDto.ts; requestText global/autoridade/SQL/UI/engine/PDFmanifestos intactos",
+  "reproduction": {
+    "log": "etapa16-auth-unicode-red.log",
+    "sql_sdk_accepted": true,
+    "api_statement_before": 503,
+    "api_statement_after": 200,
+    "green_log": "etapa16-auth-unicode-green.log"
+  },
+  "node": {
+    "red_log": "etapa16-node-unicode-red.log",
+    "green_log": "etapa16-node-unicode-green.log",
+    "focused_passed": 11,
+    "new_distinct_case": 1,
+    "coverage": [
+      "500suplementares/mistos/BMP semtruncar",
+      "501rejeitado",
+      "minimo5codepoints",
+      "controles/nulo rejeitados"
+    ],
+    "note": "11focados incluem10casos existentes; nao somar como11novos ao152da base."
+  },
+  "auth": {
+    "passed": 1,
+    "note": "Rechecagem do mesmo fluxo16 com limiteUnicode; nao somar novo fluxo aos4anteriores."
+  },
+  "build": {
+    "passed": true,
+    "log": "etapa16-unicode-build.log",
+    "public_process_config_only": true,
+    "typecheck_client_server": true
+  },
+  "source_file": "server/modules/cash/financeDto.ts",
+  "source_sha256": "c2d33f8b23b65fe3206f1abf435b00302e856fdb3b225f9a758a0ac14dbfd510",
+  "compiled_local_file": "dist-server/server/modules/cash/financeDto.js",
+  "compiled_local_sha256": "25ca09ebe33e9ae6fe9aa943b4e8889862bb8bfe4424448fce018a36ab03557d",
+  "publication_method": "GitHub integration to Vercel, code/regressions/Livro/fecho in one PR; final commit/status in execution checkpoint to avoid self-referential docs cycle",
+  "backend_verification": "Fingerprint da fonte Git e buildlocal; deploy vinculado ao commit porstatusVercel. Nenhum teste autenticado/fixture hospedado. Health/assets e barreirasanon conferidos aposmerge. Nao alega hash do binario privado Vercel inacessivel pelo conector403.",
+  "new_migration": false,
+  "hosted_business_operations": 0
+}

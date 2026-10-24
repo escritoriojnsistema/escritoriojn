@@ -48,3 +48,8 @@ test('corrections16: presentation3 labels new events while presentation2 remains
  assert.equal(reportInputV3(r,events).events[0].actionLabel,'Alocação de pagamento estornada');assert.equal(reportInputV2({...r,renderer_version:2},events).events[0].actionLabel,'Evento de outro módulo');assert.throws(()=>reportInputV2(r,events));
 });
 void paymentsPage;
+test('corrections16: financial entry reason preserves500Unicode codepoints from SQL and rejects overflow or controls',()=>{
+ const parse=(reason:unknown)=>statement({session:{...session,cash_cents:14000,refunded_cents:2000},entries:[{id,kind:'refund_paid',created_at:source.created_at,amount_cents:2000,cash_cents:-2000,applied_cents:0,protocol:source.protocol,request_id:id,charge_id:id,payment_method_name:'Dinheiro',account_name:'Especie',reason,original_entry_id:id,refundable_cents:0,counted_cents:null,expected_cents:null}],total:1,page:1,page_size:5,can_receive:true});
+ for(const reason of ['🧾'.repeat(500),'a🧾'.repeat(250),'a'.repeat(500),'🧾'.repeat(5)])assert.equal(parse(reason).entries[0].reason,reason);
+ for(const reason of ['🧾'.repeat(501),'a'.repeat(501),'🧾'.repeat(4),'     ','Motivo\u0000inválido','Motivo\ninválido','Motivo\u007finválido',null])assert.throws(()=>parse(reason));
+});
