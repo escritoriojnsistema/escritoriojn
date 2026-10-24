@@ -1,0 +1,68 @@
+{
+  "canonical": "https://escritoriojn.vercel.app",
+  "assets": [
+    {
+      "asset": "index-Djf5P_fR.css",
+      "sha256": "e3a9befc47102eba5d6197d96695cca5cf11ae5b901663c22638373d23a1a92e",
+      "same_as_reviewed_build": true
+    },
+    {
+      "asset": "index-iGgz5ZpN.js",
+      "sha256": "f20b9d6f8798d3dc6084a737804ffd189452952b1e9ae248d0afd263670619f5",
+      "same_as_reviewed_build": true
+    },
+    {
+      "asset": "react-DYkIpRt7.js",
+      "sha256": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+      "same_as_reviewed_build": true
+    },
+    {
+      "asset": "rolldown-runtime-WkwZ5CU-.js",
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "same_as_reviewed_build": true
+    },
+    {
+      "asset": "supabase-DtuMx0jC.js",
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "same_as_reviewed_build": true
+    }
+  ],
+  "http_checks": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "path": "/auditoria",
+      "status": 200
+    },
+    {
+      "path": "/api/governance/audit?office_id=00000000-0000-4000-b000-000000000001",
+      "status": 401
+    },
+    {
+      "path": "/api/governance/audit/policy?office_id=00000000-0000-4000-b000-000000000001",
+      "status": 401
+    },
+    {
+      "path": "/api/governance/audit/export",
+      "method": "POST",
+      "status": 401
+    },
+    {
+      "path": "/api/governance/audit/verify",
+      "method": "POST",
+      "status": 401
+    },
+    {
+      "path": "/api/governance/audit/policy",
+      "method": "POST",
+      "status": 401
+    }
+  ],
+  "authenticated_hosted_business_operations": false
+}
