@@ -1,0 +1,8 @@
+{
+  "scenario": "30 comandos locais sequenciais, duas alocacoes cada, RPC+ledger+auditoria+avisos+extrato+pagina, inclui processo Docker/psql",
+  "samples": 30,
+  "median_ms": 178.46408900000097,
+  "p95_ms": 390.22066500000074,
+  "max_ms": 409.6664279999968,
+  "limitation": "Laboratorio descartavel; nao mede rede/browser hospedado ou SLA."
+}

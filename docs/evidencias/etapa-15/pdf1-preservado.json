@@ -1,0 +1,9 @@
+{
+  "presentation": 1,
+  "fixture": "amostra-input.json e amostra.pdf anteriores a15",
+  "byte_equal": true,
+  "original_sha256": "15f63d398282712d082effcbd9847f29674e5c47f88b43a33a724b3c34010f1f",
+  "regenerated_sha256": "15f63d398282712d082effcbd9847f29674e5c47f88b43a33a724b3c34010f1f",
+  "bytes": 29027,
+  "exception": "Manifesto1 histórico preservado; somente entrada body-parser no lock atual mudou2.3.0→2.4.0. Engine/fontes/PDFKit/depêndenciasPDF idênticos."
+}

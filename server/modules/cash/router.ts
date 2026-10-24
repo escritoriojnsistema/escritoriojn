@@ -1,3 +1,5 @@
+import {validPaymentOperation} from '../../../shared/payments.js';
+import {paymentsPage} from './paymentDto.js';
 import {validFinanceOperation} from '../../../shared/finance.js';
 import {statement,financialCharges,clientFinance} from './financeDto.js';
 import {Router,json,type Response} from 'express';
@@ -25,3 +27,6 @@ cashRouter.post('/client-finance',async(req,res)=>{const b:unknown=req.body;if(O
 cashRouter.post('/operate',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','operation'])||!uuid(b.office_id)||!validFinanceOperation(b.operation)){invalid(res);return;}await rpc(res,'cash_operate',{p_office_id:b.office_id,p_operation:b.operation},statement);});
 
 cashRouter.post('/dashboard-filtered',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','scope','page','page_size','unit_id','status','query'])||!uuid(b.office_id)||!['own','all'].includes(String(b.scope))||!positive(b.page,100000)||![3,5].includes(Number(b.page_size))||typeof b.page_size!=='number'||!(b.unit_id===null||uuid(b.unit_id))||!['all','open','closed'].includes(String(b.status))||!requestText(b.query,120,0)){invalid(res);return;}await rpc(res,'cash_dashboard_filtered',{p_office_id:b.office_id,p_scope:b.scope,p_page:b.page,p_page_size:b.page_size,p_unit_id:b.unit_id,p_status:b.status,p_query:b.query},dashboard);});
+
+cashRouter.post('/payments',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','session_id','page'])||!uuid(b.office_id)||!uuid(b.session_id)||!positive(b.page,100000)){invalid(res);return;}await rpc(res,'cash_payments_page',{p_office_id:b.office_id,p_session_id:b.session_id,p_page:b.page},paymentsPage);});
+cashRouter.post('/payment',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','operation'])||!uuid(b.office_id)||!validPaymentOperation(b.operation)){invalid(res);return;}await rpc(res,'payment_operate',{p_office_id:b.office_id,p_operation:b.operation},statement);});

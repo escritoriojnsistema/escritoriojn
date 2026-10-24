@@ -1,3 +1,4 @@
+import {paymentsPage} from './paymentDto.js';
 import type {ClientFinance,FinanceCharge,FinanceCharges,FinanceEntry,FinanceSession,FinanceStatement} from '../../../shared/finance.js';
 import {cashInteger} from '../../../shared/cash.js';
 import {validChargeDate} from '../../../shared/charges.js';
@@ -17,7 +18,7 @@ export function statement(v:unknown):FinanceStatement{
  if(!record(v)||!record(v.session)||!Array.isArray(v.entries)||v.entries.length>5||!total(v.total)||!positive(v.page,100000)||v.page_size!==5||typeof v.can_receive!=='boolean')return invalid();const s=v.session;
  if((s.cash_account_id!==undefined&&!uuid(s.cash_account_id))||!uuid(s.id)||!uuid(s.unit_id)||!requestText(s.unit_name,120)||!requestText(s.operator_name,120)||!positive(s.version,2147483646)||!['open','closed'].includes(String(s.status))||!time(s.opened_at)||!(s.closed_at===null||time(s.closed_at))||!cashInteger(s.opening_cents)||!cashInteger(s.cash_cents)||!total(s.received_cents)||!total(s.refunded_cents)||!total(s.digital_cents,-Number.MAX_SAFE_INTEGER)||['is_self','can_operate','can_refund'].some(k=>typeof s[k]!=='boolean')||(!s.is_self&&(s.can_operate||s.can_refund||v.can_receive)))return invalid();
  const session:FinanceSession={...(typeof s.cash_account_id==='string'?{cash_account_id:s.cash_account_id}:{}),id:s.id,unit_id:s.unit_id,unit_name:s.unit_name,operator_name:s.operator_name,is_self:s.is_self as boolean,status:s.status as FinanceSession['status'],version:s.version,opened_at:s.opened_at,closed_at:s.closed_at,opening_cents:s.opening_cents as number,cash_cents:s.cash_cents as number,received_cents:s.received_cents as number,refunded_cents:s.refunded_cents as number,digital_cents:s.digital_cents,can_operate:s.can_operate as boolean,can_refund:s.can_refund as boolean};
- return {session,entries:v.entries.map(e=>entry(e,false) as FinanceEntry),total:v.total,page:v.page,page_size:5,can_receive:v.can_receive};
+ return {session,entries:v.entries.map(e=>entry(e,false) as FinanceEntry),total:v.total,page:v.page,page_size:5,can_receive:v.can_receive,...(v.payments===undefined?{}:{payments:paymentsPage(v.payments)})};
 }
 function charge(v:unknown):FinanceCharge{
  if(!record(v)||!uuid(v.id)||!uuid(v.request_id)||!requestText(v.protocol,80)||!positive(v.version,2147483646)||!['open','paid','cancelled','zero'].includes(String(v.status))||['due_cents','paid_cents','balance_cents'].some(k=>!cashInteger(v[k]))||Number(v.due_cents)-Number(v.paid_cents)!==v.balance_cents||!Array.isArray(v.services)||v.services.length>10||v.services.some(x=>!requestText(x,120))||!Array.isArray(v.installments)||v.installments.length>12)return invalid();

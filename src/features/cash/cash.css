@@ -43,3 +43,72 @@
 .cash-list-filters{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin:14px 0}.cash-list-filters>.team-field{flex:1 1 150px}.cash-list-filters .secondary-button{min-height:44px}.cash-setup-notice{margin-bottom:14px;padding:12px 0}.cash-setup-steps{display:flex;flex-wrap:wrap;gap:8px 28px;font-size:13px;padding-left:20px;color:#426174}.cash-statement h2{font-size:20px}.cash-statement h3{font-size:17px}.finance-totals{grid-template-columns:repeat(3,minmax(0,1fr));padding:12px 0;border-block:1px solid #dce4e8}.finance-operation{padding:12px 0;border-block:1px solid #dce4e8}.finance-operation>.team-field{margin-block:12px}.finance-ledger{list-style:none;padding:0;margin:0}.finance-ledger>li{padding:14px 0;border-bottom:1px solid #dce4e8}.finance-ledger details summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:13px}.finance-ledger details p{font-size:13px;overflow-wrap:anywhere}.finance-ledger details small{display:block;color:#617887;overflow-wrap:anywhere}.cash-configuration .cash-setup-steps{margin-top:0}.cash-statement .team-section-heading{justify-content:space-between}
 @media(max-width:600px){.finance-totals{grid-template-columns:repeat(2,minmax(0,1fr))}.cash-list-filters{gap:8px}.cash-list-filters>.team-field{flex-basis:120px}.finance-operation .cash-config-grid{grid-template-columns:1fr}.cash-setup-steps{display:block;line-height:1.8}.cash-main .team-field textarea{font-size:16px}}
 @media(max-width:360px){.finance-totals>div:last-child{grid-column:auto}}
+
+.cash-payments { min-width:0; margin-block:12px; border-top:1px solid #dce4e8; }
+.cash-payments>.team-section-heading { flex-wrap:wrap; gap:4px 12px; }
+.cash-payments h3 { margin-block:10px; }
+.cash-payments .account-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.cash-payment-editor { min-width:0; }
+.cash-payment-editor h4 { font-size:16px; margin:0 0 12px; }
+.cash-payment-editor h4:focus { outline:2px solid #aa7d36; outline-offset:4px; }
+.cash-payment-editor .cash-list-filters { margin-top:0; }
+.cash-allocation-list,.cash-payment-history { list-style:none; padding:0; margin:10px 0; }
+.cash-allocation-list>li { display:grid; grid-template-columns:minmax(0,1fr) minmax(130px,.6fr) auto; gap:10px; align-items:end; border-bottom:1px solid #e1e8ec; padding-block:8px; }
+.cash-allocation-list>li>div { display:flex; flex-direction:column; min-width:0; font-size:13px; overflow-wrap:anywhere; }
+.cash-allocation-list .customer-note { font-size:12px; }
+.cash-payment-editor .cash-config-grid { margin-block:12px; }
+.cash-payment-totals { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.cash-evidence { margin-top:10px; }
+.cash-main .team-field textarea { width:100%; min-width:0; min-height:70px; resize:vertical; border:1px solid #d3dfe6; border-radius:8px; background:#fff; color:#193448; padding:9px 11px; font-size:14px; box-shadow:none; }
+.cash-main .team-field textarea:disabled { background:#f1f4f5; color:#627989; }
+.cash-payment-history>li { padding:12px 0; border-bottom:1px solid #dce4e8; min-width:0; overflow-wrap:anywhere; }
+.cash-payment-history .cash-session-heading { flex-wrap:wrap; align-items:start; }
+.cash-payment-status { padding:4px 8px; background:#edf3f0; border-radius:6px; }
+.cash-payment-history .cash-payment-pending { background:#fbf3e6; color:#79521e; }
+.cash-payment-history .cash-payment-rejected { background:#f6ece8; color:#843c25; }
+.cash-payment-allocation-summary { padding-left:18px; margin-block:8px; font-size:13px; line-height:1.7; }
+.cash-payment-reference { min-width:0; font-size:13px; margin-block:6px; }
+.cash-payment-reference summary { min-height:44px; display:flex; align-items:center; cursor:pointer; }
+.cash-payment-reference p { overflow-wrap:anywhere; }
+.cash-payment-destinations { margin-block:12px; min-width:0; }
+.cash-payment-destinations h4 { margin-block:8px; font-size:14px; }
+.cash-payment-destinations>ul { list-style:none; padding:0; margin:0; }
+.cash-payment-destinations>ul>li { padding-block:8px; border-bottom:1px solid #dce4e8; font-size:13px; overflow-wrap:anywhere; }
+.cash-destination-totals { grid-template-columns:repeat(5,minmax(0,1fr)); }
+.cash-destination-totals dd { font-size:15px; }
+.cash-payments .team-pagination { flex-wrap:wrap; }
+.cash-payments button { white-space:normal; max-width:100%; }
+@media(max-width:600px) {
+ .cash-allocation-list>li { grid-template-columns:minmax(0,1fr) auto; gap:8px; }
+ .cash-allocation-list>li>div { grid-column:1/-1; }
+ .cash-payment-editor .cash-config-grid { grid-template-columns:1fr; gap:10px; }
+ .cash-payment-history .cash-totals dd { font-size:15px; }
+ .cash-payment-totals { gap:8px; }
+ .cash-payment-totals>div:last-child { grid-column:auto; }
+ .cash-destination-totals { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .cash-payments>.team-section-heading>.account-actions { flex:1 1 100%; margin-top:0; }
+}
+@media(max-width:900px) { .cash-main .team-field textarea { font-size:16px; } }
+/* Receipt editing keeps only the context needed to confirm the current command. */
+.cash-editing-summary { margin-block:4px; border-bottom:1px solid #dce4e8; }
+.cash-editing-summary>summary { min-height:44px; display:flex; align-items:center; cursor:pointer; gap:8px; font-size:14px; overflow-wrap:anywhere; }
+.cash-payments:has(.cash-payment-editor) { margin-block:4px; border-top:0; }
+.cash-payment-editor { border-top:0; padding-top:4px; }
+.cash-payment-editor .cash-list-filters { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; align-items:end; margin-bottom:8px; }
+.cash-payment-editor .cash-list-filters>.secondary-button { width:auto; }
+.cash-charge-picker>.team-pagination { margin-block:0; }
+.cash-add-charge { min-height:44px; }
+.cash-payment-editor .cash-receipt-fields { grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-block:8px; }
+.cash-payment-editor .cash-allocation-list { margin-block:0 6px; }
+.cash-payment-editor .cash-payment-totals { margin-block:6px; }
+.cash-payment-editor .customer-note { margin-block:6px; }
+.cash-payment-editor .cash-evidence { margin-top:6px; }
+.cash-main:has(.cash-payment-editor)>.operation-heading { margin-bottom:8px; }
+.cash-main:has(.cash-payment-editor)>.operation-heading p:not(.eyebrow) { display:none; }
+@media(max-width:900px) {
+ .cash-payment-editor .cash-receipt-fields { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .cash-payment-editor .cash-receipt-fields>.team-field:first-child { grid-column:1/-1; }
+ .cash-payment-editor .cash-list-filters { grid-template-columns:minmax(0,1fr); }
+}
+.cash-main:has(.cash-payment-editor)>.cash-toolbar { display:none; }
+.cash-statement:has(.cash-payment-editor)>.team-section-heading { margin-block:2px; }

@@ -1,0 +1,36 @@
+import {test,expect} from '@playwright/test';
+import {createClient} from '@supabase/supabase-js';
+import {randomUUID} from 'node:crypto';
+import {emptyService} from '../../shared/services';
+import type {FinanceStatement} from '../../shared/finance';
+const url=process.env.AUTH_LAB_URL!,key=process.env.VITE_SUPABASE_PUBLISHABLE_KEY!,office=process.env.AUTH_LAB_OFFICE!,password=process.env.AUTH_LAB_PASSWORD!;
+test('Etapa15 real: contrato API/SDK, troco, pendencia, split, taxa/liquidacao e RPC invalida sem contaminar consulta',async({request})=>{
+ const sdk=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}}),customer=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}});
+ const signed=await sdk.auth.signInWithPassword({email:'manager@example.test',password});expect(signed.error).toBeNull();expect((await customer.auth.signInWithPassword({email:'portalclient@example.test',password})).error).toBeNull();
+ const headers={Authorization:`Bearer ${signed.data.session!.access_token}`};
+ async function post<T>(path:string,body:unknown,status=200):Promise<T>{const r=await request.post('/api/'+path,{headers,data:{office_id:office,...body as object}});expect(r.status(),await r.text()).toBe(status);return status===200||status===201?(await r.json()).data as T:undefined as T;}
+ try{
+ const service=await post<{id:string}>('services',{service:{...emptyService,code:'P15-'+randomUUID().slice(0,6).toUpperCase(),name:'Pagamentos15 locais',category:'Laboratorio',price_cents:10000},reason:'Servico ficticio para teste15'},201);
+ const charges:string[]=[];
+ for(let n=0;n<3;n++){const rq=await post<{id:string}>('requests',{idempotency_key:randomUUID(),request:{origin:'presencial',title:'Recebimento15 local '+n,customer_id:null,assignee_id:null,priority:'normal',priority_reason:'',internal_note:'',items:[{service_id:service.id,quantity:1,adjustment:{kind:'none',value:0,reason:''},fields:{},participant_ids:[],checklist:[]}] }},201);const c=await post<{charge:{id:string}}>('charges/create',{request_id:rq.id,installments:[{due_date:'2026-12-01',amount_cents:10000}],idempotency_key:randomUUID()});charges.push(c.charge.id);}
+ const config=async(data:object)=>(await post<{resource:{id:string}}>('cash/configure',{configuration:data,idempotency_key:randomUUID()})).resource.id;
+ const unit=await config({kind:'unit',id:null,expected_version:null,name:'Pagamentos15 reais locais',active:true}),cash=await config({kind:'account',id:null,expected_version:null,name:'Especie15 local',active:true,unit_id:unit,type:'cash'}),bank=await config({kind:'account',id:null,expected_version:null,name:'Banco15 local',active:true,unit_id:unit,type:'bank'});
+ const methods:Record<string,string>={};for(const type of ['cash','pix','card'])methods[type]=await config({kind:'payment_method',id:null,expected_version:null,name:'Metodo15 '+type,active:true,unit_id:unit,type,destination_account_id:type==='cash'?cash:bank});
+ const opened=await post<{sessions:{id:string;unit_id:string}[]}>('cash/open',{unit_id:unit,cash_account_id:cash,opening_cents:10000,idempotency_key:randomUUID()}),session=opened.sessions.find(s=>s.unit_id===unit)!.id;
+ const record=(amount:number,type='cash',status='confirmed',index=0,version=1)=>({kind:'record',session_id:session,expected_version:version,idempotency_key:randomUUID(),evidence:'Conferencia manual inteiramente local',payment_method_id:methods[type],status,allocations:[{charge_id:charges[index],expected_charge_version:1,amount_cents:amount}],presented_cents:type==='cash'?amount:null,fee_cents:0,settlement:type==='card'?'pending':'not_applicable',settled_on:null,external_reference:null});
+ const op={...record(3000),presented_cents:5000};const received=await post<FinanceStatement>('cash/payment',{operation:op});expect(received.session).toMatchObject({cash_cents:13000,received_cents:3000,version:2});expect(received.payments!.items[0]).toMatchObject({presented_cents:5000,change_cents:2000,status:'confirmed'});
+ expect(await post<FinanceStatement>('cash/payment',{operation:op})).toEqual(received);await post('cash/payment',{operation:{...op,presented_cents:5100}},409);
+ const pending=await post<FinanceStatement>('cash/payment',{operation:record(4000,'pix','pending',0,2)});expect(pending.session).toMatchObject({cash_cents:13000,received_cents:3000,version:2});expect(pending.payments!.items[0].status).toBe('pending');
+ const confirm={kind:'confirm',session_id:session,expected_version:2,idempotency_key:randomUUID(),payment_id:pending.payments!.items[0].id,evidence:'PIX conferido no laboratorio local'};const pix=await post<FinanceStatement>('cash/payment',{operation:confirm});expect(pix.session).toMatchObject({cash_cents:13000,digital_cents:4000,received_cents:7000,version:3});
+ const cardop={...record(3000,'card','confirmed',1,3),fee_cents:150};for(const bad of ['10000-01-01','infinity','0000-01-01','2026-2-01','2026-02-30','2026-10-24T00:00:00Z',20261024,true,null]){const rejected=await sdk.rpc('payment_operate',{p_office_id:office,p_operation:{...cardop,idempotency_key:randomUUID(),settlement:'settled',settled_on:bad}});expect(rejected.error?.code).toBe('PT422');}
+ const card=await post<FinanceStatement>('cash/payment',{operation:cardop});expect(card.payments!.items[0]).toMatchObject({fee_cents:150,net_cents:2850,settlement:'pending'});
+ for(const bad of ['10000-01-01','infinity','0000-01-01','2026-2-01','2026-02-30','2026-10-24T00:00:00Z',20261024,true]){
+  const badop={kind:'settle',session_id:session,expected_version:4,idempotency_key:randomUUID(),payment_id:card.payments!.items[0].id,evidence:'Data invalida no SDK local',settled_on:bad};const rejected=await sdk.rpc('payment_operate',{p_office_id:office,p_operation:badop});expect(rejected.error?.code).toBe('PT422');
+ }
+ const page=await post<{items:{settlement:string}[]}>('cash/payments',{session_id:session,page:1});expect(page.items[0].settlement).toBe('pending');
+ const settled=await post<FinanceStatement>('cash/payment',{operation:{kind:'settle',session_id:session,expected_version:4,idempotency_key:randomUUID(),payment_id:card.payments!.items[0].id,evidence:'Liquidacao bancaria manual ficticia',settled_on:'2026-10-24'}});expect(settled.session.received_cents).toBe(10000);expect(settled.payments!.items[0].settlement).toBe('settled');
+ const unauthorized=await customer.rpc('payment_operate',{p_office_id:office,p_operation:record(1,'pix','pending',2,4)});expect(unauthorized.error?.code).toBe('PT403');
+ const legacy=await sdk.rpc('cash_operate',{p_office_id:office,p_operation:{kind:'receive',session_id:session,expected_version:4,idempotency_key:randomUUID(),charge_id:charges[2],expected_charge_version:1,payment_method_id:methods.cash,amount_cents:1}});expect(legacy.error?.code).toBe('PT422');
+ const splitop={...record(3000,'pix','confirmed',0,4),allocations:[{charge_id:charges[0],expected_charge_version:1,amount_cents:3000},{charge_id:charges[2],expected_charge_version:1,amount_cents:2000}]};const split=await post<FinanceStatement>('cash/payment',{operation:splitop});expect(split.session).toMatchObject({received_cents:15000,cash_cents:13000,version:6});expect(split.payments!.items[0].allocations).toHaveLength(2);
+ }finally{await sdk.auth.dispose();await customer.auth.dispose();}
+});
