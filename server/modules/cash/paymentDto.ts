@@ -1,0 +1,18 @@
+import type {Payment,PaymentDestination,PaymentsPage} from '../../../shared/payments.js';
+import {cashInteger} from '../../../shared/cash.js';
+import {validChargeDate} from '../../../shared/charges.js';
+import {record,uuid} from '../team/validation.js';
+import {requestText,positive} from '../requests/validation.js';
+const invalid=():never=>{throw Error('Invalid payment response');};
+function payment(v:unknown):Payment{
+ if(!record(v)||!uuid(v.id)||v.reference!==`JN-PAG-${v.id}`||typeof v.created_at!=='string'||!Number.isFinite(Date.parse(v.created_at))||!cashInteger(v.amount_cents,1)||!['cash','pix','card','transfer'].includes(String(v.payment_type))||!['pending','confirmed','rejected','partially_reversed','reversed'].includes(String(v.status))||!['not_applicable','pending','settled','unknown'].includes(String(v.settlement))||typeof v.legacy!=='boolean'||!requestText(v.method_name,120)||!requestText(v.account_name,120)||!(v.evidence===null||requestText(v.evidence,500,5))||!(v.external_reference===null||requestText(v.external_reference,120))||!(v.settled_on===null||validChargeDate(v.settled_on))||['presented_cents','change_cents','fee_cents','net_cents'].some(k=>v[k]!==null&&!cashInteger(v[k]))||!Array.isArray(v.allocations)||v.allocations.length<1||v.allocations.length>10)return invalid();
+ const allocations=v.allocations.map(a=>{if(!record(a)||!uuid(a.charge_id)||!requestText(a.protocol,80)||!cashInteger(a.amount_cents,1))return invalid();return {charge_id:a.charge_id,protocol:a.protocol,amount_cents:a.amount_cents};});
+ if(new Set(allocations.map(a=>a.charge_id)).size!==allocations.length||allocations.reduce((n,a)=>n+a.amount_cents,0)!==v.amount_cents||(v.presented_cents!==null&&(Number(v.presented_cents)-Number(v.change_cents)!==v.amount_cents))||(v.fee_cents!==null&&(Number(v.amount_cents)-Number(v.fee_cents)!==v.net_cents)))return invalid();
+ return {id:v.id,reference:v.reference,created_at:v.created_at,amount_cents:v.amount_cents,presented_cents:v.presented_cents as number|null,change_cents:v.change_cents as number|null,fee_cents:v.fee_cents as number|null,net_cents:v.net_cents as number|null,payment_type:v.payment_type as Payment['payment_type'],method_name:v.method_name,account_name:v.account_name,legacy:v.legacy,status:v.status as Payment['status'],settlement:v.settlement as Payment['settlement'],settled_on:v.settled_on,evidence:v.evidence,external_reference:v.external_reference,allocations};
+}
+export function paymentsPage(v:unknown):PaymentsPage{
+ if(!record(v)||!Array.isArray(v.items)||v.items.length>5||!Number.isSafeInteger(v.total)||Number(v.total)<0||!positive(v.page,100000))return invalid();const destinations=v.destinations===undefined?undefined:!Array.isArray(v.destinations)?invalid():v.destinations.map(d=>{
+ if(!record(d)||!requestText(d.account_name,120)||!['cash','pix','card','transfer'].includes(String(d.payment_type))||['received_cents','returned_cents'].some(k=>!Number.isSafeInteger(d[k])||Number(d[k])<0)||['fee_cents','settled_cents'].some(k=>d[k]!==null&&(!Number.isSafeInteger(d[k])||Number(d[k])<0))||!(d.net_cents===null||Number.isSafeInteger(d.net_cents))||((d.fee_cents===null)!==(d.net_cents===null))||(d.fee_cents!==null&&Number(d.received_cents)-Number(d.returned_cents)-Number(d.fee_cents)!==d.net_cents))return invalid();
+ return {account_name:d.account_name,payment_type:d.payment_type,received_cents:d.received_cents,returned_cents:d.returned_cents,fee_cents:d.fee_cents,net_cents:d.net_cents,settled_cents:d.settled_cents} as PaymentDestination;
+ });return {items:v.items.map(payment),total:v.total as number,page:v.page,...(destinations===undefined?{}:{destinations})};
+}

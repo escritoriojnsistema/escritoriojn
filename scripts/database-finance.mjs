@@ -18,7 +18,7 @@ export async function raceFinance({sql,openSql,until}){
   const receive={kind:'receive',session_id:session.id,expected_version:1,idempotency_key:randomUUID(),charge_id:charge.id,expected_charge_version:1,payment_method_id:method.id,amount_cents:3000};
   return {session,receive,actor};
  };
- const op=payload=>`SELECT public.cash_operate('${office}',${lit(payload)})`;
+ const op=payload=>`SELECT test.cash_operate('${office}',${lit(payload)})`;
  for(const kind of ['receive-same','receive-distinct','refund','close-versus-receive']){
   const f=fixture();let first=f.receive,second={...f.receive,idempotency_key:kind==='receive-same'?f.receive.idempotency_key:randomUUID()};
   if(kind==='refund'){

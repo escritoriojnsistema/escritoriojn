@@ -1,0 +1,14 @@
+{
+  "units": 0,
+  "ledger": 0,
+  "charges": 0,
+  "accounts": 0,
+  "requests": 1,
+  "customers": 1,
+  "auth_users": 5,
+  "migrations": 21,
+  "memberships": 5,
+  "audit_events": 30,
+  "individual_grants": 17,
+  "migration15_present": false
+}

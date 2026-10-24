@@ -1,3 +1,4 @@
+import type {PaymentOperation,PaymentsPage} from '../../../shared/payments';
 import type {CashFilters} from '../../../shared/cash';
 import type {FinanceStatement,FinanceOperation,FinanceCharges,ClientFinance} from '../../../shared/finance';
 import type {CashDashboard,CashConfiguration,CashConfigurationResult,CashConfigure,CashOpen} from '../../../shared/cash';
@@ -111,6 +112,8 @@ async function request<T>(
   }
 }
 export const cashApi={
+ payment:(office_id:string,operation:PaymentOperation,signal?:AbortSignal)=>request<FinanceStatement>('/payment','POST',{office_id,operation},signal),
+ payments:(office_id:string,session_id:string,page=1,signal?:AbortSignal)=>request<PaymentsPage>('/payments','POST',{office_id,session_id,page},signal),
  statement:(office_id:string,session_id:string,page=1,signal?:AbortSignal)=>request<FinanceStatement>('/statement','POST',{office_id,session_id,page},signal),
  eligibleCharges:(office_id:string,query:string,page=1,signal?:AbortSignal)=>request<FinanceCharges>('/eligible-charges','POST',{office_id,query,page},signal),
  operate:(office_id:string,operation:FinanceOperation,signal?:AbortSignal)=>request<FinanceStatement>('/operate','POST',{office_id,operation},signal),

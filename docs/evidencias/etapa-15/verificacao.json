@@ -1,0 +1,110 @@
+{
+  "stage": 15,
+  "status": "validated_ready_for_publication",
+  "database": {
+    "replays": [
+      907,
+      908
+    ],
+    "historical_backfill_checks": 6,
+    "details": [
+      "partial60_then40",
+      "cash30_tender50_change20_opening100_expected130",
+      "PIX40_keeps_cash130",
+      "same_key_same_result_different_payload_conflict",
+      "different_sessions_cannot_overallocate",
+      "failure_on_second_allocation_rolls_back_every_layer",
+      "pending_confirmation_rejection",
+      "fee_gross_net_settlement",
+      "old_refund_and_close_preserved",
+      "RLS_ACL_isolation_auth_revocation_under_lock",
+      "P2_snapshot_method_and_canonical_dates",
+      "totals_by_destination_independent_of_pagination"
+    ]
+  },
+  "node": {
+    "full_suite_before_parser_fix": 144,
+    "affected_after_parser_fix": 22,
+    "destinations_api": 7,
+    "full_suite_after_parser_fix": 146
+  },
+  "pdf1": {
+    "presentation": 1,
+    "fixture": "amostra-input.json e amostra.pdf anteriores a15",
+    "byte_equal": true,
+    "original_sha256": "15f63d398282712d082effcbd9847f29674e5c47f88b43a33a724b3c34010f1f",
+    "regenerated_sha256": "15f63d398282712d082effcbd9847f29674e5c47f88b43a33a724b3c34010f1f",
+    "bytes": 29027,
+    "exception": "Manifesto1 histórico preservado; somente entrada body-parser no lock atual mudou2.3.0→2.4.0. Engine/fontes/PDFKit/depêndenciasPDF idênticos."
+  },
+  "dependencies_production": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "limitations": [
+    "no hosted business fixtures, money or new individual grants",
+    "no GitHub Actions or Vercel CLI/API deploy"
+  ],
+  "diagnosed_failures": [
+    "command-finalization GUC restored after internal subcommands",
+    "local SQL fixture services privilege and missing request reference corrected",
+    "historical assertion changed to lateral set-returning query",
+    "new AuditEvent test fixture actor_id supplied",
+    "Auth audit regression test selects official renderer version",
+    "Legacy UI fixture supplied official cash_account_id",
+    "401 UI contract expects SDK sign-out and login redirect",
+    "Filled textarea located by accessible textbox name",
+    "Compact editor hides toolbar; contracts inspect hidden DOM disabled state while checking visible back/cancel remain blocked",
+    "UI runner uses installed Chromium explicitly; missing Playwright cache was an environment failure, not a product failure"
+  ],
+  "auth": {
+    "distinct_passed": 4,
+    "flows": [
+      "payments API/SDK and invalid raw RPC dates",
+      "cash individual opening and authorization",
+      "browser receipt, own portal, notices, refund and close",
+      "audit policy, versioned PDF canonical verification and revoked access"
+    ],
+    "audit_recheck": "Old test forced reportInputV1 for a newly produced version2 snapshot; version-aware test passed in isolation."
+  },
+  "ui": {
+    "distinct_affected_contracts": 67,
+    "compact_scope": 36,
+    "compact_initial_passed": 33,
+    "focused_recheck_passed": 7,
+    "layouts_rechecked_after_zoom_submission": 3,
+    "no_parallel_playwright": true,
+    "geometry": {
+      "320": {
+        "width": 320,
+        "viewport_height": 740,
+        "confirmation_bottom": 948,
+        "document_height": 1047
+      },
+      "360": {
+        "width": 360,
+        "viewport_height": 740,
+        "confirmation_bottom": 912,
+        "document_height": 1011
+      },
+      "1440": {
+        "width": 1440,
+        "viewport_height": 900,
+        "confirmation_bottom": 754,
+        "document_height": 900
+      }
+    },
+    "manual_inspection": "Executor and auxiliary inspected viewport/fullPage; coordinator independent inspection follows. Mobile uses natural vertical scroll; no horizontal overflow, 16px inputs and44px targets."
+  },
+  "build": {
+    "passed": true,
+    "public_environment": "Isolated process; active public key matched canonical bundle; no .env.local used",
+    "typecheck": true,
+    "server_compilation": true,
+    "vite_build": true
+  }
+}

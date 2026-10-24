@@ -5,6 +5,7 @@ import { errorResponse } from '../../errors.js';
 import { fields, record, uuid } from '../team/validation.js';
 import { createAuditPdf } from './auditPdf.js';
 import { reportInputV1 } from './reportV1.js';
+import { reportInputV2 } from './reportV2.js';
 import { auditReportMaxBytes, auditReportMaxEvents, type AuditEvent, type AuditReport } from '../../../shared/governance.js';
 
 export const governanceRouter=Router();
@@ -52,7 +53,7 @@ async function pdf(res:Response,source:Record<string,unknown>):Promise<Buffer|nu
     events.push(...chunk.items as AuditEvent[]);
   }
   if(res.destroyed)return null;
-  const output=Buffer.from(await createAuditPdf(reportInputV1(report,events)));
+  const output=Buffer.from(await createAuditPdf((report.renderer_version===2?reportInputV2:reportInputV1)(report,events)));
   if(output.length>auditReportMaxBytes){errorResponse(res,422,'EXPORT_LIMIT',messages.EXPORT_LIMIT);return null;}
   if(output.subarray(0,5).toString()!=='%PDF-')throw new Error('Invalid PDF');
   return output;

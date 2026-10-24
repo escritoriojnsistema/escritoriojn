@@ -1,3 +1,5 @@
+import {verifyPaymentHistory} from './database-payment-history.mjs';
+import {racePayments,benchmarkPayments} from './database-payments.mjs';
 import {raceAudit} from './database-audit.mjs';
 import {raceFinance} from './database-finance.mjs';
 import {raceCash,benchmarkCash} from './database-cash.mjs';
@@ -709,16 +711,24 @@ try {
     CREATE ROLE migrator LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS;
   `);
   const migrations = readdirSync(`${root}supabase/migrations`).filter(name => name.endsWith('.sql')).sort();
-  for (const database of ['foundation_replay_a', 'foundation_replay_b']) {
+  for (const database of process.env.JN_DB_HISTORY_PAYMENTS==='1'?[]:['foundation_replay_a', 'foundation_replay_b']) {
     sql('postgres', 'postgres', `CREATE DATABASE ${database} OWNER migrator;`);
     sql(database, 'postgres', readFileSync(`${root}tests/database/bootstrap.sql`, 'utf8'));
     for (const migration of migrations) {
       sql(database, 'migrator', `BEGIN;\n${readFileSync(`${root}supabase/migrations/${migration}`, 'utf8')}\nCOMMIT;`);
     }
+    sql(database,'postgres',readFileSync(`${root}tests/database/payment-compat.sql`,'utf8'));
     if(process.env.JN_DB_FOCUS_AUDIT==='1'){
       let result='';for(const suite of ['access','auth','team','governance','audit-reports'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
       result+=await raceAudit({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
       console.log(`${database} auditoria (${result.split('\n').filter(line=>line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);continue;
+    }
+    if(process.env.JN_DB_FOCUS_PAYMENTS==='1'){
+      let result='';for(const suite of ['access','auth','team','governance','audit-reports','customers','customer-registration','customer-relations','services','requests','attachments','checklists','adjustments','account','charges','cash','finance','payments'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
+      result+=await raceFinance({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+      result+=await racePayments({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+      if(database==='foundation_replay_b')result+=benchmarkPayments({sql:input=>sql(database,'postgres',input)});
+      console.log(`${database} pagamentos (${result.split('\n').filter(line=>line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);continue;
     }
     const result = sql(database, 'postgres', readFileSync(`${root}tests/database/access.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/auth.sql`, 'utf8'))
@@ -737,6 +747,7 @@ try {
       + sql(database, 'postgres', readFileSync(`${root}tests/database/charges.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/cash.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/finance.sql`, 'utf8'))
+      + sql(database, 'postgres', readFileSync(`${root}tests/database/payments.sql`, 'utf8'))
       + sql(database, 'postgres', readFileSync(`${root}tests/database/team-concurrency.sql`, 'utf8'))
       + await raceAudit({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceLastOwners(database)
@@ -765,6 +776,7 @@ try {
       + await raceReclaim({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceAccount({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceCash({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
+      + await racePayments({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceFinance({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceCharges({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until})
       + await raceRequestAuthority(database,false)
@@ -779,7 +791,12 @@ try {
     await benchmarkCharges({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});await benchmarkCustomerRelations(database);await benchmarkServices(database);await benchmarkRequests(database);await benchmarkAttachments({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});}
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
-  console.log('PASS: dois replays vazios, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.');
+  if(process.env.JN_DB_FOCUS_PAYMENTS==='1'||process.env.JN_DB_HISTORY_PAYMENTS==='1'){
+    const history='foundation_history15';sql('postgres','postgres',`CREATE DATABASE ${history} OWNER migrator;`);sql(history,'postgres',readFileSync(`${root}tests/database/bootstrap.sql`,'utf8'));
+    for(const file of migrations.filter(n=>n<'20261024032407'))sql(history,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+    console.log(verifyPaymentHistory({root,migrations:migrations.filter(n=>n>='20261024032407'),sql:(user,input)=>sql(history,user,input)}).trim());
+  }
+  console.log(process.env.JN_DB_HISTORY_PAYMENTS==='1'?'PASS: migracao de historico15 e replay antigo reais.':'PASS: dois replays vazios, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.');
 } catch (error) {
   console.error(error.stderr?.toString() || error.message);
   process.exitCode = 1;
