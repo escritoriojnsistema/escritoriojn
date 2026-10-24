@@ -1,0 +1,19 @@
+{
+  "type": "security",
+  "errors": 0,
+  "notices": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "title": "RLS Enabled No Policy",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "title": "Leaked Password Protection Disabled",
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+    }
+  ],
+  "assessment": "No ERROR. RLS without policies is intentional for private tables with raw ACL closed. Leaked password protection warning predates15; no service/configuration change in this domain."
+}

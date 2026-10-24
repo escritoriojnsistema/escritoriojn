@@ -1,6 +1,6 @@
 {
   "stage": 15,
-  "status": "validated_ready_for_publication",
+  "status": "published_verified",
   "database": {
     "replays": [
       907,
@@ -98,7 +98,7 @@
         "document_height": 900
       }
     },
-    "manual_inspection": "Executor and auxiliary inspected viewport/fullPage; coordinator independent inspection follows. Mobile uses natural vertical scroll; no horizontal overflow, 16px inputs and44px targets."
+    "manual_inspection": "Executor, auxiliary and independent coordinator inspected viewport/fullPage. Mobile uses natural vertical scroll with completed submission afterzoom125%; no horizontal overflow,16px inputs/44px targets."
   },
   "build": {
     "passed": true,
@@ -106,5 +106,18 @@
     "typecheck": true,
     "server_compilation": true,
     "vite_build": true
+  },
+  "publication": "publicacao.json",
+  "hosted_verification": {
+    "migration_statements": 49,
+    "active_bodies": 13,
+    "original_aliases_preserved": 2,
+    "private_tables_closed": 4,
+    "migrations": 22,
+    "canonical_assets": 5,
+    "health": 200,
+    "anonymous_barriers": 6,
+    "counts_preserved": true,
+    "independent_review": "Aquinas P2 fixes source/SQL rechecked; coordinator final visual and hosted publication checks approved, no pending finding."
   }
 }
