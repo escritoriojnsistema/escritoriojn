@@ -1,0 +1,55 @@
+{
+  "status": "published_verified",
+  "repository": "escritoriojnsistema/escritoriojn",
+  "canonical": "https://escritoriojn.vercel.app",
+  "pull_request": {
+    "title": "Separar estornos lógicos e devoluções com histórico financeiro",
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/pull/44",
+    "number": 44,
+    "feature_commit": "1fe8dc8d4b0556e495f1a8e9a7975b23965b5d69",
+    "merge_commit": "5c9236851111a31787b96817c02eca90c6f7b0e3",
+    "tree": "a61e615100af2c29b6209c7ba0a4aef5ed9fc927",
+    "validated_tree_matches": true
+  },
+  "vercel": {
+    "method": "GitHub integration only",
+    "preview": {
+      "id": "9ShbXBZZWAKhNfGHWjz7on9HuU79",
+      "state": "success"
+    },
+    "production": {
+      "id": "CbMvD89KrRdKzLQLjWHCFFc7UvyN",
+      "state": "success"
+    }
+  },
+  "supabase": {
+    "migration": "20261024133149",
+    "history_count": 23,
+    "automatic": true,
+    "manual_apply": false,
+    "statements_match": 47,
+    "function_bodies_match": 19,
+    "aliases_match_before16": 2,
+    "private_tables_rls_acl_closed": 2,
+    "new_public_rpc_invoker_authenticated_only": 2,
+    "renderer_default": 3,
+    "business_counts_and_hashes_preserved": true
+  },
+  "canonical_checks": "bundle-publicado.json",
+  "database_checks": [
+    "migration-publicada.json",
+    "schema-publicado.json"
+  ],
+  "independent_review": {
+    "static": "Aquinas: unicoP3corrigido e regressao focada aprovada; sem outro achado confirmado, nao executou concorrencia/rollback",
+    "visual": "Coordenador aprovou320/360/1440 e geometrias, sem achados",
+    "hosted_post_merge": "Coordenador reconferiu Vercel/history23/aliases/ACL/RLS/contagens/5assetsSHA/health200/8anon401, somenteleitura"
+  },
+  "hosted_business_operations": 0,
+  "hosted_fixtures": 0,
+  "new_individual_grants": 0,
+  "github_actions": false,
+  "vercel_cli_api_deploy": false,
+  "documents": "Fecho definitivo publicado em PR documental separado, somente documentos/evidencias; mesmo runtime verificado. Identidade do merge documental final no checkpoint da execucao para evitar autorreferencia de commit.",
+  "stage17": "not_started"
+}

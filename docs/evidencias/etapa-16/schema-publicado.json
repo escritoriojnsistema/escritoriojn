@@ -1,0 +1,382 @@
+{
+  "migration": "20261024133149",
+  "application": "automatic_after_github_merge",
+  "manual_apply": false,
+  "history_count": 23,
+  "source_functions_match": 19,
+  "functions": [
+    {
+      "name": "private.correction_insert_guard",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "abfc2aa6cdde4f8ec30e44e4dbe6ba44",
+      "arguments": "",
+      "body_sha256": "1f618b6e3125fac6a7bbc15633b5e410c28e72469d32ce69adf42a80c37d18a1",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.cash_entry_guard",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "af36b28f7913cfec84d5ce99ae5dcaad",
+      "arguments": "",
+      "body_sha256": "8865e1251904e97f733b0563423c518aeede00e33293accd430deadae7de8091",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.cash_session_guard",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "5fcbc31566359f1a38964bf8c7dee290",
+      "arguments": "",
+      "body_sha256": "a35f00d49ec5bb1572092285e577257f73075dc064f14159c9d6c7f06d04aab7",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.cash_operate",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "e6d4f5f5b86d221710375e47de3b0222",
+      "arguments": "p_office_id uuid, p_operation jsonb",
+      "body_sha256": "3af0e8cdaf88e970c9b7beccb7e4bbc8b14a2568b3027799123fb2607c7451d9",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.payment_link_entry",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "f378446a3709bdedc934738c1c910f2a",
+      "arguments": "",
+      "body_sha256": "224fab4acb11a5a9d6cc8855fce890d74dc1f9d1ebe735db2d80366558cbe58c",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.allocation_corrections",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "0af774b9539db3acfd8e37793065985b",
+      "arguments": "p_office uuid, p_allocation uuid",
+      "body_sha256": "abfea16cacb677b0833d627a59360c6526a046c7ae47913938983e9bac5a0cbb",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.payment_json",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "f05eb77a08d3dc5cc03e8cc5a15f622c",
+      "arguments": "p private.payments",
+      "body_sha256": "e9af1fa1fc0f56724f09cb0a16a0ab8803ad873c28946a4759ab681f2abd4168",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.payment_destinations",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "af024b9ace459db25e08c05857c5b75d",
+      "arguments": "p_office_id uuid, p_session_id uuid",
+      "body_sha256": "eafc4265f1fcada03d00713f462152e02632d0f645c24e63de6fbf932d94daf7",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.cash_statement_finance16",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "7c32bda71c735a0936b2cdba2ab97714",
+      "arguments": "s private.cash_sessions, p_actor uuid, p_page integer",
+      "body_sha256": "6100557892b2bd7f0f7f0a931ce36959cb93562157dc01e842f8acce8be56486",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.cash_dashboard_record",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "6531ac38d0e1f4948f835a31dd5da26e",
+      "arguments": "p_office_id uuid, p_actor uuid, p_scope text, p_page integer, p_page_size integer",
+      "body_sha256": "73ff9d63f1e4805a6388e2909b091d022c18a9f88177c638c4ae208584292a00",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.cash_dashboard_filtered_record",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "b677896d580860329c8282cde4859072",
+      "arguments": "p_office_id uuid, p_actor uuid, p_scope text, p_page integer, p_page_size integer, p_unit_id uuid, p_status text, p_query text",
+      "body_sha256": "aaf59ac40eec3421eb0be29d37d53117e23a6edb17dc3bfacb131732b5fb19df",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.finance_entry_json",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "6f3b0a18c60dc177a14db2ea2304c2ae",
+      "arguments": "e private.cash_entries, p_client boolean",
+      "body_sha256": "b53ef355bdd2ac95ad1aaed92ce254a35f5649fcbe2d1a61bebc5791f3138329",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.finance_charge_json",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "b222bc82cf484ec2ec42c78f688e39d4",
+      "arguments": "c private.charges, r requests",
+      "body_sha256": "ba5e1acb90c800d680eb15b2c454b4c9816ee52a96404cf1095cc1a5f06b875c",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.correction_sources",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "a9a04e7c3903b9ba1d1c86f7e6960f83",
+      "arguments": "p_office_id uuid, p_session_id uuid, p_kind text, p_query text, p_page integer",
+      "body_sha256": "347bedef4e60816935588e407368a01ec8d8386c085a186a0182e35dcd1a8786",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.correction_operate",
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "acbf612407139cc9abadfc764dc08cec",
+      "arguments": "p_office_id uuid, p_operation jsonb",
+      "body_sha256": "087ebd5c226d81baf92f39e13e69a01f2f565019553c978ff20c6fc0f7e6c306",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "public.correction_sources",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "0bafa2503c25fbcd3eff73e375b4f103",
+      "arguments": "p_office_id uuid, p_session_id uuid, p_kind text, p_query text, p_page integer",
+      "body_sha256": "d6e5530a1de1492500db1efd94f5796ee1f75f558cf4fb0fb2cb3f5fb891f97f",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": true,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "public.correction_operate",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "957ff526a08acd4283683ab6c9984537",
+      "arguments": "p_office_id uuid, p_operation jsonb",
+      "body_sha256": "7974db95294e18fb6d0f5ebae7e60056933eaf79674b2da88b3b65e09004d18b",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": true,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.cash_statement_record",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "b68c604af0e7aca9ec9ea78ba894f8d1",
+      "arguments": "s private.cash_sessions, p_actor uuid, p_page integer",
+      "body_sha256": "71a592b00be40ae8ed8b68bb8b107cc0cccdeec6e428a1613942f54719a35d4b",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    },
+    {
+      "name": "private.safe_audit_changes",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "ba1534a5cd2be44fae782238bd7c07cd",
+      "arguments": "p_changes jsonb",
+      "body_sha256": "f759124638ab9d19e6cb0df10eefc1268da7854e059e258a4d49ba71a53ad304",
+      "anon_execute": false,
+      "public_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false,
+      "matches_source": true,
+      "acl_expected": true
+    }
+  ],
+  "tables": [
+    {
+      "rls": true,
+      "table": "payment_refunds",
+      "anon_raw_access": false,
+      "service_raw_access": false,
+      "authenticated_raw_access": false
+    },
+    {
+      "rls": true,
+      "table": "payment_reversals",
+      "anon_raw_access": false,
+      "service_raw_access": false,
+      "authenticated_raw_access": false
+    }
+  ],
+  "aliases": [
+    {
+      "name": "private.cash_operate_before15",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "241826d5001f3cbaf5df4c998c89dc7e",
+      "anon_execute": false,
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.cash_statement_record_before15",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "b55a865dabe46be474eaef71bc48bf88",
+      "anon_execute": false,
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    }
+  ],
+  "aliases_match_before16": true,
+  "renderer_default": 3,
+  "counts": {
+    "units": 0,
+    "ledger": 0,
+    "charges": 0,
+    "accounts": 0,
+    "payments": 0,
+    "requests": 1,
+    "customers": 1,
+    "auth_users": 5,
+    "allocations": 0,
+    "memberships": 5,
+    "audit_events": 32,
+    "individual_grants": 17,
+    "legacy_corrections": 0
+  },
+  "reversals": 0,
+  "refunds": 0,
+  "baseline_counts_preserved": true,
+  "immutable_hashes_preserved": true,
+  "immutable_hashes": {
+    "ledger": "d751713988987e9331980363e24189ce",
+    "commands": "d751713988987e9331980363e24189ce",
+    "payments": "d751713988987e9331980363e24189ce",
+    "individual_grants": "16478203091a062632d77644b519aa23"
+  },
+  "scope": "SELECT only; no hosted financial business/Auth/fixtures/grants."
+}
