@@ -1,0 +1,284 @@
+{
+  "counts": {
+    "links": 0,
+    "units": 0,
+    "ledger": 0,
+    "charges": 0,
+    "accounts": 0,
+    "payments": 0,
+    "requests": 1,
+    "customers": 1,
+    "decisions": 0,
+    "auth_users": 5,
+    "migrations": 22,
+    "allocations": 0,
+    "memberships": 5,
+    "audit_events": 30,
+    "individual_grants": 17
+  },
+  "tables": [
+    {
+      "rls": true,
+      "name": "payment_allocations",
+      "anon_access": false,
+      "service_role_access": false,
+      "authenticated_access": false
+    },
+    {
+      "rls": true,
+      "name": "payment_decisions",
+      "anon_access": false,
+      "service_role_access": false,
+      "authenticated_access": false
+    },
+    {
+      "rls": true,
+      "name": "payment_ledger_links",
+      "anon_access": false,
+      "service_role_access": false,
+      "authenticated_access": false
+    },
+    {
+      "rls": true,
+      "name": "payments",
+      "anon_access": false,
+      "service_role_access": false,
+      "authenticated_access": false
+    }
+  ],
+  "functions": [
+    {
+      "name": "private.cash_operate",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "0a39654baa98a9794f394d8c871ad0f3",
+      "arguments": "p_office_id uuid, p_operation jsonb",
+      "body_sha256": "75f51bbf78dfe71bd14fb8b72e381f340ca45a0f9f5f831aba10f7482cf6e7b3",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.cash_operate_before15",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "241826d5001f3cbaf5df4c998c89dc7e",
+      "arguments": "p_office_id uuid, p_operation jsonb",
+      "body_sha256": "7f78e488609ee264ac7f6035993081c4dbe7019f4f3d14e0eb3314c336c96749",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.cash_payments_page",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "46812f80e1914eb217afad7af7bb50b4",
+      "arguments": "p_office_id uuid, p_session_id uuid, p_page integer",
+      "body_sha256": "6dbe3e58fdb857cbe66d5a5727b32dd7b8a2ade07b52f00ac184b9d63f31e7df",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.cash_statement_record",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "d0d9b2c26da112201347a4e46b9ddfd9",
+      "arguments": "s private.cash_sessions, p_actor uuid, p_page integer",
+      "body_sha256": "4acce4b71fd4dd2ef54a7d7171137e46012660acb02591cc589d171e408b5553",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.cash_statement_record_before15",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "b55a865dabe46be474eaef71bc48bf88",
+      "arguments": "s private.cash_sessions, p_actor uuid, p_page integer",
+      "body_sha256": "bf32aae8a366ef657b070d2714456c368fb7ea79c81d8ea26a210d5daafb6724",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.charges_amounts",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "8a5dc33769610689b23e16c7d859c2e0",
+      "arguments": "p_office_id uuid, p_charge_id uuid",
+      "body_sha256": "69780d630bdf052ff94bf6d341b024b9fa6774ee67e879e5c3cf37019491480e",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.payment_date",
+      "config": [
+        "search_path=\"\"",
+        "DateStyle=ISO,YMD"
+      ],
+      "body_md5": "3a7917c49874bed928e7306414ef0e37",
+      "arguments": "v jsonb, p_nullable boolean",
+      "body_sha256": "eb905a3b3029756d8be086bb0de1d5ab90fdbbe5329cff0aee659a339ca8fa33",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.payment_destinations",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "1a32edab636399c86448d65a471b7d3c",
+      "arguments": "p_office_id uuid, p_session_id uuid",
+      "body_sha256": "b0a16865f38d25f43e8f64943bc563cd5a503bc6142e8e279a99a37ee7c53d4f",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.payment_insert_guard",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "620fee3ebfc2818885e651a92e0b74f3",
+      "arguments": "",
+      "body_sha256": "6f69273a3bcc92dad55e578b832150b372a5eaceca66ac933f66b3f49da8dc07",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.payment_json",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "e91ace4d502216fef193319dc493dca2",
+      "arguments": "p private.payments",
+      "body_sha256": "90b7fdbfcd3eaf5d89cf671efe4e68f02598c236e27f36c37c24ed7d9c77c566",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.payment_link_entry",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "e1e9b915685731225ff37347f2ec9672",
+      "arguments": "",
+      "body_sha256": "12937afdc6698ff239a8dea8598dfccadb5f7cab9536ab8cd6d10de5e2bd98cb",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.payment_operate",
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "body_md5": "3b76214e18b325aacf871711623b2cf9",
+      "arguments": "p_office_id uuid, p_operation jsonb",
+      "body_sha256": "5967aa1d7007207137b1e7314a8a3dc02a957a1863e178a1d5cb9a44999a56be",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.safe_audit_changes",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "e75ffdebc00f73acdadde06e7298e248",
+      "arguments": "p_changes jsonb",
+      "body_sha256": "fbe4cb04e8b4e5bc0b6eaba2be16745299e9767e580d26ece9f752a7f2706f22",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "public.cash_payments_page",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "6d6005b5071ae9f2bdf7b34da4a231dd",
+      "arguments": "p_office_id uuid, p_session_id uuid, p_page integer",
+      "body_sha256": "bab0f6a37a52b2e67e3f243622fa75dd873de99799b3511d2eab2bf5278d79c2",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.payment_operate",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "62d3c1c216ab10a45bd4f9f50132d5d3",
+      "arguments": "p_office_id uuid, p_operation jsonb",
+      "body_sha256": "4bf6f24de01ca7dff259f3a95b8cf0638b67ac2d3cc8a55b461925765eea33de",
+      "anon_execute": false,
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    }
+  ],
+  "report_default": "2",
+  "migration": "20261024032407",
+  "applied_by": "Automatic Git integration; no manual apply",
+  "statements_identical": 49,
+  "active_function_bodies_identical": 13,
+  "original_aliases": [
+    {
+      "name": "private.cash_operate_before15",
+      "body_preserved": true,
+      "security_preserved": true,
+      "internal_only": true
+    },
+    {
+      "name": "private.cash_statement_record_before15",
+      "body_preserved": true,
+      "security_preserved": true,
+      "internal_only": true
+    }
+  ],
+  "counts_preserved_from_prepublication": true,
+  "new_individual_grants": 0
+}

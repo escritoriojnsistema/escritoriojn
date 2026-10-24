@@ -1,0 +1,61 @@
+{
+  "published": true,
+  "repository": "escritoriojnsistema/escritoriojn",
+  "pull_request": {
+    "title": "Receber pagamentos parciais com alocações e confirmação manual",
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/pull/42",
+    "merged": true
+  },
+  "feature_commit": "9cb3dbc6d06409fc3bfd2a32eab0098425011afd",
+  "merge_commit": "626da55e5a29f1deea676ce4eb8dfe9be3492060",
+  "reviewed_tree": "8b95943eb6e41318c6dca085675af121c3f0dd1e",
+  "delivery": "GitHub → Vercel",
+  "preview_vercel": "SUCCESS",
+  "production_vercel": "SUCCESS",
+  "production_deployment_url": "https://vercel.com/escritorio-jn/escritoriojn/9JrYy6kvajoFrNgGGUQ3KS4KWu39",
+  "canonical": "https://escritoriojn.vercel.app",
+  "canonical_assets_match": 5,
+  "canonical_health": 200,
+  "anonymous_barriers": {
+    "payment": 401,
+    "payments": 401,
+    "operate": 401,
+    "statement": 401,
+    "eligible-charges": 401,
+    "client-finance": 401
+  },
+  "schema": {
+    "migration": "20261024032407",
+    "history_count": 22,
+    "statements_identical": 49,
+    "active_function_bodies_identical": 13,
+    "original_aliases_identical": 2,
+    "applied_by_git": true,
+    "manual_application": false,
+    "private_tables_rls_acl_closed": 4,
+    "new_public_wrappers_invoker_authenticated_only": 2
+  },
+  "counts_before_and_after": {
+    "links": 0,
+    "units": 0,
+    "ledger": 0,
+    "charges": 0,
+    "accounts": 0,
+    "payments": 0,
+    "requests": 1,
+    "customers": 1,
+    "decisions": 0,
+    "auth_users": 5,
+    "migrations": 22,
+    "allocations": 0,
+    "memberships": 5,
+    "audit_events": 30,
+    "individual_grants": 17
+  },
+  "no_hosted_business_test_fixtures": true,
+  "no_new_individual_grants": true,
+  "github_actions_used": false,
+  "vercel_cli_or_deploy_api_used": false,
+  "independent_coordinator_recheck": "Merge/Vercel SUCCESS,49 statements/history22, two original alias MD5s, canonical5 asset hashes/health200 and new anonymous barriers independently confirmed; no pending finding.",
+  "documentation": "This documentary close records the verified functional publication; its follow-up PR changes documentation/evidence only."
+}

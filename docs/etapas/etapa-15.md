@@ -18,4 +18,4 @@ Aceites: 100→60 parcial→40 quitado; retry/colisão de hash; concorrência/ro
 
 Baseline hospedada relida em24/10: 5Auth/5vínculos/1cliente/1pedido/27eventos/17grants individuais; zero unidades/contas/ledger/cobranças. O total de eventos mudou legitimamente desde o fecho anterior (25); não reverter dados do usuário.
 
-Estado: implementação/validação em andamento; publicação ainda não alegada. Fecho e provas serão registrados após validação real.
+Estado: concluída e publicada pelo PR Receber pagamentos parciais com alocações e confirmação manual, merge626da55. VercelSUCCESS e canônico conferidos; migration15 automática com49comandos/13corpos/2aliases originais preservados, histórico22. Sem reaplicação manual. [Fecho publicado](fecho-15.md) e [publicação](../evidencias/etapa-15/publicacao.json). Próxima16 somente por novo pedido.
