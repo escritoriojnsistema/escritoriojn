@@ -7,11 +7,16 @@ import {positive,requestText} from '../requests/validation.js';
 const total=(v:unknown,min=0):v is number=>Number.isSafeInteger(v)&&Number(v)>=min;
 const invalid=():never=>{throw Error('Invalid financial response');};
 const time=(v:unknown):v is string=>typeof v==='string'&&v.length<41&&Number.isFinite(Date.parse(v));
+// PostgreSQL char_length counts Unicode codepoints, rather than UTF-16 units.
+const entryReason=(v:unknown):v is string=>{
+ if(!requestText(v,1000,5))return false;
+ const length=Array.from(v).length;return length>=5&&length<=500;
+};
 function entry(v:unknown,client:boolean):FinanceEntry|ClientFinance['history'][number]{
  if(!record(v)||!uuid(v.id)||!['received','refunded','reversed','reconciled','closed','allocation_reversed','refund_paid'].includes(String(v.kind))||!time(v.created_at)||!cashInteger(v.amount_cents)||!(v.request_id===null||uuid(v.request_id))||!(v.charge_id===null||uuid(v.charge_id))||!(v.protocol===null||requestText(v.protocol,80))||!(v.payment_method_name===null||requestText(v.payment_method_name,120)))return invalid();
  const base={id:v.id,kind:v.kind as FinanceEntry['kind'],created_at:v.created_at,amount_cents:v.amount_cents,request_id:v.request_id,charge_id:v.charge_id,protocol:v.protocol,payment_method_name:v.payment_method_name};
  if(client){if(!['received','refunded','reversed','allocation_reversed','refund_paid'].includes(base.kind)||!base.request_id||!base.charge_id||!base.protocol)return invalid();return base;}
- if(!cashInteger(v.cash_cents,-1e12)||!cashInteger(v.applied_cents,-1e12)||!requestText(v.reason,500,5)||!(v.account_name===null||requestText(v.account_name,120))||!(v.original_entry_id===null||uuid(v.original_entry_id))||!cashInteger(v.refundable_cents)||!(v.counted_cents===null||cashInteger(v.counted_cents))||!(v.expected_cents===null||cashInteger(v.expected_cents)))return invalid();
+ if(!cashInteger(v.cash_cents,-1e12)||!cashInteger(v.applied_cents,-1e12)||!entryReason(v.reason)||!(v.account_name===null||requestText(v.account_name,120))||!(v.original_entry_id===null||uuid(v.original_entry_id))||!cashInteger(v.refundable_cents)||!(v.counted_cents===null||cashInteger(v.counted_cents))||!(v.expected_cents===null||cashInteger(v.expected_cents)))return invalid();
  return {...base,cash_cents:v.cash_cents,applied_cents:v.applied_cents,reason:v.reason,account_name:v.account_name,original_entry_id:v.original_entry_id,refundable_cents:v.refundable_cents,counted_cents:v.counted_cents,expected_cents:v.expected_cents};
 }
 export function statement(v:unknown):FinanceStatement{

@@ -51,5 +51,11 @@
   "github_actions": false,
   "vercel_cli_api_deploy": false,
   "documents": "Fecho definitivo publicado em PR documental separado, somente documentos/evidencias; mesmo runtime verificado. Identidade do merge documental final no checkpoint da execucao para evitar autorreferencia de commit.",
-  "stage17": "not_started"
+  "stage17": "not_started",
+  "unicode_patch": {
+    "evidence": "motivo-unicode.json",
+    "scope": "DTO financeiro reason porcodepoint Unicode, comregressaoAuthSDK eNode",
+    "publication": "MesmoPRcodigo+Livro+fecho; GitHub→Vercel. Commit/statusfinal nocheckpoint, semnovo cicloautorreferente.",
+    "sql_unchanged": true
+  }
 }
