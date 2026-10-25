@@ -1,0 +1,54 @@
+{
+  "environment": "Disposable PostgreSQL17; includes Docker/psql process; no hosted SLA",
+  "samples": 12,
+  "median_ms": 205.3808699999936,
+  "p95_ms": 318.06489700000384,
+  "explain": [
+    {
+      "Plan": {
+        "Node Type": "Index Scan",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Scan Direction": "Forward",
+        "Index Name": "cash_entries_session_idx",
+        "Relation Name": "cash_entries",
+        "Alias": "cash_entries",
+        "Startup Cost": 0.27,
+        "Total Cost": 8.29,
+        "Plan Rows": 1,
+        "Plan Width": 296,
+        "Actual Startup Time": 0.021,
+        "Actual Total Time": 0.021,
+        "Actual Rows": 0,
+        "Actual Loops": 1,
+        "Index Cond": "((office_id = '00000000-0000-4000-e000-000000000151'::uuid) AND (session_id = '72c8fe02-4b12-408b-a1e6-f0320c1e0c12'::uuid))",
+        "Rows Removed by Index Recheck": 0,
+        "Shared Hit Blocks": 2,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning": {
+        "Shared Hit Blocks": 339,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning Time": 1.168,
+      "Triggers": [],
+      "Execution Time": 0.073
+    }
+  ]
+}

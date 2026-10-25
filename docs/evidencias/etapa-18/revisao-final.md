@@ -1,0 +1,32 @@
+# Revisão final independente — Etapa18
+
+Data: 25/10/2026. Base informada: `83413fb2`. Veredito: **APROVADO para publicação na sequência runtime → migration prevista no plano.** Achados acionáveis: **P0=0, P1=0, P2=0, P3=0**. Não identifiquei lacuna material de implementação que exija correção antes desse rollout.
+
+## Escopo e método
+
+Revisão estática do pacote completo `review-task12.diff`, confrontado com `contract.md`, `task12-review.md`, cartão `docs/etapas/etapa-18.md`, plano de implementação, AGENTS, Livro e regras financeiras pertinentes. Consultei as fontes atuais e as funções financeiras anteriores chamadas pela nova migration, além dos contratos/testes que documentam a integração. A habilidade `desenvolvimento-profissional-ia:auditoria-final` orientou a separação entre aceite do código e comprovação da publicação.
+
+Não executei novas suítes, não alterei implementação, não criei subagentes e não realizei operação hospedada. Este arquivo é o único artefato produzido por esta revisão. O parecer é independente da aprovação das tarefas1/2; não atribui a esta revisão a execução dos testes recebidos.
+
+## Fundamentação material
+
+- **Frontend → Express → Supabase:** os três caminhos de conferência estão conectados pelo cliente tipado ao router autenticado, com Bearer do chamador, no-store e RPCs nominadas. A subrota de32KB comporta100contagens sem ampliar o parser legado de8KB. Operações têm campos exatos e validação de centavos/chaves; DTOs projetam o retorno e verificam relações, diferenças e versões. Não há segredo privilegiado novo no navegador/API.
+- **Dinheiro e divergências:** `closure_groups18` lê o ledger existente. Troco não é descontado novamente; reversão lógica16 fica fora do movimento de fundos; despesas, sangria e transferências aparecem uma vez. Digitais são agrupados por meio/destino, incluindo valores negativos de movimentação. Cartão conserva bruto menos devoluções como esperado, taxa/líquido e créditos liquidados/pendentes separados, mantendo desconhecidos como `null`. Cada diferença não zero conta independentemente; soma absoluta impede que faltas e sobras se ocultem. Agregados inseguros são recusados antes da projeção JavaScript.
+- **Concorrência e autorização:** a operação reutiliza o lock do escritório de `cash_actor`, trava a sessão e os registros necessários, e revalida sessão/capacidade depois das esperas e antes de replay. Fechar/conferir exige caixa próprio e `cash.open`; ajuste exige também papel owner/admin e capacidade específica. Revisão de colega acrescenta `cash.read_all`, sem conceder operação financeira naquele caixa. Tabelas são privadas, com RLS/ACL e guardas de comando; RPCs públicas são INVOKER e autenticadas.
+- **Histórico e idempotência:** fechamento e entrada física legada são atômicos com o snapshot. Revisão é única e append-only; ajuste exige fechamento próprio anterior, outra sessão própria da mesma unidade e usa o esperado imutável da origem, sem escrever dinheiro nem reabrir caixa. Chave, ator e digest são conferidos; replay novo recompõe autoridade/estado atual sem reescrever o resultado persistido. O wrapper bloqueia novos fechamentos/conciliações pelo contrato antigo, conservando retries históricos autorizados.
+- **UI e continuidade:** as ações usam Caixa/OperationLayout; o estado privado do extrato é chaveado por sessão/escritório/ator/papel/capacidades. Erro transitório preserva tentativa;409 descarta a conferência e solicita estado oficial;401/403/404 encerram o recurso. Permissões da UI não substituem guardas do banco. Conferência explicita todos os meios, revisão e ajuste preservam a diferença original e o formulário mantém rótulos estáveis.
+- **Compatibilidade17/PDF1–4:** `closures_enabled` é opcional no runtime novo e só é acrescentado pelo wrapper18 no banco. Antes da migration, o fluxo17 continua disponível. Aliases financeiros anteriores são preservados por renomeação. Renderer5 e catálogo5 são adicionados separadamente; o dispatch mantém versões1–4 e o default muda somente para relatórios novos. Engine, fontes e dependências históricas não são alterados pelo pacote.
+
+## Evidências consideradas
+
+- Banco: relatório da tarefa1 registra1062+1063verificações em dois replays descartáveis com migrador limitado, sete corridas por replay e preservação de aliases/relatórios anteriores. Corridas cobrem fechamento/pagamento, transferência/fechamento, mesma chave e revogações durante espera.
+- Node/API: conferi o encerramento de `/workspace/scratch/etapa18-node-final.log`:164aprovados, zero falhas.
+- Auth: a rodada anterior registrou18/15/16/17reais aprovados. Conferi `/workspace/scratch/etapa18-auth-final.log`: financeiro/portal e duas verificações de governança passaram3/3. A falha anterior de seletor ambíguo foi corrigida restringindo a asserção ao próprio protocolo; não foi ocultada como aprovação.
+- UI: recebida evidência de13casos18 e regressões financeiras aprovadas. Conferi `/workspace/scratch/etapa18-ui-1920-quiet.log`: rechecagem1920passou1/1 após encerramento do laboratório Docker. O erro anterior `ERR_NETWORK_CHANGED` em importsVite permanece como falha de infraestrutura documentada, resolvida pela rechecagem, sem alteração do produto.
+- Conferi os encerramentos de `etapa18-public-local.log` (3/3) e `etapa18-build.log` (build concluído, cinco assets). Typecheck, servidor, diff e auditoria de dependências produção0 foram informados pelo controlador. Manifesto `docs/evidencias/etapa-18/apresentacao5.json` registra preservação das apresentações1–4 e arquivos históricos.
+
+## Limite do aceite e próximo checkpoint
+
+O ambiente hospedado permanece na17; **publicação18 ainda não executada nem aprovada como verificação hospedada por este relatório**. A implementação está apta ao rollout já autorizado: publicar primeiro o runtime com capacidades/renderer5 e aguardar VercelSUCCESS, depois integrar a migration18. Não incluir a migration no primeiro passo, pois a integração Git pode aplicá-la automaticamente antes de o runtime estar pronto.
+
+Após cada integração Git, consultar `schema_migrations` antes de considerar aplicação manual; comparar comandos/corpos com o SQL validado, RLS/ACL, seeds apenas owner e contagens preservadas. Conferir assets, saúde e barreiras anônimas do canônico e registrar o fecho/Livro. Manter GitHub→Vercel, sem Actions/deployCLI/API Vercel e sem fixtures, grants individuais ou operações financeiras hospedadas. Esses passos são a entrega pendente, não defeitos encontrados no código.

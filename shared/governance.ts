@@ -5,7 +5,7 @@ export type ArchiveEntry = { id: string; target_type: 'membership'; target_id: s
 export type GovernancePage<T> = { items: T[]; total: number; page: number; page_size: number };
 export type AuditView = 'recent' | 'archived';
 export type AuditPolicy = { days: 30 | 60 | 90; version: number; cutoff: string; effective_at: string };
-export type AuditReport = { id: string; protocol: string; count: number; office_id: string; office_name: string; actor_name: string; created_at: string; view: AuditView; cutoff: string; filters: AuditFilters; renderer_version: 1|2|3|4; contract_version: 1 };
+export type AuditReport = { id: string; protocol: string; count: number; office_id: string; office_name: string; actor_name: string; created_at: string; view: AuditView; cutoff: string; filters: AuditFilters; renderer_version: 1|2|3|4|5; contract_version: 1 };
 export type AuditVerification = { match: boolean; protocol: string; count: number; created_at: string; bytes: number };
 export const auditReportMaxEvents = 10_000;
 export const auditReportMaxBytes = 3 * 1024 * 1024;
@@ -28,6 +28,7 @@ export const auditActionNames: Record<string, string> = {
 };
 
 Object.assign(auditActionNames,{
+ 'cash.closure_recorded':'Conferência por meio registrada','cash.closure_reviewed':'Divergência de fechamento revisada','cash.closure_adjusted':'Ajuste de conferência registrado',
  'expenses.create':'Conta a pagar registrada','expenses.approve':'Despesa aprovada','expenses.pay':'Despesa paga','cash.transferred':'Movimentação entre contas registrada','receipts.issued':'Recibo de pagamento emitido',
  'audit.policy_changed':'Prazo de arquivamento da auditoria alterado','audit.report_started':'Preparação de relatório de auditoria registrada','notifications.read':'Aviso marcado como lido',
  'accounts.correction_requested':'Correção cadastral solicitada','accounts.correction_applied':'Correção cadastral aplicada','accounts.email_confirmed':'E-mail da conta confirmado','accounts.self_updated':'Dados da própria conta atualizados',
@@ -54,3 +55,6 @@ export function auditValueLabel(value:unknown,field='',names:Record<string,strin
  if(typeof value==='string')return names[value]??auditValues[value]??value;
  return 'Informação estruturada registrada';
 }
+
+Object.assign(auditTargetNames,{cash_closure:'Conferência de caixa'});
+Object.assign(auditFieldNames,{closure_id:'Referência da conferência',differences_count:'Meios com divergência',absolute_difference_cents:'Soma absoluta das diferenças',has_difference:'Há divergência',decision:'Decisão da revisão'});

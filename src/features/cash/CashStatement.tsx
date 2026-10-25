@@ -1,3 +1,4 @@
+import {CashClosurePanel,type ClosureMode} from './CashClosurePanel';
 import {useCallback,useEffect,useRef,useState,type FormEvent} from 'react';
 import {Link} from 'react-router-dom';
 import {ArrowLeft,RefreshCw} from 'lucide-react';
@@ -13,17 +14,17 @@ import {CashPaymentsPanel} from './CashPaymentsPanel';
 import {CashCorrectionsPanel} from './CashCorrectionsPanel';
 const entryNames={expense_paid:'Despesa paga',transfer_out:'Transferência · saída',transfer_in:'Transferência · entrada',received:'Pagamento recebido',refunded:'Reembolso',reversed:'Devolução com estorno (legado)',allocation_reversed:'Alocação estornada',refund_paid:'Devolução efetiva',reconciled:'Conciliação',closed:'Fechamento'};
 type Mode='reconcile'|'close';
-type Props={office:string;sessionId:string;configuration?:CashConfiguration;onBack:()=>void;onBusy:(busy:boolean)=>void;onChanged:()=>void};
+type Props={closureIntent?:{mode:ClosureMode;nonce:number};onClosureTools:(value:{sessionId:string;canAdjust:boolean}|undefined)=>void;office:string;sessionId:string;configuration?:CashConfiguration;onBack:()=>void;onBusy:(busy:boolean)=>void;onChanged:()=>void};
 export function CashStatement(props:Props){
  const auth=useAuth(),context=auth.contexts.find(c=>c.office_id===props.office&&c.role_code!=='client');
  const scope=JSON.stringify([auth.sessionKey,props.office,props.sessionId,context?.user_id,context?.role_code,[...(context?.permissions??[])].sort()]);
  return <CashStatementView key={scope} {...props}/>;
 }
-function CashStatementView({office,sessionId,configuration,onBack,onBusy,onChanged}:Props){
+function CashStatementView({closureIntent,onClosureTools,office,sessionId,configuration,onBack,onBusy,onChanged}:Props){
  const auth=useAuth(),context=auth.contexts.find(c=>c.office_id===office&&c.role_code!=='client');
  const viewId=sessionId;
  const [data,setData]=useState<FinanceStatement>(),[error,setError]=useState<CashError>(),[page,setPage]=useState(1),[revision,setRevision]=useState(0),[reading,setReading]=useState(false),[busy,setBusy]=useState(false),[feedback,setFeedback]=useState('');
- const [mode,setMode]=useState<Mode>(),[amount,setAmount]=useState(''),[reason,setReason]=useState(''),[paymentEditing,setPaymentEditing]=useState(false),[correctionEditing,setCorrectionEditing]=useState(false);
+ const [closureMode,setClosureMode]=useState<ClosureMode>(),[mode,setMode]=useState<Mode>(),[amount,setAmount]=useState(''),[reason,setReason]=useState(''),[paymentEditing,setPaymentEditing]=useState(false),[correctionEditing,setCorrectionEditing]=useState(false);
  const attempt=useRef<{signature:string;operation:FinanceOperation}|undefined>(undefined),mutation=useRef<AbortController|null>(null),alive=useRef(true),readAbort=useRef<AbortController|null>(null);
  const blocked=error?.status===401||error?.status===403;
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;mutation.current?.abort();readAbort.current?.abort();onBusy(false);};},[onBusy]);
@@ -32,7 +33,10 @@ function CashStatementView({office,sessionId,configuration,onBack,onBusy,onChang
  const s=data?.session;
  const canOperate=s?.is_self&&s.status==='open'&&s.can_operate&&context?.permissions.includes('cash.open');
  const canRefund=s?.is_self&&s.status==='open'&&s.can_refund&&['cash.open','charges.adjust','charges.read','requests.read'].every(permission=>context?.permissions.includes(permission));
- const editing=paymentEditing||correctionEditing;
+ const editing=paymentEditing||correctionEditing||!!closureMode;
+ useEffect(()=>{if(data?.closures_enabled){onClosureTools({sessionId,canAdjust:!!canOperate&&!!context&&['owner','admin'].includes(context.role_code)&&context.permissions.includes('cash.closure.adjust')});}else onClosureTools(undefined);return()=>onClosureTools(undefined);},[data?.closures_enabled,sessionId,canOperate,context?.role_code,context?.permissions,onClosureTools]);
+ useEffect(()=>{if(closureIntent&&data?.closures_enabled&&!busy){cancel();setCorrectionEditing(false);setClosureMode(closureIntent.mode);}},[closureIntent]);
+ const adopt=(value:FinanceStatement)=>setData(previous=>previous?.closures_enabled?{...value,closures_enabled:true}:value);
  function cancel(){setMode(undefined);setAmount('');setReason('');setFeedback('');attempt.current=undefined;}
  async function submit(e:FormEvent){
   e.preventDefault();if(busy||blocked||!s||!mode||!canOperate)return;
@@ -41,7 +45,7 @@ function CashStatementView({office,sessionId,configuration,onBack,onBusy,onChang
   const details={kind:mode,counted_cents:cents,reason:reason.trim()};
   const signature=JSON.stringify([target.id,details]);if(attempt.current?.signature!==signature)attempt.current={signature,operation:{...details,session_id:target.id,expected_version:target.version,idempotency_key:crypto.randomUUID()} as FinanceOperation};
   const c=new AbortController();mutation.current=c;readAbort.current?.abort();setReading(false);setBusy(true);onBusy(true);setError(undefined);setFeedback('');
-  try{const v=await cashApi.operate(office,attempt.current.operation,c.signal);if(!c.signal.aborted){cancel();setData(v);setPage(1);setFeedback('Operação registrada e saldos atualizados.');onChanged();noticesChanged();}}
+  try{const v=await cashApi.operate(office,attempt.current.operation,c.signal);if(!c.signal.aborted){cancel();adopt(v);setPage(1);setFeedback('Operação registrada e saldos atualizados.');onChanged();noticesChanged();}}
   catch(cause){if(!c.signal.aborted){const error=cashError(cause);setError(error);if([401,403,404].includes(error.status)){setData(undefined);}else if(error.status===409){cancel();setRevision(n=>n+1);setFeedback('O estado mudou. Confira o extrato atualizado e selecione novamente a operação.');}}}
   finally{if(alive.current){mutation.current=null;setBusy(false);onBusy(false);}}
  }
@@ -51,10 +55,11 @@ function CashStatementView({office,sessionId,configuration,onBack,onBusy,onChang
  <dl className="cash-totals finance-totals"><div><dt>Fundo inicial</dt><dd>{cashMoney(s.opening_cents)}</dd></div><div><dt>Saldo em espécie</dt><dd>{cashMoney(s.cash_cents)}</dd></div><div><dt>Recebimentos brutos</dt><dd>{cashMoney(s.received_cents)}</dd></div><div><dt>Devoluções efetivas</dt><dd>{cashMoney(s.refunded_cents)}</dd></div><div><dt>Movimento digital líquido</dt><dd>{cashMoney(s.digital_cents)}</dd></div><div><dt>Recebido após devoluções</dt><dd>{cashMoney(s.received_cents-s.refunded_cents)}</dd></div></dl>
  <p className="customer-note">Registros manuais conferidos pelo operador. Recebimentos digitais não entram no numerário; sangrias, reforços e despesas em espécie constam no extrato.</p>
 </>}
- {correctionEditing&&<CashCorrectionsPanel office={office} statement={data} disabled={busy||reading} onBusy={paymentBusy} onCancel={()=>setCorrectionEditing(false)} onChanged={(value,message)=>{setData(value);setPage(value.page);setCorrectionEditing(false);setFeedback(message);onChanged();noticesChanged();}} onRefresh={()=>setRevision(n=>n+1)} onUnavailable={issue=>{readAbort.current?.abort();setReading(false);setError(issue);setCorrectionEditing(false);setData(undefined);}}/>}
+ {correctionEditing&&<CashCorrectionsPanel office={office} statement={data} disabled={busy||reading} onBusy={paymentBusy} onCancel={()=>setCorrectionEditing(false)} onChanged={(value,message)=>{adopt(value);setPage(value.page);setCorrectionEditing(false);setFeedback(message);onChanged();noticesChanged();}} onRefresh={()=>setRevision(n=>n+1)} onUnavailable={issue=>{readAbort.current?.abort();setReading(false);setError(issue);setCorrectionEditing(false);setData(undefined);}}/>}
  {!editing&&(!s.is_self||s.status==='closed')&&<p className="customer-note">Para corrigir um pagamento deste histórico, volte aos caixas e use Corrigir pagamento no seu próprio caixa aberto da mesma unidade.</p>}
- <CashPaymentsPanel key={s.id} office={office} statement={data} configuration={configuration} disabled={busy||reading||!!mode||correctionEditing} hidden={correctionEditing} actions={canOperate&&!mode?<><button type="button" className="secondary-button" disabled={busy} onClick={()=>{cancel();setMode('reconcile');setAmount((s.cash_cents/100).toFixed(2).replace('.',','));}}>Conciliar caixa</button><button type="button" className="secondary-button" disabled={busy} onClick={()=>{cancel();setMode('close');setAmount((s.cash_cents/100).toFixed(2).replace('.',','));}}>Fechar caixa</button></>:undefined} onCorrect={canRefund&&!mode?()=>{setFeedback('');setCorrectionEditing(true);}:undefined} onBusy={paymentBusy} onEditing={setPaymentEditing} onChanged={value=>{setData(value);setPage(value.page);setFeedback('');onChanged();noticesChanged();}} onRefresh={()=>setRevision(n=>n+1)} onUnavailable={issue=>{readAbort.current?.abort();setReading(false);setError(issue);cancel();setData(undefined);}}/>
+ <CashPaymentsPanel key={s.id} office={office} statement={data} configuration={configuration} disabled={busy||reading||!!mode||correctionEditing||!!closureMode} hidden={correctionEditing||!!closureMode} actions={canOperate&&!mode&&!closureMode?<><button type="button" className="secondary-button" disabled={busy} onClick={()=>{cancel();if(data.closures_enabled){setClosureMode('reconcile');return;}setMode('reconcile');setAmount((s.cash_cents/100).toFixed(2).replace('.',','));}}>Conciliar caixa</button><button type="button" className="secondary-button" disabled={busy} onClick={()=>{cancel();if(data.closures_enabled){setClosureMode('close');return;}setMode('close');setAmount((s.cash_cents/100).toFixed(2).replace('.',','));}}>Fechar caixa</button></>:undefined} onCorrect={canRefund&&!mode&&!closureMode?()=>{setFeedback('');setCorrectionEditing(true);}:undefined} onBusy={paymentBusy} onEditing={setPaymentEditing} onChanged={value=>{adopt(value);setPage(value.page);setFeedback('');onChanged();noticesChanged();}} onRefresh={()=>setRevision(n=>n+1)} onUnavailable={issue=>{readAbort.current?.abort();setReading(false);setError(issue);cancel();setData(undefined);}}/>
 
+ {closureMode&&<CashClosurePanel key={`${closureMode}:${closureIntent?.nonce??0}`} office={office} statement={data} initialMode={closureMode} onBack={()=>setClosureMode(undefined)} onBusy={paymentBusy} onChanged={value=>{adopt(value);setPage(1);onChanged();noticesChanged();}} onRefresh={()=>setRevision(n=>n+1)} onUnavailable={issue=>{readAbort.current?.abort();setReading(false);setError(issue);setClosureMode(undefined);setData(undefined);}}/>}
  {mode&&<form onSubmit={submit} className="finance-operation" noValidate><h3>{mode==='reconcile'?'Conferir espécie':'Encerrar caixa'}</h3>
   <fieldset disabled={busy}><div className="cash-config-grid"><label className="team-field">{mode==='reconcile'||mode==='close'?'Espécie contada (R$)':'Valor (R$)'}<input inputMode="decimal" maxLength={14} value={amount} onChange={e=>setAmount(e.target.value)}/></label><label className="team-field">Motivo da operação<textarea value={reason} maxLength={500} rows={2} onChange={e=>setReason(e.target.value)}/></label></div></fieldset>
   {(mode==='reconcile'||mode==='close')&&<p className="customer-note">Esperado: {cashMoney(s.cash_cents)} · Diferença: {cashAmountToCents(amount)===null?'Confira o valor':cashMoney(cashAmountToCents(amount)!-s.cash_cents)}. A diferença será registrada e não altera o saldo. {mode==='close'?'O caixa encerrado não aceita novos lançamentos.':''}</p>}

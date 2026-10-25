@@ -174,3 +174,51 @@
  .cash-correction-editor .cash-correction-notes { grid-template-columns:minmax(0,1fr); }
  .cash-correction-editor button { white-space:normal; max-width:100%; }
 }
+
+.cash-closure-panel { max-width:900px; min-width:0; }
+.cash-closure-panel h2 { margin:0; font-size:19px; }
+.cash-closure-panel h2:focus { outline:2px solid #aa7d36; outline-offset:4px; }
+.cash-closure-panel .team-section-heading { flex-wrap:wrap; gap:4px 12px; }
+.closure-fields { display:grid; gap:4px; }
+.closure-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(130px,.5fr); gap:4px 16px; align-items:center; border-bottom:1px solid #dce4e8; padding:7px 0; }
+.closure-row>div,.closure-record-lines li { display:flex; flex-direction:column; gap:4px; min-width:0; overflow-wrap:anywhere; }
+.closure-row strong,.closure-record-lines strong { font-size:14px; }
+.closure-row span,.closure-record-lines span { font-size:13px; }
+.closure-row small,.closure-record-lines small { font-size:12px; color:#617887; }
+.closure-card { grid-column:1/-1; }
+.closure-card summary { min-height:44px; display:flex; align-items:center; font-size:12px; cursor:pointer; }
+.closure-reason { margin-top:10px; }
+.closure-difference { font-size:13px; font-weight:600; color:#16415b; margin-block:10px; }
+.closure-history,.closure-record-lines { list-style:none; padding:0; margin:8px 0; }
+.closure-history li { display:flex; gap:8px 16px; align-items:center; justify-content:space-between; border-bottom:1px solid #dce4e8; padding-block:10px; overflow-wrap:anywhere; }
+.closure-history li>div { min-width:0; }
+.closure-history strong { font-size:14px; }
+.closure-record-lines li { padding-block:8px; border-bottom:1px solid #dce4e8; }
+.cash-main:has(.cash-closure-panel)>.cash-toolbar,
+.cash-main:has(.cash-closure-panel)>.operation-heading p:not(.eyebrow),
+.cash-statement:has(.cash-closure-panel)>.team-section-heading,
+.cash-statement:has(.cash-closure-panel)>.cash-editing-summary { display:none; }
+.cash-main:has(.cash-closure-panel)>.operation-heading { margin-bottom:10px; }
+.operation-context-actions { display:flex; flex-direction:column; gap:4px; padding:14px 0; border-top:1px solid #ffffff25; margin-top:12px; }
+.operation-context-actions p { font-size:12px; color:#c1cdd4; margin:0 12px 4px; }
+.operation-context-actions button { text-align:left; color:inherit; background:transparent; border:0; padding:10px 12px; min-height:44px; font:inherit; font-size:13px; cursor:pointer; border-radius:6px; }
+.operation-context-actions button:hover { background:#ffffff12; }
+.operation-context-actions button:focus-visible { outline:2px solid #e1bd80; outline-offset:-2px; }
+@media(max-width:600px) {
+ .closure-row { grid-template-columns:minmax(0,1fr) minmax(100px,.58fr); gap:4px 8px; }
+ .cash-closure-editor .team-field input,.cash-closure-editor .team-field textarea,.cash-closure-editor .team-field select { font-size:16px; }
+ .cash-closure-panel button { max-width:100%; white-space:normal; }
+ .closure-history li { flex-wrap:wrap; }
+ .closure-history li>button { margin-left:auto; }
+ .cash-closure-panel .team-section-heading h2 { font-size:18px; }
+}
+
+@media(max-width:600px) {
+ .cash-main:has(.cash-closure-panel)>.operation-heading h1 { display:none; }
+ .cash-main:has(.cash-closure-panel)>.operation-heading { margin-bottom:2px; }
+ .cash-closure-panel>.customer-note { margin-block:3px; }
+ .cash-closure-editor .closure-row { padding-block:5px; }
+ .cash-closure-editor .closure-reason textarea { min-height:48px; height:48px; }
+ .cash-closure-editor .closure-difference { margin-block:6px; }
+ .cash-closure-editor>.customer-note { margin-block:4px; }
+}
