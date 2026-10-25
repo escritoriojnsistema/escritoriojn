@@ -29,5 +29,11 @@ test('Etapa17 real: API/SDK despesas, sangria20, recibo confirmado e isolamento'
   const received=await post<FinanceStatement>('cash/payment',{operation:{kind:'record',session_id:session,expected_version:3,idempotency_key:randomUUID(),evidence:'Recebimento confirmado no laboratório',payment_method_id:method,status:'confirmed',allocations:[{charge_id:charge,expected_charge_version:1,amount_cents:3000}],presented_cents:5000,fee_cents:0,settlement:'not_applicable',settled_on:null,external_reference:null}});
   const payment=received.payments!.items[0];const receipt=await post<PaymentReceipt>('cash/receipt',{payment_id:payment.id,idempotency_key:randomUUID()});expect(receipt.snapshot).toMatchObject({amount_cents:3000,payment_reference:payment.reference});expect(typeof receipt.number).toBe('string');expect(await post<PaymentReceipt>('cash/receipt',{payment_id:payment.id,idempotency_key:randomUUID()})).toEqual(receipt);
   const other=await post('cash/receipt',{office_id:randomUUID(),payment_id:payment.id,idempotency_key:randomUUID()},403);expect(other).toBeUndefined();
+  const spaced='\u00a0Conferência registrada pela SDK\u00a0';
+  const edge=await sdk.rpc('expense_operate',{p_office_id:office,p_operation:{kind:'create',idempotency_key:randomUUID(),category:'Material',payee:'\u00a0Fornecedor\u00a0',description:'Texto íntegro aceito no banco',due_date:'2026-12-01',amount_cents:100,evidence:spaced}});expect(edge.error).toBeNull();
+  const edgePage=await post<Finance17Page>('cash/finance17',{session_id:session,page:1});expect(edgePage.expenses.find(e=>e.id===edge.data.expense.id)?.evidence).toBe(spaced);
+  const current=await post<FinanceStatement>('cash/statement',{session_id:session,page:1});
+  expect((await sdk.rpc('transfer_operate',{p_office_id:office,p_operation:{kind:'sangria',session_id:session,expected_session_version:current.session.version,source_account_id:cash,destination_account_id:bank,amount_cents:100,idempotency_key:randomUUID(),reason:spaced,evidence:spaced}})).error).toBeNull();
+  expect((await post<FinanceStatement>('cash/statement',{session_id:session,page:1})).entries.find(e=>e.kind==='transfer_out')?.reason).toBe(spaced);
  }finally{await sdk.auth.signOut();}
 });
