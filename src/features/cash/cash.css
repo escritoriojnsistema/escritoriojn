@@ -126,6 +126,44 @@
 .cash-correction-combined { margin-block:6px; align-items:center; }
 .cash-correction-notes { gap:10px; margin-block:8px; }
 .cash-correction-editor .customer-note { margin-block:6px; }
+.expense-session { margin-block:8px; max-width:760px; }
+.expense-session .team-field { margin-bottom:4px; }
+.expense-editor { max-width:760px; padding-top:4px; border-top:0; }
+.expense-editor h2 { margin-block:8px; font-size:18px; }
+.expense-editor .expense-fields { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px 12px; }
+.expense-wide { grid-column:1/-1; }
+.expense-editor .account-actions { margin-top:10px; }
+.expense-main:has(.expense-editor)>.operation-heading { margin-bottom:6px; }
+.expense-main:has(.expense-editor)>.operation-heading p:not(.eyebrow) { display:none; }
+.expense-editor .customer-note { margin-block:6px; }
+.receipt-controls { display:flex; flex-wrap:wrap; gap:8px; margin-block:12px; }
+.payment-receipt { max-width:760px; padding-block:12px; overflow-wrap:anywhere; }
+.payment-receipt h2 { font-size:22px; margin-block:8px; }
+.receipt-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.receipt-fields dt { color:#617887; font-size:13px; }
+.receipt-fields dd { margin:4px 0 0; }
+.receipt-allocations { padding-left:20px; }
+.receipt-fields>div:last-child { grid-column:1/-1; }
+.cash-main:has(.receipt-view)>.cash-toolbar,
+.cash-main:has(.receipt-view)>.operation-heading p:not(.eyebrow),
+.cash-statement:has(.receipt-view)>.team-section-heading,
+.cash-statement:has(.receipt-view)>.cash-editing-summary { display:none; }
+@media print {
+ body * { visibility:hidden; }
+ .payment-receipt,.payment-receipt * { visibility:visible; }
+ .payment-receipt { position:absolute; top:0; left:0; width:100%; max-width:none; padding:15mm; box-sizing:border-box; background:white; color:black; }
+ .operation-sidebar,.operation-mobile-nav,.operation-mobile-bar,.receipt-controls { display:none; }
+ .payment-receipt h2:focus { outline:none; }
+}
+.expense-editor fieldset { padding:0; border:0; margin:0; }
+@media(max-width:340px) {
+ .expense-main:has(.expense-editor)>.operation-heading h1 { font-size:20px; line-height:1.25; }
+}
+@media(max-width:900px) {
+ .expense-editor .team-field input,.expense-editor .team-field textarea,.expense-editor .team-field select { font-size:16px; }
+ .expense-editor .account-actions { display:flex; gap:8px; flex-wrap:wrap; }
+ .expense-editor .account-actions button { flex:1 1 130px; white-space:normal; }
+}
 .cash-main:has(.cash-correction-editor)>.cash-toolbar { display:none; }
 .cash-main:has(.cash-correction-editor)>.operation-heading { margin-bottom:8px; }
 .cash-main:has(.cash-correction-editor)>.operation-heading p:not(.eyebrow) { display:none; }

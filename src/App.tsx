@@ -18,6 +18,7 @@ import RequestsPage from './features/requests/RequestsPage';
 import AttachmentsPage from './features/attachments/AttachmentsPage';
 import NotificationsPage from './features/notifications/NotificationsPage';
 import ChargesPage from './features/charges/ChargesPage';
+import ExpensesPage from './features/cash/ExpensesPage';
 import CashPage from './features/cash/CashPage';
 import ChecklistsPage from './features/checklists/ChecklistsPage';
 import InvitationPage from './features/team/InvitationPage';
@@ -46,6 +47,7 @@ function AppRoutes() {
     <Route path={paths.requests} element={<RequestsPage key={`requests:${operationKey}`} />} />
     <Route path={paths.clientRequests} element={<RequestsPage key={`client-requests:${operationKey}`} client />} />
     <Route path={paths.clientPayments} element={<PaymentsPage key={`client-payments:${operationKey}`} />} />
+    <Route path={paths.expenses} element={<ExpensesPage key={`expenses:${operationKey}`} />} />
     <Route path={paths.cash} element={<CashPage key={`cash:${operationKey}`} />} />
     <Route path={paths.charges} element={<ChargesPage key={`charges:${operationKey}`} />} />
     <Route path={paths.checklists} element={<ChecklistsPage key={`checklists:${operationKey}`} />} />

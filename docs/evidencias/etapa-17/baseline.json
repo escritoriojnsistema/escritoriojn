@@ -1,0 +1,126 @@
+{
+  "project_id": "mcsuoxnubpqenyvbefee",
+  "counts": [
+    {
+      "auth_users": 5,
+      "memberships": 5,
+      "customers": 1,
+      "requests": 1,
+      "audit_events": 32,
+      "individual_permissions": 17,
+      "cash_sessions": 0,
+      "cash_entries": 0,
+      "payments": 0,
+      "reversals": 0,
+      "refunds": 0
+    }
+  ],
+  "aliases": [
+    {
+      "nspname": "private",
+      "proname": "cash_operate_before15",
+      "arguments": "p_office_id uuid, p_operation jsonb",
+      "body_md5": "241826d5001f3cbaf5df4c998c89dc7e"
+    },
+    {
+      "nspname": "private",
+      "proname": "cash_statement_record_before15",
+      "arguments": "s private.cash_sessions, p_actor uuid, p_page integer",
+      "body_md5": "b55a865dabe46be474eaef71bc48bf88"
+    }
+  ],
+  "migrations": [
+    {
+      "version": "20261017193833",
+      "name": "foundation_access"
+    },
+    {
+      "version": "20261017194008",
+      "name": "foundation_policy_actions"
+    },
+    {
+      "version": "20261017225649",
+      "name": "auth_sessions_client_registration"
+    },
+    {
+      "version": "20261018132255",
+      "name": "team_management_invitations"
+    },
+    {
+      "version": "20261018132554",
+      "name": "team_foreign_key_indexes"
+    },
+    {
+      "version": "20261018195511",
+      "name": "audit_privacy_archives"
+    },
+    {
+      "version": "20261019015927",
+      "name": "customers_secure_registry"
+    },
+    {
+      "version": "20261019163453",
+      "name": "customer_registration_registry"
+    },
+    {
+      "version": "20261019164337",
+      "name": "customer_registration_lock_compatibility"
+    },
+    {
+      "version": "20261020182035",
+      "name": "customer_relationships_identity_merge"
+    },
+    {
+      "version": "20261020185830",
+      "name": "services_versioned_catalog"
+    },
+    {
+      "version": "20261020211531",
+      "name": "requests_service_workflow"
+    },
+    {
+      "version": "20261020232011",
+      "name": "requests_covering_indexes"
+    },
+    {
+      "version": "20261021003953",
+      "name": "private_attachments_pipeline"
+    },
+    {
+      "version": "20261021114510",
+      "name": "checklists_pending_notifications"
+    },
+    {
+      "version": "20261021124414",
+      "name": "request_followup_client_notifications"
+    },
+    {
+      "version": "20261021200540",
+      "name": "account_data_corrections"
+    },
+    {
+      "version": "20261022012025",
+      "name": "charges_obligations"
+    },
+    {
+      "version": "20261022134044",
+      "name": "cash_individual_accounts"
+    },
+    {
+      "version": "20261023153038",
+      "name": "cash_payments_portal"
+    },
+    {
+      "version": "20261023213625",
+      "name": "audit_pdf_archive"
+    },
+    {
+      "version": "20261024032407",
+      "name": "payments_allocations"
+    },
+    {
+      "version": "20261024133149",
+      "name": "payment_reversals_refunds"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import type {PaymentsPage} from './payments.js';
 import type {FinancialCondition} from './corrections.js';
 import {cashInteger} from './cash.js';
-export type FinanceKind='received'|'refunded'|'reversed'|'reconciled'|'closed'|'allocation_reversed'|'refund_paid';
+export type FinanceKind='expense_paid'|'transfer_out'|'transfer_in'|'received'|'refunded'|'reversed'|'reconciled'|'closed'|'allocation_reversed'|'refund_paid';
 export type FinanceEntry={id:string;kind:FinanceKind;created_at:string;amount_cents:number;cash_cents:number;applied_cents:number;protocol:string|null;request_id:string|null;charge_id:string|null;payment_method_name:string|null;account_name:string|null;reason:string;original_entry_id:string|null;refundable_cents:number;counted_cents:number|null;expected_cents:number|null};
 export type FinanceSession={id:string;cash_account_id?:string;unit_id:string;unit_name:string;operator_name:string;is_self:boolean;status:'open'|'closed';version:number;opened_at:string;closed_at:string|null;opening_cents:number;cash_cents:number;received_cents:number;refunded_cents:number;digital_cents:number;can_operate:boolean;can_refund:boolean};
 export type FinanceStatement={session:FinanceSession;entries:FinanceEntry[];total:number;page:number;page_size:5;can_receive:boolean;payments?:PaymentsPage};

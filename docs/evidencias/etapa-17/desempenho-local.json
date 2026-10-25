@@ -1,0 +1,19 @@
+{
+  "environment": "Disposable PostgreSQL17; authenticated RPC; includes Docker/psql process",
+  "scenario": "20 pages +20 paired one-cent transfers alternating sangria/reforco on one own session",
+  "measures": {
+    "page": {
+      "samples": 20,
+      "median_ms": 153.62861899999552,
+      "p95_ms": 237.3691289999988,
+      "max_ms": 292.00964800000656
+    },
+    "transfer": {
+      "samples": 20,
+      "median_ms": 176.24203000000853,
+      "p95_ms": 215.37966900000174,
+      "max_ms": 254.5441759999958
+    }
+  },
+  "limitation": "Local laboratory only; no hosted load, latency or SLA claim"
+}

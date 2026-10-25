@@ -60,6 +60,13 @@ async function openStatement(page:Page){await page.goto('/caixa');await page.get
 async function record(page:Page,method=pixMethod,amount='30,00'){
  await page.getByRole('button',{name:'Registrar recebimento',exact:true}).click();await page.getByRole('combobox',{name:'Cobrança',exact:true}).selectOption(id(1));await page.getByLabel('Valor para JN-TESTE-1 (R$)',{exact:true}).fill(amount);await page.getByRole('combobox',{name:'Forma de pagamento',exact:true}).selectOption(method);await page.getByRole('textbox',{name:'Evidência da operação',exact:true}).fill('Pagamento conferido pelo operador');
 }
+test('recibo17: abre snapshot numerado e reimprime a mesma versão do recebimento original',async({page})=>{
+ await page.setViewportSize({width:360,height:640});
+ await setup(page,{payments:[payment({status:'confirmed'})],permissions:[...permissions,'receipts.read','receipts.issue']});
+ let reads=0;const snapshot={id:id(900),number:'000001',version:1,issued_at:'2026-10-25T12:00:00Z',payment_id:id(500),snapshot:{office_name:'Escritório teste',operator_name:'Operador teste',payer_name:null,description:'Recebimento de serviços',payment_reference:`JN-PAG-${id(500)}`,amount_cents:3000,payment_type:'cash',method_name:'Dinheiro',confirmed_at:'2026-10-24T12:00:00Z',allocations:[{protocol:'JN-TESTE-1',amount_cents:3000}]}};
+ await page.route('**/api/cash/receipt',r=>{reads++;return r.fulfill({json:{data:snapshot}});});
+ await openStatement(page);await page.getByText('Detalhes do pagamento',{exact:true}).click();await page.getByRole('button',{name:'Abrir recibo',exact:true}).click();await expect(page.getByRole('heading',{name:'Recibo 000001',exact:true})).toBeVisible();await expect(page.getByLabel('Recibo de recebimento')).toContainText('R$ 30,00');await expect(page.getByLabel('Recibo de recebimento')).not.toContainText('R$ 50,00');await mkdir('docs/evidencias/etapa-17',{recursive:true});await page.screenshot({path:'docs/evidencias/etapa-17/recibo-360.png',fullPage:true});await page.getByRole('button',{name:'Voltar aos pagamentos',exact:true}).click();await page.getByText('Detalhes do pagamento',{exact:true}).click();await page.getByRole('button',{name:'Abrir recibo',exact:true}).click();await expect(page.getByRole('heading',{name:'Recibo 000001',exact:true})).toBeVisible();expect(reads).toBe(2);
+});
 const history=(page:Page)=>page.getByRole('list',{name:'Histórico de pagamentos',exact:true});
 const cashTotal=(page:Page)=>page.locator('.finance-totals>div').filter({has:page.getByText('Saldo em espécie',{exact:true})});
 

@@ -1,0 +1,9 @@
+{
+  "receipt_presentation": 1,
+  "source": "src/features/cash/PaymentReceiptPanel.tsx",
+  "sha256": "94d69d44fa1c2617df844bdf84a772bc67f116ee564d29501ec3ccad4ef0138d",
+  "timestamp_zone": "UTC",
+  "snapshot_authority": "private.payment_receipts persisted snapshot; original confirmed gross received; immutable number/reference/version",
+  "printed_by": "browser print with receipt-only stylesheet; no fiscal document",
+  "stylesheet_sha256": "ca6c9def982f88d9e5d16f2d47497f6ec93c97df562624dc408e310cf62f7445"
+}
