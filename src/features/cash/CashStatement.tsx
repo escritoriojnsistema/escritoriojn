@@ -11,7 +11,7 @@ import {cashApi,cashError,CashError} from './api';
 import {cashMoney} from './CashSessions';
 import {CashPaymentsPanel} from './CashPaymentsPanel';
 import {CashCorrectionsPanel} from './CashCorrectionsPanel';
-const entryNames={received:'Pagamento recebido',refunded:'Reembolso',reversed:'Devolução com estorno (legado)',allocation_reversed:'Alocação estornada',refund_paid:'Devolução efetiva',reconciled:'Conciliação',closed:'Fechamento'};
+const entryNames={expense_paid:'Despesa paga',transfer_out:'Transferência · saída',transfer_in:'Transferência · entrada',received:'Pagamento recebido',refunded:'Reembolso',reversed:'Devolução com estorno (legado)',allocation_reversed:'Alocação estornada',refund_paid:'Devolução efetiva',reconciled:'Conciliação',closed:'Fechamento'};
 type Mode='reconcile'|'close';
 type Props={office:string;sessionId:string;configuration?:CashConfiguration;onBack:()=>void;onBusy:(busy:boolean)=>void;onChanged:()=>void};
 export function CashStatement(props:Props){

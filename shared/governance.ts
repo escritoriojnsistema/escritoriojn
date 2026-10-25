@@ -5,7 +5,7 @@ export type ArchiveEntry = { id: string; target_type: 'membership'; target_id: s
 export type GovernancePage<T> = { items: T[]; total: number; page: number; page_size: number };
 export type AuditView = 'recent' | 'archived';
 export type AuditPolicy = { days: 30 | 60 | 90; version: number; cutoff: string; effective_at: string };
-export type AuditReport = { id: string; protocol: string; count: number; office_id: string; office_name: string; actor_name: string; created_at: string; view: AuditView; cutoff: string; filters: AuditFilters; renderer_version: 1|2|3; contract_version: 1 };
+export type AuditReport = { id: string; protocol: string; count: number; office_id: string; office_name: string; actor_name: string; created_at: string; view: AuditView; cutoff: string; filters: AuditFilters; renderer_version: 1|2|3|4; contract_version: 1 };
 export type AuditVerification = { match: boolean; protocol: string; count: number; created_at: string; bytes: number };
 export const auditReportMaxEvents = 10_000;
 export const auditReportMaxBytes = 3 * 1024 * 1024;
@@ -28,6 +28,7 @@ export const auditActionNames: Record<string, string> = {
 };
 
 Object.assign(auditActionNames,{
+ 'expenses.create':'Conta a pagar registrada','expenses.approve':'Despesa aprovada','expenses.pay':'Despesa paga','cash.transferred':'Movimentação entre contas registrada','receipts.issued':'Recibo de pagamento emitido',
  'audit.policy_changed':'Prazo de arquivamento da auditoria alterado','audit.report_started':'Preparação de relatório de auditoria registrada','notifications.read':'Aviso marcado como lido',
  'accounts.correction_requested':'Correção cadastral solicitada','accounts.correction_applied':'Correção cadastral aplicada','accounts.email_confirmed':'E-mail da conta confirmado','accounts.self_updated':'Dados da própria conta atualizados',
  'payments.allocation_reversed':'Alocação de pagamento estornada','payments.refund_paid':'Devolução efetiva registrada',
@@ -37,7 +38,7 @@ Object.assign(auditActionNames,{
  'requests.reclaimed':'Atendimento retomado pelo responsável',
  'files.upload_intended':'Envio de anexo iniciado','files.download_authorized':'Consulta de anexo autorizada','files.policy_updated':'Política de anexos atualizada','files.cleanup_taken_over':'Limpeza de anexos retomada','files.cleanup_planned':'Limpeza de anexos planejada','files.process_claimed':'Processamento de anexo iniciado','files.process_completed':'Processamento de anexo concluído',
 });
-const auditModules:Record<string,string>={payments:'pagamentos',accounts:'conta',cash:'caixa',charges:'cobranças',requests:'atendimentos',services:'serviços',files:'anexos',customers:'clientes',team:'equipe e permissões',auth:'acesso',foundation:'configuração inicial',checklists:'checklists',audit:'auditoria',archives:'arquivados',notifications:'notificações'};
+const auditModules:Record<string,string>={expenses:'despesas',receipts:'recibos',payments:'pagamentos',accounts:'conta',cash:'caixa',charges:'cobranças',requests:'atendimentos',services:'serviços',files:'anexos',customers:'clientes',team:'equipe e permissões',auth:'acesso',foundation:'configuração inicial',checklists:'checklists',audit:'auditoria',archives:'arquivados',notifications:'notificações'};
 export function auditActionLabel(action:string):string{return auditActionNames[action]??`Evento de ${auditModules[action.split('.')[0]]??'outro módulo'}`;}
 export const auditFieldNames:Record<string,string>={reversal_id:'Referência do estorno lógico',refund_id:'Referência da devolução',payment_id:'Referência do pagamento',active:'Acesso ativo',role_code:'Função',permissions:'Permissões',allowed_permissions:'Permissões delegadas',allowed_roles:'Funções delegadas',can_create_owner:'Pode convidar super administrador',expires_at:'Validade',membership_id:'Referência do acesso',archive_id:'Referência do arquivo',count:'Quantidade',customer_id:'Referência do cliente',source_id:'Referência de origem',target_id:'Referência de destino',relation_id:'Referência do vínculo',merge_id:'Referência da mesclagem',version:'Versão',status:'Situação',unit_id:'Unidade',session_id:'Caixa',charge_id:'Cobrança',request_id:'Atendimento',payment_method_id:'Forma de pagamento',amount_cents:'Valor',reason:'Motivo'};
 export const auditTargetNames:Record<string,string>={account:'Conta',account_correction:'Correção cadastral',cash_session:'Caixa individual',cash_unit:'Unidade financeira',cash_account:'Conta financeira',cash_payment_method:'Forma de pagamento',charge:'Cobrança',request:'Atendimento',service:'Serviço',file:'Anexo',file_process:'Processamento de anexo',file_cleanup:'Limpeza de anexos',membership:'Acesso da equipe',delegation:'Delegação de permissões',invitation:'Convite',customer:'Cliente',office:'Escritório',audit:'Auditoria',notification:'Notificação'};

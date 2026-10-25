@@ -1,0 +1,16 @@
+# Etapa 17 — Despesas, transferências e recibos
+
+Fonte: [manual do Drive](https://drive.google.com/file/d/1yDX3KaIH03r8rbe0c-Q5PziuvyR2T8XF/view), consultado em 25/10/2026, e RF10/RF11 de `docs/regras/financeiro.md`. Base: main `b3b4aee`, Etapa16 publicada e correção Unicode preservada. Novo pedido autoriza implementação e entrega completa por GitHub → Vercel; sem Actions ou deploy CLI/API.
+
+Integração escolhida: ampliar o Caixa existente, com contas a pagar por escritório, aprovação explícita, pagamento em caixa próprio aberto, movimentos vinculados de sangria/reforço/transferência e recibo imutável por pagamento confirmado. Centavos inteiros; transferência não altera receita/alocação. Ledger existente continua fonte dos saldos. Nenhum dado, conta real, concessão individual ou configuração fictícia será criado no ambiente hospedado.
+
+Capacidades específicas de despesas, transferência e recibos, seed somente owner. Consulta consolidada não concede operação de colega. Mutações validam escritório/sessão/conta/versão após locks, guardam idempotência com hash e resultado e preservam comprovantes confirmados. Recibo conserva número, referência, valor efetivamente recebido e versão de apresentação; reimprimir consulta o mesmo snapshot. Recibo não é nota fiscal.
+
+UI reutiliza OperationLayout e componentes de Equipe/Caixa: até quatro ações principais, extras no menu lateral, áreas separadas, campos/alvos móveis existentes, sem loaders ou alteração de rótulos durante requisição. Rolagem natural somente quando conteúdo/zoom/teclado exigir. Erros transitórios preservam rascunho; 401/403 descartam dados privados.
+
+Aceites: despesa criada/aprovada/paga uma vez, operador sem capacidade negado, sangria R$20 reduz espécie e tem entrada vinculada no destino, reforço inverso e transferência sem receita; recibo15 numerado/reimpresso consistentemente, inclusive após correção16; isolamento, concorrência, retry e fechamento preservados. Verificar Node/API, SQL descartável, Auth local quando disponível, UI 320/360/768/1440, build e publicação/banco somente leitura. Etapa18 fora do escopo.
+
+
+Decisões de implementação verificadas: pagar e movimentar exigem também cash.open vigente (mesma guarda visual/API/RPC; regressão RED→GREEN após revisão). Fundos de origem são os registrados na sessão própria selecionada, na mesma unidade; cartão somente líquido liquidado, sem inventar saldo bancário inicial. Comprovante é referência/evidência textual preservada em cada decisão, sem upload financeiro desconectado do domínio11. Recibos são apresentados/impressos pelo snapshot1; auditoria nova usa apresentação4 e preserva os14hashes dos produtores1/2/3.
+
+Rollout compatível: primeiro runtime com suporte às novas capacidades, sem as conceder no banco; após VercelSUCCESS, migration17 via Git. Conferir schema_migrations após Git antes de qualquer apply manual. Nenhuma alteração de configuração Vercel/Auth/SMTP/Storage nem fixture hospedada. Estado nesta revisão: implementação e testes finais em conclusão; publicação ainda pendente.

@@ -19,6 +19,11 @@ async function setup(page:Page,permissions=capabilities,role='owner'){
   return route.fulfill({json:{data:{items,total:6,page:pageNo,page_size:size}}});
  });
 }
+test('auditoria: consulta tardia da política conserva prazo já escolhido na mesma sessão',async({page})=>{
+ await setup(page);let release!:()=>void;const wait=new Promise<void>(resolve=>{release=resolve;});
+ await page.route('**/api/governance/audit/policy?**',async route=>{await wait;await route.fallback();});
+ try{await page.goto('/auditoria');await page.getByRole('button',{name:'Relatórios e prazo',exact:true}).click();await page.getByRole('combobox',{name:'Arquivar após',exact:true}).selectOption('60');release();await expect(page.getByText('Recentes: últimos 90 dias.',{exact:false})).toBeVisible();await expect(page.getByRole('combobox',{name:'Arquivar após',exact:true})).toHaveValue('60');await expect(page.getByRole('button',{name:'Salvar prazo',exact:true})).toBeEnabled();}finally{release();}
+});
 test('consulta lenta de auditoria continua após rotação do token da mesma sessão',async({page})=>{
  await setup(page);await page.goto('/auditoria');
  await expect(page.getByRole('list',{name:'Eventos de auditoria'})).toBeVisible();

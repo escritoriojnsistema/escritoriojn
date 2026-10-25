@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-25T03:40:57.596201+00:00",
+  "base": "b3b4aee68722b61a784a0547f06a22682a244c2f",
+  "status": "local_verified_rollout_pending",
+  "node_api": {
+    "passed": 159,
+    "failed": 0
+  },
+  "sql": {
+    "replays": [
+      970,
+      971
+    ],
+    "restricted_migrator": true,
+    "real_concurrency_scenarios": 8,
+    "final_log": "etapa17-db-verified.log"
+  },
+  "auth_local": {
+    "distinct_flows": 4,
+    "expenses17": true,
+    "payments15": true,
+    "corrections16": true,
+    "audit_pdf4": true,
+    "logs": [
+      "etapa17-auth-final.log (3 passed, audit initially failed)",
+      "etapa17-auth-audit-final.log (audit passed after draft fix)"
+    ]
+  },
+  "ui": {
+    "regressions14_to16": 98,
+    "new17": 12,
+    "governance": 22,
+    "execution": "multiple batches with isolated rechecks; no overlap added",
+    "final_new_and_policy_run": 13,
+    "known_failed_runs": [
+      "select getByLabel corrected to accessible combobox",
+      "simultaneous runners artifact ENOENT and Vite reload during edits",
+      "one governance initial load5s passed isolated without timeout change",
+      "320 movement geometry583>570 corrected heading size",
+      "policy late response overwrote draft RED; preserved current-authority edits GREEN"
+    ]
+  },
+  "public_local": 3,
+  "build": {
+    "typecheck": true,
+    "vite": true,
+    "server": true,
+    "public_connection_matches_production": true
+  },
+  "dependency_audit_production_vulnerabilities": 0,
+  "pdf_historical_file_hashes_preserved": 14,
+  "review": {
+    "independent": "review17_final",
+    "important_found": 1,
+    "remaining": 0,
+    "resolution": "cash.open authority aligned in RPC with UI, replay/current operations tested RED→GREEN"
+  },
+  "hosted": {
+    "business_fixtures": false,
+    "auth_changes": false,
+    "individual_grants_added": false,
+    "publication": "pending"
+  },
+  "github_actions_used": false,
+  "vercel_cli_api_deploy_used": false
+}

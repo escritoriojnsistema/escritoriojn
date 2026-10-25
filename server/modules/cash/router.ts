@@ -1,3 +1,5 @@
+import {validExpenseOperation,validTransferOperation} from '../../../shared/expenses.js';
+import {finance17Page,expenseResult,transferResult,receipt} from './expenseDto.js';
 import {validPaymentOperation} from '../../../shared/payments.js';
 import {validCorrectionOperation} from '../../../shared/corrections.js';
 import {correctionSources} from './correctionDto.js';
@@ -35,3 +37,8 @@ cashRouter.post('/payment',async(req,res)=>{const b:unknown=req.body;if(Object.k
 
 cashRouter.post('/correction-sources',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','session_id','kind','query','page'])||!uuid(b.office_id)||!uuid(b.session_id)||!['reverse','refund'].includes(String(b.kind))||!requestText(b.query,120,0)||!positive(b.page,100000)){invalid(res);return;}await rpc(res,'correction_sources',{p_office_id:b.office_id,p_session_id:b.session_id,p_kind:b.kind,p_query:b.query,p_page:b.page},correctionSources);});
 cashRouter.post('/correction',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','operation'])||!uuid(b.office_id)||!validCorrectionOperation(b.operation)){invalid(res);return;}await rpc(res,'correction_operate',{p_office_id:b.office_id,p_operation:b.operation},statement);});
+
+cashRouter.post('/finance17',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','session_id','page'])||!uuid(b.office_id)||!(b.session_id===null||uuid(b.session_id))||!positive(b.page,100000)){invalid(res);return;}await rpc(res,'finance17_page',{p_office_id:b.office_id,p_session_id:b.session_id,p_page:b.page},finance17Page);});
+cashRouter.post('/expense',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','operation'])||!uuid(b.office_id)||!validExpenseOperation(b.operation)){invalid(res);return;}await rpc(res,'expense_operate',{p_office_id:b.office_id,p_operation:b.operation},expenseResult);});
+cashRouter.post('/transfer',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','operation'])||!uuid(b.office_id)||!validTransferOperation(b.operation)){invalid(res);return;}await rpc(res,'transfer_operate',{p_office_id:b.office_id,p_operation:b.operation},transferResult);});
+cashRouter.post('/receipt',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','payment_id','idempotency_key'])||!uuid(b.office_id)||!uuid(b.payment_id)||!uuid(b.idempotency_key)){invalid(res);return;}await rpc(res,'payment_receipt',{p_office_id:b.office_id,p_payment_id:b.payment_id,p_idempotency_key:b.idempotency_key},receipt);});
