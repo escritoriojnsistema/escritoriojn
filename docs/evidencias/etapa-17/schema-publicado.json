@@ -1,0 +1,343 @@
+{
+  "counts": [
+    {
+      "auth_users": 5,
+      "memberships": 5,
+      "customers": 1,
+      "requests": 1,
+      "audit_events": 32,
+      "individual_permissions": 17,
+      "cash_sessions": 0,
+      "cash_entries": 0,
+      "payments": 0,
+      "reversals": 0,
+      "refunds": 0,
+      "expenses": 0,
+      "expense_history": 0,
+      "transfers": 0,
+      "receipts": 0,
+      "migrations": 24
+    }
+  ],
+  "tables": [
+    {
+      "relname": "expense_history",
+      "rls": true,
+      "anon_access": false,
+      "authenticated_access": false,
+      "service_role_access": false
+    },
+    {
+      "relname": "expenses",
+      "rls": true,
+      "anon_access": false,
+      "authenticated_access": false,
+      "service_role_access": false
+    },
+    {
+      "relname": "financial_transfers",
+      "rls": true,
+      "anon_access": false,
+      "authenticated_access": false,
+      "service_role_access": false
+    },
+    {
+      "relname": "payment_receipts",
+      "rls": true,
+      "anon_access": false,
+      "authenticated_access": false,
+      "service_role_access": false
+    }
+  ],
+  "functions": [
+    {
+      "schema": "private",
+      "name": "cash_statement_record",
+      "body_md5": "dc69ca009f8e7c0987d51b8e5ad695f7",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "arguments": "s private.cash_sessions, p_actor uuid, p_page integer",
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false,
+      "public_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "expense_operate",
+      "body_md5": "681057f337ee6660bae1b1a98a9297f3",
+      "definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "arguments": "p_office_id uuid, p_operation jsonb",
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false,
+      "public_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "finance17_funds",
+      "body_md5": "a165e211a50d46f6c0435b65561f2423",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "arguments": "p_office uuid, p_session uuid, p_account uuid",
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false,
+      "public_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "finance17_guard",
+      "body_md5": "6ab1acb6e7959ee01445eb47a35322f9",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "arguments": "",
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false,
+      "public_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "finance17_page",
+      "body_md5": "ad7fa832680a835ab345a58e869f2dd0",
+      "definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "arguments": "p_office_id uuid, p_session_id uuid, p_page integer",
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false,
+      "public_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "finance17_text",
+      "body_md5": "28f82c2e9e3bec60882875dcde5bcfe1",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "arguments": "v text, lo integer, hi integer",
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false,
+      "public_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "payment_receipt",
+      "body_md5": "d41038ba364bfa267bf31a7e9788aa81",
+      "definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "arguments": "p_office_id uuid, p_payment_id uuid, p_idempotency_key uuid",
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false,
+      "public_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "transfer_operate",
+      "body_md5": "3fc92fb47b0d3e3ccfdd58985a8e2c70",
+      "definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "arguments": "p_office_id uuid, p_operation jsonb",
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false,
+      "public_execute": false
+    },
+    {
+      "schema": "public",
+      "name": "expense_operate",
+      "body_md5": "7e3756687fc6f571dd0d15bb3fc44daf",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "arguments": "p_office_id uuid, p_operation jsonb",
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false,
+      "public_execute": false
+    },
+    {
+      "schema": "public",
+      "name": "finance17_page",
+      "body_md5": "d73b69b88cdccad4f2f272706c03b365",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "arguments": "p_office_id uuid, p_session_id uuid, p_page integer",
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false,
+      "public_execute": false
+    },
+    {
+      "schema": "public",
+      "name": "payment_receipt",
+      "body_md5": "e044f891c2913463bfda78bcd5ed578e",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "arguments": "p_office_id uuid, p_payment_id uuid, p_idempotency_key uuid",
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false,
+      "public_execute": false
+    },
+    {
+      "schema": "public",
+      "name": "transfer_operate",
+      "body_md5": "fb363747650c3a5aec8f8b33246a0156",
+      "definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "arguments": "p_office_id uuid, p_operation jsonb",
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false,
+      "public_execute": false
+    }
+  ],
+  "capabilities": [
+    {
+      "code": "cash.transfer",
+      "seed_roles": [
+        "owner"
+      ],
+      "individual_grants": 0
+    },
+    {
+      "code": "expenses.approve",
+      "seed_roles": [
+        "owner"
+      ],
+      "individual_grants": 0
+    },
+    {
+      "code": "expenses.create",
+      "seed_roles": [
+        "owner"
+      ],
+      "individual_grants": 0
+    },
+    {
+      "code": "expenses.pay",
+      "seed_roles": [
+        "owner"
+      ],
+      "individual_grants": 0
+    },
+    {
+      "code": "expenses.read",
+      "seed_roles": [
+        "owner"
+      ],
+      "individual_grants": 0
+    },
+    {
+      "code": "receipts.issue",
+      "seed_roles": [
+        "owner"
+      ],
+      "individual_grants": 0
+    },
+    {
+      "code": "receipts.read",
+      "seed_roles": [
+        "owner"
+      ],
+      "individual_grants": 0
+    }
+  ],
+  "aliases": [
+    {
+      "proname": "cash_operate_before15",
+      "body_md5": "241826d5001f3cbaf5df4c998c89dc7e"
+    },
+    {
+      "proname": "cash_statement_before17",
+      "body_md5": "b68c604af0e7aca9ec9ea78ba894f8d1"
+    },
+    {
+      "proname": "cash_statement_record_before15",
+      "body_md5": "b55a865dabe46be474eaef71bc48bf88"
+    }
+  ],
+  "audit": [
+    {
+      "column_default": "4"
+    }
+  ],
+  "function_body_checks": [
+    {
+      "function": "private.finance17_guard",
+      "body_matches": true
+    },
+    {
+      "function": "private.finance17_text",
+      "body_matches": true
+    },
+    {
+      "function": "private.finance17_page",
+      "body_matches": true
+    },
+    {
+      "function": "private.finance17_funds",
+      "body_matches": true
+    },
+    {
+      "function": "private.expense_operate",
+      "body_matches": true
+    },
+    {
+      "function": "private.transfer_operate",
+      "body_matches": true
+    },
+    {
+      "function": "private.payment_receipt",
+      "body_matches": true
+    },
+    {
+      "function": "public.finance17_page",
+      "body_matches": true
+    },
+    {
+      "function": "public.expense_operate",
+      "body_matches": true
+    },
+    {
+      "function": "public.transfer_operate",
+      "body_matches": true
+    },
+    {
+      "function": "public.payment_receipt",
+      "body_matches": true
+    },
+    {
+      "function": "private.cash_statement_record",
+      "body_matches": true
+    }
+  ],
+  "all_previous_counts_preserved": true
+}

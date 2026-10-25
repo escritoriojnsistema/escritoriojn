@@ -1,0 +1,57 @@
+{
+  "url": "https://escritoriojn.vercel.app",
+  "runtime": {
+    "pr": 47,
+    "commit": "5776910fd716107c032bfdeea94adb29e8a251b0",
+    "merge": "54bf495dd23c05559596120deb2d4c1658d4d47a",
+    "tree": "0a71aa8597a2863b5c334950d2fcc01d4ce76377",
+    "vercel": [
+      {
+        "state": "success",
+        "url": "https://vercel.com/escritorio-jn/escritoriojn/QPqNrZtWne9GrR4qyYRWZtUPgP4U",
+        "context": "Vercel"
+      }
+    ]
+  },
+  "database": {
+    "pr": 48,
+    "commit": "758afe1bf2ce60a1d21727ee42a26fab4618e673",
+    "merge": "b00044d31daaf1233316825358b16909ffb28927",
+    "tree": "7b55aa9b41983cc42b242e5d28fd781574ef59c1",
+    "vercel": [
+      {
+        "state": "success",
+        "url": "https://vercel.com/escritorio-jn/escritoriojn/DHZqkka3xCGgt1Q8idshTRbuhirC",
+        "context": "Vercel"
+      }
+    ],
+    "migration": "20261025025841",
+    "automatic_git_application": true,
+    "manual_application": false
+  },
+  "github_actions_used": false,
+  "vercel_cli_api_deploy_used": false,
+  "hosted_business_fixtures": false,
+  "hosted_authenticated_business_test": false,
+  "hosted_readback_verified": true,
+  "presentation": {
+    "pr": 49,
+    "commit": "99e51146c01379f6c0cf3211f68b78a66acc5b81",
+    "merge": "c0ce51c6b2501ee7f2910278c139182a76928c72",
+    "tree": "b9807db60cb7f64f3d9455d940830613fb8aad8f",
+    "vercel": [
+      {
+        "state": "success",
+        "url": "https://vercel.com/escritorio-jn/escritoriojn/3bjyyFu1H6FC4VfXKsZAEFAC8UPc",
+        "context": "Vercel"
+      }
+    ],
+    "change": "Digital session movements labeled separately from gross service receipts; no calculation or SQL change"
+  },
+  "final_closure": {
+    "includes": "stored text compatibility and final evidence",
+    "no_new_migration": true,
+    "visual_bundle_unchanged": true,
+    "commit_status": "Verified in execution checkpoint after this commit, avoiding self-hash documentation cycle"
+  }
+}

@@ -4,13 +4,13 @@ import {cashInteger} from '../../../shared/cash.js';
 import {validChargeDate} from '../../../shared/charges.js';
 import {record,uuid} from '../team/validation.js';
 import {positive,requestText} from '../requests/validation.js';
+import {storedFinancialText} from './text.js';
 const total=(v:unknown,min=0):v is number=>Number.isSafeInteger(v)&&Number(v)>=min;
 const invalid=():never=>{throw Error('Invalid financial response');};
 const time=(v:unknown):v is string=>typeof v==='string'&&v.length<41&&Number.isFinite(Date.parse(v));
 // PostgreSQL char_length counts Unicode codepoints, rather than UTF-16 units.
 const entryReason=(v:unknown):v is string=>{
- if(!requestText(v,1000,5))return false;
- const length=Array.from(v).length;return length>=5&&length<=500;
+ return storedFinancialText(v,5,500);
 };
 function entry(v:unknown,client:boolean):FinanceEntry|ClientFinance['history'][number]{
  if(!record(v)||!uuid(v.id)||!['expense_paid','transfer_out','transfer_in','received','refunded','reversed','reconciled','closed','allocation_reversed','refund_paid'].includes(String(v.kind))||!time(v.created_at)||!cashInteger(v.amount_cents)||!(v.request_id===null||uuid(v.request_id))||!(v.charge_id===null||uuid(v.charge_id))||!(v.protocol===null||requestText(v.protocol,80))||!(v.payment_method_name===null||requestText(v.payment_method_name,120)))return invalid();

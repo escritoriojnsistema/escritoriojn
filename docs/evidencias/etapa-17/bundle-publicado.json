@@ -1,0 +1,78 @@
+{
+  "url": "https://escritoriojn.vercel.app",
+  "runtime_merge": "c0ce51c6b2501ee7f2910278c139182a76928c72",
+  "assets": [
+    {
+      "path": "assets/index-CZDrkXbd.js",
+      "sha256": "aed960d1ffb6ad8b41d4b1371d713c0e0c5e39627c232024d262c93b20ac2cd9",
+      "matches": true
+    },
+    {
+      "path": "assets/rolldown-runtime-WkwZ5CU-.js",
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "matches": true
+    },
+    {
+      "path": "assets/index-CnRrsYWx.css",
+      "sha256": "3249927a2fef2f4aaad3b6b72d5da0377e40d34d04f16835a82dfa382f98ef7e",
+      "matches": true
+    },
+    {
+      "path": "assets/supabase-DtuMx0jC.js",
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "matches": true
+    },
+    {
+      "path": "assets/react-DYkIpRt7.js",
+      "sha256": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+      "matches": true
+    }
+  ],
+  "anonymous_apis": [
+    {
+      "path": "finance17",
+      "status": 401,
+      "no_store": true
+    },
+    {
+      "path": "expense",
+      "status": 401,
+      "no_store": true
+    },
+    {
+      "path": "transfer",
+      "status": 401,
+      "no_store": true
+    },
+    {
+      "path": "receipt",
+      "status": 401,
+      "no_store": true
+    },
+    {
+      "path": "statement",
+      "status": 401,
+      "no_store": true
+    },
+    {
+      "path": "payment",
+      "status": 401,
+      "no_store": true
+    },
+    {
+      "path": "correction",
+      "status": 401,
+      "no_store": true
+    },
+    {
+      "path": "correction-sources",
+      "status": 401,
+      "no_store": true
+    }
+  ],
+  "html_status": 200,
+  "served_script": [
+    "/assets/index-CZDrkXbd.js"
+  ],
+  "health_status": 200
+}

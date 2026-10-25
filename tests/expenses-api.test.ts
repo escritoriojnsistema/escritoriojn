@@ -4,6 +4,7 @@ import {validExpenseOperation,validTransferOperation} from '../shared/expenses.j
 import {expenseResult,finance17Page,receipt,transferResult} from '../server/modules/cash/expenseDto.js';
 import {app} from '../server/app.js';
 import {createServer} from 'node:http';
+import {statement} from '../server/modules/cash/financeDto.js';
 import {reportInputV4} from '../server/modules/governance/reportV4.js';
 import {reportInputV3} from '../server/modules/governance/reportV3.js';
 import type {AuditEvent,AuditReport} from '../shared/governance.js';
@@ -30,6 +31,14 @@ test('DTO17: elimina campos privados e recusa valores/datas/estados inconsistent
  assert.equal(finance17Page(page).expenses[0].amount_cents,2000);
  assert.throws(()=>finance17Page({...page,expenses:Array(6).fill(expense)}));
  assert.throws(()=>transferResult({transfer:{id,kind:'sangria',amount_cents:2000,source_account_id:id,destination_account_id:id,source_account_name:'Caixa',destination_account_name:'Caixa',reason:'Retirada para cofre',evidence:'Conferido',created_at:expense.created_at,session_id:id}}));
+});
+test('financeiro17: leitura conserva espaços Unicode aceitos no SQL sem inutilizar lista ou extrato',()=>{
+ const text='\u00a0Comprovante conferido\u00a0';
+ const parsed=expenseResult({expense:{...expense,payee:'\u00a0Fornecedor\u00a0',evidence:text}});assert.equal(parsed.expense.evidence,text);
+ const entry={id,kind:'transfer_out',created_at:expense.created_at,amount_cents:2000,cash_cents:-2000,applied_cents:0,request_id:null,charge_id:null,protocol:null,payment_method_name:null,account_name:'Banco',reason:text,original_entry_id:null,refundable_cents:0,counted_cents:null,expected_cents:null};
+ const session={id,unit_id:id,unit_name:'Unidade',operator_name:'Operador',is_self:true,status:'open',version:2,opened_at:expense.created_at,closed_at:null,opening_cents:10000,cash_cents:8000,received_cents:0,refunded_cents:0,digital_cents:2000,can_operate:true,can_refund:false};
+ assert.equal(statement({session,entries:[entry],total:1,page:1,page_size:5,can_receive:false}).entries[0].reason,text);
+ assert.throws(()=>expenseResult({expense:{...expense,evidence:' Comprovante conferido '}}));
 });
 test('recibo17: contrato preserva valor recebido bruto, referência e versão, sem campos internos',()=>{
  const data={id,number:'JN-REC-000001',version:1,issued_at:expense.created_at,payment_id:id,snapshot:{office_name:'Escritório',operator_name:'Operador',payer_name:null,description:'Serviço recebido',payment_reference:`JN-PAG-${id}`,amount_cents:3000,payment_type:'cash',method_name:'Dinheiro',confirmed_at:expense.created_at,allocations:[{protocol:'JN-0001',amount_cents:3000}],private:'PRIVATE'}};

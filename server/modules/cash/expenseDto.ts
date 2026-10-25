@@ -1,5 +1,5 @@
 import type {Expense,Finance17Page,FinancialTransfer,PaymentReceipt} from '../../../shared/expenses.js';
-import {expenseText} from '../../../shared/expenses.js';
+import {storedFinancialText as expenseText} from './text.js';
 import {cashInteger} from '../../../shared/cash.js';
 import {validChargeDate} from '../../../shared/charges.js';
 import {record,uuid} from '../team/validation.js';

@@ -1,0 +1,8 @@
+{
+  "version": "20261025025841",
+  "source_sha256": "345de1fefb5a8dabea6ba0ff68536eae1b76f93915d380456e26ab68b62dc6a3",
+  "expected_statements": 46,
+  "statements": 46,
+  "all_statements_match": true,
+  "different_indices": []
+}

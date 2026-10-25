@@ -1,9 +1,9 @@
 {
   "date": "2026-10-25T03:40:57.596201+00:00",
   "base": "b3b4aee68722b61a784a0547f06a22682a244c2f",
-  "status": "local_verified_rollout_pending",
+  "status": "published_verified",
   "node_api": {
-    "passed": 159,
+    "passed": 160,
     "failed": 0
   },
   "sql": {
@@ -28,7 +28,7 @@
   },
   "ui": {
     "regressions14_to16": 98,
-    "new17": 12,
+    "new17": 13,
     "governance": 22,
     "execution": "multiple batches with isolated rechecks; no overlap added",
     "final_new_and_policy_run": 13,
@@ -38,7 +38,12 @@
       "one governance initial load5s passed isolated without timeout change",
       "320 movement geometry583>570 corrected heading size",
       "policy late response overwrote draft RED; preserved current-authority edits GREEN"
-    ]
+    ],
+    "digital_label_regression": {
+      "red_green": true,
+      "final_focused_passed": 2,
+      "no_calculation_change": true
+    }
   },
   "public_local": 3,
   "build": {
@@ -59,8 +64,30 @@
     "business_fixtures": false,
     "auth_changes": false,
     "individual_grants_added": false,
-    "publication": "pending"
+    "publication": "verified",
+    "migration_auto_applied": "20261025025841",
+    "counts_preserved": true,
+    "source_statements_match": 46,
+    "function_bodies_match": 12,
+    "assets_match": 5,
+    "health_status": 200,
+    "anonymous_apis_401": 8,
+    "runtime_merge": "c0ce51c6b2501ee7f2910278c139182a76928c72"
   },
   "github_actions_used": false,
-  "vercel_cli_api_deploy_used": false
+  "vercel_cli_api_deploy_used": false,
+  "public_hosted": 3,
+  "github_pull_requests": [
+    47,
+    48,
+    49
+  ],
+  "text_compatibility": {
+    "red_green": true,
+    "focused_node_passed": 7,
+    "full_node_passed": 160,
+    "auth_sdk_to_api_statement_passed": true,
+    "no_sql_or_input_normalization_change": true,
+    "visual_bundle_unchanged": true
+  }
 }
