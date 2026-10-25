@@ -1,7 +1,7 @@
 {
   "etapa": 18,
   "date": "2026-10-25",
-  "status": "Código validado; publicação e leitura hospedada registradas em publicacao.json após rollout",
+  "status": "Concluída, publicada e verificada",
   "baseline": "83413fb2dad9acd616d7180e7f0faf8986351f8d",
   "manual": "https://drive.google.com/file/d/1E4DpN697mVPa5uFL8qQsuvZVAioF7IHS/view",
   "tests": {
@@ -50,7 +50,8 @@
     "server_typecheck": true,
     "public_config_build": true,
     "diff_check": true,
-    "production_dependencies_vulnerabilities": 0
+    "production_dependencies_vulnerabilities": 0,
+    "public_hosted": 3
   },
   "presentation": {
     "preserved": [
@@ -69,5 +70,28 @@
     "Múltiplos destinos, zoom, teclado e conteúdos extensos podem exigir rolagem natural.",
     "Medições SQL são locais e incluem Docker/psql; não constituem SLA hospedado.",
     "Nenhum teste autenticado de negócio ou fixture hospedado."
-  ]
+  ],
+  "hosted": {
+    "migration_statements_match": 33,
+    "function_bodies_match": 13,
+    "migrations": 25,
+    "rls_acl_private_tables": 2,
+    "public_invoker_authenticated_rpcs": 3,
+    "capabilities_owner_seed_only": 2,
+    "counts_preserved": true,
+    "canonical_assets_sha_match": 5,
+    "health": 200,
+    "anonymous_401": 10,
+    "advisors_errors": 0,
+    "new18_unindexed_foreign_keys": 0
+  },
+  "reviews": {
+    "task_spec": "APROVADA",
+    "task_quality": "APROVADA",
+    "whole_branch": "APROVADA",
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "P3": 0
+  }
 }

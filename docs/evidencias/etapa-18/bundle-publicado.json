@@ -1,0 +1,95 @@
+{
+  "base": "https://escritoriojn.vercel.app",
+  "checked_at": "2026-10-25T11:47:08Z",
+  "assets": [
+    {
+      "path": "assets/index-C4VSV6Gw.js",
+      "status": 200,
+      "bytes": 427056,
+      "sha256": "fd1a2cae31f2b705ac42e6e25625d4f803ee43acc20aceddba3d81747733efe4",
+      "matches_build": true
+    },
+    {
+      "path": "assets/index-Q9_C0WtA.css",
+      "status": 200,
+      "bytes": 77874,
+      "sha256": "d977cc86c9d18ada8c185a6dd656cdb5e74c080f9a07bf0f741669e21fc5c438",
+      "matches_build": true
+    },
+    {
+      "path": "assets/react-DYkIpRt7.js",
+      "status": 200,
+      "bytes": 259235,
+      "sha256": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+      "matches_build": true
+    },
+    {
+      "path": "assets/rolldown-runtime-WkwZ5CU-.js",
+      "status": 200,
+      "bytes": 599,
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "matches_build": true
+    },
+    {
+      "path": "assets/supabase-DtuMx0jC.js",
+      "status": 200,
+      "bytes": 214392,
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "matches_build": true
+    }
+  ],
+  "anonymous": [
+    {
+      "path": "/api/cash/closures/state",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/closures/record",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/closures/operate",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/statement",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/payment",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/correction",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/finance17",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/expense",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/transfer",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/receipt",
+      "status": 401,
+      "cache_control": "private, no-store"
+    }
+  ],
+  "canonical_status": 200,
+  "health_status": 200
+}

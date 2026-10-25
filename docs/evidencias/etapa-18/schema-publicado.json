@@ -1,0 +1,308 @@
+{
+  "counts": {
+    "reviews": 0,
+    "closures": 0,
+    "expenses": 0,
+    "payments": 0,
+    "receipts": 0,
+    "requests": 1,
+    "customers": 1,
+    "transfers": 0,
+    "auth_users": 5,
+    "migrations": 25,
+    "memberships": 5,
+    "audit_events": 32,
+    "cash_entries": 0,
+    "cash_sessions": 0,
+    "individual_permissions": 17
+  },
+  "tables": [
+    {
+      "rls": true,
+      "name": "cash_closure_reviews",
+      "policies": 0,
+      "anon_access": false,
+      "service_role_access": false,
+      "authenticated_access": false
+    },
+    {
+      "rls": true,
+      "name": "cash_closures",
+      "policies": 0,
+      "anon_access": false,
+      "service_role_access": false,
+      "authenticated_access": false
+    }
+  ],
+  "indexes": [
+    {
+      "name": "cash_closures_pkey",
+      "valid": true
+    },
+    {
+      "name": "cash_closures_office_id_id_key",
+      "valid": true
+    },
+    {
+      "name": "cash_closures_office_id_command_key_key",
+      "valid": true
+    },
+    {
+      "name": "cash_closures_session_idx",
+      "valid": true
+    },
+    {
+      "name": "cash_closures_sources_idx",
+      "valid": true
+    },
+    {
+      "name": "cash_closures_source_idx",
+      "valid": true
+    },
+    {
+      "name": "cash_closures_actor_idx",
+      "valid": true
+    },
+    {
+      "name": "cash_closure_reviews_pkey",
+      "valid": true
+    },
+    {
+      "name": "cash_closure_reviews_actor_idx",
+      "valid": true
+    }
+  ],
+  "functions": [
+    {
+      "name": "cash_operate",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "349d04ad7844f424b421aa8b263cd944",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "cash_operate_before15",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "241826d5001f3cbaf5df4c998c89dc7e",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "cash_operate_before18",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "e6d4f5f5b86d221710375e47de3b0222",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "cash_statement_before17",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "b68c604af0e7aca9ec9ea78ba894f8d1",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "cash_statement_before18",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "dc69ca009f8e7c0987d51b8e5ad695f7",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "cash_statement_record",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "3ed70f0c81746ae8fef3f30691de8632",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "cash_statement_record_before15",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "b55a865dabe46be474eaef71bc48bf88",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "closure_can18",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "185650ff0cd785280211dac92da30e89",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "closure_groups18",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "cc8afdcd035e96c1b84f82c594a75fd9",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "closure_guard18",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "0296231eda524f09d828f501e761b9d5",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "closure_json18",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "afc544ba942bb17bf6ddf0d8fe1f91bc",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "closure_operate",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "26f563631ca150937b1f80a87653ebbb",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "closure_record",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "9311170e72982c2f98c8b3fec81f4973",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "closure_safe18",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "9913fbba0f8af086a7894893c0c2c81d",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "closure_state",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "a5d9f942f416f876d623460a1a8fa4fa",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "closure_operate",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "body_md5": "9d6733cf4e1da6546bb6cb49f5359f02",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "closure_record",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "body_md5": "024052fde860e83f5a0b35c686bcb6dd",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "closure_state",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "body_md5": "38bdfe5ceaae75bc633e3eb591c71449",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    }
+  ],
+  "permissions": [
+    {
+      "code": "cash.closure.approve",
+      "roles": [
+        "owner"
+      ]
+    },
+    {
+      "code": "cash.closure.adjust",
+      "roles": [
+        "owner"
+      ]
+    }
+  ],
+  "renderer_default": "5"
+}
