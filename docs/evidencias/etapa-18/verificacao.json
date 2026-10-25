@@ -1,0 +1,73 @@
+{
+  "etapa": 18,
+  "date": "2026-10-25",
+  "status": "Código validado; publicação e leitura hospedada registradas em publicacao.json após rollout",
+  "baseline": "83413fb2dad9acd616d7180e7f0faf8986351f8d",
+  "manual": "https://drive.google.com/file/d/1E4DpN697mVPa5uFL8qQsuvZVAioF7IHS/view",
+  "tests": {
+    "node_api": {
+      "passed": 164,
+      "failed": 0
+    },
+    "database": {
+      "replays": [
+        1062,
+        1063
+      ],
+      "races_per_replay": 7,
+      "migrator": "NOSUPERUSER NOBYPASSRLS",
+      "scope": "Regressões14–17 antes da migration18; snapshot, aprovação, ajuste, isolamento,100grupos/101negado, dinheiro/cartão, replays e aliases/PDF históricos"
+    },
+    "ui": {
+      "unique_financial_cases": 124,
+      "passed_in_batch": 123,
+      "quiet_recheck_passed": 1,
+      "new_closure_cases": 13,
+      "widths": [
+        320,
+        360,
+        768,
+        1440,
+        1920
+      ],
+      "reason_for_recheck": "ERR_NETWORK_CHANGED em imports Vite durante criação/remoção de redes Docker;1920 passou sem Docker concorrente"
+    },
+    "auth_local": {
+      "distinct_flows_passed": 7,
+      "flows": [
+        "fechamento18 SDK/API/navegador",
+        "pagamentos15",
+        "estornos16",
+        "despesas17",
+        "portal financeiro e fechamento18",
+        "auditoria PDF5 e restauração",
+        "auditoria separação de capacidades/escritório/cliente"
+      ],
+      "notes": "Primeira inicialização abortou por timeout local. Reexecução validou4fluxos; asserção antiga ambígua do portal foi vinculada ao protocolo próprio e passou na rechecagem com2fluxos de Auditoria. Nenhum rastro/credencial Auth armazenado."
+    },
+    "public_local": 3,
+    "typecheck": true,
+    "server_typecheck": true,
+    "public_config_build": true,
+    "diff_check": true,
+    "production_dependencies_vulnerabilities": 0
+  },
+  "presentation": {
+    "preserved": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "new": 5,
+    "manifest": "apresentacao5.json"
+  },
+  "limitations": [
+    "Registros manuais, sem gateway ou conciliação bancária automática.",
+    "Cartão confere bruto após devoluções; taxas e créditos liquidados/pendentes são informações separadas.",
+    "Ajuste de conferência é documental e não movimenta dinheiro; original permanece visível.",
+    "Múltiplos destinos, zoom, teclado e conteúdos extensos podem exigir rolagem natural.",
+    "Medições SQL são locais e incluem Docker/psql; não constituem SLA hospedado.",
+    "Nenhum teste autenticado de negócio ou fixture hospedado."
+  ]
+}

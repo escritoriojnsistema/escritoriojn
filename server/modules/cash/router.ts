@@ -1,3 +1,4 @@
+import {makeClosureRouter} from './closureRouter.js';
 import {validExpenseOperation,validTransferOperation} from '../../../shared/expenses.js';
 import {finance17Page,expenseResult,transferResult,receipt} from './expenseDto.js';
 import {validPaymentOperation} from '../../../shared/payments.js';
@@ -16,7 +17,9 @@ import {dashboard,configuration,configured} from './dto.js';
 export const cashRouter=Router();
 cashRouter.use((_req,res,next)=>{res.setHeader('Cache-Control','private, no-store');res.setHeader('CDN-Cache-Control','no-store');res.vary('Authorization');next();});
 cashRouter.use(async(req,res,next)=>{const auth=await authenticatedClient(req,res);if(auth){res.locals.cashAuth=auth;next();}});
-cashRouter.use((req,res,next)=>{if(!req.is('application/json')){errorResponse(res,415,'UNSUPPORTED_MEDIA_TYPE','Envie um corpo JSON.');return;}next();},json({limit:'8kb'}));
+cashRouter.use((req,res,next)=>{if(!req.is('application/json')){errorResponse(res,415,'UNSUPPORTED_MEDIA_TYPE','Envie um corpo JSON.');return;}next();});
+cashRouter.use('/closures',makeClosureRouter(rpc));
+cashRouter.use(json({limit:'8kb'}));
 const invalid=(res:Response)=>errorResponse(res,422,'CASH_VALIDATION','Confira os dados do caixa e da configuração.');
 const codes:Record<string,number>={AUTH_REQUIRED:401,CASH_FORBIDDEN:403,CASH_NOT_FOUND:404,CASH_CONFLICT:409,CASH_VALIDATION:422,CHARGES_FORBIDDEN:403,REQUESTS_FORBIDDEN:403,REQUEST_NOT_FOUND:404,CHARGE_CONFLICT:409};
 async function rpc(res:Response,name:string,args:Record<string,unknown>,dto:(x:unknown)=>unknown){try{const {client}=res.locals.cashAuth as NonNullable<Awaited<ReturnType<typeof authenticatedClient>>>;const {data,error}=await client.rpc(name,args);if(error){const status=codes[error.message];if(status&&error.code===`PT${status}`)errorResponse(res,status,error.message,status===401?'Entre novamente para continuar.':status===403?'Seu acesso não permite esta operação.':status===404?'Registro não disponível no seu escopo.':status===409?'O registro mudou. Confira o estado antes de repetir.':'Confira os dados do caixa e da configuração.');else errorResponse(res,503,'CASH_UNAVAILABLE','Não foi possível concluir. Tente novamente.');return;}res.json({data:dto(data)});}catch{errorResponse(res,503,'CASH_UNAVAILABLE','Não foi possível concluir. Tente novamente.');}}

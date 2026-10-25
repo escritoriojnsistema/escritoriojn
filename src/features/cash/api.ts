@@ -1,3 +1,4 @@
+import type {ClosureState,ClosureRecord,ClosureOperation,ClosureResult} from '../../../shared/closures';
 import type {Expense,ExpenseOperation,FinancialTransfer,TransferOperation,Finance17Page,PaymentReceipt} from '../../../shared/expenses';
 import type {CorrectionKind,CorrectionOperation,CorrectionSources} from '../../../shared/corrections';
 import type {PaymentOperation,PaymentsPage} from '../../../shared/payments';
@@ -114,6 +115,9 @@ async function request<T>(
   }
 }
 export const cashApi={
+ closureState:(office_id:string,session_id:string,page=1,source_page=1,signal?:AbortSignal)=>request<ClosureState>('/closures/state','POST',{office_id,session_id,page,source_page},signal),
+ closureRecord:(office_id:string,record_id:string,signal?:AbortSignal)=>request<ClosureRecord>('/closures/record','POST',{office_id,record_id},signal),
+ closureOperate:(office_id:string,operation:ClosureOperation,signal?:AbortSignal)=>request<ClosureResult>('/closures/operate','POST',{office_id,operation},signal),
  finance17:(office_id:string,session_id:string|null,page=1,signal?:AbortSignal)=>request<Finance17Page>('/finance17','POST',{office_id,session_id,page},signal),
  expense:(office_id:string,operation:ExpenseOperation,signal?:AbortSignal)=>request<{expense:Expense}>('/expense','POST',{office_id,operation},signal),
  transfer:(office_id:string,operation:TransferOperation,signal?:AbortSignal)=>request<{transfer:FinancialTransfer}>('/transfer','POST',{office_id,operation},signal),

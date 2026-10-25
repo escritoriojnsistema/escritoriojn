@@ -9,7 +9,7 @@ import { operationNavigation, mobileOperationNavigation, operationRoleNames } fr
 import './operation.css';
 
 const icons = { expenses: Banknote, payments: Wallet, cash: Banknote, charges: Wallet, home: House, checklists: ClipboardCheck, notifications: Bell, requests: MessagesSquare, attachments: Paperclip, customers: UserRoundSearch, services: ClipboardList, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
-export function OperationLayout({ client = false, busy = false, children }: { client?: boolean; busy?: boolean; children: ReactNode }) {
+export function OperationLayout({ client = false, busy = false, contextActions, children }: { client?: boolean; busy?: boolean; contextActions?: ReactNode; children: ReactNode }) {
   const auth = useAuth();
   const items = operationNavigation(auth.contexts, client);
   const home = items[0].path;
@@ -54,7 +54,7 @@ export function OperationLayout({ client = false, busy = false, children }: { cl
     return <button className="operation-exit" disabled={leaving || busy} onClick={() => void logout()}><LogOut size={20} aria-hidden="true" /><span>Sair da conta</span></button>;
   }
   return <div className="operation-layout">
-    <aside className="operation-sidebar" aria-label="Navegação principal"><Brand light to={home} /><p className="operation-area">{client ? 'Área do cliente' : 'Área da equipe'}</p>{navigation('Navegação da operação')}<div className="operation-sidebar-end">{exit()}<p>Acesso individual e protegido.</p></div></aside>
+    <aside className="operation-sidebar" aria-label="Navegação principal"><Brand light to={home} /><p className="operation-area">{client ? 'Área do cliente' : 'Área da equipe'}</p>{navigation('Navegação da operação')}{contextActions&&<div className="operation-context-actions">{contextActions}</div>}<div className="operation-sidebar-end">{exit()}<p>Acesso individual e protegido.</p></div></aside>
     <div className="operation-body">
       <header className="operation-mobile-bar" aria-label="Barra da conta"><button ref={menuButton} className="operation-icon-button" aria-label="Abrir menu" aria-expanded={open} aria-controls="operation-menu" onClick={() => setOpen(true)}><Menu size={24} aria-hidden="true" /></button><Brand to={home} /><div className="operation-header-actions"><NotificationBell client={client}/><Link to={account} className="operation-icon-button" aria-label="Abrir conta" title="Conta"><CircleUserRound size={25} aria-hidden="true" /></Link></div></header>
       <main id="conteudo" className="operation-main">{error && !open && <p role="alert" className="form-feedback error">{error}</p>}{children}</main>
@@ -64,7 +64,7 @@ export function OperationLayout({ client = false, busy = false, children }: { cl
       if (event.target !== event.currentTarget) return;
       const bounds = event.currentTarget.getBoundingClientRect();
       if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeMenu();
-    }}><div className="operation-drawer-header"><Brand light to={home} /><button className="operation-icon-button" aria-label="Fechar menu" onClick={closeMenu}><X size={23} aria-hidden="true" /></button></div><p className="operation-area">{client ? 'Área do cliente' : 'Área da equipe'}</p>{navigation('Menu da operação')}{error && open && <p role="alert" className="form-feedback error">{error}</p>}<div className="operation-sidebar-end">{exit()}<p>Acesso individual e protegido.</p></div></dialog>
+    }}><div className="operation-drawer-header"><Brand light to={home} /><button className="operation-icon-button" aria-label="Fechar menu" onClick={closeMenu}><X size={23} aria-hidden="true" /></button></div><p className="operation-area">{client ? 'Área do cliente' : 'Área da equipe'}</p>{navigation('Menu da operação')}{contextActions&&<div className="operation-context-actions" onClick={closeMenu}>{contextActions}</div>}{error && open && <p role="alert" className="form-feedback error">{error}</p>}<div className="operation-sidebar-end">{exit()}<p>Acesso individual e protegido.</p></div></dialog>
   </div>;
 }
 
