@@ -1,3 +1,4 @@
+import {raceExpenses,benchmarkExpenses} from './database-expenses.mjs';
 import {raceCorrections,benchmarkCorrections} from './database-corrections.mjs';
 import {verifyPaymentHistory} from './database-payment-history.mjs';
 import {racePayments,benchmarkPayments} from './database-payments.mjs';
@@ -726,14 +727,18 @@ try {
       console.log(result.trim());continue;
     }
     sql(database,'postgres',readFileSync(`${root}tests/database/payment-compat.sql`,'utf8'));
-    if(process.env.JN_DB_FOCUS_CORRECTIONS==='1'){
+    if(process.env.JN_DB_FOCUS_CORRECTIONS==='1'||process.env.JN_DB_FOCUS_EXPENSES==='1'){
       let result='';for(const suite of ['access','auth','team','governance','audit-reports','customers','customer-registration','customer-relations','services','requests','attachments','checklists','adjustments','account','charges','cash','finance','payments'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
       sql(database,'postgres',readFileSync(`${root}tests/database/corrections-before.sql`,'utf8'));
+      sql(database,'postgres',`CREATE TABLE test.finance17_audit_before AS SELECT id,renderer_version,contract_version,created_at FROM private.audit_reports;`);
       for(const file of migrations.filter(n=>n>='20261024133149'))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
       result+=sql(database,'postgres',readFileSync(`${root}tests/database/corrections.sql`,'utf8'));
-      result+=await raceCorrections({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
-      if(database==='foundation_replay_b')result+=benchmarkCorrections({sql:input=>sql(database,'postgres',input)});
-      console.log(`${database} correcoes16 (${result.split('\n').filter(line=>line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);continue;
+      result+=sql(database,'postgres',readFileSync(`${root}tests/database/expenses.sql`,'utf8'));
+      result+=await raceExpenses({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+      if(database==='foundation_replay_b')result+=benchmarkExpenses({sql:input=>sql(database,'postgres',input)});
+      if(process.env.JN_DB_FOCUS_EXPENSES!=='1')result+=await raceCorrections({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+      if(database==='foundation_replay_b'&&process.env.JN_DB_FOCUS_EXPENSES!=='1')result+=benchmarkCorrections({sql:input=>sql(database,'postgres',input)});
+      console.log(`${database} ${process.env.JN_DB_FOCUS_EXPENSES==='1'?'despesas17':'correcoes16'} (${result.split('\n').filter(line=>line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);continue;
     }
     if(process.env.JN_DB_FOCUS_AUDIT==='1'){
       let result='';for(const suite of ['access','auth','team','governance','audit-reports'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
@@ -807,8 +812,12 @@ try {
     await benchmarkCash({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});
     await benchmarkCharges({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});await benchmarkCustomerRelations(database);await benchmarkServices(database);await benchmarkRequests(database);await benchmarkAttachments({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});}
     sql(database,'postgres',readFileSync(`${root}tests/database/corrections-before.sql`,'utf8'));
+    sql(database,'postgres',`CREATE TABLE test.finance17_audit_before AS SELECT id,renderer_version,contract_version,created_at FROM private.audit_reports;`);
     for(const file of migrations.filter(n=>n>='20261024133149'))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
     result+=sql(database,'postgres',readFileSync(`${root}tests/database/corrections.sql`,'utf8'));
+    result+=sql(database,'postgres',readFileSync(`${root}tests/database/expenses.sql`,'utf8'));
+    result+=await raceExpenses({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+    if(database==='foundation_replay_b')result+=benchmarkExpenses({sql:input=>sql(database,'postgres',input)});
     result+=await raceCorrections({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
