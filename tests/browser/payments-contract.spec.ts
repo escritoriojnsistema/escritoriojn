@@ -69,9 +69,14 @@ test('recibo17: abre snapshot numerado e reimprime a mesma versão do recebiment
 });
 const history=(page:Page)=>page.getByRole('list',{name:'Histórico de pagamentos',exact:true});
 const cashTotal=(page:Page)=>page.locator('.finance-totals>div').filter({has:page.getByText('Saldo em espécie',{exact:true})});
+test('finance17: saldo digital de movimentação não é apresentado como nova receita',async({page})=>{
+ const state=await setup(page);state.value.session.digital_cents=2000;state.value.session.received_cents=0;await openStatement(page);
+ await expect(page.getByText('Movimento digital líquido',{exact:true})).toBeVisible();await expect(page.getByText('Recebimentos digitais',{exact:true})).toHaveCount(0);
+ await expect(page.locator('.finance-totals>div').filter({has:page.getByText('Recebimentos brutos',{exact:true})})).toContainText('0,00');
+});
 
 test('payments15: dinheiro guarda aplicado/apresentado/troco e consome o extrato oficial',async({page})=>{
- let configurationReads=0;page.on('request',r=>{if(r.url().endsWith('/api/cash/configuration'))configurationReads++;});const state=await setup(page);await openStatement(page);const readsBefore=configurationReads;await expect(page.locator('.finance-totals')).toContainText('Recebimentos digitais');await expect(page.locator('.finance-totals')).toContainText('Recebido após devoluções');await record(page,cashMethod);await page.getByLabel('Valor apresentado (R$)',{exact:true}).fill('50,00');
+ let configurationReads=0;page.on('request',r=>{if(r.url().endsWith('/api/cash/configuration'))configurationReads++;});const state=await setup(page);await openStatement(page);const readsBefore=configurationReads;await expect(page.locator('.finance-totals')).toContainText('Movimento digital líquido');await expect(page.locator('.finance-totals')).toContainText('Recebido após devoluções');await record(page,cashMethod);await page.getByLabel('Valor apresentado (R$)',{exact:true}).fill('50,00');
  await expect(page.getByRole('definition').filter({hasText:'R$ 20,00'})).toHaveCount(1);
  await page.getByRole('button',{name:'Confirmar recebimento',exact:true}).click();await expect(history(page)).toContainText('Confirmado');await expect(cashTotal(page)).toContainText('130,00');
  expect(state.posted[0]).toMatchObject({kind:'record',status:'confirmed',presented_cents:5000,fee_cents:0,allocations:[{charge_id:id(1),expected_charge_version:2,amount_cents:3000}]});
