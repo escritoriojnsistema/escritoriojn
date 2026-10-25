@@ -1,3 +1,4 @@
+import {raceClosures,benchmarkClosures,prepareClosures} from './database-closures.mjs';
 import {raceExpenses,benchmarkExpenses} from './database-expenses.mjs';
 import {raceCorrections,benchmarkCorrections} from './database-corrections.mjs';
 import {verifyPaymentHistory} from './database-payment-history.mjs';
@@ -716,7 +717,7 @@ try {
   for (const database of process.env.JN_DB_HISTORY_PAYMENTS==='1'?[]:process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'?['foundation_replay_a']:['foundation_replay_a', 'foundation_replay_b']) {
     sql('postgres', 'postgres', `CREATE DATABASE ${database} OWNER migrator;`);
     sql(database, 'postgres', readFileSync(`${root}tests/database/bootstrap.sql`, 'utf8'));
-    for (const migration of migrations.filter(n=>process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'||n<'20261024133149')) {
+    for (const migration of migrations.filter(n=>process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'&&n<'20261025042809'||n<'20261024133149')) {
       sql(database, 'migrator', `BEGIN;\n${readFileSync(`${root}supabase/migrations/${migration}`, 'utf8')}\nCOMMIT;`);
     }
     if(process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'){
@@ -727,17 +728,25 @@ try {
       console.log(result.trim());continue;
     }
     sql(database,'postgres',readFileSync(`${root}tests/database/payment-compat.sql`,'utf8'));
-    if(process.env.JN_DB_FOCUS_CORRECTIONS==='1'||process.env.JN_DB_FOCUS_EXPENSES==='1'){
+    if(process.env.JN_DB_FOCUS_CORRECTIONS==='1'||process.env.JN_DB_FOCUS_EXPENSES==='1'||process.env.JN_DB_FOCUS_CLOSURES==='1'){
       let result='';for(const suite of ['access','auth','team','governance','audit-reports','customers','customer-registration','customer-relations','services','requests','attachments','checklists','adjustments','account','charges','cash','finance','payments'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
       sql(database,'postgres',readFileSync(`${root}tests/database/corrections-before.sql`,'utf8'));
       sql(database,'postgres',`CREATE TABLE test.finance17_audit_before AS SELECT id,renderer_version,contract_version,created_at FROM private.audit_reports;`);
-      for(const file of migrations.filter(n=>n>='20261024133149'))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+      for(const file of migrations.filter(n=>n>='20261024133149'&&n<'20261025042809'))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
       result+=sql(database,'postgres',readFileSync(`${root}tests/database/corrections.sql`,'utf8'));
       result+=sql(database,'postgres',readFileSync(`${root}tests/database/expenses.sql`,'utf8'));
       result+=await raceExpenses({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
-      if(database==='foundation_replay_b')result+=benchmarkExpenses({sql:input=>sql(database,'postgres',input)});
+      if(database==='foundation_replay_b'&&process.env.JN_DB_FOCUS_EXPENSES==='1')result+=benchmarkExpenses({sql:input=>sql(database,'postgres',input)});
       if(process.env.JN_DB_FOCUS_EXPENSES!=='1')result+=await raceCorrections({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
-      if(database==='foundation_replay_b'&&process.env.JN_DB_FOCUS_EXPENSES!=='1')result+=benchmarkCorrections({sql:input=>sql(database,'postgres',input)});
+      if(database==='foundation_replay_b'&&process.env.JN_DB_FOCUS_EXPENSES!=='1'&&process.env.JN_DB_FOCUS_CLOSURES!=='1')result+=benchmarkCorrections({sql:input=>sql(database,'postgres',input)});
+      if(process.env.JN_DB_FOCUS_CLOSURES==='1'){
+        prepareClosures({sql:input=>sql(database,'postgres',input)});
+        for(const file of migrations.filter(n=>n>='20261025042809'))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+        result+=sql(database,'postgres',readFileSync(`${root}tests/database/closures.sql`,'utf8'));
+        result+=await raceClosures({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+        if(database==='foundation_replay_b')result+=benchmarkClosures({sql:input=>sql(database,'postgres',input)});
+        console.log(`${database} fechamento18 (${result.split('\n').filter(line=>line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);continue;
+      }
       console.log(`${database} ${process.env.JN_DB_FOCUS_EXPENSES==='1'?'despesas17':'correcoes16'} (${result.split('\n').filter(line=>line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);continue;
     }
     if(process.env.JN_DB_FOCUS_AUDIT==='1'){
@@ -813,12 +822,17 @@ try {
     await benchmarkCharges({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});await benchmarkCustomerRelations(database);await benchmarkServices(database);await benchmarkRequests(database);await benchmarkAttachments({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database)});}
     sql(database,'postgres',readFileSync(`${root}tests/database/corrections-before.sql`,'utf8'));
     sql(database,'postgres',`CREATE TABLE test.finance17_audit_before AS SELECT id,renderer_version,contract_version,created_at FROM private.audit_reports;`);
-    for(const file of migrations.filter(n=>n>='20261024133149'))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+    for(const file of migrations.filter(n=>n>='20261024133149'&&n<'20261025042809'))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
     result+=sql(database,'postgres',readFileSync(`${root}tests/database/corrections.sql`,'utf8'));
     result+=sql(database,'postgres',readFileSync(`${root}tests/database/expenses.sql`,'utf8'));
     result+=await raceExpenses({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
-    if(database==='foundation_replay_b')result+=benchmarkExpenses({sql:input=>sql(database,'postgres',input)});
+    if(database==='foundation_replay_b'&&process.env.JN_DB_FOCUS_EXPENSES==='1')result+=benchmarkExpenses({sql:input=>sql(database,'postgres',input)});
     result+=await raceCorrections({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+    prepareClosures({sql:input=>sql(database,'postgres',input)});
+    for(const file of migrations.filter(n=>n>='20261025042809'))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+    result+=sql(database,'postgres',readFileSync(`${root}tests/database/closures.sql`,'utf8'));
+    result+=await raceClosures({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+    if(database==='foundation_replay_b')result+=benchmarkClosures({sql:input=>sql(database,'postgres',input)});
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
   if(process.env.JN_DB_FOCUS_PAYMENTS==='1'||process.env.JN_DB_HISTORY_PAYMENTS==='1'){
