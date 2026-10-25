@@ -1,0 +1,54 @@
+{
+  "etapa": 18,
+  "status": "Concluída, publicada e verificada",
+  "source_manual": "https://drive.google.com/file/d/1E4DpN697mVPa5uFL8qQsuvZVAioF7IHS/view",
+  "deployment": "GitHub → Vercel; nenhum GitHub Actions, deployCLI ou API Vercel",
+  "canonical": "https://escritoriojn.vercel.app",
+  "runtime": {
+    "pr": "https://github.com/escritoriojnsistema/escritoriojn/pull/51",
+    "commit": "1164282087ba478c6e7425fc6bb87baeb4e76202",
+    "merge": "b1a1873fd3befb002c0dfa4a160d7ae2778a657b",
+    "tree": "c87822f1499b0a7e7f676eb9ad86c86f17e6d647",
+    "vercel_status": "success",
+    "vercel_url": "https://vercel.com/escritorio-jn/escritoriojn/56CsDFZsqsjVQKTzHPVAmwCBgkPs"
+  },
+  "database": {
+    "pr": "https://github.com/escritoriojnsistema/escritoriojn/pull/52",
+    "commit": "0ef5d3e00da08cf161c49ed7a65af9316de4e632",
+    "merge": "4ef34d73026b4d68e402df231a278fab1271edf2",
+    "tree": "150d4c709d9f9ce5bf5c8c701a229e474cd9a624",
+    "vercel_status": "success",
+    "vercel_url": "https://vercel.com/escritorio-jn/escritoriojn/36hk4Kt8nhnxzUyUK83qMCoNRQ5E",
+    "migration": "20261025042809_cash_closures_divergences",
+    "applied": "Automática pela integração Git; histórico relido após merge, sem apply manual",
+    "sha256": "b87ef168792d01b30eb8f5e1878be598b315e8d20ac1457ec51eb1f715de5471",
+    "statements_match": 33,
+    "function_bodies_match": 13
+  },
+  "canonical_checks": {
+    "assets": 5,
+    "all_sha256_match": true,
+    "health_status": 200,
+    "anonymous_api_401": 10,
+    "public_browser_tests": 3
+  },
+  "preservation": {
+    "auth_users": 5,
+    "memberships": 5,
+    "customers": 1,
+    "requests": 1,
+    "audit_events": 32,
+    "individual_grants": 17,
+    "hosted_financial_rows": 0,
+    "pdf_presentations": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "legacy_aliases_verified": 5
+  },
+  "advisors": "Sem ERROR; WARN de proteção contra senha vazada preexistente, mantido sem alterar Auth. INFO de índices antigos/RLS sem política/índices sem uso; nenhuma FK18 descoberta.",
+  "scope_limits": "Registros manuais. Conferência do cartão bruto após devoluções, taxas/créditos separados. Ajuste documental sem dinheiro fictício, original preservado. Sem autenticação de negócio hospedada ou aparelho físico; laboratório real local comprovado. Etapa19 fora do escopo.",
+  "documentary_close": "Fecho final altera somente documentação/evidências; merge/status final ficam no checkpoint da execução, sem ciclo documental por hash próprio."
+}
