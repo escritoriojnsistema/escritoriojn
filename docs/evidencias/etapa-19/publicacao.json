@@ -1,0 +1,62 @@
+{
+  "runtime": {
+    "pr": 54,
+    "head": "cb841421d9135ec0396d863bfccc8bac58f3be90",
+    "merge": "b6d1303ca3b8e955642287212e898bcc965c183b",
+    "tree": "802bf98ed9a502d3d63cd4da884275360404f5f6",
+    "preview": {
+      "state": "success",
+      "url": "https://vercel.com/escritorio-jn/escritoriojn/VB8mooYmqPzvAXcCYtPvABR1juxP"
+    },
+    "production": {
+      "state": "success",
+      "url": "https://vercel.com/escritorio-jn/escritoriojn/5KAkpCXzZtDJLSXPrq41kfDA82WH"
+    }
+  },
+  "public": "https://escritoriojn.vercel.app",
+  "rollout": "runtime then migration; both production VercelSUCCESS",
+  "no_github_actions": true,
+  "database": {
+    "pr": 55,
+    "head": "c3d19982f8960e76d28a9bb6a7682fc43c630b76",
+    "merge": "eaddfe0edff0f28e72e38416b8e5f820eb761fce",
+    "tree": "6f5c274148c0c8c8ab8eef8afc835d3771528046",
+    "preview": {
+      "state": "success",
+      "url": "https://vercel.com/escritorio-jn/escritoriojn/CU2NFFRZWsPUtMWn2h3AUHfYR3PN"
+    },
+    "production": {
+      "state": "success",
+      "url": "https://vercel.com/escritorio-jn/escritoriojn/egvCudLG9BiKmUVt9nTwrpGhFcse"
+    },
+    "migration": "20261025172605_quick_financial_reports",
+    "sha256": "b2b727f9a6718fd5930c00adbd28aaeff6880dd87148fcff9f47bdd8dcdfc90c"
+  },
+  "supabase": {
+    "applied_automatically_by_git": true,
+    "migrations": 26,
+    "matching_statements": 54,
+    "matching_new_function_bodies": 29,
+    "historical_bodies_unchanged": 7,
+    "private_rls_tables": 3,
+    "authenticated_invoker_rpcs": 9,
+    "owner_seed_capabilities": 5,
+    "individual_grants_unchanged": 17,
+    "manual_apply": false,
+    "fixtures": false,
+    "auth_writes": false
+  },
+  "verification": {
+    "node": 176,
+    "sql": 2320,
+    "ui": 150,
+    "auth_real_local": 8,
+    "public_local": 5,
+    "public_hosted": 5,
+    "assets_sha_match": 5,
+    "health": 200,
+    "anonymous_401": 17,
+    "production_dependency_vulnerabilities": 0
+  },
+  "final_documentation": "Following commit changes documentation/screenshots only; final status checked at closure without self-hash cycle."
+}

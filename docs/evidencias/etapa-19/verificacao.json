@@ -1,5 +1,5 @@
 {
-  "status": "LOCAL_GREEN",
+  "status": "PUBLISHED_VERIFIED",
   "date": "2026-10-26T02:12:37.754650+00:00",
   "stack": "React19.3.1 + Vite8.3.4 + TypeScript7.0.2 / Express5.3.0 / Node24.19.0",
   "checks": {
@@ -19,14 +19,18 @@
     "production_vulnerabilities": 0,
     "public_build": true,
     "typecheck_and_server": true,
-    "diff_check": true
+    "diff_check": true,
+    "public_hosted": 5,
+    "canonical_assets_sha_match": 5,
+    "anonymous_401": 17
   },
   "log_sha256": {
     "node": "dd11c4df6db9d6fbb887824e49c5caf5e820e5dc7498454d80a16b74fb5fdc66",
     "ui": "65297687e6104b1dfb4fe25d599f1e88def7271b544c85524aee936d81d775e0",
     "auth": "067d450c5f1455eb241df5fc3d5f386b040fb53b668195dceb215c34073f2938",
     "public_local": "9448cb746c4f640c2730988505422d4dd475605cbfccd71ac1d8fc682c147b89",
-    "build": "27331923ff5a2af6739e096f5fc06af202fdee537a089ac68353d995311d87e2"
+    "build": "27331923ff5a2af6739e096f5fc06af202fdee537a089ac68353d995311d87e2",
+    "public_hosted": "d9bc189d6fedd731335cf387c135cb1bb9889b53fac0ce5f7d9937692d81f7f3"
   },
   "scope": [
     "Own quick atomic09/10/13/15 and closed18 retry",
@@ -42,5 +46,5 @@
     "Timings include Docker/psql overhead, no zero-network-delay SLA",
     "Vercel admin connector403 preexisting; release uses GitHub status and canonical HTTPS, no bypass"
   ],
-  "release": "Pending runtime then migration GitHub→Vercel, no GitHub Actions/CLI/API deploy"
+  "release": "RuntimePR54 and migrationPR55 published in order, both VercelSUCCESS; migration autoGit,26history/54statements/29bodies match; hosted counts preserved. Documentation-only closure follows."
 }
