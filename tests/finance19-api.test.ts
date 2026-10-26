@@ -1,0 +1,53 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {createServer} from 'node:http';
+import {app} from '../server/app.js';
+import {operation,quickContext,quickResult,reportContext,row,snapshot,filters,id,office} from './fixtures/finance19.js';
+import {quickContext as contextDto,reportPage,reportSnapshot} from '../server/modules/finance/dto.js';
+import {financialCsv,financialPdf} from '../server/modules/finance/export.js';
+import {reportMoney} from '../shared/finance19.js';
+test('19 DTO: projeção não exporta PII, valores/diferenças/filtros inconsistentes são recusados',()=>{
+ assert.equal(JSON.stringify(contextDto({...quickContext,PRIVATE:'secret'})).includes('PRIVATE'),false);
+ assert.throws(()=>reportSnapshot({...snapshot,total:1001}));assert.throws(()=>reportPage({...snapshot,generated_at:snapshot.created_at,page:1,page_size:5,items:[{...row,balance_cents:1}]}));
+ assert.equal(reportMoney(Number.MAX_SAFE_INTEGER),'R$ 90.071.992.547.409,91');
+ const csv=financialCsv(snapshot,[{...row,description:'=HYPERLINK("https://example.invalid")',customer_name:'SECRET',cpf:'SECRET'} as typeof row]).toString('utf8');assert.ok(csv.includes('"\'=HYPERLINK'));assert.ok(!csv.includes('SECRET'));assert.ok(csv.includes('"5,00"'));
+});
+test('19 PDF: snapshot exato e vazio produzem PDF, linhas ausentes não viram arquivo parcial',async()=>{
+ const pdf=await financialPdf(snapshot,[{...row,description:'Xerox ação <script>texto literal</script> 中文😀'}]);assert.equal(pdf.subarray(0,5).toString(),'%PDF-');assert.ok(pdf.length>1000);
+ const empty=await financialPdf({...snapshot,total:0,summary:{...snapshot.summary,contracted_cents:0,allocated_cents:0}},[]);assert.equal(empty.subarray(0,5).toString(),'%PDF-');await assert.rejects(financialPdf(snapshot,[]));
+});
+test('19 API: Bearer/RPC, contratos exatos, CSV/PDF só depois de autorização atual',async()=>{
+ const calls:{url:string;authorization:string|undefined;body:Record<string,unknown>}[]=[];let deny=false,chunkTotal=1,notFound=false;
+ const provider=createServer(async(req,res)=>{let data='';for await(const b of req)data+=b;const body=data?JSON.parse(data):{};calls.push({url:req.url??'',authorization:req.headers.authorization,body});res.setHeader('Content-Type','application/json');if(req.url==='/auth/v1/user'){res.end(JSON.stringify({id:id(2)}));return;}
+ if(notFound&&req.url?.endsWith('finance_report_page')){res.statusCode=404;res.end(JSON.stringify({code:'PT404',message:'CUSTOMER_NOT_FOUND',details:'PRIVATE'}));return;}
+ if(deny&&req.url?.endsWith('finance_report_authorize')){res.statusCode=403;res.end(JSON.stringify({code:'PT403',message:'FINANCE19_FORBIDDEN',details:'PRIVATE'}));return;}
+ const name=req.url?.split('/').at(-1);res.end(JSON.stringify(name==='quick_context'?quickContext:name==='quick_operate'?quickResult:name==='finance_report_context'?reportContext:name==='finance_report_page'?{...snapshot,generated_at:snapshot.created_at,items:[row],page:1,page_size:5}:name==='finance_report_begin'?snapshot:name==='finance_report_chunk'?{items:[row],offset:0,total:chunkTotal}:name==='finance_report_authorize'?{authorized:true}:{}));
+ });await new Promise<void>(r=>provider.listen(0,'127.0.0.1',r));
+ const vars=['VITE_SUPABASE_URL','VITE_SUPABASE_PUBLISHABLE_KEY'] as const,old=vars.map(k=>process.env[k]);process.env.VITE_SUPABASE_URL=`http://127.0.0.1:${(provider.address() as {port:number}).port}`;process.env.VITE_SUPABASE_PUBLISHABLE_KEY='sb_publishable_fixture';
+ const server=app.listen(0,'127.0.0.1');await new Promise<void>(r=>server.once('listening',r));
+ try{const base=`http://127.0.0.1:${(server.address() as {port:number}).port}/api/finance`,headers={Authorization:'Bearer caller-test','Content-Type':'application/json'};const send=(path:string,body:object)=>fetch(base+path,{method:'POST',headers,body:JSON.stringify({office_id:office,...body})});
+ for(const path of ['/quick/context','/quick/operate','/reports/context','/reports/options','/reports/page','/reports/settings','/reports/export'])assert.equal((await fetch(base+path,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).status,401);assert.equal(calls.length,0);
+ assert.equal((await send('/quick/context',{session_id:null,query:'',page:1,session_page:1,method_page:1})).status,200);
+ const quick=await send('/quick/operate',{operation});assert.equal(quick.status,200);assert.equal(calls.at(-1)?.url,'/rest/v1/rpc/quick_operate');assert.equal(calls.at(-1)?.authorization,'Bearer caller-test');assert.equal(calls.filter(c=>c.url==='/auth/v1/user').length,2);
+ assert.equal((await send('/quick/operate',{operation:{...operation,actor_id:office}})).status,422);
+ const csv=await send('/reports/export',{filters,idempotency_key:id(20),format:'csv'});assert.equal(csv.status,200);assert.ok(csv.headers.get('content-type')?.includes('text/csv'));assert.ok(csv.headers.get('cache-control')?.includes('no-store'));assert.equal(csv.headers.get('X-Finance-Count'),'1');assert.ok((await csv.text()).includes('"5,00"'));
+ const final=calls.at(-1)!;assert.equal(final.url,'/rest/v1/rpc/finance_report_authorize');assert.equal(final.body.p_format,'csv');assert.ok(typeof final.body.p_download_key==='string');
+ deny=true;const forbidden=await send('/reports/export',{filters,idempotency_key:id(20),format:'pdf'});assert.equal(forbidden.status,403);const text=await forbidden.text();assert.ok(!text.includes('PRIVATE')&&!text.includes('%PDF-'));
+ deny=false;notFound=true;assert.equal((await send('/reports/page',{filters:{...filters,customer_id:id(99)},page:1})).status,404);notFound=false;chunkTotal=2;const incomplete=await send('/reports/export',{filters,idempotency_key:id(20),format:'csv'});assert.equal(incomplete.status,503);
+ }finally{vars.forEach((k,i)=>{if(old[i]===undefined)delete process.env[k];else process.env[k]=old[i];});server.closeAllConnections();server.close();provider.closeAllConnections();provider.close();}
+});
+test('19 exportações: PDF multipágina mantém última linha, UTC e Unicode explícito; limiteCSV sem parcial',async()=>{
+ const {mkdtemp,writeFile,rm}=await import('node:fs/promises'),{tmpdir}=await import('node:os'),{join}=await import('node:path'),{execFileSync}=await import('node:child_process');
+ const rows=Array.from({length:45},(_,n)=>({...row,id:id(100+n),reference:`AT-REGISTRO-${n}`,description:(`Descrição com acentos ${n} 中文😀 `+'Texto extenso '.repeat(25)).trim()}));const pdf=await financialPdf({...snapshot,total:rows.length,summary:{...snapshot.summary,contracted_cents:500*rows.length,allocated_cents:500*rows.length}},rows),directory=await mkdtemp(join(tmpdir(),'jn-finance19-'));
+ try{const path=join(directory,'report.pdf');await writeFile(path,pdf);const text=execFileSync('pdftotext',[path,'-'],{encoding:'utf8'});assert.ok(text.includes('AT-REGISTRO-44'));assert.ok(text.includes('UTC'));assert.ok(text.includes('[U+4E2D]'));assert.ok((text.match(/Página /g)?.length??0)>1);}finally{await rm(directory,{recursive:true,force:true});}
+ const large=Array.from({length:1000},(_,n)=>({...row,id:id(1000+n),description:'😀'.repeat(1500)}));assert.throws(()=>financialCsv({...snapshot,total:1000,summary:{...snapshot.summary,contracted_cents:500000,allocated_cents:500000}},large),{name:'Error',message:'Export exceeds limit'});
+});
+
+test('19 exportações recusam totais inconciliáveis mesmo com todas as linhas',()=>{assert.throws(()=>financialCsv({...snapshot,summary:{...snapshot.summary,contracted_cents:499}},[row]));});
+
+test('19 catálogo reutilizado conserva120caracteres suplementares aceitos pelo PostgreSQL',async()=>{const {validService}=await import('../shared/services.js'),{servicePage,serviceQuote}=await import('../server/modules/services/dto.js'),{emptyService}=await import('../shared/services.js'),{quote}=await import('./fixtures/finance19.js');const name='😀'.repeat(120);assert.equal(validService({...emptyService,code:'UNICODE19',name,category:'Rápido'}),true);assert.equal(servicePage({items:[{...quickContext.services[0],name}],total:1,page:1,page_size:5}).items[0].name,name);const q=quote();assert.equal(serviceQuote({...q,definition:{...q.definition,name}}).definition.name,name);});
+test('19 Auditoria6 reconhece novos eventos sem modificar apresentação5',async()=>{const {reportInputV6}=await import('../server/modules/governance/reportV6.js'),{reportInputV5}=await import('../server/modules/governance/reportV5.js');const report={renderer_version:6,contract_version:1,count:1,protocol:'JN-AUD-TESTE',office_name:'Escritório',actor_name:'Operador',created_at:snapshot.created_at,view:'recent',cutoff:snapshot.created_at,filters:{action:'',actor_id:'',from:'',until:''}} as import('../shared/governance.js').AuditReport;const events=[{id:id(90),action:'quick.completed',actor_id:id(2),occurred_at:snapshot.created_at,actor_name:'Operador',target_type:'request',target_id:id(12),outcome:'success',changes:{},request_id:id(91)}] as import('../shared/governance.js').AuditEvent[];assert.equal(reportInputV6(report,events).events[0].actionLabel,'Atendimento rápido concluído');assert.equal(reportInputV5({...report,renderer_version:5},events).events[0].actionLabel,'Evento de outro módulo');});
+
+test('regressão19:CSV mantém números BRL como literais seguros e negativos sem apóstrofo',()=>{assert.ok(financialCsv(snapshot,[row]).toString('utf8').includes('"5,00"'));const s={...snapshot,filters:{...filters,view:'movements' as const},summary:{...snapshot.summary,contracted_cents:null,allocated_cents:null,balance_cents:null,received_cents:0,expense_cents:0,reversed_cents:0,refund_cents:0,fee_cents:0}};const csv=financialCsv(s,[{...row,kind:'transfer_out',status:'confirmed',description:'-1+2',amount_cents:-500,paid_cents:null,balance_cents:null}]).toString('utf8');assert.ok(csv.includes('"-5,00"'));assert.ok(!csv.includes('"\'-5,00"'));assert.ok(csv.includes('"\'-1+2"'));});
+
+ test('19 fusos: aliases IANA com dígitos aceitos pelo banco continuam legíveis em configuração e relatório',async()=>{const {validReportTimezone}=await import('../shared/finance19.js');const {reportSettings,reportContext:contextDto}=await import('../server/modules/finance/dto.js');for(const timezone of ['GMT0','EST5EDT','CST6CDT','MST7MDT','PST8PDT']){assert.equal(validReportTimezone(timezone),true);const settings={timezone,configured:true,version:1,can_manage:true};assert.equal(reportSettings(settings).timezone,timezone);assert.equal(contextDto({...reportContext,settings}).settings.timezone,timezone);assert.equal(reportPage({...snapshot,timezone,generated_at:snapshot.created_at,page:1,page_size:5,items:[row]}).timezone,timezone);assert.ok(financialCsv({...snapshot,timezone},[row]).toString('utf8').includes(timezone));}});
