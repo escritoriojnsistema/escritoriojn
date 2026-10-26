@@ -1,5 +1,7 @@
 # Etapa20 — revisão independente
 
+Conferência complementar do controlador após a revisão: o advisor hospedado identificou a FK de comandos sem índice. A migration adicional `20261026135113_templates_document_library_reference_index.sql` acrescenta somente `(office_id,template_id)`, com regressão SQL RED→GREEN e dois replays finais completos20. Aplicação automática porGit conferida e aviso novo removido. Funções, dados e permissões não foram alterados pelo índice. Evidências em banco-verificacao.txt, schema-publicado.json e advisors.json; este complemento é verificação de integração pelo controlador, separado da revisão independente abaixo.
+
 Revisão de 26/10/2026, base `cbac760`, alterações de trabalho da biblioteca documental. Escopo confrontado com `docs/etapas/etapa-20.md`, `docs/superpowers/plans/2026-10-26-etapa-20.md`, `AGENTS.md` e regras documentais. Aplicada a habilidade `desenvolvimento-profissional-ia:auditoria-final`. O revisor não alterou código, não executou suítes concorrentes e não realizou operações hospedadas.
 
 ## Vereditos
