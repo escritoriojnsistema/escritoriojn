@@ -1,4 +1,5 @@
 import {financeRouter} from './modules/finance/router.js';
+import {templatesRouter} from './modules/templates/router.js';
 import express, { type ErrorRequestHandler } from 'express';
 import { MAX_VALIDATION_MESSAGE_LENGTH, type HealthResponse, type ValidationResponse } from '../shared/api.js';
 import { errorResponse } from './errors.js';
@@ -47,6 +48,7 @@ api.use('/checklists',checklistsRouter);
 api.use('/charges',chargesRouter);
 api.use('/cash',cashRouter);
 api.use('/finance',financeRouter);
+api.use('/templates',templatesRouter);
 api.use('/notifications',notificationsRouter);
 api.post('/validate', (req, res, next) => {
   if (!req.is('application/json')) {

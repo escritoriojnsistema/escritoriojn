@@ -1,0 +1,34 @@
+import {useState} from 'react';
+import {emptyTemplate,templateKeys,templateIssues,templateKinds,templateVariables,signaturePolicies,variableTypeLabels,type TemplateInput,type TemplateVariable} from '../../../shared/templates';
+const localTime=(v:string|null)=>v?new Date(Date.parse(v)-new Date(v).getTimezoneOffset()*60000).toISOString().slice(0,16):'';
+export function TemplateForm({initial,busy,locked,conflict,onSave}:{initial?:TemplateInput;busy:boolean;locked:boolean;conflict:boolean;onSave:(definition:TemplateInput,reason:string)=>void}){
+ const [input,setInput]=useState<TemplateInput>(()=>initial?{...Object.fromEntries(templateKeys.map(k=>[k,initial[k]])) as TemplateInput,variables:initial.variables.map(v=>({...v}))}:{...emptyTemplate,variables:[]});
+ const [reason,setReason]=useState(''),[issues,setIssues]=useState<string[]>([]),[from,setFrom]=useState(localTime(input.effective_from)),[until,setUntil]=useState(localTime(input.effective_until)),[fromEdited,setFromEdited]=useState(false),[untilEdited,setUntilEdited]=useState(false);
+ const set=<K extends keyof TemplateInput>(key:K,value:TemplateInput[K])=>setInput(v=>({...v,[key]:value}));
+ function text(content:string){setInput(old=>{const keys=[...new Set([...content.matchAll(/{{([^{}]*)}}/g)].map(m=>m[1]).filter(k=>Object.hasOwn(templateVariables,k)))];return {...old,content,variables:keys.map(key=>old.variables.find(v=>v.key===key)??{key,label:templateVariables[key].label,type:templateVariables[key].type,required:true})};});}
+ function variable(key:string,change:Partial<TemplateVariable>){set('variables',input.variables.map(v=>v.key===key?{...v,...change}:v));}
+ return <form className="template-form" onSubmit={e=>{e.preventDefault();let definition:TemplateInput;try{definition={...input,name:input.name.trim(),content:input.content.trim(),effective_from:fromEdited?(from?new Date(from).toISOString():null):input.effective_from,effective_until:untilEdited?(until?new Date(until).toISOString():null):input.effective_until};}catch{setIssues(['Vigência: informe datas válidas.']);return;}const errors=templateIssues(definition);if(!reason.trim())errors.push('Informe o motivo desta versão.');setIssues(errors);if(!errors.length)onSave(definition,reason.trim());}}>
+  {issues.length>0&&<div role="alert" className="form-feedback error">{issues.map(x=><p key={x}>{x}</p>)}</div>}
+  <fieldset disabled={busy||locked}>
+   <div className="template-grid">
+    <label className="team-field">Nome do modelo<input required maxLength={120} value={input.name} onChange={e=>set('name',e.target.value)}/></label>
+    <label className="team-field">Código<input required maxLength={32} readOnly={!!initial} autoComplete="off" value={input.code} onChange={e=>set('code',e.target.value.toUpperCase())}/></label>
+    <label className="team-field">Tipo documental<select value={input.kind} onChange={e=>set('kind',e.target.value as TemplateInput['kind'])}>{Object.entries(templateKinds).map(([key,label])=><option key={key} value={key}>{label}</option>)}</select></label>
+    <label className="template-check"><input type="checkbox" checked={input.demonstration} onChange={e=>set('demonstration',e.target.checked)}/>Modelo de demonstração</label>
+   </div>
+   <label className="team-field template-content-field">Texto do modelo<textarea aria-label="Texto do modelo" required rows={3} value={input.content} onChange={e=>text(e.target.value)} aria-describedby="template-text-help"/></label>
+   <p id="template-text-help" className="customer-note">Texto simples, até 30.000 caracteres. Cole o modelo ou insira campos reconhecidos abaixo.</p>
+   <details className="template-section"><summary>Variáveis do texto ({input.variables.length})</summary>
+    <label className="team-field">Inserir variável<select value="" onChange={e=>{if(e.target.value)text(input.content+`${input.content?' ':''}{{${e.target.value}}}`);}}><option value="">Selecione um campo permitido</option>{Object.entries(templateVariables).map(([key,v])=><option value={key} key={key}>{v.label} · {variableTypeLabels[v.type]}</option>)}</select></label>
+    <p className="customer-note">Os campos são reconhecidos ao digitar. Para remover, apague a variável do texto. O tipo é fixo; dados ausentes nunca são inventados.</p>
+    {input.variables.map(v=><div className="template-variable" key={v.key}><div><code>{`{{${v.key}}}`}</code><small>{variableTypeLabels[v.type]} · {templateVariables[v.key].source}</small></div><label className="team-field">Rótulo de {v.key}<input maxLength={80} value={v.label} onChange={e=>variable(v.key,{label:e.target.value})}/></label><label className="template-check"><input type="checkbox" checked={v.required} onChange={e=>variable(v.key,{required:e.target.checked})}/>Obrigatória</label></div>)}
+   </details>
+   <details className="template-section"><summary>Vigência e políticas</summary><div className="template-grid">
+    <label className="team-field">Início da vigência (opcional)<input type="datetime-local" value={from} onChange={e=>{setFrom(e.target.value);setFromEdited(true);}}/></label><label className="team-field">Fim da vigência (opcional)<input type="datetime-local" value={until} onChange={e=>{setUntil(e.target.value);setUntilEdited(true);}}/></label>
+    <label className="team-field">Política de assinatura<select value={input.signature_policy} onChange={e=>set('signature_policy',e.target.value as TemplateInput['signature_policy'])}>{Object.entries(signaturePolicies).map(([key,label])=><option key={key} value={key}>{label}</option>)}</select></label><label className="template-check"><input type="checkbox" checked={input.review_required} onChange={e=>set('review_required',e.target.checked)}/>Exigir revisão do documento</label>
+   </div><p className="customer-note">Horários no seu fuso local. Sem início: a partir da aprovação. A aprovação nunca retroage; assinatura e revisão do documento seguem suas políticas próprias.</p></details>
+   <label className="team-field template-reason">Motivo da versão<input required maxLength={500} value={reason} onChange={e=>setReason(e.target.value)}/></label>
+  </fieldset>
+  <button className="primary-button template-save" type="submit" disabled={busy||conflict}>{initial?'Salvar versão':'Cadastrar modelo'}</button>
+ </form>;
+}

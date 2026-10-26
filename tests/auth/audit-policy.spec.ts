@@ -1,4 +1,7 @@
 import {reportInputV4} from '../../server/modules/governance/reportV4';
+import {reportInputV7} from '../../server/modules/governance/reportV7';
+import {reportInputV6} from '../../server/modules/governance/reportV6';
+import {reportInputV5} from '../../server/modules/governance/reportV5';
 import {reportInputV3} from '../../server/modules/governance/reportV3';
 import {test,expect} from '@playwright/test';
 import {createClient} from '@supabase/supabase-js';
@@ -26,7 +29,7 @@ test('Auth real: prazo persiste, arquivo é interno, PDF canônico ignora selo f
   await page.reload();await page.getByRole('button',{name:'Relatórios e prazo'}).click();await expect(page.getByLabel('Arquivar após')).toHaveValue('60');await page.getByLabel('Arquivar após').selectOption('90');await page.getByRole('button',{name:'Salvar prazo'}).click();await expect(page.getByRole('status').filter({hasText:'Prazo salvo'})).toBeVisible();await page.getByRole('button',{name:'Relatórios e prazo'}).click();await page.getByRole('button',{name:'Arquivados',exact:true}).click();await expect(page.getByRole('list',{name:'Eventos de auditoria'}).locator('li')).toHaveCount(2);
   const {data:report,error}=await admin.sdk.rpc('audit_report_begin',{p_office_id:office,p_action:'test.archive_fixture',p_actor:null,p_from:null,p_until:null,p_view:'archived',p_request_id:randomUUID()});expect(error).toBeNull();expect(report.count).toBe(2);
   const chunk=await admin.sdk.rpc('audit_report_chunk',{p_office_id:office,p_report_id:report.id,p_offset:0});expect(chunk.error).toBeNull();
-  const canonical=await createAuditPdf((report.renderer_version===4?reportInputV4:report.renderer_version===3?reportInputV3:report.renderer_version===2?reportInputV2:reportInputV1)(report as AuditReport,chunk.data.items));const digest=createHash('sha256').update(canonical).digest('hex');
+  const canonical=await createAuditPdf((report.renderer_version===7?reportInputV7:report.renderer_version===6?reportInputV6:report.renderer_version===5?reportInputV5:report.renderer_version===4?reportInputV4:report.renderer_version===3?reportInputV3:report.renderer_version===2?reportInputV2:reportInputV1)(report as AuditReport,chunk.data.items));const digest=createHash('sha256').update(canonical).digest('hex');
   expect((await admin.sdk.rpc('audit_report_seal',{p_office_id:office,p_report_id:report.id,p_sha256:'f'.repeat(64),p_bytes:123})).error).toBeNull();
   const verify=async(sha256:string)=>request.post('/api/governance/audit/verify',{headers:admin.headers,data:{office_id:office,report_id:report.id,sha256}});
   const good=await verify(digest);expect(good.status()).toBe(200);expect((await good.json()).data.match).toBe(true);expect((await (await verify('f'.repeat(64))).json()).data.match).toBe(false);
