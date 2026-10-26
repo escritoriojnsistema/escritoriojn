@@ -1,0 +1,578 @@
+{
+  "counts": {
+    "reviews": 0,
+    "closures": 0,
+    "expenses": 0,
+    "payments": 0,
+    "receipts": 0,
+    "requests": 1,
+    "customers": 1,
+    "transfers": 0,
+    "auth_users": 5,
+    "migrations": 26,
+    "memberships": 5,
+    "role_grants": 65,
+    "audit_events": 32,
+    "cash_entries": 0,
+    "cash_sessions": 0,
+    "report_settings": 0,
+    "permission_codes": 62,
+    "quick_operations": 0,
+    "report_snapshots": 0,
+    "individual_permissions": 17
+  },
+  "tables": [
+    {
+      "rls": true,
+      "name": "finance_report_settings",
+      "policies": 0,
+      "anon_access": false,
+      "service_role_access": false,
+      "authenticated_access": false
+    },
+    {
+      "rls": true,
+      "name": "finance_report_snapshots",
+      "policies": 0,
+      "anon_access": false,
+      "service_role_access": false,
+      "authenticated_access": false
+    },
+    {
+      "rls": true,
+      "name": "quick_operations",
+      "policies": 0,
+      "anon_access": false,
+      "service_role_access": false,
+      "authenticated_access": false
+    }
+  ],
+  "indexes": [
+    {
+      "name": "quick_operations_pkey",
+      "valid": true
+    },
+    {
+      "name": "quick_operations_office_id_command_key_key",
+      "valid": true
+    },
+    {
+      "name": "quick_operations_office_id_request_id_key",
+      "valid": true
+    },
+    {
+      "name": "quick_operations_office_id_charge_id_key",
+      "valid": true
+    },
+    {
+      "name": "quick_operations_office_id_payment_id_key",
+      "valid": true
+    },
+    {
+      "name": "quick_operations_operator_idx",
+      "valid": true
+    },
+    {
+      "name": "quick_operations_operator_id_idx",
+      "valid": true
+    },
+    {
+      "name": "quick_operations_session_idx",
+      "valid": true
+    },
+    {
+      "name": "finance_report_settings_pkey",
+      "valid": true
+    },
+    {
+      "name": "finance_report_settings_actor_idx",
+      "valid": true
+    },
+    {
+      "name": "finance_report_snapshots_pkey",
+      "valid": true
+    },
+    {
+      "name": "finance_report_snapshots_office_id_command_key_key",
+      "valid": true
+    },
+    {
+      "name": "finance_report_snapshots_actor_idx",
+      "valid": true
+    },
+    {
+      "name": "finance_report_snapshots_actor_id_idx",
+      "valid": true
+    }
+  ],
+  "functions": [
+    {
+      "name": "cash_operate",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "349d04ad7844f424b421aa8b263cd944",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "cash_operate_before15",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "241826d5001f3cbaf5df4c998c89dc7e",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "cash_operate_before18",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "e6d4f5f5b86d221710375e47de3b0222",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "cash_statement_before17",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "b68c604af0e7aca9ec9ea78ba894f8d1",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "cash_statement_before18",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "dc69ca009f8e7c0987d51b8e5ad695f7",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "cash_statement_record",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "3ed70f0c81746ae8fef3f30691de8632",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "cash_statement_record_before15",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "b55a865dabe46be474eaef71bc48bf88",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "finance19_actor",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "76bce2a8f64d24adb7a54dc4bdacb2c5",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "finance19_build",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "58c9af33d71e8179658e7b1ffdc38474",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "finance19_filters",
+      "config": [
+        "search_path=\"\"",
+        "DateStyle=ISO,YMD"
+      ],
+      "schema": "private",
+      "body_md5": "27970676c6b6390f0fa30426219b53e0",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "finance19_guard",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "fca7006683170b3eb7444b29095530d5",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "finance19_row",
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "schema": "private",
+      "body_md5": "05892292210c1ad13da6e4cd637aca6d",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "finance19_rows",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "07471d94aec5a4ec709afb7d3866ee9c",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "finance19_safe",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "93ce51ccc11d8f4de9483f935fc4dbfc",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "finance19_settings",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "f065c117fa0cc510f650ba9643bbfc66",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "finance19_snapshot",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "73ada3f0ea540df2fb0c4aaffef1504c",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "finance_report_authorize",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "9382669a12029ed94939cb0b4f778bb4",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "finance_report_begin",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "176835671b7b860d37dc879c6944e9fa",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "finance_report_chunk",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "59dc6e983734f0539cd515bbbc1b51d8",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "finance_report_context",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "50173eb1b5fa53ae63e0f36f616dc0a0",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "finance_report_options",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "745f0aeedd6e8294874cf3c6cd3beb91",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "finance_report_page",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "3c7202eae70e48d4f913ae7384e0ba79",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "finance_report_settings",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "61ab440e823aa837e50dcbc8b1a120ce",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "quick_context",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "3de175c110a4ce2d9a34d1e07cdb49af",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "quick_eligible19",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "672b589709f66498280297998b9234f6",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "quick_operate",
+      "config": [
+        "search_path=\"\"",
+        "TimeZone=UTC"
+      ],
+      "schema": "private",
+      "body_md5": "b3ec6149fe999aacbae925bb710268b1",
+      "anon_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "quick_session19",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "private",
+      "body_md5": "43a9e0cdace25362745b76c30d19f60c",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "finance_report_authorize",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "body_md5": "d86f5b8c9d9a284d1479de747193237c",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "finance_report_begin",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "body_md5": "2d6928fa28bac911a20ae41c68ca9372",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "finance_report_chunk",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "body_md5": "aad30b71e8ddf19444d66c514c0f5baf",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "finance_report_context",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "body_md5": "5b7cb8869f2d5b5ea8153c972fe844df",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "finance_report_options",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "body_md5": "08f88b83b06e981b60b0b6fe0405be5e",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "finance_report_page",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "body_md5": "396608730630badea01d5fe98a9e7d91",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "finance_report_settings",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "body_md5": "cefb86d2c54085def31e33733b20f302",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "quick_context",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "body_md5": "cb1c3a549bbb95910b49a32ec3cefa1d",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "quick_operate",
+      "config": [
+        "search_path=\"\""
+      ],
+      "schema": "public",
+      "body_md5": "920b6a7a88358b9bbe8a0cee6f86c85c",
+      "anon_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    }
+  ],
+  "permissions": [
+    {
+      "code": "quick.perform",
+      "roles": [
+        "owner"
+      ]
+    },
+    {
+      "code": "finance.reports.read",
+      "roles": [
+        "owner"
+      ]
+    },
+    {
+      "code": "finance.reports.read_all",
+      "roles": [
+        "owner"
+      ]
+    },
+    {
+      "code": "finance.reports.export",
+      "roles": [
+        "owner"
+      ]
+    },
+    {
+      "code": "finance.reports.manage",
+      "roles": [
+        "owner"
+      ]
+    }
+  ],
+  "renderer_default": "6"
+}

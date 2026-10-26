@@ -1,0 +1,130 @@
+{
+  "base": "https://escritoriojn.vercel.app",
+  "checked_at": "2026-10-26T02:23:50Z",
+  "assets": [
+    {
+      "path": "assets/index-BVNMit_R.css",
+      "status": 200,
+      "bytes": 82076,
+      "sha256": "a93bab66ad1a1f4708a970eff4f9112896d0d0effd0dfc84868ee7059f0b6608",
+      "matches_build": true
+    },
+    {
+      "path": "assets/index-mJRc6oto.js",
+      "status": 200,
+      "bytes": 466728,
+      "sha256": "d79799bd8bf2df00a6057f18957f535f8677abb09754e03526f31c191cb087d2",
+      "matches_build": true
+    },
+    {
+      "path": "assets/rolldown-runtime-WkwZ5CU-.js",
+      "status": 200,
+      "bytes": 599,
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "matches_build": true
+    },
+    {
+      "path": "assets/supabase-DtuMx0jC.js",
+      "status": 200,
+      "bytes": 214392,
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "matches_build": true
+    },
+    {
+      "path": "assets/react-DYkIpRt7.js",
+      "status": 200,
+      "bytes": 259235,
+      "sha256": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+      "matches_build": true
+    }
+  ],
+  "anonymous": [
+    {
+      "path": "/api/cash/closures/state",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/closures/record",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/closures/operate",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/statement",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/payment",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/correction",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/finance17",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/expense",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/transfer",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/cash/receipt",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/finance/quick/context",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/finance/quick/operate",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/finance/reports/context",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/finance/reports/options",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/finance/reports/page",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/finance/reports/settings",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/finance/reports/export",
+      "status": 401,
+      "cache_control": "private, no-store"
+    }
+  ],
+  "canonical_status": 200,
+  "health_status": 200
+}

@@ -1,0 +1,57 @@
+{
+  "before": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 61
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "level": "INFO",
+      "count": 16
+    },
+    {
+      "name": "unused_index",
+      "level": "INFO",
+      "count": 104
+    }
+  ],
+  "after": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 64,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1,
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "level": "INFO",
+      "count": 16,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys"
+    },
+    {
+      "name": "unused_index",
+      "level": "INFO",
+      "count": 110,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+    }
+  ],
+  "new_tables_unindexed_foreign_keys": 0,
+  "notes": [
+    "RLS private tables without policy are intentional; raw API ACLs remain closed.",
+    "Leaked password protection warning predates19; not changed.",
+    "Sixteen unindexed foreign keys belong to previous tables; none from19.",
+    "Unused indexes expected for zero-business-row tables; retain constraints/support indexes."
+  ]
+}
