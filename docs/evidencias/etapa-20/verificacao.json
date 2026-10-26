@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-26",
+  "base": "cbac76024be7d9fa9319ec277cc9f9615abf1e35",
+  "stage": 20,
+  "stack": "React + Vite + TypeScript / Express / Supabase",
+  "tests": {
+    "node_api": {
+      "passed": 185,
+      "failed": 0,
+      "command": "npm test"
+    },
+    "sql": {
+      "command": "JN_DB_TEMPLATES_ISOLATED=1 node scripts/test-database.mjs",
+      "empty_replays": 2,
+      "reported_pass_lines_including_runner_summary": 103,
+      "real_lock_scenarios_per_replay": 7,
+      "unicode_cases_per_field": 20,
+      "unicode_fields": 5,
+      "benchmark_templates": 1000,
+      "result": "PASS"
+    },
+    "ui_templates_final": {
+      "passed": 13,
+      "failed": 0,
+      "command": "node scripts/test-team-ui.mjs --grep 'modelos20:'"
+    },
+    "ui_regression_batch": {
+      "passed": 39,
+      "failed": 0,
+      "overlap_with_templates_final": 10,
+      "command": "node scripts/test-team-ui.mjs --grep 'finance19:|rápido19:|relatórios19:|regressão19:|modelos20:|loading|carregamento'"
+    },
+    "auth_real_local": {
+      "passed": 5,
+      "failed": 0,
+      "command": "npm run test:auth -- tests/auth/templates.spec.ts tests/auth/finance19.spec.ts tests/auth/audit-policy.spec.ts"
+    },
+    "public_local": {
+      "passed": 8,
+      "failed": 0,
+      "command": "npx playwright test tests/browser/templates-public.spec.ts tests/browser/finance19-public.spec.ts --output test-results/public20"
+    },
+    "build_typecheck_server": "PASS",
+    "diff_check": "PASS",
+    "production_dependency_vulnerabilities": 0
+  },
+  "review": {
+    "status": "APROVÁVEL",
+    "pending_findings": 0,
+    "report": "revisao-final.md"
+  },
+  "ui": {
+    "viewports": [
+      320,
+      360,
+      768,
+      1440
+    ],
+    "mobile_input_font_px": 16,
+    "mobile_shortcuts_max": 4,
+    "loaders": false,
+    "standard_editor_fits_320x740": true,
+    "zoom_natural_scroll": true
+  },
+  "migration": {
+    "file": "supabase/migrations/20261026025302_templates_document_library.sql",
+    "sha256": "b721b6b2aab220412ce02e3a90fca6803448f5c98a3c0d44854be603260334e8",
+    "publication": "PENDING_GIT_RUNTIME_FIRST"
+  },
+  "preservation": {
+    "historical_pdf_files_unchanged": 20,
+    "individual_hosted_grants_added": 0,
+    "hosted_auth_fixtures": 0,
+    "hosted_business_fixtures": 0,
+    "github_actions_used": false,
+    "vercel_deploy_cli_or_api_used": false
+  },
+  "n_a": [
+    "Storage/Edge: sem novo upload/geração documental20",
+    "Pagamentos/financeiro: sem runtime novo; regressões executadas",
+    "MagicPath: sem novo protótipo; padrões aprovados de Equipe reutilizados",
+    "Tipos Database gerados: projeto usa contratos TS/DTOs de RPC; sem catálogo Database existente"
+  ],
+  "limits": [
+    "Sem modelo real fornecido; demonstrações somente no laboratório local.",
+    "Editor/autopreenchimento/PDF documental pertencem à Etapa21.",
+    "Medição Docker local não representa latência hospedada nem SLA.",
+    "Rodada antiga de SQL01–19 confirmou replayA1198PASS; conclusão da segunda execução não recuperável após retomada. Não contada como suíte final. Auth19/UI/Node e cadeia de migrations revalidados."
+  ]
+}

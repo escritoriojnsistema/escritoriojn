@@ -1,3 +1,4 @@
+import {reportInputV7} from './reportV7.js';
 import {reportInputV6} from './reportV6.js';
 import {reportInputV5} from './reportV5.js';
 import {reportInputV4} from './reportV4.js';
@@ -57,7 +58,7 @@ async function pdf(res:Response,source:Record<string,unknown>):Promise<Buffer|nu
     events.push(...chunk.items as AuditEvent[]);
   }
   if(res.destroyed)return null;
-  const output=Buffer.from(await createAuditPdf((report.renderer_version===6?reportInputV6:report.renderer_version===5?reportInputV5:report.renderer_version===4?reportInputV4:report.renderer_version===3?reportInputV3:report.renderer_version===2?reportInputV2:reportInputV1)(report,events)));
+  const output=Buffer.from(await createAuditPdf((report.renderer_version===7?reportInputV7:report.renderer_version===6?reportInputV6:report.renderer_version===5?reportInputV5:report.renderer_version===4?reportInputV4:report.renderer_version===3?reportInputV3:report.renderer_version===2?reportInputV2:reportInputV1)(report,events)));
   if(output.length>auditReportMaxBytes){errorResponse(res,422,'EXPORT_LIMIT',messages.EXPORT_LIMIT);return null;}
   if(output.subarray(0,5).toString()!=='%PDF-')throw new Error('Invalid PDF');
   return output;

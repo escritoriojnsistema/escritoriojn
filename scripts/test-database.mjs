@@ -1,3 +1,4 @@
+import {raceTemplates,benchmarkTemplates} from './database-templates.mjs';
 import {raceFinance19,benchmarkFinance19,finance19LegacySeed,verifyFinance19Legacy} from './database-finance19.mjs';
 import {raceClosures,benchmarkClosures,prepareClosures} from './database-closures.mjs';
 import {raceExpenses,benchmarkExpenses} from './database-expenses.mjs';
@@ -19,6 +20,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 
 // No URL or remote database option: this runner can only mutate its own disposable container.
+if(process.env.JN_DB_FOCUS_TEMPLATES==='1')process.env.JN_DB_FOCUS_FINANCE19='1';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const image = 'postgres:17-bookworm@sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826';
 const name = `jn-foundation-test-${randomUUID()}`;
@@ -714,12 +716,22 @@ try {
     CREATE ROLE service_role NOLOGIN BYPASSRLS;
     CREATE ROLE migrator LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS;
   `);
-  const migrations = readdirSync(`${root}supabase/migrations`).filter(name => name.endsWith('.sql')).sort();
+  const allMigrations = readdirSync(`${root}supabase/migrations`).filter(name => name.endsWith('.sql')).sort();
+  const templateMigrations=allMigrations.filter(n=>n.includes('_templates_document_library'));
+  const migrations=allMigrations.filter(n=>!templateMigrations.includes(n));
   for (const database of process.env.JN_DB_HISTORY_PAYMENTS==='1'?[]:process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'?['foundation_replay_a']:['foundation_replay_a', 'foundation_replay_b']) {
     sql('postgres', 'postgres', `CREATE DATABASE ${database} OWNER migrator;`);
     sql(database, 'postgres', readFileSync(`${root}tests/database/bootstrap.sql`, 'utf8'));
     for (const migration of migrations.filter(n=>process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'&&n<'20261025042809'||n<'20261024133149')) {
       sql(database, 'migrator', `BEGIN;\n${readFileSync(`${root}supabase/migrations/${migration}`, 'utf8')}\nCOMMIT;`);
+    }
+    if(process.env.JN_DB_TEMPLATES_ISOLATED==='1'){
+      for(const file of migrations.filter(n=>n>='20261024133149'))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+      if(process.env.JN_DB_TEMPLATES_RED!=='1')for(const file of templateMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+      let result=sql(database,'postgres',readFileSync(`${root}tests/database/templates.sql`,'utf8'));
+      result+=await raceTemplates({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+      if(database==='foundation_replay_b')result+=benchmarkTemplates({sql:input=>sql(database,'postgres',input)});
+      console.log(`${database} templates20 isolated:\n${result.trim()}`);continue;
     }
     if(process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'){
       const finance=readFileSync(`${root}tests/database/finance.sql`,'utf8').split('\n').slice(0,6).join('\n');
@@ -752,6 +764,12 @@ try {
           result+=sql(database,'postgres',readFileSync(`${root}tests/database/finance19.sql`,'utf8'));
           result+=await raceFinance19({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
           if(database==='foundation_replay_b')result+=benchmarkFinance19({sql:input=>sql(database,'postgres',input)});
+          if(process.env.JN_DB_FOCUS_TEMPLATES==='1'){
+            if(process.env.JN_DB_TEMPLATES_RED!=='1')for(const file of templateMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+            result+=sql(database,'postgres',readFileSync(`${root}tests/database/templates.sql`,'utf8'));
+    result+=await raceTemplates({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+      if(database==='foundation_replay_b')result+=benchmarkTemplates({sql:input=>sql(database,'postgres',input)});
+          }
         }
         console.log(`${database} ${process.env.JN_DB_FOCUS_FINANCE19==='1'?'financeiro19':'fechamento18'} (${result.split('\n').filter(line=>line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);continue;
       }
@@ -845,6 +863,10 @@ try {
     result+=sql(database,'postgres',readFileSync(`${root}tests/database/finance19.sql`,'utf8'));
     result+=await raceFinance19({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     if(database==='foundation_replay_b')result+=benchmarkFinance19({sql:input=>sql(database,'postgres',input)});
+    for(const file of templateMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+    result+=sql(database,'postgres',readFileSync(`${root}tests/database/templates.sql`,'utf8'));
+    result+=await raceTemplates({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+      if(database==='foundation_replay_b')result+=benchmarkTemplates({sql:input=>sql(database,'postgres',input)});
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
   if(process.env.JN_DB_FOCUS_FINANCE19==='1'){

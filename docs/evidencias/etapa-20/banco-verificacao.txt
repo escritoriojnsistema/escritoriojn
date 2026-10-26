@@ -1,0 +1,115 @@
+foundation_replay_a templates20 isolated:
+PASS: 20: save RPC exists
+PASS: 20: capabilities seed owner only
+PASS: 20: RLS and table ACL closed
+PASS: 20: public invoker wrappers and helpers ACL
+PASS: 20: missing real session denied
+PASS: 20: employee without capability denied
+PASS: 20: client denied even with capabilities
+PASS: 20: library initially empty
+PASS: 20: other office denied
+PASS: 20: typed demonstration draft created with author snapshot
+PASS: 20: unapproved draft never current
+PASS: 20: explicit approval exact version no retroactive time
+PASS: 20: immutable v1 remains current while v2 is draft
+PASS: 20: idempotent retries return current authorized DTO
+PASS: 20: same key different payload conflicts
+PASS: 20: duplicate code conflicts
+PASS: 20: approval cannot approve a stale version
+PASS: 20: employee approve capability never implies role approval
+PASS: 20: employee cannot approve
+{"id": "af2595e2-ba27-44ae-baf6-83325d4f7f0f", "code": "DECLARACAO-TESTE", "versions": [{"id": "02aab39e-ff87-415c-a527-cbc849229f18", "code": "DECLARACAO-TESTE", "kind": "declaration", "name": "Declaracao de Teste", "number": 2, "reason": "Edicao apos aprovacao", "content": "Nova declaracao {{cliente.nome}} em {{datas.emissao}}.", "variables": [{"key": "cliente.nome", "type": "text", "label": "Nome", "required": true}, {"key": "datas.emissao", "type": "date", "label": "Emissao", "required": true}], "created_at": "2026-10-26T13:34:34.705549+00:00", "created_by": "00000000-0000-4000-a000-000000000201", "approved_at": "2026-10-26T13:34:34.736746+00:00", "approved_by": "00000000-0000-4000-a000-000000000206", "demonstration": true, "effective_from": null, "approval_reason": "Aprovacao administrativa", "created_by_name": "Autor Modelo Teste", "effective_until": null, "review_required": true, "approved_by_name": "Autor Modelo Teste", "signature_policy": "none"}, {"id": "08a5908e-5d40-45f2-8fb9-870743494d71", "code": "DECLARACAO-TESTE", "kind": "declaration", "name": "Declaracao de Teste", "number": 1, "reason": "Cadastro demonstracao", "content": "Declaramos {{cliente.nome}} em {{datas.emissao}}.", "variables": [{"key": "cliente.nome", "type": "text", "label": "Nome", "required": true}, {"key": "datas.emissao", "type": "date", "label": "Emissao", "required": true}], "created_at": "2026-10-26T13:34:34.689195+00:00", "created_by": "00000000-0000-4000-a000-000000000201", "approved_at": "2026-10-26T13:34:34.699106+00:00", "approved_by": "00000000-0000-4000-a000-000000000201", "demonstration": true, "effective_from": null, "approval_reason": "Homologacao demonstracao", "created_by_name": "Autor Modelo Teste", "effective_until": null, "review_required": true, "approved_by_name": "Autor Modelo Teste", "signature_policy": "none"}], "can_manage": true, "can_approve": true, "history_page": 1, "history_total": 2, "latest_version": 2}
+PASS: 20: admin explicit approval makes v2 current
+PASS: 20: author and approver names immutable snapshots
+PASS: 20: draft and approved versions append-only
+PASS: 20: approval decisions append-only
+PASS: 20: idempotency evidence append-only
+PASS: 20: historical PDFs1-6 and audit unchanged
+PASS: 20: transactional audit refs only without text or PII
+PASS: 20: malformed definition, placeholders, types and UTC dates rejected directly by SQL
+PASS: 20: content unicode point upper bound
+PASS: 20: list sizes exactly3 or5
+PASS: 20: missing template404
+PASS: 20: approval always requires read
+PASS: 20: admin approval independent from manage
+PASS: 20: duplicate variable definition denied
+{"id": "61cbb726-0384-4892-8d1e-cb0acdee8cbb", "code": "FUTURO-TESTE", "versions": [{"id": "caa0d50d-5674-405c-b1e3-25991f5e8ed4", "code": "FUTURO-TESTE", "kind": "declaration", "name": "Declaracao de Teste", "number": 1, "reason": "Vigencia futura demonstracao", "content": "Declaramos {{cliente.nome}} em {{datas.emissao}}.", "variables": [{"key": "cliente.nome", "type": "text", "label": "Nome", "required": true}, {"key": "datas.emissao", "type": "date", "label": "Emissao", "required": true}], "created_at": "2026-10-26T13:34:34.778387+00:00", "created_by": "00000000-0000-4000-a000-000000000201", "approved_at": "2026-10-26T13:34:34.783864+00:00", "approved_by": "00000000-0000-4000-a000-000000000201", "demonstration": true, "effective_from": "2026-10-27T13:34:34.776Z", "approval_reason": "Aprovacao antecipada demonstracao", "created_by_name": "Nome novo nao retroativo", "effective_until": "2026-10-28T13:34:34.776Z", "review_required": true, "approved_by_name": "Nome novo nao retroativo", "signature_policy": "none"}], "can_manage": true, "can_approve": true, "history_page": 1, "history_total": 1, "latest_version": 1}
+PASS: 20: future approved version waits for effective_from
+PASS: 20: expired validity cannot be approved retroactively
+PASS: 20: SQL rejects content controls outside tab CR LF
+{"id": "4dd4cbc3-e483-41cb-b084-3404c5ad2f3a", "code": "LITERAL-TESTE", "versions": [{"id": "4be25bbe-ad63-463f-8a34-3717ae44a748", "code": "LITERAL-TESTE", "kind": "declaration", "name": "Declaracao de Teste", "number": 1, "reason": "Texto literal multilinha", "content": "Literal {texto}\n\t{{cliente.nome}} em {{datas.emissao}}\r", "variables": [{"key": "cliente.nome", "type": "text", "label": "Nome", "required": true}, {"key": "datas.emissao", "type": "date", "label": "Emissao", "required": true}], "created_at": "2026-10-26T13:34:34.799533+00:00", "created_by": "00000000-0000-4000-a000-000000000201", "approved_at": null, "approved_by": null, "demonstration": true, "effective_from": null, "approval_reason": null, "created_by_name": "Nome novo nao retroativo", "effective_until": null, "review_required": true, "approved_by_name": null, "signature_policy": "none"}], "can_manage": true, "can_approve": true, "history_page": 1, "history_total": 1, "latest_version": 1}
+PASS: 20: code stable through every version
+PASS: 20: only new audit reports use renderer7
+PASS: 20: unchanged audit_report_begin selects presentation7 through default
+PASS: 20: preparing renderer7 leaves every historical PDF snapshot1-6 intact
+PASS: 20: all ECMAScript Unicode whitespace-only names labels content save and approval reasons denied by SQL
+PASS: 20: Unicode around nonblank literal text preserved without normalization
+PASS: 20 race: two_edits
+PASS: 20 race: edit_before_approve
+PASS: 20 race: two_approvals
+PASS: 20 race: revoke manage while waiting
+PASS: 20 race: revoke approve while waiting
+PASS: 20 race: revoke read while waiting
+PASS: 20 race: revoke session while waiting
+PASS: 20: concurrent edits approvals revocations preserve version and exact audit count
+foundation_replay_b templates20 isolated:
+PASS: 20: save RPC exists
+PASS: 20: capabilities seed owner only
+PASS: 20: RLS and table ACL closed
+PASS: 20: public invoker wrappers and helpers ACL
+PASS: 20: missing real session denied
+PASS: 20: employee without capability denied
+PASS: 20: client denied even with capabilities
+PASS: 20: library initially empty
+PASS: 20: other office denied
+PASS: 20: typed demonstration draft created with author snapshot
+PASS: 20: unapproved draft never current
+PASS: 20: explicit approval exact version no retroactive time
+PASS: 20: immutable v1 remains current while v2 is draft
+PASS: 20: idempotent retries return current authorized DTO
+PASS: 20: same key different payload conflicts
+PASS: 20: duplicate code conflicts
+PASS: 20: approval cannot approve a stale version
+PASS: 20: employee approve capability never implies role approval
+PASS: 20: employee cannot approve
+{"id": "b4da698c-1839-4519-867f-f989e03f2942", "code": "DECLARACAO-TESTE", "versions": [{"id": "5f20fc2e-6b58-4b6d-9da9-0064c0fb5e5d", "code": "DECLARACAO-TESTE", "kind": "declaration", "name": "Declaracao de Teste", "number": 2, "reason": "Edicao apos aprovacao", "content": "Nova declaracao {{cliente.nome}} em {{datas.emissao}}.", "variables": [{"key": "cliente.nome", "type": "text", "label": "Nome", "required": true}, {"key": "datas.emissao", "type": "date", "label": "Emissao", "required": true}], "created_at": "2026-10-26T13:34:42.110649+00:00", "created_by": "00000000-0000-4000-a000-000000000201", "approved_at": "2026-10-26T13:34:42.141589+00:00", "approved_by": "00000000-0000-4000-a000-000000000206", "demonstration": true, "effective_from": null, "approval_reason": "Aprovacao administrativa", "created_by_name": "Autor Modelo Teste", "effective_until": null, "review_required": true, "approved_by_name": "Autor Modelo Teste", "signature_policy": "none"}, {"id": "b210b034-fdf7-46ea-8b11-c4db93483e97", "code": "DECLARACAO-TESTE", "kind": "declaration", "name": "Declaracao de Teste", "number": 1, "reason": "Cadastro demonstracao", "content": "Declaramos {{cliente.nome}} em {{datas.emissao}}.", "variables": [{"key": "cliente.nome", "type": "text", "label": "Nome", "required": true}, {"key": "datas.emissao", "type": "date", "label": "Emissao", "required": true}], "created_at": "2026-10-26T13:34:42.089151+00:00", "created_by": "00000000-0000-4000-a000-000000000201", "approved_at": "2026-10-26T13:34:42.103468+00:00", "approved_by": "00000000-0000-4000-a000-000000000201", "demonstration": true, "effective_from": null, "approval_reason": "Homologacao demonstracao", "created_by_name": "Autor Modelo Teste", "effective_until": null, "review_required": true, "approved_by_name": "Autor Modelo Teste", "signature_policy": "none"}], "can_manage": true, "can_approve": true, "history_page": 1, "history_total": 2, "latest_version": 2}
+PASS: 20: admin explicit approval makes v2 current
+PASS: 20: author and approver names immutable snapshots
+PASS: 20: draft and approved versions append-only
+PASS: 20: approval decisions append-only
+PASS: 20: idempotency evidence append-only
+PASS: 20: historical PDFs1-6 and audit unchanged
+PASS: 20: transactional audit refs only without text or PII
+PASS: 20: malformed definition, placeholders, types and UTC dates rejected directly by SQL
+PASS: 20: content unicode point upper bound
+PASS: 20: list sizes exactly3 or5
+PASS: 20: missing template404
+PASS: 20: approval always requires read
+PASS: 20: admin approval independent from manage
+PASS: 20: duplicate variable definition denied
+{"id": "a634daf0-2677-48fe-a015-ed872f53f419", "code": "FUTURO-TESTE", "versions": [{"id": "d61d314e-73a4-48cd-9c7c-213c5a6b4514", "code": "FUTURO-TESTE", "kind": "declaration", "name": "Declaracao de Teste", "number": 1, "reason": "Vigencia futura demonstracao", "content": "Declaramos {{cliente.nome}} em {{datas.emissao}}.", "variables": [{"key": "cliente.nome", "type": "text", "label": "Nome", "required": true}, {"key": "datas.emissao", "type": "date", "label": "Emissao", "required": true}], "created_at": "2026-10-26T13:34:42.196772+00:00", "created_by": "00000000-0000-4000-a000-000000000201", "approved_at": "2026-10-26T13:34:42.203658+00:00", "approved_by": "00000000-0000-4000-a000-000000000201", "demonstration": true, "effective_from": "2026-10-27T13:34:42.194Z", "approval_reason": "Aprovacao antecipada demonstracao", "created_by_name": "Nome novo nao retroativo", "effective_until": "2026-10-28T13:34:42.194Z", "review_required": true, "approved_by_name": "Nome novo nao retroativo", "signature_policy": "none"}], "can_manage": true, "can_approve": true, "history_page": 1, "history_total": 1, "latest_version": 1}
+PASS: 20: future approved version waits for effective_from
+PASS: 20: expired validity cannot be approved retroactively
+PASS: 20: SQL rejects content controls outside tab CR LF
+{"id": "5d76b5b0-33cf-483b-a768-1d80f4b159c8", "code": "LITERAL-TESTE", "versions": [{"id": "ba74da09-7725-448f-90ef-28a3f1285734", "code": "LITERAL-TESTE", "kind": "declaration", "name": "Declaracao de Teste", "number": 1, "reason": "Texto literal multilinha", "content": "Literal {texto}\n\t{{cliente.nome}} em {{datas.emissao}}\r", "variables": [{"key": "cliente.nome", "type": "text", "label": "Nome", "required": true}, {"key": "datas.emissao", "type": "date", "label": "Emissao", "required": true}], "created_at": "2026-10-26T13:34:42.21953+00:00", "created_by": "00000000-0000-4000-a000-000000000201", "approved_at": null, "approved_by": null, "demonstration": true, "effective_from": null, "approval_reason": null, "created_by_name": "Nome novo nao retroativo", "effective_until": null, "review_required": true, "approved_by_name": null, "signature_policy": "none"}], "can_manage": true, "can_approve": true, "history_page": 1, "history_total": 1, "latest_version": 1}
+PASS: 20: code stable through every version
+PASS: 20: only new audit reports use renderer7
+PASS: 20: unchanged audit_report_begin selects presentation7 through default
+PASS: 20: preparing renderer7 leaves every historical PDF snapshot1-6 intact
+PASS: 20: all ECMAScript Unicode whitespace-only names labels content save and approval reasons denied by SQL
+PASS: 20: Unicode around nonblank literal text preserved without normalization
+PASS: 20 race: two_edits
+PASS: 20 race: edit_before_approve
+PASS: 20 race: two_approvals
+PASS: 20 race: revoke manage while waiting
+PASS: 20 race: revoke approve while waiting
+PASS: 20 race: revoke read while waiting
+PASS: 20 race: revoke session while waiting
+PASS: 20: concurrent edits approvals revocations preserve version and exact audit count
+Result  (cost=0.00..0.26 rows=1 width=32) (actual time=9.886..9.886 rows=1 loops=1)
+  Buffers: shared hit=7361
+Planning Time: 0.010 ms
+Execution Time: 9.893 ms
+PASS: 20: indexed office library pagination1000 preserves total and bounded page
+PASS: 20: history exactly5 per page descending without truncating total
+PASS: dois replays vazios, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.
