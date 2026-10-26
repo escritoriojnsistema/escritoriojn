@@ -19,7 +19,7 @@ export const emptyService: ServiceInput = { code:'',name:'',category:'',unit:'un
 
 const object=(v:unknown):v is Record<string,unknown>=>!!v && typeof v==='object' && !Array.isArray(v);
 const exact=(v:unknown,keys:readonly string[]):v is Record<string,unknown>=>object(v) && Object.keys(v).length===keys.length && keys.every(k=>Object.hasOwn(v,k));
-const text=(v:unknown,max:number)=>typeof v==='string' && v.trim().length>=1 && v.length<=max && !/[\u0000-\u001f\u007f]/.test(v);
+const text=(v:unknown,max:number)=>typeof v==='string' && v.trim().length>=1 && Array.from(v).length<=max && !/[\u0000-\u001f\u007f]/.test(v);
 const integer=(v:unknown,min:number,max:number)=>Number.isSafeInteger(v) && Number(v)>=min && Number(v)<=max;
 export function validService(value:unknown):value is ServiceInput {
   if(!exact(value,serviceKeys) || typeof value.code!=='string' || !/^[A-Z0-9][A-Z0-9_-]{1,31}$/.test(value.code)

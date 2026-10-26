@@ -5,7 +5,7 @@ export type ArchiveEntry = { id: string; target_type: 'membership'; target_id: s
 export type GovernancePage<T> = { items: T[]; total: number; page: number; page_size: number };
 export type AuditView = 'recent' | 'archived';
 export type AuditPolicy = { days: 30 | 60 | 90; version: number; cutoff: string; effective_at: string };
-export type AuditReport = { id: string; protocol: string; count: number; office_id: string; office_name: string; actor_name: string; created_at: string; view: AuditView; cutoff: string; filters: AuditFilters; renderer_version: 1|2|3|4|5; contract_version: 1 };
+export type AuditReport = { id: string; protocol: string; count: number; office_id: string; office_name: string; actor_name: string; created_at: string; view: AuditView; cutoff: string; filters: AuditFilters; renderer_version: 1|2|3|4|5|6; contract_version: 1 };
 export type AuditVerification = { match: boolean; protocol: string; count: number; created_at: string; bytes: number };
 export const auditReportMaxEvents = 10_000;
 export const auditReportMaxBytes = 3 * 1024 * 1024;
@@ -58,3 +58,7 @@ export function auditValueLabel(value:unknown,field='',names:Record<string,strin
 
 Object.assign(auditTargetNames,{cash_closure:'Conferência de caixa'});
 Object.assign(auditFieldNames,{closure_id:'Referência da conferência',differences_count:'Meios com divergência',absolute_difference_cents:'Soma absoluta das diferenças',has_difference:'Há divergência',decision:'Decisão da revisão'});
+
+Object.assign(auditActionNames,{'quick.completed':'Atendimento rápido concluído','finance.report_prepared':'Relatório financeiro preparado','finance.report_exported':'Relatório financeiro exportado','finance.report_timezone_changed':'Fuso dos relatórios alterado'});
+Object.assign(auditTargetNames,{financial_report:'Relatório financeiro',finance_report_settings:'Configuração dos relatórios'});
+Object.assign(auditFieldNames,{format:'Formato do arquivo'});

@@ -1,10 +1,11 @@
+import {quickRequiredPermissions} from '../../../shared/finance19';
 import type { AccessContext } from '../../../shared/access';
 import { paths } from '../../app/routes';
 
 export const operationRoleNames = {
   owner: 'Super administrador (Proprietário)', admin: 'Administrador', employee: 'Funcionário', client: 'Cliente',
 };
-export type OperationItem = { key: 'expenses' | 'payments' | 'cash' | 'charges' | 'home' | 'checklists' | 'notifications' | 'requests' | 'attachments' | 'customers' | 'services' | 'team' | 'audit' | 'archives' | 'account'; label: string; path: string };
+export type OperationItem = { key: 'quick' | 'reports' | 'expenses' | 'payments' | 'cash' | 'charges' | 'home' | 'checklists' | 'notifications' | 'requests' | 'attachments' | 'customers' | 'services' | 'team' | 'audit' | 'archives' | 'account'; label: string; path: string };
 export function operationNavigation(contexts: AccessContext[], client: boolean): OperationItem[] {
   const items: OperationItem[] = [{ key: 'home', label: 'Início', path: client ? paths.clientPanel : paths.panel }];
   if (client || contexts.some(context => context.role_code !== 'client' && context.permissions.includes('requests.read'))) items.push({ key: 'requests', label: client ? 'Minhas solicitações' : 'Solicitações', path: client ? paths.clientRequests : paths.requests });
@@ -22,6 +23,8 @@ export function operationNavigation(contexts: AccessContext[], client: boolean):
   if (!client && contexts.some(c => c.role_code !== 'client' && c.permissions.includes('requests.read') && c.permissions.includes('charges.read'))) items.push({key:'charges',label:'Cobranças',path:paths.charges});
   if(!client && contexts.some(c=>c.role_code!=='client'&&c.permissions.includes('cash.read'))) items.push({key:'cash',label:'Caixa',path:paths.cash});
   if(!client&&contexts.some(c=>c.role_code!=='client'&&c.permissions.includes('cash.read')&&['expenses.read','cash.transfer'].some(p=>c.permissions.includes(p))))items.push({key:'expenses',label:'Despesas e movimentações',path:paths.expenses});
+  if(!client&&contexts.some(c=>c.role_code!=='client'&&quickRequiredPermissions.every(p=>c.permissions.includes(p))))items.push({key:'quick',label:'Atendimento rápido',path:paths.quick});
+  if(!client&&contexts.some(c=>c.role_code!=='client'&&['cash.read','finance.reports.read'].every(p=>c.permissions.includes(p))))items.push({key:'reports',label:'Relatórios financeiros',path:paths.financialReports});
   items.push({ key: 'account', label: 'Conta', path: client ? paths.clientAccount : paths.account });
   return items;
 }

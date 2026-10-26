@@ -9,7 +9,7 @@ function version(value:unknown):ServiceVersion {
   return {...input,fields:input.fields.map(f=>({key:f.key,label:f.label,type:f.type,required:f.required})),checklist:[...input.checklist],required_capabilities:[...input.required_capabilities],id:value.id,number:Number(value.number),created_at:value.created_at,created_by:value.created_by,reason:value.reason};
 }
 function summary(v:unknown):ServiceSummary {
-  if(!record(v)||!uuid(v.id)||typeof v.code!=='string'||!/^[A-Z0-9][A-Z0-9_-]{1,31}$/.test(v.code)||typeof v.name!=='string'||v.name.length>120||typeof v.category!=='string'||v.category.length>60||typeof v.unit!=='string'||v.unit.length>30||!int(v.price_cents,0,100000000)||!int(v.version,1,2147483646)||!time(v.effective_from))throw Error('Invalid service summary');
+  if(!record(v)||!uuid(v.id)||typeof v.code!=='string'||!/^[A-Z0-9][A-Z0-9_-]{1,31}$/.test(v.code)||typeof v.name!=='string'||Array.from(v.name).length>120||typeof v.category!=='string'||Array.from(v.category).length>60||typeof v.unit!=='string'||Array.from(v.unit).length>30||!int(v.price_cents,0,100000000)||!int(v.version,1,2147483646)||!time(v.effective_from))throw Error('Invalid service summary');
   return {id:v.id,code:v.code,name:v.name,category:v.category,unit:v.unit,price_cents:Number(v.price_cents),version:Number(v.version),effective_from:v.effective_from};
 }
 export function servicePage(v:unknown):ServicePage {

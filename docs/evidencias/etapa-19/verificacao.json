@@ -1,0 +1,46 @@
+{
+  "status": "LOCAL_GREEN",
+  "date": "2026-10-26T02:12:37.754650+00:00",
+  "stack": "React19.3.1 + Vite8.3.4 + TypeScript7.0.2 / Express5.3.0 / Node24.19.0",
+  "checks": {
+    "node_api": 176,
+    "ui": 150,
+    "ui19": 26,
+    "auth_real_local": 8,
+    "auth19": 2,
+    "public_local": 5,
+    "sql_pass_lines": 2320,
+    "sql_replays": [
+      1153,
+      1154
+    ],
+    "sql_history": 12,
+    "sql_completion": 1,
+    "production_vulnerabilities": 0,
+    "public_build": true,
+    "typecheck_and_server": true,
+    "diff_check": true
+  },
+  "log_sha256": {
+    "node": "dd11c4df6db9d6fbb887824e49c5caf5e820e5dc7498454d80a16b74fb5fdc66",
+    "ui": "65297687e6104b1dfb4fe25d599f1e88def7271b544c85524aee936d81d775e0",
+    "auth": "067d450c5f1455eb241df5fc3d5f386b040fb53b668195dceb215c34073f2938",
+    "public_local": "9448cb746c4f640c2730988505422d4dd475605cbfccd71ac1d8fc682c147b89",
+    "build": "27331923ff5a2af6739e096f5fc06af202fdee537a089ac68353d995311d87e2"
+  },
+  "scope": [
+    "Own quick atomic09/10/13/15 and closed18 retry",
+    "Three report views, no double revenue, zero price without fake payment",
+    "IANA/DST, filters, masked snapshot, BigInt totals and numeric CSV, multipage PDF",
+    "503 preserves attempt;409 reconfirms;401/403/authority aborts private responses",
+    "History1–18 and frozen PDF1–5 preserved"
+  ],
+  "review": "Independent final review approvable, all findings fixed and reproduced RED→GREEN",
+  "visual": "320/360/768/1440 screenshots inspected; shared Equipe/OperationLayout, four shortcuts, extras sidebar, natural scroll, no loaders",
+  "limits": [
+    "Auth/business tests used disposable local fixtures only; no hosted Auth/grant/business writes",
+    "Timings include Docker/psql overhead, no zero-network-delay SLA",
+    "Vercel admin connector403 preexisting; release uses GitHub status and canonical HTTPS, no bypass"
+  ],
+  "release": "Pending runtime then migration GitHub→Vercel, no GitHub Actions/CLI/API deploy"
+}
