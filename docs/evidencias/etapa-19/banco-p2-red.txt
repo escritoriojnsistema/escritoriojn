@@ -1,0 +1,2 @@
+ERROR:  FAIL: 19 P2: optional field policy excluded from quick context
+CONTEXT:  PL/pgSQL function test.assert_true(boolean,text) line 4 at RAISE
