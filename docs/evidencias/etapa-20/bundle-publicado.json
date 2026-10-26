@@ -1,0 +1,65 @@
+{
+  "origin": "https://escritoriojn.vercel.app",
+  "health": 200,
+  "assets": [
+    {
+      "path": "/assets/index-BA1ZOzxa.css",
+      "sha256": "a7ee062b4e307c81365c09dd7fe37154f6ea7ca2d9ff75323e464d36025d13f9",
+      "local_equal": true
+    },
+    {
+      "path": "/assets/index-DYbFDbve.js",
+      "sha256": "4efd02047b199d6f1a5a89bb0741b36e87d8cbe012069141375896f1eaaa2650",
+      "local_equal": true
+    },
+    {
+      "path": "/assets/react-DYkIpRt7.js",
+      "sha256": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+      "local_equal": true
+    },
+    {
+      "path": "/assets/rolldown-runtime-WkwZ5CU-.js",
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "local_equal": true
+    },
+    {
+      "path": "/assets/supabase-DtuMx0jC.js",
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "local_equal": true
+    }
+  ],
+  "anonymous_barriers": [
+    {
+      "path": "/api/templates/search",
+      "status": 401
+    },
+    {
+      "path": "/api/templates/detail",
+      "status": 401
+    },
+    {
+      "path": "/api/templates/save",
+      "status": 401
+    },
+    {
+      "path": "/api/templates/approve",
+      "status": 401
+    },
+    {
+      "path": "/api/finance/quick/context",
+      "status": 401
+    },
+    {
+      "path": "/api/finance/reports/context",
+      "status": 401
+    },
+    {
+      "path": "/api/cash/context",
+      "status": 401
+    },
+    {
+      "path": "/api/services/search",
+      "status": 401
+    }
+  ]
+}

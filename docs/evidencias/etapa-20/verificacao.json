@@ -12,12 +12,13 @@
     "sql": {
       "command": "JN_DB_TEMPLATES_ISOLATED=1 node scripts/test-database.mjs",
       "empty_replays": 2,
-      "reported_pass_lines_including_runner_summary": 103,
+      "reported_pass_lines_including_runner_summary": 105,
       "real_lock_scenarios_per_replay": 7,
       "unicode_cases_per_field": 20,
       "unicode_fields": 5,
       "benchmark_templates": 1000,
-      "result": "PASS"
+      "result": "PASS",
+      "foreign_key_index_regression": "RED antes do índice; GREEN em dois replays finais"
     },
     "ui_templates_final": {
       "passed": 13,
@@ -42,7 +43,11 @@
     },
     "build_typecheck_server": "PASS",
     "diff_check": "PASS",
-    "production_dependency_vulnerabilities": 0
+    "production_dependency_vulnerabilities": 0,
+    "public_published": {
+      "passed": 8,
+      "failed": 0
+    }
   },
   "review": {
     "status": "APROVÁVEL",
@@ -65,7 +70,7 @@
   "migration": {
     "file": "supabase/migrations/20261026025302_templates_document_library.sql",
     "sha256": "b721b6b2aab220412ce02e3a90fca6803448f5c98a3c0d44854be603260334e8",
-    "publication": "PENDING_GIT_RUNTIME_FIRST"
+    "publication": "APPLIED_AUTOMATICALLY_BY_GIT"
   },
   "preservation": {
     "historical_pdf_files_unchanged": 20,
@@ -86,5 +91,14 @@
     "Editor/autopreenchimento/PDF documental pertencem à Etapa21.",
     "Medição Docker local não representa latência hospedada nem SLA.",
     "Rodada antiga de SQL01–19 confirmou replayA1198PASS; conclusão da segunda execução não recuperável após retomada. Não contada como suíte final. Auth19/UI/Node e cadeia de migrations revalidados."
-  ]
+  ],
+  "index_migration": {
+    "file": "supabase/migrations/20261026135113_templates_document_library_reference_index.sql",
+    "sha256": "d6c510fd34b12c54d9bf2dffb7b8de1c73c7834c75e381bc734a88fdb3aef435",
+    "publication": "APPLIED_AUTOMATICALLY_BY_GIT"
+  },
+  "status": "APROVÁVEL_PUBLICADA_VERIFICADA",
+  "publication_evidence": "publicacao.json",
+  "schema_evidence": "schema-publicado.json",
+  "performance_new_fk_without_index": 0
 }

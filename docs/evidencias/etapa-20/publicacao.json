@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-26",
+  "origin": "https://escritoriojn.vercel.app",
+  "runtime": {
+    "pr": 57,
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/pull/57",
+    "commit": "618359a11f1649f400516f01c224d5dde5b62ad9",
+    "merge": "a6f86ed7dc3f917da03462be2fa09fe225eaf0f3",
+    "tree": "7f7048b3a64dab76b7fc96487e5a1eb302fd976c",
+    "vercel": [
+      {
+        "context": "Vercel",
+        "state": "success",
+        "target_url": "https://vercel.com/escritorio-jn/escritoriojn/DNz5pDJ4PJuZzd4gF2n2i4ixZyi3"
+      }
+    ]
+  },
+  "schema": {
+    "pr": 58,
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/pull/58",
+    "commit": "bf5ff56f27f1125acdbf337cb59e3839b8b1b45f",
+    "merge": "24cc1e6248341741539d733e54f035147adef497",
+    "tree": "835c2ac4a12fc097a6c593a56b175229bdaa7006",
+    "vercel": [
+      {
+        "context": "Vercel",
+        "state": "success",
+        "target_url": "https://vercel.com/escritorio-jn/escritoriojn/DwT1DVgdkni6h3AYEyCqDfstWPm9"
+      }
+    ],
+    "migration": "20261026025302",
+    "automatic_git_application": true,
+    "statements": 38,
+    "new_functions_equal": 14,
+    "historical_finance_functions_unchanged": 36,
+    "audit_begin_body_unchanged": true
+  },
+  "index": {
+    "pr": 59,
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/pull/59",
+    "commit": "56921b7e451aa4da68967239ef6a7fcc4f95401b",
+    "merge": "ddbb8bb0f8a4fbb979b06347ae6552e9f8e2c509",
+    "tree": "8adc7489d9f8270b5673e81290a764c4e9f9c44c",
+    "vercel": [
+      {
+        "context": "Vercel",
+        "state": "success",
+        "target_url": "https://vercel.com/escritorio-jn/escritoriojn/CPbMYHBNmn9UddtBaEE85rka4gKP"
+      }
+    ],
+    "migration": "20261026135113",
+    "automatic_git_application": true,
+    "statements_equal": 1,
+    "verified": {
+      "valid": true,
+      "requests": 1,
+      "customers": 1,
+      "templates": 0,
+      "auth_users": 5,
+      "index_name": "template_commands_template_idx",
+      "migrations": 28,
+      "memberships": 5,
+      "audit_events": 32,
+      "index_definition": "CREATE INDEX template_commands_template_idx ON private.template_commands USING btree (office_id, template_id)",
+      "template_commands": 0,
+      "template_versions": 0,
+      "template_approvals": 0,
+      "individual_permissions": 17
+    }
+  },
+  "checks": {
+    "canonical_assets_equal": 5,
+    "health": 200,
+    "anonymous_barriers401": 8,
+    "published_public_tests": 8,
+    "github_actions": false,
+    "vercel_cli_api_deploy": false,
+    "manual_migration": false,
+    "hosted_fixtures": false,
+    "hosted_auth_mutation": false,
+    "individual_grants_added": 0,
+    "template_foreign_keys_missing_index": 0
+  }
+}

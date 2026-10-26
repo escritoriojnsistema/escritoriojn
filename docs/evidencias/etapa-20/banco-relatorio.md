@@ -35,3 +35,7 @@ O runner legado de benchmark19 regrava seu JSON de desempenho durante execução
 ## Fecho após revisão Unicode
 
 O controlador executou a migration final com `JN_DB_TEMPLATES_ISOLATED=1 node scripts/test-database.mjs`: dois replays vazios completos, migrador restrito,103linhasPASS incluindo o resumo do runner, sete corridas reais por replay e benchmark1000. Saída íntegra em `banco-verificacao.txt`. O helper `templates_has_text20` espelha25espaços ECMAScript, recusa texto vazio em nome/conteúdo/rótulo/motivos e mantém os bytes não vazios. A suíteSQL cobre20espaços×5campos e o Auth real confirmaSDK422/consultaAPI200 para textos válidos. Nome/motivo contendo Unicode válido não são truncados nem reescritos. O primeiro replay anterior de regressões19 e os dois replays finais20 são evidências distintas, não somadas como uma única suíte completa01–20.
+
+## Índice complementar da conferência hospedada
+
+O advisor hospedado apontou a FK nova `template_commands_office_id_template_id_fkey` sem índice de apoio. Uma regressão de catálogo falhou antes do índice; a migration complementar `20261026135113_templates_document_library_reference_index.sql` adiciona somente `(office_id,template_id)`. A cadeia final passou novamente em dois bancos vazios/migrador limitado, sete corridas/replay e benchmark1000, com saída final em banco-verificacao.txt. Nenhum corpo de função, dado, concessão ou PDF foi modificado pelo índice. A confirmação hospedada acompanha schema-publicado/advisors no fecho.

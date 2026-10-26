@@ -1,0 +1,183 @@
+{
+  "security": {
+    "before": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "count": 64
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "level": "WARN",
+        "count": 1
+      }
+    ],
+    "after": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "count": 68
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "level": "WARN",
+        "count": 1
+      }
+    ],
+    "template_findings": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "detail": "Table \\`private.template_approvals\\` has RLS enabled, but no policies exist",
+        "metadata": {
+          "name": "template_approvals",
+          "type": "table",
+          "schema": "private"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      },
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "detail": "Table \\`private.template_commands\\` has RLS enabled, but no policies exist",
+        "metadata": {
+          "name": "template_commands",
+          "type": "table",
+          "schema": "private"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      },
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "detail": "Table \\`public.template_versions\\` has RLS enabled, but no policies exist",
+        "metadata": {
+          "name": "template_versions",
+          "type": "table",
+          "schema": "public"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      },
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "detail": "Table \\`public.templates\\` has RLS enabled, but no policies exist",
+        "metadata": {
+          "name": "templates",
+          "type": "table",
+          "schema": "public"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      }
+    ],
+    "existing_warnings": [
+      {
+        "name": "auth_leaked_password_protection",
+        "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection",
+        "preexisting": true
+      }
+    ]
+  },
+  "performance": {
+    "before": [
+      {
+        "name": "unindexed_foreign_keys",
+        "level": "INFO",
+        "count": 16
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "count": 108
+      }
+    ],
+    "after": [
+      {
+        "name": "unindexed_foreign_keys",
+        "level": "INFO",
+        "count": 16
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "count": 113
+      }
+    ],
+    "template_findings": [
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "detail": "Index \\`templates_author_idx\\` on table \\`public.templates\\` has not been used",
+        "metadata": {
+          "name": "templates",
+          "type": "table",
+          "schema": "public"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "detail": "Index \\`template_versions_author_idx\\` on table \\`public.template_versions\\` has not been used",
+        "metadata": {
+          "name": "template_versions",
+          "type": "table",
+          "schema": "public"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "detail": "Index \\`template_approvals_author_idx\\` on table \\`private.template_approvals\\` has not been used",
+        "metadata": {
+          "name": "template_approvals",
+          "type": "table",
+          "schema": "private"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "detail": "Index \\`template_commands_author_idx\\` on table \\`private.template_commands\\` has not been used",
+        "metadata": {
+          "name": "template_commands",
+          "type": "table",
+          "schema": "private"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "detail": "Index \\`template_commands_template_idx\\` on table \\`private.template_commands\\` has not been used",
+        "metadata": {
+          "name": "template_commands",
+          "type": "table",
+          "schema": "private"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      }
+    ],
+    "existing_warnings": [],
+    "before_index": [
+      {
+        "name": "unindexed_foreign_keys",
+        "level": "INFO",
+        "count": 17
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "count": 112
+      }
+    ]
+  },
+  "explanation": {
+    "rls_no_policy": "Intencional: ACL bruta fechada; somente RPCs autorizadas.",
+    "unused_index": "Esperado na biblioteca vazia; preservar índices de integridade e autoria.",
+    "new_fk_index": "Índice complementar aplicado; aviso novo removido,16 anteriores preservados.",
+    "password_warning": "Preexistente, sem mudança na configuração Auth nesta etapa."
+  }
+}
