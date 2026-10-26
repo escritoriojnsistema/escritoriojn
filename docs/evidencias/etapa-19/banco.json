@@ -1,0 +1,127 @@
+{
+  "status": "GREEN",
+  "command": "JN_DB_FOCUS_FINANCE19=1 node scripts/test-database.mjs",
+  "exit_code": 0,
+  "finished_at": "2026-10-26T02:19:54.406507+00:00",
+  "environment": "Disposable PostgreSQL17 pinned image, two fresh replay databases, migrator NOSUPERUSER NOBYPASSRLS; no hosted mutation",
+  "replays": [
+    {
+      "database": "foundation_replay_a",
+      "checks": 1153
+    },
+    {
+      "database": "foundation_replay_b",
+      "checks": 1154
+    }
+  ],
+  "historical_checks": 12,
+  "runner_completion_checks": 1,
+  "total_pass_lines": 2320,
+  "new_capabilities": 5,
+  "new_private_tables": 3,
+  "new_public_invoker_rpcs": 9,
+  "sql19_assertions_per_replay": 75,
+  "finance19_race_assertions_per_replay": 15,
+  "migration19_after_regression18": true,
+  "prior_migrations_or_evidence14_18_modified": false,
+  "containers_remaining": 0,
+  "files_sha256": {
+    "supabase/migrations/20261025172605_quick_financial_reports.sql": "b2b727f9a6718fd5930c00adbd28aaeff6880dd87148fcff9f47bdd8dcdfc90c",
+    "tests/database/finance19.sql": "7f3567ad979419ee3bf5789299ec53e625c0b2693fbe2c63237bb45840bde8e1",
+    "scripts/database-finance19.mjs": "3bc856c2c0a4a9113491ab3e7c4f13f8783700424996e002587c91fbade39cdd",
+    "scripts/test-database.mjs": "9bc550be5cecddc3c3eb46e52492d0d1729c782de0520ae8d0bedc17eecbe533"
+  },
+  "full_log_sha256": "cc6ddd383520b0ecf54a9291cd71c238ff42fda415d2727042d521ef29ac6724",
+  "boundaries": [
+    "Rows and audits exclude customer names, CPF/email, payee and free evidence.",
+    "1000 snapshot rows max, 500/chunk; byte3MB and CSV/PDF validation belong to API/controller.",
+    "Page aggregates only requested5 rows; begin at most1001, complete totals from same CTE.",
+    "IANA official timezone, default UTC without a settings row; local 1–366 days, half-open bounds and DST.",
+    "No hosted fixtures/Auth grants/business mutation; no commits/push/deploy."
+  ],
+  "legacy_regression": {
+    "before15_rpc": true,
+    "received_cents": 2500,
+    "reversed_cents": 2500,
+    "refund_cents": 2500,
+    "allocated_cents": 0,
+    "balance_cents": 10000,
+    "cash_expected_cents": 1000,
+    "card_fee_cents": null,
+    "unknown_fee_count": 1,
+    "movement_rows": 11,
+    "paired_kind_id_identity": true
+  },
+  "rpc_dto_probe": "Current API DTOs accepted real quick/context/options/3 views/snapshot/chunk and 300 projected movement rows; isolated disposable PG probe before the final pagination-only helper change.",
+  "previous_verification": {
+    "finished_at": "2026-10-25T18:02:46.477229+00:00",
+    "replays": [
+      {
+        "database": "foundation_replay_a",
+        "checks": 1145
+      },
+      {
+        "database": "foundation_replay_b",
+        "checks": 1146
+      }
+    ],
+    "total_pass_lines": 2304,
+    "files_sha256": {
+      "supabase/migrations/20261025172605_quick_financial_reports.sql": "4fc8d28b8761242b0614181ca72291c1c209173e8a5bb1356d71dfe20c87ae29",
+      "tests/database/finance19.sql": "4410a3f32c67545b2b6e299aed9241a29bbdf11a16a46e5da324315670efc7b4",
+      "scripts/database-finance19.mjs": "3bc856c2c0a4a9113491ab3e7c4f13f8783700424996e002587c91fbade39cdd",
+      "scripts/test-database.mjs": "9bc550be5cecddc3c3eb46e52492d0d1729c782de0520ae8d0bedc17eecbe533"
+    },
+    "full_log_sha256": "9f48e390741316713a51a3017ec5d5450a6e8d92a1bfd4f69a353dfff5c1370c"
+  },
+  "full_log_workspace_path": "/tmp/finance19-p2-green.log",
+  "summary_file": "docs/evidencias/etapa-19/banco-resumo.txt",
+  "container_scope": "Only the owned disposable foundation runner; controller Auth laboratory is separate.",
+  "review_corrections": {
+    "P2": {
+      "cause": "JSONB containment @> of empty arrays also matched populated fields/checklist arrays.",
+      "fix": "Retain scalar policy checks; compare fields and checklist with exact empty JSONB array equality.",
+      "cases": [
+        "optional field only",
+        "nonempty checklist only",
+        "both optional field and checklist"
+      ],
+      "checked": [
+        "absent from context",
+        "quick returns PT409",
+        "requests charges payments allocations ledger commands audits notifications and session unchanged"
+      ],
+      "red": {
+        "command": "JN_DB_FOCUS_FINANCE19=1 node scripts/test-database.mjs",
+        "exit_code": 1,
+        "migration_sha256": "aa7e23a5cca229f8b1f89f8351d7e091ed923bda67de8b62935c9a2ec77cc643",
+        "predicate": "old containment with fields:[] and checklist:[]",
+        "failure": "FAIL: 19 P2: optional field policy excluded from quick context",
+        "file": "docs/evidencias/etapa-19/banco-p2-red.txt",
+        "sha256": "b26913ae83b02e01eae7a6d1af655e1b5df6f7f9f75f949c7beefdf9da05190d"
+      }
+    },
+    "P3": {
+      "added_indexes": {
+        "quick_operations_operator_id_idx": [
+          "operator_id"
+        ],
+        "quick_operations_session_idx": [
+          "office_id",
+          "unit_id",
+          "session_id"
+        ],
+        "finance_report_settings_actor_idx": [
+          "actor_id"
+        ],
+        "finance_report_snapshots_actor_id_idx": [
+          "actor_id"
+        ]
+      },
+      "checked": "Every FK on the three new private tables has a valid, ready, nonpartial supporting index prefix, verified through pg_constraint and pg_index."
+    },
+    "fixture_only": "Default test period uses current_date-1 through current_date+1 to remain valid when UTC and America/New_York dates differ; explicit DST tests unchanged."
+  },
+  "previous_reviewed_sql_sha256": "b306b64ed5971b2974c701fafe9ae7fd853602d7e6097c35763295bef26a1e55",
+  "release_recheck": "Two full replays rerun GREEN after removing one whitespace-only SQL line; same2320checks and business code."
+}

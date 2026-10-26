@@ -1,0 +1,193 @@
+Resumo:2320PASS; replayA1153,replayB1154,histórico12,fecho1.
+Full log SHA256:cc6ddd383520b0ecf54a9291cd71c238ff42fda415d2727042d521ef29ac6724
+Abaixo somente verificações19 e fechamento; regressões01–18 passaram antes19 em cada replay.
+PASS: 19 RED gate: feature unavailable before migration19
+PASS: 19: quick RPC exists
+PASS: 19: five capabilities seed owner only
+PASS: 19: private ACL and RLS closed
+PASS: 19: public INVOKER authenticated wrappers, closed helpers
+PASS: 19 P3: every new foreign key has a valid nonpartial supporting index prefix
+PASS: 19: paginated context selects authorized own session and explicit UTC default
+PASS: 19 P2: optional field policy excluded from quick context
+PASS: 19 P2: nonempty checklist excluded from quick context
+PASS: 19 P2: optional field and checklist policy excluded from quick context
+PASS: 19 P2: quick rejects optional field before creating any operation
+PASS: 19 P2: quick rejects nonempty checklist at eligibility gate
+PASS: 19 P2: quick rejects optional field and checklist at eligibility gate
+PASS: 19 P2: rejected policies preserve requests charges payments allocations ledger commands audits notifications and session
+PASS: 19: quick closed input rejects injected title
+PASS: 19: catalog99 rejected
+PASS: 19: quoted price server checked
+PASS: 19: 10x50 creates 500 confirmed payment and completes
+PASS: 19: stable retry no duplicates
+PASS: 19: reused key changed payload rejected
+PASS: 19: one existing request/charge/payment/allocation, no anonymous customer
+PASS: 19: zero courtesy creates no fictitious payment
+PASS: 19: downstream failure rolls back request and charge
+PASS: 19: failed command leaves no reservation
+PASS: 19: report ledger gross receipt and masked snapshot description
+PASS: 19: incompatible obligation unit refused
+PASS: 19: incompatible cash service refused
+PASS: 19: maximum 366 local days
+PASS: 19: IANA timezone checked in database
+PASS: 19: snapshot captures same filters, totals and rows
+PASS: 19: timezone change cannot rewrite snapshot
+PASS: 19: local IANA DST bounds inclusive/exclusive
+PASS: 19: chunks offsets multiple of500
+PASS: 19: renderer6 default only
+PASS: 19: PDF1-5 snapshots unchanged
+PASS: 19: pending card is neither received nor fee
+PASS: 19: two allocations yield gross5000 and one card fee100 at confirmation
+PASS: 19: service uses allocation rows and excludes unallocated fee without invented zero
+PASS: 19: gross receipt, logical reversal, actual refund and original fee remain separate
+PASS: 19: transfer pairs stay outside receipt and service cohort
+PASS: 19: old quick replay cannot reopen current closed18 statement
+PASS: 19: cash report preserves original close counted difference
+PASS: 19: closed18 session denies new quick
+PASS: 19: own report excludes another actor operations
+PASS: 19: operators options use own UID
+PASS: 19: all needs report.read_all and cash.read_all
+PASS: 19: own cannot filter another operator
+PASS: 19: reports permission never grants quick
+PASS: 19: another actor cannot read saved report
+PASS: 19: export revoked between chunks
+PASS: 19: final authorize repeats export authority
+PASS: 19: client excluded reports
+PASS: 19: client excluded quick
+PASS: 19: exactly1000 accepted in two500 chunks
+PASS: 19: page2 is the same ordered window as immutable chunk, without serializing all rows
+PASS: 19: 1001 explicitly denied, no partial export
+PASS: 19: old1000 snapshot stable after new1001st obligation
+PASS: 19: snapshot key different filters rejected
+PASS: 19: export authorization idempotent
+PASS: 19: prepare/delivery audited once with enum format and no free personal data
+PASS: 19: anonymous complex policy denied without changing catalog
+PASS: 19: context excludes services requiring person or approval
+PASS: 19: method from another unit denied atomically
+PASS: 19: quick capability cannot select colleague session
+PASS: 19: discount needs independent services.discount
+PASS: 19: authorized discount computes server price450
+PASS: 19: own movement uses actual event actor
+PASS: 19: successful replay revalidates revoked historical adjustment permission
+PASS: 19: obligation allocated net is explicit and never called gross receipt
+PASS: 19: cash view rejects a bank account instead of silently matching nothing
+PASS: 19: customer filter requires current scope08 even with reports all
+PASS: 19: losing cash.read_all invalidates saved all snapshot despite reports.read_all
+PASS: 19: assigned customer filter may produce a known empty report
+PASS: 19: scope08 revoked between chunks invalidates report
+PASS: 19: final authorization rechecks customer scope08
+PASS: 19: ISO date range has no invented1900 floor, still one local day
+PASS: 19 race quick-quick: one atomic result
+PASS: 19 race close-quick: version and close serialized
+PASS: 19 race close-quick: one atomic result
+PASS: 19 race quick-close: version and close serialized
+PASS: 19 race quick-close: one atomic result
+PASS: 19: Auth revoked while waiting session
+PASS: 19: Auth revocation leaves no quick result
+PASS: 19: effective price selected after session lock wait
+PASS: 19: stale price session wait rolls back all work
+PASS: 19: effective price selected after method lock wait
+PASS: 19: stale price method wait rolls back all work
+PASS: 19: quick.perform revoked during office wait
+PASS: 19: revoked capability wait leaves no command
+PASS: 19: chunk Auth revoked during customer lock wait
+PASS: 19: authorize-replay Auth revoked during customer lock wait
+PASS: 19 RED gate: feature unavailable before migration19
+PASS: 19: quick RPC exists
+PASS: 19: five capabilities seed owner only
+PASS: 19: private ACL and RLS closed
+PASS: 19: public INVOKER authenticated wrappers, closed helpers
+PASS: 19 P3: every new foreign key has a valid nonpartial supporting index prefix
+PASS: 19: paginated context selects authorized own session and explicit UTC default
+PASS: 19 P2: optional field policy excluded from quick context
+PASS: 19 P2: nonempty checklist excluded from quick context
+PASS: 19 P2: optional field and checklist policy excluded from quick context
+PASS: 19 P2: quick rejects optional field before creating any operation
+PASS: 19 P2: quick rejects nonempty checklist at eligibility gate
+PASS: 19 P2: quick rejects optional field and checklist at eligibility gate
+PASS: 19 P2: rejected policies preserve requests charges payments allocations ledger commands audits notifications and session
+PASS: 19: quick closed input rejects injected title
+PASS: 19: catalog99 rejected
+PASS: 19: quoted price server checked
+PASS: 19: 10x50 creates 500 confirmed payment and completes
+PASS: 19: stable retry no duplicates
+PASS: 19: reused key changed payload rejected
+PASS: 19: one existing request/charge/payment/allocation, no anonymous customer
+PASS: 19: zero courtesy creates no fictitious payment
+PASS: 19: downstream failure rolls back request and charge
+PASS: 19: failed command leaves no reservation
+PASS: 19: report ledger gross receipt and masked snapshot description
+PASS: 19: incompatible obligation unit refused
+PASS: 19: incompatible cash service refused
+PASS: 19: maximum 366 local days
+PASS: 19: IANA timezone checked in database
+PASS: 19: snapshot captures same filters, totals and rows
+PASS: 19: timezone change cannot rewrite snapshot
+PASS: 19: local IANA DST bounds inclusive/exclusive
+PASS: 19: chunks offsets multiple of500
+PASS: 19: renderer6 default only
+PASS: 19: PDF1-5 snapshots unchanged
+PASS: 19: pending card is neither received nor fee
+PASS: 19: two allocations yield gross5000 and one card fee100 at confirmation
+PASS: 19: service uses allocation rows and excludes unallocated fee without invented zero
+PASS: 19: gross receipt, logical reversal, actual refund and original fee remain separate
+PASS: 19: transfer pairs stay outside receipt and service cohort
+PASS: 19: old quick replay cannot reopen current closed18 statement
+PASS: 19: cash report preserves original close counted difference
+PASS: 19: closed18 session denies new quick
+PASS: 19: own report excludes another actor operations
+PASS: 19: operators options use own UID
+PASS: 19: all needs report.read_all and cash.read_all
+PASS: 19: own cannot filter another operator
+PASS: 19: reports permission never grants quick
+PASS: 19: another actor cannot read saved report
+PASS: 19: export revoked between chunks
+PASS: 19: final authorize repeats export authority
+PASS: 19: client excluded reports
+PASS: 19: client excluded quick
+PASS: 19: exactly1000 accepted in two500 chunks
+PASS: 19: page2 is the same ordered window as immutable chunk, without serializing all rows
+PASS: 19: 1001 explicitly denied, no partial export
+PASS: 19: old1000 snapshot stable after new1001st obligation
+PASS: 19: snapshot key different filters rejected
+PASS: 19: export authorization idempotent
+PASS: 19: prepare/delivery audited once with enum format and no free personal data
+PASS: 19: anonymous complex policy denied without changing catalog
+PASS: 19: context excludes services requiring person or approval
+PASS: 19: method from another unit denied atomically
+PASS: 19: quick capability cannot select colleague session
+PASS: 19: discount needs independent services.discount
+PASS: 19: authorized discount computes server price450
+PASS: 19: own movement uses actual event actor
+PASS: 19: successful replay revalidates revoked historical adjustment permission
+PASS: 19: obligation allocated net is explicit and never called gross receipt
+PASS: 19: cash view rejects a bank account instead of silently matching nothing
+PASS: 19: customer filter requires current scope08 even with reports all
+PASS: 19: losing cash.read_all invalidates saved all snapshot despite reports.read_all
+PASS: 19: assigned customer filter may produce a known empty report
+PASS: 19: scope08 revoked between chunks invalidates report
+PASS: 19: final authorization rechecks customer scope08
+PASS: 19: ISO date range has no invented1900 floor, still one local day
+PASS: 19 race quick-quick: one atomic result
+PASS: 19 race close-quick: version and close serialized
+PASS: 19 race close-quick: one atomic result
+PASS: 19 race quick-close: version and close serialized
+PASS: 19 race quick-close: one atomic result
+PASS: 19: Auth revoked while waiting session
+PASS: 19: Auth revocation leaves no quick result
+PASS: 19: effective price selected after session lock wait
+PASS: 19: stale price session wait rolls back all work
+PASS: 19: effective price selected after method lock wait
+PASS: 19: stale price method wait rolls back all work
+PASS: 19: quick.perform revoked during office wait
+PASS: 19: revoked capability wait leaves no command
+PASS: 19: chunk Auth revoked during customer lock wait
+PASS: 19: authorize-replay Auth revoked during customer lock wait
+PASS: 19 local three-view timings, limited5 projection and EXPLAIN recorded without rewriting measurements14–18
+PASS: 19 historico: both genuine pre15 legacy kinds retain allocation/funds effects
+PASS: 19 historico: balance13 equals immutable legacy ledger net allocation0
+PASS: 19 historico: legacy refunded AND reversed project both facts, received2500 once, unknown card fee remains null
+PASS: 19 historico: each original legacy row has exactly one refund and reversal projection
+PASS: 19 historico: physical cash remains fund1000 after both legacy fund effects
+PASS: 19 historico: timestamp/id/kind gives stable pagination for paired legacy projections
+PASS: dois replays vazios, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.
