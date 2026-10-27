@@ -1,5 +1,5 @@
-import {validCpf,digitsOnly,formatCpf} from './identifiers.js';
-import type {TemplateInput} from './templates.js';
+import {validCpf,validCnpj,digitsOnly,formatCpf,formatCnpj} from './identifiers.js';
+import {templateVariables,templateValueLimit,type TemplateInput} from './templates.js';
 import type {DraftInput,DocumentSource,DocumentParticipant,DocumentResolution} from './documents.js';
 const units=['','um','dois','três','quatro','cinco','seis','sete','oito','nove','dez','onze','doze','treze','catorze','quinze','dezesseis','dezessete','dezoito','dezenove'];
 const tens=['','','vinte','trinta','quarenta','cinquenta','sessenta','setenta','oitenta','noventa'];
@@ -27,15 +27,17 @@ export function resolveDocument(definition:TemplateInput,input:DraftInput,source
  for(const [role,key] of [['buyer','comprador'],['seller','vendedor']] as const){const p=participants.find(p=>p.role===role);automatic[`participante.${key}.nome`]=p?.name??null;automatic[`participante.${key}.cpf`]=p?.kind==='person'?p.identifier:null;}
  for(const variable of definition.variables){
   const {key,label,type,required}=variable;const raw=Object.hasOwn(input.overrides,key)?input.overrides[key]:automatic[key];let v=raw?.trim()||null;
-  if(required&&key.startsWith('participante.')){const role=key.includes('.comprador.')?'buyer':'seller';if(!participants.some(p=>p.role===role))add(key,'participant_required',`${label}: selecione o participante correspondente.`);}
+  if(required&&Object.hasOwn(templateVariables,key)&&key.startsWith('participante.')){const role=key.includes('.comprador.')?'buyer':'seller';if(!participants.some(p=>p.role===role))add(key,'participant_required',`${label}: selecione o participante correspondente.`);}
   if(!v){if(required)add(key,'required',`${label}: informe o campo obrigatório.`);result.values[key]=null;continue;}
   let formatted=v,valid=true;
   if(type==='date'){valid=documentDate(v);if(valid)formatted=v.slice(8,10)+'/'+v.slice(5,7)+'/'+v.slice(0,4);}
   else if(type==='money'){const cents=money(v);valid=cents!==null;if(cents!==null){v=Math.floor(cents/100)+'.'+String(cents%100).padStart(2,'0');formatted=brMoney(cents);result.words[key]=documentMoneyWords(cents);}}
   else if(type==='number'){valid=/^(0|[1-9]\d{0,5})(\.\d{1,3})?$/.test(v)&&Number(v)<=100000;if(valid){v=v.includes('.')?v.replace(/0+$/,'').replace(/\.$/,''):v;formatted=v.replace('.',',');}}
-  else if(key.endsWith('.cpf')){valid=validCpf(v);if(valid){v=digitsOnly(v);formatted=formatCpf(v);}}
-  else valid=Array.from(v).length<=(key.endsWith('.nome')?120:500);
-  if(!valid){add(key,'invalid_value',`${label}: confira o ${type==='date'?'dia, mês e ano':type==='money'?'valor em reais (ex.: 10.50)':key.endsWith('.cpf')?'CPF':'valor informado'}.`);result.values[key]=null;continue;}
+  else if(type==='cpf'||Object.hasOwn(templateVariables,key)&&key.endsWith('.cpf')){valid=validCpf(v);if(valid){v=digitsOnly(v);formatted=formatCpf(v);}}
+  else if(type==='cnpj'){valid=validCnpj(v);if(valid){v=digitsOnly(v);formatted=formatCnpj(v);}}
+  else if(type==='tax_id'){valid=validCpf(v)||validCnpj(v);if(valid){v=digitsOnly(v);formatted=v.length===11?formatCpf(v):formatCnpj(v);}}
+  else valid=Array.from(v).length<=templateValueLimit(key);
+  if(!valid){add(key,'invalid_value',`${label}: confira o ${type==='date'?'dia, mês e ano':type==='money'?'valor em reais (ex.: 10.50)':type==='cpf'||Object.hasOwn(templateVariables,key)&&key.endsWith('.cpf')?'CPF':type==='cnpj'?'CNPJ':type==='tax_id'?'CPF ou CNPJ':'valor informado'}.`);result.values[key]=null;continue;}
   result.values[key]=v;result.formatted[key]=formatted;
  }
  if(result.values['datas.inicio']&&result.values['datas.fim']&&result.values['datas.inicio']>result.values['datas.fim'])add('datas.fim','date_order','A data final deve ser igual ou posterior à data de início.');

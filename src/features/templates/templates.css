@@ -2,3 +2,6 @@
 @media(max-width:900px),(hover:none) and (pointer:coarse) and (max-width:1200px){.operation-main:has(.templates-main){padding-top:10px;padding-bottom:calc(64px + env(safe-area-inset-bottom))}.templates-main .operation-heading{margin-bottom:4px}.templates-main .operation-heading h1{margin-bottom:3px}.templates-main .operation-heading p:not(.eyebrow){font-size:12px}.templates-main:has(.template-form) .operation-heading p:not(.eyebrow){display:none}.templates-main .team-field{font-size:11px;gap:3px}.templates-main .team-field input,.templates-main .team-field select,.templates-main .team-field textarea{font-size:16px;padding-inline:8px}.template-grid{gap:4px 8px}.template-check{font-size:11px}.template-variable{grid-template-columns:minmax(0,1fr)}.template-section>summary{font-size:12px}.template-save{width:100%;margin-top:6px}.template-demo{font-size:12px}.template-literal{font-size:13px}.template-version-line{gap:6px}}
 
 @media(max-width:900px),(hover:none) and (pointer:coarse) and (max-width:1200px){.templates-main .template-content-field textarea{min-height:92px}}
+
+.template-variable-custom{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(120px,.7fr) auto}
+@media(max-width:900px),(hover:none) and (pointer:coarse) and (max-width:1200px){.template-variable-custom{grid-template-columns:minmax(0,1fr)}}

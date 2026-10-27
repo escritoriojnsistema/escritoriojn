@@ -3,11 +3,11 @@ import {record,uuid} from '../team/validation.js';
 const int=(v:unknown,min=0,max=2147483646):v is number=>typeof v==='number'&&Number.isSafeInteger(v)&&v>=min&&v<=max;
 const time=(v:unknown):v is string=>typeof v==='string'&&v.length<=40&&Number.isFinite(Date.parse(v));
 function version(v:unknown):TemplateVersion{
- if(!record(v)||!uuid(v.id)||!int(v.number,1)||!uuid(v.created_by)||!templateText(v.created_by_name,120)||!time(v.created_at)||!templateText(v.reason,500))throw Error('Invalid template version');
+ if(!record(v)||!uuid(v.id)||!int(v.number,1)||!(uuid(v.created_by)&&(v.source_import_id===undefined||v.source_import_id===null)||v.created_by===null&&uuid(v.source_import_id))||!templateText(v.created_by_name,120)||!time(v.created_at)||!templateText(v.reason,500))throw Error('Invalid template version');
  const input=Object.fromEntries(templateKeys.map(k=>[k,v[k]]));if(!validTemplate(input))throw Error('Invalid template definition');
  if(v.approved_at===null){if(v.approved_by!==null||v.approved_by_name!==null||v.approval_reason!==null)throw Error('Invalid approval');}
  else if(!time(v.approved_at)||!uuid(v.approved_by)||!templateText(v.approved_by_name,120)||!templateText(v.approval_reason,500))throw Error('Invalid approval');
- return {...input,variables:input.variables.map(x=>({key:x.key,label:x.label,type:x.type,required:x.required})),id:v.id,number:v.number,created_by:v.created_by,created_by_name:v.created_by_name,created_at:v.created_at,reason:v.reason,approved_by:v.approved_by as string|null,approved_by_name:v.approved_by_name as string|null,approved_at:v.approved_at as string|null,approval_reason:v.approval_reason as string|null};
+ return {...input,variables:input.variables.map(x=>({key:x.key,label:x.label,type:x.type,required:x.required})),id:v.id,number:v.number,created_by:v.created_by as string|null,...(v.source_import_id!==undefined?{source_import_id:v.source_import_id as string|null}:{}),created_by_name:v.created_by_name,created_at:v.created_at,reason:v.reason,approved_by:v.approved_by as string|null,approved_by_name:v.approved_by_name as string|null,approved_at:v.approved_at as string|null,approval_reason:v.approval_reason as string|null};
 }
 function summary(v:unknown):TemplateSummary{
  if(!record(v)||!uuid(v.id)||!templateText(v.name,120)||typeof v.code!=='string'||!/^[A-Z0-9][A-Z0-9_-]{1,31}$/.test(v.code)||typeof v.kind!=='string'||!Object.hasOwn(templateKinds,v.kind)||typeof v.demonstration!=='boolean'||!int(v.latest_version,1)||!(v.current_version===null||int(v.current_version,1,v.latest_version)))throw Error('Invalid template summary');
