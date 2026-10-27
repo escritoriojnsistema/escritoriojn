@@ -1,3 +1,4 @@
+import {raceManualImports21,verifyManualImportPayload21} from './database-templates21-manual-import.mjs';
 import {raceDocuments21,benchmarkDocuments21} from './database-documents21.mjs';
 import {raceTemplates,benchmarkTemplates} from './database-templates.mjs';
 import {raceFinance19,benchmarkFinance19,finance19LegacySeed,verifyFinance19Legacy} from './database-finance19.mjs';
@@ -720,7 +721,8 @@ try {
   const allMigrations = readdirSync(`${root}supabase/migrations`).filter(name => name.endsWith('.sql')).sort();
   const templateMigrations=allMigrations.filter(n=>n.includes('_templates_document_library'));
   const documentMigrations=allMigrations.filter(n=>n.includes('_documents21_editor'));
-  const migrations=allMigrations.filter(n=>!templateMigrations.includes(n)&&!documentMigrations.includes(n));
+  const manualImportMigrations=allMigrations.filter(n=>n.includes('_templates21_manual_import'));
+  const migrations=allMigrations.filter(n=>!templateMigrations.includes(n)&&!documentMigrations.includes(n)&&!manualImportMigrations.includes(n));
   for (const database of process.env.JN_DB_HISTORY_PAYMENTS==='1'?[]:process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'?['foundation_replay_a']:['foundation_replay_a', 'foundation_replay_b']) {
     sql('postgres', 'postgres', `CREATE DATABASE ${database} OWNER migrator;`);
     sql(database, 'postgres', readFileSync(`${root}tests/database/bootstrap.sql`, 'utf8'));
@@ -735,6 +737,11 @@ try {
         sql(database,'postgres',"CREATE TABLE test.documents_functions_before21 AS SELECT p.oid,pg_get_functiondef(p.oid) body FROM pg_proc p WHERE pronamespace IN('public'::regnamespace,'private'::regnamespace) AND prokind='f' AND proname NOT IN('team_scope_for_member','team_validate_assignment','safe_audit_changes');");
         for(const file of documentMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
         result+=sql(database,'postgres',readFileSync(`${root}tests/database/documents21.sql`,'utf8'));
+        if(process.env.JN_DB_MANUAL_IMPORT_RED!=='1')for(const file of manualImportMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+        result+=sql(database,'postgres',readFileSync(`${root}tests/database/templates21-manual-import.sql`,'utf8'));
+        if(process.env.JN_TEMPLATE_IMPORT_PAYLOAD_PATH)result+=verifyManualImportPayload21({sql:input=>sql(database,'postgres',input),definitions:JSON.parse(readFileSync(process.env.JN_TEMPLATE_IMPORT_PAYLOAD_PATH,'utf8')),sourceUrl:process.env.JN_TEMPLATE_IMPORT_SOURCE_URL});
+        result+=await raceManualImports21({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+        result+=await raceTemplates({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
         result+=await raceDocuments21({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
         if(database==='foundation_replay_b')result+=benchmarkDocuments21({sql:input=>sql(database,'postgres',input)});
         console.log(`${database} documents21 isolated:\n${result.trim()}`);continue;
@@ -880,6 +887,10 @@ try {
     sql(database,'postgres',"CREATE TABLE test.documents_functions_before21 AS SELECT p.oid,pg_get_functiondef(p.oid) body FROM pg_proc p WHERE pronamespace IN('public'::regnamespace,'private'::regnamespace) AND prokind='f' AND proname NOT IN('team_scope_for_member','team_validate_assignment','safe_audit_changes');");
     for(const file of documentMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
     result+=sql(database,'postgres',readFileSync(`${root}tests/database/documents21.sql`,'utf8'));
+    for(const file of manualImportMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+    result+=sql(database,'postgres',readFileSync(`${root}tests/database/templates21-manual-import.sql`,'utf8'));
+        if(process.env.JN_TEMPLATE_IMPORT_PAYLOAD_PATH)result+=verifyManualImportPayload21({sql:input=>sql(database,'postgres',input),definitions:JSON.parse(readFileSync(process.env.JN_TEMPLATE_IMPORT_PAYLOAD_PATH,'utf8')),sourceUrl:process.env.JN_TEMPLATE_IMPORT_SOURCE_URL});
+    result+=await raceManualImports21({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceDocuments21({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     if(database==='foundation_replay_b')result+=benchmarkDocuments21({sql:input=>sql(database,'postgres',input)});
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
