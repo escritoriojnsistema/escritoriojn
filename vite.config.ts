@@ -36,11 +36,13 @@ export default defineConfig(({ mode }) => {
   }
   return {
     plugins: [localApi(), react(), tailwindcss()],
-    // Static imports keep navigation immediate. Split the provider SDK for
-    // independent browser caching, loaded with the entry (never on route click).
+    // Static imports keep navigation immediate. These modules are preloaded
+    // with the entry and cached independently, never fetched on route click.
     build: { rolldownOptions: { output: { codeSplitting: { groups: [
       { name: 'supabase', test: /node_modules\/@supabase\// },
       { name: 'react', test: /node_modules\/(react|react-dom|react-router|react-router-dom|scheduler)\// },
+      { name: 'icons', test: /node_modules\/lucide-react\// },
+      { name: 'documents', test: /\/(src\/features\/documents\/|shared\/documentRender\.ts$|shared\/documents\.ts$)/ },
     ] } } } },
   };
 });

@@ -5,7 +5,7 @@ export type ArchiveEntry = { id: string; target_type: 'membership'; target_id: s
 export type GovernancePage<T> = { items: T[]; total: number; page: number; page_size: number };
 export type AuditView = 'recent' | 'archived';
 export type AuditPolicy = { days: 30 | 60 | 90; version: number; cutoff: string; effective_at: string };
-export type AuditReport = { id: string; protocol: string; count: number; office_id: string; office_name: string; actor_name: string; created_at: string; view: AuditView; cutoff: string; filters: AuditFilters; renderer_version: 1|2|3|4|5|6|7; contract_version: 1 };
+export type AuditReport = { id: string; protocol: string; count: number; office_id: string; office_name: string; actor_name: string; created_at: string; view: AuditView; cutoff: string; filters: AuditFilters; renderer_version: 1|2|3|4|5|6|7|8; contract_version: 1 };
 export type AuditVerification = { match: boolean; protocol: string; count: number; created_at: string; bytes: number };
 export const auditReportMaxEvents = 10_000;
 export const auditReportMaxBytes = 3 * 1024 * 1024;
@@ -65,3 +65,6 @@ Object.assign(auditFieldNames,{format:'Formato do arquivo'});
 
 Object.assign(auditActionNames,{'templates.saved':'Versão de modelo salva','templates.approved':'Versão de modelo aprovada'});
 Object.assign(auditTargetNames,{template:'Modelo documental'});
+
+Object.assign(auditActionNames,{'documents.created':'Rascunho documental criado','documents.saved':'Revisão documental salva','documents.participants_changed':'Participantes do documento alterados','documents.prepared':'Preenchimento documental concluído'});
+Object.assign(auditTargetNames,{document:'Documento em preenchimento'});

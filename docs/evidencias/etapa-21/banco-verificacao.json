@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "date_utc": "2026-10-27",
+  "scope": "local disposable PostgreSQL17 only",
+  "command": "JN_DB_DOCUMENTS21_ISOLATED=1 node scripts/test-database.mjs > /tmp/fix21-sql-final.log 2>&1",
+  "databases": [
+    "foundation_replay_a",
+    "foundation_replay_b"
+  ],
+  "migrator": {
+    "superuser": false,
+    "bypassrls": false
+  },
+  "reported_pass_lines": 209,
+  "templates20_pass_lines": 86,
+  "documents21_pass_lines": 110,
+  "documents21_real_race_pass_lines": 12,
+  "migration": {
+    "file": "supabase/migrations/20261026195437_documents21_editor.sql",
+    "statement_count": 55,
+    "create_function_count": 22,
+    "new_tables": 5,
+    "public_invoker_rpcs": 5,
+    "owner_only_capabilities": 3
+  },
+  "benchmark": {
+    "documents": 1001,
+    "page": 200,
+    "page_size": 5,
+    "execution_ms": 19.443,
+    "shared_buffer_hits": 3943,
+    "history_revisions": 11,
+    "history_page_size": 5
+  },
+  "checks": {
+    "all_new_foreign_keys_indexed": true,
+    "rls_and_acl_closed": true,
+    "historical_bodies_preserved_except_3_allowlists": true,
+    "historical_data_snapshots_unchanged": true,
+    "audit_renderer_default": 8,
+    "node_syntax": true,
+    "uuid_identity_case_insensitive_and_snapshot_canonical": true
+  },
+  "sha256": {
+    "supabase/migrations/20261026195437_documents21_editor.sql": "e8b8ab87a3435f124e07e30f1ea75a77dd44f3f8af5c84e998bfede6aab8cbfa",
+    "tests/database/documents21.sql": "6a2cfb8946710e97ca565bf2c5448b66f0cae0cb03091821ddc85351b8bd9a8e",
+    "scripts/database-documents21.mjs": "c0e2e271b97a8e273a5361a2d2eef18c7b94aac22a91be3e88732024216b2a8b",
+    "scripts/test-database.mjs": "b4850de7e85b1e3f4621a4984d63b85a620bdadc62d688a62eb3ebe74bd6ae70"
+  },
+  "log_sha256": "b85209d418bae28cae86be158aab29026a705d6c85b9f5c55e4d92ae370746b2",
+  "remote_mutations": false,
+  "commits": false,
+  "known_blockers": []
+}

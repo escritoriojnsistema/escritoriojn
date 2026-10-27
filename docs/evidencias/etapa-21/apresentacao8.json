@@ -1,0 +1,41 @@
+{
+  "renderer_version": 8,
+  "contract_version": 1,
+  "preserved_presentations": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "node": "24.19.0",
+  "npm": "11.9.0",
+  "pdfkit": "0.17.2",
+  "files": {
+    "server/modules/governance/auditPdf.ts": "576e4331c524a333605e4d31364a4ea073e975683a3cb25c99e01b90c9866d14",
+    "server/modules/governance/reportV1.ts": "6fbc422a55fb030dd16084502a1b465048ab534a66b17b7a67c6f71ae78df1fb",
+    "server/modules/governance/reportV1Catalog.ts": "0fc280800d96d2c4dd00700d0dad3b8891db1494a1f18ea9c197c0b3c259a4fc",
+    "server/assets/audit-fonts/OpenSans-Regular.ttf": "e64e508b2aa2880f907e470c4550980ec4c0694d103a43f36150ac3f93189bee",
+    "server/assets/audit-fonts/OpenSans-Semibold.ttf": "aa3b0ef53db12e3d45094030cac0e69d384e44cc5978643dd4390041cad546e2",
+    "package-lock.json": "ebf1f616abce201e72c2d30959b717d5bbafd973342b83c644563b040050b9bc",
+    "supabase/migrations/20261023213625_audit_pdf_archive.sql": "b7a0cda5788d440e37489dffa376831beab7d785c2db05b265b0d102cb76371d",
+    "server/modules/governance/reportV2.ts": "23df1d9f7a651f4455796bb5f76254e9c24d03254c568ac1617c027b121efc5f",
+    "server/modules/governance/reportV2Catalog.ts": "449a55d735c8cff01c39a95cd5a365573209b7cdfabbb695264eca68ae738a30",
+    "package.json": "6c2e41706e8f0897ccad887b47f8a849f6c353e224367ddaef501c9ff7ab8675",
+    "supabase/migrations/20261024032407_payments_allocations.sql": "9538daa485a53b19e7a58548b4ed9f77432b9216ea43a43e1209f68985c2e5ee",
+    "server/modules/governance/reportV3.ts": "9ad9106299eb3478d4c31496eab929e270004b02477c4ac06b19a45579eb415f",
+    "server/modules/governance/reportV3Catalog.ts": "da542df56b0e93bd6080ad4ef34d18d2209eff4fd70f2b4e1d91ad62cbdf5a97",
+    "supabase/migrations/20261024133149_payment_reversals_refunds.sql": "d7af89baeb1bad5554fc6923caf3acc6950c1e4302fbe2d7de939291ac001a09",
+    "server/modules/governance/reportV4.ts": "2bd63ca34651415b27a875d3190af46987827eca33b5b025c5534c68500eb445",
+    "server/modules/governance/reportV4Catalog.ts": "833e0e0731e2c8668938fadeaa293c61ec5cd8f389aef2563affcc3206c0e6e0",
+    "server/modules/governance/reportV5.ts": "26f7a1753446e0b29b0295807cada7c26f20161cb0b92bbe5d320bfd60919fb4",
+    "server/modules/governance/reportV5Catalog.ts": "79a582df718fae122c075fe3b9e3f2e94b3c182453d35afab1561879d4f6bf7e",
+    "server/modules/governance/reportV6.ts": "304699c62bd70cf8898396c053e903c3638ba1587d3c6e998a2beeae6232ef4c",
+    "server/modules/governance/reportV6Catalog.ts": "ac1cadfba94dab66ffa81a7c0d35edd92ac7f856eaf15eff1d5ec5b2c0c13882",
+    "server/modules/governance/reportV7.ts": "e02931f16b2d19045eb398302b11b1a4509c1645282d12c8ec24c02bb5093855",
+    "server/modules/governance/reportV7Catalog.ts": "0543c9eecf9917328c9499a42757f1140b97ce9cff55663077883f6c75551938"
+  },
+  "note": "Etapa21 acrescenta apresentação8; motor, fontes e apresentações1–7 preservados byte a byte."
+}

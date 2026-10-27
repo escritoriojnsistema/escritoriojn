@@ -1,0 +1,3 @@
+import {test,expect} from '@playwright/test';
+for(const width of [360,1440])test(`documentos21: rota anônima protegida ${width}`,async({page})=>{await page.setViewportSize({width,height:900});await page.goto('/documentos');await expect(page).toHaveURL(/\/login$/);await expect(page.getByRole('heading',{name:'Área da Equipe',exact:true})).toBeVisible();await expect(page.getByLabel('Texto em edição',{exact:true})).toHaveCount(0);});
+test('documentos21: APIs privadas negam anônimo sem executar operação',async({request})=>{for(const path of ['search','detail','options','create','operate']){const r=await request.post(`/api/documents/${path}`,{data:{}});expect(r.status()).toBe(401);expect(await r.text()).not.toMatch(/SQL|token|secret|cláusula/);}});
