@@ -6,7 +6,7 @@ import {documentPage,documentOptions,documentDetail} from './dto.js';
 export const documentsRouter=Router();
 documentsRouter.use((_req,res,next)=>{res.setHeader('Cache-Control','private, no-store');res.setHeader('CDN-Cache-Control','no-store');res.vary('Authorization');next();});
 documentsRouter.use(async(req,res,next)=>{const auth=await authenticatedClient(req,res);if(auth){res.locals.documentsAuth=auth;next();}});
-documentsRouter.use((req,res,next)=>{if(req.method!=='GET'&&req.method!=='HEAD'&&!req.is('application/json')){errorResponse(res,415,'UNSUPPORTED_MEDIA_TYPE','Envie um corpo JSON.');return;}next();},json({limit:'180kb'}));
+documentsRouter.use((req,res,next)=>{if(req.method!=='GET'&&req.method!=='HEAD'&&!req.is('application/json')){errorResponse(res,415,'UNSUPPORTED_MEDIA_TYPE','Envie um corpo JSON.');return;}next();},json({limit:'1mb'}));
 const invalid=(res:Response)=>errorResponse(res,422,'DOCUMENTS_VALIDATION','Confira os campos e os participantes do documento.');
 const int=(v:unknown,min=1)=>typeof v==='number'&&Number.isInteger(v)&&v>=min&&v<=100000;
 const query=(v:unknown)=>typeof v==='string'&&Array.from(v).length<=120&&!/[\u0000-\u001f\u007f]/.test(v);

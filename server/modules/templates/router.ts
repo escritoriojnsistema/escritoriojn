@@ -8,7 +8,7 @@ import {templatePage,templateDetail} from './dto.js';
 export const templatesRouter=Router();
 templatesRouter.use((_req,res,next)=>{res.setHeader('Cache-Control','private, no-store');res.setHeader('CDN-Cache-Control','no-store');res.vary('Authorization');next();});
 templatesRouter.use(async(req,res,next)=>{const auth=await authenticatedClient(req,res);if(auth){res.locals.templatesAuth=auth;next();}});
-templatesRouter.use((req,res,next)=>{if(req.method!=='GET'&&req.method!=='HEAD'&&!req.is('application/json')){errorResponse(res,415,'UNSUPPORTED_MEDIA_TYPE','Envie um corpo JSON.');return;}next();},json({limit:'160kb'}));
+templatesRouter.use((req,res,next)=>{if(req.method!=='GET'&&req.method!=='HEAD'&&!req.is('application/json')){errorResponse(res,415,'UNSUPPORTED_MEDIA_TYPE','Envie um corpo JSON.');return;}next();},json({limit:'256kb'}));
 const invalid=(res:Response)=>errorResponse(res,422,'TEMPLATES_VALIDATION','Confira o tipo, as variáveis, o texto, a vigência e o motivo.');
 const integer=(v:unknown,min:number,max=2147483645)=>Number.isInteger(v)&&Number(v)>=min&&Number(v)<=max;
 const messages:Record<string,[number,string]>={AUTH_REQUIRED:[401,'Entre novamente para continuar.'],TEMPLATES_FORBIDDEN:[403,'Seu acesso não permite esta operação nos modelos.'],TEMPLATE_NOT_FOUND:[404,'Modelo não encontrado.'],TEMPLATE_CONFLICT:[409,'O modelo mudou. Reabra e confira a versão antes de continuar.'],TEMPLATE_DUPLICATE:[409,'Este código já existe na biblioteca.'],TEMPLATES_VALIDATION:[422,'Confira o tipo, as variáveis, o texto, a vigência e o motivo.']};

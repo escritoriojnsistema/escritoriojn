@@ -1,4 +1,4 @@
-import {templateVariables,type TemplateInput} from './templates.js';
+import {templateVariables,isCustomTemplateKey,type TemplateInput} from './templates.js';
 export const participantRoles={buyer:'Comprador',seller:'Vendedor',representative:'Representante',guardian:'Responsável',other:'Outro'} as const;
 export type ParticipantInput={role:keyof typeof participantRoles;customer_id:string;label:string};
 export type PersonSnapshot={customer_id:string;version:number;kind:'person'|'company';name:string;identifier:string|null};
@@ -19,7 +19,7 @@ export const documentUuid=(v:unknown):v is string=>typeof v==='string'&&/^[0-9a-
 export const documentObject=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);
 export const documentExact=(v:unknown,keys:readonly string[]):v is Record<string,unknown>=>documentObject(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
 export const documentString=(v:unknown,max:number):v is string=>typeof v==='string'&&Array.from(v).length<=max&&!/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(v);
-export function validDraftInput(v:unknown,definition?:TemplateInput):v is DraftInput{return documentExact(v,['content','overrides','money_in_words'])&&documentString(v.content,30000)&&typeof v.money_in_words==='boolean'&&documentObject(v.overrides)&&Object.keys(v.overrides).length<=14&&Object.entries(v.overrides).every(([k,value])=>Object.hasOwn(templateVariables,k)&&(!definition||definition.variables.some(x=>x.key===k))&&documentString(value,500));}
+export function validDraftInput(v:unknown,definition?:TemplateInput):v is DraftInput{return documentExact(v,['content','overrides','money_in_words'])&&documentString(v.content,30000)&&typeof v.money_in_words==='boolean'&&documentObject(v.overrides)&&Object.keys(v.overrides).length<=80&&Object.entries(v.overrides).every(([k,value])=>(Object.hasOwn(templateVariables,k)||isCustomTemplateKey(k))&&(!definition||definition.variables.some(x=>x.key===k))&&documentString(value,isCustomTemplateKey(k)?2000:500));}
 export function validParticipants(v:unknown):v is ParticipantInput[]{
  if(!Array.isArray(v)||v.length>20||!v.every(p=>documentExact(p,['role','customer_id','label'])&&typeof p.role==='string'&&Object.hasOwn(participantRoles,p.role)&&documentUuid(p.customer_id)&&documentString(p.label,80)&&p.label.trim().length>0&&!/[\u0000-\u001f\u007f]/.test(p.label)))return false;
  const parties=v as ParticipantInput[];return new Set(parties.map(p=>p.role+':'+p.customer_id.toLowerCase())).size===parties.length&&['buyer','seller'].every(r=>parties.filter(p=>p.role===r).length<=1)&&!(parties.find(p=>p.role==='buyer')&&parties.find(p=>p.role==='buyer')?.customer_id.toLowerCase()===parties.find(p=>p.role==='seller')?.customer_id.toLowerCase());
