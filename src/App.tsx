@@ -1,3 +1,4 @@
+import DocumentsPage from './features/documents/DocumentsPage';
 import TemplatesPage from './features/templates/TemplatesPage';
 import QuickPage from './features/finance/QuickPage';
 import ReportsPage from './features/finance/ReportsPage';
@@ -51,6 +52,7 @@ function AppRoutes() {
     <Route path={paths.clientRequests} element={<RequestsPage key={`client-requests:${operationKey}`} client />} />
     <Route path={paths.clientPayments} element={<PaymentsPage key={`client-payments:${operationKey}`} />} />
     <Route path={paths.expenses} element={<ExpensesPage key={`expenses:${operationKey}`} />} />
+    <Route path={paths.documents} element={<DocumentsPage key={`documents:${operationKey}`} />} />
     <Route path={paths.templates} element={<TemplatesPage key={`templates:${operationKey}`} />} />
     <Route path={paths.quick} element={<QuickPage key={`quick:${operationKey}`} />} />
     <Route path={paths.financialReports} element={<ReportsPage key={`financial-reports:${operationKey}`} />} />

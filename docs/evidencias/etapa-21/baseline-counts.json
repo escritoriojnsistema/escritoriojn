@@ -1,0 +1,18 @@
+[
+  {
+    "counts": {
+      "requests": 1,
+      "customers": 1,
+      "templates": 0,
+      "auth_users": 5,
+      "memberships": 5,
+      "audit_events": 32,
+      "cash_entries": 0,
+      "quick_operations": 0,
+      "template_commands": 0,
+      "template_versions": 0,
+      "template_approvals": 0,
+      "individual_permissions": 17
+    }
+  }
+]

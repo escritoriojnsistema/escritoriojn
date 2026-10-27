@@ -1,3 +1,4 @@
+import {raceDocuments21,benchmarkDocuments21} from './database-documents21.mjs';
 import {raceTemplates,benchmarkTemplates} from './database-templates.mjs';
 import {raceFinance19,benchmarkFinance19,finance19LegacySeed,verifyFinance19Legacy} from './database-finance19.mjs';
 import {raceClosures,benchmarkClosures,prepareClosures} from './database-closures.mjs';
@@ -718,17 +719,26 @@ try {
   `);
   const allMigrations = readdirSync(`${root}supabase/migrations`).filter(name => name.endsWith('.sql')).sort();
   const templateMigrations=allMigrations.filter(n=>n.includes('_templates_document_library'));
-  const migrations=allMigrations.filter(n=>!templateMigrations.includes(n));
+  const documentMigrations=allMigrations.filter(n=>n.includes('_documents21_editor'));
+  const migrations=allMigrations.filter(n=>!templateMigrations.includes(n)&&!documentMigrations.includes(n));
   for (const database of process.env.JN_DB_HISTORY_PAYMENTS==='1'?[]:process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'?['foundation_replay_a']:['foundation_replay_a', 'foundation_replay_b']) {
     sql('postgres', 'postgres', `CREATE DATABASE ${database} OWNER migrator;`);
     sql(database, 'postgres', readFileSync(`${root}tests/database/bootstrap.sql`, 'utf8'));
     for (const migration of migrations.filter(n=>process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'&&n<'20261025042809'||n<'20261024133149')) {
       sql(database, 'migrator', `BEGIN;\n${readFileSync(`${root}supabase/migrations/${migration}`, 'utf8')}\nCOMMIT;`);
     }
-    if(process.env.JN_DB_TEMPLATES_ISOLATED==='1'){
+    if(process.env.JN_DB_TEMPLATES_ISOLATED==='1'||process.env.JN_DB_DOCUMENTS21_ISOLATED==='1'){
       for(const file of migrations.filter(n=>n>='20261024133149'))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
       if(process.env.JN_DB_TEMPLATES_RED!=='1')for(const file of templateMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
       let result=sql(database,'postgres',readFileSync(`${root}tests/database/templates.sql`,'utf8'));
+      if(process.env.JN_DB_DOCUMENTS21_ISOLATED==='1'){
+        sql(database,'postgres',"CREATE TABLE test.documents_functions_before21 AS SELECT p.oid,pg_get_functiondef(p.oid) body FROM pg_proc p WHERE pronamespace IN('public'::regnamespace,'private'::regnamespace) AND prokind='f' AND proname NOT IN('team_scope_for_member','team_validate_assignment','safe_audit_changes');");
+        for(const file of documentMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+        result+=sql(database,'postgres',readFileSync(`${root}tests/database/documents21.sql`,'utf8'));
+        result+=await raceDocuments21({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+        if(database==='foundation_replay_b')result+=benchmarkDocuments21({sql:input=>sql(database,'postgres',input)});
+        console.log(`${database} documents21 isolated:\n${result.trim()}`);continue;
+      }
       result+=await raceTemplates({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
       if(database==='foundation_replay_b')result+=benchmarkTemplates({sql:input=>sql(database,'postgres',input)});
       console.log(`${database} templates20 isolated:\n${result.trim()}`);continue;
@@ -867,6 +877,11 @@ try {
     result+=sql(database,'postgres',readFileSync(`${root}tests/database/templates.sql`,'utf8'));
     result+=await raceTemplates({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
       if(database==='foundation_replay_b')result+=benchmarkTemplates({sql:input=>sql(database,'postgres',input)});
+    sql(database,'postgres',"CREATE TABLE test.documents_functions_before21 AS SELECT p.oid,pg_get_functiondef(p.oid) body FROM pg_proc p WHERE pronamespace IN('public'::regnamespace,'private'::regnamespace) AND prokind='f' AND proname NOT IN('team_scope_for_member','team_validate_assignment','safe_audit_changes');");
+    for(const file of documentMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+    result+=sql(database,'postgres',readFileSync(`${root}tests/database/documents21.sql`,'utf8'));
+    result+=await raceDocuments21({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+    if(database==='foundation_replay_b')result+=benchmarkDocuments21({sql:input=>sql(database,'postgres',input)});
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
   if(process.env.JN_DB_FOCUS_FINANCE19==='1'){

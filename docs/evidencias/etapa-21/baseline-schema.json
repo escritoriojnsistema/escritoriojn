@@ -1,0 +1,2593 @@
+[
+  {
+    "baseline": {
+      "tables": [
+        {
+          "rows": -1,
+          "table": "account_corrections",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "account_data",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "account_email_intents",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "archived_records",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "audit_policies",
+          "schema": "private"
+        },
+        {
+          "rows": 52,
+          "table": "audit_report_events",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "audit_report_seals",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "audit_reports",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "cash_closure_reviews",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "cash_closures",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "cash_commands",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "cash_entries",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "cash_movements",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "cash_sessions",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "cash_units",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "charge_commands",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "charge_events",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "charge_installments",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "charge_items",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "charges",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "checklist_entries",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "checklist_history",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "checklist_instances",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "checklist_model_versions",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "client_registration_settings",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "customer_merges",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "customer_registrations",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "customer_relations",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "customer_snapshots",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "expense_history",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "expenses",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "file_cleanup_plans",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "file_cleanup_reservations",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "file_process_leases",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "file_references",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "file_service_policies",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "finance_report_settings",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "finance_report_snapshots",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "financial_accounts",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "financial_transfers",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "internal_notifications",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "payment_allocations",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "payment_decisions",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "payment_ledger_links",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "payment_methods",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "payment_receipts",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "payment_refunds",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "payment_reversals",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "payments",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "quick_operations",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "request_assignments",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "request_counters",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "request_history",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "team_delegations",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "team_invitations",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "team_member_identities",
+          "schema": "private"
+        },
+        {
+          "rows": 16,
+          "table": "team_member_permissions",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "template_approvals",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "template_commands",
+          "schema": "private"
+        },
+        {
+          "rows": -1,
+          "table": "upload_intents",
+          "schema": "private"
+        },
+        {
+          "rows": 1,
+          "table": "audit_events",
+          "schema": "public"
+        },
+        {
+          "rows": -1,
+          "table": "customer_contacts",
+          "schema": "public"
+        },
+        {
+          "rows": 1,
+          "table": "customers",
+          "schema": "public"
+        },
+        {
+          "rows": -1,
+          "table": "files",
+          "schema": "public"
+        },
+        {
+          "rows": -1,
+          "table": "memberships",
+          "schema": "public"
+        },
+        {
+          "rows": -1,
+          "table": "offices",
+          "schema": "public"
+        },
+        {
+          "rows": 55,
+          "table": "permissions",
+          "schema": "public"
+        },
+        {
+          "rows": -1,
+          "table": "profiles",
+          "schema": "public"
+        },
+        {
+          "rows": -1,
+          "table": "request_items",
+          "schema": "public"
+        },
+        {
+          "rows": -1,
+          "table": "requests",
+          "schema": "public"
+        },
+        {
+          "rows": 51,
+          "table": "role_permissions",
+          "schema": "public"
+        },
+        {
+          "rows": -1,
+          "table": "roles",
+          "schema": "public"
+        },
+        {
+          "rows": -1,
+          "table": "service_versions",
+          "schema": "public"
+        },
+        {
+          "rows": -1,
+          "table": "services",
+          "schema": "public"
+        },
+        {
+          "rows": -1,
+          "table": "template_versions",
+          "schema": "public"
+        },
+        {
+          "rows": -1,
+          "table": "templates",
+          "schema": "public"
+        }
+      ],
+      "functions": [
+        {
+          "args": "",
+          "hash": "6df0a70fd8e1f5782b13197b3ee58d18",
+          "name": "account_auth_email_guard",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "5b06d6db80338084f08340ad20637b50",
+          "name": "account_auth_email_sync",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_expected_version integer, p_input jsonb, p_event_id uuid",
+          "hash": "26a035125bdd8791c8f44361226979ef",
+          "name": "account_correction_apply",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_expected_version text, p_input jsonb, p_event_id uuid, p_idempotency_key uuid",
+          "hash": "c1c7ff33e6189ff4178564982df4455f",
+          "name": "account_correction_create",
+          "schema": "private"
+        },
+        {
+          "args": "r requests, m memberships",
+          "hash": "0c568cee2563d045766b96598ef557a7",
+          "name": "account_correction_json",
+          "schema": "private"
+        },
+        {
+          "args": "p_user_id uuid",
+          "hash": "39a2431d71f9658d894c60fe7c8cb625",
+          "name": "account_linked_customers",
+          "schema": "private"
+        },
+        {
+          "args": "p_user_id uuid, p_office_id uuid, p_email text, p_request_id uuid",
+          "hash": "004678cf9ab3a6070961c1eb9300fa9c",
+          "name": "account_prepare_email",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid",
+          "hash": "317a2fe650a7bbeb6da8b0d60352b393",
+          "name": "account_read",
+          "schema": "private"
+        },
+        {
+          "args": "m memberships",
+          "hash": "f6040033f1bdac024a4806c867378f97",
+          "name": "account_record",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_expected_version text, p_input jsonb, p_event_id uuid",
+          "hash": "57e95fa9810743823b461dd65ca22944",
+          "name": "account_save",
+          "schema": "private"
+        },
+        {
+          "args": "p_input jsonb",
+          "hash": "e5b0845f4fd95196cdded138392fb58b",
+          "name": "account_validate",
+          "schema": "private"
+        },
+        {
+          "args": "p_user_id uuid",
+          "hash": "f91355aa9a7a31ef2586632901bbe21b",
+          "name": "account_values",
+          "schema": "private"
+        },
+        {
+          "args": "p_user_id uuid",
+          "hash": "97a90ecedc44b568d53fe578a09b470b",
+          "name": "account_version",
+          "schema": "private"
+        },
+        {
+          "args": "p_user_id uuid, p_values jsonb",
+          "hash": "ca804e7f2dfc243ded28129892410c80",
+          "name": "account_write_fields",
+          "schema": "private"
+        },
+        {
+          "args": "p_office uuid, p_allocation uuid",
+          "hash": "0af774b9539db3acfd8e37793065985b",
+          "name": "allocation_corrections",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_membership_id uuid, p_request_id uuid",
+          "hash": "425d924bf20670ced6d7934a96f18327",
+          "name": "archive_membership",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_page integer, p_size integer, p_status text",
+          "hash": "e646d999d5213b25af13e722aa2b5501",
+          "name": "archives_page",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone, p_request_id uuid",
+          "hash": "e76729012e66d8775fb412df3864cd58",
+          "name": "audit_export",
+          "schema": "private"
+        },
+        {
+          "args": "p_page integer, p_size integer, p_action text, p_from timestamp with time zone, p_until timestamp with time zone",
+          "hash": "3bfbf504b69730dfef8cefb5559553f2",
+          "name": "audit_filters",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_page integer, p_size integer, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone, p_view text",
+          "hash": "87455a06d6aa419603723fd2a8d957bd",
+          "name": "audit_history_page",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "de39ff3f33167d56362526bf698f1fc3",
+          "name": "audit_notification_read",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_page integer, p_size integer, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone",
+          "hash": "71cdfc29586bc456f8b840ab266033a4",
+          "name": "audit_page",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid",
+          "hash": "19169259cda42239e75cf273b2edce16",
+          "name": "audit_policy_get",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "bd9136f82d540dbca58cef04f4825c28",
+          "name": "audit_policy_initialize",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid",
+          "hash": "3c38fba8c65498a68fbc40ed8f5f35d1",
+          "name": "audit_policy_record",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_days integer, p_version integer, p_request_id uuid",
+          "hash": "95f69c16850b983ba24413b995de1281",
+          "name": "audit_policy_set",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_capability text",
+          "hash": "bfb1963ad38c8d080b2fdd26dd98661e",
+          "name": "audit_privileged",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_report_id uuid",
+          "hash": "d5d557ae757ec7dac66f089a34ea1db0",
+          "name": "audit_report_access",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone, p_view text, p_request_id uuid",
+          "hash": "876f93da31f054511a45f12a653d531b",
+          "name": "audit_report_begin",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_report_id uuid, p_offset integer",
+          "hash": "d5e67bb6d9e843a0b94087f9d354d4de",
+          "name": "audit_report_chunk",
+          "schema": "private"
+        },
+        {
+          "args": "r private.audit_reports",
+          "hash": "77f7052b68b1a7434dff20fa36c4ee12",
+          "name": "audit_report_json",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_report_id uuid",
+          "hash": "06c7bb2c328a8431f75e666ef0d6e2f1",
+          "name": "audit_report_reference",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_report_id uuid, p_sha256 text, p_bytes integer",
+          "hash": "d85a416e829e8d7a4b729d4046aced21",
+          "name": "audit_report_seal",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone",
+          "hash": "85caad8674aa084307251ca1939c9ed3",
+          "name": "audit_rows",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_view text",
+          "hash": "9b20df7c83025e9c82fca52405f22e4c",
+          "name": "audit_view_access",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_write boolean, p_capability text",
+          "hash": "baaeb47bf15a6bf47aa086ede7044ffe",
+          "name": "cash_actor",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_page integer, p_history_page integer, p_request_id uuid",
+          "hash": "e251b0f61451f5162863022200d9b0ac",
+          "name": "cash_client_finance",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "d40f9aeaae5c9edb6b69d83eb7c1d049",
+          "name": "cash_command_guard",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_unit_id uuid, p_page integer, p_page_size integer",
+          "hash": "2f3955a3635ea0d6b46dcb9acfef09c4",
+          "name": "cash_configuration",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "2e93a8241eb9ae7d518b4e2bf6268c68",
+          "name": "cash_configuration_guard",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_unit_id uuid, p_page integer, p_page_size integer",
+          "hash": "095d9525305eea7bde1ecce8d06e03b6",
+          "name": "cash_configuration_record",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_configuration jsonb, p_idempotency_key uuid",
+          "hash": "c7d034dddb95a5468c960cffca6d5d01",
+          "name": "cash_configure",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_scope text, p_page integer, p_page_size integer",
+          "hash": "7056ad8c1c93e552a2f811a972022472",
+          "name": "cash_dashboard",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_scope text, p_page integer, p_page_size integer, p_unit_id uuid, p_status text, p_query text",
+          "hash": "74eccd8cfba02d4a7a1fd8dae90f52ef",
+          "name": "cash_dashboard_filtered",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_actor uuid, p_scope text, p_page integer, p_page_size integer, p_unit_id uuid, p_status text, p_query text",
+          "hash": "b677896d580860329c8282cde4859072",
+          "name": "cash_dashboard_filtered_record",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_actor uuid, p_scope text, p_page integer, p_page_size integer",
+          "hash": "6531ac38d0e1f4948f835a31dd5da26e",
+          "name": "cash_dashboard_record",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_page integer",
+          "hash": "7dd0efcc745f917ed56eacbe4bae5611",
+          "name": "cash_eligible_charges",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "61547d5dbc9424b0be45fb8431e919c8",
+          "name": "cash_entry_guard",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "8b088cd4f7945a40c0804f46b8d59a8b",
+          "name": "cash_history_account_guard",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "9c114f584d5238e62e75ba4efc98a605",
+          "name": "cash_insert_guard",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_unit_id uuid, p_cash_account_id uuid, p_opening_cents bigint, p_idempotency_key uuid",
+          "hash": "bac6987bf73f86f8d8b961b0a89e611f",
+          "name": "cash_open",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "349d04ad7844f424b421aa8b263cd944",
+          "name": "cash_operate",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "241826d5001f3cbaf5df4c998c89dc7e",
+          "name": "cash_operate_before15",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "e6d4f5f5b86d221710375e47de3b0222",
+          "name": "cash_operate_before18",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_session_id uuid, p_page integer",
+          "hash": "46812f80e1914eb217afad7af7bb50b4",
+          "name": "cash_payments_page",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "a4874e1e17043360856cba450df2ea37",
+          "name": "cash_session_guard",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_session_id uuid, p_page integer",
+          "hash": "ddc7b3054e933edb1b416f096aaa82c6",
+          "name": "cash_statement",
+          "schema": "private"
+        },
+        {
+          "args": "s private.cash_sessions, p_actor uuid, p_page integer",
+          "hash": "b68c604af0e7aca9ec9ea78ba894f8d1",
+          "name": "cash_statement_before17",
+          "schema": "private"
+        },
+        {
+          "args": "s private.cash_sessions, p_actor uuid, p_page integer",
+          "hash": "dc69ca009f8e7c0987d51b8e5ad695f7",
+          "name": "cash_statement_before18",
+          "schema": "private"
+        },
+        {
+          "args": "s private.cash_sessions, p_actor uuid, p_page integer",
+          "hash": "7c32bda71c735a0936b2cdba2ab97714",
+          "name": "cash_statement_finance16",
+          "schema": "private"
+        },
+        {
+          "args": "s private.cash_sessions, p_actor uuid, p_page integer",
+          "hash": "3ed70f0c81746ae8fef3f30691de8632",
+          "name": "cash_statement_record",
+          "schema": "private"
+        },
+        {
+          "args": "s private.cash_sessions, p_actor uuid, p_page integer",
+          "hash": "b55a865dabe46be474eaef71bc48bf88",
+          "name": "cash_statement_record_before15",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_write boolean, p_capability text",
+          "hash": "44efcddbe12b087e0324bf53745273f0",
+          "name": "charges_actor",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_charge_id uuid",
+          "hash": "8a5dc33769610689b23e16c7d859c2e0",
+          "name": "charges_amounts",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_installments jsonb, p_idempotency_key uuid",
+          "hash": "eeac65f5df0f90d9d7d3d4d044c76780",
+          "name": "charges_create",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid",
+          "hash": "1939ae92b7334899057b20efd31b9224",
+          "name": "charges_items",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_charge_id uuid, p_expected_version integer, p_mutation jsonb, p_idempotency_key uuid",
+          "hash": "29591d9d471de8d49ac32766d3417a78",
+          "name": "charges_mutate",
+          "schema": "private"
+        },
+        {
+          "args": "p_plan jsonb, p_total bigint",
+          "hash": "552db79a65f1782efc74c613e7db72a6",
+          "name": "charges_plan",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "4c62cdea5ebf14a2207d217d8d8caaca",
+          "name": "charges_request_cancel_guard",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_history_page integer",
+          "hash": "16026d0749f08eb0c807e4ab3454804f",
+          "name": "charges_view",
+          "schema": "private"
+        },
+        {
+          "args": "r requests, m memberships, p_page integer",
+          "hash": "5739996a5dc5cf7060d7073a8834854e",
+          "name": "charges_view_record",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_write boolean, p_capability text",
+          "hash": "134b6ee877197d8a15fb85ec86c5d4ff",
+          "name": "checklists_actor",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_item_id uuid, p_event_id uuid",
+          "hash": "5a8304357de18a9e5a3a25b9dda92527",
+          "name": "checklists_apply",
+          "schema": "private"
+        },
+        {
+          "args": "p_definition jsonb",
+          "hash": "029a1bff40d1478fa0f95ec515c1d47e",
+          "name": "checklists_definition",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid",
+          "hash": "67975b2008103f4ae4edc96b033bb991",
+          "name": "checklists_model",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_kind text, p_event_id uuid, p_recipient_id uuid",
+          "hash": "7bf2a913b9d0549774c7b5d256f1a2ee",
+          "name": "checklists_notice",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_page integer, p_size integer, p_unread_only boolean",
+          "hash": "b089cc2a5d2099c57d945c777e42e1c4",
+          "name": "checklists_notifications",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_instance_id uuid",
+          "hash": "ea62e44e082452159fe4711096696d4d",
+          "name": "checklists_notify",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid, p_expected_version integer, p_definition jsonb, p_reason text, p_event_id uuid",
+          "hash": "d8a72f1b551525068878d421e3cbfde9",
+          "name": "checklists_publish",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_id uuid",
+          "hash": "7d96ff01e9f8feca4de2ac17b6a47295",
+          "name": "checklists_read",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_write boolean, p_capability text",
+          "hash": "464ee858c8dbee5cfcdaf4027b66423b",
+          "name": "checklists_request",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "c53f1c9304f24f3f6f71e9972105ac5e",
+          "name": "checklists_transfer_notice",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_entry_id uuid, p_expected_version integer, p_status text, p_file_id uuid, p_reason text, p_event_id uuid",
+          "hash": "5c42fcac5e4c2f3eae30b2dbb9f93583",
+          "name": "checklists_update",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_item_id uuid",
+          "hash": "644faa62511deb09c336fb056099822e",
+          "name": "checklists_view",
+          "schema": "private"
+        },
+        {
+          "args": "p_office uuid, p_cap text",
+          "hash": "185650ff0cd785280211dac92da30e89",
+          "name": "closure_can18",
+          "schema": "private"
+        },
+        {
+          "args": "s private.cash_sessions",
+          "hash": "cc8afdcd035e96c1b84f82c594a75fd9",
+          "name": "closure_groups18",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "0296231eda524f09d828f501e761b9d5",
+          "name": "closure_guard18",
+          "schema": "private"
+        },
+        {
+          "args": "r private.cash_closures, p_actor uuid",
+          "hash": "afc544ba942bb17bf6ddf0d8fe1f91bc",
+          "name": "closure_json18",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "26f563631ca150937b1f80a87653ebbb",
+          "name": "closure_operate",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_record_id uuid",
+          "hash": "9311170e72982c2f98c8b3fec81f4973",
+          "name": "closure_record",
+          "schema": "private"
+        },
+        {
+          "args": "v numeric",
+          "hash": "9913fbba0f8af086a7894893c0c2c81d",
+          "name": "closure_safe18",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_session_id uuid, p_page integer, p_source_page integer",
+          "hash": "a5d9f942f416f876d623460a1a8fa4fa",
+          "name": "closure_state",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_enabled boolean",
+          "hash": "8a1137cb9778e33cf94125a2702cf9aa",
+          "name": "configure_client_registration",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "abfc2aa6cdde4f8ec30e44e4dbe6ba44",
+          "name": "correction_insert_guard",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "acbf612407139cc9abadfc764dc08cec",
+          "name": "correction_operate",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_session_id uuid, p_kind text, p_query text, p_page integer",
+          "hash": "a9a04e7c3903b9ba1d1c86f7e6960f83",
+          "name": "correction_sources",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid",
+          "hash": "3307c581fc6bd158c72c60ffadc7ba07",
+          "name": "current_permissions",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_customer jsonb, p_request_id uuid",
+          "hash": "18f4683fa2a089493803e40d084f7803",
+          "name": "customer_create",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_customer_id uuid",
+          "hash": "f43fa6706bdbc7b0d2bda6ca21cde104",
+          "name": "customer_detail",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "d0350e0975012d58237a0e22597568d0",
+          "name": "customer_history_immutable",
+          "schema": "private"
+        },
+        {
+          "args": "p_customer customers, p_caller uuid",
+          "hash": "38a6b03afed4655f4780a264754c2e67",
+          "name": "customer_in_scope",
+          "schema": "private"
+        },
+        {
+          "args": "p_registration private.customer_registrations",
+          "hash": "8a8d854bd28e5f897e03f7153f4a1207",
+          "name": "customer_intake_resolved",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_source_id uuid, p_target_id uuid, p_source_version integer, p_target_version integer, p_evidence text, p_confirm boolean, p_request_id uuid",
+          "hash": "1fc07b34f894e3b6ce2bbc711225e9ce",
+          "name": "customer_merge",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_source_id uuid, p_target_id uuid",
+          "hash": "680c6466eb6355433cff8cb7d51e39a6",
+          "name": "customer_merge_preview",
+          "schema": "private"
+        },
+        {
+          "args": "p_registration private.customer_registrations",
+          "hash": "e03f15449327dca78042fda73b63de8a",
+          "name": "customer_registration_active",
+          "schema": "private"
+        },
+        {
+          "args": "p_registration private.customer_registrations",
+          "hash": "aa93e6f4f47851d4b177fefd1b81fd85",
+          "name": "customer_registration_summary",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_kind text, p_query text",
+          "hash": "90af2a605ea94a3be2b6453a75a8f3c5",
+          "name": "customer_relation_candidates",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_customer_id uuid, p_action text, p_payload jsonb, p_request_id uuid",
+          "hash": "dd5f60681e952390db10cfc731d54860",
+          "name": "customer_relation_command",
+          "schema": "private"
+        },
+        {
+          "args": "p_name text",
+          "hash": "0243d9c265fa30bdcb420ad27fa4c083",
+          "name": "customer_relation_display_label",
+          "schema": "private"
+        },
+        {
+          "args": "p_value jsonb",
+          "hash": "f039402734a5a18e2a623b0424886e9c",
+          "name": "customer_relation_evidence",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_member_id uuid, p_client boolean",
+          "hash": "39c22000b6add7d916c62e8fc157f5e6",
+          "name": "customer_relation_member_active",
+          "schema": "private"
+        },
+        {
+          "args": "p_payload jsonb, p_keys text[]",
+          "hash": "4c5a579e3c583d052f07a3ed323a7344",
+          "name": "customer_relation_payload",
+          "schema": "private"
+        },
+        {
+          "args": "p_relation private.customer_relations",
+          "hash": "2a68bd91a1ca313938a196cde8f2c465",
+          "name": "customer_relation_status",
+          "schema": "private"
+        },
+        {
+          "args": "p_value jsonb, p_nullable boolean",
+          "hash": "499f9a69a04e316a3ad2ae292a23178d",
+          "name": "customer_relation_time",
+          "schema": "private"
+        },
+        {
+          "args": "p_value jsonb",
+          "hash": "48234809645907e7ddda9d8922bb1580",
+          "name": "customer_relation_uuid",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_customer_id uuid",
+          "hash": "6186906b0da59c9a2fba52d7cad7f85d",
+          "name": "customer_relations_state",
+          "schema": "private"
+        },
+        {
+          "args": "p_customer customers",
+          "hash": "781fb5f3992eeb44cecdbc98dbd77783",
+          "name": "customer_snapshot_capture",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_customer_id uuid, p_customer jsonb, p_version integer, p_request_id uuid",
+          "hash": "40642cc98869e8df8d9b552c6baeb096",
+          "name": "customer_update",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_write text",
+          "hash": "a9709437592656fff112d92973e51f75",
+          "name": "customers_actor",
+          "schema": "private"
+        },
+        {
+          "args": "p_customer customers, p_can_update boolean",
+          "hash": "f89d4aa547cf48bc0d3659f8f5799876",
+          "name": "customers_detail_record",
+          "schema": "private"
+        },
+        {
+          "args": "p_kind text, p_identifier text",
+          "hash": "073b8426bd17bfccaceda7f376385134",
+          "name": "customers_normalize_identifier",
+          "schema": "private"
+        },
+        {
+          "args": "p_customer jsonb",
+          "hash": "e2f34bc2bdfe8c27f85f37ab21f2e2b0",
+          "name": "customers_normalize_input",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_page integer, p_size integer",
+          "hash": "7d266b0357c783b896b02ff7235e6e93",
+          "name": "customers_page",
+          "schema": "private"
+        },
+        {
+          "args": "p_customer customers",
+          "hash": "9a8e7be7bcc2dd34f8db7db959ca2916",
+          "name": "customers_summary",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_action text, p_type text, p_target uuid, p_request uuid, p_changes jsonb",
+          "hash": "dbc08aff2430a3b4d0737dbf78b1d6b0",
+          "name": "emit_business_event",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "681057f337ee6660bae1b1a98a9297f3",
+          "name": "expense_operate",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_write boolean, p_capability text",
+          "hash": "e881e73ff9386c746b7aeb19b8e67df9",
+          "name": "files_actor",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_input jsonb, p_event_id uuid",
+          "hash": "a0d7983d8e1441ddfac1b821e71c9f1c",
+          "name": "files_begin_upload",
+          "schema": "private"
+        },
+        {
+          "args": "f files",
+          "hash": "68039e8c5d8471864c240c724486b717",
+          "name": "files_cleanup_eligible",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_event_id uuid",
+          "hash": "e28dfdb6503b9eae114f0ffa78b09968",
+          "name": "files_cleanup_plan",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_file_id uuid, p_event_id uuid",
+          "hash": "af6e9939df61872355ba43116ca5af81",
+          "name": "files_download",
+          "schema": "private"
+        },
+        {
+          "args": "f files, m memberships",
+          "hash": "ca5989f08a8c35ab1c952c68c551b07f",
+          "name": "files_file_json",
+          "schema": "private"
+        },
+        {
+          "args": "l private.file_process_leases",
+          "hash": "b4fe40f853fe82048c7c579ef85cd07a",
+          "name": "files_lease_json",
+          "schema": "private"
+        },
+        {
+          "args": "f files, i private.upload_intents",
+          "hash": "7a774219a0c0fb119e9c053800216c0e",
+          "name": "files_object_json",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_page integer, p_size integer",
+          "hash": "87ab9bf5fe47e6f825da156490bdf7de",
+          "name": "files_page",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid",
+          "hash": "3ed5e9a9725ec98c72fe19f5a09b85f4",
+          "name": "files_policy_get",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid",
+          "hash": "a227595fad75aa8c01de26d21585542e",
+          "name": "files_policy_record",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid, p_expected_version integer, p_max_bytes bigint, p_mime_types text[], p_reason text, p_event_id uuid",
+          "hash": "9d50681cf4c5c7ecc226fc00a579c4cc",
+          "name": "files_policy_set",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_action text, p_args jsonb, p_event_id uuid",
+          "hash": "3f893457781028998728e5470033ca68",
+          "name": "files_process_claim",
+          "schema": "private"
+        },
+        {
+          "args": "p_lease_id uuid, p_lease_token text, p_result jsonb, p_event_id uuid",
+          "hash": "222f2f6625ae1cc26dd0320cdade5951",
+          "name": "files_process_complete",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "7e1adb63b57f66ec136972a33f42926f",
+          "name": "files_reference_guard",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, m memberships, p_write boolean",
+          "hash": "a082860559a6b69be442be63eb5be9b7",
+          "name": "files_request",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_page integer, p_size integer",
+          "hash": "bca00585e2a7fea358a76189c29650ee",
+          "name": "files_requests_page",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "3cabfddd45f67c8ed4a73d22d8bc2597",
+          "name": "files_retention_guard",
+          "schema": "private"
+        },
+        {
+          "args": "p_bucket text, p_path text, p_operation text, p_metadata jsonb",
+          "hash": "bb17e091d4dc24c08dbacb3d203d8e6c",
+          "name": "files_storage_allowed",
+          "schema": "private"
+        },
+        {
+          "args": "p_office uuid, p_session uuid, p_account uuid",
+          "hash": "a165e211a50d46f6c0435b65561f2423",
+          "name": "finance17_funds",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "6ab1acb6e7959ee01445eb47a35322f9",
+          "name": "finance17_guard",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_session_id uuid, p_page integer",
+          "hash": "ad7fa832680a835ab345a58e869f2dd0",
+          "name": "finance17_page",
+          "schema": "private"
+        },
+        {
+          "args": "v text, lo integer, hi integer",
+          "hash": "28f82c2e9e3bec60882875dcde5bcfe1",
+          "name": "finance17_text",
+          "schema": "private"
+        },
+        {
+          "args": "p_office uuid, p_write boolean, p_quick boolean, p_export boolean",
+          "hash": "76bce2a8f64d24adb7a54dc4bdacb2c5",
+          "name": "finance19_actor",
+          "schema": "private"
+        },
+        {
+          "args": "p_office uuid, f jsonb, p_limit integer, p_offset integer",
+          "hash": "58c9af33d71e8179658e7b1ffdc38474",
+          "name": "finance19_build",
+          "schema": "private"
+        },
+        {
+          "args": "p_office uuid, f jsonb, p_export boolean",
+          "hash": "27970676c6b6390f0fa30426219b53e0",
+          "name": "finance19_filters",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "fca7006683170b3eb7444b29095530d5",
+          "name": "finance19_guard",
+          "schema": "private"
+        },
+        {
+          "args": "id uuid, kind text, occurred_at timestamp with time zone, reference text, description text, operator_name text, unit_name text, method_name text, account_name text, customer_label text, status text, amount numeric, paid numeric, balance numeric, expected numeric, counted numeric, difference numeric",
+          "hash": "05892292210c1ad13da6e4cd637aca6d",
+          "name": "finance19_row",
+          "schema": "private"
+        },
+        {
+          "args": "p_office uuid, f jsonb, p_from timestamp with time zone, p_until timestamp with time zone",
+          "hash": "07471d94aec5a4ec709afb7d3866ee9c",
+          "name": "finance19_rows",
+          "schema": "private"
+        },
+        {
+          "args": "v numeric",
+          "hash": "93ce51ccc11d8f4de9483f935fc4dbfc",
+          "name": "finance19_safe",
+          "schema": "private"
+        },
+        {
+          "args": "p_office uuid",
+          "hash": "f065c117fa0cc510f650ba9643bbfc66",
+          "name": "finance19_settings",
+          "schema": "private"
+        },
+        {
+          "args": "p_office uuid, p_report uuid",
+          "hash": "73ada3f0ea540df2fb0c4aaffef1504c",
+          "name": "finance19_snapshot",
+          "schema": "private"
+        },
+        {
+          "args": "c private.charges, r requests",
+          "hash": "b222bc82cf484ec2ec42c78f688e39d4",
+          "name": "finance_charge_json",
+          "schema": "private"
+        },
+        {
+          "args": "r requests, m memberships",
+          "hash": "8200fec20df37e14fff18f80820d51fe",
+          "name": "finance_client_request",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "bdde96fc47f3b1d3728f33655a197f11",
+          "name": "finance_debt_notice",
+          "schema": "private"
+        },
+        {
+          "args": "e private.cash_entries, p_client boolean",
+          "hash": "6f3b0a18c60dc177a14db2ea2304c2ae",
+          "name": "finance_entry_json",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "b14e3bd00099a6b2c11c22641c26d7d5",
+          "name": "finance_obligation_guard",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_report_id uuid, p_format text, p_download_key uuid",
+          "hash": "9382669a12029ed94939cb0b4f778bb4",
+          "name": "finance_report_authorize",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_filters jsonb, p_idempotency_key uuid",
+          "hash": "176835671b7b860d37dc879c6944e9fa",
+          "name": "finance_report_begin",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_report_id uuid, p_offset integer",
+          "hash": "59dc6e983734f0539cd515bbbc1b51d8",
+          "name": "finance_report_chunk",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid",
+          "hash": "50173eb1b5fa53ae63e0f36f616dc0a0",
+          "name": "finance_report_context",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_kind text, p_query text, p_page integer",
+          "hash": "745f0aeedd6e8294874cf3c6cd3beb91",
+          "name": "finance_report_options",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_filters jsonb, p_page integer",
+          "hash": "3c7202eae70e48d4f913ae7384e0ba79",
+          "name": "finance_report_page",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_timezone text, p_expected_version integer, p_reason text, p_idempotency_key uuid",
+          "hash": "61ab440e823aa837e50dcbc8b1a120ce",
+          "name": "finance_report_settings",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_capability text, p_lock boolean",
+          "hash": "eae8b3b0308702461aba6cdbf571b324",
+          "name": "governance_actor",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "91cf59b179a4508840a2cc2f24113456",
+          "name": "guard_archived_membership",
+          "schema": "private"
+        },
+        {
+          "args": "n private.internal_notifications, r requests, m memberships",
+          "hash": "10339b8f0e4f6697cd987540e4b64f70",
+          "name": "notification_visible",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_write boolean",
+          "hash": "2a89001eb1dffb915a0bb73ffa04b5b4",
+          "name": "notifications_actor",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_read text, p_kind text, p_page integer, p_size integer",
+          "hash": "ec2dfa522bff39195a2a7a26a12e6e13",
+          "name": "notifications_page",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_id uuid",
+          "hash": "a467f11a80dd1676177990e27bfa5054",
+          "name": "notifications_read",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid",
+          "hash": "97d45d48d563542838898324949bc880",
+          "name": "notifications_summary",
+          "schema": "private"
+        },
+        {
+          "args": "v jsonb, p_nullable boolean",
+          "hash": "3a7917c49874bed928e7306414ef0e37",
+          "name": "payment_date",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_session_id uuid",
+          "hash": "af024b9ace459db25e08c05857c5b75d",
+          "name": "payment_destinations",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "620fee3ebfc2818885e651a92e0b74f3",
+          "name": "payment_insert_guard",
+          "schema": "private"
+        },
+        {
+          "args": "p private.payments",
+          "hash": "f05eb77a08d3dc5cc03e8cc5a15f622c",
+          "name": "payment_json",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "f378446a3709bdedc934738c1c910f2a",
+          "name": "payment_link_entry",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "3b76214e18b325aacf871711623b2cf9",
+          "name": "payment_operate",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_payment_id uuid, p_idempotency_key uuid",
+          "hash": "d41038ba364bfa267bf31a7e9788aa81",
+          "name": "payment_receipt",
+          "schema": "private"
+        },
+        {
+          "args": "p_user_id uuid, p_office_name text, p_request_id uuid",
+          "hash": "3c3d8ac71f5d9ad0b72c5125154c2e3e",
+          "name": "provision_owner",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_session_id uuid, p_query text, p_page integer, p_session_page integer, p_method_page integer",
+          "hash": "3de175c110a4ce2d9a34d1e07cdb49af",
+          "name": "quick_context",
+          "schema": "private"
+        },
+        {
+          "args": "d jsonb",
+          "hash": "672b589709f66498280297998b9234f6",
+          "name": "quick_eligible19",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "b3ec6149fe999aacbae925bb710268b1",
+          "name": "quick_operate",
+          "schema": "private"
+        },
+        {
+          "args": "s private.cash_sessions",
+          "hash": "43a9e0cdace25362745b76c30d19f60c",
+          "name": "quick_session19",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "7625346738d88bb994dcbc59595cc79e",
+          "name": "register_new_client",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "f2f40a2f2b94a9e7af5e9633fa14c400",
+          "name": "reject_audit_mutation",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_member_id uuid",
+          "hash": "75401665f8215ff8f0f5081967d3312d",
+          "name": "request_assignee",
+          "schema": "private"
+        },
+        {
+          "args": "r requests, m memberships",
+          "hash": "f12514dec697601ce8351707cfb4799b",
+          "name": "request_can_reclaim",
+          "schema": "private"
+        },
+        {
+          "args": "r requests, m memberships",
+          "hash": "bcbd83b4d55ace56a7b388ec980076f2",
+          "name": "request_can_work",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_customer_id uuid, p_items jsonb, p_member memberships, p_capability text",
+          "hash": "27133a51062a4f9cd300fb2417be7db0",
+          "name": "request_capture_items",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request jsonb, p_idempotency_key uuid, p_request_id uuid",
+          "hash": "8b91e015deb6dccbdebce3f0a69a4a93",
+          "name": "request_create",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_customer_id uuid, p_caller uuid",
+          "hash": "fa154ed5a1c3e371dd4ad256cc5ffe71",
+          "name": "request_customer",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_page integer",
+          "hash": "dfbe5612a20da38f5bff01d970fceab8",
+          "name": "request_detail",
+          "schema": "private"
+        },
+        {
+          "args": "r requests, m memberships, p_page integer",
+          "hash": "eec50eaf25f5613d98b0300a4aecf3e7",
+          "name": "request_detail_record",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "86615e2ac7e78a5a0784d26ca017d3ce",
+          "name": "request_immutable",
+          "schema": "private"
+        },
+        {
+          "args": "r requests, m memberships",
+          "hash": "25261f16e8b493bb0b247692c05baa00",
+          "name": "request_in_scope",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_expected_version integer, p_mutation jsonb, p_event_id uuid",
+          "hash": "b2d4737eb4b2b418f48cb3914f829336",
+          "name": "request_mutate",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_kind text, p_query text, p_page integer, p_size integer",
+          "hash": "6c2cdcac66ece3ae1dbdce80111bbf0e",
+          "name": "request_options",
+          "schema": "private"
+        },
+        {
+          "args": "p_status text",
+          "hash": "89073b2eac74d13b0378893f46646e99",
+          "name": "request_public_status",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "86544921c402a4bc33405c33879f001c",
+          "name": "request_record_guard",
+          "schema": "private"
+        },
+        {
+          "args": "p_value jsonb, p_keys text[]",
+          "hash": "1c9f5fab63ec1349251e99084fb5a208",
+          "name": "request_shape",
+          "schema": "private"
+        },
+        {
+          "args": "r requests, p_portal boolean",
+          "hash": "4b5ce4d6fae355cda9b08f6fbe49defe",
+          "name": "request_summary",
+          "schema": "private"
+        },
+        {
+          "args": "p_value jsonb, p_min integer, p_max integer, p_multiline boolean",
+          "hash": "c9bdd3ef26b8d1dbc585609786a59994",
+          "name": "request_text",
+          "schema": "private"
+        },
+        {
+          "args": "p_value jsonb, p_nullable boolean",
+          "hash": "d5eeb1d03e1a7cf176a2f522279f2239",
+          "name": "request_uuid",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_write boolean, p_capability text",
+          "hash": "9500d6eaa31247e7eaf50e972388f71e",
+          "name": "requests_actor",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_scope text, p_status text, p_page integer, p_size integer",
+          "hash": "a5162ed023d09a631b4ceaabeabccd45",
+          "name": "requests_page",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_archive_id uuid, p_request_id uuid",
+          "hash": "b324caea940f8d7e1bcddf397b7fcc64",
+          "name": "restore_archive",
+          "schema": "private"
+        },
+        {
+          "args": "p_changes jsonb",
+          "hash": "3139c99c221404e339de8b17bb44670a",
+          "name": "safe_audit_changes",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_service jsonb, p_reason text, p_request_id uuid",
+          "hash": "8ebfe72694d77dbcc7f4c52528e5e72b",
+          "name": "service_create",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid, p_page integer",
+          "hash": "29c6dbfb6572a65f4b205aa274bb91bd",
+          "name": "service_detail",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid, p_service jsonb, p_expected_version integer, p_reason text, p_request_id uuid",
+          "hash": "c6bd2bf1ac1eb183e21c7369a2233312",
+          "name": "service_publish",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid, p_quantity integer, p_adjustment jsonb",
+          "hash": "3f8fb979e4c4d41bc2cab6b78dd9296e",
+          "name": "service_quote",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_write boolean, p_perform boolean",
+          "hash": "88958c66e8e8af6b17e92a2575a9f991",
+          "name": "services_actor",
+          "schema": "private"
+        },
+        {
+          "args": "s services, p_page integer, p_can_manage boolean",
+          "hash": "824f7bb27e3e80d7c1168022932580d6",
+          "name": "services_detail_record",
+          "schema": "private"
+        },
+        {
+          "args": "p_service jsonb",
+          "hash": "f893e350d4b96d6f7c1a7355ac53fed9",
+          "name": "services_normalize_input",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_page integer, p_size integer",
+          "hash": "ca0d4bfe3cc5aaba587a1e622814a83c",
+          "name": "services_page",
+          "schema": "private"
+        },
+        {
+          "args": "s services, v service_versions, p_quantity integer, p_adjustment jsonb, p_caps text[]",
+          "hash": "0d9430c1cc7b86c613d5fd146c420a52",
+          "name": "services_snapshot",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "c9d58a97355f7f11b38147fad3502c81",
+          "name": "services_version_immutable",
+          "schema": "private"
+        },
+        {
+          "args": "v service_versions",
+          "hash": "b3cef345588a3e5b06464f660c48a264",
+          "name": "services_version_record",
+          "schema": "private"
+        },
+        {
+          "args": "p_user_id uuid",
+          "hash": "4e1f6cf606b6d179520d6c4ee6f8ce6c",
+          "name": "sync_customer_registration",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "9cc8c167cddf4f700980d0aaefd851ee",
+          "name": "sync_new_customer_registration",
+          "schema": "private"
+        },
+        {
+          "args": "p_invitation_id uuid, p_request_id uuid",
+          "hash": "48d470a955a37a1db5519a0ca0687144",
+          "name": "team_accept_invitation",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_lock boolean",
+          "hash": "f866a5981370affce3aac24ba65b24a0",
+          "name": "team_actor",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_actor uuid, p_action text, p_type text, p_target uuid, p_request uuid, p_changes jsonb",
+          "hash": "fc063c91d3df946b27637e20004481b9",
+          "name": "team_audit",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_invitation_id uuid, p_request_id uuid",
+          "hash": "b0abc266212ac859175ef22174414150",
+          "name": "team_claim_delivery",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_email text, p_full_name text, p_cpf text, p_role_code text, p_permissions text[], p_expires_at timestamp with time zone, p_request_id uuid",
+          "hash": "ee78105e683b01938b0aa050cc72e6e5",
+          "name": "team_create_invitation",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_kind text, p_page integer, p_query text, p_status text",
+          "hash": "458fdbd6b1fe2aa561814455767ebed4",
+          "name": "team_dashboard",
+          "schema": "private"
+        },
+        {
+          "args": "p_invitation_id uuid, p_lease_id uuid, p_sent boolean",
+          "hash": "b31a23014c3d671b72f8920edbe53ab3",
+          "name": "team_finish_delivery",
+          "schema": "private"
+        },
+        {
+          "args": "p_actor jsonb, p_member memberships, p_role text, p_active boolean, p_allow_client boolean",
+          "hash": "0a4c55da89b292cbd698a7a3fd4a06aa",
+          "name": "team_guard_member",
+          "schema": "private"
+        },
+        {
+          "args": "p_invitation_id uuid",
+          "hash": "98959e756c99ba1b863f1350e5f7c33d",
+          "name": "team_has_password",
+          "schema": "private"
+        },
+        {
+          "args": "p_id uuid",
+          "hash": "df760a2047c753829d7893cd763964a0",
+          "name": "team_invitation_authority",
+          "schema": "private"
+        },
+        {
+          "args": "p_invitation_id uuid",
+          "hash": "64d23c6dc4afa215254c4a82e89764e4",
+          "name": "team_invitation_state",
+          "schema": "private"
+        },
+        {
+          "args": "p_cpf text",
+          "hash": "4f6bcf333066a394233e9fb62b75fc41",
+          "name": "team_normalize_cpf",
+          "schema": "private"
+        },
+        {
+          "args": "p_name text",
+          "hash": "a317e79b9bfb00e93dbb44ff4bf8ca7a",
+          "name": "team_normalize_name",
+          "schema": "private"
+        },
+        {
+          "args": "p_membership_id uuid",
+          "hash": "50503b976517e1cf28fc254f881783eb",
+          "name": "team_permissions_for_member",
+          "schema": "private"
+        },
+        {
+          "args": "p_id uuid, p_lock boolean",
+          "hash": "165da51b36b7c5be8316640c247089c6",
+          "name": "team_recipient",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "05e3adbe074ed4773a503fd9238d8e68",
+          "name": "team_require_identity",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_delegation_id uuid, p_request_id uuid",
+          "hash": "aa8f7cbb113508d4ea6ffd7c111530c5",
+          "name": "team_revoke_delegation",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_invitation_id uuid, p_request_id uuid",
+          "hash": "ffe9afc0d70d4bc2265661dd0310939e",
+          "name": "team_revoke_invitation",
+          "schema": "private"
+        },
+        {
+          "args": "p_membership_id uuid",
+          "hash": "a3d1443713369f7028c56afd49163ea1",
+          "name": "team_scope_for_member",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_membership_id uuid, p_allowed_roles text[], p_allowed_permissions text[], p_can_create_owner boolean, p_expires_at timestamp with time zone, p_request_id uuid",
+          "hash": "243b5e3a10fb6cd7c0c3e315941dfe0d",
+          "name": "team_set_delegation",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_membership_id uuid, p_role_code text, p_active boolean, p_permissions text[], p_request_id uuid",
+          "hash": "5dcec555d6d73b87c6072edc0ffaa615",
+          "name": "team_set_member",
+          "schema": "private"
+        },
+        {
+          "args": "p_user_id uuid, p_office_id uuid",
+          "hash": "e1778d8f11f370582db1d97dddb68697",
+          "name": "team_user_active",
+          "schema": "private"
+        },
+        {
+          "args": "p_actor jsonb, p_role text, p_permissions text[], p_creating_owner boolean",
+          "hash": "c3391f71effa9e2f05d5b5c38437b5bd",
+          "name": "team_validate_assignment",
+          "schema": "private"
+        },
+        {
+          "args": "p_invitation_id uuid, p_full_name text, p_cpf text, p_role_code text, p_request_id uuid",
+          "hash": "c5d1dcfc3b13b3eee8af7ed6177a8275",
+          "name": "team_verify_invitation",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_template_id uuid, p_version_id uuid, p_expected_version integer, p_reason text, p_idempotency_key uuid",
+          "hash": "50f9ab45ad110859ecd4d2debc877dcb",
+          "name": "template_approve",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_template_id uuid, p_page integer",
+          "hash": "2d6d6ef11b9942635645c01c2cc20191",
+          "name": "template_detail",
+          "schema": "private"
+        },
+        {
+          "args": "t templates, p_page integer",
+          "hash": "5ec392e7eda2621ead59fcda7ee2a3e1",
+          "name": "template_detail20",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_template_id uuid, p_definition jsonb, p_expected_version integer, p_reason text, p_idempotency_key uuid",
+          "hash": "77f4e1d4964718683591c4d843542097",
+          "name": "template_save",
+          "schema": "private"
+        },
+        {
+          "args": "v template_versions",
+          "hash": "3d20a47f76fc6ed8ce92a7805fe0e6d8",
+          "name": "template_version20",
+          "schema": "private"
+        },
+        {
+          "args": "p_office uuid, p_action text",
+          "hash": "d05b40ba9462ec846ad351965972e115",
+          "name": "templates_actor20",
+          "schema": "private"
+        },
+        {
+          "args": "value text",
+          "hash": "60d49d713ef0746c965b48f963fd4443",
+          "name": "templates_has_text20",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "5826bab0f5ade351b4242b37ed6c5c2d",
+          "name": "templates_immutable20",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_page integer, p_size integer",
+          "hash": "bd2f4905faf70b91555e950fd1343b2d",
+          "name": "templates_page",
+          "schema": "private"
+        },
+        {
+          "args": "d jsonb",
+          "hash": "ac0e17947c59989a70620acbf3707279",
+          "name": "templates_validate20",
+          "schema": "private"
+        },
+        {
+          "args": "",
+          "hash": "95ccc55df74d75c9f5609ef3b94e243a",
+          "name": "touch_updated_at",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "3fc92fb47b0d3e3ccfdd58985a8e2c70",
+          "name": "transfer_operate",
+          "schema": "private"
+        },
+        {
+          "args": "p_office_id uuid",
+          "hash": "84724cc4d8b377ca8ad0b7f6a263a7f8",
+          "name": "access_context",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_expected_version integer, p_input jsonb, p_event_id uuid",
+          "hash": "0f1d3d48efa61f04d2219a49ec479ca8",
+          "name": "account_correction_apply",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_expected_version text, p_input jsonb, p_event_id uuid, p_idempotency_key uuid",
+          "hash": "4a3ed917ab2de44818da2bc57f0fa38a",
+          "name": "account_correction_create",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid",
+          "hash": "c6312976ba7ee962c5e941292d482f4e",
+          "name": "account_read",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_expected_version text, p_input jsonb, p_event_id uuid",
+          "hash": "b6f29de5f136beb8265ef0b7df3d04d3",
+          "name": "account_save",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_membership_id uuid, p_request_id uuid",
+          "hash": "4f9db3c7d7a29293af0789c2fe72252f",
+          "name": "archive_membership",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_page integer, p_size integer, p_status text",
+          "hash": "5bbe8854f25a2fbb03d4a15d5e0400f5",
+          "name": "archives_page",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone, p_request_id uuid",
+          "hash": "69ca8e45809cf5351393eb3036f09d03",
+          "name": "audit_export",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_page integer, p_size integer, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone, p_view text",
+          "hash": "16163f81c1cafbea85fdd54be7342470",
+          "name": "audit_history_page",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_page integer, p_size integer, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone",
+          "hash": "973b0640855a4879229f1c0df13e227a",
+          "name": "audit_page",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid",
+          "hash": "c21906190e619f771f47eda962ab5290",
+          "name": "audit_policy_get",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_days integer, p_version integer, p_request_id uuid",
+          "hash": "7a9461696ffe78a58fa38ab937c76bd1",
+          "name": "audit_policy_set",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_action text, p_actor uuid, p_from timestamp with time zone, p_until timestamp with time zone, p_view text, p_request_id uuid",
+          "hash": "ff0ad83f717ab37c271dab117b6bf80d",
+          "name": "audit_report_begin",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_report_id uuid, p_offset integer",
+          "hash": "73c129ecf278ad70814702e9a2851f67",
+          "name": "audit_report_chunk",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_report_id uuid",
+          "hash": "35d2cc19e428b72562e2e0886e7f8322",
+          "name": "audit_report_reference",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_report_id uuid, p_sha256 text, p_bytes integer",
+          "hash": "f027d4cac6ef033328a8b20c4ffccc83",
+          "name": "audit_report_seal",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_page integer, p_history_page integer, p_request_id uuid",
+          "hash": "fc34fc2b3c22df70c02899c0e24379cd",
+          "name": "cash_client_finance",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_unit_id uuid, p_page integer, p_page_size integer",
+          "hash": "3dd063420dedd3296d9fdfde74fbc516",
+          "name": "cash_configuration",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_configuration jsonb, p_idempotency_key uuid",
+          "hash": "4149489187834e4b4000b99f44552ec9",
+          "name": "cash_configure",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_scope text, p_page integer, p_page_size integer",
+          "hash": "eb1409017d1d28d84f206c52a65226a0",
+          "name": "cash_dashboard",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_scope text, p_page integer, p_page_size integer, p_unit_id uuid, p_status text, p_query text",
+          "hash": "fb0df7b18af7b8b98b04fa4e5127e6d0",
+          "name": "cash_dashboard_filtered",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_page integer",
+          "hash": "4647c847cae37a953161aeeb07644e49",
+          "name": "cash_eligible_charges",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_unit_id uuid, p_cash_account_id uuid, p_opening_cents bigint, p_idempotency_key uuid",
+          "hash": "784f2041f632815dda16365933e313d7",
+          "name": "cash_open",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "85589ffb1dcd4b6062089319cb3d6329",
+          "name": "cash_operate",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_session_id uuid, p_page integer",
+          "hash": "6d6005b5071ae9f2bdf7b34da4a231dd",
+          "name": "cash_payments_page",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_session_id uuid, p_page integer",
+          "hash": "7aa9019d3d8fcb86902571a1781b2b03",
+          "name": "cash_statement",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_installments jsonb, p_idempotency_key uuid",
+          "hash": "5205afd2e06a45f836677cd3fe370361",
+          "name": "charges_create",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_charge_id uuid, p_expected_version integer, p_mutation jsonb, p_idempotency_key uuid",
+          "hash": "955483219e889da0feb0b9966f6b62a7",
+          "name": "charges_mutate",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_history_page integer",
+          "hash": "589c710e7bbf2921fd9505b0b9ba8e97",
+          "name": "charges_view",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_item_id uuid, p_event_id uuid",
+          "hash": "253e936213896c70d1c2f8845cdfcc52",
+          "name": "checklists_apply",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid",
+          "hash": "5a09160ba67902eb63a9ce2b323f7e76",
+          "name": "checklists_model",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_page integer, p_size integer, p_unread_only boolean",
+          "hash": "be1cd5994847c94f785a9149295faf31",
+          "name": "checklists_notifications",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_instance_id uuid",
+          "hash": "e0e0de2c2ebfca20632f93e09b9c33a6",
+          "name": "checklists_notify",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid, p_expected_version integer, p_definition jsonb, p_reason text, p_event_id uuid",
+          "hash": "c25da24aa9c545aca5562daed5774928",
+          "name": "checklists_publish",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_id uuid",
+          "hash": "abe03e0021aa8ad7c4e6b2d56d36e9d4",
+          "name": "checklists_read",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_entry_id uuid, p_expected_version integer, p_status text, p_file_id uuid, p_reason text, p_event_id uuid",
+          "hash": "81c74e97dc4fce503fd5d223d0d1e933",
+          "name": "checklists_update",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_item_id uuid",
+          "hash": "2fef091c4cf6b1db6680f48051cc03be",
+          "name": "checklists_view",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "9d6733cf4e1da6546bb6cb49f5359f02",
+          "name": "closure_operate",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_record_id uuid",
+          "hash": "024052fde860e83f5a0b35c686bcb6dd",
+          "name": "closure_record",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_session_id uuid, p_page integer, p_source_page integer",
+          "hash": "38bdfe5ceaae75bc633e3eb591c71449",
+          "name": "closure_state",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "957ff526a08acd4283683ab6c9984537",
+          "name": "correction_operate",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_session_id uuid, p_kind text, p_query text, p_page integer",
+          "hash": "0bafa2503c25fbcd3eff73e375b4f103",
+          "name": "correction_sources",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_customer jsonb, p_request_id uuid",
+          "hash": "4ebde1db2a57896aff47a16657881c17",
+          "name": "customer_create",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_customer_id uuid",
+          "hash": "b2587405da5832cf303ab67e5cc6d12f",
+          "name": "customer_detail",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_source_id uuid, p_target_id uuid, p_source_version integer, p_target_version integer, p_evidence text, p_confirm boolean, p_request_id uuid",
+          "hash": "b477b1441ea5a3bcaba4f531124f3593",
+          "name": "customer_merge",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_source_id uuid, p_target_id uuid",
+          "hash": "d91fae6af73bc4b0486843cd10c95e36",
+          "name": "customer_merge_preview",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_kind text, p_query text",
+          "hash": "1232bc4559b0bf7c1e0ef91ecdea790b",
+          "name": "customer_relation_candidates",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_customer_id uuid, p_action text, p_payload jsonb, p_request_id uuid",
+          "hash": "0ce26e563a12c23d5ce82685145a06f2",
+          "name": "customer_relation_command",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_customer_id uuid",
+          "hash": "948460c930ec595657c3964b15d1b885",
+          "name": "customer_relations_state",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_customer_id uuid, p_customer jsonb, p_version integer, p_request_id uuid",
+          "hash": "402e1eb872fb4c266b66b7d72c73e9f0",
+          "name": "customer_update",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_page integer, p_size integer",
+          "hash": "299c7d5203bbf7e4a8f94de017aa2bab",
+          "name": "customers_page",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "7e3756687fc6f571dd0d15bb3fc44daf",
+          "name": "expense_operate",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_input jsonb, p_event_id uuid",
+          "hash": "3159d0fe558d775b019a0afd01ff9679",
+          "name": "files_begin_upload",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_event_id uuid",
+          "hash": "ad507ae1f13d0a3e45752b0a3b35d3f9",
+          "name": "files_cleanup_plan",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_file_id uuid, p_event_id uuid",
+          "hash": "5d4174bc190344689e78f9a257576deb",
+          "name": "files_download",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_page integer, p_size integer",
+          "hash": "981bd9d04228e1e9b9582afed1756c4a",
+          "name": "files_page",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid",
+          "hash": "4816153d5bc669c06fac3613f7dc928e",
+          "name": "files_policy_get",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid, p_expected_version integer, p_max_bytes bigint, p_mime_types text[], p_reason text, p_event_id uuid",
+          "hash": "fb41c61a990db5553df89c3d7cc79537",
+          "name": "files_policy_set",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_action text, p_args jsonb, p_event_id uuid",
+          "hash": "ab8ffef5ca6fdf67854cb08da093c29b",
+          "name": "files_process_claim",
+          "schema": "public"
+        },
+        {
+          "args": "p_lease_id uuid, p_lease_token text, p_result jsonb, p_event_id uuid",
+          "hash": "222803a294545cb960d5149f742c62c6",
+          "name": "files_process_complete",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_page integer, p_size integer",
+          "hash": "69163966e722e9446f315a01867700be",
+          "name": "files_requests_page",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_session_id uuid, p_page integer",
+          "hash": "d73b69b88cdccad4f2f272706c03b365",
+          "name": "finance17_page",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_report_id uuid, p_format text, p_download_key uuid",
+          "hash": "d86f5b8c9d9a284d1479de747193237c",
+          "name": "finance_report_authorize",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_filters jsonb, p_idempotency_key uuid",
+          "hash": "2d6928fa28bac911a20ae41c68ca9372",
+          "name": "finance_report_begin",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_report_id uuid, p_offset integer",
+          "hash": "aad30b71e8ddf19444d66c514c0f5baf",
+          "name": "finance_report_chunk",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid",
+          "hash": "5b7cb8869f2d5b5ea8153c972fe844df",
+          "name": "finance_report_context",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_kind text, p_query text, p_page integer",
+          "hash": "08f88b83b06e981b60b0b6fe0405be5e",
+          "name": "finance_report_options",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_filters jsonb, p_page integer",
+          "hash": "396608730630badea01d5fe98a9e7d91",
+          "name": "finance_report_page",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_timezone text, p_expected_version integer, p_reason text, p_idempotency_key uuid",
+          "hash": "cefb86d2c54085def31e33733b20f302",
+          "name": "finance_report_settings",
+          "schema": "public"
+        },
+        {
+          "args": "",
+          "hash": "755933ce3c72f5d455e65f6e588a4a11",
+          "name": "my_access_context",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_read text, p_kind text, p_page integer, p_size integer",
+          "hash": "e799f1124c30096fe80899a00a4d3acd",
+          "name": "notifications_page",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_id uuid",
+          "hash": "02b42202b141db7ade2937e80a4527e9",
+          "name": "notifications_read",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid",
+          "hash": "dd095574266c8032037af948d5c9b5c5",
+          "name": "notifications_summary",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "62d3c1c216ab10a45bd4f9f50132d5d3",
+          "name": "payment_operate",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_payment_id uuid, p_idempotency_key uuid",
+          "hash": "e044f891c2913463bfda78bcd5ed578e",
+          "name": "payment_receipt",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_session_id uuid, p_query text, p_page integer, p_session_page integer, p_method_page integer",
+          "hash": "cb1c3a549bbb95910b49a32ec3cefa1d",
+          "name": "quick_context",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "920b6a7a88358b9bbe8a0cee6f86c85c",
+          "name": "quick_operate",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_request jsonb, p_idempotency_key uuid, p_request_id uuid",
+          "hash": "1beee1da4cf92623c5cb51314562e8e4",
+          "name": "request_create",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_page integer",
+          "hash": "51e44652c2cd14d680760f761cdac6d0",
+          "name": "request_detail",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_request_id uuid, p_expected_version integer, p_mutation jsonb, p_event_id uuid",
+          "hash": "5efa19f83eb44787475076acbab992ad",
+          "name": "request_mutate",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_kind text, p_query text, p_page integer, p_size integer",
+          "hash": "5a1320146991e3226a3ace41ea35073f",
+          "name": "request_options",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_scope text, p_status text, p_page integer, p_size integer",
+          "hash": "904699e75899a310156cbb54921a4414",
+          "name": "requests_page",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_archive_id uuid, p_request_id uuid",
+          "hash": "4ccd1cbb0ec1b857d0d234ea186470bb",
+          "name": "restore_archive",
+          "schema": "public"
+        },
+        {
+          "args": "",
+          "hash": "c44fb229ea8a6b0afd04a0a33261c16c",
+          "name": "rls_auto_enable",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_service jsonb, p_reason text, p_request_id uuid",
+          "hash": "14c68df9968942c039ee1086f1e74693",
+          "name": "service_create",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid, p_page integer",
+          "hash": "5fc002d33a52ac57b6b812b4783075f0",
+          "name": "service_detail",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid, p_service jsonb, p_expected_version integer, p_reason text, p_request_id uuid",
+          "hash": "01a492d8890311abd8b0f86e9c47f4ff",
+          "name": "service_publish",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_service_id uuid, p_quantity integer, p_adjustment jsonb",
+          "hash": "23e9f0f246fe88f698ba7d466ae550a3",
+          "name": "service_quote",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_page integer, p_size integer",
+          "hash": "03b242cae364af84902dddad205a44f9",
+          "name": "services_page",
+          "schema": "public"
+        },
+        {
+          "args": "p_invitation_id uuid, p_request_id uuid",
+          "hash": "6a77411ba5749fe24212eddc69287e92",
+          "name": "team_accept_invitation",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_invitation_id uuid, p_request_id uuid",
+          "hash": "06b5bbc43e7aa9dd1e7ffde8f98a735e",
+          "name": "team_claim_delivery",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_email text, p_full_name text, p_cpf text, p_role_code text, p_permissions text[], p_expires_at timestamp with time zone, p_request_id uuid",
+          "hash": "92f277e6506e2fbc3df974e207499523",
+          "name": "team_create_invitation",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_kind text, p_page integer, p_query text, p_status text",
+          "hash": "fa1e75428cdeb2b16f020854f0b08d9d",
+          "name": "team_dashboard",
+          "schema": "public"
+        },
+        {
+          "args": "p_invitation_id uuid, p_lease_id uuid, p_sent boolean",
+          "hash": "c4975ae4048d7c3f3dd2a2300d2e7e2e",
+          "name": "team_finish_delivery",
+          "schema": "public"
+        },
+        {
+          "args": "p_invitation_id uuid",
+          "hash": "30f74f3c81939a030d26b25e907f7247",
+          "name": "team_invitation_state",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_delegation_id uuid, p_request_id uuid",
+          "hash": "1e7dae315665e979bfa4d1edaee44511",
+          "name": "team_revoke_delegation",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_invitation_id uuid, p_request_id uuid",
+          "hash": "21a5bbe310b4e58cad0e61e0607eaca5",
+          "name": "team_revoke_invitation",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_membership_id uuid, p_allowed_roles text[], p_allowed_permissions text[], p_can_create_owner boolean, p_expires_at timestamp with time zone, p_request_id uuid",
+          "hash": "239de89d63ddc26e10cc576c94ccfc46",
+          "name": "team_set_delegation",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_membership_id uuid, p_role_code text, p_active boolean, p_permissions text[], p_request_id uuid",
+          "hash": "f816aac10f2bdbad86fc1c83031d9158",
+          "name": "team_set_member",
+          "schema": "public"
+        },
+        {
+          "args": "p_invitation_id uuid, p_full_name text, p_cpf text, p_role_code text, p_request_id uuid",
+          "hash": "90a7c40a836c69788888089f882bd942",
+          "name": "team_verify_invitation",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_template_id uuid, p_version_id uuid, p_expected_version integer, p_reason text, p_idempotency_key uuid",
+          "hash": "7ca736d8d644aef6334d430fa25dd51a",
+          "name": "template_approve",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_template_id uuid, p_page integer",
+          "hash": "61896fc92a4757ac50d9597b197ba365",
+          "name": "template_detail",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_template_id uuid, p_definition jsonb, p_expected_version integer, p_reason text, p_idempotency_key uuid",
+          "hash": "e8615dda73f0edfb2ec0a16f304c8476",
+          "name": "template_save",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_query text, p_page integer, p_size integer",
+          "hash": "680032968bd73839c2f2513d9d6fc6ec",
+          "name": "templates_page",
+          "schema": "public"
+        },
+        {
+          "args": "p_office_id uuid, p_operation jsonb",
+          "hash": "fb363747650c3a5aec8f8b33246a0156",
+          "name": "transfer_operate",
+          "schema": "public"
+        }
+      ],
+      "migrations": 28
+    }
+  }
+]

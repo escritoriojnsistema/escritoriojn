@@ -1,0 +1,77 @@
+{
+  "stage": 21,
+  "date": "2026-10-27",
+  "base": "93c8bf060876365540480a584e970e6a0d0fa79d",
+  "status": "implementação local validada e revisão sem achado bloqueante; publicação pendente",
+  "tests": {
+    "node_api": {
+      "passed": 209,
+      "failed": 0,
+      "command": "npm test"
+    },
+    "ui21": {
+      "passed": 14,
+      "failed": 0,
+      "command": "node scripts/test-team-ui.mjs --grep 'documentos21:'",
+      "note": "Lotecompleto14 após correçõesdeconcorrência/UUID/422/reversão e navegação"
+    },
+    "regression20": {
+      "passed": 13,
+      "failed": 0,
+      "note": "Lote18:13modelos20+5repetiçõeslayout21"
+    },
+    "public_local": {
+      "passed": 11,
+      "failed": 0,
+      "command": "Playwright documentos21-public +templates-public +finance19-public sobre preview3016"
+    },
+    "auth": {
+      "passed": 6,
+      "failed": 0,
+      "command": "npm run test:auth -- tests/auth/documents21.spec.ts tests/auth/templates.spec.ts tests/auth/finance19.spec.ts tests/auth/audit-policy.spec.ts",
+      "note": "Pacotefinal0542230;6/6 navegador→API→RPC,CPF/snapshots/conflito/replay/regressão20/19/Auditoria8"
+    },
+    "sql": {
+      "passed_lines": 209,
+      "regression20": 86,
+      "stage21": 110,
+      "race_assertions": 12,
+      "empty_replays": 2,
+      "migrator": "NOSUPERUSER/NOBYPASSRLS",
+      "command": "JN_DB_DOCUMENTS21_ISOLATED=1 node scripts/test-database.mjs",
+      "benchmark": {
+        "documents": 1001,
+        "history_revisions": 11,
+        "page_size": 5,
+        "before_ms": 3463.818,
+        "after_ms": 19.443,
+        "buffer_hits_before": 112027,
+        "buffer_hits_after": 3943,
+        "scope": "laboratório local, sem SLA hospedado"
+      }
+    }
+  },
+  "build": {
+    "passed": true,
+    "static_preload": true,
+    "entry_kb": 434.86,
+    "documents_kb": 79.54,
+    "note": "módulosdocumentais/íconespré-carregados,semimportaçãonoclique;semavisotamanho500KB"
+  },
+  "dependency_audit_production": {
+    "vulnerabilities": 0
+  },
+  "historical_pdf_files_preserved": 22,
+  "no_hosted_fixture_or_auth_changes": true,
+  "publication": "GitHub→Vercel,semActions;pendenteapósrevisão",
+  "review": {
+    "blockers": 0,
+    "report": "revisao-final.md",
+    "fixed": [
+      "replay503comrevisãoconcorrente",
+      "identidadeUUIDsemcaixa",
+      "recuperação422",
+      "reversãoOdurantesave/navegação"
+    ]
+  }
+}
