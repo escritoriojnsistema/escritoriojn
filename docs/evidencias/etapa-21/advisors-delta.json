@@ -1,0 +1,114 @@
+{
+  "security": {
+    "new": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "metadata": {
+          "name": "document_participants",
+          "type": "table",
+          "schema": "public"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      },
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "metadata": {
+          "name": "document_commands",
+          "type": "table",
+          "schema": "private"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      },
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "metadata": {
+          "name": "document_revisions",
+          "type": "table",
+          "schema": "private"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      },
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "metadata": {
+          "name": "document_preparations",
+          "type": "table",
+          "schema": "private"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      },
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "metadata": {
+          "name": "documents",
+          "type": "table",
+          "schema": "public"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      }
+    ],
+    "removed": 0,
+    "errors": []
+  },
+  "performance": {
+    "new": [
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "metadata": {
+          "name": "documents",
+          "type": "table",
+          "schema": "public"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "metadata": {
+          "name": "document_preparations",
+          "type": "table",
+          "schema": "private"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "metadata": {
+          "name": "document_participants",
+          "type": "table",
+          "schema": "public"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "metadata": {
+          "name": "document_commands",
+          "type": "table",
+          "schema": "private"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "metadata": {
+          "name": "document_revisions",
+          "type": "table",
+          "schema": "private"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      }
+    ],
+    "removed": 0,
+    "errors": []
+  }
+}

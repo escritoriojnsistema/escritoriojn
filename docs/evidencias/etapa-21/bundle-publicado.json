@@ -1,0 +1,55 @@
+{
+  "canonical": "https://escritoriojn.vercel.app",
+  "assets": [
+    {
+      "path": "/assets/documents-CoR2aXYn.js",
+      "bytes": 79549,
+      "sha256": "5e4139aefcc9e14fad1b0dfdb98cecae6d9c880c708dc04aa909eeb153d673f4",
+      "equals_local_build": true
+    },
+    {
+      "path": "/assets/documents-CyLNeP2R.css",
+      "bytes": 28941,
+      "sha256": "4f0da02f846e68492720bf827d12e2eb0101ac95cd4ba5e0e85de2030e0af620",
+      "equals_local_build": true
+    },
+    {
+      "path": "/assets/icons-B3AA7x6H.js",
+      "bytes": 11804,
+      "sha256": "b0effe3054d58eaf07d4ce974dc825e19c5e34ca6043599d08eeb18f8df35367",
+      "equals_local_build": true
+    },
+    {
+      "path": "/assets/index-CgX0xMv_.js",
+      "bytes": 434860,
+      "sha256": "a348e7bee0e338a7bb8ad751ef8f7d15dc8943ba51033b1b526cf355b76e08df",
+      "equals_local_build": true
+    },
+    {
+      "path": "/assets/index-DcxRWTUR.css",
+      "bytes": 60380,
+      "sha256": "f7e26e969dc7f74001f90d89865b3fce8808442b6a0080fed2d2d919dd9f8591",
+      "equals_local_build": true
+    },
+    {
+      "path": "/assets/react-DYkIpRt7.js",
+      "bytes": 259235,
+      "sha256": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+      "equals_local_build": true
+    },
+    {
+      "path": "/assets/rolldown-runtime-WkwZ5CU-.js",
+      "bytes": 599,
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "equals_local_build": true
+    },
+    {
+      "path": "/assets/supabase-DtuMx0jC.js",
+      "bytes": 214392,
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "equals_local_build": true
+    }
+  ],
+  "asset_count": 8,
+  "all_equal": true
+}
