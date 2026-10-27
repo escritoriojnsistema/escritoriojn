@@ -3,6 +3,25 @@ const claims=n=>JSON.stringify({sub:`00000000-0000-4000-a000-000000000${n}`,sess
 export const raceDocuments21=async({sql,openSql,until})=>{
  const row=JSON.parse(sql('SELECT row_to_json(f) FROM test.documents_fixture21 f;').trim());
  let output='';
+ // Release a common advisory barrier so real selector RPCs start together.
+ // The barrier is unrelated to the office row and does not reproduce lock logic.
+ const barrier=openSql(), callers=[];
+ try {
+  barrier.child.stdin.write("SELECT pg_advisory_lock(210021);\n\\echo OPTIONS_BARRIER_HELD\n");
+  await until(()=>barrier.output().includes('OPTIONS_BARRIER_HELD'));
+  for(let i=0;i<16;i++){
+   const c=openSql(), kind=['requests','templates','customers','items'][i%4];callers.push(c);
+   c.child.stdin.end(`SET application_name='jn_options_${i}';SET deadlock_timeout='50ms';SET statement_timeout='15s';SET ROLE authenticated;SET request.jwt.claims='${claims(201)}';SELECT pg_advisory_lock_shared(210021);SELECT test.assert_true(public.document_options('${office}','${kind}',${kind==='items'?`'${row.request_id}'`:'NULL'},'',1)->>'kind'='${kind}','21: concurrent ${kind} options');`);
+  }
+  await until(()=>Number(sql("SELECT count(*) FROM pg_stat_activity WHERE application_name LIKE 'jn_options_%' AND wait_event='advisory';").trim())===16);
+  const started=performance.now();
+  barrier.child.stdin.end('SELECT pg_advisory_unlock(210021);\n');await barrier.result;
+  const results=await Promise.allSettled(callers.map(c=>c.result));
+  const failures=results.filter(r=>r.status==='rejected');
+  if(failures.length)throw Error(`Concurrent options failed (${failures.length}/16): ${failures.map(r=>r.reason.message).join('\n')}`);
+  output+=`OPTIONS_CONCURRENCY 16 calls 4 kinds elapsed_ms=${(performance.now()-started).toFixed(1)} deadlocks=0\n`;
+  output+=results.map(r=>r.value).join('');
+ }finally{barrier.child.kill();for(const c of callers)c.child.kill();}
  const input=JSON.stringify({content:'Corrida {{cliente.nome}} {{datas.emissao}}',overrides:{},money_in_words:true});
  const save=(revision,key='gen_random_uuid()')=>`SELECT public.document_operate('${office}','${row.document_id}',jsonb_build_object('kind','save','expected_revision',${revision},'input','${input}'::jsonb,'idempotency_key',${key}))`;
  const race=async(label,firstStatement,secondStatement,state,actor=201)=>{
@@ -18,6 +37,17 @@ export const raceDocuments21=async({sql,openSql,until})=>{
  output+=await race('two_edits',`SET ROLE authenticated;SET request.jwt.claims='${claims(201)}';${save(4)}`,save(4),'PT409');
  const lock=`SELECT id FROM public.offices WHERE id='${office}' FOR UPDATE`;
  sql(`INSERT INTO private.team_member_permissions(membership_id,permission_code) SELECT '00000000-0000-4000-b000-000000000202',p FROM unnest(ARRAY['documents.read','documents.create','documents.update','requests.read','requests.read_all','customers.read','customers.read_all'])p ON CONFLICT DO NOTHING;UPDATE public.requests SET assignee_id='00000000-0000-4000-b000-000000000202' WHERE id='${row.request_id}';`);
+ const options=`SELECT public.document_options('${office}','items','${row.request_id}','',1)`;
+ try {
+  output+=await race('options_revoke',`${lock};DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000202' AND permission_code='documents.read'`,options,'PT403',202);
+ } finally {sql("INSERT INTO private.team_member_permissions VALUES('00000000-0000-4000-b000-000000000202','documents.read') ON CONFLICT DO NOTHING");}
+ try {
+  output+=await race('options_scope',`${lock};UPDATE public.requests SET assignee_id='00000000-0000-4000-b000-000000000201' WHERE id='${row.request_id}'`,options,'PT403',202);
+ } finally {sql(`UPDATE public.requests SET assignee_id='00000000-0000-4000-b000-000000000202' WHERE id='${row.request_id}'`);}
+ try {
+  output+=await race('options_session',`${lock};DELETE FROM auth.sessions WHERE id='00000000-0000-4000-c000-000000000202'`,options,'PT401',202);
+ } finally {sql("INSERT INTO auth.sessions(id,user_id) VALUES('00000000-0000-4000-c000-000000000202','00000000-0000-4000-a000-000000000202') ON CONFLICT DO NOTHING");}
+ output+=sql(`SET ROLE authenticated;SET request.jwt.claims='${claims(205)}';SELECT test.expect_error($q$SELECT public.document_options('${office}','customers',NULL,'',1)$q$,'PT403','21: client denied options');RESET ROLE;`);
  for(const kind of ['capability','scope','customer','session','replay']){
   let mutation,restore,statement=save(5),state='PT403';
   if(kind==='capability'||kind==='replay'){
