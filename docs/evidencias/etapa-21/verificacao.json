@@ -2,7 +2,7 @@
   "stage": 21,
   "date": "2026-10-27",
   "base": "93c8bf060876365540480a584e970e6a0d0fa79d",
-  "status": "implementação local validada e revisão sem achado bloqueante; publicação pendente",
+  "status": "concluída, publicada e verificada",
   "tests": {
     "node_api": {
       "passed": 209,
@@ -49,6 +49,11 @@
         "buffer_hits_after": 3943,
         "scope": "laboratório local, sem SLA hospedado"
       }
+    },
+    "public_canonical": {
+      "passed": 11,
+      "failed": 0,
+      "command": "E2E_BASE_URL=https://escritoriojn.vercel.app Playwright documentos21/templates20/finance19 públicos"
     }
   },
   "build": {
@@ -63,7 +68,7 @@
   },
   "historical_pdf_files_preserved": 22,
   "no_hosted_fixture_or_auth_changes": true,
-  "publication": "GitHub→Vercel,semActions;pendenteapósrevisão",
+  "publication": "GitHub→Vercel PR61runtime+PR62schema; migration29automática;8assetsiguais",
   "review": {
     "blockers": 0,
     "report": "revisao-final.md",
@@ -73,5 +78,23 @@
       "recuperação422",
       "reversãoOdurantesave/navegação"
     ]
+  },
+  "hosted": {
+    "migration_count": 29,
+    "statements_equal": 55,
+    "new_bodies_equal": 22,
+    "historical_bodies_preserved": 364,
+    "allowlists_modified": 3,
+    "counts_preserved": true,
+    "new_tables_empty": true,
+    "rls_acl_closed": true,
+    "fk_indexes_complete": true,
+    "assets_equal": 8,
+    "health": 200,
+    "anonymous_documents_api": 401,
+    "anonymous_supabase": "401/42501",
+    "manual_apply": false,
+    "github_actions": false,
+    "vercel_cli_api_deploy": false
   }
 }

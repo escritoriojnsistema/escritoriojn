@@ -1,0 +1,26 @@
+{
+  "canonical_browser_tests": 11,
+  "canonical_health": 200,
+  "document_api_anonymous": [
+    401,
+    401,
+    401,
+    401,
+    401
+  ],
+  "supabase_anonymous": [
+    {
+      "path": "/rest/v1/documents?select=id",
+      "status": 401,
+      "code": "42501",
+      "anonymous_denied": true
+    },
+    {
+      "path": "/rest/v1/rpc/documents_page",
+      "status": 401,
+      "code": "42501",
+      "anonymous_denied": true
+    }
+  ],
+  "hosted_auth_accounts_created": 0
+}

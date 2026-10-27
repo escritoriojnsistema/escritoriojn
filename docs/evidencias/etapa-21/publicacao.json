@@ -1,0 +1,97 @@
+{
+  "stage": 21,
+  "canonical": "https://escritoriojn.vercel.app/documentos",
+  "base": "93c8bf060876365540480a584e970e6a0d0fa79d",
+  "local_validated_commit": "2f1ad1862e00b94ac8bbaa16c5da604d2342f3c9",
+  "runtime": {
+    "pr": 61,
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/pull/61",
+    "feature": "5ca4fd550381278064c87ea846225b6a670c8d57",
+    "merge": "ee25fa42a4553558183922514427a86d095391ee",
+    "tree": "b6efa997b8a63526ecbb25167fe6f2d1996d418a",
+    "preview": [
+      {
+        "context": "Vercel",
+        "state": "success",
+        "target_url": "https://vercel.com/escritorio-jn/escritoriojn/Ssak2Z5QzRX4rh1XN29FVvw7evhv"
+      }
+    ],
+    "production": [
+      {
+        "context": "Vercel",
+        "state": "success",
+        "target_url": "https://vercel.com/escritorio-jn/escritoriojn/GtxVLyHMKM56jutMqAew4Gz17L3F"
+      }
+    ],
+    "assets_equal": true
+  },
+  "database": {
+    "pr": 62,
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/pull/62",
+    "feature": "2b218197465785db2ca944dddf04731d3a200693",
+    "merge": "1e70655c53d76de03e2e9dc4bd70a702528b1a8d",
+    "tree": "8926a5f370e6f9d0462f07bb6bbfa9f4ce558d6a",
+    "version": "20261026195437",
+    "automatic_git_application": true,
+    "manual_apply": false,
+    "migration_count": 29,
+    "preview": [
+      {
+        "context": "Vercel",
+        "state": "success",
+        "target_url": "https://vercel.com/escritorio-jn/escritoriojn/8iP3UDvuxVD6mZyQoRisB7b51A6p"
+      }
+    ],
+    "production": [
+      {
+        "context": "Vercel",
+        "state": "success",
+        "target_url": "https://vercel.com/escritorio-jn/escritoriojn/2LUTmDKXqYWnMx5rCLnBQ7LtVayD"
+      }
+    ],
+    "supabase_check": [
+      {
+        "name": "Supabase Preview",
+        "app": "supabase",
+        "status": "completed",
+        "conclusion": "success",
+        "completed_at": "2026-10-27T12:15:45Z"
+      }
+    ]
+  },
+  "verification": {
+    "statements": 55,
+    "new_bodies": 22,
+    "historical_bodies_preserved": 364,
+    "intentional_allowlists": 3,
+    "new_tables": 5,
+    "public_invoker_rpcs": 5,
+    "owner_only_capabilities": 3,
+    "fk_indexes_complete": true,
+    "assets_equal": 8,
+    "canonical_public_browser_tests": 11,
+    "health": 200,
+    "document_api_anonymous": [
+      401,
+      401,
+      401,
+      401,
+      401
+    ],
+    "supabase_anonymous": "401/42501",
+    "hosted_business_fixtures": 0,
+    "hosted_auth_changes": 0,
+    "individual_grants_added": 0,
+    "github_actions_used": false,
+    "vercel_cli_or_api_deploy": false
+  },
+  "evidence": [
+    "schema-publicado.json",
+    "bundle-publicado.json",
+    "barreiras-publicas.json",
+    "advisors.json",
+    "advisors-delta.json",
+    "verificacao.json",
+    "revisao-final.md"
+  ]
+}
