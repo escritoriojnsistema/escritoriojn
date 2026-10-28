@@ -6,7 +6,6 @@ import {fields,record,uuid} from '../team/validation.js';
 import {positive} from '../requests/validation.js';
 import {validQuickOperation,validReportFilters,validReportTimezone,finance19Text,type ReportRow} from '../../../shared/finance19.js';
 import {quickContext,quickResult,reportContext,reportOptions,reportPage,reportSettings,reportSnapshot,reportChunk} from './dto.js';
-import {financialCsv,financialPdf,FinancialExportLimit} from './export.js';
 export const financeRouter=Router();
 financeRouter.use((_req,res,next)=>{res.setHeader('Cache-Control','private, no-store');res.setHeader('CDN-Cache-Control','no-store');res.vary('Authorization');next();});
 financeRouter.use(async(req,res,next)=>{const auth=await authenticatedClient(req,res);if(auth){res.locals.financeAuth=auth;next();}});
@@ -26,10 +25,12 @@ financeRouter.post('/reports/page',async(req,res)=>{const b:unknown=req.body;if(
 financeRouter.post('/reports/settings',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','timezone','expected_version','reason','idempotency_key'])||!uuid(b.office_id)||!validReportTimezone(b.timezone)||!Number.isInteger(b.expected_version)||Number(b.expected_version)<0||Number(b.expected_version)>=2147483646||!finance19Text(b.reason,5,500)||!uuid(b.idempotency_key)){invalid(res);return;}await jsonRpc(res,'finance_report_settings',{p_office_id:b.office_id,p_timezone:b.timezone,p_expected_version:b.expected_version,p_reason:b.reason,p_idempotency_key:b.idempotency_key},reportSettings);});
 financeRouter.post('/reports/export',async(req,res)=>{
  const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','filters','idempotency_key','format'])||!uuid(b.office_id)||!validReportFilters(b.filters)||!uuid(b.idempotency_key)||!['csv','pdf'].includes(String(b.format))){invalid(res);return;}
+ let ExportLimit:typeof import('./export.js').FinancialExportLimit|undefined;
  try{const begun=await rpc(res,'finance_report_begin',{p_office_id:b.office_id,p_filters:b.filters,p_idempotency_key:b.idempotency_key});if(begun===undefined||res.destroyed)return;const report=reportSnapshot(begun),rows:ReportRow[]=[];
  for(let offset=0;offset<report.total;offset+=500){const raw=await rpc(res,'finance_report_chunk',{p_office_id:b.office_id,p_report_id:report.id,p_offset:offset});if(raw===undefined||res.destroyed)return;const chunk=reportChunk(raw);if(chunk.offset!==offset||chunk.total!==report.total)throw Error('Incomplete financial report');rows.push(...chunk.items);}
- if(res.destroyed)return;const output=b.format==='csv'?financialCsv(report,rows):await financialPdf(report,rows);if(res.destroyed)return;
+ if(res.destroyed)return;const {financialCsv,financialPdf,FinancialExportLimit}=await import('./export.js');ExportLimit=FinancialExportLimit;
+ const output=b.format==='csv'?financialCsv(report,rows):await financialPdf(report,rows);if(res.destroyed)return;
  const authorized=await rpc(res,'finance_report_authorize',{p_office_id:b.office_id,p_report_id:report.id,p_format:b.format,p_download_key:randomUUID()});if(authorized===undefined||res.destroyed)return;if(!record(authorized)||authorized.authorized!==true)throw Error('Report unauthorized');
  res.setHeader('Content-Type',b.format==='csv'?'text/csv; charset=utf-8':'application/pdf');res.setHeader('Content-Disposition',`attachment; filename="financeiro-${report.id}.${b.format}"`);res.setHeader('X-Finance-Protocol',report.protocol);res.setHeader('X-Finance-Count',String(report.total));res.setHeader('X-Finance-SHA256',createHash('sha256').update(output).digest('hex'));res.send(output);
- }catch(cause){if(!res.headersSent&&!res.destroyed)errorResponse(res,cause instanceof FinancialExportLimit?422:503,cause instanceof FinancialExportLimit?'FINANCE19_LIMIT':'FINANCE19_UNAVAILABLE',cause instanceof FinancialExportLimit?'O arquivo excede 3MB. Refine os filtros; nenhum arquivo parcial foi entregue.':'Não foi possível gerar o relatório completo. Tente novamente.');}
+ }catch(cause){const limited=ExportLimit!==undefined&&cause instanceof ExportLimit;if(!res.headersSent&&!res.destroyed)errorResponse(res,limited?422:503,limited?'FINANCE19_LIMIT':'FINANCE19_UNAVAILABLE',limited?'O arquivo excede 3MB. Refine os filtros; nenhum arquivo parcial foi entregue.':'Não foi possível gerar o relatório completo. Tente novamente.');}
 });

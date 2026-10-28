@@ -66,18 +66,18 @@ for (const profile of profiles) {
     expect(await hasSession(page)).toBe(false);
   });
 
-  test(`login verifica contexto uma vez e revalida novamente no foco/reload: ${profile.name}`, async ({ page }) => {
+  test(`login verifica RPC uma vez e API revalida no foco/reload: ${profile.name}`, async ({ page }) => {
     let calls = 0;
     page.on('request', request => { if (new URL(request.url()).pathname === '/api/auth/context') calls++; });
     await login(page, profile);
-    expect(calls).toBe(1);
+    expect(calls).toBe(0);
     const focused = page.waitForResponse(response => new URL(response.url()).pathname === '/api/auth/context');
     await page.evaluate(() => window.dispatchEvent(new Event('focus')));
     await focused;
-    expect(calls).toBe(2);
+    expect(calls).toBe(1);
     await page.reload();
     await expect(page.locator('.operation-role')).toHaveText(profile.role);
-    expect(calls).toBe(3);
+    expect(calls).toBe(2);
   });
 }
 

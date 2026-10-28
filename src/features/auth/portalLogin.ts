@@ -1,4 +1,4 @@
-import { isAccessResponse, uuidPattern } from '../../../shared/access';
+import { projectAccessContexts, uuidPattern } from '../../../shared/access';
 import { paths } from '../../app/routes';
 import { createPortalClient, onBrowserSessionEnded, supabase } from './browser';
 import { guardAdoption } from './sessionStorage';
@@ -36,15 +36,16 @@ export async function portalLogin(email: string, password: string, team: boolean
       let allowed = false;
       let denied = false;
       try {
-        const response = await fetch(`/api/auth/context?area=${team ? 'team' : 'client'}`, {
-          headers: { Authorization: `Bearer ${data.session.access_token}` }, cache: 'no-store',
-          signal: AbortSignal.any([current, AbortSignal.timeout(12_000)]),
-        });
-        denied = response.status === 403;
-        const body: unknown = response.ok ? await response.json() : null;
-        allowed = isAccessResponse(body) && body.data.user.id === data.session.user.id
-          && body.data.contexts.every(context => team ? context.role_code !== 'client' : context.role_code === 'client');
-        if (allowed) cancelHandoff = rememberVerifiedPortal(data.session, team ? 'team' : 'client', body);
+        // This isolated SDK owns the provider session from signInWithPassword.
+        // PostgREST verifies its JWT; RLS checks the live session and authority.
+        // Main-session adoption still performs the official SDK getUser below.
+        const { data: rows, error: contextError } = await attempt.rpc('my_access_context')
+          .abortSignal(AbortSignal.any([current, AbortSignal.timeout(12_000)]));
+        current.throwIfAborted();
+        const contexts = contextError ? null : projectAccessContexts(rows, data.session.user.id, team ? 'team' : 'client');
+        denied = contexts !== null && contexts.length === 0;
+        allowed = contexts !== null && contexts.length > 0;
+        if (allowed) cancelHandoff = rememberVerifiedPortal(data.session, team ? 'team' : 'client', { data: { user: { id: data.session.user.id }, contexts } });
       } catch { current.throwIfAborted(); }
       if (!allowed) throw new PortalAccessError(denied ? 'Este portal não está disponível para esta conta. Use o portal correto.' : 'Não foi possível verificar seu acesso. Tente novamente em instantes.');
     }
