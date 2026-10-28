@@ -1,0 +1,51 @@
+{
+  "canonical": "https://escritoriojn.vercel.app",
+  "scope": "ajuste pós21 — acesso, concorrência e64 minutas para revisão",
+  "base": "f5913865beef8fabee21ca54e5f6501ca81b551a",
+  "github_actions_used": false,
+  "vercel_publication": "GitHub integration only",
+  "releases": [
+    {
+      "pr": 64,
+      "feature": "61feeacb1c976aae4e529640f075e47099dcfda5",
+      "merge": "92c35a46174063ec7e06785feedf4ac220ca5ffe",
+      "tree": "c7a0f712606c64f4cb088160648e8cf3e617fd44",
+      "vercel_status": "success",
+      "vercel_url": "https://vercel.com/escritorio-jn/escritoriojn/2BmDArqDKKugjNyoSpGCvVEmDQPN"
+    },
+    {
+      "pr": 65,
+      "feature": "7b5f884de92a201a5051c418357aaa51bac9c5ef",
+      "merge": "9b8ec8b2aa924ae3e233d511d6cd9542ce1ccc0f",
+      "tree": "f7f31944d53ea4ccd0620d62e24b8a80955def5b",
+      "vercel_status": "success",
+      "vercel_url": "https://vercel.com/escritorio-jn/escritoriojn/9zUku9UJv9VMoSph2oaQRVv37Ck4"
+    },
+    {
+      "pr": 66,
+      "feature": "9e743f6f94d12517ad3e1ef8190b4b980486b69b",
+      "merge": "094ad740e5a6c826f685fdfab7f8a500a5b4129b",
+      "tree": "a8022447fc7fed5cd1fac8cdadda2452ce5e2d4c",
+      "vercel_status": "success",
+      "vercel_url": "https://vercel.com/escritorio-jn/escritoriojn/GQg34KV49yQNQNiptaJp6b5SiciQ"
+    }
+  ],
+  "migrations_automatic": [
+    "20261027162946",
+    "20261027172917"
+  ],
+  "manual_apply": false,
+  "catalog": {
+    "models": 64,
+    "versions": 64,
+    "batches": 1,
+    "approvals": 0,
+    "documents_created": 0,
+    "operator_events": 64,
+    "exact_replay": true,
+    "definitions_equal": true
+  },
+  "hosted_personal_auth_used": false,
+  "hosted_test_fixtures": false,
+  "old_accounts_permissions_preserved": true
+}

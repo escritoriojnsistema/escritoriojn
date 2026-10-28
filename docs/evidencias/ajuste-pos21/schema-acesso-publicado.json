@@ -1,0 +1,24 @@
+{
+  "project": "mcsuoxnubpqenyvbefee",
+  "migration": "20261027162946",
+  "history_count": 30,
+  "statements": 1,
+  "sql_matches_file": true,
+  "migration_sha256": "d6f5b9aa983ddfaa9e7003f705644a614f23e9ccfa7f1c78e9ce8ab559022ad9",
+  "functions_changed": [
+    "private.document_options"
+  ],
+  "historical_functions_preserved": 388,
+  "counts": {
+    "audit": 32,
+    "users": 5,
+    "members": 5,
+    "requests": 1,
+    "customers": 1,
+    "documents": 0,
+    "templates": 0,
+    "template_versions": 0
+  },
+  "counts_preserved": true,
+  "automatic_application_after_github_merge": true
+}

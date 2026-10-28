@@ -1,0 +1,53 @@
+{
+  "node_api": {
+    "passed": 228,
+    "failed": 0
+  },
+  "sql": {
+    "PASS_lines": 389,
+    "empty_replays": 2,
+    "catalog_models_per_replay": 64,
+    "catalog_fields": 1938,
+    "limited_migrator": true,
+    "options_concurrent_calls_per_replay": 16,
+    "no_deadlocks": true,
+    "local_page1001_ms": 18.888
+  },
+  "auth_real_local": {
+    "compatibility_and_sessions": 41,
+    "templates_documents_including_import": 4,
+    "total_distinct": 45,
+    "hosted_personal_accounts_used": false
+  },
+  "ui": {
+    "final_tax_id_tests": 10,
+    "affected_unit_api": 26,
+    "regressions20_21_passed": true,
+    "widths": [
+      320,
+      360,
+      768,
+      1440
+    ],
+    "timeout1920_passed_isolated": true
+  },
+  "public_canonical": {
+    "passed": 12,
+    "failed": 0
+  },
+  "build": "passed",
+  "typecheck": "passed",
+  "production_dependency_vulnerabilities": 0,
+  "assets_equal": 8,
+  "new_advisor_WARN_ERROR": 0,
+  "new_unindexed_FKs": 0,
+  "review": "no P0/P1/P2 pending",
+  "old_PDF_and_Actions_files_changed": false,
+  "limits": [
+    "APIs ausentes simuladas em Chromium; aparelhos físicos não exercitados.",
+    "Auth autenticado hospedado não exercitado; laboratório usa provedores reais descartáveis.",
+    "Tempos locais não estimam latência de rede/produção.",
+    "Preview protegido pela Vercel não foi autenticado; runtime local e assets canônicos verificados.",
+    "Minutas exigem revisão humana específica do caso; não aprovadas."
+  ]
+}

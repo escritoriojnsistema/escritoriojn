@@ -1,0 +1,15 @@
+{
+  "models": 64,
+  "fields": 1938,
+  "characters": 249315,
+  "max_characters": 8025,
+  "max_fields": 60,
+  "payload_bytes": 599619,
+  "payload_sha256": "aa728c0b65f3b6cb1ed0445a27cb2ad7fb721d438a27e3f80e3e8bab29342bcb",
+  "manifest_sha256": "2a8de546d260b99c5b408fef87409f78f03f03716e8cbec4ccf81a5030815e10",
+  "all_status": "rascunho_para_revisao",
+  "originals_preserved": true,
+  "private_source_ids_not_in_repository": true,
+  "approval_automatic": false,
+  "raw_source_files_committed": false
+}
