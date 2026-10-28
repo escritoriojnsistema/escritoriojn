@@ -1,0 +1,911 @@
+[
+  {
+    "code": "DRIVE-001",
+    "name": "Manifestação de vontade para esterilização",
+    "kind": "declaration",
+    "characters": 3204,
+    "variables": 14,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "4c53b9184863d93f6723c9460cc5813e58f72376244408505fcb6d62aeb2660f",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-002",
+    "name": "Arrendamento de pastagem",
+    "kind": "contract",
+    "characters": 6674,
+    "variables": 37,
+    "types": [
+      "cpf",
+      "date",
+      "number",
+      "text"
+    ],
+    "definition_sha256": "e375a14e780cef79df2c90c0d67a16a9b64b27663399cdfda33009c11d2cbc4b",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-003",
+    "name": "Autorização de uso de marca de rebanho",
+    "kind": "declaration",
+    "characters": 3521,
+    "variables": 28,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "020cf5c1be2b94c833918c0148d32471e6e015cb1ab3dbdcc4bb527b061527a9",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-004",
+    "name": "Pedido de autorização para construção de jazigo",
+    "kind": "application",
+    "characters": 2947,
+    "variables": 21,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "99fcd0b796e7f13c7d4ac3d8907eb02b8cbb2b0a06edff79d1320e652f2fd516",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-005",
+    "name": "Autorização de viagem de criança ou adolescente",
+    "kind": "declaration",
+    "characters": 3202,
+    "variables": 30,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "76ed98bb39e89716437dd99efcc72ad370a5eacb447913c8a5efba409d355c46",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-006",
+    "name": "Compra e venda de bovinos",
+    "kind": "contract",
+    "characters": 4826,
+    "variables": 36,
+    "types": [
+      "cpf",
+      "date",
+      "money",
+      "number",
+      "text"
+    ],
+    "definition_sha256": "b610cd1f301a475b3fa2ae2d8eb31b9ce3ab7d866e43f3864ab52063332ac0c5",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-007",
+    "name": "Parceria pecuária",
+    "kind": "contract",
+    "characters": 6208,
+    "variables": 41,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "d989533d4180e5aa7ee4fde03f66a6ad16cafa871137eec5923a0e2fe618fcf9",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-008",
+    "name": "Compra e venda de imóvel rural",
+    "kind": "contract",
+    "characters": 6529,
+    "variables": 46,
+    "types": [
+      "cpf",
+      "date",
+      "money",
+      "text"
+    ],
+    "definition_sha256": "3643b534afe79e5bed6204da29d3f821f624efb82fb21666fb1b05b9efc6c7fe",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-009",
+    "name": "Compra e venda de imóvel urbano",
+    "kind": "contract",
+    "characters": 5997,
+    "variables": 50,
+    "types": [
+      "cpf",
+      "date",
+      "money",
+      "text"
+    ],
+    "definition_sha256": "5d3211127f96738a11eb9672dafd41addfa5302fd60b666ec341fb78331c46c6",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-010",
+    "name": "Locação de imóvel",
+    "kind": "contract",
+    "characters": 5764,
+    "variables": 38,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "6d20b4f4408ab270a9b6c30d75a04de16f8f8d4be853c4f8b8d18e5eb1a678e8",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-011",
+    "name": "Mútuo de bovinos ou arrobas",
+    "kind": "contract",
+    "characters": 5218,
+    "variables": 38,
+    "types": [
+      "cpf",
+      "date",
+      "number",
+      "text"
+    ],
+    "definition_sha256": "1244acabf29bdc2ee032b96704a5ac2bb240589ad6f910d885a0030a141b39e0",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-012",
+    "name": "Doação de direitos sobre imóvel rural",
+    "kind": "contract",
+    "characters": 8025,
+    "variables": 60,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "cce1e6c9e138e2a6cf71375c1dac0ea08c2b6379e877384022e5b4a59f260c1a",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-013",
+    "name": "Currículo profissional",
+    "kind": "declaration",
+    "characters": 1960,
+    "variables": 25,
+    "types": [
+      "date",
+      "text"
+    ],
+    "definition_sha256": "7f8e1f070f471803686029c668b362a32c2f025c48724a60613eedd461da543c",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-014",
+    "name": "Declaração de amizade para visita",
+    "kind": "declaration",
+    "characters": 2457,
+    "variables": 17,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "7ec3f344e072b8ff56c26586a6eee72b05724432c0b237da40fb31b280c8ff52",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-015",
+    "name": "Compra e venda de veículo",
+    "kind": "contract",
+    "characters": 5175,
+    "variables": 41,
+    "types": [
+      "cpf",
+      "date",
+      "money",
+      "text"
+    ],
+    "definition_sha256": "e6218d86ae2c798e385e53ee186343a53e9fa015d9b4bcfc803c68798e0fa26d",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-016",
+    "name": "Autorização para atos administrativos delimitados",
+    "kind": "declaration",
+    "characters": 4491,
+    "variables": 29,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "90afb63408daaaefdf511247efeadf6d9714a8894247ff04519c73840c1cfe16",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-017",
+    "name": "Declaração de tentativa de contato",
+    "kind": "declaration",
+    "characters": 2551,
+    "variables": 19,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "a32634ebc78f4224d2d36f8155c9438115454ba6e12d64f1598df7e245d4cef2",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-018",
+    "name": "Declaração de residência de terceiro",
+    "kind": "declaration",
+    "characters": 2466,
+    "variables": 22,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "05bf63699f2d7b257f5565d68425119ffd05aacd12314197b4fd2809b6a25ed3",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-019",
+    "name": "Declaração de rendimentos",
+    "kind": "declaration",
+    "characters": 2465,
+    "variables": 23,
+    "types": [
+      "cpf",
+      "date",
+      "number",
+      "text"
+    ],
+    "definition_sha256": "097f7da51357279851c04c614f0472aa5d4f7e42e7e7f14b2bfccae030b75a6b",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-020",
+    "name": "Declaração sobre histórico de demissão",
+    "kind": "declaration",
+    "characters": 1898,
+    "variables": 15,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "9b05a13752720483c1a1826e77d98b7d3df2e751f2ca7587f180e6abaa315731",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-021",
+    "name": "Requerimento de averbação de pacto antenupcial",
+    "kind": "application",
+    "characters": 2947,
+    "variables": 24,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "16d9e4b034d86c821ff8ae03ff7b44a8290f356ae4206671724dc2a04d98eb98",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-022",
+    "name": "Termo de desistência ou cessão de direitos possessórios",
+    "kind": "contract",
+    "characters": 5051,
+    "variables": 34,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "5cebe19001561cf23839b16beb8ea847eb66a1856e6f82687f26e1e455c1cc57",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-023",
+    "name": "Recibo de pagamento",
+    "kind": "declaration",
+    "characters": 3345,
+    "variables": 37,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "7c77aa90762dfa9c3c6c463b4499030642d39a7db4027a780b4a5043ab5dc126",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-024",
+    "name": "Requerimento de regularização municipal",
+    "kind": "application",
+    "characters": 3690,
+    "variables": 30,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "dc1f627904df98f2fff6bfe9973f60896acaa9da3b02d9694c9bd43fcf661c1b",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-025",
+    "name": "Requerimento de inclusão de documentos em matrícula",
+    "kind": "application",
+    "characters": 2969,
+    "variables": 25,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "989a24d9fb555ed0b668915de255ac246cd7a8e3f53177029c04bdd6e9b9e945",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-026",
+    "name": "Errata de documento",
+    "kind": "declaration",
+    "characters": 4374,
+    "variables": 31,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "b27a6f6cc75d299db4c782ce0f75d2d8160425d7df2040a86ba0cfded4e99e48",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-027",
+    "name": "Solicitação de aumento de carga elétrica",
+    "kind": "application",
+    "characters": 3358,
+    "variables": 21,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "d20a2d71cf8dd2bb5f92e3ecaa8ea2c64060ca4164005c6c6647148e96e611d2",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-028",
+    "name": "Requerimento de cancelamento de hipoteca",
+    "kind": "application",
+    "characters": 3101,
+    "variables": 25,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "b780e2b35602b02cc61364b6fde6799332fb9a77c92bc012713e379f02eadd63",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-029",
+    "name": "Confissão de dívida e promessa de pagamento",
+    "kind": "contract",
+    "characters": 5022,
+    "variables": 42,
+    "types": [
+      "cpf",
+      "date",
+      "money",
+      "text"
+    ],
+    "definition_sha256": "e074be523dc3463d73759e1bc8b65f969de03efdb3f0807d605eb17c01072083",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-030",
+    "name": "Distrato de compra e venda de imóvel rural",
+    "kind": "contract",
+    "characters": 5546,
+    "variables": 38,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "83eb78e40f0bf6b265ea8c60d47d5532bee8809dd26f38d8fcb14a3c743c26ba",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-031",
+    "name": "Distrato de arrendamento de pastagem",
+    "kind": "contract",
+    "characters": 4330,
+    "variables": 35,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "e85c395e0818d51d32c79cf7eb74469d7ece5119ed05a18d10d876e8112c970b",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-032",
+    "name": "Declaração de erro em documento de transferência de veículo",
+    "kind": "declaration",
+    "characters": 3401,
+    "variables": 31,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "0bcabbbf339806fa13e9c3522c6aa244164880675d2373f1397a6bb8140e1a54",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-033",
+    "name": "Declaração de renda para destinatário",
+    "kind": "declaration",
+    "characters": 2484,
+    "variables": 18,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "c9a695df82a269ce5059763c04b5334056cd41dab36120526e6ebf16e5079cd3",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-034",
+    "name": "Requerimento de análise de prescrição de IPTU",
+    "kind": "application",
+    "characters": 3620,
+    "variables": 24,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "d89d791265c345ec9d464b84d7151424abdff33844cf55030b4acc4c589c3bc2",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-035",
+    "name": "Doação de direitos sobre imóvel urbano",
+    "kind": "contract",
+    "characters": 5906,
+    "variables": 42,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "1408505cc819dfc763b6e75c0a6aadf33ac6aa997f4d5ea22934ad146a5d1ede",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-036",
+    "name": "Declaração de posse e uso de imóvel rural",
+    "kind": "declaration",
+    "characters": 3216,
+    "variables": 27,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "cbb8a44f69a644d5edbf6ab20ea8a5cd32de72c7e01567ebeaeb388de3279be5",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-037",
+    "name": "Declaração testemunhal sobre imóvel",
+    "kind": "declaration",
+    "characters": 3612,
+    "variables": 34,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "6f844e0ed1180acfecf91ad3169cebce98dcb0f09f2a22994b1f1087b89dc886",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-038",
+    "name": "Declaração de união estável",
+    "kind": "declaration",
+    "characters": 3095,
+    "variables": 23,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "9d564dee57ec8ff27606f55f4cb30f3139b12718cfb61bd1a69e4d7742ea2557",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-039",
+    "name": "Declaração de responsabilidade por unidade consumidora",
+    "kind": "declaration",
+    "characters": 3208,
+    "variables": 26,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "7c205eddf1471772a3bb917b96ef83aa1182684fc64e186a749f2e3c452e1095",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-040",
+    "name": "Consentimento informado para laqueadura tubária",
+    "kind": "declaration",
+    "characters": 5216,
+    "variables": 25,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "c02d0e53d5f810960cc913e2b4aed18891fff5b13bb6ebb1c09695dc8f4f8bd2",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-041",
+    "name": "Pedido de transferência ou religação de energia",
+    "kind": "application",
+    "characters": 3289,
+    "variables": 28,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "008538657f4f57858d2389e1c2c3b90e38eaa55d84461035219d5e9a690a2fa4",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-042",
+    "name": "Ofício de comunicação de evento — Delegacia de Polícia Civil",
+    "kind": "official_letter",
+    "characters": 4318,
+    "variables": 26,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "14c846db770848e1a9b586b3043aa8ca2f586fe10f0ccdd499acd5efafef56d7",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-043",
+    "name": "Ofício de comunicação de evento — Corpo de Bombeiros",
+    "kind": "official_letter",
+    "characters": 4407,
+    "variables": 26,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "9ad4962aa08d9434ffe1b94610cc94b7914c2d3c19aa6b1f973d7a7f3d938a7f",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-044",
+    "name": "Ofício de comunicação de evento — Polícia Militar",
+    "kind": "official_letter",
+    "characters": 4489,
+    "variables": 27,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "54021a0a990764f4651de16de4d0bd597044deb2898782c5f160e7767b79d426",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-045",
+    "name": "Ofício de comunicação de evento — Conselho Tutelar",
+    "kind": "official_letter",
+    "characters": 4494,
+    "variables": 26,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "b0435c0326be460e359ae99f825d7f838290ed22ec53c445d74c8231dc085667",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-046",
+    "name": "Comodato de imóvel rural",
+    "kind": "contract",
+    "characters": 5667,
+    "variables": 34,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "2fd0c65431ef8fa4f2ebbd7fd643d12f74febe7480694d3ae12438e78bc00863",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-047",
+    "name": "Declaração de residência própria",
+    "kind": "declaration",
+    "characters": 2213,
+    "variables": 19,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "b54b5dcf0fe116c17cc2c8f104792780c4a76514b9bb26499e0341fa9c7eb0ee",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-048",
+    "name": "Carta de anuência e quitação de cheque",
+    "kind": "declaration",
+    "characters": 3606,
+    "variables": 33,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "3cdd14fec390cd7518b41eee8bf52a2bcad4f1123c43dfe68359dc9b4bbd0857",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-049",
+    "name": "Compra e venda de equipamento",
+    "kind": "contract",
+    "characters": 5658,
+    "variables": 44,
+    "types": [
+      "cpf",
+      "date",
+      "money",
+      "text"
+    ],
+    "definition_sha256": "3ebdad61d9412da1562ff4741592e7efab7a9b0c3f5af1bf44bbe61cb7b4c5ff",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-050",
+    "name": "Locação de imóvel comercial por empresa",
+    "kind": "contract",
+    "characters": 7541,
+    "variables": 51,
+    "types": [
+      "cnpj",
+      "cpf",
+      "date",
+      "money",
+      "text"
+    ],
+    "definition_sha256": "a06acfd12cfcb06e293a7c6544654938f40ba7aecc2bccbc169c4706e0ef6d51",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-051",
+    "name": "Ofício de comunicação de evento — SAMU",
+    "kind": "official_letter",
+    "characters": 4535,
+    "variables": 27,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "c85cce239a7f7fec170e43b3f01cb4d7cf66da5ddc6aea0a47b17e00c9a5ae49",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-052",
+    "name": "Requerimento de atualização de e-mail no Cadastro Ambiental Rural",
+    "kind": "application",
+    "characters": 1853,
+    "variables": 21,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "2ba51bbceca0f21c3673f2afcca122f6cdb39be72874fcde35d1311e37a4842b",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-053",
+    "name": "Comodato de área em imóvel urbano para moradia",
+    "kind": "contract",
+    "characters": 4444,
+    "variables": 40,
+    "types": [
+      "cpf",
+      "date",
+      "tax_id",
+      "text"
+    ],
+    "definition_sha256": "0220e7dd3394fd3eced46fb9707fe3af0ae071da386d79ebb8f8fea9155190bf",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-054",
+    "name": "Requerimento de certidão de imagem de protesto",
+    "kind": "application",
+    "characters": 1820,
+    "variables": 20,
+    "types": [
+      "date",
+      "tax_id",
+      "text"
+    ],
+    "definition_sha256": "9e2ddf9f87fd5c109fe0aad12366924c8630f692ad62adc2a529737b6eac7b64",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-055",
+    "name": "Contrato de prestação de serviços rurais",
+    "kind": "contract",
+    "characters": 4682,
+    "variables": 41,
+    "types": [
+      "date",
+      "tax_id",
+      "text"
+    ],
+    "definition_sha256": "4768d2e3823db1e3da46c8885f059c22fb80ed38b043527c6d7448e49808ae87",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-056",
+    "name": "Autorização para participação de criança ou adolescente em atividades esportivas",
+    "kind": "declaration",
+    "characters": 3650,
+    "variables": 33,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "c3de9f03e0af29ef82be9bffea54ddba57c572a444b1e0d15dc73427196782d5",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-057",
+    "name": "Requerimento de cópia de termo de posse e certidão de tempo de serviço",
+    "kind": "application",
+    "characters": 2159,
+    "variables": 25,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "41e7cdc2895ef245923cbfc7843f476590b1a62e81b450c51446eb9227bedddf",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-058",
+    "name": "Requerimento de levantamento topográfico de imóvel urbano",
+    "kind": "application",
+    "characters": 2235,
+    "variables": 29,
+    "types": [
+      "date",
+      "tax_id",
+      "text"
+    ],
+    "definition_sha256": "7b908a91d3769a9539933ab0529914bd510895d57b8d00e8045d186d3f37f92b",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-059",
+    "name": "Requerimento de desmembramento e abertura de matrículas",
+    "kind": "application",
+    "characters": 2833,
+    "variables": 30,
+    "types": [
+      "date",
+      "tax_id",
+      "text"
+    ],
+    "definition_sha256": "bbe55d0043ad90337035443f0d19b45189ccc372534ae3b50f26e43e6718c106",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-060",
+    "name": "Requerimento de revisão de débitos de IPTU por fatos alegados",
+    "kind": "application",
+    "characters": 2454,
+    "variables": 25,
+    "types": [
+      "date",
+      "tax_id",
+      "text"
+    ],
+    "definition_sha256": "a3d2e2f1d467a6470e1240ba94d87d41630249bedec9ffbadf5a508389c35ec0",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-061",
+    "name": "Requerimento de anuência para cancelamento de protesto de IPTU",
+    "kind": "application",
+    "characters": 2347,
+    "variables": 24,
+    "types": [
+      "date",
+      "tax_id",
+      "text"
+    ],
+    "definition_sha256": "570b8beaca06b82751ee7eb1e000e369e460596693ec90c7ef361fc6b68178f6",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-062",
+    "name": "Solicitação de alteração de conta para recebimento de repasses",
+    "kind": "application",
+    "characters": 2012,
+    "variables": 23,
+    "types": [
+      "cpf",
+      "date",
+      "tax_id",
+      "text"
+    ],
+    "definition_sha256": "4df92c10a6f315b5de7a73d618f0e65a8673c4f69fd4b3ec9e6f96fb5b2e391e",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-063",
+    "name": "Declaração de responsabilidade delimitada por imóvel urbano",
+    "kind": "declaration",
+    "characters": 2954,
+    "variables": 33,
+    "types": [
+      "cpf",
+      "date",
+      "text"
+    ],
+    "definition_sha256": "5d3047749bda7ec088af2db4ddd3aaba6950d8d386c1f5ac2ee59e0193e88e3a",
+    "status": "rascunho_para_revisao"
+  },
+  {
+    "code": "DRIVE-064",
+    "name": "Requerimento de transferência cadastral e autorização para escritura de imóvel urbano",
+    "kind": "application",
+    "characters": 2586,
+    "variables": 31,
+    "types": [
+      "date",
+      "tax_id",
+      "text"
+    ],
+    "definition_sha256": "bc2800a6ce850d64c3fd04583577da9c2084c6799047792b97ecccfdb19d8b6a",
+    "status": "rascunho_para_revisao"
+  }
+]

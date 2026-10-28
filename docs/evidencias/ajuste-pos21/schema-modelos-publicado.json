@@ -1,0 +1,66 @@
+{
+  "history_count": 31,
+  "migration": "20261027172917",
+  "migration_sha256": "5b79e42e83fa4eeedc11a993f23efbda5cf067e57b75d97572ce1778bf514a01",
+  "statements": 25,
+  "all_statements_equal": true,
+  "bodies_equal": 6,
+  "historical_functions_preserved": 385,
+  "functions_intentionally_modified": [
+    "private.documents_input21",
+    "private.documents_resolve21",
+    "private.template_version20",
+    "private.templates_validate20"
+  ],
+  "new_functions": [
+    "private.import_template_drafts",
+    "private.templates_origin21"
+  ],
+  "private_invoker_closed_ACL": true,
+  "tables": [
+    {
+      "rls": true,
+      "name": "template_versions",
+      "schema": "public",
+      "policies": 0,
+      "anon_access": false,
+      "service_role_access": false,
+      "authenticated_access": false
+    },
+    {
+      "rls": true,
+      "name": "templates",
+      "schema": "public",
+      "policies": 0,
+      "anon_access": false,
+      "service_role_access": false,
+      "authenticated_access": false
+    },
+    {
+      "rls": true,
+      "name": "template_import_batches",
+      "schema": "private",
+      "policies": 0,
+      "anon_access": false,
+      "service_role_access": false,
+      "authenticated_access": false
+    }
+  ],
+  "origin_constraints": 4,
+  "import_FK_indices": 2,
+  "counts_before_import": {
+    "audit": 32,
+    "users": 5,
+    "members": 5,
+    "requests": 1,
+    "customers": 1,
+    "documents": 0,
+    "templates": 0,
+    "individual_grants": 17,
+    "template_versions": 0,
+    "template_approvals": 0,
+    "template_import_batches": 0
+  },
+  "old_counts_preserved": true,
+  "automatic_application_after_github_merge": true
+}

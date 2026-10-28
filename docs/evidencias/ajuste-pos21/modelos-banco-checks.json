@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-27",
+  "scope": "local disposable PostgreSQL17 only",
+  "exit_code": 0,
+  "replays": 2,
+  "total_PASS_lines": 389,
+  "catalog_checks": 10,
+  "catalog_models": 64,
+  "catalog_fields": 1938,
+  "catalog_sha256": "aa728c0b65f3b6cb1ed0445a27cb2ad7fb721d438a27e3f80e3e8bab29342bcb",
+  "catalog_bytes": 599619,
+  "catalog_each_authorized_DTO_verified": true,
+  "catalog_no_approvals_documents_PDFs": true,
+  "catalog_rollback_verified": true,
+  "page_benchmark_ms": [
+    18.888
+  ],
+  "limited_role": "migrator NOSUPERUSER NOBYPASSRLS",
+  "hosted_writes_by_tests": 0,
+  "file_sha256": {
+    "supabase/migrations/20261027172917_templates21_manual_import.sql": "5b79e42e83fa4eeedc11a993f23efbda5cf067e57b75d97572ce1778bf514a01",
+    "tests/database/templates21-manual-import.sql": "e0073267694ca7dd3ced5d996723ed16614415a39978bc331cc651edbc12a5c4",
+    "scripts/database-templates21-manual-import.mjs": "beba0edfed7506f3be9936aba7a727a577f85f5d78abcc13948363711ad9b5a9",
+    "scripts/test-database.mjs": "79b029a58ea5fd6b8a9a6ebb12688e89cc274149f66cb515a9c716bc66261eae"
+  }
+}

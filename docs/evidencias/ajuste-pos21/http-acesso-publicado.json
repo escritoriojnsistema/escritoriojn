@@ -1,0 +1,27 @@
+[
+  {
+    "path": "/api/health",
+    "status": 200,
+    "elapsed_ms": 337.1
+  },
+  {
+    "path": "/api/auth/context?area=team",
+    "status": 401,
+    "elapsed_ms": 468.0
+  },
+  {
+    "path": "/login",
+    "status": 200,
+    "elapsed_ms": 195.5
+  },
+  {
+    "path": "/login-cliente",
+    "status": 200,
+    "elapsed_ms": 200.4
+  },
+  {
+    "path": "/documentos",
+    "status": 200,
+    "elapsed_ms": 230.9
+  }
+]

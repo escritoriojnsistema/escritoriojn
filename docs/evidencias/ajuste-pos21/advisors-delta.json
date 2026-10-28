@@ -1,0 +1,81 @@
+{
+  "security": {
+    "before": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "count": 73
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "level": "WARN",
+        "count": 1
+      }
+    ],
+    "after": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "count": 74
+      },
+      {
+        "name": "auth_leaked_password_protection",
+        "level": "WARN",
+        "count": 1
+      }
+    ],
+    "new_findings": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "metadata": {
+          "name": "template_import_batches",
+          "type": "table",
+          "schema": "private"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      }
+    ]
+  },
+  "performance": {
+    "before": [
+      {
+        "name": "unindexed_foreign_keys",
+        "level": "INFO",
+        "count": 16
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "count": 122
+      }
+    ],
+    "after": [
+      {
+        "name": "unindexed_foreign_keys",
+        "level": "INFO",
+        "count": 16
+      },
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "count": 122
+      }
+    ],
+    "new_findings": [
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "metadata": {
+          "name": "templates",
+          "type": "table",
+          "schema": "public"
+        },
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      }
+    ]
+  },
+  "new_WARN_ERROR": 0,
+  "new_unindexed_foreign_keys": 0,
+  "interpretation": "RLS sem policies da tabela privada de lotes é intencional com ACL fechada; novos índices sem uso podem aparecer como INFO. Avisos/FKs anteriores não foram atribuídos ao ajuste."
+}

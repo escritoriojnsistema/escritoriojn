@@ -1,0 +1,23 @@
+{
+  "count": 64,
+  "counts": {
+    "audit": 96,
+    "users": 5,
+    "members": 5,
+    "requests": 1,
+    "customers": 1,
+    "documents": 0,
+    "templates": 64,
+    "audit_reports": 2,
+    "individual_grants": 17,
+    "template_versions": 64,
+    "template_approvals": 0,
+    "template_import_batches": 1
+  },
+  "batch_id": "3f5a0a92-fbe2-4af5-918b-c757777d01d7",
+  "replay_exact": true,
+  "version_rows": 64,
+  "approval_rows": 0,
+  "operator_events": 64,
+  "definitions_equal": true
+}
