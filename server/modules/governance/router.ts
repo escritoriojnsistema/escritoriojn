@@ -9,7 +9,6 @@ import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 import { authenticatedClient } from '../auth/client.js';
 import { errorResponse } from '../../errors.js';
 import { fields, record, uuid } from '../team/validation.js';
-import { createAuditPdf } from './auditPdf.js';
 import { reportInputV1 } from './reportV1.js';
 import { reportInputV2 } from './reportV2.js';
 import { auditReportMaxBytes, auditReportMaxEvents, type AuditEvent, type AuditReport } from '../../../shared/governance.js';
@@ -59,6 +58,7 @@ async function pdf(res:Response,source:Record<string,unknown>):Promise<Buffer|nu
     events.push(...chunk.items as AuditEvent[]);
   }
   if(res.destroyed)return null;
+  const {createAuditPdf}=await import('./auditPdf.js');
   const output=Buffer.from(await createAuditPdf((report.renderer_version===8?reportInputV8:report.renderer_version===7?reportInputV7:report.renderer_version===6?reportInputV6:report.renderer_version===5?reportInputV5:report.renderer_version===4?reportInputV4:report.renderer_version===3?reportInputV3:report.renderer_version===2?reportInputV2:reportInputV1)(report,events)));
   if(output.length>auditReportMaxBytes){errorResponse(res,422,'EXPORT_LIMIT',messages.EXPORT_LIMIT);return null;}
   if(output.subarray(0,5).toString()!=='%PDF-')throw new Error('Invalid PDF');

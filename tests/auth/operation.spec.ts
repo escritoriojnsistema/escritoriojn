@@ -156,7 +156,7 @@ test('cliente ignora convite na URL e permanece exclusivamente na própria área
 });
 
 test('falha na verificação do portal não persiste a sessão da tentativa', async ({ page }) => {
-  await page.route('**/api/auth/context?area=team', route => route.fulfill({ status: 503, json: { error: { code: 'AUTH_UNAVAILABLE' } } }));
+  await page.route(`${process.env.AUTH_LAB_URL}/rest/v1/rpc/my_access_context`, route => route.abort('failed'));
   await page.goto('/login');
   await page.getByLabel('E-mail', { exact: true }).fill('manager@example.test');
   await page.getByLabel('Senha', { exact: true }).fill(process.env.AUTH_LAB_PASSWORD!);

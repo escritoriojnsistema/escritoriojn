@@ -25,3 +25,14 @@ export function isAccessResponse(value: unknown): value is AccessResponse {
     && data.contexts.every(row=>isAccessContext(row) && row.user_id===data.user.id
       && row.permissions.includes('foundation.access'));
 }
+
+/** Project only the public fields after validating every row, before filtering. */
+export function projectAccessContexts(value: unknown, userId: string, area?: 'team' | 'client', officeId?: string): AccessContext[] | null {
+  if (!uuidPattern.test(userId) || !Array.isArray(value) || value.length > 100
+    || !value.every(row => isAccessContext(row) && row.user_id === userId)) return null;
+  return value.filter(row => row.permissions.includes('foundation.access')
+    && (!officeId || row.office_id === officeId)
+    && (!area || (area === 'client') === (row.role_code === 'client')))
+    .map(row => ({ office_id: row.office_id, user_id: row.user_id, role_code: row.role_code,
+      permissions: [...row.permissions], office_name: row.office_name, display_name: row.display_name }));
+}

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { createClient } from '@supabase/supabase-js';
-import { isAccessContext, uuidPattern, type AccessResponse } from '../../../shared/access.js';
+import { projectAccessContexts, uuidPattern, type AccessResponse } from '../../../shared/access.js';
 import { validPublicConnection } from '../../../shared/connection.js';
 import { errorResponse } from '../../errors.js';
 
@@ -44,13 +44,11 @@ authRouter.get('/context',async(req,res)=>{
       errorResponse(res,unavailable?503:401,unavailable?'AUTH_UNAVAILABLE':'AUTH_REQUIRED',
         unavailable?'Não foi possível verificar o acesso. Tente novamente.':'Entre novamente para continuar.');return;
     }
-    if (error || !Array.isArray(data) || data.length>100
-      || !data.every(row=>isAccessContext(row) && row.user_id===identity.user.id)) {
+    const contexts=error?null:projectAccessContexts(data,identity.user.id,
+      area==='team'||area==='client'?area:undefined,typeof office==='string'?office:undefined);
+    if (contexts===null) {
       errorResponse(res,503,'AUTH_UNAVAILABLE','Não foi possível verificar as permissões. Tente novamente.');return;
     }
-    const contexts=data.filter(row=>row.permissions.includes('foundation.access')
-      && (!office || row.office_id===office)
-      && (!area || (area==='client')===(row.role_code==='client')));
     if (!contexts.length) {
       errorResponse(res,403,'ACCESS_DENIED','Seu acesso a esta área não está liberado.');return;
     }
