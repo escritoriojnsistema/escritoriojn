@@ -1,12 +1,14 @@
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useMemo,useRef,useState} from 'react';
 import {Link,Navigate} from 'react-router-dom';
-import {ArrowLeft,ArrowRight,Eye,Plus,RefreshCw,Search} from 'lucide-react';
+import {ArrowLeft,ArrowRight,Eye,FolderPlus,FolderInput,PencilPlus,Plus,RefreshCw,Search,Trash2} from 'lucide-react';
 import type {AccessContext} from '../../../shared/access';
 import {templateKinds,type TemplateDetail as Detail,type TemplateInput,type TemplatePage} from '../../../shared/templates';
+import {templateFolderLevels,templateMoney,validFoldersPage,validSearchPage,type TemplateFolderLevel,type TemplateFoldersPage,type TemplateSearchPage} from '../../../shared/templateFolders';
 import {paths} from '../../app/routes';
 import {useAuth} from '../auth/AuthProvider';
 import {OperationHeading,OperationLayout} from '../operation/OperationLayout';
 import {OperationalFeedback} from '../operation/OperationalAccess';
+import {servicesApi} from '../services/api';
 import {templatesApi,templatesError,TemplatesError} from './api';
 import {TemplateForm} from './TemplateForm';
 import {TemplateDetail} from './TemplateDetail';
@@ -23,6 +25,18 @@ function Workspace({context,contexts,onOffice}:{context:AccessContext;contexts:A
  const [view,setView]=useState<'list'|'detail'|'create'|'edit'>('list'),[input,setInput]=useState(''),[query,setQuery]=useState(''),[page,setPage]=useState(1),[revision,setRevision]=useState(0);
  const media='(max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px)',[size,setSize]=useState(()=>matchMedia(media).matches?3:5);
  const [list,setList]=useState<TemplatePage>(),[detail,setDetail]=useState<Detail>(),[error,setError]=useState<TemplatesError>(),[busy,setBusy]=useState(false),[blocked,setBlocked]=useState(false),[feedback,setFeedback]=useState(''),[uncertain,setUncertain]=useState(false);
+ // Etapa22: organização por pastas, nível de atendimento e vínculo modelo↔serviço (preço do documento).
+ const canFolders=context.permissions.includes('templates.folders')&&['owner','admin'].includes(context.role_code);
+ const [showFolders,setShowFolders]=useState(false),[folders,setFolders]=useState<TemplateFoldersPage>(),[folderPage,setFolderPage]=useState(1);
+ const [search,setSearch]=useState<TemplateSearchPage>(),[folderFilter,setFolderFilter]=useState<string|null>(null),[levelFilter,setLevelFilter]=useState<TemplateFolderLevel|null>(null);
+ const [folderDraft,setFolderDraft]=useState<{name:string;level:TemplateFolderLevel;expected_version:number;id?:string}|null>(null);
+ const folderVersions=useRef(new Map<string,number>()).current;
+ useEffect(()=>{if(!canFolders||view!=='list'||blocked)return;const c=new AbortController();void templatesApi.foldersPage(office,folderPage,5,c.signal).then(d=>{if(validFoldersPage(d)){setFolders(d);for(const f of d.items)folderVersions.set(f.id,f.latest_version??0);}}).catch(()=>{});return()=>c.abort();},[canFolders,office,folderPage,revision,view,blocked]);
+ function fail(cause:unknown){const e=templatesError(cause);setError(e);if(e.status===401||e.status===403){pending.current?.abort();attempt.current=null;setBlocked(true);setDetail(undefined);setList(undefined);setUncertain(false);}}
+ async function foldersWork(work:(signal:AbortSignal)=>Promise<unknown>,accept:()=>void){if(inFlight.current||blocked)return;const c=new AbortController();inFlight.current=true;setBusy(true);setError(undefined);try{await work(c.signal);if(alive.current){accept();setRevision(x=>x+1);}}catch(e){if(alive.current)fail(e);}finally{if(alive.current){inFlight.current=false;setBusy(false);}}}
+ function saveFolder(){const d=folderDraft;if(!d||!d.name.trim())return;void foldersWork(s=>templatesApi.folderSave({office_id:office,folder_id:d.id??null,name:d.name.trim(),level:d.level,expected_version:d.expected_version,reason:'Organização da biblioteca de modelos',idempotency_key:crypto.randomUUID()},s),()=>{setFolderDraft(null);setFeedback(d.id?'Pasta atualizada.':'Pasta criada.');});}
+ function deleteFolder(id:string,name:string,level:TemplateFolderLevel,version:number){void foldersWork(s=>templatesApi.folderSave({office_id:office,folder_id:id,name,level,expected_version:version,reason:'__delete__',idempotency_key:crypto.randomUUID()},s),()=>setFeedback('Pasta excluída.'));}
+ function linkModel(template_id:string,expected_version:number,next:{service_id?:string|null;folder_id?:string|null}){void foldersWork(s=>templatesApi.link({office_id:office,template_id,service_id:next.service_id??null,folder_id:next.folder_id??null,expected_version,reason:'Vínculo de organização/preço do modelo',idempotency_key:crypto.randomUUID()},s),()=>setFeedback('Modelo atualizado. O preço vinculado passa a valer nas próximas cobranças; documentos já emitidos preservam o valor original.'));}
  const pending=useRef<AbortController|null>(null),generation=useRef(0),alive=useRef(true),inFlight=useRef(false),attempt=useRef<{kind:'save';body:Parameters<typeof templatesApi.save>[0]}|{kind:'approve';body:Parameters<typeof templatesApi.approve>[0]}|null>(null);
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;pending.current?.abort();generation.current++;};},[]);
  useEffect(()=>{const m=matchMedia(media),change=()=>{setSize(m.matches?3:5);setPage(1);};m.addEventListener('change',change);return()=>m.removeEventListener('change',change);},[]);

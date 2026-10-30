@@ -11,7 +11,15 @@ function version(v:unknown):TemplateVersion{
 }
 function summary(v:unknown):TemplateSummary{
  if(!record(v)||!uuid(v.id)||!templateText(v.name,120)||typeof v.code!=='string'||!/^[A-Z0-9][A-Z0-9_-]{1,31}$/.test(v.code)||typeof v.kind!=='string'||!Object.hasOwn(templateKinds,v.kind)||typeof v.demonstration!=='boolean'||!int(v.latest_version,1)||!(v.current_version===null||int(v.current_version,1,v.latest_version)))throw Error('Invalid template summary');
- return {id:v.id,code:v.code,name:v.name,kind:v.kind as TemplateSummary['kind'],demonstration:v.demonstration,latest_version:v.latest_version,current_version:v.current_version};
+ // Etapa22: pasta, nível e serviço vinculado (preço vigente) — extras tolerantes para não quebrar buscas antigas.
+ const extras:Pick<TemplateSummary,'folder_id'|'folder_name'|'level'|'service'>={
+  folder_id:(v.folder_id===undefined||v.folder_id===null||uuid(v.folder_id))?(v.folder_id as string|null??null):null,
+  folder_name:typeof v.folder_name==='string'&&Array.from(v.folder_name).length<=80?v.folder_name:null,
+  level:int(v.level,1,3)?v.level:3,
+  service:record(v.service)&&uuid(v.service.id)&&typeof v.service.code==='string'&&/^[A-Z0-9][A-Z0-9_-]{1,31}$/.test(v.service.code)&&templateText(v.service.name,120)&&uuid(v.service.version_id)&&int(v.service.price_cents,0,100000000)
+   ?{id:v.service.id as string,code:v.service.code,name:v.service.name as string,version_id:v.service.version_id as string,price_cents:v.service.price_cents as number}:null,
+ };
+ return {id:v.id,code:v.code,name:v.name,kind:v.kind as TemplateSummary['kind'],demonstration:v.demonstration,latest_version:v.latest_version,current_version:v.current_version,...extras};
 }
 export function templatePage(v:unknown):TemplatePage{
  if(!record(v)||!int(v.total)||!int(v.page,1,100000)||!int(v.page_size)||![3,5].includes(v.page_size)||!Array.isArray(v.items)||v.items.length>v.page_size)throw Error('Invalid template page');
@@ -20,5 +28,7 @@ export function templatePage(v:unknown):TemplatePage{
 export function templateDetail(v:unknown):TemplateDetail{
  if(!record(v)||!uuid(v.id)||typeof v.code!=='string'||!int(v.latest_version,1)||typeof v.can_manage!=='boolean'||typeof v.can_approve!=='boolean'||!Array.isArray(v.versions)||v.versions.length>5||!int(v.history_total,1)||v.history_total!==v.latest_version||!int(v.history_page,1,100000))throw Error('Invalid template detail');
  const versions=v.versions.map(version);if(versions.some(x=>x.code!==v.code||x.number>Number(v.latest_version))||new Set(versions.map(x=>x.number)).size!==versions.length)throw Error('Invalid version identity');
- return {id:v.id,code:v.code,latest_version:v.latest_version,can_manage:v.can_manage,can_approve:v.can_approve,versions,history_total:v.history_total,history_page:v.history_page};
+ // Etapa22: extras de organização (pasta/nível/serviço-vínculo com preço vigente), tolerantes.
+ const page=summary({id:v.id,code:v.code,name:versions[0]?.name??'',kind:versions[0]?.kind??'declaration',demonstration:versions[0]?.demonstration??true,latest_version:v.latest_version,current_version:null,folder_id:v.folder_id,folder_name:null,level:v.level,service:v.service});
+ return {id:v.id,code:v.code,latest_version:v.latest_version,can_manage:v.can_manage,can_approve:v.can_approve,versions,history_total:v.history_total,history_page:v.history_page,folder_id:page.folder_id,level:page.level,service:page.service};
 }

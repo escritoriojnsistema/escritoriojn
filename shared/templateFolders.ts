@@ -1,5 +1,5 @@
 // Etapa22: organização dos modelos em pastas e vínculo com serviços (preço do modelo).
-import {uuidPattern} from './access.js';
+export const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export type TemplateFolderLevel = 1 | 2 | 3;
 export const templateFolderLevels: Record<TemplateFolderLevel, string> = {1: 'Nível 1 · Super administrador', 2: 'Nível 2 · Administrador', 3: 'Nível 3 · Funcionário'};
