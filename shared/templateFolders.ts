@@ -8,7 +8,7 @@ export const isTemplateFolderId = (v: unknown): v is string => typeof v === 'str
 export const templateFolderName = (v: unknown): v is string => typeof v === 'string' && v.trim().length >= 1 && Array.from(v.trim()).length <= 80 && !/[\u0000-\u001f\u007f]/.test(v);
 export const templateLevel = (v: unknown): v is TemplateFolderLevel => v === 1 || v === 2 || v === 3;
 
-export type TemplateFolderSummary = {id: string; name: string; level: TemplateFolderLevel; templates_count: number};
+export type TemplateFolderSummary = {id: string; name: string; level: TemplateFolderLevel; templates_count: number; latest_version: number};
 export type TemplateFoldersPage = {items: TemplateFolderSummary[]; total: number; page: number; page_size: number};
 export type TemplateLinkedService = {id: string; code: string; name: string; version_id: string; price_cents: number};
 export type TemplateSearchItem = {id: string; code: string; name: string; kind: string; demonstration: boolean; latest_version: number; current_version: number | null; folder_id: string | null; folder_name: string | null; service: TemplateLinkedService | null};

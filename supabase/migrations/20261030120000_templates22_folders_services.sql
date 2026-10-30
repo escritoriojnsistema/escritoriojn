@@ -54,7 +54,7 @@ CREATE FUNCTION private.template_folders_page(p_office_id uuid,p_page integer,p_
 DECLARE result jsonb;total bigint;BEGIN
  PERFORM private.template_folder_actor22(p_office_id,'templates.folders');
  IF p_page IS NULL OR p_page NOT BETWEEN 1 AND 100000 OR p_size IS NULL OR p_size NOT IN(3,5) THEN RAISE EXCEPTION 'TEMPLATES_VALIDATION' USING ERRCODE='PT422';END IF;
- WITH candidates AS(SELECT f.id,f.name,f.level,(SELECT count(*) FROM public.templates t WHERE t.office_id=f.office_id AND t.folder_id=f.id)templates_count FROM public.template_folders f WHERE f.office_id=p_office_id),page AS(SELECT * FROM candidates ORDER BY lower(name),id LIMIT p_size OFFSET(p_page-1)*p_size)
+ WITH candidates AS(SELECT f.id,f.name,f.level,f.latest_version,(SELECT count(*) FROM public.templates t WHERE t.office_id=f.office_id AND t.folder_id=f.id)templates_count FROM public.template_folders f WHERE f.office_id=p_office_id),page AS(SELECT * FROM candidates ORDER BY lower(name),id LIMIT p_size OFFSET(p_page-1)*p_size)
  SELECT(SELECT count(*) FROM candidates),coalesce((SELECT jsonb_agg(to_jsonb(page) ORDER BY lower(name),id) FROM page),'[]'::jsonb) INTO total,result;
  RETURN jsonb_build_object('items',result,'total',total,'page',p_page,'page_size',p_size);
 END $$;
@@ -127,8 +127,27 @@ CREATE FUNCTION private.template_detail22(p_office_id uuid,p_template_id uuid,p_
  WHERE t.office_id=p_office_id AND t.id=p_template_id;
 $$;
 
--- Substitui apenas o wrapper SECURITY DEFINER da página20: mesma assinatura pública, agora com pasta, serviço e filtro por nível/pasta.
-CREATE OR REPLACE FUNCTION private.templates_page(p_office_id uuid,p_query text,p_page integer,p_size integer,p_folder_id uuid DEFAULT NULL,p_level integer DEFAULT NULL) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $$
+-- Página enriquecida (pasta, nível e serviço vigente) com a assinatura original de 4 argumentos.
+CREATE OR REPLACE FUNCTION private.templates_page(p_office_id uuid,p_query text,p_page integer,p_size integer) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $$
+DECLARE result jsonb;total bigint;at_time timestamptz;BEGIN
+ PERFORM private.templates_actor20(p_office_id);
+ IF p_query IS NULL OR char_length(p_query)>120 OR p_query ~ '[[:cntrl:]]' OR p_page IS NULL OR p_page NOT BETWEEN 1 AND 100000 OR p_size IS NULL OR p_size NOT IN(3,5) THEN RAISE EXCEPTION 'TEMPLATES_VALIDATION' USING ERRCODE='PT422';END IF;
+ at_time:=clock_timestamp();
+ WITH candidates AS(
+  SELECT t.id,t.code,v.definition->>'name' name,v.definition->>'kind' kind,(v.definition->>'demonstration')::boolean demonstration,t.latest_version,t.folder_id,f.name folder_name,coalesce(f.level,3)level,
+   (SELECT max(cv.number) FROM public.template_versions cv JOIN private.template_approvals a ON a.office_id=cv.office_id AND a.template_id=cv.template_id AND a.version_id=cv.id WHERE cv.office_id=t.office_id AND cv.template_id=t.id AND greatest(a.approved_at,(cv.definition->>'effective_from')::timestamptz)<=at_time AND((cv.definition->>'effective_until') IS NULL OR(cv.definition->>'effective_until')::timestamptz>at_time))current_version,
+   (SELECT CASE WHEN s.id IS NULL THEN NULL ELSE jsonb_build_object('id',s.id,'code',s.code,'name',sv.definition->>'name','version_id',sv.id,'price_cents',(sv.definition->>'price_cents')::integer)END FROM public.services s LEFT JOIN LATERAL(SELECT sv.* FROM public.service_versions sv WHERE sv.office_id=s.office_id AND sv.service_id=s.id AND sv.effective_from<=at_time ORDER BY sv.effective_from DESC LIMIT 1)sv ON true WHERE s.office_id=t.office_id AND s.id=t.service_id)service
+  FROM public.templates t JOIN public.template_versions v ON v.office_id=t.office_id AND v.template_id=t.id AND v.number=t.latest_version
+  LEFT JOIN public.template_folders f ON f.office_id=t.office_id AND f.id=t.folder_id
+  WHERE t.office_id=p_office_id
+   AND(btrim(p_query)='' OR strpos(lower(t.code||' '||(v.definition->>'name')),lower(btrim(p_query)))>0)),
+ page AS(SELECT * FROM candidates ORDER BY folder_name NULLS FIRST,code,id LIMIT p_size OFFSET(p_page-1)*p_size)
+ SELECT(SELECT count(*) FROM candidates),coalesce((SELECT jsonb_agg(to_jsonb(page) ORDER BY folder_name NULLS FIRST,code,id) FROM page),'[]'::jsonb) INTO total,result;
+ RETURN jsonb_build_object('items',result,'total',total,'page',p_page,'page_size',p_size);
+END $$;
+
+-- Busca por pasta/nível para solicitações internas e portal do cliente (mesma estrutura enriquecida).
+CREATE FUNCTION private.templates_folder_search22(p_office_id uuid,p_query text,p_page integer,p_size integer,p_folder_id uuid,p_level integer) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $$
 DECLARE result jsonb;total bigint;at_time timestamptz;BEGIN
  PERFORM private.templates_actor20(p_office_id);
  IF p_query IS NULL OR char_length(p_query)>120 OR p_query ~ '[[:cntrl:]]' OR p_page IS NULL OR p_page NOT BETWEEN 1 AND 100000 OR p_size IS NULL OR p_size NOT IN(3,5) OR(p_level IS NOT NULL AND p_level NOT IN(1,2,3))THEN RAISE EXCEPTION 'TEMPLATES_VALIDATION' USING ERRCODE='PT422';END IF;
@@ -142,19 +161,19 @@ DECLARE result jsonb;total bigint;at_time timestamptz;BEGIN
   WHERE t.office_id=p_office_id AND(p_folder_id IS NULL OR t.folder_id=p_folder_id)AND(p_level IS NULL OR coalesce(f.level,3)=p_level)
    AND(btrim(p_query)='' OR strpos(lower(t.code||' '||(v.definition->>'name')),lower(btrim(p_query)))>0)),
  page AS(SELECT * FROM candidates ORDER BY folder_name NULLS FIRST,code,id LIMIT p_size OFFSET(p_page-1)*p_size)
- SELECT(SELECT count(*) FROM candidates),coalesce((SELECT jsonb_agg(to_jsonb(page)-'current_version'||jsonb_build_object('current_version',(SELECT max(cv.number) FROM public.template_versions cv JOIN private.template_approvals a ON a.office_id=cv.office_id AND a.template_id=cv.template_id AND a.version_id=cv.id WHERE cv.office_id=t2.office_id AND cv.template_id=t2.id AND greatest(a.approved_at,(cv.definition->>'effective_from')::timestamptz)<=at_time AND((cv.definition->>'effective_until') IS NULL OR(cv.definition->>'effective_until')::timestamptz>at_time))) FROM page INNER JOIN public.templates t2 ON t2.office_id=p_office_id AND t2.id=page.id ORDER BY folder_name NULLS FIRST,code,id),'[]') INTO total,result;
+ SELECT(SELECT count(*) FROM candidates),coalesce((SELECT jsonb_agg(to_jsonb(page) ORDER BY folder_name NULLS FIRST,code,id) FROM page),'[]'::jsonb) INTO total,result;
  RETURN jsonb_build_object('items',result,'total',total,'page',p_page,'page_size',p_size);
 END $$;
 
 CREATE FUNCTION public.template_folders_page(p_office_id uuid,p_page integer,p_size integer) RETURNS jsonb LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$SELECT private.template_folders_page(p_office_id,p_page,p_size);$$;
 CREATE FUNCTION public.template_folder_save(p_office_id uuid,p_folder_id uuid,p_name text,p_level integer,p_expected_version integer,p_reason text,p_idempotency_key uuid) RETURNS jsonb LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$SELECT private.template_folder_save(p_office_id,p_folder_id,p_name,p_level,p_expected_version,p_reason,p_idempotency_key);$$;
 CREATE FUNCTION public.template_link(p_office_id uuid,p_template_id uuid,p_service_id uuid,p_folder_id uuid,p_expected_version integer,p_reason text,p_idempotency_key uuid) RETURNS jsonb LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$SELECT private.template_link22(p_office_id,p_template_id,p_service_id,p_folder_id,p_expected_version,p_reason,p_idempotency_key);$$;
-CREATE OR REPLACE FUNCTION public.templates_page(p_office_id uuid,p_query text,p_page integer,p_size integer) RETURNS jsonb LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$SELECT private.templates_page(p_office_id,p_query,p_page,p_size,NULL,NULL);$$;
-CREATE FUNCTION public.templates_folder_search(p_office_id uuid,p_query text,p_page integer,p_size integer,p_folder_id uuid,p_level integer) RETURNS jsonb LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$SELECT private.templates_page(p_office_id,p_query,p_page,p_size,p_folder_id,p_level);$$;
+CREATE OR REPLACE FUNCTION public.templates_page(p_office_id uuid,p_query text,p_page integer,p_size integer) RETURNS jsonb LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$SELECT private.templates_page(p_office_id,p_query,p_page,p_size);$$;
+CREATE FUNCTION public.templates_folder_search(p_office_id uuid,p_query text,p_page integer,p_size integer,p_folder_id uuid,p_level integer) RETURNS jsonb LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$SELECT private.templates_folder_search22(p_office_id,p_query,p_page,p_size,p_folder_id,p_level);$$;
 CREATE OR REPLACE FUNCTION public.template_detail(p_office_id uuid,p_template_id uuid,p_page integer) RETURNS jsonb LANGUAGE sql SECURITY INVOKER SET search_path='' AS $$SELECT private.template_detail22(p_office_id,p_template_id,p_page);$$;
 
-DO $$DECLARE r record;BEGIN FOR r IN SELECT oid::regprocedure signature,proname FROM pg_proc WHERE pronamespace IN('public'::regnamespace,'private'::regnamespace) AND(proname LIKE 'template_folders_%' OR proname LIKE 'template_folder_%' OR proname='template_link22' OR proname='template_detail22' OR proname='template_folders_immutable22' OR proname='template_folder_actor22') LOOP EXECUTE format('REVOKE ALL ON FUNCTION %s FROM PUBLIC,anon,authenticated,service_role',r.signature);END LOOP;
- FOR r IN SELECT oid::regprocedure signature,proname FROM pg_proc WHERE pronamespace='public'::regnamespace AND proname IN('template_folders_page','template_folder_save','template_link','templates_folder_search') LOOP EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO authenticated',r.signature);END LOOP;
+DO $$DECLARE r record;BEGIN FOR r IN SELECT oid::regprocedure signature FROM pg_proc WHERE pronamespace IN('public'::regnamespace,'private'::regnamespace) AND(proname LIKE 'template_folders_%' OR proname LIKE 'template_folder_%' OR proname='template_link22' OR proname='template_detail22' OR proname='templates_folder_search22') LOOP EXECUTE format('REVOKE ALL ON FUNCTION %s FROM PUBLIC,anon,authenticated,service_role',r.signature);END LOOP;
+ FOR r IN SELECT oid::regprocedure signature FROM pg_proc WHERE pronamespace='public'::regnamespace AND proname IN('template_folders_page','template_folder_save','template_link','templates_folder_search') LOOP EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO authenticated',r.signature);END LOOP;
 END $$;
 
 NOTIFY pgrst,'reload schema';
