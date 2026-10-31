@@ -1,5 +1,7 @@
 # Escritório JN — continuidade
 
+- Checkpoint 31/10/2026: revisão do PR69 de pastas/serviços (base antiga) em andamento, ainda não publicada nem aplicada ao Supabase. Ler primeiro `docs/etapas/revisao-fluxo-documental-20261031.md`, plano/spec `2026-10-28-fluxo-documental-integrado` e os primeiros parágrafos de `LIVRO_RAIZ.md`. Ajustes em DTO/ACL/revisão concorrente/nível por modelo precisam de teste SQL Auth real antes de merge. O vínculo modelo↔serviço **não** liga automaticamente pedido/caixa/portal; não anunciar nem liberar documentos como pagos sem o gate financeiro e editorial.
+
 - Por pedido explícito do usuário em20/10/2026, NÃO usar GitHub Actions. O único workflow Qualidade da base está disabled_manually; não reativar nem criar novos workflows. Validar localmente com os scripts existentes e publicar pela integração GitHub→Vercel. Execuções anteriores são somente evidência histórica.
 - Stack fixa: React + Vite + TypeScript; API Express sob `/api`; Supabase nas etapas pertinentes. Não migrar para Next.js.
 - Leia `LIVRO_RAIZ.md`, o cartão atual em `docs/etapas/` e somente as regras afetadas. A numeração oficial é Etapa 01–40, sem módulos paralelos.

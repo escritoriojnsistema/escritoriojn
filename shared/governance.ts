@@ -65,6 +65,8 @@ Object.assign(auditFieldNames,{format:'Formato do arquivo'});
 
 Object.assign(auditActionNames,{'templates.saved':'Versão de modelo salva','templates.approved':'Versão de modelo aprovada'});
 Object.assign(auditTargetNames,{template:'Modelo documental'});
+Object.assign(auditActionNames,{'templates.folder_saved':'Pasta de modelos criada ou atualizada','templates.folder_deleted':'Pasta de modelos vazia excluída','templates.linked':'Organização, classificação ou vínculo de serviço alterado'});
+Object.assign(auditTargetNames,{template_folder:'Pasta de modelos'});
 
 Object.assign(auditActionNames,{'documents.created':'Rascunho documental criado','documents.saved':'Revisão documental salva','documents.participants_changed':'Participantes do documento alterados','documents.prepared':'Preenchimento documental concluído'});
 Object.assign(auditTargetNames,{document:'Documento em preenchimento'});
