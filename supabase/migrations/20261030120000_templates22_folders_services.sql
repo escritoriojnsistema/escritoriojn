@@ -3,7 +3,7 @@
 INSERT INTO public.permissions(code,name) VALUES('templates.folders','Gerir pastas de modelos') ON CONFLICT DO NOTHING;
 INSERT INTO public.role_permissions(role_code,permission_code) SELECT 'owner',code FROM public.permissions WHERE code='templates.folders' ON CONFLICT DO NOTHING;
 -- Amplia as allowlists vivas de atribuições sem reescrever corpos históricos de auditoria/PDF.
-DO $migration$ DECLARE r record;d text;extra text::='' := '';BEGIN
+DO $migration$ DECLARE r record;d text;BEGIN
  FOR r IN SELECT conrelid::regclass tbl,conname,pg_get_constraintdef(oid) def FROM pg_constraint WHERE conrelid IN('private.team_member_permissions'::regclass,'private.team_delegations'::regclass,'private.team_invitations'::regclass) AND contype='c' AND pg_get_constraintdef(oid) LIKE '%templates.read%' AND pg_get_constraintdef(oid) NOT LIKE '%templates.folders%' LOOP
   d:=replace(r.def,'''templates.approve''::text','''templates.approve''::text, ''templates.folders''::text');EXECUTE format('ALTER TABLE %s DROP CONSTRAINT %I',r.tbl,r.conname);EXECUTE format('ALTER TABLE %s ADD CONSTRAINT %I %s',r.tbl,r.conname,d);
  END LOOP;
@@ -148,8 +148,7 @@ DECLARE result jsonb;BEGIN
  WHERE t.office_id=p_office_id AND t.id=p_template_id;
  IF result IS NULL THEN RAISE EXCEPTION 'TEMPLATE_NOT_FOUND' USING ERRCODE='PT404';END IF;
  RETURN result;
-END $$;
-$$;
+END $;
 
 -- Página enriquecida (pasta, nível e serviço vigente) com a assinatura original de 4 argumentos.
 CREATE OR REPLACE FUNCTION private.templates_page(p_office_id uuid,p_query text,p_page integer,p_size integer) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $$
