@@ -1,9 +1,10 @@
 import type {TemplateInput,TemplatePage,TemplateDetail} from '../../../shared/templates';
+import type {TemplateFoldersPage} from '../../../shared/templateFolders';
 import {supabase} from '../auth/browser';
 import {authenticatedFetch} from '../auth/authenticatedFetch';
 import {sessionScope} from '../auth/sessionScope';
 export class TemplatesError extends Error {
- constructor(public status:number,public code?:string){super(status===401?'Sua sessão foi encerrada. Entre novamente.':status===403?'Seu acesso não permite esta operação na biblioteca.':status===404?'Modelo não encontrado. Volte à lista.':code==='TEMPLATE_DUPLICATE'?'Este código já existe na biblioteca.':status===409?'O modelo mudou. Reabra e confira a versão antes de continuar.':status===422?'Confira o tipo, as variáveis, o texto, a vigência e o motivo.':'Biblioteca indisponível. Tente novamente com esta mesma tentativa.');}
+ constructor(public status:number,public code?:string){super(status===401?'Sua sessão foi encerrada. Entre novamente.':status===403?'Seu acesso não permite esta operação na biblioteca.':status===404?'Modelo não encontrado. Volte à lista.':code==='TEMPLATE_DUPLICATE'?'Este código já existe na biblioteca.':code==='TEMPLATE_FOLDER_NOT_EMPTY'?'A pasta ainda contém modelos. Mova ou exclua os modelos antes de excluir a pasta.':status===409?'O modelo mudou. Reabra e confira a versão antes de continuar.':status===422?'Confira o tipo, as variáveis, o texto, a vigência e o motivo.':'Biblioteca indisponível. Tente novamente com esta mesma tentativa.');}
 }
 async function request<T>(path: string, method: 'POST', body: unknown, signal?: AbortSignal): Promise<T> {
   if (!supabase) throw new TemplatesError(503);
@@ -46,6 +47,10 @@ async function request<T>(path: string, method: 'POST', body: unknown, signal?: 
 }
 export const templatesApi={
  search:(office_id:string,query:string,page:number,size:number,signal?:AbortSignal)=>request<TemplatePage>('/search','POST',{office_id,query,page,size},signal),
+ folderSearch:(body:{office_id:string;query:string;page:number;size:number;folder_id:string|null;level:1|2|3|null},signal?:AbortSignal)=>request<TemplatePage>('/folder-search','POST',body,signal),
+ foldersPage:(office_id:string,page:number,size:number,signal?:AbortSignal)=>request<TemplateFoldersPage>('/folders/page','POST',{office_id,page,size},signal),
+ folderSave:(body:{office_id:string;folder_id:string|null;name:string;level:1|2|3;expected_version:number;reason:string;idempotency_key:string},signal?:AbortSignal)=>request<unknown>('/folders/save','POST',body,signal),
+ link:(body:{office_id:string;template_id:string;service_id:string|null;folder_id:string|null;level:1|2|3;expected_version:number;expected_config_version:number;reason:string;idempotency_key:string},signal?:AbortSignal)=>request<TemplateDetail>('/link','POST',body,signal),
  detail:(office_id:string,template_id:string,page=1,signal?:AbortSignal)=>request<TemplateDetail>('/detail','POST',{office_id,template_id,page},signal),
  save:(body:{office_id:string;template_id:string|null;definition:TemplateInput;expected_version:number;reason:string;idempotency_key:string},signal?:AbortSignal)=>request<TemplateDetail>('/save','POST',body,signal),
  approve:(body:{office_id:string;template_id:string;version_id:string;expected_version:number;reason:string;idempotency_key:string},signal?:AbortSignal)=>request<TemplateDetail>('/approve','POST',body,signal),
