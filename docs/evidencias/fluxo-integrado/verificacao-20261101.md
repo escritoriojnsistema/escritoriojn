@@ -53,3 +53,8 @@ A URL de prévia é `https://escritoriojn-git-feat-fluxo-integrado-20261101-escr
 ## Publicação concluída pela integração GitHub
 
 O usuário autorizou expressamente concluir. PR71 foi integrado em `e4645119`; VercelSUCCESS e schema/Edge foram aplicados automaticamente pelo GitHub. Foram conferidos health200, APIs/Edge401, bucket/RLS/ACL,33migrations e função ACTIVE, bundles novos e6redirecionamentos Chromium360/1440 sem erros. O bloqueio do preview foi superado pela verificação direta da versão canônica, sem desativar proteção. Fonte final: `publicacao-20261101.json` e `fecho-fluxo-integrado-20261101.md`. O parágrafo anterior que informa ausência de merge descreve a etapa de preparação, não o estado atual.
+
+
+## Fecho publicado e organização real confirmada
+
+PR72/merge7399bc48 e VercelSUCCESS ARpv6pKYoJHCZdCxHV3TS51zo2gV. Migration20261101200103 aplicada automaticamente (1comando),34históricas. Readback real:19Contratos,23Declarações,17Requerimentos,5Ofícios;zero modelos sem pasta. Modelos/versões/aprovações mantiveram exatamente os mesmos hashes antes/depois. O conjunto SQL final passou559verificações em dois bancos descartáveis, incluindo classificação, preservação de escolhas e replay. As restrições antigas de preview/autorização não impedem o estado publicado; fecho/JSON registram os resultados canônicos. Não houve escrita manual no Supabase nem fixtures hospedadas.
