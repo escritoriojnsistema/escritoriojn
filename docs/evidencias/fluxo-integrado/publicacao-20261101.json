@@ -16,12 +16,12 @@
       "statements": 40
     }
   ],
-  "migration_history_count": 33,
+  "migration_history_count": 34,
   "edge": {
     "name": "document-artifacts",
     "status": "ACTIVE",
-    "version": 1,
-    "verify_jwt": true
+    "verify_jwt": true,
+    "version_observed_at_first_runtime_publish": 1
   },
   "bucket": {
     "name": "jn-document-artifacts",
@@ -60,5 +60,25 @@
   "manual_database_apply": false,
   "hosted_test_fixtures": false,
   "hosted_authenticated_journey": "not exercised",
-  "organization_migration": "prepared for GitHub rollout; awaiting post-merge readback"
+  "organization_migration": "applied automatically by GitHub and verified in read-only SQL",
+  "final_verified_at": "2026-11-01T20:08:54.373987+00:00",
+  "organization": {
+    "pr": 72,
+    "merge": "7399bc483328b68bcd87effb26f69185889db9c6",
+    "vercel_status": "success",
+    "vercel_deployment": "ARpv6pKYoJHCZdCxHV3TS51zo2gV",
+    "migration": "20261101200103",
+    "statements": 1,
+    "folders": {
+      "Contratos": 19,
+      "Declarações": 23,
+      "Requerimentos": 17,
+      "Ofícios": 5
+    },
+    "unfiled": 0,
+    "templates_hash_preserved": true,
+    "versions_hash_preserved": true,
+    "approvals_hash_preserved": true
+  },
+  "local_sql_pass_count": 559
 }

@@ -5,6 +5,7 @@ O usuário autorizou expressamente concluir a publicação pela integração Git
 ## Publicação comprovada
 
 - PR71: merge `e4645119899ba390d435d429e0063db74267ab0e`; VercelSUCCESS `B77pPnJDiQzZWwXZeQyTLSRHoQ8M`.
+- PR72: merge `7399bc483328b68bcd87effb26f69185889db9c6`; VercelSUCCESS `ARpv6pKYoJHCZdCxHV3TS51zo2gV`. Organização inicial aplicada automaticamente:34migrations no total.
 - Canonical: `https://escritoriojn.vercel.app`. Bundle `index-DgvvE7Mg.js`/`documents-CmfQ3JY4.js` contém catálogo, documentos do portal, endpoints comerciais/workflow e envio ao caixa.
 - Supabase aplicou automaticamente pelo Git as migrations `20261101143627` (148comandos) e `20261101144028` (40comandos), total33históricas. Não houve apply manual.
 - Função `document-artifacts` ACTIVE/v1, JWT obrigatório; bucket privado, PDF somente e limite3MiB. Invoker/ACL/RLS dos novos registros conferidos, completion somente service_role.
@@ -13,7 +14,7 @@ O usuário autorizou expressamente concluir a publicação pela integração Git
 
 ## Organização inicial
 
-A conferência revelou64modelos sem pasta:19contratos,23declarações,17requerimentos e5ofícios. A migration `organize_existing_templates_by_kind` organiza somente modelos sem localização já escolhida. Ela usa o tipo documental existente, não altera texto/aprovação/preço e não atribui a uma pessoa uma ação técnica do migrador. Pastas e localizações já escolhidas por humanos são preservadas. Reexecução não muda IDs/revisões. A aplicação e a contagem final devem ser confirmadas no histórico após a integração desta alteração.
+A conferência revelou64modelos sem pasta:19contratos,23declarações,17requerimentos e5ofícios. A migration `organize_existing_templates_by_kind` organiza somente modelos sem localização já escolhida. Ela usa o tipo documental existente, não altera texto/aprovação/preço e não atribui a uma pessoa uma ação técnica do migrador. Pastas e localizações já escolhidas por humanos são preservadas. Reexecução não muda IDs/revisões. Aplicação confirmada no histórico `20261101200103` (1comando). Readback:19Contratos/23Declarações/17Requerimentos/5Ofícios,zero sem pasta. Hashes agregados de modelos, versões e aprovações antes/depois idênticos. Não repetir essa migration.
 
 ## Configuração comercial real
 
