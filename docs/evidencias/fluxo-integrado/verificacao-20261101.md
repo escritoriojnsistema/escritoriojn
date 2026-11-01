@@ -41,3 +41,10 @@ Não houve merge em produção, aplicação manual no Supabase, deployCLI ou Git
 Logs locais de suporte: `/tmp/jn-node-final.log`, `/tmp/jn-build-final.log`, `/tmp/jn-workflow-final.log`, `/tmp/jn-workflow-final4.log`, `/tmp/jn-focused-ui.log`, `/tmp/jn-integrated-ui2.log`, `/tmp/jn-pdf-final.log`, `/tmp/jn-deno-check.log`, `/tmp/jn-deno-render.log`. Não são arquivos de produção nem evidência de publicação.
 
 Complemento de regressão:35 contratos UI de Solicitações/Caixa aprovados; tela pública1440 aprovada na repetição. O último replay SQL inclui perda do vínculo de identidade após quitação, bloqueio de edição documental pelo caixa delegado e título renomeado no seletor legado. O log final desse complemento é `/tmp/jn-workflow-final4.log`, concluído com saída0 e549verificações PASS;48delas trazem o prefixo workflow. Não houve erro no replay final.
+
+
+## PR e prévia conferidos
+
+[PR71](https://github.com/escritoriojnsistema/escritoriojn/pull/71), draft, branch `feat/fluxo-integrado-20261101`; código `1a036d27b87af20b3cc5522dbd5902b66aac3819`, árvore `7a269441fa17fd9c1779abbc2bed2afbd407dac8`, idêntica à árvore testada localmente. Status GitHub VercelSUCCESS e bot confirmou Ready para `95XDihrEJdCZ2hCVBxgvDbNHtyDw`.
+
+A URL de prévia é `https://escritoriojn-git-feat-fluxo-integrado-20261101-escritorio-jn.vercel.app`. O conector Vercel negou acesso à implantação com403; tentativa com time explícito também não liberou acesso. Consultas públicas de health e dos dois endpoints novos retornaram302para autenticação vercel.com. Isso é barreira da plataforma, não resposta validada da API. Nenhuma proteção foi desativada. Não há afirmação de login/banco/Storage funcionais nessa prévia. É necessário acesso ao projeto `escritoriojn` no time `escritorio-jn` para concluir a homologação hospedada. Produção não foi publicada.
