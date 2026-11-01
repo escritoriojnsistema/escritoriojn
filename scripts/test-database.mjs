@@ -723,7 +723,18 @@ try {
   const templateMigrations=allMigrations.filter(n=>n.includes('_templates_document_library'));
   const documentMigrations=allMigrations.filter(n=>n.includes('_documents21_editor'));
   const manualImportMigrations=allMigrations.filter(n=>n.includes('_templates21_manual_import'));
-  const integratedMigrations=allMigrations.filter(n=>n>'20261027172917_templates21_manual_import.sql' && (process.env.JN_DB_INTEGRATED_ONLY_A!=='1' || n.includes('_document_commercial_')));
+  const organizationMigrations=allMigrations.filter(n=>n.includes('_organize_existing_templates_by_kind'));
+  const integratedMigrations=allMigrations.filter(n=>!organizationMigrations.includes(n)&&n>'20261027172917_templates21_manual_import.sql' && (process.env.JN_DB_INTEGRATED_ONLY_A!=='1' || n.includes('_document_commercial_')));
+  const verifyOrganization=database=>{
+    if(!organizationMigrations.length)return '';
+    sql(database,'postgres',`CREATE TABLE test.organization_before AS SELECT (SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY id),'[]'::jsonb) FROM public.templates t) templates,(SELECT coalesce(jsonb_agg(to_jsonb(v) ORDER BY id),'[]'::jsonb) FROM public.template_versions v) versions,(SELECT coalesce(jsonb_agg(to_jsonb(a) ORDER BY office_id,version_id),'[]'::jsonb) FROM private.template_approvals a) approvals;CREATE TABLE test.organization_locations_before AS SELECT office_id,template_id,to_jsonb(l) snapshot FROM private.model_locations l;`);
+    for(const file of organizationMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+    let result=sql(database,'postgres',readFileSync(`${root}tests/database/model-organization.sql`,'utf8'));
+    const after=sql(database,'postgres',"SELECT jsonb_build_object('folders',(SELECT jsonb_agg(to_jsonb(f) ORDER BY id) FROM private.model_folders f),'locations',(SELECT jsonb_agg(to_jsonb(l) ORDER BY office_id,template_id) FROM private.model_locations l))::text;").trim();
+    for(const file of organizationMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+    if(sql(database,'postgres',"SELECT jsonb_build_object('folders',(SELECT jsonb_agg(to_jsonb(f) ORDER BY id) FROM private.model_folders f),'locations',(SELECT jsonb_agg(to_jsonb(l) ORDER BY office_id,template_id) FROM private.model_locations l))::text;").trim()!==after)throw Error('Organization replay changed existing folders/locations');
+    return result+'PASS: organization replay preserves ids and revisions\n';
+  };
   const migrations=allMigrations.filter(n=>!templateMigrations.includes(n)&&!documentMigrations.includes(n)&&!manualImportMigrations.includes(n)&&n<='20261027172917_templates21_manual_import.sql');
   for (const database of process.env.JN_DB_HISTORY_PAYMENTS==='1'?[]:process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'?['foundation_replay_a']:['foundation_replay_a', 'foundation_replay_b']) {
     sql('postgres', 'postgres', `CREATE DATABASE ${database} OWNER migrator;`);
@@ -751,6 +762,7 @@ try {
         result+=await raceDocumentCommercial({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
         result+=await raceFolderSession({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
         if(process.env.JN_DB_INTEGRATED_ONLY_A!=='1')result+=sql(database,'postgres',readFileSync(`${root}tests/database/document-workflow.sql`,'utf8'));
+        result+=verifyOrganization(database);
         console.log(`${database} documents21 isolated:\n${result.trim()}`);continue;
       }
       result+=await raceTemplates({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
@@ -905,6 +917,7 @@ try {
     result+=await raceDocumentCommercial({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceFolderSession({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     if(process.env.JN_DB_INTEGRATED_ONLY_A!=='1')result+=sql(database,'postgres',readFileSync(`${root}tests/database/document-workflow.sql`,'utf8'));
+        result+=verifyOrganization(database);
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
   if(process.env.JN_DB_FOCUS_FINANCE19==='1'){

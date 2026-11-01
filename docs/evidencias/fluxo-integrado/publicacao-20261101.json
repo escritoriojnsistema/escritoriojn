@@ -1,0 +1,64 @@
+{
+  "verified_at": "2026-11-01T20:03:41.199648+00:00",
+  "route": "GitHub → Vercel/Supabase automatic integration",
+  "canonical": "https://escritoriojn.vercel.app",
+  "runtime_pr": 71,
+  "runtime_merge": "e4645119899ba390d435d429e0063db74267ab0e",
+  "vercel_status": "success",
+  "vercel_deployment": "B77pPnJDiQzZWwXZeQyTLSRHoQ8M",
+  "migrations": [
+    {
+      "version": "20261101143627",
+      "statements": 148
+    },
+    {
+      "version": "20261101144028",
+      "statements": 40
+    }
+  ],
+  "migration_history_count": 33,
+  "edge": {
+    "name": "document-artifacts",
+    "status": "ACTIVE",
+    "version": 1,
+    "verify_jwt": true
+  },
+  "bucket": {
+    "name": "jn-document-artifacts",
+    "private": true,
+    "limit_bytes": 3145728,
+    "allowed_mime_types": [
+      "application/pdf"
+    ]
+  },
+  "production_counts": {
+    "auth_users": 5,
+    "memberships": 5,
+    "templates": 64,
+    "template_approvals": 1,
+    "documents": 0,
+    "charges": 0,
+    "payments": 0
+  },
+  "http": {
+    "health": 200,
+    "anonymous_commercial": 401,
+    "anonymous_portal": 401,
+    "invalid_token": 401,
+    "anonymous_edge": 401
+  },
+  "browser_anonymous": {
+    "checks": 6,
+    "widths": [
+      360,
+      1440
+    ],
+    "page_errors": 0,
+    "horizontal_overflow": false
+  },
+  "actions_used": false,
+  "manual_database_apply": false,
+  "hosted_test_fixtures": false,
+  "hosted_authenticated_journey": "not exercised",
+  "organization_migration": "prepared for GitHub rollout; awaiting post-merge readback"
+}
