@@ -1,0 +1,25 @@
+# Retomada do fluxo documental integrado — 01/11/2026
+
+Base `bfc78af` (PR68). Continuação do pedido anterior e organização por pastas adicionada pelo usuário. React/Vite/TypeScript, Express e banco existentes preservados. Sem GitHub Actions, preços inventados, concessões individuais, aprovação automática das minutas ou fixtures hospedadas.
+
+## Implementação nesta branch
+
+- Biblioteca: pastas com nome/revisão, criação, renomeação, movimentação e exclusão somente vazia. Gestão exige super administrador/administrador com capacidade atual; leitura da equipe e catálogo seguro do cliente. Renomeação comercial, exclusão lógica/restauração e duplicação como rascunho conservam versões e documentos anteriores. Conteúdo aprovado continua editável por nova versão, com nova aprovação.
+- Serviço/modelo: vínculo ao serviço já cadastrado; preço vem exclusivamente da versão vigente09. Configuração de nível1/2/3, instruções e campos manuais tipados. O cliente vê título, pasta, preço e informações necessárias; não recebe conteúdo integral, função/nível interno ou notas da equipe. Modelos de demonstração, não aprovados ou arquivados não são contratáveis.
+- Contratação: cria atendimento10, item com preço oficial e intake imutável na mesma transação, com idempotência e conferência das versões esperadas. Mudanças de preço/modelo retornam conflito sem recalcular o histórico. Portal não pode escolher cliente, responsável ou preço. Presencial exige responsável; WhatsApp representa canal registrado pela equipe, sem integração externa simulada.
+- Distribuição: presença vinculada à sessão, heartbeat30s somente visível, offline após90s, capacidade1–10 e fila de nível exato. Pedidos presenciais permanecem manuais. Atribuição, carga e versão são verificadas sob locks; trabalho em curso não é roubado por heartbeat. Gestores autorizados consultam disponibilidade e espera. Pagamentos e estornos acionam despacho após os vínculos financeiros da transação.
+- Atendimento/editor: modelo contratado fixado; campos do modelo e respostas da solicitação consultáveis e aplicáveis explicitamente no preenchimento. Cadastro do cliente permanece separado. Triagem pode vincular ficha a pedido de documento já precificado sem duplicar seus itens. Documento contratado abre no editor por referência autorizada; assumir/transferir reutilizam o atendimento existente.
+- Revisão/arquivo: publicação fixa revisão preparada, texto resolvido e hash. Aprovação e assinatura física conferida são eventos separados. Revisão própria do super administrador depende de configuração explícita capturada. PDF canônico v1 gerado pelo worker confiável, fontes locais com licença, acentos/paginação/limite, bytes determinísticos e arquivo privado sem sobrescrita. Glifo ausente falha explicitamente. Download verifica hash/tamanho e autorização antes/depois da leitura, sem URL pública/assinada.
+- Caixa/portal: envio exige aprovação/assinatura exigidas e arquivo preservado. Caixa reivindica tarefa financeira, reaproveita/cria cobrança canônica e recebe no próprio caixa, sem tomar responsabilidade pelo documento. O adaptador interno de recebimento anterior15 também verifica essa delegação financeira estreita; permissões documentais não são ampliadas. Disponibilidade deriva de revisão atual, restrições, identidade08 vigente e saldo13–16. Pagamento parcial/pendente/sem cobrança bloqueia; quitação integral libera; estorno/revogação/versão nova bloqueiam novos acessos. Não há flag permanente de “pago”.
+
+## Limites reais
+
+Serviços com campos09, checklist10 ou participantes obrigatórios ainda não são contratáveis pelo novo catálogo: é necessário configurar um serviço compatível ou usar o fluxo de atendimento existente. Não se presume que o formulário documental cumpra esses requisitos. Preço/código continuam editáveis em Serviços. Minutas existentes continuam sem aprovação até revisão humana.
+
+Assinatura eletrônica externa permanece bloqueada no gate: não foi implementada integração com provedor nem aceitação de original assinado. A assinatura física registra conferência humana da via original; o PDF do portal é identificado como cópia digital. Alterações de respostas do intake por novas propostas/aceites não foram implementadas; a equipe pode conferir/ajustar o documento com revisões preservadas. Nenhuma conta Auth é criada por CPF/e-mail coincidente.
+
+## Validação e publicação
+
+Evidências e comandos finais ficam em `docs/evidencias/fluxo-integrado/verificacao-20261101.md`. Somente testes concluídos serão marcados aprovados. Alterações Supabase são migrations versionadas pelo GitHub; não houve aplicação manual em banco hospedado. Antes de eventual publicação, conferir o histórico automático para não duplicar migrations e verificar a função `document-artifacts` e assets servidos.
+
+A otimização do login já estava na base publicada pelo PR68: RPC de contexto na tentativa isolada, adoção oficial do SDK e importação tardia dos geradores PDF. Esta retomada preserva esse caminho; números antigos de laboratório não são SLA ou nova medição em produção.

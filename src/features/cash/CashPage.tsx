@@ -1,3 +1,4 @@
+import {DocumentCashQueue} from '../documentWorkflow/DocumentCashQueue';
 import type {ClosureMode} from './CashClosurePanel';
 import {CashStatement} from './CashStatement';
 import {cashMoney} from './CashSessions';
@@ -68,6 +69,7 @@ function CashWorkspace({context,contexts,onOffice}:{context:AccessContext;contex
   <OperationHeading context={context} showRole={false} title="Caixa" description="Operação individual, recebimentos e conferência financeira."/>
   {contexts.length>1&&<label className="team-field team-office">Escritório<select disabled={controlsBusy} value={office} onChange={e=>onOffice(e.target.value)}>{contexts.map(c=><option value={c.office_id} key={c.office_id}>{c.office_name}</option>)}</select></label>}
   {feedback&&<p role="status" className="form-feedback">{feedback}</p>}{Object.entries(issues).map(([source,error])=><p key={source} role="alert" className="form-feedback error">{error.message}</p>)}
+  {!blocked&&['requests.read','charges.read','charges.create','cash.open'].every(p=>context.permissions.includes(p))&&<DocumentCashQueue office={office} disabled={controlsBusy} onChanged={()=>setFinancialRevision(x=>x+1)} onDenied={status=>fail(new CashError(status))}/>}
   {blocked?<Link className="secondary-button" to={paths.account}>Verificar meu acesso</Link>:<>
    <div className="team-toolbar cash-toolbar"><div role="tablist" aria-label="Área do caixa" className="team-tabs">
     <button role="tab" aria-selected={tab==='own'} disabled={controlsBusy} onClick={()=>changeTab('own')}>Meu caixa</button>

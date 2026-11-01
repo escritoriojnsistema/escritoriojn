@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { emptyService } from '../../shared/services';
 test.skip(!process.env.TEAM_UI_CONTRACT,'Contrato visual fictício; Auth e banco reais têm suíte própria.');
+test.beforeEach(async({page})=>{await page.route('**/api/document-commercial/presence',r=>r.fulfill({json:{data:{status:'offline',capacity:1,last_seen:null,session_current:false}}}));await page.route('**/api/document-workflow/cash-queue',r=>r.fulfill({json:{data:{items:[],total:0,page:1,page_size:5}}}));});
 const office='11111111-1111-4111-8111-111111111111',user='22222222-2222-4222-8222-222222222222',id='33333333-3333-4333-8333-333333333333',service='44444444-4444-4444-8444-444444444444',other='55555555-5555-4555-8555-555555555555';
 const permissions=['foundation.access','requests.read','requests.create','requests.update','requests.transfer','requests.cancel','requests.read_all','customers.read','services.perform','services.discount','services.surcharge','services.courtesy','services.price_override','users.manage'];
 const definition={...emptyService,name:'Cópia de teste',code:'COPIA-TESTE',category:'Cópias',unit:'página',price_cents:50,max_discount_bps:1000,allow_courtesy:true,allow_price_override:true};

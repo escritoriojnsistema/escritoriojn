@@ -8,6 +8,9 @@ import {useAuth} from '../auth/AuthProvider';
 import {OperationHeading,OperationLayout} from '../operation/OperationLayout';
 import {OperationalFeedback} from '../operation/OperationalAccess';
 import {templatesApi,templatesError,TemplatesError} from './api';
+import {ModelManagement} from '../documentCommercial/ModelManagement';
+import {commercialApi} from '../documentCommercial/api';
+import {TemplateFolders,allFolders,type FolderFilter} from '../documentCommercial/TemplateFolders';
 import {TemplateForm} from './TemplateForm';
 import {TemplateDetail} from './TemplateDetail';
 import '../team/team.css';import '../customers/customers.css';import './templates.css';
@@ -20,6 +23,7 @@ export default function TemplatesPage(){
 }
 function Workspace({context,contexts,onOffice}:{context:AccessContext;contexts:AccessContext[];onOffice:(id:string)=>void}){
  const auth=useAuth(),office=context.office_id,canManage=context.permissions.includes('templates.manage');
+ const [folder,setFolder]=useState<FolderFilter>(allFolders);
  const [view,setView]=useState<'list'|'detail'|'create'|'edit'>('list'),[input,setInput]=useState(''),[query,setQuery]=useState(''),[page,setPage]=useState(1),[revision,setRevision]=useState(0);
  const media='(max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px)',[size,setSize]=useState(()=>matchMedia(media).matches?3:5);
  const [list,setList]=useState<TemplatePage>(),[detail,setDetail]=useState<Detail>(),[error,setError]=useState<TemplatesError>(),[busy,setBusy]=useState(false),[blocked,setBlocked]=useState(false),[feedback,setFeedback]=useState(''),[uncertain,setUncertain]=useState(false);
@@ -27,7 +31,7 @@ function Workspace({context,contexts,onOffice}:{context:AccessContext;contexts:A
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;pending.current?.abort();generation.current++;};},[]);
  useEffect(()=>{const m=matchMedia(media),change=()=>{setSize(m.matches?3:5);setPage(1);};m.addEventListener('change',change);return()=>m.removeEventListener('change',change);},[]);
  function fail(cause:unknown){const e=templatesError(cause);setError(e);if(e.status===401||e.status===403){pending.current?.abort();attempt.current=null;setBlocked(true);setDetail(undefined);setList(undefined);setUncertain(false);}}
- useEffect(()=>{if(view!=='list'||blocked)return;const c=new AbortController();setError(undefined);void templatesApi.search(office,query,page,size,c.signal).then(data=>{if(!c.signal.aborted)setList(data);}).catch(e=>{if(!c.signal.aborted)fail(e);});return()=>c.abort();},[office,query,page,size,revision,view,blocked]);
+ useEffect(()=>{if(view!=='list'||blocked)return;const c=new AbortController();setError(undefined);void commercialApi.templates(office,folder.folder_id,folder.unfiled,folder.archived,query,page,size,c.signal).then(data=>{if(!c.signal.aborted)setList(data);}).catch(e=>{if(!c.signal.aborted)fail(e);});return()=>c.abort();},[office,folder,query,page,size,revision,view,blocked]);
  useEffect(()=>{const t=setTimeout(()=>{setQuery(input.trim());setPage(1);},250);return()=>clearTimeout(t);},[input]);
  function transition(next:typeof view){pending.current?.abort();generation.current++;inFlight.current=false;setBusy(false);setError(undefined);setFeedback('');setUncertain(false);attempt.current=null;setView(next);window.scrollTo(0,0);}
  async function run(work:(signal:AbortSignal)=>Promise<Detail>,accept:(result:Detail)=>void,mutation=false){if(inFlight.current||blocked)return;const c=new AbortController(),started=generation.current;pending.current=c;inFlight.current=true;setBusy(true);setError(undefined);try{const result=await work(c.signal);if(alive.current&&!c.signal.aborted&&started===generation.current){attempt.current=null;setUncertain(false);accept(result);}}catch(e){if(alive.current&&!c.signal.aborted&&started===generation.current){const failure=templatesError(e);if(mutation&&failure.status===503)setUncertain(true);else if(mutation){setUncertain(false);attempt.current=null;}fail(failure);}}finally{if(alive.current&&pending.current===c){pending.current=null;inFlight.current=false;setBusy(false);}}}
@@ -41,6 +45,8 @@ function Workspace({context,contexts,onOffice}:{context:AccessContext;contexts:A
  {contexts.length>1&&<label className="team-field customer-office">Escritório<select value={office} disabled={busy} onChange={e=>onOffice(e.target.value)}>{contexts.map(c=><option value={c.office_id} key={c.office_id}>{c.office_name}</option>)}</select></label>}
  {blocked?<div className="team-empty"><p role="alert" className="form-feedback error">{error?.message}</p>{error?.status===401?<Link className="primary-button" to={paths.team}>Entrar novamente</Link>:<button className="team-text-button" onClick={()=>{auth.refresh();back();setBlocked(false);}}>Verificar acesso novamente</button>}</div>:<>
  {view!=='list'&&<div className="customer-view-toolbar"><button className="team-text-button" disabled={busy} onClick={back}><ArrowLeft size={18} aria-hidden="true"/>Voltar à lista</button>{view==='detail'&&detail?.can_manage&&canManage&&<button className="team-text-button" disabled={busy||!!locked} onClick={edit}><Plus size={18} aria-hidden="true"/>Nova versão</button>}</div>}
+ {view==='detail'&&detail&&<ModelManagement key={detail.id+':'+detail.latest_version} office={office} detail={detail} onDuplicate={d=>{setDetail(d);setRevision(x=>x+1);}} onChanged={()=>setRevision(x=>x+1)} onDenied={status=>{setBlocked(true);setList(undefined);setDetail(undefined);setError(new TemplatesError(status));}}/>}
+ {(view==='list'||view==='detail')&&<TemplateFolders office={office} filter={folder} onFilter={f=>{setFolder(f);setPage(1);}} templateId={view==='detail'?detail?.id:undefined} onChanged={()=>setRevision(x=>x+1)} onDenied={status=>{setBlocked(true);setList(undefined);setDetail(undefined);setError(new TemplatesError(status));}}/>}
  {feedback&&<p role="status" className="form-feedback">{feedback}</p>}
  {error&&<div><p role="alert" className="form-feedback error">{error.message}</p>{error.status===409&&detail&&<button className="team-text-button" disabled={busy} onClick={()=>open(detail.id)}>Reabrir modelo</button>}{error.status===503&&view==='detail'&&!detail&&<button className="team-text-button" onClick={back}>Voltar à lista</button>}</div>}
  {(view==='create'||view==='edit')?<TemplateForm key={`${view}:${detail?.latest_version??0}`} initial={view==='edit'?initial:undefined} busy={busy} locked={!!locked} conflict={!!conflict} onSave={save}/>:view==='detail'?detail&&<TemplateDetail key={`${detail.id}:${detail.history_page}:${detail.latest_version}`} data={detail} busy={busy} locked={!!locked} conflict={!!conflict} canApprove={detail.can_approve&&context.permissions.includes('templates.approve')&&['owner','admin'].includes(context.role_code)} onApprove={approve} onHistory={p=>void run(s=>templatesApi.detail(office,detail.id,p,s),setDetail)}/>:<>

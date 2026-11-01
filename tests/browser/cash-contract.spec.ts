@@ -1,6 +1,7 @@
 import {test,expect,type Page} from '@playwright/test';
 import type {CashConfiguration,CashDashboard,CashSession} from '../../shared/cash';
 test.skip(!process.env.TEAM_UI_CONTRACT,'Fictitious local UI contract.');
+test.beforeEach(async({page})=>{await page.route('**/api/document-commercial/presence',r=>r.fulfill({json:{data:{status:'offline',capacity:1,last_seen:null,session_current:false}}}));await page.route('**/api/document-workflow/cash-queue',r=>r.fulfill({json:{data:{items:[],total:0,page:1,page_size:5}}}));});
 const office='11111111-1111-4111-8111-111111111111',user='22222222-2222-4222-8222-222222222222',unit='33333333-3333-4333-8333-333333333333',account='44444444-4444-4444-8444-444444444444',bank='55555555-5555-4555-8555-555555555555';
 const config:CashConfiguration={units:[{id:unit,name:'Unidade Fictícia',active:true,version:1}],accounts:[{id:account,unit_id:unit,name:'Espécie Fictícia',type:'cash',active:true,version:1},{id:bank,unit_id:unit,name:'Destino Digital Fictício',type:'digital',active:true,version:1}],payment_methods:[{id:'66666666-6666-4666-8666-666666666666',unit_id:unit,name:'PIX Fictício',type:'pix',destination_account_id:bank,active:true,version:1}],units_total:1,accounts_total:2,payment_methods_total:1,page:1,page_size:50,unit_id:null};
 const empty:CashDashboard={sessions:[],total:0,page:1,page_size:3,scope:'own',can_open:true,can_manage:true,can_read_all:true};

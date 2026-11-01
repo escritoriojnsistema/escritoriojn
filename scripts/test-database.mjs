@@ -1,3 +1,4 @@
+import { raceDocumentCommercial, raceFolderSession } from './database-document-commercial.mjs';
 import {raceManualImports21,verifyManualImportPayload21} from './database-templates21-manual-import.mjs';
 import {raceDocuments21,benchmarkDocuments21} from './database-documents21.mjs';
 import {raceTemplates,benchmarkTemplates} from './database-templates.mjs';
@@ -722,7 +723,8 @@ try {
   const templateMigrations=allMigrations.filter(n=>n.includes('_templates_document_library'));
   const documentMigrations=allMigrations.filter(n=>n.includes('_documents21_editor'));
   const manualImportMigrations=allMigrations.filter(n=>n.includes('_templates21_manual_import'));
-  const migrations=allMigrations.filter(n=>!templateMigrations.includes(n)&&!documentMigrations.includes(n)&&!manualImportMigrations.includes(n));
+  const integratedMigrations=allMigrations.filter(n=>n>'20261027172917_templates21_manual_import.sql' && (process.env.JN_DB_INTEGRATED_ONLY_A!=='1' || n.includes('_document_commercial_')));
+  const migrations=allMigrations.filter(n=>!templateMigrations.includes(n)&&!documentMigrations.includes(n)&&!manualImportMigrations.includes(n)&&n<='20261027172917_templates21_manual_import.sql');
   for (const database of process.env.JN_DB_HISTORY_PAYMENTS==='1'?[]:process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'?['foundation_replay_a']:['foundation_replay_a', 'foundation_replay_b']) {
     sql('postgres', 'postgres', `CREATE DATABASE ${database} OWNER migrator;`);
     sql(database, 'postgres', readFileSync(`${root}tests/database/bootstrap.sql`, 'utf8'));
@@ -744,6 +746,11 @@ try {
         result+=await raceTemplates({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
         result+=await raceDocuments21({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
         if(database==='foundation_replay_b')result+=benchmarkDocuments21({sql:input=>sql(database,'postgres',input)});
+        for(const file of integratedMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+        result+=sql(database,'postgres',readFileSync(`${root}tests/database/document-commercial.sql`,'utf8'));
+        result+=await raceDocumentCommercial({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+        result+=await raceFolderSession({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+        if(process.env.JN_DB_INTEGRATED_ONLY_A!=='1')result+=sql(database,'postgres',readFileSync(`${root}tests/database/document-workflow.sql`,'utf8'));
         console.log(`${database} documents21 isolated:\n${result.trim()}`);continue;
       }
       result+=await raceTemplates({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
@@ -893,6 +900,11 @@ try {
     result+=await raceManualImports21({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceDocuments21({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     if(database==='foundation_replay_b')result+=benchmarkDocuments21({sql:input=>sql(database,'postgres',input)});
+    for(const file of integratedMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+    result+=sql(database,'postgres',readFileSync(`${root}tests/database/document-commercial.sql`,'utf8'));
+    result+=await raceDocumentCommercial({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+    result+=await raceFolderSession({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+    if(process.env.JN_DB_INTEGRATED_ONLY_A!=='1')result+=sql(database,'postgres',readFileSync(`${root}tests/database/document-workflow.sql`,'utf8'));
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
   if(process.env.JN_DB_FOCUS_FINANCE19==='1'){

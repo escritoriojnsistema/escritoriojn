@@ -1,0 +1,26 @@
+import {createContext,useContext,useEffect,useRef,useState,type ReactNode} from 'react';
+import type {DocumentPresence,PresenceStatus} from '../../../shared/modelCommercial';
+import {useAuth} from '../auth/AuthProvider';
+import {modelApi} from './modelApi';
+import {CommercialError} from './api';
+type PresenceContext={states:Record<string,DocumentPresence>;errors:Record<string,string>;busy:string|null;update:(office:string,status:PresenceStatus,capacity:number)=>void};
+const Presence=createContext<PresenceContext>({states:{},errors:{},busy:null,update:()=>{}});
+export function DocumentPresenceProvider({children}:{children:ReactNode}){
+ const auth=useAuth(),key=JSON.stringify([auth.sessionKey,auth.contexts.map(c=>[c.office_id,c.role_code,[...c.permissions].sort()])]);
+ return <SessionPresence identity={key}>{children}</SessionPresence>;
+}
+function SessionPresence({children,identity}:{children:ReactNode;identity:string}){
+ const auth=useAuth(),offices=auth.status==='authorized'?auth.contexts.filter(c=>c.role_code!=='client'&&c.permissions.includes('requests.read')).map(c=>c.office_id):[];
+ const [adopted,setAdopted]=useState(identity);
+ const [states,setStates]=useState<Record<string,DocumentPresence>>({}),[errors,setErrors]=useState<Record<string,string>>({}),[busy,setBusy]=useState<string|null>(null),[clock,setClock]=useState(Date.now());
+ const latest=useRef(states),controllers=useRef(new Map<string,AbortController>()),active=useRef(true);latest.current=states;
+ useEffect(()=>{active.current=true;setAdopted(identity);setStates({});setErrors({});setBusy(null);const reads=offices.map(office=>{const c=new AbortController();void modelApi.presence(office,c.signal).then(v=>{if(!c.signal.aborted)setStates(old=>({...old,[office]:v}));}).catch(e=>{if(!c.signal.aborted)setErrors(old=>({...old,[office]:e instanceof Error?e.message:'Não foi possível consultar sua presença.'}));});return c;});return()=>{active.current=false;reads.forEach(c=>c.abort());controllers.current.forEach(c=>c.abort());controllers.current.clear();};},[identity]);
+ async function write(office:string,status:PresenceStatus,capacity:number,manual:boolean){if(controllers.current.has(office))return;const c=new AbortController();controllers.current.set(office,c);if(manual)setBusy(office);try{const v=await modelApi.updatePresence(office,status,capacity,c.signal);if(active.current&&!c.signal.aborted){setStates(old=>({...old,[office]:v}));setErrors(old=>({...old,[office]:''}));}}catch(e){if(active.current&&!c.signal.aborted){setErrors(old=>({...old,[office]:e instanceof Error?e.message:'Sua presença não foi confirmada.'}));if(e instanceof CommercialError&&[401,403].includes(e.status))setStates(old=>({...old,[office]:{status:'offline',capacity:1,last_seen:null,session_current:false}}));}}finally{if(controllers.current.get(office)===c)controllers.current.delete(office);if(active.current&&!c.signal.aborted&&manual)setBusy(null);}}
+ useEffect(()=>{const heartbeat=()=>{setClock(Date.now());if(document.visibilityState!=='visible')return;for(const [office,state]of Object.entries(latest.current))if(state.session_current&&state.status!=='offline')void write(office,state.status,state.capacity,false);};const t=setInterval(heartbeat,30000);document.addEventListener('visibilitychange',heartbeat);return()=>{clearInterval(t);document.removeEventListener('visibilitychange',heartbeat);};},[identity]);
+ const effective=Object.fromEntries(Object.entries(states).map(([o,v])=>[o,!v.last_seen||Date.parse(v.last_seen)<clock-90000?{...v,status:'offline' as const}:v]));
+ return <Presence.Provider value={{states:adopted===identity?effective:{},errors:adopted===identity?errors:{},busy:adopted===identity?busy:null,update:(o,s,c)=>void write(o,s,c,true)}}>{children}</Presence.Provider>;
+}
+export function PresenceControl(){
+ const auth=useAuth(),presence=useContext(Presence),offices=auth.contexts.filter(c=>c.role_code!=='client'&&c.permissions.includes('requests.read'));
+ return <>{offices.map(c=>{const v=presence.states[c.office_id];return <section className="operation-presence" key={c.office_id} aria-label={`Disponibilidade em ${c.office_name}`}><label>Minha disponibilidade{offices.length>1?` · ${c.office_name}`:''}<select value={v?.status??'offline'} disabled={presence.busy===c.office_id} onChange={e=>{if(e.target.value!=='offline')presence.update(c.office_id,e.target.value as PresenceStatus,v?.capacity??1);}}><option value="offline" disabled>Offline</option><option value="available">Disponível</option><option value="busy">Em atendimento</option><option value="away">Ausente</option></select></label><label>Atendimentos simultâneos<input type="number" min={1} max={10} step={1} value={v?.capacity??1} disabled={presence.busy===c.office_id||!v||v.status==='offline'} onChange={e=>{const n=Number(e.target.value);if(Number.isInteger(n)&&n>=1&&n<=10&&v?.status&&v.status!=='offline')presence.update(c.office_id,v.status,n);}}/></label>{presence.errors[c.office_id]&&<p role="alert">{presence.errors[c.office_id]}</p>}</section>;})}</>;
+}

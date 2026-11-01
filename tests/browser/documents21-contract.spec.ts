@@ -2,6 +2,7 @@ import {test,expect,type Page} from '@playwright/test';
 import {mkdir} from 'node:fs/promises';
 import {office21 as office,user21 as user,doc21,document21 as detail,request21,item21,version21} from '../fixtures/documents21';
 test.skip(!process.env.TEAM_UI_CONTRACT,'Contratos fictícios locais.');
+test.beforeEach(async({page})=>{await page.route('**/api/document-commercial/presence',r=>r.fulfill({json:{data:{status:'offline',capacity:1,last_seen:null,session_current:false}}}));await page.route('**/api/document-commercial/intake',r=>r.fulfill({json:{data:null}}));await page.route('**/api/document-workflow/state',r=>r.fulfill({json:{data:{document_id:'00000000-0000-4000-8000-000000000001',current_revision:1,can_work:false,can_review:false,publications:[]}}}));});
 async function setup(page:Page,role='owner',permissions=['foundation.access','documents.read','documents.create','documents.update','requests.read','customers.read','templates.read']){
  const state={permissions,role,value:structuredClone(detail),posts:[] as Record<string,unknown>[],failures:[] as number[]};
  const token=`e30.${Buffer.from(JSON.stringify({sub:user,exp:Math.floor(Date.now()/1000)+3600,role:'authenticated',session_id:office})).toString('base64url')}.fixture`;

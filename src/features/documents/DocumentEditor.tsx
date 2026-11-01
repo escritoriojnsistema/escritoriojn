@@ -1,3 +1,5 @@
+import {IntakeAnswers} from '../documentCommercial/IntakeAnswers';
+import {WorkflowPanel} from '../documentWorkflow/WorkflowPanel';
 import {useEffect,useMemo,useState,useSyncExternalStore} from 'react';
 import type {DocumentDetail,ParticipantInput} from '../../../shared/documents';
 import {participantRoles,validParticipants} from '../../../shared/documents';
@@ -17,6 +19,7 @@ export function DocumentEditor({initial,office,onState,onDenied,onError,sideView
  const locked=!d.can_edit||d.revision!==d.current_revision||state.blocked||!!state.failure&&state.failure.status!==422||state.busy&&sideView==='participants';
  function field(key:string,value:string){const type=d!.template.definition.variables.find(v=>v.key===key)?.type;const identifier=type==='cpf'||type==='cnpj'||type==='tax_id'||Object.hasOwn(templateVariables,key)&&key.endsWith('.cpf');const normalized=identifier?digitsOnly(value):value;if(Array.from(normalized).length<=templateValueLimit(key))queue.edit({...input!,overrides:{...input!.overrides,[key]:normalized}});}
  return <>
+ <IntakeAnswers office={office} requestId={d.request_id} itemId={d.request_item_id} definition={d.template.definition} disabled={!d.can_edit||state.busy||state.dirty||state.blocked||d.revision!==d.current_revision||!!state.failure} onApply={answers=>queue.edit({...input,overrides:{...input.overrides,...answers}})}/>
  <div className="document-meta"><span>{d.request_protocol} · Revisão {d.revision} de {d.current_revision}</span><span role="status">{state.failure?'Gravação interrompida':state.dirty?'Edição local ainda não confirmada':d.status==='prepared'?'Preenchimento concluído':'Rascunho salvo'}</span></div>
  {d.template.definition.demonstration&&<p className="template-demo">Demonstração sem validade operacional</p>}
  {state.failure&&<p role="alert" className="form-feedback error">{state.failure.message}{state.failure.status===503?' Repita a tentativa pelo menu.':state.failure.status===409?' Reabrir pelo menu descarta somente sua edição local.':''}</p>}
@@ -31,6 +34,7 @@ export function DocumentEditor({initial,office,onState,onDenied,onError,sideView
  </div>
  <div className="document-final"><button className="primary-button" disabled={locked||state.busy||state.dirty||preview.issues.length>0||!d.can_prepare||d.status==='prepared'} onClick={()=>queue.operate('prepare')}>Concluir preenchimento</button><p className="document-hint">Conclusão técnica do preenchimento. Aprovação, assinatura e entrega são decisões posteriores.</p></div>
  </>}
+ {sideView==='none'&&<WorkflowPanel office={office} documentId={d.id} revision={d.current_revision} disabled={state.busy||state.dirty||state.blocked||d.revision!==d.current_revision||!!state.failure} onDenied={onDenied}/>}
  {sideView!=='none'&&<button className="team-text-button" disabled={state.busy||state.dirty} onClick={()=>onSideView('none')}>Retornar ao editor</button>}
  </>;
 }
