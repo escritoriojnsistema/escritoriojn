@@ -48,3 +48,8 @@ Complemento de regressão:35 contratos UI de Solicitações/Caixa aprovados; tel
 [PR71](https://github.com/escritoriojnsistema/escritoriojn/pull/71), draft, branch `feat/fluxo-integrado-20261101`; código `1a036d27b87af20b3cc5522dbd5902b66aac3819`, árvore `7a269441fa17fd9c1779abbc2bed2afbd407dac8`, idêntica à árvore testada localmente. Status GitHub VercelSUCCESS e bot confirmou Ready para `95XDihrEJdCZ2hCVBxgvDbNHtyDw`.
 
 A URL de prévia é `https://escritoriojn-git-feat-fluxo-integrado-20261101-escritorio-jn.vercel.app`. O conector Vercel negou acesso à implantação com403; tentativa com time explícito também não liberou acesso. Consultas públicas de health e dos dois endpoints novos retornaram302para autenticação vercel.com. Isso é barreira da plataforma, não resposta validada da API. Nenhuma proteção foi desativada. Não há afirmação de login/banco/Storage funcionais nessa prévia. É necessário acesso ao projeto `escritoriojn` no time `escritorio-jn` para concluir a homologação hospedada. Produção não foi publicada.
+
+
+## Publicação concluída pela integração GitHub
+
+O usuário autorizou expressamente concluir. PR71 foi integrado em `e4645119`; VercelSUCCESS e schema/Edge foram aplicados automaticamente pelo GitHub. Foram conferidos health200, APIs/Edge401, bucket/RLS/ACL,33migrations e função ACTIVE, bundles novos e6redirecionamentos Chromium360/1440 sem erros. O bloqueio do preview foi superado pela verificação direta da versão canônica, sem desativar proteção. Fonte final: `publicacao-20261101.json` e `fecho-fluxo-integrado-20261101.md`. O parágrafo anterior que informa ausência de merge descreve a etapa de preparação, não o estado atual.
