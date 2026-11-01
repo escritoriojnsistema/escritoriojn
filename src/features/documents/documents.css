@@ -3,3 +3,4 @@
 @media(max-width:380px){.document-fields{grid-template-columns:minmax(0,1fr)}.document-text textarea{height:32vh}.document-meta span{display:block}}
 
 .document-field-text{grid-column:1/-1}.document-field-text textarea{resize:vertical;min-height:80px;line-height:1.5}
+.document-workflow{margin-top:1.25rem;border-top:1px solid var(--border,#ddd);padding-top:1rem}.document-publication{padding-block:1rem;border-bottom:1px solid var(--border,#ddd)}.document-publication p{overflow-wrap:anywhere}.document-workflow .team-field{max-width:760px}

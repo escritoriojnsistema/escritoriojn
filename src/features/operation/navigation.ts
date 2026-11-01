@@ -5,10 +5,12 @@ import { paths } from '../../app/routes';
 export const operationRoleNames = {
   owner: 'Super administrador (Proprietário)', admin: 'Administrador', employee: 'Funcionário', client: 'Cliente',
 };
-export type OperationItem = { key: 'documents' | 'templates' | 'quick' | 'reports' | 'expenses' | 'payments' | 'cash' | 'charges' | 'home' | 'checklists' | 'notifications' | 'requests' | 'attachments' | 'customers' | 'services' | 'team' | 'audit' | 'archives' | 'account'; label: string; path: string };
+export type OperationItem = { key: 'catalog' | 'portalDocuments' | 'documents' | 'templates' | 'quick' | 'reports' | 'expenses' | 'payments' | 'cash' | 'charges' | 'home' | 'checklists' | 'notifications' | 'requests' | 'attachments' | 'customers' | 'services' | 'team' | 'audit' | 'archives' | 'account'; label: string; path: string };
 export function operationNavigation(contexts: AccessContext[], client: boolean): OperationItem[] {
   const items: OperationItem[] = [{ key: 'home', label: 'Início', path: client ? paths.clientPanel : paths.panel }];
   if (client || contexts.some(context => context.role_code !== 'client' && context.permissions.includes('requests.read'))) items.push({ key: 'requests', label: client ? 'Minhas solicitações' : 'Solicitações', path: client ? paths.clientRequests : paths.requests });
+  if(client||contexts.some(c=>c.role_code!=='client'&&['requests.read','requests.create'].every(p=>c.permissions.includes(p))))items.push({key:'catalog',label:client?'Modelos e preços':'Solicitar documento',path:client?paths.clientDocumentCatalog:paths.documentCatalog});
+  if(client)items.push({key:'portalDocuments',label:'Meus documentos',path:paths.clientDocuments});
   if (!client && contexts.some(context => context.role_code !== 'client' && context.permissions.includes('customers.read'))) items.push({ key: 'customers', label: 'Clientes', path: paths.customers });
   if (!client && contexts.some(c=>c.role_code!=='client'&&['documents.read','requests.read','customers.read'].every(p=>c.permissions.includes(p)))) items.push({key:'documents',label:'Documentos',path:paths.documents});
   if (!client && contexts.some(c=>c.role_code!=='client'&&c.permissions.includes('templates.read'))) items.push({key:'templates',label:'Modelos documentais',path:paths.templates});

@@ -1,0 +1,14 @@
+# Contrato interno comercial integrado
+
+Tipos de entrada/saída em `shared/modelCommercial.ts`; projeções fechadas em `shared/modelCommercialValidation.ts`. Endpoints Express em `/api/document-commercial`. As RPCs públicas são wrappers INVOKER; implementações privadas verificam sessão, escritório, capacidade e escopo atuais. Dados oficiais ficam no banco, não em metadata/localStorage.
+
+- `model_folders_state(office)` / `model_folders_command(office,command,key)`: criar/renomear/excluir pasta vazia/mover modelo. Revisão inicial da localização0. Gestão exige owner/admin e templates.manage; leitura da biblioteca exige templates.read.
+- `model_templates_page(office,folder,unfiled,archived,query,page,size)`: filtro antes da paginação, título comercial atual e arquivo lógico. `model_commercial_state(office,template)` retorna metadados/oferta e capacidades atuais.
+- `model_metadata_command(office,template,command,expected_revision,key)`: rename/archive/restore; não reescreve versões/documentos. `model_duplicate(office,template,version,code,name,key)` cria rascunho sem aprovação.
+- `document_offer_manage(office,template,value,expected_revision,key)`: vincula serviço existente e configura instruções/nível/campos. Preço somente da versão09 vigente. Exige owner/admin, templates.manage e services.read/manage. Publicação exige modelo real aprovado/vigente e serviço compatível.
+- `document_offers_page(office,folder,unfiled,query,page,size)` / `document_offer_form(office,template)`: projeções do catálogo sem conteúdo integral, papéis, nível ou notas internas.
+- `document_booking_create(office,value,key)`: atendimento/item10/intake atomicamente. Portal exige cliente/responsável nulos; presencial exige responsável. Resultado público inclui protocolo/status e `waiting` sem dados da equipe. Versões/preço obsoletos retornam conflito.
+- `document_presence_state(office)` / `document_presence_update(office,status,capacity)`: presença própria da sessão, capacidade1–10, offline90s. `document_dispatch_page(office,page,size)` mostra espera e até50presenças com totais explícitos para owner/admin com requests.read_all. Despacho reutiliza atribuição/histórico10 e nível exato, com locks e revalidação.
+- `document_intake_is_booked(office,request)` habilita triagem de ficha sem duplicar item. `document_intake_view(office,request,item)` retorna declarações à equipe autorizada; `document_intake_start(office,request,item,participants,key)` fixa modelo contratado. `document_intake_apply(office,document,expected_revision,key)` usa a operação documental canônica. A UI também aplica respostas explicitamente por edição/autosave21, sem alterar cadastro.
+
+Status do checkpoint, limites, provas e publicação: `docs/etapas/fluxo-integrado-20261101.md` e `docs/evidencias/fluxo-integrado/verificacao-20261101.md`. Correções futuras de intake por novas propostas/aceites ainda não estão implementadas.

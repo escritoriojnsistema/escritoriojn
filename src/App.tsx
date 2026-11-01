@@ -1,3 +1,6 @@
+import {DocumentPresenceProvider} from './features/documentCommercial/DocumentPresenceProvider';
+import DocumentCatalogPage from './features/documentCommercial/DocumentCatalogPage';
+import PortalDocumentsPage from './features/documentWorkflow/PortalDocumentsPage';
 import DocumentsPage from './features/documents/DocumentsPage';
 import TemplatesPage from './features/templates/TemplatesPage';
 import QuickPage from './features/finance/QuickPage';
@@ -52,6 +55,9 @@ function AppRoutes() {
     <Route path={paths.clientRequests} element={<RequestsPage key={`client-requests:${operationKey}`} client />} />
     <Route path={paths.clientPayments} element={<PaymentsPage key={`client-payments:${operationKey}`} />} />
     <Route path={paths.expenses} element={<ExpensesPage key={`expenses:${operationKey}`} />} />
+    <Route path={paths.documentCatalog} element={<DocumentCatalogPage key={`catalog:${operationKey}`} />} />
+    <Route path={paths.clientDocumentCatalog} element={<DocumentCatalogPage key={`client-catalog:${operationKey}`} client />} />
+    <Route path={paths.clientDocuments} element={<PortalDocumentsPage key={`portal-documents:${operationKey}`} />} />
     <Route path={paths.documents} element={<DocumentsPage key={`documents:${operationKey}`} />} />
     <Route path={paths.templates} element={<TemplatesPage key={`templates:${operationKey}`} />} />
     <Route path={paths.quick} element={<QuickPage key={`quick:${operationKey}`} />} />
@@ -74,4 +80,4 @@ function AppRoutes() {
     <Route path="*" element={<main id="conteudo" className="not-found"><h1>Página não encontrada</h1><p>Confira o endereço ou volte ao início.</p><Link to={paths.home} className="primary-button"><ArrowLeft size={18} aria-hidden="true" />Voltar ao início</Link></main>} />
   </Routes></>;
 }
-export default function App() { return <BrowserRouter><AuthProvider><NotificationReadProvider><AppRoutes /></NotificationReadProvider></AuthProvider></BrowserRouter>; }
+export default function App() { return <BrowserRouter><AuthProvider><NotificationReadProvider><DocumentPresenceProvider><AppRoutes /></DocumentPresenceProvider></NotificationReadProvider></AuthProvider></BrowserRouter>; }

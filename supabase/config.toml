@@ -9,3 +9,8 @@ import_map = "./functions/team-invitations/deno.json"
 verify_jwt = true
 entrypoint = "./functions/private-attachments/index.ts"
 import_map = "./functions/private-attachments/deno.json"
+
+[functions.document-artifacts]
+verify_jwt = true
+entrypoint = "./functions/document-artifacts/index.ts"
+import_map = "./functions/document-artifacts/deno.json"

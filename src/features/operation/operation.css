@@ -127,3 +127,4 @@
 .account-actions .primary-button,.account-actions .secondary-button { width:auto; margin:0; }
 
 .operation-account .operation-details > .account-email-detail { grid-column:1/-1; }
+.operation-presence{padding:.75rem 1rem;border-top:1px solid #ffffff26;color:#fff}.operation-presence label{display:grid;gap:.35rem;font-size:.82rem;margin-bottom:.5rem}.operation-presence select,.operation-presence input{width:100%;min-height:44px;font-size:16px;background:#fff;color:#103248;border:1px solid #ccd3d8;border-radius:5px;padding:.4rem}.operation-presence p{font-size:.8rem;overflow-wrap:anywhere}

@@ -1,3 +1,5 @@
+import {workflowRouter} from './modules/document-workflow/router.js';
+import {commercialRouter} from './modules/document-commercial/router.js';
 import {financeRouter} from './modules/finance/router.js';
 import {templatesRouter} from './modules/templates/router.js';
 import {documentsRouter} from './modules/documents/router.js';
@@ -50,6 +52,8 @@ api.use('/charges',chargesRouter);
 api.use('/cash',cashRouter);
 api.use('/finance',financeRouter);
 api.use('/templates',templatesRouter);
+api.use('/document-commercial',commercialRouter);
+api.use('/document-workflow',workflowRouter);
 api.use('/documents',documentsRouter);
 api.use('/notifications',notificationsRouter);
 api.post('/validate', (req, res, next) => {

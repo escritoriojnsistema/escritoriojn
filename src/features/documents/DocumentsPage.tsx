@@ -1,5 +1,5 @@
 import {useEffect,useRef,useState} from 'react';
-import {Link,Navigate} from 'react-router-dom';
+import {Link,Navigate,useLocation} from 'react-router-dom';
 import {ArrowLeft,ArrowRight,Eye,Plus,RefreshCw,Search} from 'lucide-react';
 import type {AccessContext} from '../../../shared/access';
 import {validParticipants,type DocumentDetail,type DocumentPage,type ParticipantInput} from '../../../shared/documents';
@@ -13,6 +13,7 @@ import {OptionPicker,ParticipantsForm} from './DocumentOptions';
 import '../team/team.css';import '../customers/customers.css';import '../templates/templates.css';import './documents.css';
 export default function DocumentsPage(){const auth=useAuth(),[selected,setSelected]=useState(''),contexts=auth.contexts.filter(c=>c.role_code!=='client'&&['documents.read','requests.read','customers.read'].every(p=>c.permissions.includes(p))),context=contexts.find(c=>c.office_id===selected)??contexts[0];if(auth.status==='loading')return <OperationalFeedback status="loading"/>;if(auth.status==='signedOut'||auth.status==='expired')return <Navigate replace to={paths.team}/>;if(auth.status!=='authorized'||!context)return <OperationalFeedback status={auth.status==='unavailable'?'unavailable':'denied'}/>;return <Workspace key={`${auth.sessionKey}:${context.office_id}:${context.role_code}:${[...context.permissions].sort().join(',')}`} context={context} contexts={contexts} onOffice={setSelected}/>;}
 function Workspace({context,contexts,onOffice}:{context:AccessContext;contexts:AccessContext[];onOffice:(id:string)=>void}){
+ const location=useLocation();
  const office=context.office_id,[view,setView]=useState<'list'|'create'|'editor'>('list'),[list,setList]=useState<DocumentPage>(),[detail,setDetail]=useState<DocumentDetail>(),[input,setInput]=useState(''),[query,setQuery]=useState(''),[page,setPage]=useState(1),[refresh,setRefresh]=useState(0),[error,setError]=useState<Error>(),[busy,setBusy]=useState(false),[blocked,setBlocked]=useState(false),[epoch,setEpoch]=useState(0),[sideView,setSideView]=useState<'none'|'history'|'participants'>('none');
  const [queueState,setQueueState]=useState({dirty:false,busy:false,conflict:false,retryable:false,retry:()=>{}}),[request,setRequest]=useState(''),[item,setItem]=useState(''),[template,setTemplate]=useState(''),[parts,setParts]=useState<ParticipantInput[]>([]);
  const media='(max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px)',[size,setSize]=useState(()=>matchMedia(media).matches?3:5);
@@ -25,6 +26,7 @@ function Workspace({context,contexts,onOffice}:{context:AccessContext;contexts:A
  useEffect(()=>{const t=setTimeout(()=>{setQuery(input.trim());setPage(1);},250);return()=>clearTimeout(t);},[input]);
  async function run(work:(s:AbortSignal)=>Promise<DocumentDetail>){if(flight.current||blocked)return;const c=new AbortController();pending.current=c;flight.current=true;setBusy(true);setError(undefined);try{const d=await work(c.signal);if(alive.current&&!c.signal.aborted){setDetail(d);setView('editor');setEpoch(n=>n+1);setQueueState({dirty:false,busy:false,conflict:false,retryable:false,retry:()=>{}});createAttempt.current=null;}}catch(e){if(alive.current&&!c.signal.aborted){if(!(e instanceof DocumentsError)||e.status!==503)createAttempt.current=null;fail(e);}}finally{if(pending.current===c){flight.current=false;pending.current=null;if(alive.current)setBusy(false);}}}
  function open(id:string,revision:number|null=null,history_page=1){setDetail(undefined);setView('editor');void run(s=>documentsApi.detail(office,id,revision,history_page,s));}
+ useEffect(()=>{const id=location.state?.document_id;if(location.state?.office_id===office&&typeof id==='string'&&id.length===36)open(id);},[location.key,office]);
  function back(){if(busy||queueState.busy||queueState.dirty)return;setDetail(undefined);setView('list');setSideView('none');setError(undefined);setRefresh(n=>n+1);createAttempt.current=null;}
  function create(){if(!canCreate||!request||!item||!template||!validParticipants(parts))return;if(!createAttempt.current)createAttempt.current={office_id:office,request_id:request,request_item_id:item,template_version_id:template,participants:structuredClone(parts),idempotency_key:crypto.randomUUID()};const body=createAttempt.current;void run(s=>documentsApi.create(body,s));}
  const uncertain=!!createAttempt.current,locked=busy||uncertain,editorBusy=busy||queueState.busy;
