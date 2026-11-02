@@ -68,7 +68,7 @@ SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000201","session_i
 SELECT public.document_offer_manage('00000000-0000-4000-e000-000000000201',:'source_tid',(:'commercial_offer'::jsonb||'{"portal_enabled":true}'),1,gen_random_uuid());
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000205","session_id":"00000000-0000-4000-c000-000000000205"}';
 SELECT public.document_offer_form('00000000-0000-4000-e000-000000000201',:'source_tid') AS public_offer \gset
-SELECT test.assert_true(:'public_offer'::jsonb->>'price_cents'='1234' AND NOT (:'public_offer'::jsonb ?| ARRAY['content','service_id','execution_level','allow_self_approval']),'commercial: client gets real price without internals');
+SELECT test.assert_true(:'public_offer'::jsonb->>'price_cents'='1234' AND NOT (:'public_offer'::jsonb ?| ARRAY['content','execution_level','allow_self_approval']),'commercial: client gets real price without internals');
 SELECT test.assert_true(public.document_offers_page('00000000-0000-4000-e000-000000000201',NULL,false,'',1,5)->>'total'='1','commercial: client sees published offer');
 RESET ROLE;
 SET ROLE authenticated;

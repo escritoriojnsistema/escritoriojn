@@ -1,8 +1,10 @@
 import {Router,json,type Response} from 'express';
+import {createHash} from 'node:crypto';
 import {authenticatedClient} from '../auth/client.js';
 import {errorResponse} from '../../errors.js';
 import {documentExact as exact,documentObject as object,documentUuid as uuid} from '../../../shared/documents.js';
 import {validWorkflowCommand,projectWorkflowState,projectPortalDocuments} from '../../../shared/documentWorkflowValidation.js';
+import {projectDocumentVersions} from './versions-dto.js';
 export const workflowRouter=Router();
 workflowRouter.use((_req,res,next)=>{res.setHeader('Cache-Control','private, no-store');res.setHeader('CDN-Cache-Control','no-store');res.vary('Authorization');next();});
 workflowRouter.use(async(req,res,next)=>{const auth=await authenticatedClient(req,res);if(auth){res.locals.workflowAuth=auth;next();}});
@@ -17,6 +19,20 @@ function cashQueue(v:unknown){
 }
 async function rpc(res:Response,name:string,args:Record<string,unknown>,project:(v:unknown)=>unknown){try{const {client}=res.locals.workflowAuth as NonNullable<Awaited<ReturnType<typeof authenticatedClient>>>;const {data,error}=await client.rpc(name,args);if(error){failure(res,Number(/^PT(401|403|404|409|422)$/.exec(error.code??'')?.[1]??503));return;}res.json({data:project(data)});}catch{failure(res,503);}}
 workflowRouter.post('/state',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!exact(b,['office_id','document_id'])||!uuid(b.office_id)||!uuid(b.document_id)){invalid(res);return;}await rpc(res,'document_workflow_state',{p_office_id:b.office_id,p_document_id:b.document_id},projectWorkflowState);});
+workflowRouter.post('/versions',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!exact(b,['office_id','document_id','page'])||!uuid(b.office_id)||!uuid(b.document_id)||!integer(b.page)){invalid(res);return;}await rpc(res,'document_versions_page',{p_office_id:b.office_id,p_document_id:b.document_id,p_page:b.page},projectDocumentVersions);});
+workflowRouter.post('/preview',async(req,res)=>{
+ const b:unknown=req.body;if(Object.keys(req.query).length||!exact(b,['office_id','version_id'])||!uuid(b.office_id)||!uuid(b.version_id)){invalid(res);return;}
+ const {url,key,token}=res.locals.workflowAuth as NonNullable<Awaited<ReturnType<typeof authenticatedClient>>>;
+ try{
+ const response=await fetch(url+'/functions/v1/document-artifacts',{method:'POST',headers:{Authorization:'Bearer '+token,apikey:key,'Content-Type':'application/json'},body:JSON.stringify({office_id:b.office_id,publication_id:b.version_id,action:'preview'}),signal:AbortSignal.timeout(35000),cache:'no-store'});
+ if(!response.ok){await response.body?.cancel();failure(res,[401,403,404,409,422].includes(response.status)?response.status:503);return;}
+ const sha=response.headers.get('X-Document-SHA256');
+ if(response.headers.get('X-Document-Version')!==b.version_id||!sha||!/^[a-f0-9]{64}$/.test(sha)||!response.headers.get('Content-Type')?.startsWith('application/pdf')||Number(response.headers.get('Content-Length'))>3145728||!response.body){await response.body?.cancel();failure(res,503);return;}
+ const parts:Uint8Array[]=[];let size=0;const reader=response.body.getReader();try{for(;;){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>3145728){await reader.cancel();failure(res,503);return;}parts.push(value);}}finally{reader.releaseLock();}
+ const bytes=Buffer.concat(parts);if(size<8||bytes.subarray(0,5).toString()!=='%PDF-'||createHash('sha256').update(bytes).digest('hex')!==sha){failure(res,503);return;}
+ res.setHeader('Content-Type','application/pdf');res.setHeader('Content-Disposition',`inline; filename="rascunho-${b.version_id}.pdf"`);res.setHeader('X-Document-SHA256',sha);res.setHeader('X-Document-Version',b.version_id);res.setHeader('X-Content-Type-Options','nosniff');res.send(bytes);
+ }catch{failure(res,503);}
+});
 workflowRouter.post('/command',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!exact(b,['office_id','document_id','command','idempotency_key'])||!uuid(b.office_id)||!uuid(b.document_id)||!uuid(b.idempotency_key)||!validWorkflowCommand(b.command)){invalid(res);return;}await rpc(res,'document_workflow_command',{p_office_id:b.office_id,p_document_id:b.document_id,p_command:b.command,p_idempotency_key:b.idempotency_key},projectWorkflowState);});
 workflowRouter.post('/portal',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!exact(b,['office_id','page'])||!uuid(b.office_id)||!integer(b.page)){invalid(res);return;}await rpc(res,'portal_documents_page',{p_office_id:b.office_id,p_page:b.page},projectPortalDocuments);});
 workflowRouter.post('/cash-queue',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!exact(b,['office_id','page'])||!uuid(b.office_id)||!integer(b.page)){invalid(res);return;}await rpc(res,'document_cash_queue',{p_office_id:b.office_id,p_page:b.page},cashQueue);});
