@@ -59,7 +59,7 @@ export function ServiceForm({initial,busy,onSave}:{initial?:ServiceInput;busy:bo
     </div>)}
     <button type="button" className="team-text-button" disabled={input.fields.length>=12} onClick={addField}><Plus size={18} aria-hidden="true"/>Adicionar campo</button>
     <label className="team-field">Checklist do cliente (um item por linha)<textarea rows={3} maxLength={1451} value={checklist} onChange={e=>setChecklist(e.target.value)}/></label>
-    <p className="customer-note">O checklist do cliente aparece ao solicitar, informa o que enviar e marca pendência quando faltar item. O checklist interno da equipe é publicado em Checklist, por serviço ou documento. Para a categoria Documentos, deixe campos e checklist vazios e vincule pasta e modelo na tela do serviço: o documento define os dados e o checklist do cliente.</p>
+    <p className="customer-note">Crie o checklist do cliente (o que enviar) e o interno (o que conferir) em Checklist, por serviço ou documento; o modelo publicado passa a valer nos próximos atendimentos. Este campo continua como fallback legado quando não há modelo do cliente. Serviços de Consultoria, Contabilidade ou Atendimento podem ter somente o interno. Para a categoria Documentos, deixe campos e checklist vazios e vincule pasta e modelo na tela do serviço.</p>
    </details>
    <button className="primary-button service-submit" type="submit">{initial?'Publicar versão':'Cadastrar serviço'}</button>
   </fieldset>

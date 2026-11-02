@@ -128,3 +128,14 @@
 
 .operation-account .operation-details > .account-email-detail { grid-column:1/-1; }
 .operation-presence{margin:.75rem;padding:.85rem;border:1px solid #ffffff2e;border-radius:10px;background:#ffffff0f;color:#fff}.operation-presence+.operation-presence{margin-top:.25rem}.operation-presence-heading{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;font-size:.85rem;letter-spacing:.01em}.operation-presence-heading strong{font-weight:600}.operation-presence-heading small{margin-left:auto;font-size:.72rem;opacity:.75;text-align:right;overflow-wrap:anywhere}.operation-presence-dot{width:.6rem;height:.6rem;flex:0 0 .6rem;border-radius:50%;background:#94a3b8;box-shadow:0 0 0 3px #ffffff1a}.operation-presence-dot[data-status=available]{background:#22c55e}.operation-presence-dot[data-status=busy]{background:#f59e0b}.operation-presence-dot[data-status=away]{background:#f97316}.operation-presence-grid{display:grid;gap:.65rem}.operation-presence label{display:grid;gap:.35rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:#dbe6ee}.operation-presence select,.operation-presence input{width:100%;min-height:44px;font-size:16px;background:#fff;color:#103248;border:1px solid #cbd5e1;border-radius:7px;padding:.4rem .55rem}.operation-presence select:focus-visible,.operation-presence input:focus-visible{outline:3px solid #ffe08a;outline-offset:1px}.operation-presence p{font-size:.8rem;margin:.5rem 0 0;overflow-wrap:anywhere;color:#fecaca}@media(min-width:901px){.operation-presence-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:end}}
+
+/* Disponibilidade stays one column inside the 220px sidebar. */
+.operation-presence { margin: 0; padding: 12px; }
+.operation-presence-heading { margin-bottom: 10px; font-size: 12px; }
+.operation-presence-heading small { font-size: 10px; }
+.operation-presence-grid { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.operation-presence label { font-size: 10px; letter-spacing: .03em; }
+.operation-presence select, .operation-presence input { min-height: 44px; font-size: 14px; }
+@media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
+ .operation-presence select, .operation-presence input { font-size: 16px; }
+}

@@ -1,4 +1,4 @@
-import type {ChecklistDefinition,ChecklistModel,ChecklistView,ChecklistState,ChecklistNotices} from '../../../shared/checklists';
+import type {ChecklistDefinition,ChecklistModel,ChecklistView,ChecklistState,ChecklistScope,ChecklistNotices} from '../../../shared/checklists';
 import { supabase } from '../auth/browser';
 import { authenticatedFetch } from '../auth/authenticatedFetch';
 import { sessionScope } from '../auth/sessionScope';
@@ -48,8 +48,8 @@ async function request<T>(path: string, method: 'POST' | 'PATCH', body: unknown,
   } finally { unsubscribe?.(); }
 }
 export const checklistsApi={
- model:(office_id:string,service_id:string,signal?:AbortSignal)=>request<ChecklistModel>('/model','POST',{office_id,service_id},signal),
- publish:(office_id:string,service_id:string,expected_version:number,definition:ChecklistDefinition,reason:string,signal?:AbortSignal)=>request<ChecklistModel>('/model/publish','POST',{office_id,service_id,expected_version,definition,reason},signal),
+ model:(office_id:string,service_id:string,scope:ChecklistScope='internal',signal?:AbortSignal)=>request<ChecklistModel>('/model','POST',{office_id,service_id,scope},signal),
+ publish:(office_id:string,service_id:string,expected_version:number,definition:ChecklistDefinition,reason:string,scope:ChecklistScope='internal',signal?:AbortSignal)=>request<ChecklistModel>('/model/publish','POST',{office_id,service_id,expected_version,definition,reason,scope},signal),
  view:(office_id:string,request_id:string,item_id:string|null,signal?:AbortSignal)=>request<ChecklistView>('/view','POST',{office_id,request_id,item_id},signal),
  apply:(office_id:string,request_id:string,item_id:string,signal?:AbortSignal)=>request<ChecklistView>('/apply','POST',{office_id,request_id,item_id},signal),
  update:(office_id:string,entry_id:string,expected_version:number,status:ChecklistState,file_id:string|null,reason:string,signal?:AbortSignal)=>request<ChecklistView>('/entries/update','POST',{office_id,entry_id,expected_version,status,file_id,reason},signal),

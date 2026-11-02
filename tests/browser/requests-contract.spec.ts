@@ -32,6 +32,7 @@ for(const [width,height]of [[360,640],[1440,900]])test(`solicitações: lista, f
  if(width===360){const nav=page.getByRole('navigation',{name:'Atalhos do aplicativo'});expect(await nav.getByRole('link').count()).toBeLessThanOrEqual(4);await expect(nav.getByRole('link',{name:'Solicitações',exact:true})).toBeVisible();}
  if(process.env.TEAM_UI_CAPTURE)await page.screenshot({path:`docs/evidencias/etapa-10/lista-${width}.png`,fullPage:true});
  await page.getByRole('button',{name:`Ver solicitação ${summary.protocol}`,exact:true}).click();await expect(page.getByText('R$ 1,00',{exact:true})).toBeVisible();await expect(page.getByText(/Concluir não confirma quitação/)).toBeVisible();
+ if(process.env.TEAM_UI_CAPTURE)await page.screenshot({path:`docs/evidencias/etapa-10/detalhe-lista-${width}.png`,fullPage:true});
  await page.getByText('Histórico do atendimento',{exact:true}).click();await expect(page.getByRole('list',{name:'Histórico da solicitação'})).toContainText('Abertura');
  if(process.env.TEAM_UI_CAPTURE)await page.screenshot({path:`docs/evidencias/etapa-10/detalhe-${width}.png`,fullPage:true});
  await page.getByRole('button',{name:'Voltar à lista',exact:true}).click();await page.getByRole('button',{name:'Nova solicitação',exact:true}).click();await page.getByLabel('Título',{exact:true}).fill('Novo atendimento');
