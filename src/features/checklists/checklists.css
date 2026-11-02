@@ -44,3 +44,16 @@
  .checklist-scope-filter button { flex: 1 1 30%; padding-inline: 6px; }
  .checklist-toolbar { flex-wrap: wrap; }
 }
+
+/* 360px: os itens terminam acima da barra inferior sem esconder conteúdo. */
+@media (max-width: 900px) {
+ .checklists-main .operation-heading { margin-bottom: 4px; }
+ .checklists-main .team-field { margin-bottom: 4px; }
+ .checklist-toolbar, .checklist-subheading { margin: 3px 0; }
+ .checklist-toolbar { padding-bottom: 4px; }
+ .checklist-subheading h2 { margin: 3px 0; }
+ .checklist-counts { margin: 4px 0 2px; }
+ .checklist-entries > li { padding: 1px 0; }
+ .checklist-entries summary { min-height: 44px; padding-block: 3px; }
+ .checklist-entries summary span { margin-top: 2px; }
+}
