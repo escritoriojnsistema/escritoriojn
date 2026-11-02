@@ -83,8 +83,18 @@ Documentos), sem criar um segundo campo editável que possa divergir.
 - Testes focados de Serviços, pastas, catálogo documental e contratos de equipe:
   11 passaram após atualizar as fixtures com `category` e a identidade do modelo.
 - Banco: funções novas e projeções conferidas no Supabase por consulta ao catálogo
-  (`pg_proc` e `pg_get_functiondef`); não há serviços nem ofertas reais, então o
-  vínculo não foi exercitado com dados fictícios.
+  (`pg_proc`, `pg_get_functiondef` e ACL); categorias derivadas conferidas contra as
+  quatro pastas reais (Declarações, Contratos, Requerimentos, Ofícios). Não há
+  serviços nem ofertas reais, então o vínculo não foi exercitado com dados fictícios.
+- Histórico: `20261102030000` registrado em `schema_migrations` após o SQL idempotente
+  já estar aplicado e conferido; a integração Git não o registrou dentro da janela
+  observada. Nenhuma migration anterior foi reaplicada.
 - `npm test` completo não foi repetido nesta rodada; o histórico desta VM é de falha
   somente nos testes de PDF por fonte ausente.
-- Ainda não houve commit, push, deploy ou publicação neste checkpoint.
+- Git: commit `4b81453` enviado para `main`.
+- Vercel: deployment `dpl_4D2RxaY39FF2Qn4P6ehcrUHXjpri` `READY`/`PROMOTED` no alias
+  https://escritoriojn.vercel.app. Home e `/api/health` responderam 200; `/documentos`
+  respondeu 200; `offer-attach` anônimo respondeu 401; o bundle publicado contém
+  `offer-attach`, “Super administrador” e “Documentos emitidos”.
+- Login e o vínculo real pasta→modelo não foram exercitados por falta de navegador e
+  de um serviço real; permanecem para conferência autenticada do gestor.
