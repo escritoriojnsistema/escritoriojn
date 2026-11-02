@@ -15,7 +15,8 @@ CREATE TABLE auth.users (
 CREATE TABLE auth.sessions (
   id uuid PRIMARY KEY,
   user_id uuid NOT NULL REFERENCES auth.users(id),
-  not_after timestamptz
+  not_after timestamptz,
+  created_at timestamptz NOT NULL DEFAULT clock_timestamp()
 );
 CREATE FUNCTION auth.jwt() RETURNS jsonb LANGUAGE sql STABLE AS $$
   SELECT coalesce(nullif(current_setting('request.jwt.claims',true),'')::jsonb,'{}'::jsonb);

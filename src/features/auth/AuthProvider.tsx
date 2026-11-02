@@ -8,12 +8,14 @@ import { authStorageKey, endBrowserSession, onBrowserSessionEnded, supabase } fr
 import { sessionScope } from './sessionScope';
 import { isEndedSession, type SessionEndReason } from './sessionStorage';
 import { consumeVerifiedPortal } from './verifiedPortalContext';
+import { useSessionActivity } from './useSessionActivity';
 type AccessState = { status: 'loading' | 'signedOut' | 'expired' | 'authorized' | 'denied' | 'unavailable'; contexts: AccessContext[] };
 const initial: AccessState = { status: 'loading', contexts: [] };
 const AuthContext = createContext({ ...initial, sessionKey: '', recovery: false, refresh: () => {}, endRecovery: () => {}, logout: async () => false });
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null | undefined>(undefined);
   const currentSession = useRef<Session | null>(null);
+  useSessionActivity(currentSession,session?sessionScope(session):'');
   const endedReason = useRef<SessionEndReason>('signedOut');
   const [access, setAccess] = useState<AccessState>(initial);
   const [verifiedScope, setVerifiedScope] = useState<string>();

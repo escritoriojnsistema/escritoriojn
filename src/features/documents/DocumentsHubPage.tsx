@@ -19,6 +19,7 @@ const canIssued=(context:AccessContext)=>context.role_code!=='client'&&['documen
  * "Documentos" separately. The document request flow lives in Solicitações.
  */
 export default function DocumentsHubPage(){
+ const [modelsBusy,setModelsBusy]=useState(false);
  const auth=useAuth(),[selected,setSelected]=useState(''),[params,setParams]=useSearchParams(),[documentLayout,setDocumentLayout]=useState<DocumentsLayout>({actions:undefined,busy:false});
  const contexts=auth.contexts.filter(context=>canModels(context)||canIssued(context));
  const context=contexts.find(item=>item.office_id===selected)??contexts[0];
@@ -32,12 +33,12 @@ export default function DocumentsHubPage(){
  const available=tabs.filter(([, ,show])=>show);
  const requested=params.get('aba') as Tab|null;
  const tab=available.some(([key])=>key===requested)?requested as Tab:available[0][0];
- return <OperationLayout busy={tab==='issued'&&documentLayout.busy} contextActions={tab==='issued'?documentLayout.actions:undefined}><div className="documents-main documents-hub">
+ return <OperationLayout busy={tab==='issued'?documentLayout.busy:modelsBusy} contextActions={tab==='issued'?documentLayout.actions:undefined}><div className="documents-main documents-hub">
   <OperationHeading context={context} showRole={false} title="Documentos" description="Modelos, documentos emitidos e solicitação de documento no mesmo lugar."/>
-  {contexts.length>1&&<label className="team-field customer-office">Escritório<select value={context.office_id} disabled={documentLayout.busy} onChange={event=>setSelected(event.target.value)}>{contexts.map(item=><option key={item.office_id} value={item.office_id}>{item.office_name}</option>)}</select></label>}
+  {contexts.length>1&&<label className="team-field customer-office">Escritório<select value={context.office_id} disabled={tab==='issued'?documentLayout.busy:modelsBusy} onChange={event=>setSelected(event.target.value)}>{contexts.map(item=><option key={item.office_id} value={item.office_id}>{item.office_name}</option>)}</select></label>}
   <div role="tablist" aria-label="Áreas de documentos" className="team-tabs">
-   {available.map(([key,label])=><button key={key} role="tab" aria-selected={tab===key} disabled={documentLayout.busy} onClick={()=>setParams(key==='models'?{}:{aba:key},{replace:true})}>{label}</button>)}
+   {available.map(([key,label])=><button key={key} role="tab" aria-selected={tab===key} disabled={tab==='issued'?documentLayout.busy:modelsBusy} onClick={()=>setParams(key==='models'?{}:{aba:key},{replace:true})}>{label}</button>)}
   </div>
-  {tab==='models'?<TemplatesPage embedded/>:<DocumentsPage embedded onLayout={setDocumentLayout}/>}
+  {tab==='models'?<TemplatesPage embedded fixedOffice={context.office_id} onPendingChange={setModelsBusy}/>:<DocumentsPage embedded onLayout={setDocumentLayout}/>}
  </div></OperationLayout>;
 }

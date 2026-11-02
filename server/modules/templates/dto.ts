@@ -18,7 +18,7 @@ export function templatePage(v:unknown):TemplatePage{
  return {items:v.items.map(summary),total:v.total,page:v.page,page_size:v.page_size};
 }
 export function templateDetail(v:unknown):TemplateDetail{
- if(!record(v)||!uuid(v.id)||typeof v.code!=='string'||!int(v.latest_version,1)||typeof v.can_manage!=='boolean'||typeof v.can_approve!=='boolean'||!Array.isArray(v.versions)||v.versions.length>5||!int(v.history_total,1)||v.history_total!==v.latest_version||!int(v.history_page,1,100000))throw Error('Invalid template detail');
- const versions=v.versions.map(version);if(versions.some(x=>x.code!==v.code||x.number>Number(v.latest_version))||new Set(versions.map(x=>x.number)).size!==versions.length)throw Error('Invalid version identity');
+ if(!record(v)||!uuid(v.id)||typeof v.code!=='string'||!int(v.latest_version,1)||typeof v.can_manage!=='boolean'||typeof v.can_approve!=='boolean'||!Array.isArray(v.versions)||v.versions.length>5||!int(v.history_total,1)||v.history_total>v.latest_version||!int(v.history_page,1,100000))throw Error('Invalid template detail');
+ const versions=v.versions.map(version);if(versions.some(x=>x.code!==v.code||x.number>Number(v.latest_version))||new Set(versions.map(x=>x.number)).size!==versions.length||!v.can_manage&&!v.can_approve&&versions.some(x=>x.approved_at===null))throw Error('Invalid version identity');
  return {id:v.id,code:v.code,latest_version:v.latest_version,can_manage:v.can_manage,can_approve:v.can_approve,versions,history_total:v.history_total,history_page:v.history_page};
 }

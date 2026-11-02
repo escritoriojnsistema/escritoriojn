@@ -2,15 +2,20 @@ import { serviceKeys, validService, validAdjustment, validServiceReason, type Se
 import { record, uuid } from '../team/validation.js';
 const int=(v:unknown,min=0,max=Number.MAX_SAFE_INTEGER)=>Number.isSafeInteger(v) && Number(v)>=min && Number(v)<=max;
 const time=(v:unknown):v is string=>typeof v==='string' && v.length<=40 && Number.isFinite(Date.parse(v));
+function categoryMetadata(value:Record<string,unknown>){
+  if(value.category_id===undefined&&value.category_name===undefined)return {};
+  if(!uuid(value.category_id)||typeof value.category_name!=='string'||!value.category_name.trim()||Array.from(value.category_name).length>60||/[\u0000-\u001f\u007f]/.test(value.category_name))throw Error('Invalid service category metadata');
+  return {category_id:value.category_id,category_name:value.category_name};
+}
 function version(value:unknown):ServiceVersion {
   if(!record(value)||!uuid(value.id)||!uuid(value.created_by)||!int(value.number,1,2147483646)||!time(value.created_at)||!time(value.effective_from)||!validServiceReason(value.reason))throw Error('Invalid service version');
   const input=Object.fromEntries(serviceKeys.map(k=>[k,k==='effective_from'?new Date(value.effective_from as string).toISOString():value[k]]));
   if(!validService(input))throw Error('Invalid service definition');
-  return {...input,fields:input.fields.map(f=>({key:f.key,label:f.label,type:f.type,required:f.required})),checklist:[...input.checklist],required_capabilities:[...input.required_capabilities],id:value.id,number:Number(value.number),created_at:value.created_at,created_by:value.created_by,reason:value.reason};
+  return {...input,...categoryMetadata(value),fields:input.fields.map(f=>({key:f.key,label:f.label,type:f.type,required:f.required})),checklist:[...input.checklist],required_capabilities:[...input.required_capabilities],id:value.id,number:Number(value.number),created_at:value.created_at,created_by:value.created_by,reason:value.reason};
 }
 function summary(v:unknown):ServiceSummary {
   if(!record(v)||!uuid(v.id)||typeof v.code!=='string'||!/^[A-Z0-9][A-Z0-9_-]{1,31}$/.test(v.code)||typeof v.name!=='string'||Array.from(v.name).length>120||typeof v.category!=='string'||Array.from(v.category).length>60||typeof v.unit!=='string'||Array.from(v.unit).length>30||!int(v.price_cents,0,100000000)||!int(v.version,1,2147483646)||!time(v.effective_from))throw Error('Invalid service summary');
-  return {id:v.id,code:v.code,name:v.name,category:v.category,unit:v.unit,price_cents:Number(v.price_cents),version:Number(v.version),effective_from:v.effective_from};
+  return {...categoryMetadata(v),id:v.id,code:v.code,name:v.name,category:v.category,unit:v.unit,price_cents:Number(v.price_cents),version:Number(v.version),effective_from:v.effective_from};
 }
 export function servicePage(v:unknown):ServicePage {
   if(!record(v)||!Array.isArray(v.items)||![3,5].includes(Number(v.page_size))||!int(v.page_size)||v.items.length>Number(v.page_size)||!int(v.total)||!int(v.page,1,100000))throw Error('Invalid service page');

@@ -1,3 +1,5 @@
+import SettingsPage from './features/settings/SettingsPage';
+import ArchivesHubPage from './features/settings/ArchivesHubPage';
 import {DocumentPresenceProvider} from './features/documentCommercial/DocumentPresenceProvider';
 import DocumentsHubPage from './features/documents/DocumentsHubPage';
 import ClientDocumentsPage from './features/documents/ClientDocumentsPage';
@@ -67,11 +69,15 @@ function AppRoutes() {
     <Route path={paths.clientNotifications} element={<NotificationsPage key={`client-notices:${operationKey}`} client />} />
     <Route path={paths.attachments} element={<AttachmentsPage key={`attachments:${operationKey}`} />} />
     <Route path={paths.clientAttachments} element={<AttachmentsPage key={`client-attachments:${operationKey}`} client />} />
+    <Route path={paths.settings} element={<SettingsPage key={`settings:${operationKey}`}/>} />
+    <Route path={paths.settingsCategories} element={<SettingsPage key={`categories:${operationKey}`} section="categories"/>} />
+    <Route path={paths.settingsAccess} element={<SettingsPage key={`access-settings:${operationKey}`} section="access"/>} />
+    <Route path={paths.settingsArchives} element={<ArchivesHubPage key={`archives-hub:${operationKey}`}/>} />
     <Route path={paths.services} element={<ServicesPage key={operationKey} />} />
     <Route path={paths.teamManagement} element={<TeamPage key={operationKey} />} />
     <Route path={paths.invitation} element={<InvitationPage key={auth.sessionKey} />} />
     <Route path={paths.audit} element={<GovernancePage key={`audit:${operationKey}`} mode="audit" />} />
-    <Route path={paths.archives} element={<GovernancePage key={`archives:${operationKey}`} mode="archives" />} />
+    <Route path={paths.archives} element={<ArchivesHubPage key={`archives:${operationKey}`} />} />
     <Route path={paths.account} element={<AccountPage key={`team:${operationKey}`} />} />
     <Route path={paths.clientAccount} element={<AccountPage key={`client:${operationKey}`} />} />
     <Route path={paths.status} element={<StatusPage />} />

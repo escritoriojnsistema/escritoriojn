@@ -1,9 +1,10 @@
+import {ClientRequestForm} from './ClientRequestForm';
 import { useState, type FormEvent } from 'react';
 import type { CreateRequestInput, RequestOption } from '../../../shared/requests';
 import { RequestPicker } from './RequestPicker';
 import { RequestItems, itemInputs, type DraftItem } from './RequestItems';
 import type { RequestsError } from './api';
-export function RequestForm({office,client,permissions,busy,onSave,onFailure}:{office:string;client:boolean;permissions:string[];busy:boolean;onSave:(input:CreateRequestInput)=>void;onFailure:(failure:RequestsError)=>void}){
+export function RequestForm({office,client,permissions,busy,onSave,onFailure,onPendingChange}:{office:string;client:boolean;permissions:string[];busy:boolean;onSave:(input:CreateRequestInput)=>void;onFailure:(failure:RequestsError)=>void;onPendingChange?:(pending:boolean)=>void}){
  const [title,setTitle]=useState(''),[message,setMessage]=useState(''),[origin,setOrigin]=useState<'presencial'|'whatsapp'>('presencial'),[priority,setPriority]=useState<'normal'|'urgent'>('normal'),[reason,setReason]=useState(''),[note,setNote]=useState(''),[customer,setCustomer]=useState<RequestOption>(),[assignee,setAssignee]=useState<RequestOption>(),[items,setItems]=useState<DraftItem[]>([]),[error,setError]=useState('');
  function submit(event:FormEvent){event.preventDefault();if(busy)return;setError('');
   if(!title.trim()||title.trim().length>120||/[\u0000-\u001f\u007f]/.test(title)){setError('Informe um título de até 120 caracteres.');return;}
@@ -11,6 +12,7 @@ export function RequestForm({office,client,permissions,busy,onSave,onFailure}:{o
   if(priority==='urgent'&&!reason.trim()){setError('Informe o motivo da urgência.');return;}
   try{onSave({origin,title:title.trim(),customer_id:customer?.id??null,assignee_id:assignee?.id??null,priority,priority_reason:priority==='urgent'?reason.trim():'',items:itemInputs(items,customer),internal_note:note.trim()});}catch(cause){setError(cause instanceof Error?cause.message:'Confira os dados do atendimento.');}
  }
+ if(client)return <ClientRequestForm office={office} busy={busy} onSave={onSave} onFailure={onFailure} onPendingChange={onPendingChange}/>;
  return <form className="request-form" onSubmit={submit} noValidate>{error&&<p role="alert" className="form-feedback error">{error}</p>}<fieldset disabled={busy}>
   <div className="request-grid"><label className="team-field request-wide">Título<input autoComplete="off" maxLength={120} value={title} onChange={e=>setTitle(e.target.value)}/></label>
    {client?<label className="team-field request-wide">Mensagem<textarea rows={4} maxLength={2000} value={message} onChange={e=>setMessage(e.target.value)}/></label>:<label className="team-field">Origem<select value={origin} onChange={e=>setOrigin(e.target.value as typeof origin)}><option value="presencial">Presencial</option><option value="whatsapp">WhatsApp</option></select></label>}

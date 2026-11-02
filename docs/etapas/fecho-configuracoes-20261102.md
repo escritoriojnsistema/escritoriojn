@@ -1,0 +1,28 @@
+# Configurações, categorias, acesso e catálogo — 02/11/2026
+
+Pedido: verificar o trabalho da outra IA e concluir frontend, API, Supabase, GitHub→Vercel e Livro, preservando a Etapa22 já publicada. Base: `8cba4fc`. Implementação e homologação locais concluídas; publicação e readback remoto serão registrados neste fecho.
+
+## Auditoria e correções
+
+As migrations20261102154519/160847/161221 estavam no Supabase e ausentes de main. Os três arquivos foram recuperados do histórico, com MD5 exato008ca279736ed86574d986160f0f53ce/056864d6fad2fc4e7193e4575989f19f/aa6a238ff02f14b9bab9b36da1bd88bd. Não reaplicar. A implantação anterior não conectava essas alterações às telas/API.
+
+- Categorias: corrigidos acesso a coluna inexistente, INSERT incompatível, repetição e revalidação. IDs centrais por escritório; criar/renomear/excluir com motivo/versão/chave e auditoria. Associação por versão preserva definição e preço históricos; categoria em uso não é apagada. Catálogo, cadastro de serviço e solicitação usam a mesma fonte. Quinze categorias padrão abrangem os grupos do manual até40; nomes legados preservados. Não cria tarifas ou fluxos de etapas futuras.
+- Configurações reúne Auditoria, Arquivados, Equipe e convites, Categorias e Acessos. Quatro capacidades novas entram em Equipe/convites/delegações; seed apenas owner. Cada destino conserva sua autorização; cliente e funcionário não administram políticas por conhecer a URL.
+- Inatividade: políticas separadas equipe/cliente,15/30/60/120/180min e personalizado5–1440. GoTrue fornece o início da sessão; servidor mantém atividade/prazo por UID/session_id e histórico de políticas. Só interação humana renova; leitura, foco, atualização de token e notificações não renovam. JWT válido não contorna prazo; sessão vencida não revive ao aumentar política. RPC/RLS, conclusão de workers e distribuição verificam o prazo. Com múltiplos escritórios vale o menor prazo aplicável.
+- Solicitação: categoria oficial, protocolo `AT-…` gerado atomicamente e retry sem duplicação. Documentos encaminha a pasta→oferta com modelo aprovado/serviço/preço reais. A API só projeta dados comerciais, campos necessários e checklist do cliente; nunca texto do modelo/checklist interno. Corrigida regressão030000 que havia removido o checklist externo da projeção. Portas de quitação/identidade/aprovação/assinatura existentes preservadas.
+- Modelos: abas Rascunhos/Aprovados preservam pasta; aprovado com nova minuta permanece em ambas as listas adequadas. Leitor interno autorizado só recebe aprovados. Editar aprovado cria versão nova sem alterar aprovação anterior; título renomeado permanece. Exclusão desaparece das listas, sem checkbox Mostrar excluídos/restauração na biblioteca ativa, conservando histórico. Atualizar pastas consulta pastas e modelos e informa o resultado. Aprovação fora da primeira página abre a versão correta.
+- Arquivos: solicitações concluídas/canceladas têm arquivo manual e política30/60/90dias, corte monotônico, relatório PDF privado e snapshot imutável, até1000registros/3MB. Somente owner/admin com requests.read+requests.archives.manage; read_all amplia consulta. Escopo histórico de responsáveis e correções cadastrais restaurado. Cliente conserva acompanhamento; nada é apagado do financeiro/documentos. Renderer novo independente dos PDFs históricos de Auditoria/Etapa22.
+
+## Verificação e performance
+
+274Node/API,791linhasPASS SQL em dois bancos descartáveis,55Playwright320/360/768/1440, TypeScript/build e audit de dependências de produção0 passaram. Evidências em [verificacao-local.json](../evidencias/configuracoes-20261102/verificacao-local.json). O laboratório Auth específico passou12verificações com JWT real, isolamento UID/session_id, renovação por interação, políticas, expiração, bloqueio de revivificação e novo login. Testes de UI são contratos fictícios; não representam sessão hospedada.
+
+Consultas oficiais com Bearer e sem cache de autoridade; navegação sem loaders, estados da mesma sessão preservados, respostas antigas abortadas. Catálogo calcula uma projeção autorizada por modelo e a reutiliza em lista/pastas/contagens. FK/escopo usam índices; eventos humanos limitados a uma renovação a cada15s. Sem prometer latência zero de rede. Sidebar/Equipe reutilizadas, até4atalhos móveis, campos16px/alvos44px, conteúdo longo com rolagem natural. Screenshots de Acessos e cliente360/1440 inspecionados no laboratório.
+
+## Configuração comercial real
+
+Na leitura inicial:5usuários Auth,5vínculos,64modelos/64versões,1aprovação,17concessões individuais,2solicitações,0serviços/ofertas/documentos. Não há preços reais para publicar ofertas. A busca no Drive encontrou a Etapa09 com Xerox de TesteR$0,50/Contrato de TesteR$100,00, explicitamente fictícios; não são tabela comercial. Pergunta enviada ao usuário sobre valores oficiais. Usar Serviços para valor/categoria e checklist Cliente/Interno; vincular modelo aprovado e ativar Disponível no catálogo do cliente em Documentos. Não aprovar automaticamente minutas nem conceder permissões individuais.
+
+## Publicação e continuidade
+
+Autorização do pedido inclui concluir e publicar estes ajustes. Usar exclusivamente GitHub→Vercel, sem Actions/deployCLI. Após merge reler schema_migrations antes de aplicar qualquer SQL: a integração costuma aplicar automaticamente. Recuperadas3 não serão reaplicadas; corretivas7 geradas pela CLI. Readback deve conferir corpos/ACL/RLS/contagens, commit Vercel e assets/barreiras públicas. Edge Functions não tiveram arquivos alterados: guardas dos workers foram reforçadas nas funções SQL já chamadas por elas. Preservar renderer/PDFs históricos. Próxima etapa oficial permanece fora deste ajuste.

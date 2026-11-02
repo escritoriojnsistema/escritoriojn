@@ -1,24 +1,38 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
-import { emptyService, serviceKeys, serviceCategories, serviceAmountToUnits, validService, validServiceReason, type ServiceInput, type ServiceField } from '../../../shared/services';
+import { emptyService, serviceKeys, serviceAmountToUnits, validService, validServiceReason, type ServiceInput, type ServiceField } from '../../../shared/services';
+import type { CategoriesState } from '../../../shared/categories';
+import { categoriesApi, categoriesError, type CategoriesError } from '../settings/categoriesApi';
 
-export function ServiceForm({initial,busy,onSave}:{initial?:ServiceInput;busy:boolean;onSave:(input:ServiceInput,reason:string)=>void}){
+export function ServiceForm({office,initial,initialCategoryId,busy,onSave,onDenied}:{office:string;initial?:ServiceInput;initialCategoryId?:string;busy:boolean;onSave:(input:ServiceInput,reason:string)=>void;onDenied?:()=>void}){
  const [input,setInput]=useState<ServiceInput>(()=>({...Object.fromEntries(serviceKeys.map(key=>[key,(initial??emptyService)[key]])) as ServiceInput,effective_from:null}));
  const [price,setPrice]=useState(((initial?.price_cents??0)/100).toFixed(2).replace('.',','));
  const [reason,setReason]=useState(initial?'':'Cadastro inicial');
  const [schedule,setSchedule]=useState('');
  const [checklist,setChecklist]=useState((initial?.checklist??[]).join('\n'));
  const [error,setError]=useState('');
+ const [categories,setCategories]=useState<CategoriesState>();
+ const [categoryFailure,setCategoryFailure]=useState<CategoriesError>();
+ const [categoryId,setCategoryId]=useState(initialCategoryId??'');
+ const [categoryRevision,setCategoryRevision]=useState(0);
+ const onDeniedRef=useRef(onDenied);onDeniedRef.current=onDenied;
+ useEffect(()=>{
+  const controller=new AbortController();
+  void categoriesApi.state(office,controller.signal).then(result=>{if(!controller.signal.aborted){setCategories(result);setCategoryFailure(undefined);}}).catch(cause=>{if(!controller.signal.aborted){const failure=categoriesError(cause);setCategoryFailure(failure);if(failure.status===401||failure.status===403){setCategories(undefined);setInput({...emptyService});setPrice('0,00');setReason('');setSchedule('');setChecklist('');setCategoryId('');onDeniedRef.current?.();}}});
+  return()=>controller.abort();
+ },[office,categoryRevision]);
+ const selectedCategory=categories?.items.find(category=>category.id===categoryId)||(!categoryId?categories?.items.find(category=>category.name===input.category):undefined);
  const set=<K extends keyof ServiceInput>(key:K,value:ServiceInput[K])=>setInput(old=>({...old,[key]:value}));
  function field(index:number,patch:Partial<ServiceField>){set('fields',input.fields.map((f,i)=>i===index?{...f,...patch}:f));}
  function addField(){setInput(old=>{let n=1;while(old.fields.some(f=>f.key===`campo_${n}`))n++;return {...old,fields:[...old.fields,{key:`campo_${n}`,label:'',type:'text',required:true}]};});}
  function submit(event:FormEvent){
   event.preventDefault();if(busy)return;
+  if(!selectedCategory||categoryFailure){setError('Confira as categorias oficiais do escritório antes de publicar.');return;}
   const priceCents=serviceAmountToUnits(price);
   if(priceCents===null){setError('Informe o preço em reais, com até duas casas decimais.');return;}
   const date=schedule?new Date(schedule):null;
   if(date&&!Number.isFinite(date.getTime())){setError('Confira a data de início da vigência.');return;}
-  const normalized:ServiceInput={...input,name:input.name.trim(),category:input.category.trim(),unit:input.unit.trim(),price_cents:priceCents,effective_from:date?.toISOString()??null,checklist:checklist.split('\n').map(x=>x.trim()).filter(Boolean)};
+  const normalized:ServiceInput={...input,name:input.name.trim(),category:selectedCategory.name,unit:input.unit.trim(),price_cents:priceCents,effective_from:date?.toISOString()??null,checklist:checklist.split('\n').map(x=>x.trim()).filter(Boolean)};
   if(!validService(normalized)||!validServiceReason(reason)){setError('Confira os campos, limites e motivo. Pessoa é obrigatória quando há participantes ou assinatura.');return;}
   setError('');onSave(normalized,reason.trim());
  }
@@ -26,12 +40,14 @@ export function ServiceForm({initial,busy,onSave}:{initial?:ServiceInput;busy:bo
  const check=(key:'person_required'|'approval_required'|'signature_required'|'settlement_required'|'allow_courtesy'|'allow_price_override',label:string)=><label className="service-check"><input type="checkbox" checked={input[key]} onChange={e=>set(key,e.target.checked)}/><span>{label}</span></label>;
  return <form className="service-form" onSubmit={submit} noValidate>
   {error&&<p role="alert" className="form-feedback error">{error}</p>}
+  {categoryFailure&&<p role="alert" className="form-feedback error">{categoryFailure.message}</p>}
+  {(!!categoryFailure&&categoryFailure.status>=500)&&<button type="button" className="team-text-button" disabled={busy} onClick={()=>setCategoryRevision(n=>n+1)}>Atualizar categorias</button>}
   <fieldset disabled={busy}>
    <div className="service-form-grid">
     <label className="team-field service-name">Nome do serviço<input autoComplete="off" maxLength={120} value={input.name} onChange={e=>set('name',e.target.value)}/></label>
     <label className="team-field">Código<input autoComplete="off" maxLength={32} readOnly={!!initial} value={input.code} onChange={e=>set('code',e.target.value.toUpperCase())}/></label>
     <label className="team-field">Preço (R$)<input inputMode="decimal" autoComplete="off" maxLength={12} value={price} onChange={e=>setPrice(e.target.value)}/></label>
-    <label className="team-field">Categoria do serviço<select value={serviceCategories.includes(input.category as typeof serviceCategories[number])?input.category:''} onChange={e=>set('category',e.target.value)}><option value="">Selecione a categoria</option>{serviceCategories.map(category=><option key={category} value={category}>{category}</option>)}{input.category&&!serviceCategories.includes(input.category as typeof serviceCategories[number])&&<option value={input.category}>{input.category} (atual)</option>}</select></label>
+    <label className="team-field">Categoria do serviço<select value={selectedCategory?.id??''} disabled={!categories||!!categoryFailure} onChange={e=>setCategoryId(e.target.value)}><option value="">Selecione a categoria</option>{categories?.items.map(category=><option key={category.id} value={category.id}>{category.name}</option>)}</select></label>
     <label className="team-field">Unidade<input autoComplete="off" maxLength={30} value={input.unit} onChange={e=>set('unit',e.target.value)}/></label>
     {initial&&<label className="team-field service-name">Motivo da versão<input maxLength={500} value={reason} onChange={e=>setReason(e.target.value)}/></label>}
    </div>
@@ -61,7 +77,7 @@ export function ServiceForm({initial,busy,onSave}:{initial?:ServiceInput;busy:bo
     <label className="team-field">Checklist do cliente (um item por linha)<textarea rows={3} maxLength={1451} value={checklist} onChange={e=>setChecklist(e.target.value)}/></label>
     <p className="customer-note">Crie o checklist do cliente (o que enviar) e o interno (o que conferir) em Checklist, por serviço ou documento; o modelo publicado passa a valer nos próximos atendimentos. Este campo continua como fallback legado quando não há modelo do cliente. Serviços de Consultoria, Contabilidade ou Atendimento podem ter somente o interno. Para a categoria Documentos, deixe campos e checklist vazios e vincule pasta e modelo na tela do serviço.</p>
    </details>
-   <button className="primary-button service-submit" type="submit">{initial?'Publicar versão':'Cadastrar serviço'}</button>
   </fieldset>
+  <button className="primary-button service-submit" type="submit" disabled={busy||!selectedCategory||!!categoryFailure}>{initial?'Publicar versão':'Cadastrar serviço'}</button>
  </form>;
 }

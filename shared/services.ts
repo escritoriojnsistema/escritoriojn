@@ -1,4 +1,3 @@
-export const serviceCategories = ['Documentos','Certidões','Registros','Consultoria','Contabilidade','Fiscal','Trabalhista','Jurídico','Atendimento','Outros'] as const;
 export const servicePermissions = ['services.read','services.manage','services.perform','services.approve','services.discount','services.surcharge','services.courtesy','services.price_override'] as const;
 export const executionCapabilities = ['services.perform','services.approve'] as const;
 export type ServiceField = { key: string; label: string; type: 'text' | 'number' | 'date'; required: boolean };
@@ -9,8 +8,9 @@ export type ServiceInput = {
   max_discount_bps: number; max_surcharge_bps: number; allow_courtesy: boolean; allow_price_override: boolean;
 };
 export const serviceKeys = ['code','name','category','unit','price_cents','effective_from','person_required','participants_min','approval_required','signature_required','settlement_required','required_capabilities','fields','checklist','quantity_min','quantity_max','max_discount_bps','max_surcharge_bps','allow_courtesy','allow_price_override'] as const;
-export type ServiceVersion = ServiceInput & { id: string; number: number; created_at: string; created_by: string; reason: string };
-export type ServiceSummary = { id: string; code: string; name: string; category: string; unit: string; price_cents: number; version: number; effective_from: string };
+export type ServiceCategoryMetadata = { category_id?: string; category_name?: string };
+export type ServiceVersion = ServiceInput & ServiceCategoryMetadata & { id: string; number: number; created_at: string; created_by: string; reason: string };
+export type ServiceSummary = ServiceCategoryMetadata & { id: string; code: string; name: string; category: string; unit: string; price_cents: number; version: number; effective_from: string };
 export type ServicePage = { items: ServiceSummary[]; total: number; page: number; page_size: number };
 export type ServiceDetail = { id: string; code: string; latest_version: number; can_manage: boolean; current: ServiceVersion | null; versions: ServiceVersion[]; history_page: number; history_total: number };
 // Percentage adjustments use basis points: 1000 = 10%. Override uses unit cents.

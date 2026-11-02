@@ -22,5 +22,5 @@ export async function commercialRequest<T>(path:string,body:unknown,signal?:Abor
 export const commercialApi={
  folders:(office_id:string,signal?:AbortSignal)=>commercialRequest<TemplateFolderState>('/folders',{office_id},signal),
  folderCommand:(office_id:string,command:TemplateFolderCommand,idempotency_key:string,signal?:AbortSignal)=>commercialRequest<TemplateFolderState>('/folder-command',{office_id,command,idempotency_key},signal),
- templates:(office_id:string,folder_id:string|null,unfiled:boolean,archived:boolean,query:string,page:number,size:number,signal?:AbortSignal)=>commercialRequest<TemplatePage>('/templates-search',{office_id,folder_id,unfiled,archived,query,page,size},signal),
+ templates:(office_id:string,folder_id:string|null,unfiled:boolean,state:'draft'|'approved',query:string,page:number,size:number,signal?:AbortSignal)=>commercialRequest<TemplatePage>('/templates-search',{office_id,folder_id,unfiled,archived:false,state,query,page,size},signal),
 };

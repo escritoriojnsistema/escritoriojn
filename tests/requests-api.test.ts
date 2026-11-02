@@ -40,6 +40,12 @@ test('atendimentos10: API valida, preserva idempotência e projeta cliente sem d
    for(let n=0;n<2;n++){const response=await send('',input);assert.equal(response.status,201);assert.deepEqual((await response.json()).data,{...summary,portal:true,message:'Triagem fictícia',services:['Xerox de Teste'],assignee_name:null});assert.equal(calls.at(-1)?.body.p_idempotency_key,key);assert.notEqual(calls.at(-1)?.body.p_request_id,key);}
    const response=await send(`/${id}/detail`,{office_id:office,page:1});assert.equal(response.status,200);assert.ok(!(await response.text()).includes('PRIVATE'));
   });
+  await t.test('categoria oficial segue para a RPC transacional com a mesma chave',async()=>{
+   const response=await send('',{...input,request:{...input.request,category_id:id}});
+   assert.equal(response.status,201);assert.equal(calls.at(-1)?.url,'/rest/v1/rpc/categorized_request_create');
+   assert.deepEqual(calls.at(-1)?.body,{p_office_id:office,p_request:{...input.request,category_id:id},p_idempotency_key:key});
+   for(const category_id of [null,'bad',12])assert.equal((await send('',{...input,request:{...input.request,category_id}})).status,422);
+  });
   await t.test('portal não aceita responsável, nota, preço ou pessoa arbitrários',async()=>{
    for(const extra of [{created_by:id},{customer_id:id},{assignee_id:id},{internal_note:'secret'},{items:[]},{price_cents:1}])assert.equal((await send('',{...input,request:{...input.request,...extra}})).status,422);
    for(const change of [{idempotency_key:'bad'},{actor_id:id},{request:{...input.request,title:''}},{request:{...input.request,message:'x'.repeat(2001)}}])assert.equal((await send('',{...input,...change})).status,422);

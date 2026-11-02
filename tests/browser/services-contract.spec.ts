@@ -11,6 +11,7 @@ async function setup(page:Page,caps=permissions,empty=false,role='owner'){
  await page.route('https://team-ui.supabase.co/**',r=>r.fulfill({json:{id:user,aud:'authenticated',email:'fixture@example.test'}}));
  await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
  await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,role_code:role,permissions:caps,office_name:'Escritório Fictício',display_name:'Pessoa Fictícia'}]}}}));
+ await page.route('**/api/categories/state',r=>r.fulfill({json:{data:{items:['Cópias','Contratos','Fictício'].map((name,i)=>({id:`00000000-0000-4000-a000-00000000000${i+1}`,name,revision:1,is_documents:false})),can_manage:true}}}));
  await page.route('**/api/services**',r=>{
   const url=r.request().url(),b=r.request().postDataJSON();
   expect(r.request().headers().authorization).toMatch(/^Bearer /);
@@ -50,7 +51,7 @@ test('serviços: vazio permite cadastro e políticas no mesmo formulário',async
  await page.setViewportSize({width:360,height:640});await setup(page,permissions,true);await page.goto('/servicos');
  await expect(page.getByText('Nenhum serviço encontrado. Cadastre o primeiro serviço ou ajuste a busca.')).toBeVisible();
  await page.getByRole('button',{name:'Novo serviço',exact:true}).click();
- await page.getByLabel('Nome do serviço',{exact:true}).fill('Contrato de Teste');await page.getByLabel('Código',{exact:true}).fill('CONTRATO-TESTE');await page.getByLabel('Categoria',{exact:true}).fill('Contratos');await page.getByLabel('Preço (R$)',{exact:true}).fill('100,00');
+ await page.getByLabel('Nome do serviço',{exact:true}).fill('Contrato de Teste');await page.getByLabel('Código',{exact:true}).fill('CONTRATO-TESTE');await page.getByRole('combobox',{name:'Categoria do serviço',exact:true}).selectOption({label:'Contratos'});await page.getByLabel('Preço (R$)',{exact:true}).fill('100,00');
  await page.getByText('Políticas de atendimento e cobrança',{exact:true}).click();await page.getByLabel('Exigir pessoa').check();await page.getByLabel('Participantes mínimos').fill('2');await page.getByLabel('Exigir aprovação').check();await page.getByLabel('Exigir assinatura').check();
  const sent=page.waitForRequest(r=>r.url().endsWith('/api/services'));await page.getByRole('button',{name:'Cadastrar serviço',exact:true}).click();
  const b=(await sent).postDataJSON();expect(b.service).toMatchObject({price_cents:10000,person_required:true,participants_min:2,approval_required:true,signature_required:true});await expect(page.getByRole('status')).toContainText('Serviço cadastrado');
@@ -61,7 +62,7 @@ test('serviços: funcionário sem gestão consulta, sem editar',async({page})=>{
  await page.getByRole('button',{name:'Ver serviço Xerox de Teste',exact:true}).click();await expect(page.getByRole('heading',{name:'Xerox de Teste',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'Nova versão',exact:true})).toHaveCount(0);
 });
 test('serviços: pendência mantém rótulo e erro de conexão preserva formulário',async({page})=>{
- await setup(page);await page.goto('/servicos');await page.getByRole('button',{name:'Novo serviço',exact:true}).click();await page.getByLabel('Nome do serviço',{exact:true}).fill('Xerox de Teste');await page.getByLabel('Código',{exact:true}).fill('XEROX-TESTE');await page.getByLabel('Categoria',{exact:true}).fill('Cópias');
+ await setup(page);await page.goto('/servicos');await page.getByRole('button',{name:'Novo serviço',exact:true}).click();await page.getByLabel('Nome do serviço',{exact:true}).fill('Xerox de Teste');await page.getByLabel('Código',{exact:true}).fill('XEROX-TESTE');await page.getByRole('combobox',{name:'Categoria do serviço',exact:true}).selectOption({label:'Cópias'});
  let release!:()=>void;const held=new Promise<void>(r=>release=r);await page.route('**/api/services',async r=>{await held;await r.fulfill({status:503,json:{error:{code:'SERVICES_UNAVAILABLE'}}});});
  const button=page.getByRole('button',{name:'Cadastrar serviço',exact:true});await button.click();await expect(button).toBeDisabled();await expect(page.getByText(/Carregando|Salvando|Aguarde/)).toHaveCount(0);release();await expect(page.getByRole('alert')).toContainText('indisponível');await expect(page.getByLabel('Nome do serviço',{exact:true})).toHaveValue('Xerox de Teste');
 });
@@ -86,7 +87,7 @@ test('serviços: troca de escritório descarta rascunho e resultado tardio',asyn
  await setup(page);const other='99999999-9999-4999-8999-999999999999';
  await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
  await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[office,other].map(id=>({office_id:id,user_id:user,role_code:'owner',permissions,office_name:id===office?'Escritório Fictício':'Outro Escritório',display_name:'Pessoa Fictícia'}))}}}));
- await page.goto('/servicos');await page.getByRole('button',{name:'Novo serviço',exact:true}).click();await page.getByLabel('Nome do serviço',{exact:true}).fill('Rascunho do escritório A');await page.getByLabel('Código',{exact:true}).fill('RASCUNHO-A');await page.getByLabel('Categoria',{exact:true}).fill('Fictício');
+ await page.goto('/servicos');await page.getByRole('button',{name:'Novo serviço',exact:true}).click();await page.getByLabel('Nome do serviço',{exact:true}).fill('Rascunho do escritório A');await page.getByLabel('Código',{exact:true}).fill('RASCUNHO-A');await page.getByRole('combobox',{name:'Categoria do serviço',exact:true}).selectOption({label:'Fictício'});
  let release!:()=>void;const held=new Promise<void>(r=>release=r);await page.route('**/api/services',async r=>{await held;try{await r.fulfill({json:{data:detail}});}catch{/* canceled on office change */}});
  await page.getByRole('button',{name:'Cadastrar serviço',exact:true}).click();await page.getByRole('combobox',{name:'Escritório',exact:true}).selectOption(other);release();await expect(page.getByRole('list',{name:'Serviços do escritório'})).toBeVisible();await expect(page.getByText('Serviço cadastrado.',{exact:true})).toHaveCount(0);await page.getByRole('button',{name:'Novo serviço',exact:true}).click();await expect(page.getByLabel('Nome do serviço',{exact:true})).toHaveValue('');
 });
