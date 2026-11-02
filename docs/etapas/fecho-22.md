@@ -1,6 +1,6 @@
 # Fecho da Etapa 22 — 02/11/2026
 
-Implementação concluída na branch `feat/etapa-22`, base b3a9330. Publicação e readback ainda em acompanhamento; não declarar produção antes das evidências abaixo.
+Etapa22 concluída e publicada pelo [PR74](https://github.com/escritoriojnsistema/escritoriojn/pull/74), feature `e287147b`, merge `c904170f`. Base b3a9330 preservada. Vercel `dpl_8ThZyZKKFVYG7awAxZVuiczA6zPj` READY/produção/sourceGit, commit exato confirmado; https://escritoriojn.vercel.app.
 
 ## Resultado verificado
 
@@ -12,12 +12,16 @@ Implementação concluída na branch `feat/etapa-22`, base b3a9330. Publicação
 
 ## Publicação
 
-Pendente: registrar PR/commit, VercelREADY, migration `20261102134139_document_versions22_preview`, worker e comparação de schema/arquivos/barreiras. Fluxo exclusivamente GitHub→Vercel; sem Actions/deploy CLI/API da Vercel. Worker Supabase deve preceder o schema; após merge, conferir aplicação automática antes de qualquer aplicação manual.
+Migration `20261102134139_document_versions22_preview` aplicada automaticamente peloGit;31comandos iguais ao arquivo e nenhum SQL restante fora do histórico, SHA256 `6a148a2ae626327f0eec6f299fb08779722d30262cb8b4d73b114861ffe6e942`. Nenhuma aplicação manual/duplicada. Três tabelas RLS/ACL fechadas, três wrappers de leitura/início/autorizar autenticados e conclusão somente service_role; wrappers INVOKER e captura diferida confirmados. Default de novos jobs `jn-document-v2`.
+
+Worker compatível versão9 foi implantado antes do schema; Git publicou versão10 ACTIVE/JWT, sete arquivos-fonte idênticos ao código testado, incluindo fontes e renderers antigos. Health/home/documentos200, oito assets200 com hashes registrados e marcadores novos no bundle, APIs/worker anônimos401; três Playwright públicos canônicos passaram em360/1440. Os hashes do build local sem configuração pública diferem nos chunks que incorporam a configuração Vite; o commitGit, os assets realmente publicados e as funções-fonte foram conferidos. Fluxo exclusivamente GitHub→Vercel; sem Actions/deploy CLI/API da Vercel.
+
+Evidências: [publicacao.json](../evidencias/etapa-22/publicacao.json),[arquivos e barreiras](../evidencias/etapa-22/arquivos-e-barreiras.json). Fecho posterior altera somente documentação; não reaplicar schema nem alterar os PDFs históricos.
 
 ## Integridade e limites
 
-Antes do rollout hospedado:5Auth/5vínculos/64modelos/64versões/1aprovação/17grants individuais/99eventos, zero documentos/revisões/publicações/artefatos e zero serviços. Nenhuma fixture/Auth/permissão individual criada no projeto real. Sem serviços reais, a jornada autenticada do gestor com documento real depende da configuração operacional pela UI; a jornada de negócio foi validada em bancos locais e contratosAPI/UI, não por alteração de contas reais.
+Contagens hospedadas antes/depois do rollout, idênticas:5Auth/5vínculos/64modelos/64versões/1aprovação/17grants individuais/99eventos, zero documentos/revisões/publicações/artefatos e zero serviços. Nenhuma fixture/Auth/permissão individual criada no projeto real. Sem serviços reais, a jornada autenticada do gestor com documento real depende da configuração operacional pela UI; a jornada de negócio foi validada em bancos locais e contratosAPI/UI, não por alteração de contas reais.
 
-RLS privada sem policy é intencional com ACL fechada. Aviso anterior de proteção contra senhas vazadas permanece; nenhuma configuração Auth foi alterada. Não promete impedir cópia física nem fornecer assinatura criptográfica. Arquivos novos de prévia são material de trabalho; entrega conserva gates anteriores.
+Advisors:93INFO RLSsemPolicy (90anteriores+3novas privadas com ACL fechada), WARNpreexistente de senha; zero FKsemíndice nas novas tabelas. RLS privada sem policy é intencional com ACL fechada. Aviso anterior de proteção contra senhas vazadas permanece; nenhuma configuração Auth foi alterada. Não promete impedir cópia física nem fornecer assinatura criptográfica. Arquivos novos de prévia são material de trabalho; entrega conserva gates anteriores.
 
 Próxima leitura: AGENTS, Livro, cartão22/fecho e regra documental afetada. Próxima23 somente por novo pedido.

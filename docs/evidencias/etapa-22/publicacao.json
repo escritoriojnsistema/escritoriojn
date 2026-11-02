@@ -1,0 +1,128 @@
+{
+  "stage": 22,
+  "date": "2026-11-02",
+  "base": "b3a9330646bd36d9a3f07a2fb501318a1e9de999",
+  "pull_request": 74,
+  "commit": "e287147b28dc0c9d72eb486872a7060fc430db2b",
+  "merge": "c904170f171c0d1535b65592b964ddbf9c3a50a2",
+  "deployment": {
+    "id": "dpl_8ThZyZKKFVYG7awAxZVuiczA6zPj",
+    "state": "READY",
+    "source": "git",
+    "target": "production",
+    "canonical": "https://escritoriojn.vercel.app"
+  },
+  "migration": {
+    "version": "20261102134139",
+    "automatic": true,
+    "statements": 31,
+    "all_statements_exact": true,
+    "file_sha256": "6a148a2ae626327f0eec6f299fb08779722d30262cb8b4d73b114861ffe6e942"
+  },
+  "worker": {
+    "version": 10,
+    "status": "ACTIVE",
+    "verify_jwt": true,
+    "source_files": 7,
+    "all_source_files_exact": true,
+    "bundle_sha256": "fbaf1132f1f8aa3338ddeae2fad055f994b9866a06a61f84537ce5360513e135"
+  },
+  "schema": {
+    "rpc": [
+      {
+        "name": "document_version_authorize",
+        "definer": false,
+        "anon_execute": false,
+        "auth_execute": true,
+        "service_execute": false
+      },
+      {
+        "name": "document_version_begin",
+        "definer": false,
+        "anon_execute": false,
+        "auth_execute": true,
+        "service_execute": false
+      },
+      {
+        "name": "document_version_complete",
+        "definer": false,
+        "anon_execute": false,
+        "auth_execute": false,
+        "service_execute": true
+      },
+      {
+        "name": "document_versions_page",
+        "definer": false,
+        "anon_execute": false,
+        "auth_execute": true,
+        "service_execute": false
+      }
+    ],
+    "counts": {
+      "auth": 5,
+      "audit": 99,
+      "grants": 17,
+      "versions": 64,
+      "approvals": 1,
+      "documents": 0,
+      "templates": 64,
+      "memberships": 5,
+      "new_versions": 0
+    },
+    "tables": [
+      {
+        "rls": true,
+        "table": "document_versions",
+        "anon_select": false,
+        "auth_select": false
+      },
+      {
+        "rls": true,
+        "table": "document_version_files",
+        "anon_select": false,
+        "auth_select": false
+      },
+      {
+        "rls": true,
+        "table": "document_version_accesses",
+        "anon_select": false,
+        "auth_select": false
+      }
+    ],
+    "capture_deferred": true,
+    "renderer_default": "'jn-document-v2'::text"
+  },
+  "tests": {
+    "node": 252,
+    "sql": 603,
+    "sql_replays": 2,
+    "ui": 28,
+    "ui_widths": [
+      320,
+      360,
+      768,
+      1440
+    ],
+    "build": true,
+    "typecheck": true,
+    "deno_check": true,
+    "production_dependency_vulnerabilities": 0,
+    "independent_review": {
+      "findings": 2,
+      "fixed": 2
+    },
+    "public_browser": 3
+  },
+  "limits": [
+    "No hosted authenticated business fixture was created; real database has zero services/documents.",
+    "UI provider and business HTTP contracts use local intercepted fixtures; PostgreSQL tests use disposable databases.",
+    "Existing leaked password protection warning unchanged; new private RLS-without-policy INFO is intentional with denied raw grants.",
+    "Physical mobile device and authenticated real customer journey not exercised."
+  ],
+  "workflow": "GitHub to Vercel; no GitHub Actions or Vercel CLI/API deployment",
+  "advisors": {
+    "new_private_rls_info": 3,
+    "existing_leaked_password_warning": true,
+    "new_unindexed_foreign_keys": 0
+  }
+}

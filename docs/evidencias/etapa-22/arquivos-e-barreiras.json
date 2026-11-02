@@ -1,0 +1,77 @@
+[
+  {
+    "path": "/",
+    "status": 200
+  },
+  {
+    "path": "/documentos?aba=issued",
+    "status": 200
+  },
+  {
+    "path": "/api/health",
+    "status": 200
+  },
+  {
+    "asset": "/assets/react-DYkIpRt7.js",
+    "status": 200,
+    "sha256": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+    "bytes": 259235
+  },
+  {
+    "asset": "/assets/rolldown-runtime-WkwZ5CU-.js",
+    "status": 200,
+    "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+    "bytes": 599
+  },
+  {
+    "asset": "/assets/index-BcKNtdQQ.js",
+    "status": 200,
+    "sha256": "1d628179418db4d735b2ce4f7c204a35f364335e5657a0909b8487368919a186",
+    "bytes": 431173
+  },
+  {
+    "asset": "/assets/icons-B3AA7x6H.js",
+    "status": 200,
+    "sha256": "b0effe3054d58eaf07d4ce974dc825e19c5e34ca6043599d08eeb18f8df35367",
+    "bytes": 11804
+  },
+  {
+    "asset": "/assets/supabase-DtuMx0jC.js",
+    "status": 200,
+    "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+    "bytes": 214392
+  },
+  {
+    "asset": "/assets/documents-HHD8y_M8.js",
+    "status": 200,
+    "sha256": "fec8a2c4696d2789b6fce6d99f6388842b72998f275a8d610c89b3f7f8493254",
+    "bytes": 156127
+  },
+  {
+    "asset": "/assets/documents-U2LQdWK3.css",
+    "status": 200,
+    "sha256": "8b718ebdee5a5c7457c82d618f0654a68a281b3a939f9586b3fa76e79a74af24",
+    "bytes": 37232
+  },
+  {
+    "asset": "/assets/index-CWGgQaMs.css",
+    "status": 200,
+    "sha256": "46477df2cea96b16c95119e08832365ac3069476eb329342cc39341c88084e42",
+    "bytes": 60385
+  },
+  {
+    "new_document_features_in_deployed_bundle": true,
+    "environment_specific_build": true
+  },
+  {
+    "path": "/api/document-workflow/versions",
+    "anonymous_status": 401
+  },
+  {
+    "path": "/api/document-workflow/preview",
+    "anonymous_status": 401
+  },
+  {
+    "worker_anonymous": 401
+  }
+]
