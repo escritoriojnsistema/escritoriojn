@@ -1,8 +1,10 @@
-import { Router } from 'express';
+import { Router, json } from 'express';
 import { createClient } from '@supabase/supabase-js';
 import { projectAccessContexts, uuidPattern, type AccessResponse } from '../../../shared/access.js';
 import { validPublicConnection } from '../../../shared/connection.js';
 import { errorResponse } from '../../errors.js';
+import { authenticatedClient } from './client.js';
+import { activitySnapshot } from '../../../shared/sessionActivity.js';
 
 export const authRouter=Router();
 authRouter.use((_req,res,next)=>{
@@ -47,6 +49,7 @@ authRouter.get('/context',async(req,res)=>{
     const contexts=error?null:projectAccessContexts(data,identity.user.id,
       area==='team'||area==='client'?area:undefined,typeof office==='string'?office:undefined);
     if (contexts===null) {
+      if(error?.code==='PT401'&&error.message==='AUTH_REQUIRED'){errorResponse(res,401,'AUTH_REQUIRED','Entre novamente para continuar.');return;}
       errorResponse(res,503,'AUTH_UNAVAILABLE','Não foi possível verificar as permissões. Tente novamente.');return;
     }
     if (!contexts.length) {
@@ -56,4 +59,19 @@ authRouter.get('/context',async(req,res)=>{
   } catch {
     errorResponse(res,503,'AUTH_UNAVAILABLE','Não foi possível verificar o acesso. Tente novamente.');
   }
+});
+authRouter.route('/activity').all((req,res,next)=>{
+  if(Object.keys(req.query).length){errorResponse(res,422,'ACTIVITY_VALIDATION','Solicitação de atividade inválida.');return;}
+  if(req.method!=='GET'&&req.method!=='POST'){res.sendStatus(405);return;}
+  if(req.method==='POST'&&!req.is('application/json')){errorResponse(res,415,'UNSUPPORTED_MEDIA_TYPE','Envie um corpo JSON.');return;}
+  next();
+},json({limit:'1kb'}),async(req,res)=>{
+  const auth=await authenticatedClient(req,res);if(!auth)return;
+  if(req.method==='POST'&&(!req.body||typeof req.body!=='object'||Array.isArray(req.body)||Object.keys(req.body).length)){errorResponse(res,422,'ACTIVITY_VALIDATION','Solicitação de atividade inválida.');return;}
+  try{
+    const {data,error}=await auth.client.rpc('session_activity',{p_human:req.method==='POST'});
+    if(error){if(error.code==='PT401'&&error.message==='AUTH_REQUIRED'){errorResponse(res,401,'AUTH_REQUIRED','Sua sessão expirou. Entre novamente para continuar.');return;}throw error;}
+    const snapshot=activitySnapshot(data);if(snapshot.user_id!==auth.userId)throw new Error('ACTIVITY_IDENTITY');
+    res.json({data:snapshot});
+  }catch{errorResponse(res,503,'ACTIVITY_UNAVAILABLE','Não foi possível verificar o prazo da sessão. Tente novamente.');}
 });

@@ -10,6 +10,7 @@ export type AuditVerification = { match: boolean; protocol: string; count: numbe
 export const auditReportMaxEvents = 10_000;
 export const auditReportMaxBytes = 3 * 1024 * 1024;
 export const auditActionNames: Record<string, string> = {
+ 'access.policy_updated':'Prazo de acesso alterado','categories.created':'Categoria criada','categories.renamed':'Categoria renomeada','categories.deleted':'Categoria excluída','requests.archive_policy_changed':'Prazo de arquivo das solicitações alterado','requests.archived':'Solicitação arquivada','requests.report_created':'Relatório de solicitações criado',
  'checklists.model_published':'Modelo de checklist publicado', 'checklists.applied':'Checklist aplicado', 'checklists.item_updated':'Item de checklist atualizado',
  'requests.created':'Atendimento aberto', 'requests.status_changed':'Etapa do atendimento alterada', 'requests.transferred':'Responsável pelo atendimento alterado', 'requests.note_added':'Nota interna registrada', 'requests.triaged':'Solicitação classificada',
  'services.created':'Serviço cadastrado', 'services.version_published':'Versão de serviço publicada',

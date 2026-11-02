@@ -19,7 +19,7 @@ const images = {
 };
 
 /** Disposable local Auth, REST, Storage and SMTP. No hosted database or objects. */
-export async function createAuthLab() {
+export async function createAuthLab({storage=true}={}) {
   const id = randomUUID();
   const network = `jn-auth-lab-${id}`;
   const names = Object.fromEntries(Object.keys(images).map(key => [key, `${network}-${key}`]));
@@ -287,6 +287,7 @@ export async function createAuthLab() {
 
     // Run the official provider migrations before app migrations create a
     // bucket or RLS policies. Storage bytes live only in this disposable tmpfs.
+    if(storage){
     await run('storage', {
       ANON_KEY: anonKey, SERVICE_KEY: serviceRoleKey, AUTH_JWT_SECRET: jwtSecret,
       POSTGREST_URL: 'http://rest:3000',
@@ -303,6 +304,13 @@ export async function createAuthLab() {
       if (!await healthy(`${url}/storage/v1/status`)) return false;
       return (await sql("SELECT count(*)>0 FROM storage.migrations;" )).trim() === 't';
     }, 'storage');
+    }else{
+      // Auth-only suites keep real GoTrue/PostgREST. Storage is only a schema
+      // contract here; these suites must never claim a provider Storage proof.
+      const fixture=await readFile(`${root}tests/database/bootstrap.sql`,'utf8');
+      const storageContract=fixture.slice(fixture.indexOf('SET ROLE migrator;',fixture.indexOf('-- Provider-shaped Storage stub.'))).replace('SET ROLE migrator;','SET ROLE supabase_storage_admin;');
+      await sql(storageContract);
+    }
     // The migrator may define application policies under the real provider
     // owner, just as a hosted migration operator can, without superuser/BYPASSRLS.
     await sql(`

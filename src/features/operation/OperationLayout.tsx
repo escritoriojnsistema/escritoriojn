@@ -1,6 +1,6 @@
 import {PresenceControl} from '../documentCommercial/DocumentPresenceProvider';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { FileText, House, UserRoundSearch, UsersRound, CircleUserRound, History, Archive, LogOut, Menu, X, ClipboardList, MessagesSquare, Paperclip, ClipboardCheck, Bell, Wallet, Banknote, Zap, ChartColumn } from 'lucide-react';
+import { FileText, House, UserRoundSearch, UsersRound, CircleUserRound, History, Archive, LogOut, Menu, X, ClipboardList, MessagesSquare, Paperclip, ClipboardCheck, Bell, Wallet, Banknote, Zap, ChartColumn, Settings } from 'lucide-react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import type { AccessContext } from '../../../shared/access';
 import {NotificationBell} from '../notifications/NotificationBell';
@@ -9,7 +9,7 @@ import { useAuth } from '../auth/AuthProvider';
 import { operationNavigation, mobileOperationNavigation, operationRoleNames } from './navigation';
 import './operation.css';
 
-const icons = {catalog:FileText,portalDocuments:FileText, documents:FileText, templates:FileText, quick:Zap,reports:ChartColumn, expenses: Banknote, payments: Wallet, cash: Banknote, charges: Wallet, home: House, checklists: ClipboardCheck, notifications: Bell, requests: MessagesSquare, attachments: Paperclip, customers: UserRoundSearch, services: ClipboardList, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
+const icons = {settings:Settings,catalog:FileText,portalDocuments:FileText, documents:FileText, templates:FileText, quick:Zap,reports:ChartColumn, expenses: Banknote, payments: Wallet, cash: Banknote, charges: Wallet, home: House, checklists: ClipboardCheck, notifications: Bell, requests: MessagesSquare, attachments: Paperclip, customers: UserRoundSearch, services: ClipboardList, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
 export function OperationLayout({ client = false, busy = false, contextActions, children }: { client?: boolean; busy?: boolean; contextActions?: ReactNode; children: ReactNode }) {
   const auth = useAuth();
   const items = operationNavigation(auth.contexts, client);
@@ -48,7 +48,7 @@ export function OperationLayout({ client = false, busy = false, contextActions, 
   function navigation(label: string, mobile = false) {
     return <nav aria-label={label} className={mobile ? 'operation-mobile-nav' : 'operation-navigation'}>{(mobile ? mobileOperationNavigation(items) : items).map(item => {
       const Icon = icons[item.key];
-      return <NavLink key={item.key} to={item.path} end onClick={closeMenu}><Icon size={21} aria-hidden="true" /><span>{mobile && item.key === 'team' ? 'Equipe' : mobile && client && item.key === 'requests' ? 'Solicitações' : item.label}</span></NavLink>;
+      return <NavLink key={item.key} to={item.path} end={item.key!=='settings'} onClick={closeMenu}><Icon size={21} aria-hidden="true" /><span>{mobile && item.key === 'team' ? 'Equipe' : mobile && client && item.key === 'requests' ? 'Solicitações' : item.label}</span></NavLink>;
     })}</nav>;
   }
   function exit() {

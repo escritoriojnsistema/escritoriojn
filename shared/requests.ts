@@ -10,7 +10,7 @@ export type RequestFilterStatus = RequestStatus|PublicRequestStatus|'';
 export const publicRequestStatusLabels: Record<PublicRequestStatus,string> = {recebido:'Recebido para triagem',em_analise:'Em análise',aguardando_cliente:'Aguardando você',concluido:'Concluído',cancelado:'Cancelado'};
 export type RequestItemInput = {service_id:string;quantity:number;adjustment:ServiceAdjustment;fields:Record<string,string>;participant_ids:string[];checklist:string[]};
 export type StaffRequestInput = {origin:'presencial'|'whatsapp';title:string;customer_id:string|null;assignee_id:string|null;priority:'normal'|'urgent';priority_reason:string;items:RequestItemInput[];internal_note:string};
-export type PortalRequestInput = {origin:'portal';title:string;message:string};
+export type PortalRequestInput = {origin:'portal';title:string;message:string;category_id?:string};
 export type CreateRequestInput = StaffRequestInput|PortalRequestInput;
 export type CancellationReview = {charges_reviewed:true;refunds_reviewed:true;deliveries_reviewed:true;external_reviewed:true};
 export type RequestMutation =
@@ -19,7 +19,7 @@ export type RequestMutation =
  | {kind:'transfer';assignee_id:string;reason:string}
  | {kind:'note';note:string}
  | {kind:'triage';customer_id:string|null;items:RequestItemInput[];reason:string};
-export type RequestSummary = {id:string;protocol:string;title:string;public_status:PublicRequestStatus;created_at:string;updated_at:string};
+export type RequestSummary = {category_id?:string;category_name?:string;id:string;protocol:string;title:string;public_status:PublicRequestStatus;created_at:string;updated_at:string};
 export type StaffRequestSummary = RequestSummary & {status:RequestStatus;origin:'presencial'|'whatsapp'|'portal';priority:'normal'|'urgent';created_by:string;created_by_name?:string|null;assignee_id:string|null;assignee_name:string|null;customer_name:string|null;version:number};
 export type RequestPage = {items:(RequestSummary|StaffRequestSummary)[];total:number;page:number;page_size:number;portal:boolean};
 export type RequestHistory = {id:string;kind:'created'|'status'|'transfer'|'note'|'triage';actor_id:string;actor_name:string|null;reason:string;from_status:RequestStatus|null;to_status:RequestStatus|null;from_assignee:string|null;to_assignee:string|null;created_at:string};

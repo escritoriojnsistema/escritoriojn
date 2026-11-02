@@ -16,7 +16,7 @@ async function setup(page:Page,client:boolean){
  else if(path==='folders'||path==='folder-command'){if(path==='folder-command')state.moves.push(b);data={folders:[{id:folder,name:'Contratos rurais',revision:1,category:'Contratos'}],locations:[{template_id:templateId,folder_id:state.folder||null,revision:0}],can_manage:true};}
  else if(path==='model-state')data={metadata:{template_id:templateId,display_name:state.name,archived_at:null,revision:0},offer:null,can_manage:false,can_manage_metadata:true};
  else if(path==='metadata-command'){state.name=b.command.name;data={template_id:templateId,display_name:state.name,archived_at:null,revision:1};}
- else if(path==='offers')data={items:[offer],folders:[{id:folder,name:'Contratos rurais',category:'Contratos'}],total:1,page:1,page_size:5};
+ else if(path==='offers')data={categories:[{id:folder,name:'Documentos',count:1,is_documents:true}],items:[offer],folders:[{id:folder,name:'Contratos rurais',category:'Contratos'}],total:1,page:1,page_size:5};
  else if(path==='offer-form')data=offer;
  else if(path==='booking'){state.bookings.push(b);data={request_id:templateId,protocol:'AT-000001',status:'recebido',waiting:true};}
  else return r.fulfill({status:404,json:{error:{code:'FIXTURE_NOT_FOUND'}}});

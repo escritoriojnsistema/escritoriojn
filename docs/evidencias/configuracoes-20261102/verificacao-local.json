@@ -1,0 +1,101 @@
+{
+  "base": "8cba4fca296181934b0dd7773452a06a4b14ddff",
+  "node_api": {
+    "passed": 274,
+    "command": "npm test"
+  },
+  "sql": {
+    "pass_lines": 791,
+    "replays": 2,
+    "command": "JN_DB_DOCUMENTS21_ISOLATED=1 npm run test:db",
+    "scope": "Etapas20/21/22 e fluxo integrado, categorias, acesso, arquivos e catálogo; PostgreSQL17 com migrador NOSUPER/NOBYPASSRLS"
+  },
+  "ui": {
+    "passed": 55,
+    "widths": [
+      320,
+      360,
+      768,
+      1440
+    ],
+    "command": "npm run test:team-ui -- --grep 'configurações:|modelos:|integrado:|serviços:|solicitações:|owner tem quatro|ação pendente|auditoria:|arquivados:'",
+    "provider": "fixtures locais interceptadas"
+  },
+  "build": true,
+  "typecheck": true,
+  "production_dependency_vulnerabilities": 0,
+  "hosted_before": {
+    "auth_users": 5,
+    "memberships": 5,
+    "templates": 64,
+    "template_versions": 64,
+    "approvals": 1,
+    "individual_grants": 17,
+    "services": 0,
+    "offerings": 0,
+    "requests": 2,
+    "documents": 0
+  },
+  "migrations": [
+    {
+      "path": "supabase/migrations/20261102154519_settings_categories_access_archives.sql",
+      "sha256": "ed95b81356b565da014f702e068a4f091934b1b28752df4328464e12dbc80f87",
+      "already_hosted": true
+    },
+    {
+      "path": "supabase/migrations/20261102160847_catalog_categories_all.sql",
+      "sha256": "a66dfe1a09568eec06e2ff23a9a76360cf96d706b501ad24cd1c11d3efa722e0",
+      "already_hosted": true
+    },
+    {
+      "path": "supabase/migrations/20261102161221_model_title_preserved.sql",
+      "sha256": "17f54b3de5396b687482cc3b39f1e87a00a371a521fd66b0d5a22fc8ba518f01",
+      "already_hosted": true
+    },
+    {
+      "path": "supabase/migrations/20261102171214_categories_canonical_fix.sql",
+      "sha256": "05c9d2b339424748e661d32cd13e7265ddd0c4dbba1d6112b67d5bac84e2ea76",
+      "already_hosted": false
+    },
+    {
+      "path": "supabase/migrations/20261102171221_access_inactivity_enforced.sql",
+      "sha256": "b7375cc1c4867a8a112c7a93546c7ee5ca76724bfce0f018ce9e2cbfb87057dc",
+      "already_hosted": false
+    },
+    {
+      "path": "supabase/migrations/20261102171252_request_archives_policy_fix.sql",
+      "sha256": "dab8507305122ecc537ee0bda09000da44aee95ee5b94810ba992d19ccf3fad8",
+      "already_hosted": false
+    },
+    {
+      "path": "supabase/migrations/20261102171344_settings_capabilities.sql",
+      "sha256": "ad564fc7dd7fc81db827d1313b3f8eecf8b03981b360694b6b4947b10039bc8f",
+      "already_hosted": false
+    },
+    {
+      "path": "supabase/migrations/20261102171439_model_management_visibility_fix.sql",
+      "sha256": "67c87d6b95453bb01891f1fb54fab5b982df52b4bdf564c8b765f5062eaa12c1",
+      "already_hosted": false
+    },
+    {
+      "path": "supabase/migrations/20261102171535_categorized_request_catalog.sql",
+      "sha256": "736354522a45f49cbdfdab38cfb82f549930b697373ae20e2bdeff2e1c72b15f",
+      "already_hosted": false
+    },
+    {
+      "path": "supabase/migrations/20261102185758_inactivity_workers_guards.sql",
+      "sha256": "c773952ae78f4ef3d2120a494d5d474ae36d6b45f6d30c824cd68862e7657737",
+      "already_hosted": false
+    }
+  ],
+  "limitations": [
+    "Teste Auth/Storage completo bloqueado por falta de espaço ao extrair a imagem Storage; suíte Auth específica usa GoTrue/PostgREST/PostgreSQL reais e apenas contrato de schema Storage.",
+    "Sem autenticação em contas hospedadas; nenhuma conta, preço, aprovação ou pedido fictício foi criado no projeto real.",
+    "Preços reais e decisão de publicar ofertas não foram fornecidos. Drive contém valores expressamente fictícios para testes."
+  ],
+  "real_auth": {
+    "passed": 12,
+    "command": "npm run test:session-auth",
+    "provider": "GoTrue/PostgREST/PostgreSQL locais reais; sem Storage runtime"
+  }
+}

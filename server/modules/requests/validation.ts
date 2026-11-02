@@ -16,7 +16,7 @@ export function validRequestItem(v:unknown):v is RequestItemInput {
 export const validRequestItems=(v:unknown):v is RequestItemInput[]=>Array.isArray(v) && v.length>=1 && v.length<=10 && v.every(validRequestItem);
 export function validCreateRequest(v:unknown):v is CreateRequestInput {
  if(!record(v))return false;
- if(v.origin==='portal')return fields(v,['origin','title','message']) && requestText(v.title,120) && requestText(v.message,2000,1,true);
+ if(v.origin==='portal')return ((Object.hasOwn(v,'category_id')?fields(v,['origin','title','message','category_id']):fields(v,['origin','title','message']))&&(!Object.hasOwn(v,'category_id')||uuid(v.category_id))) && requestText(v.title,120) && requestText(v.message,2000,1,true);
  return fields(v,['origin','title','customer_id','assignee_id','priority','priority_reason','items','internal_note'])
   && ['presencial','whatsapp'].includes(String(v.origin)) && requestText(v.title,120)
   && (v.customer_id===null||uuid(v.customer_id)) && (v.assignee_id===null||uuid(v.assignee_id))

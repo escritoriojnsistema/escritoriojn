@@ -9,3 +9,5 @@
 .template-folder-controls,.template-folder-actions{display:flex;align-items:end;gap:.75rem;flex-wrap:wrap}
 .template-folder-controls>.team-field{flex:1 1 220px}.template-folder-controls .template-check{min-height:44px;align-items:center}
 .template-folders summary{cursor:pointer;min-height:44px;display:flex;align-items:center}.template-folder-actions{margin-top:.75rem}
+
+.template-state-tabs{display:flex;gap:8px;margin-block:10px}.template-state-tabs [aria-selected=true]{border-bottom:2px solid #855e29;color:#103248;font-weight:700}

@@ -1,0 +1,9 @@
+.categories-settings { min-width: 0; }
+.categories-settings fieldset { border: 0; padding: 0; margin: 0; min-width: 0; display: grid; gap: 8px; }
+.categories-settings h2 { font-size: 18px; margin: 12px 0; }
+.categories-settings .team-field { min-width: 0; }
+.categories-settings .team-field input, .categories-settings .team-field select { min-height: 44px; font-size: 16px; }
+.categories-settings .customer-list li > div:first-child { min-width: 0; overflow-wrap: anywhere; }
+.categories-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+.categories-settings .customer-list .categories-actions { flex: 0 0 auto; margin: 0; }
+.categories-settings .customer-list .categories-actions button { min-width: 44px; min-height: 44px; }

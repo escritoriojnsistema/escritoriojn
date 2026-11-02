@@ -725,7 +725,13 @@ try {
   const manualImportMigrations=allMigrations.filter(n=>n.includes('_templates21_manual_import'));
   const organizationMigrations=allMigrations.filter(n=>n.includes('_organize_existing_templates_by_kind'));
   const versions22Migrations=allMigrations.filter(n=>n.includes('_document_versions22_'));
-  const integratedMigrations=allMigrations.filter(n=>!versions22Migrations.includes(n)&&!organizationMigrations.includes(n)&&n>'20261027172917_templates21_manual_import.sql' && (process.env.JN_DB_INTEGRATED_ONLY_A!=='1' || n.includes('_document_commercial_')));
+  const settingsMigrations=allMigrations.filter(n=>n>='20261102154519');
+  const verifySettings=database=>{
+    for(const file of settingsMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+    let result='';for(const suite of ['categories-settings','access-inactivity','request-archives-settings','template-management-settings','categorized-request-catalog'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
+    return result;
+  };
+  const integratedMigrations=allMigrations.filter(n=>!settingsMigrations.includes(n)&&!versions22Migrations.includes(n)&&!organizationMigrations.includes(n)&&n>'20261027172917_templates21_manual_import.sql' && (process.env.JN_DB_INTEGRATED_ONLY_A!=='1' || n.includes('_document_commercial_')));
   const verifyOrganization=database=>{
     if(!organizationMigrations.length)return '';
     sql(database,'postgres',`CREATE TABLE test.organization_before AS SELECT (SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY id),'[]'::jsonb) FROM public.templates t) templates,(SELECT coalesce(jsonb_agg(to_jsonb(v) ORDER BY id),'[]'::jsonb) FROM public.template_versions v) versions,(SELECT coalesce(jsonb_agg(to_jsonb(a) ORDER BY office_id,version_id),'[]'::jsonb) FROM private.template_approvals a) approvals;CREATE TABLE test.organization_locations_before AS SELECT office_id,template_id,to_jsonb(l) snapshot FROM private.model_locations l;`);
@@ -767,6 +773,7 @@ try {
         if(process.env.JN_DB_INTEGRATED_ONLY_A!=='1'){
           for(const file of versions22Migrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
           result+=sql(database,'postgres',readFileSync(`${root}tests/database/documents22.sql`,'utf8'));
+          result+=verifySettings(database);
         }
         console.log(`${database} documents21 isolated:\n${result.trim()}`);continue;
       }
@@ -926,6 +933,7 @@ try {
     if(process.env.JN_DB_INTEGRATED_ONLY_A!=='1'){
       for(const file of versions22Migrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
       result+=sql(database,'postgres',readFileSync(`${root}tests/database/documents22.sql`,'utf8'));
+          result+=verifySettings(database);
     }
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }

@@ -1,3 +1,6 @@
+import {categoriesRouter} from './modules/categories/router.js';
+import {accessSettingsRouter} from './modules/access-settings/router.js';
+import {requestArchivesRouter} from './modules/request-archives/router.js';
 import {workflowRouter} from './modules/document-workflow/router.js';
 import {commercialRouter} from './modules/document-commercial/router.js';
 import {financeRouter} from './modules/finance/router.js';
@@ -38,6 +41,9 @@ api.use((_req, res, next) => {
 api.get('/health', (_req, res) => {
   res.json({ data: { status: 'ok', service: 'escritorio-jn-api' } } satisfies HealthResponse);
 });
+api.use('/categories',categoriesRouter);
+api.use('/access-settings',accessSettingsRouter);
+api.use('/request-archives',requestArchivesRouter);
 api.use('/auth',authRouter);
 api.use('/account',accountRouter);
 api.use('/team',teamRouter);

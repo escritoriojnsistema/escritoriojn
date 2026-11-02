@@ -71,9 +71,9 @@ test('falha transitória no acompanhamento de convite preserva lista e formulár
   await expect(page.getByRole('list',{name:'Convites da equipe'})).toContainText('Convite pendente');
 });
 
-test('owner tem quatro atalhos móveis e Arquivados permanece no menu completo', async ({ page }) => {
+test('owner tem quatro atalhos móveis e Configurações reúne os destinos de gestão', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 640 });
-  await session(page, ['foundation.access', 'users.manage', 'audit.read', 'archives.manage']);
+  await session(page, ['foundation.access', 'settings.access', 'users.manage', 'audit.read', 'archives.manage']);
   await page.goto('/painel');
   const shortcuts = page.getByRole('navigation', { name: 'Atalhos do aplicativo' });
   await expect(shortcuts.getByRole('link')).toHaveCount(4);
@@ -81,7 +81,8 @@ test('owner tem quatro atalhos móveis e Arquivados permanece no menu completo',
   await expect(shortcuts.getByRole('link', { name: 'Arquivados', exact: true })).toHaveCount(0);
   if (process.env.NAVIGATION_CAPTURE) await page.screenshot({ path: '/workspace/shared/ajuste06-quatro-atalhos-360.png' });
   await page.getByRole('button', { name: 'Abrir menu' }).click();
-  await expect(page.getByRole('dialog').getByRole('link', { name: 'Arquivados', exact: true })).toBeVisible();
+  await page.getByRole('dialog').getByRole('link', { name: 'Configurações', exact: true }).click();
+  await expect(page.getByRole('navigation',{name:'Opções de configurações'}).getByRole('link',{name:/Arquivados/})).toBeVisible();
   if (process.env.NAVIGATION_CAPTURE) await page.screenshot({ path: '/workspace/shared/ajuste06-menu-completo-360.png' });
 });
 
