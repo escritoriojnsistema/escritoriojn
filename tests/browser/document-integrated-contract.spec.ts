@@ -10,13 +10,13 @@ async function setup(page:Page,client:boolean){
  await page.route('https://team-ui.supabase.co/**',r=>r.fulfill({json:{id:user,aud:'authenticated'}}));
  await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,office_name:'Escritório de teste',display_name:'Pessoa de teste',role_code:client?'client':'owner',permissions}]}}}));
  await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
- const offer={template_id:templateId,template_version_id:versionId,service_version_id:versionId,offer_revision:1,name:state.name,folder_id:folder,instructions:'Informe o CPF e o endereço do imóvel.',price_cents:12345,variables:[{key:'documento.cpf',label:'CPF do solicitante',type:'cpf',required:true}]};
+ const offer={template_id:templateId,template_version_id:versionId,service_version_id:versionId,offer_revision:1,name:state.name,template_code:declaration.code,folder_id:folder,folder_name:'Contratos rurais',folder_category:'Contratos',instructions:'Informe o CPF e o endereço do imóvel.',price_cents:12345,service_id:folder,service_code:'DOC-001',service_category:'Documentos',service_checklist:[],variables:[{key:'documento.cpf',label:'CPF do solicitante',type:'cpf',required:true}]};
  await page.route('**/api/document-commercial/**',async r=>{const path=new URL(r.request().url()).pathname.split('/').at(-1),b=r.request().postDataJSON();let data:unknown;
  if(path==='templates-search')data={items:[{id:templateId,code:declaration.code,name:state.name,kind:declaration.kind,demonstration:false,latest_version:1,current_version:1}],page:1,page_size:b.size,total:1};
- else if(path==='folders'||path==='folder-command'){if(path==='folder-command')state.moves.push(b);data={folders:[{id:folder,name:'Contratos rurais',revision:1}],locations:[{template_id:templateId,folder_id:state.folder||null,revision:0}],can_manage:true};}
+ else if(path==='folders'||path==='folder-command'){if(path==='folder-command')state.moves.push(b);data={folders:[{id:folder,name:'Contratos rurais',revision:1,category:'Contratos'}],locations:[{template_id:templateId,folder_id:state.folder||null,revision:0}],can_manage:true};}
  else if(path==='model-state')data={metadata:{template_id:templateId,display_name:state.name,archived_at:null,revision:0},offer:null,can_manage:false,can_manage_metadata:true};
  else if(path==='metadata-command'){state.name=b.command.name;data={template_id:templateId,display_name:state.name,archived_at:null,revision:1};}
- else if(path==='offers')data={items:[offer],folders:[{id:folder,name:'Contratos rurais'}],total:1,page:1,page_size:5};
+ else if(path==='offers')data={items:[offer],folders:[{id:folder,name:'Contratos rurais',category:'Contratos'}],total:1,page:1,page_size:5};
  else if(path==='offer-form')data=offer;
  else if(path==='booking'){state.bookings.push(b);data={request_id:templateId,protocol:'AT-000001',status:'recebido',waiting:true};}
  else return r.fulfill({status:404,json:{error:{code:'FIXTURE_NOT_FOUND'}}});

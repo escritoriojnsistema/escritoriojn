@@ -11,8 +11,8 @@ test('pastas: comandos fechados, versões e nomes válidos',()=>{
  assert.equal(validFolderCommand({kind:'rename',folder_id:id,name:'Nova pasta',expected_revision:1}),true);
 });
 test('pastas: projeção descarta extras e recusa localização desconhecida',()=>{
- const state={folders:[{id,name:'Contratos',revision:1,secret:'hidden'}],locations:[{template_id:id,folder_id:id,revision:1,secret:'hidden'}],can_manage:true,secret:'hidden'};
- assert.deepEqual(projectFolderState(state),{folders:[{id,name:'Contratos',revision:1}],locations:[{template_id:id,folder_id:id,revision:1}],can_manage:true});
+ const state={folders:[{id,name:'Contratos',revision:1,category:'Contratos',secret:'hidden'}],locations:[{template_id:id,folder_id:id,revision:1,secret:'hidden'}],can_manage:true,secret:'hidden'};
+ assert.deepEqual(projectFolderState(state),{folders:[{id,name:'Contratos',revision:1,category:'Contratos'}],locations:[{template_id:id,folder_id:id,revision:1}],can_manage:true});
  assert.throws(()=>projectFolderState({...state,can_manage:'true'}));
  assert.throws(()=>projectFolderState({...state,locations:[{template_id:id,folder_id:'invalid',revision:0}]}));
 });

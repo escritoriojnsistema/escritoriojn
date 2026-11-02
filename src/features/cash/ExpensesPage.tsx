@@ -19,16 +19,14 @@ import './cash.css';
 type Editor={kind:'create'}|{kind:'approve'|'pay';expense:Expense}|{kind:'movement'};
 const names={pending:'Aguardando aprovação',approved:'Aprovada',paid:'Paga'};
 const movementNames={sangria:'Sangria',reforco:'Reforço',transfer:'Transferência'};
-export default function ExpensesPage(){
+export default function ExpensesPage({embedded=false,office:fixedOffice}:{embedded?:boolean;office?:string}={}){
  const auth=useAuth(),[office,setOffice]=useState('');
  const contexts=auth.contexts.filter(c=>c.role_code!=='client'&&c.permissions.includes('cash.read')&&['expenses.read','cash.transfer'].some(p=>c.permissions.includes(p)));
- const context=contexts.find(c=>c.office_id===office)??contexts[0];
+ const context=contexts.find(c=>c.office_id===(fixedOffice??office))??contexts[0];
  if(auth.status==='loading')return <OperationalFeedback status="loading"/>;
  if(auth.status==='signedOut'||auth.status==='expired')return <Navigate replace to={paths.team}/>;
- if(auth.status!=='authorized'||!context)return <OperationalFeedback status={auth.status==='unavailable'?'unavailable':'denied'}/>;
- return <ExpensesWorkspace key={JSON.stringify([auth.sessionKey,context.office_id,context.role_code,[...context.permissions].sort()])} context={context} contexts={contexts} onOffice={setOffice}/>;
-}
-function ExpensesWorkspace({context,contexts,onOffice}:{context:AccessContext;contexts:AccessContext[];onOffice:(id:string)=>void}){
+ if(auth.status!=='authorized'||!context)return <OperationalFeedback status={auth.status==='unavailable'?'unavailable':'denied'}/>;return <ExpensesWorkspace key={JSON.stringify([auth.sessionKey,context.office_id,context.role_code,[...context.permissions].sort()])} context={context} contexts={contexts} embedded={embedded} onOffice={setOffice}/>;}
+function ExpensesWorkspace({context,contexts,embedded,onOffice}:{context:AccessContext;contexts:AccessContext[];embedded:boolean;onOffice:(id:string)=>void}){
  const office=context.office_id,mayRead=context.permissions.includes('expenses.read'),mayTransfer=context.permissions.includes('cash.transfer');
  const [tab,setTab]=useState<'expenses'|'transfers'>(mayRead?'expenses':'transfers'),[data,setData]=useState<Finance17Page>(),[dashboard,setDashboard]=useState<CashDashboard>(),[session,setSession]=useState<FinanceSession>(),[sessionId,setSessionId]=useState(''),[sessionPage,setSessionPage]=useState(1),[page,setPage]=useState(1),[revision,setRevision]=useState(0);
  const [editor,setEditor]=useState<Editor>(),[category,setCategory]=useState(''),[payee,setPayee]=useState(''),[description,setDescription]=useState(''),[date,setDate]=useState(''),[amount,setAmount]=useState(''),[evidence,setEvidence]=useState(''),[reason,setReason]=useState(''),[kind,setKind]=useState<TransferOperation['kind']>('sangria'),[source,setSource]=useState(''),[destination,setDestination]=useState(''),[account,setAccount]=useState('');
@@ -68,9 +66,9 @@ function ExpensesWorkspace({context,contexts,onOffice}:{context:AccessContext;co
   }catch(cause){if(!c.signal.aborted&&alive.current){const e=cashError(cause);fail(e);if(e.status===409){reset();setRevision(n=>n+1);setFeedback('O estado mudou. Confira os dados atualizados e selecione novamente a operação.');}}}
   finally{if(alive.current){mutation.current=null;setBusy(false);}}
  }
- return <OperationLayout busy={busy}><div className="cash-main team-main expense-main">
-  <OperationHeading context={context} showRole={false} title="Despesas e movimentações" description="Contas a pagar, saídas e transferências vinculadas."/>
-  {contexts.length>1&&!editor&&<label className="team-field team-office">Escritório<select disabled={busy} value={office} onChange={e=>onOffice(e.target.value)}>{contexts.map(c=><option value={c.office_id} key={c.office_id}>{c.office_name}</option>)}</select></label>}
+ const content=<div className="cash-main team-main expense-main">
+  {!embedded&&<OperationHeading context={context} showRole={false} title="Despesas e movimentações" description="Contas a pagar, saídas e transferências vinculadas."/>}
+  {!embedded&&contexts.length>1&&!editor&&<label className="team-field team-office">Escritório<select disabled={busy} value={office} onChange={e=>onOffice(e.target.value)}>{contexts.map(c=><option value={c.office_id} key={c.office_id}>{c.office_name}</option>)}</select></label>}
   {error&&<p role="alert" className="form-feedback error">{error.message}</p>}{sessionError&&<p role="alert" className="form-feedback error">{sessionError.message}</p>}{feedback&&<p role="status" className="form-feedback">{feedback}</p>}
   {blocked?<Link className="secondary-button" to={paths.account}>Verificar meu acesso</Link>:<>
    {!editor&&<div className="team-toolbar"><div className="team-tabs" role="tablist" aria-label="Área financeira">{mayRead&&<button role="tab" aria-selected={tab==='expenses'} disabled={busy} onClick={()=>{setTab('expenses');setPage(1);}}>Despesas</button>}{mayTransfer&&<button role="tab" aria-selected={tab==='transfers'} disabled={busy} onClick={()=>{setTab('transfers');setPage(1);}}>Movimentação</button>}</div><button className="operation-icon-button" aria-label="Atualizar despesas e movimentos" disabled={busy||reading} onClick={()=>setRevision(n=>n+1)}><RefreshCw size={18} aria-hidden="true"/></button></div>}
@@ -95,5 +93,6 @@ function ExpensesWorkspace({context,contexts,onOffice}:{context:AccessContext;co
     <nav className="team-pagination" aria-label="Paginação financeira"><button className="team-text-button" disabled={busy||reading||page<=1} onClick={()=>setPage(n=>n-1)}>Anterior</button><span>{tab==='expenses'?data.total:data.transfers_total} registros · {page}/{Math.max(1,Math.ceil((tab==='expenses'?data.total:data.transfers_total)/5))}</span><button className="team-text-button" disabled={busy||reading||page*5>=(tab==='expenses'?data.total:data.transfers_total)} onClick={()=>setPage(n=>n+1)}>Próxima</button></nav>
    </section>}
   </>}
- </div></OperationLayout>;
+ </div>;
+ return embedded?content:<OperationLayout busy={busy}>{content}</OperationLayout>;
 }

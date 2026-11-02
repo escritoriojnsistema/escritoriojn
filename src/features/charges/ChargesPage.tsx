@@ -30,7 +30,7 @@ const money = (cents: number) =>
 const today = () => new Date().toLocaleDateString("en-CA");
 const media =
   "(max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px)";
-export default function ChargesPage() {
+export default function ChargesPage({embedded=false,office:fixedOffice}:{embedded?:boolean;office?:string}={}) {
   const auth = useAuth();
   const [office, setOffice] = useState("");
   const contexts = auth.contexts.filter(
@@ -39,7 +39,7 @@ export default function ChargesPage() {
       c.permissions.includes("requests.read") &&
       c.permissions.includes("charges.read"),
   );
-  const context = contexts.find((c) => c.office_id === office) ?? contexts[0];
+  const context = contexts.find((c) => c.office_id === (fixedOffice ?? office)) ?? contexts[0];
   if (auth.status === "loading")
     return <OperationalFeedback status="loading" />;
   if (auth.status === "signedOut" || auth.status === "expired")
@@ -55,6 +55,7 @@ export default function ChargesPage() {
       key={context.office_id}
       context={context}
       contexts={contexts}
+      embedded={embedded}
       onOffice={setOffice}
     />
   );
@@ -62,10 +63,12 @@ export default function ChargesPage() {
 function Workspace({
   context,
   contexts,
+  embedded,
   onOffice,
 }: {
   context: AccessContext;
   contexts: AccessContext[];
+  embedded: boolean;
   onOffice: (id: string) => void;
 }) {
   const [request, setRequest] = useState("");
@@ -168,16 +171,15 @@ function Workspace({
       }
     }
   }
-  return (
-    <OperationLayout busy={busy}>
+  const content = (
       <div className="charges-main">
-        <OperationHeading
+        {!embedded&&<OperationHeading
           context={context}
           showRole={false}
           title="Cobranças"
           description="Obrigações e parcelas dos atendimentos."
-        />
-        {contexts.length > 1 && (
+        />}
+        {!embedded && contexts.length > 1 && (
           <label className="team-field">
             Escritório
             <select
@@ -371,8 +373,8 @@ function Workspace({
           </>
         )}
       </div>
-    </OperationLayout>
   );
+  return embedded?content:<OperationLayout busy={busy}>{content}</OperationLayout>;
 }
 function ChargeDecisions({
   data,

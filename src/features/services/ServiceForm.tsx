@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
-import { emptyService, serviceKeys, serviceAmountToUnits, validService, validServiceReason, type ServiceInput, type ServiceField } from '../../../shared/services';
+import { emptyService, serviceKeys, serviceCategories, serviceAmountToUnits, validService, validServiceReason, type ServiceInput, type ServiceField } from '../../../shared/services';
 
 export function ServiceForm({initial,busy,onSave}:{initial?:ServiceInput;busy:boolean;onSave:(input:ServiceInput,reason:string)=>void}){
  const [input,setInput]=useState<ServiceInput>(()=>({...Object.fromEntries(serviceKeys.map(key=>[key,(initial??emptyService)[key]])) as ServiceInput,effective_from:null}));
@@ -31,7 +31,7 @@ export function ServiceForm({initial,busy,onSave}:{initial?:ServiceInput;busy:bo
     <label className="team-field service-name">Nome do serviço<input autoComplete="off" maxLength={120} value={input.name} onChange={e=>set('name',e.target.value)}/></label>
     <label className="team-field">Código<input autoComplete="off" maxLength={32} readOnly={!!initial} value={input.code} onChange={e=>set('code',e.target.value.toUpperCase())}/></label>
     <label className="team-field">Preço (R$)<input inputMode="decimal" autoComplete="off" maxLength={12} value={price} onChange={e=>setPrice(e.target.value)}/></label>
-    <label className="team-field">Categoria<input autoComplete="off" maxLength={60} value={input.category} onChange={e=>set('category',e.target.value)}/></label>
+    <label className="team-field">Categoria do serviço<select value={serviceCategories.includes(input.category as typeof serviceCategories[number])?input.category:''} onChange={e=>set('category',e.target.value)}><option value="">Selecione a categoria</option>{serviceCategories.map(category=><option key={category} value={category}>{category}</option>)}{input.category&&!serviceCategories.includes(input.category as typeof serviceCategories[number])&&<option value={input.category}>{input.category} (atual)</option>}</select></label>
     <label className="team-field">Unidade<input autoComplete="off" maxLength={30} value={input.unit} onChange={e=>set('unit',e.target.value)}/></label>
     {initial&&<label className="team-field service-name">Motivo da versão<input maxLength={500} value={reason} onChange={e=>setReason(e.target.value)}/></label>}
    </div>
@@ -58,7 +58,8 @@ export function ServiceForm({initial,busy,onSave}:{initial?:ServiceInput;busy:bo
      <button type="button" className="operation-icon-button" aria-label={`Remover campo ${index+1}`} onClick={()=>set('fields',input.fields.filter((_,i)=>i!==index))}><Trash2 size={18} aria-hidden="true"/></button>
     </div>)}
     <button type="button" className="team-text-button" disabled={input.fields.length>=12} onClick={addField}><Plus size={18} aria-hidden="true"/>Adicionar campo</button>
-    <label className="team-field">Checklist (um item por linha)<textarea rows={3} maxLength={1451} value={checklist} onChange={e=>setChecklist(e.target.value)}/></label>
+    <label className="team-field">Checklist do cliente (um item por linha)<textarea rows={3} maxLength={1451} value={checklist} onChange={e=>setChecklist(e.target.value)}/></label>
+    <p className="customer-note">O checklist do cliente aparece ao solicitar, informa o que enviar e marca pendência quando faltar item. O checklist interno da equipe é publicado em Checklist, por serviço ou documento. Para a categoria Documentos, deixe campos e checklist vazios e vincule pasta e modelo na tela do serviço: o documento define os dados e o checklist do cliente.</p>
    </details>
    <button className="primary-button service-submit" type="submit">{initial?'Publicar versão':'Cadastrar serviço'}</button>
   </fieldset>

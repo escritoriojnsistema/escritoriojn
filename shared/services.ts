@@ -1,3 +1,4 @@
+export const serviceCategories = ['Documentos','Certidões','Registros','Consultoria','Contabilidade','Fiscal','Trabalhista','Jurídico','Atendimento','Outros'] as const;
 export const servicePermissions = ['services.read','services.manage','services.perform','services.approve','services.discount','services.surcharge','services.courtesy','services.price_override'] as const;
 export const executionCapabilities = ['services.perform','services.approve'] as const;
 export type ServiceField = { key: string; label: string; type: 'text' | 'number' | 'date'; required: boolean };

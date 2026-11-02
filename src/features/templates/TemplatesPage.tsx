@@ -14,14 +14,12 @@ import {TemplateFolders,allFolders,type FolderFilter} from '../documentCommercia
 import {TemplateForm} from './TemplateForm';
 import {TemplateDetail} from './TemplateDetail';
 import '../team/team.css';import '../customers/customers.css';import './templates.css';
-export default function TemplatesPage(){
+export default function TemplatesPage({embedded=false}:{embedded?:boolean}={}){
  const auth=useAuth(),[selected,setSelected]=useState('');const contexts=auth.contexts.filter(c=>c.role_code!=='client'&&c.permissions.includes('templates.read')),context=contexts.find(c=>c.office_id===selected)??contexts[0];
  if(auth.status==='loading')return <OperationalFeedback status="loading"/>;
  if(auth.status==='signedOut'||auth.status==='expired')return <Navigate replace to={paths.team}/>;
- if(auth.status!=='authorized'||!context)return <OperationalFeedback status={auth.status==='unavailable'?'unavailable':'denied'}/>;
- return <Workspace key={`${auth.sessionKey}:${context.office_id}:${context.role_code}:${[...context.permissions].sort().join(',')}`} context={context} contexts={contexts} onOffice={setSelected}/>;
-}
-function Workspace({context,contexts,onOffice}:{context:AccessContext;contexts:AccessContext[];onOffice:(id:string)=>void}){
+ if(auth.status!=='authorized'||!context)return <OperationalFeedback status={auth.status==='unavailable'?'unavailable':'denied'}/>;return <Workspace key={`${auth.sessionKey}:${context.office_id}:${context.role_code}:${[...context.permissions].sort().join(',')}`} context={context} contexts={contexts} embedded={embedded} onOffice={setSelected}/>;}
+function Workspace({context,contexts,embedded,onOffice}:{context:AccessContext;contexts:AccessContext[];embedded:boolean;onOffice:(id:string)=>void}){
  const auth=useAuth(),office=context.office_id,canManage=context.permissions.includes('templates.manage');
  const [folder,setFolder]=useState<FolderFilter>(allFolders);
  const [view,setView]=useState<'list'|'detail'|'create'|'edit'>('list'),[input,setInput]=useState(''),[query,setQuery]=useState(''),[page,setPage]=useState(1),[revision,setRevision]=useState(0);
@@ -41,7 +39,7 @@ function Workspace({context,contexts,onOffice}:{context:AccessContext;contexts:A
  function save(definition:TemplateInput,reason:string){if((error?.status===409&&error.code!=='TEMPLATE_DUPLICATE')||!canManage)return;if(!attempt.current)attempt.current={kind:'save',body:{office_id:office,template_id:view==='edit'?detail!.id:null,definition,reason,expected_version:view==='edit'?detail!.latest_version:0,idempotency_key:crypto.randomUUID()}};const a=attempt.current;if(a.kind!=='save')return;void run(s=>templatesApi.save(a.body,s),d=>{setDetail(d);setView('detail');setFeedback('Versão salva. A aprovação é uma decisão separada.');},true);}
  function approve(version_id:string,reason:string){if(!detail||error?.status===409)return;if(!attempt.current)attempt.current={kind:'approve',body:{office_id:office,template_id:detail.id,version_id,expected_version:detail.latest_version,reason,idempotency_key:crypto.randomUUID()}};const a=attempt.current;if(a.kind!=='approve')return;void run(s=>templatesApi.approve(a.body,s),d=>{setDetail(d);setFeedback('Versão aprovada. Edições futuras exigem aprovação própria.');},true);}
  const conflict=error?.status===409&&error.code!=='TEMPLATE_DUPLICATE',locked=uncertain||conflict,initial=detail?.versions.find(v=>v.number===detail.latest_version);
- return <OperationLayout busy={busy}><div className="templates-main"><OperationHeading context={context} showRole={false} title={view==='list'?'Modelos documentais':view==='create'?'Novo modelo':view==='edit'?'Nova versão':detail?.versions[0]?.name??'Modelo documental'} description="Biblioteca, versões e aprovação dos modelos do escritório."/>
+ const content=<div className="templates-main">{!embedded&&<OperationHeading context={context} showRole={false} title={view==='list'?'Modelos':view==='create'?'Novo modelo':view==='edit'?'Nova versão':detail?.versions[0]?.name??'Modelo'} description="Biblioteca, versões e aprovação dos modelos do escritório."/>}
  {contexts.length>1&&<label className="team-field customer-office">Escritório<select value={office} disabled={busy} onChange={e=>onOffice(e.target.value)}>{contexts.map(c=><option value={c.office_id} key={c.office_id}>{c.office_name}</option>)}</select></label>}
  {blocked?<div className="team-empty"><p role="alert" className="form-feedback error">{error?.message}</p>{error?.status===401?<Link className="primary-button" to={paths.team}>Entrar novamente</Link>:<button className="team-text-button" onClick={()=>{auth.refresh();back();setBlocked(false);}}>Verificar acesso novamente</button>}</div>:<>
  {view!=='list'&&<div className="customer-view-toolbar"><button className="team-text-button" disabled={busy} onClick={back}><ArrowLeft size={18} aria-hidden="true"/>Voltar à lista</button>{view==='detail'&&detail?.can_manage&&canManage&&<button className="team-text-button" disabled={busy||!!locked} onClick={edit}><Plus size={18} aria-hidden="true"/>Nova versão</button>}</div>}
@@ -54,5 +52,6 @@ function Workspace({context,contexts,onOffice}:{context:AccessContext;contexts:A
  {list&&<>{list.items.length?<ul className="customer-list" aria-label="Modelos do escritório">{list.items.map(v=><li key={v.id}><div><strong>{v.name}</strong><small>{templateKinds[v.kind]} · v{v.latest_version} · {v.current_version?`Aprovada vigente: v${v.current_version}`:'Sem versão aprovada vigente'}{v.demonstration?' · Demonstração':''}</small></div><button className="operation-icon-button" aria-label={`Ver modelo ${v.name}`} title="Ver modelo" onClick={()=>open(v.id)}><Eye size={20} aria-hidden="true"/></button></li>)}</ul>:<p className="team-empty">Nenhum modelo encontrado. Cadastre um modelo ou ajuste a busca.</p>}<nav className="team-pagination" aria-label="Paginação de modelos"><button className="team-text-button" disabled={list.page<=1} onClick={()=>setPage(list.page-1)}><ArrowLeft size={17} aria-hidden="true"/>Anterior</button><span>{list.total} modelos · {list.page}/{Math.max(1,Math.ceil(list.total/list.page_size))}</span><button className="team-text-button" disabled={list.page*list.page_size>=list.total} onClick={()=>setPage(list.page+1)}>Próxima<ArrowRight size={17} aria-hidden="true"/></button></nav></>}
  </>}
  </>}
- </div></OperationLayout>;
+ </div>;
+ return embedded?content:<OperationLayout busy={busy}>{content}</OperationLayout>;
 }

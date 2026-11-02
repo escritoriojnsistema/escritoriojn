@@ -1,15 +1,13 @@
 import {DocumentPresenceProvider} from './features/documentCommercial/DocumentPresenceProvider';
-import DocumentCatalogPage from './features/documentCommercial/DocumentCatalogPage';
-import PortalDocumentsPage from './features/documentWorkflow/PortalDocumentsPage';
-import DocumentsPage from './features/documents/DocumentsPage';
-import TemplatesPage from './features/templates/TemplatesPage';
+import DocumentsHubPage from './features/documents/DocumentsHubPage';
+import ClientDocumentsPage from './features/documents/ClientDocumentsPage';
 import QuickPage from './features/finance/QuickPage';
 import ReportsPage from './features/finance/ReportsPage';
 import PaymentsPage from './features/payments/PaymentsPage';
 import {NotificationReadProvider} from './features/notifications/NotificationReadProvider';
 import { useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { paths, pageTitles, normalizePathname } from './app/routes';
 import { AuthProvider, useAuth } from './features/auth/AuthProvider';
 import HomePage from './features/home/HomePage';
@@ -55,11 +53,11 @@ function AppRoutes() {
     <Route path={paths.clientRequests} element={<RequestsPage key={`client-requests:${operationKey}`} client />} />
     <Route path={paths.clientPayments} element={<PaymentsPage key={`client-payments:${operationKey}`} />} />
     <Route path={paths.expenses} element={<ExpensesPage key={`expenses:${operationKey}`} />} />
-    <Route path={paths.documentCatalog} element={<DocumentCatalogPage key={`catalog:${operationKey}`} />} />
-    <Route path={paths.clientDocumentCatalog} element={<DocumentCatalogPage key={`client-catalog:${operationKey}`} client />} />
-    <Route path={paths.clientDocuments} element={<PortalDocumentsPage key={`portal-documents:${operationKey}`} />} />
-    <Route path={paths.documents} element={<DocumentsPage key={`documents:${operationKey}`} />} />
-    <Route path={paths.templates} element={<TemplatesPage key={`templates:${operationKey}`} />} />
+    <Route path={paths.clientDocumentCatalog} element={<Navigate replace to={paths.clientDocuments} />} />
+    <Route path={paths.clientDocuments} element={<ClientDocumentsPage key={`client-documents:${operationKey}`} />} />
+    <Route path={paths.documents} element={<DocumentsHubPage key={`documents:${operationKey}`} />} />
+    <Route path={paths.templates} element={<Navigate replace to={paths.documents} />} />
+    <Route path={paths.documentCatalog} element={<Navigate replace to={paths.requests} />} />
     <Route path={paths.quick} element={<QuickPage key={`quick:${operationKey}`} />} />
     <Route path={paths.financialReports} element={<ReportsPage key={`financial-reports:${operationKey}`} />} />
     <Route path={paths.cash} element={<CashPage key={`cash:${operationKey}`} />} />

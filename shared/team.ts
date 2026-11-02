@@ -3,7 +3,7 @@ import type { BusinessRole } from './access.js';
 export const teamRoles = ['employee', 'admin', 'owner'] as const;
 export type TeamRole = Exclude<BusinessRole, 'client'>;
 export const teamRoleNames: Record<TeamRole, string> = {
-  owner: 'Superadministrador (Proprietário)', admin: 'Administrador', employee: 'Funcionário',
+  owner: 'Super administrador', admin: 'Administrador', employee: 'Funcionário',
 };
 export const assignablePermissions = ['documents.read','documents.create','documents.update','templates.read','templates.manage','templates.approve','quick.perform','finance.reports.read','finance.reports.read_all','finance.reports.export','finance.reports.manage','cash.closure.approve','cash.closure.adjust','expenses.read','expenses.create','expenses.approve','expenses.pay','cash.transfer','receipts.read','receipts.issue','cash.read','cash.open','cash.read_all','cash.manage','charges.read','charges.create','charges.adjust','charges.cancel','accounts.corrections.read', 'accounts.corrections.apply', 'checklists.read', 'checklists.manage', 'checklists.update', 'checklists.waive', 'foundation.access', 'audit.read', 'audit.export', 'audit.archives', 'audit.manage', 'archives.manage', 'customers.read', 'customers.create', 'customers.update', 'customers.read_all', 'customers.relate', 'customers.verify', 'customers.merge', 'requests.read', 'requests.create', 'requests.update', 'requests.transfer', 'requests.cancel', 'requests.read_all', 'requests.reclaim', 'files.read', 'files.upload', 'files.copy', 'files.manage', 'services.read', 'services.manage', 'services.perform', 'services.approve', 'services.discount', 'services.surcharge', 'services.courtesy', 'services.price_override'] as const;
 export type TeamPermission = typeof assignablePermissions[number];
@@ -16,7 +16,7 @@ export const permissionNames: Record<TeamPermission, string> = {
   'cash.read':'Consultar meu caixa','cash.open':'Abrir meu caixa','cash.read_all':'Consultar consolidação de caixas','cash.manage':'Gerenciar unidades, contas e formas',
   'charges.read':'Consultar cobranças','charges.create':'Criar cobranças','charges.adjust':'Ajustar obrigações','charges.cancel':'Cancelar cobranças',
   'accounts.corrections.read':'Consultar correções cadastrais (requer solicitações)', 'accounts.corrections.apply':'Aplicar correções cadastrais (requer consulta)',
-  'checklists.read':'Consultar checklists e pendências','checklists.manage':'Publicar modelos de checklist','checklists.update':'Atualizar e avisar pendências','checklists.waive':'Dispensar itens com motivo',
+  'checklists.read':'Consultar checklists','checklists.manage':'Publicar modelos de checklist','checklists.update':'Atualizar e avisar pendências','checklists.waive':'Dispensar itens com motivo',
   'files.read':'Consultar anexos dos atendimentos', 'files.upload':'Enviar anexos privados', 'files.copy':'Copiar anexos privados', 'files.manage':'Gerenciar políticas e limpeza de anexos',
   'requests.reclaim':'Retomar atendimento para si (administradores)',
   'requests.read':'Consultar solicitações do seu escopo', 'requests.create':'Abrir atendimentos', 'requests.update':'Atualizar atendimentos', 'requests.transfer':'Transferir responsável', 'requests.cancel':'Cancelar atendimentos', 'requests.read_all':'Consultar todas as solicitações do escritório',

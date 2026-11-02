@@ -1,35 +1,42 @@
-import {quickRequiredPermissions} from '../../../shared/finance19';
 import type { AccessContext } from '../../../shared/access';
 import { paths } from '../../app/routes';
 
 export const operationRoleNames = {
-  owner: 'Super administrador (Proprietário)', admin: 'Administrador', employee: 'Funcionário', client: 'Cliente',
+  owner: 'Super administrador', admin: 'Administrador', employee: 'Funcionário', client: 'Cliente',
 };
 export type OperationItem = { key: 'catalog' | 'portalDocuments' | 'documents' | 'templates' | 'quick' | 'reports' | 'expenses' | 'payments' | 'cash' | 'charges' | 'home' | 'checklists' | 'notifications' | 'requests' | 'attachments' | 'customers' | 'services' | 'team' | 'audit' | 'archives' | 'account'; label: string; path: string };
+const staff = (contexts: AccessContext[], permissions: string[]) => contexts.some(context => context.role_code !== 'client' && permissions.every(permission => context.permissions.includes(permission)));
+/**
+ * One destination per subject. Client and team menus never share entries:
+ * a screen that belongs to the client portal is not rendered for the team and
+ * vice versa. Finance lives inside Caixa; document models and issued documents
+ * live inside Documentos; the document catalog is opened from Solicitações.
+ */
 export function operationNavigation(contexts: AccessContext[], client: boolean): OperationItem[] {
-  const items: OperationItem[] = [{ key: 'home', label: 'Início', path: client ? paths.clientPanel : paths.panel }];
-  if (client || contexts.some(context => context.role_code !== 'client' && context.permissions.includes('requests.read'))) items.push({ key: 'requests', label: client ? 'Minhas solicitações' : 'Solicitações', path: client ? paths.clientRequests : paths.requests });
-  if(client||contexts.some(c=>c.role_code!=='client'&&['requests.read','requests.create'].every(p=>c.permissions.includes(p))))items.push({key:'catalog',label:client?'Modelos e preços':'Solicitar documento',path:client?paths.clientDocumentCatalog:paths.documentCatalog});
-  if(client)items.push({key:'portalDocuments',label:'Meus documentos',path:paths.clientDocuments});
-  if (!client && contexts.some(context => context.role_code !== 'client' && context.permissions.includes('customers.read'))) items.push({ key: 'customers', label: 'Clientes', path: paths.customers });
-  if (!client && contexts.some(c=>c.role_code!=='client'&&['documents.read','requests.read','customers.read'].every(p=>c.permissions.includes(p)))) items.push({key:'documents',label:'Documentos',path:paths.documents});
-  if (!client && contexts.some(c=>c.role_code!=='client'&&c.permissions.includes('templates.read'))) items.push({key:'templates',label:'Modelos documentais',path:paths.templates});
-  if (!client && contexts.some(context => context.role_code !== 'client' && context.permissions.includes('services.read'))) items.push({ key: 'services', label: 'Serviços', path: paths.services });
-  if (!client && contexts.some(context => context.role_code !== 'client' && context.permissions.includes('users.manage'))) {
-    items.push({ key: 'team', label: 'Equipe e convites', path: paths.teamManagement });
+  if (client) {
+    return [
+      { key: 'home', label: 'Início', path: paths.clientPanel },
+      { key: 'requests', label: 'Minhas solicitações', path: paths.clientRequests },
+      { key: 'catalog', label: 'Documentos', path: paths.clientDocuments },
+      { key: 'attachments', label: 'Anexos', path: paths.clientAttachments },
+      { key: 'payments', label: 'Meus pagamentos', path: paths.clientPayments },
+      { key: 'notifications', label: 'Notificações', path: paths.clientNotifications },
+      { key: 'account', label: 'Conta', path: paths.clientAccount },
+    ];
   }
-  if (!client && contexts.some(c => c.role_code !== 'client' && c.permissions.includes('audit.read'))) items.push({ key: 'audit', label: 'Auditoria', path: paths.audit });
-  if (!client && contexts.some(c => c.role_code !== 'client' && c.permissions.includes('archives.manage'))) items.push({ key: 'archives', label: 'Arquivados', path: paths.archives });
-  if (client || contexts.some(context => context.role_code !== 'client' && context.permissions.includes('files.read') && context.permissions.includes('requests.read'))) items.push({ key: 'attachments', label: 'Anexos privados', path: client ? paths.clientAttachments : paths.attachments });
-  if (!client && contexts.some(c => c.role_code !== 'client' && c.permissions.includes('requests.read') && c.permissions.includes('checklists.read'))) items.push({key:'checklists',label:'Checklists e pendências',path:paths.checklists});
-  if(client)items.push({key:'payments',label:'Meus pagamentos',path:paths.clientPayments});
-  items.push({key:'notifications',label:'Notificações',path:client?paths.clientNotifications:paths.notifications});
-  if (!client && contexts.some(c => c.role_code !== 'client' && c.permissions.includes('requests.read') && c.permissions.includes('charges.read'))) items.push({key:'charges',label:'Cobranças',path:paths.charges});
-  if(!client && contexts.some(c=>c.role_code!=='client'&&c.permissions.includes('cash.read'))) items.push({key:'cash',label:'Caixa',path:paths.cash});
-  if(!client&&contexts.some(c=>c.role_code!=='client'&&c.permissions.includes('cash.read')&&['expenses.read','cash.transfer'].some(p=>c.permissions.includes(p))))items.push({key:'expenses',label:'Despesas e movimentações',path:paths.expenses});
-  if(!client&&contexts.some(c=>c.role_code!=='client'&&quickRequiredPermissions.every(p=>c.permissions.includes(p))))items.push({key:'quick',label:'Atendimento rápido',path:paths.quick});
-  if(!client&&contexts.some(c=>c.role_code!=='client'&&['cash.read','finance.reports.read'].every(p=>c.permissions.includes(p))))items.push({key:'reports',label:'Relatórios financeiros',path:paths.financialReports});
-  items.push({ key: 'account', label: 'Conta', path: client ? paths.clientAccount : paths.account });
+  const items: OperationItem[] = [{ key: 'home', label: 'Início', path: paths.panel }];
+  if (staff(contexts, ['requests.read'])) items.push({ key: 'requests', label: 'Solicitações', path: paths.requests });
+  if (staff(contexts, ['customers.read'])) items.push({ key: 'customers', label: 'Clientes', path: paths.customers });
+  if (staff(contexts, ['documents.read', 'requests.read', 'customers.read']) || staff(contexts, ['templates.read'])) items.push({ key: 'documents', label: 'Documentos', path: paths.documents });
+  if (staff(contexts, ['services.read'])) items.push({ key: 'services', label: 'Serviços', path: paths.services });
+  if (staff(contexts, ['requests.read', 'checklists.read'])) items.push({ key: 'checklists', label: 'Checklist', path: paths.checklists });
+  if (contexts.some(context => context.role_code !== 'client' && (context.permissions.includes('cash.read') || context.permissions.includes('charges.read') || context.permissions.includes('expenses.read') || context.permissions.includes('cash.transfer')))) items.push({ key: 'cash', label: 'Caixa', path: paths.cash });
+  if (staff(contexts, ['files.read', 'requests.read'])) items.push({ key: 'attachments', label: 'Anexos', path: paths.attachments });
+  items.push({ key: 'notifications', label: 'Notificações', path: paths.notifications });
+  if (staff(contexts, ['users.manage'])) items.push({ key: 'team', label: 'Equipe e convites', path: paths.teamManagement });
+  if (staff(contexts, ['audit.read'])) items.push({ key: 'audit', label: 'Auditoria', path: paths.audit });
+  if (staff(contexts, ['archives.manage'])) items.push({ key: 'archives', label: 'Arquivados', path: paths.archives });
+  items.push({ key: 'account', label: 'Conta', path: paths.account });
   return items;
 }
 
