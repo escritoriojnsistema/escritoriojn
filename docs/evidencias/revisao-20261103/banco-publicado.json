@@ -1,0 +1,59 @@
+{
+  "baseline": {
+    "grants": 17,
+    "folders": 4,
+    "services": 1,
+    "versions": 64,
+    "approvals": 1,
+    "templates": 64,
+    "text_hash": "a3f8805445d8b9a8d72d0513af8a1f58",
+    "service_hash": "f9d887bb876b6a4842304329bb27b672",
+    "locations_hash": "0f59caa6c7d1a368aa272c6c25fc6ab7",
+    "service_versions": 1
+  },
+  "after": {
+    "grants": 17,
+    "folders": 4,
+    "services": 1,
+    "versions": 64,
+    "approvals": 1,
+    "migration": {
+      "version": "20261103160413",
+      "first_md5": "c2a29f8fc4dab88a32e3fdd3e9acc955",
+      "statements": 26
+    },
+    "templates": 64,
+    "text_hash": "a3f8805445d8b9a8d72d0513af8a1f58",
+    "service_hash": "f9d887bb876b6a4842304329bb27b672",
+    "new_table_rls": true,
+    "locations_hash": "0f59caa6c7d1a368aa272c6c25fc6ab7",
+    "missing_origin": 0,
+    "raw_table_closed": true,
+    "service_versions": 1,
+    "anonymous_rpc_closed": true
+  },
+  "preserved": true,
+  "migration": {
+    "version": "20261103160413",
+    "statements": 26,
+    "canonical_sql_equal": true,
+    "application": "automatic Git integration; a concurrent manual attempt was rejected by the already-repaired-target guard and did not create another history entry"
+  },
+  "advisors": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 108
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1
+    }
+  ],
+  "new_security_guards": {
+    "rls": true,
+    "raw_table_closed": true,
+    "anonymous_rpc_closed": true
+  }
+}

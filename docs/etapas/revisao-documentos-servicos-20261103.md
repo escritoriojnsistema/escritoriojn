@@ -57,3 +57,12 @@ A fonte de categorias continua sendo o banco por escritório; a tabela acima doc
 ## Publicação e limites
 
 Publicação pelo GitHub → Vercel, sem Actions nem deploy CLI/API. Conferir a migration corretiva no histórico após merge antes de aplicação manual. Comparar contagens/hashes de modelos, serviços e localizações antes/depois. A verificação hospedada não usa credenciais pessoais: schema, projeções, preservação de dados, assets públicos, saúde e barreiras anônimas; o login real foi exercitado no laboratório descartável.
+
+
+## Publicação confirmada
+
+[PR77](https://github.com/escritoriojnsistema/escritoriojn/pull/77), merge `65574ca19e9b62def592417997234c3212fe7564`, árvore runtime `c1a227c695de235f92916e56505a34a9ba58b2cc`. Vercel [6Cbasji3](https://vercel.com/escritorio-jn/escritoriojn/6Cbasji3njqgCwd4MsSAsKc1bgS3) **success**, produção https://escritoriojn.vercel.app. Oito assets iguais ao build com a mesma URL/chave pública do projeto (sem chave privilegiada), home/health200 e cinco APIs401 anônimas.
+
+Migration `20261103160413` aplicada pela integração Git: **26 comandos canonicamente iguais ao arquivo**. Uma tentativa manual concorrente foi recusada pela guarda de alvo já corrigido; o readback confirmou a aplicação automática completa e uma única entrada no histórico. Não reaplicar. Sem mudança nos hashes de texto/definições de serviço/localizações e sem mudança das contagens64modelos/64versões/1aprovação/1serviço/1versão de serviço/4pastas/17concessões individuais. Projeção dos64importados agora conserva origem; nova tabelaRLS/ACL e RPCs fechadas ao anônimo conferidas.
+
+Próximo checkpoint: uso operacional dos modelos e serviços pelo gestor. As escolhas reais de aprovação, tarifa e itens de checklist permanecem sob sua gestão; esta revisão não avança automaticamente as etapas futuras do manual. Para continuidade, ler AGENTS, este fecho e os três JSONs de evidência desta revisão.
