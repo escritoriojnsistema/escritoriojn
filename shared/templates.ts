@@ -14,7 +14,7 @@ export const templateValueLimit=(key:string):number=>isCustomTemplateKey(key)?20
 export type TemplateVariable={key:string;label:string;type:VariableType;required:boolean};
 export type TemplateInput={code:string;name:string;kind:keyof typeof templateKinds;content:string;demonstration:boolean;effective_from:string|null;effective_until:string|null;variables:TemplateVariable[];signature_policy:keyof typeof signaturePolicies;review_required:boolean};
 export const templateKeys=['code','name','kind','content','demonstration','effective_from','effective_until','variables','signature_policy','review_required'] as const;
-export type TemplateVersion=TemplateInput & {id:string;number:number;created_by:string|null;source_import_id?:string|null;created_by_name:string;created_at:string;reason:string;approved_by:string|null;approved_by_name:string|null;approved_at:string|null;approval_reason:string|null};
+export type TemplateVersion=TemplateInput & {id:string;number:number;created_by:string|null;source_import_id?:string|null;created_by_name:string;created_at:string;reason:string;approved_by:string|null;approved_by_name:string|null;approved_at:string|null;approval_reason:string|null;edited_at:string|null};
 export type TemplateSummary=Pick<TemplateInput,'code'|'name'|'kind'|'demonstration'> & {id:string;latest_version:number;current_version:number|null};
 export type TemplatePage={items:TemplateSummary[];total:number;page:number;page_size:number};
 export type TemplateDetail={id:string;code:string;latest_version:number;can_manage:boolean;can_approve:boolean;versions:TemplateVersion[];history_total:number;history_page:number};

@@ -1,4 +1,4 @@
-import type {ModelCommercialState,ModelMetadata,ModelMetadataCommand,DocumentOffer,DocumentOfferInput,DocumentPublicOffer,DocumentOffersPage,DocumentBookingInput,DocumentBookingResult,DocumentIntakeView,DocumentPresence,PresenceStatus,DocumentDispatchPage} from '../../../shared/modelCommercial';
+import type {ModelCommercialState,ModelMetadata,ModelMetadataCommand,ModelVersionCommand,DocumentOffer,DocumentOfferInput,DocumentPublicOffer,DocumentOffersPage,DocumentBookingInput,DocumentBookingResult,DocumentIntakeView,DocumentPresence,PresenceStatus,DocumentDispatchPage} from '../../../shared/modelCommercial';
 import type {TemplateDetail} from '../../../shared/templates';
 import type {DocumentDetail,ParticipantInput} from '../../../shared/documents';
 import {commercialRequest as request} from './api';
@@ -8,6 +8,7 @@ export const modelApi={
  state:(office_id:string,template_id:string,signal?:AbortSignal)=>request<ModelCommercialState>('/model-state',{office_id,template_id},signal),
  metadata:(office_id:string,template_id:string,command:ModelMetadataCommand,expected_revision:number,idempotency_key:string,signal?:AbortSignal)=>request<ModelMetadata>('/metadata-command',{office_id,template_id,command,expected_revision,idempotency_key},signal),
  duplicate:(office_id:string,template_id:string,version_id:string,code:string,name:string,idempotency_key:string,signal?:AbortSignal)=>request<TemplateDetail>('/duplicate',{office_id,template_id,version_id,code,name,idempotency_key},signal),
+ versionCommand:(office_id:string,template_id:string,command:ModelVersionCommand,expected_version:number,idempotency_key:string,signal?:AbortSignal)=>request<TemplateDetail>('/version-command',{office_id,template_id,command,expected_version,idempotency_key},signal),
  offer:(office_id:string,template_id:string,value:DocumentOfferInput,expected_revision:number,idempotency_key:string,signal?:AbortSignal)=>request<DocumentOffer>('/offer-manage',{office_id,template_id,value,expected_revision,idempotency_key},signal),
  offers:(office_id:string,folder_id:string|null,unfiled:boolean,query:string,page:number,size:number,signal?:AbortSignal)=>request<DocumentOffersPage>('/offers',{office_id,folder_id,unfiled,query,page,size},signal),
  form:(office_id:string,template_id:string,signal?:AbortSignal)=>request<DocumentPublicOffer>('/offer-form',{office_id,template_id},signal),

@@ -64,7 +64,7 @@ Object.assign(auditActionNames,{'quick.completed':'Atendimento rápido concluíd
 Object.assign(auditTargetNames,{financial_report:'Relatório financeiro',finance_report_settings:'Configuração dos relatórios'});
 Object.assign(auditFieldNames,{format:'Formato do arquivo'});
 
-Object.assign(auditActionNames,{'templates.saved':'Versão de modelo salva','templates.approved':'Versão de modelo aprovada'});
+Object.assign(auditActionNames,{'templates.saved':'Versão de modelo salva','templates.approved':'Versão de modelo aprovada','templates.version_edited':'Versão de modelo editada','templates.version_deleted':'Versão de modelo excluída'});
 Object.assign(auditTargetNames,{template:'Modelo documental'});
 
 Object.assign(auditActionNames,{'documents.created':'Rascunho documental criado','documents.saved':'Revisão documental salva','documents.participants_changed':'Participantes do documento alterados','documents.prepared':'Preenchimento documental concluído'});

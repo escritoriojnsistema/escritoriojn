@@ -1,5 +1,6 @@
 import {documentExact as exact,documentObject as object,documentUuid as uuid} from './documents.js';
-import type {TemplateFolderCommand,TemplateFolderState} from './modelCommercial.js';
+import {validTemplate} from './templates.js';
+import type {TemplateFolderCommand,TemplateFolderState,ModelVersionCommand} from './modelCommercial.js';
 const revision=(v:unknown,min=1):v is number=>typeof v==='number'&&Number.isSafeInteger(v)&&v>=min&&v<2147483647;
 export const folderName=(v:unknown):v is string=>typeof v==='string'&&v.trim().length>0&&Array.from(v).length<=120&&!/[\u0000-\u001f\u007f]/.test(v);
 export function validFolderCommand(v:unknown):v is TemplateFolderCommand {
@@ -20,6 +21,12 @@ export function projectFolderState(v:unknown):TemplateFolderState {
  return {folders,locations,can_manage:v.can_manage};
 }
 export function validMetadataCommand(v:unknown):v is import('./modelCommercial.js').ModelMetadataCommand{return object(v)&&(v.kind==='rename'?exact(v,['kind','name'])&&folderName(v.name):['archive','restore'].includes(String(v.kind))&&exact(v,['kind']));}
+const versionReason=(v:unknown):v is string=>typeof v==='string'&&v.trim().length>0&&Array.from(v).length<=500&&!/[\u0000-\u001f\u007f]/.test(v);
+export function validVersionCommand(v:unknown):v is ModelVersionCommand {
+ if(!object(v))return false;
+ if(v.kind==='edit')return exact(v,['kind','version_id','definition','reason'])&&uuid(v.version_id)&&validTemplate(v.definition)&&versionReason(v.reason);
+ return v.kind==='delete'&&exact(v,['kind','version_id','reason'])&&uuid(v.version_id)&&versionReason(v.reason);
+}
 export function projectMetadata(v:unknown):import('./modelCommercial.js').ModelMetadata{
  if(!object(v)||!uuid(v.template_id)||!folderName(v.display_name)||!revision(v.revision,0)||!(v.archived_at===null||typeof v.archived_at==='string'&&Number.isFinite(Date.parse(v.archived_at))))throw Error('Invalid metadata');
  return {template_id:v.template_id,display_name:v.display_name,archived_at:v.archived_at as string|null,revision:v.revision};

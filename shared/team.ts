@@ -10,7 +10,7 @@ export type TeamPermission = typeof assignablePermissions[number];
 export const permissionNames: Record<TeamPermission, string> = {
  'settings.access':'Acessar configurações','categories.manage':'Gerenciar categorias (administradores)','access.manage':'Configurar prazo dos acessos (administradores)','requests.archives.manage':'Relatórios e arquivamento de solicitações (administradores)',
   'documents.read':'Consultar documentos','documents.create':'Criar rascunhos documentais','documents.update':'Editar e concluir preenchimento',
-  'templates.read':'Consultar modelos documentais','templates.manage':'Criar versões de modelos','templates.approve':'Aprovar modelos (administradores)',
+  'templates.read':'Consultar modelos documentais','templates.manage':'Criar, editar, mover e excluir modelos','templates.approve':'Aprovar modelos (administradores)',
   'quick.perform':'Executar atendimento rápido','finance.reports.read':'Consultar relatórios financeiros próprios','finance.reports.read_all':'Consultar relatórios consolidados (requer leitura de todos os caixas)','finance.reports.export':'Exportar relatórios financeiros','finance.reports.manage':'Configurar fuso dos relatórios (administradores)',
   'cash.closure.approve':'Revisar divergências de fechamento (administradores)','cash.closure.adjust':'Ajustar conferência em nova sessão própria (administradores)',
   'expenses.read':'Consultar despesas','expenses.create':'Registrar contas a pagar','expenses.approve':'Aprovar despesas','expenses.pay':'Pagar despesas em caixa próprio','cash.transfer':'Registrar sangria, reforço e transferência','receipts.read':'Consultar recibos','receipts.issue':'Emitir recibos de pagamentos confirmados',

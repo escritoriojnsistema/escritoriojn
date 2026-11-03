@@ -1,3 +1,5 @@
+import type {TemplateInput} from './templates.js';
+
 /** Folder management is independent from the immutable template versions. */
 export interface TemplateFolder { id: string; name: string; revision: number; category: string }
 export interface TemplateLocation { template_id: string; folder_id: string | null; revision: number }
@@ -10,6 +12,9 @@ export type TemplateFolderCommand =
 
 export interface ModelMetadata { template_id: string; display_name: string; archived_at: string | null; revision: number }
 export type ModelMetadataCommand = { kind: 'rename'; name: string } | { kind: 'archive' } | { kind: 'restore' };
+export type ModelVersionCommand =
+  | { kind: 'edit'; version_id: string; definition: TemplateInput; reason: string }
+  | { kind: 'delete'; version_id: string; reason: string };
 
 export interface DocumentOfferInput {
   service_id: string; instructions: string; execution_level: 1 | 2 | 3; portal_enabled: boolean;

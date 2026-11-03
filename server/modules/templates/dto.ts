@@ -7,7 +7,8 @@ function version(v:unknown):TemplateVersion{
  const input=Object.fromEntries(templateKeys.map(k=>[k,v[k]]));if(!validTemplate(input))throw Error('Invalid template definition');
  if(v.approved_at===null){if(v.approved_by!==null||v.approved_by_name!==null||v.approval_reason!==null)throw Error('Invalid approval');}
  else if(!time(v.approved_at)||!uuid(v.approved_by)||!templateText(v.approved_by_name,120)||!templateText(v.approval_reason,500))throw Error('Invalid approval');
- return {...input,variables:input.variables.map(x=>({key:x.key,label:x.label,type:x.type,required:x.required})),id:v.id,number:v.number,created_by:v.created_by as string|null,...(v.source_import_id!==undefined?{source_import_id:v.source_import_id as string|null}:{}),created_by_name:v.created_by_name,created_at:v.created_at,reason:v.reason,approved_by:v.approved_by as string|null,approved_by_name:v.approved_by_name as string|null,approved_at:v.approved_at as string|null,approval_reason:v.approval_reason as string|null};
+ const edited=v.edited_at===undefined||v.edited_at===null?null:v.edited_at;if(edited!==null&&!time(edited))throw Error('Invalid edit timestamp');
+ return {...input,variables:input.variables.map(x=>({key:x.key,label:x.label,type:x.type,required:x.required})),id:v.id,number:v.number,created_by:v.created_by as string|null,...(v.source_import_id!==undefined?{source_import_id:v.source_import_id as string|null}:{}),created_by_name:v.created_by_name,created_at:v.created_at,reason:v.reason,approved_by:v.approved_by as string|null,approved_by_name:v.approved_by_name as string|null,approved_at:v.approved_at as string|null,approval_reason:v.approval_reason as string|null,edited_at:edited as string|null};
 }
 function summary(v:unknown):TemplateSummary{
  if(!record(v)||!uuid(v.id)||!templateText(v.name,120)||typeof v.code!=='string'||!/^[A-Z0-9][A-Z0-9_-]{1,31}$/.test(v.code)||typeof v.kind!=='string'||!Object.hasOwn(templateKinds,v.kind)||typeof v.demonstration!=='boolean'||!int(v.latest_version,1)||!(v.current_version===null||int(v.current_version,1,v.latest_version)))throw Error('Invalid template summary');
@@ -18,7 +19,7 @@ export function templatePage(v:unknown):TemplatePage{
  return {items:v.items.map(summary),total:v.total,page:v.page,page_size:v.page_size};
 }
 export function templateDetail(v:unknown):TemplateDetail{
- if(!record(v)||!uuid(v.id)||typeof v.code!=='string'||!int(v.latest_version,1)||typeof v.can_manage!=='boolean'||typeof v.can_approve!=='boolean'||!Array.isArray(v.versions)||v.versions.length>5||!int(v.history_total,1)||v.history_total>v.latest_version||!int(v.history_page,1,100000))throw Error('Invalid template detail');
+ if(!record(v)||!uuid(v.id)||typeof v.code!=='string'||!int(v.latest_version,1)||typeof v.can_manage!=='boolean'||typeof v.can_approve!=='boolean'||!Array.isArray(v.versions)||v.versions.length>5||!int(v.history_total,0)||v.history_total>v.latest_version||!int(v.history_page,1,100000))throw Error('Invalid template detail');
  const versions=v.versions.map(version);if(versions.some(x=>x.code!==v.code||x.number>Number(v.latest_version))||new Set(versions.map(x=>x.number)).size!==versions.length||!v.can_manage&&!v.can_approve&&versions.some(x=>x.approved_at===null))throw Error('Invalid version identity');
  return {id:v.id,code:v.code,latest_version:v.latest_version,can_manage:v.can_manage,can_approve:v.can_approve,versions,history_total:v.history_total,history_page:v.history_page};
 }

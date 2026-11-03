@@ -1,7 +1,8 @@
 import {useState} from 'react';
 import {emptyTemplate,templateKeys,templateIssues,templateKinds,templateVariables,isCustomTemplateKey,signaturePolicies,variableTypeLabels,type TemplateInput,type TemplateVariable} from '../../../shared/templates';
 const localTime=(v:string|null)=>v?new Date(Date.parse(v)-new Date(v).getTimezoneOffset()*60000).toISOString().slice(0,16):'';
-export function TemplateForm({initial,busy,locked,conflict,onSave}:{initial?:TemplateInput;busy:boolean;locked:boolean;conflict:boolean;onSave:(definition:TemplateInput,reason:string)=>void}){
+export function TemplateForm({initial,busy,locked,conflict,onSave,mode,onCancel}:{initial?:TemplateInput;busy:boolean;locked:boolean;conflict:boolean;onSave:(definition:TemplateInput,reason:string)=>void;mode?:'create'|'version'|'edit';onCancel?:()=>void}){
+ const action=mode??(initial?'version':'create');
  const [input,setInput]=useState<TemplateInput>(()=>initial?{...Object.fromEntries(templateKeys.map(k=>[k,initial[k]])) as TemplateInput,variables:initial.variables.map(v=>({...v}))}:{...emptyTemplate,variables:[]});
  const [reason,setReason]=useState(''),[issues,setIssues]=useState<string[]>([]),[from,setFrom]=useState(localTime(input.effective_from)),[until,setUntil]=useState(localTime(input.effective_until)),[fromEdited,setFromEdited]=useState(false),[untilEdited,setUntilEdited]=useState(false);
  const set=<K extends keyof TemplateInput>(key:K,value:TemplateInput[K])=>setInput(v=>({...v,[key]:value}));
@@ -27,8 +28,9 @@ export function TemplateForm({initial,busy,locked,conflict,onSave}:{initial?:Tem
     <label className="team-field">Início da vigência (opcional)<input type="datetime-local" value={from} onChange={e=>{setFrom(e.target.value);setFromEdited(true);}}/></label><label className="team-field">Fim da vigência (opcional)<input type="datetime-local" value={until} onChange={e=>{setUntil(e.target.value);setUntilEdited(true);}}/></label>
     <label className="team-field">Política de assinatura<select value={input.signature_policy} onChange={e=>set('signature_policy',e.target.value as TemplateInput['signature_policy'])}>{Object.entries(signaturePolicies).map(([key,label])=><option key={key} value={key}>{label}</option>)}</select></label><label className="template-check"><input type="checkbox" checked={input.review_required} onChange={e=>set('review_required',e.target.checked)}/>Exigir revisão do documento</label>
    </div><p className="customer-note">Horários no seu fuso local. Sem início: a partir da aprovação. A aprovação nunca retroage; assinatura e revisão do documento seguem suas políticas próprias.</p></details>
-   <label className="team-field template-reason">Motivo da versão<input required maxLength={500} value={reason} onChange={e=>setReason(e.target.value)}/></label>
+   <label className="team-field template-reason">{action==='edit'?'Motivo da edição':'Motivo da versão'}<input required maxLength={500} value={reason} onChange={e=>setReason(e.target.value)}/></label>
+   {action==='edit'&&<p className="customer-note">A edição altera esta mesma versão, mantém a aprovação já registrada e guarda o texto anterior na auditoria. Não cria uma nova versão.</p>}
   </fieldset>
-  <button className="primary-button template-save" type="submit" disabled={busy||conflict}>{initial?'Salvar versão':'Cadastrar modelo'}</button>
+  <div className="template-folder-actions"><button className="primary-button template-save" type="submit" disabled={busy||conflict}>{action==='edit'?'Salvar alterações nesta versão':initial?'Salvar versão':'Cadastrar modelo'}</button>{onCancel&&<button type="button" className="team-text-button" disabled={busy} onClick={onCancel}>Cancelar</button>}</div>
  </form>;
 }
