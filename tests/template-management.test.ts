@@ -13,3 +13,11 @@ test('leitor de modelos recebe histórico aprovado menor que o total de versões
  assert.throws(()=>templateDetail({...detail,history_total:2}));
  assert.throws(()=>templateDetail({...detail,can_manage:false,can_approve:false}),'DTO fails closed if the provider returns a draft to a reader');
 });
+
+import {validVersionCommand} from '../shared/modelCommercialValidation.js';
+test('edição na mesma versão transporta carimbo e rejeita campos forjados',()=>{
+ const command={kind:'edit',version_id:version.id,definition:Object.fromEntries(['code','name','kind','content','demonstration','effective_from','effective_until','variables','signature_policy','review_required'].map(k=>[k,version[k as keyof typeof version]])),reason:'Correção autorizada',expected_edited_at:'2026-11-03T12:00:00.123456+00:00'};
+ assert.equal(validVersionCommand(command),true);assert.equal(validVersionCommand({...command,expected_edited_at:null}),true);
+ for(const stamp of ['invalido',42,{},''])assert.equal(validVersionCommand({...command,expected_edited_at:stamp}),false);
+ assert.equal(validVersionCommand({...command,actor_id:user}),false);
+});

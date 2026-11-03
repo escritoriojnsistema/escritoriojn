@@ -34,7 +34,7 @@ for(const [width,height] of [[320,568],[360,640],[768,1024],[1440,900]])test(`se
  await page.getByRole('button',{name:'Ver serviço Xerox de Teste',exact:true}).click();
  await expect(page.getByRole('heading',{name:'Xerox de Teste',exact:true})).toBeVisible();
  await page.getByText('Histórico de versões',{exact:true}).click();await expect(page.getByRole('list',{name:'Versões do serviço'})).toContainText('Cadastro fictício');
- await page.getByRole('button',{name:'Nova versão',exact:true}).click();
+ await page.getByRole('button',{name:'Editar serviço',exact:true}).click();
  const formHeight=await page.evaluate(()=>document.documentElement.scrollHeight);
  if(height>=640)expect(formHeight).toBeLessThanOrEqual(height+1);
  if(process.env.TEAM_UI_CAPTURE)await page.screenshot({path:`docs/evidencias/etapa-09/formulario-${width}.png`,fullPage:true});
@@ -59,7 +59,7 @@ test('serviços: vazio permite cadastro e políticas no mesmo formulário',async
 test('serviços: funcionário sem gestão consulta, sem editar',async({page})=>{
  await setup(page,['foundation.access','services.read'],false,'employee');await page.goto('/servicos');
  await expect(page.getByRole('list',{name:'Serviços do escritório'})).toBeVisible();await expect(page.getByRole('button',{name:'Novo serviço',exact:true})).toHaveCount(0);
- await page.getByRole('button',{name:'Ver serviço Xerox de Teste',exact:true}).click();await expect(page.getByRole('heading',{name:'Xerox de Teste',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'Nova versão',exact:true})).toHaveCount(0);
+ await page.getByRole('button',{name:'Ver serviço Xerox de Teste',exact:true}).click();await expect(page.getByRole('heading',{name:'Xerox de Teste',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'Editar serviço',exact:true})).toHaveCount(0);
 });
 test('serviços: pendência mantém rótulo e erro de conexão preserva formulário',async({page})=>{
  await setup(page);await page.goto('/servicos');await page.getByRole('button',{name:'Novo serviço',exact:true}).click();await page.getByLabel('Nome do serviço',{exact:true}).fill('Xerox de Teste');await page.getByLabel('Código',{exact:true}).fill('XEROX-TESTE');await page.getByRole('combobox',{name:'Categoria do serviço',exact:true}).selectOption({label:'Cópias'});
@@ -95,4 +95,18 @@ test('serviços: zoom e altura reduzida permitem rolagem sem corte horizontal',a
  await page.setViewportSize({width:360,height:400});await setup(page);await page.goto('/servicos');await page.getByRole('button',{name:'Novo serviço',exact:true}).click();await page.getByLabel('Nome do serviço',{exact:true}).fill('Nome fictício longo '.repeat(6));
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(await page.evaluate(()=>document.documentElement.scrollHeight>innerHeight)).toBe(true);await page.getByRole('button',{name:'Cadastrar serviço',exact:true}).scrollIntoViewIfNeeded();await expect(page.getByRole('button',{name:'Cadastrar serviço',exact:true})).toBeInViewport();
  await page.setViewportSize({width:1440,height:900});await page.evaluate(()=>document.documentElement.style.zoom='2');expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.getByRole('button',{name:'Cadastrar serviço',exact:true}).scrollIntoViewIfNeeded();await expect(page.getByRole('button',{name:'Cadastrar serviço',exact:true})).toBeInViewport();
+});
+
+for(const width of [320,1440])test(`serviços: excluir com motivo e repetir a mesma tentativa em ${width}px`,async({page})=>{
+ await page.setViewportSize({width,height:900});await setup(page);
+ const commands:any[]=[];let failure=true;
+ await page.route('**/api/services/*/archive',r=>{commands.push(r.request().postDataJSON());if(failure){failure=false;return r.fulfill({status:503,json:{error:{}}});}return r.fulfill({json:{data:{id,archived_at:'2026-11-03T12:00:00.000Z'}}});});
+ await page.goto('/servicos');await page.getByRole('button',{name:'Ver serviço Xerox de Teste',exact:true}).click();
+ await page.getByText('Excluir serviço',{exact:true}).click();await page.getByLabel('Motivo da exclusão',{exact:true}).fill('Serviço descontinuado');
+ await page.getByRole('button',{name:'Confirmar exclusão',exact:true}).click();await expect(page.getByRole('alert')).toBeVisible();
+ await expect(page.getByRole('button',{name:'Voltar à lista',exact:true})).toBeDisabled();
+ await expect(page.getByLabel('Motivo da exclusão',{exact:true})).toBeDisabled();
+ await page.getByRole('button',{name:'Repetir exclusão',exact:true}).click();
+ await expect(page.getByRole('status')).toContainText('Serviço excluído');expect(commands).toHaveLength(2);expect(commands[0]).toEqual(commands[1]);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });

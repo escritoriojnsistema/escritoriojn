@@ -22,6 +22,7 @@ test('catálogo09: API autenticada, contratos e erros seguros',async t=>{
     if(req.url==='/auth/v1/user'){res.end(JSON.stringify({id,aud:'authenticated',email:'fixture@example.test'}));return;}
     if(mode!=='ok' && mode!=='malformed') {const status=mode==='forbidden'?403:mode==='conflict'?409:mode==='validation'?422:500;res.statusCode=status;res.end(JSON.stringify({code:`PT${status}`,message:mode==='forbidden'?'SERVICES_FORBIDDEN':mode==='conflict'?'SERVICE_CONFLICT':mode==='validation'?'SERVICES_VALIDATION':'SQL private secret'}));return;}
     if(mode==='malformed'){res.end(JSON.stringify({...detail,latest_version:'1'}));return;}
+    if(req.url?.endsWith('service_archive')){res.end(JSON.stringify({id,archived_at:'2026-11-03T12:00:00.000Z',private:'hidden'}));return;}
     const result=req.url?.endsWith('services_page')?{items:[{...summary,private:'secret'}],total:1,page:body.p_page,page_size:body.p_size}:detail;
     res.end(JSON.stringify({...result,private:'secret'}));
   });
@@ -45,6 +46,19 @@ test('catálogo09: API autenticada, contratos e erros seguros',async t=>{
       assert.match(String(calls.at(-1)?.body.p_request_id),/^[a-f0-9-]{36}$/);
       assert.equal((await send(`/${id}/versions`,{office_id:office,service:{...serviceFixture,price_cents:75},expected_version:1,reason:'Reajuste fictício'})).status,201);
       assert.equal((await send(`/${id}/detail`,{office_id:office,page:1})).status,200);
+    });
+    await t.test('exclusão usa comando estável e não expõe campos privados',async()=>{
+      const body={office_id:office,expected_version:1,reason:'Remover serviço',idempotency_key:versionId};
+      const response=await send(`/${id}/archive`,body);assert.equal(response.status,200);
+      assert.deepEqual(await response.json(),{data:{id,archived_at:'2026-11-03T12:00:00.000Z'}});
+      assert.equal(calls.at(-1)?.url,'/rest/v1/rpc/service_archive');
+      assert.equal(calls.at(-1)?.body.p_idempotency_key,versionId);
+      for(const change of [{expected_version:0},{reason:''},{idempotency_key:'bad'},{actor_id:id}]){
+        const before=calls.filter(c=>c.url.includes('/rpc/')).length;
+        assert.equal((await send(`/${id}/archive`,{...body,...change})).status,422);
+        assert.equal(calls.filter(c=>c.url.includes('/rpc/')).length,before);
+      }
+      for(const [value,status] of [['forbidden',403],['conflict',409],['internal',503],['malformed',503]] as const){mode=value;assert.equal((await send(`/${id}/archive`,body)).status,status);}mode='ok';
     });
     await t.test('centavos, quantidades, políticas e campos são estritos',async()=>{
       for(const change of [{price_cents:0.5},{price_cents:-1},{quantity_min:0},{quantity_max:0},{max_discount_bps:10001},{participants_min:2},{fields:[{key:'cpf',label:'CPF',type:'text',required:'sim'}]},{required_capabilities:['users.manage']},{name:['forjado']},{effective_from:'2026-02-31'},{allow_courtesy:'true'},{signature_required:true}]){

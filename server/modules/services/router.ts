@@ -12,12 +12,16 @@ servicesRouter.use(async(req,res,next)=>{const auth=await authenticatedClient(re
 servicesRouter.use((req,res,next)=>{if(req.method!=='GET' && req.method!=='HEAD' && !req.is('application/json')){errorResponse(res,415,'UNSUPPORTED_MEDIA_TYPE','Envie um corpo JSON.');return;}next();},json({limit:'10kb'}));
 const invalid=(res:Response)=>errorResponse(res,422,'SERVICES_VALIDATION','Confira os dados, regras, vigência e motivo informados.');
 const messages:Record<string,[number,string]>={AUTH_REQUIRED:[401,'Entre novamente para continuar.'],SERVICES_FORBIDDEN:[403,'Seu acesso não permite esta operação no catálogo.'],SERVICE_NOT_FOUND:[404,'Serviço não encontrado.'],SERVICE_CONFLICT:[409,'O catálogo mudou. Reabra o serviço antes de publicar.'],SERVICE_DUPLICATE:[409,'Este código já existe no escritório.'],SERVICE_NOT_EFFECTIVE:[409,'O serviço ainda não possui versão vigente.'],SERVICES_VALIDATION:[422,'Confira os dados, vigência e limites da política.']};
-async function rpc(res:Response,name:string,args:Record<string,unknown>,kind:'page'|'detail'|'quote'='detail',status=200){
+async function rpc(res:Response,name:string,args:Record<string,unknown>,kind:'page'|'detail'|'quote'|'removal'='detail',status=200){
   try{
     const {client}=res.locals.servicesAuth as NonNullable<Awaited<ReturnType<typeof authenticatedClient>>>;
     const {data,error}=await client.rpc(name,args);
     if(error){const known=Object.hasOwn(messages,error.message)?messages[error.message]:null;if(known&&error.code===`PT${known[0]}`)errorResponse(res,known[0],error.message,known[1]);else errorResponse(res,503,'SERVICES_UNAVAILABLE','Não foi possível concluir. Atualize o catálogo antes de repetir.');return;}
-    const dto=kind==='page'?servicePage(data):kind==='quote'?serviceQuote(data):serviceDetail(data);
+    let dto;
+    if(kind==='removal'){
+      if(!data||!uuid(data.id)||data.id!==args.p_service_id||typeof data.archived_at!=='string'||!Number.isFinite(Date.parse(data.archived_at)))throw Error('Invalid service removal');
+      dto={id:data.id,archived_at:data.archived_at};
+    }else dto=kind==='page'?servicePage(data):kind==='quote'?serviceQuote(data):serviceDetail(data);
     res.status(status).json({data:dto});
   }catch{errorResponse(res,503,'SERVICES_UNAVAILABLE','Não foi possível concluir. Atualize o catálogo antes de repetir.');}
 }
@@ -45,4 +49,9 @@ servicesRouter.post('/:id/quote',async(req,res)=>{
   const b:unknown=req.body;
   if(Object.keys(req.query).length||!uuid(req.params.id)||!fields(b,['office_id','quantity','adjustment'])||!uuid(b.office_id)||!Number.isInteger(b.quantity)||Number(b.quantity)<1||Number(b.quantity)>100000||!validAdjustment(b.adjustment)){invalid(res);return;}
   await rpc(res,'service_quote',{p_office_id:b.office_id,p_service_id:req.params.id,p_quantity:b.quantity,p_adjustment:b.adjustment},'quote');
+});
+servicesRouter.post('/:id/archive',async(req,res)=>{
+  const b:unknown=req.body;
+  if(Object.keys(req.query).length||!uuid(req.params.id)||!fields(b,['office_id','expected_version','reason','idempotency_key'])||!uuid(b.office_id)||!validServiceReason(b.reason)||!Number.isInteger(b.expected_version)||Number(b.expected_version)<1||Number(b.expected_version)>2147483645||!uuid(b.idempotency_key)){invalid(res);return;}
+  await rpc(res,'service_archive',{p_office_id:b.office_id,p_service_id:req.params.id,p_expected_version:b.expected_version,p_reason:b.reason.trim(),p_idempotency_key:b.idempotency_key},'removal');
 });

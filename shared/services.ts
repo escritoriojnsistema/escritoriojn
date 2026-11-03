@@ -13,6 +13,7 @@ export type ServiceVersion = ServiceInput & ServiceCategoryMetadata & { id: stri
 export type ServiceSummary = ServiceCategoryMetadata & { id: string; code: string; name: string; category: string; unit: string; price_cents: number; version: number; effective_from: string };
 export type ServicePage = { items: ServiceSummary[]; total: number; page: number; page_size: number };
 export type ServiceDetail = { id: string; code: string; latest_version: number; can_manage: boolean; current: ServiceVersion | null; versions: ServiceVersion[]; history_page: number; history_total: number };
+export type ServiceRemoval = { id: string; archived_at: string };
 // Percentage adjustments use basis points: 1000 = 10%. Override uses unit cents.
 export type ServiceAdjustment = { kind: 'none' | 'discount' | 'surcharge' | 'courtesy' | 'override'; value: number; reason: string };
 export type ServiceQuote = { service_id: string; version_id: string; version: number; effective_from: string; quoted_at: string; definition: ServiceInput; quantity: number; unit_price_cents: number; base_cents: number; total_cents: number; adjustment: ServiceAdjustment };

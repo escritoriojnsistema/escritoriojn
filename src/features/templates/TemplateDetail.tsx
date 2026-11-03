@@ -3,7 +3,7 @@ import {templateKinds,isCustomTemplateKey,signaturePolicies,variableTypeLabels,t
 const date=(v:string|null)=>v?new Date(v).toLocaleString('pt-BR'):'Não definido';
 export function TemplateDetail({data,selectedNumber,onSelected,busy,locked,conflict,canApprove,onApprove,onHistory}:{data:Detail;selectedNumber?:number;onSelected?:(number:number)=>void;busy:boolean;locked:boolean;conflict:boolean;canApprove:boolean;onApprove:(version:string,reason:string)=>void;onHistory:(page:number)=>void}){
  const [selected,setSelected]=useState(''),[reason,setReason]=useState('');
- const v=data.versions.find(v=>v.id===selected)??data.versions.find(v=>v.number===selectedNumber)??data.versions[0];if(!v)return <p className="team-empty">Nenhuma versão nesta página.</p>;
+ const v=data.versions.find(v=>v.number===selectedNumber)??data.versions.find(v=>v.id===selected)??data.versions[0];if(!v)return <p className="team-empty">Nenhuma versão nesta página.</p>;
  return <section className="template-detail" aria-label="Detalhe do modelo">
   {v.demonstration&&<p className="template-demo">Demonstração sem validade operacional</p>}
   <div className="template-version-line"><label className="team-field">Versão consultada<select value={v.id} disabled={busy||locked} onChange={e=>{setSelected(e.target.value);const next=data.versions.find(v=>v.id===e.target.value);if(next)onSelected?.(next.number);setReason('');}}>{data.versions.map(x=><option key={x.id} value={x.id}>v{x.number} · {x.approved_at?'Aprovada':'Rascunho'} · {x.name}</option>)}</select></label><span className="template-status">{v.approved_at?'Aprovado':'Rascunho'}</span></div>
