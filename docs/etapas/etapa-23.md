@@ -18,4 +18,4 @@ Express `/api/document-workflow/{review-queue,reviewers,review-history,request-r
 
 ## Validação/publicação
 
-Evidências consolidadas em `fecho-23.md` após completar as verificações e a publicação GitHub→Vercel, sem Actions. Laboratório Auth usa GoTrue/PostgREST/Postgres descartáveis com esquemaStorage; não comprova novos bytesPDF ou SMTP. Jornada hospedada autenticada não é executada com contas reais. Medições locais não constituem SLA nem promessa de atraso zero. Etapa24 não iniciada.
+Evidências consolidadas em [fecho-23.md](fecho-23.md) e [publicação](../evidencias/etapa-23/publicacao.json), com GitHub→Vercel e migration automática conferidos, sem Actions. Laboratório Auth usa GoTrue/PostgREST/Postgres descartáveis com esquemaStorage; não comprova novos bytesPDF ou SMTP. Jornada hospedada autenticada não é executada com contas reais. Medições locais não constituem SLA nem promessa de atraso zero. Etapa24 não iniciada.
