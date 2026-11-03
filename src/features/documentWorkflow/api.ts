@@ -1,8 +1,12 @@
 import type {WorkflowCommand,WorkflowState,PortalDocuments,DocumentCashQueue} from '../../../shared/documentWorkflow';
 import {commercialRequest} from '../documentCommercial/api';
+import type {ReviewQueuePage,ReviewMembersPage,ReviewHistoryPage,ReviewStatus} from '../../../shared/editorialReview';
 import type {DocumentVersionsPage} from '../../../shared/documentVersions';
 const request=<T,>(path:string,body:unknown,signal?:AbortSignal,blob=false)=>commercialRequest<T>(path,body,signal,'/api/document-workflow',blob);
 export const workflowApi={
+ reviewQueue:(office_id:string,query:string,status:ReviewStatus|'',page:number,size:3|5,signal?:AbortSignal)=>request<ReviewQueuePage>('/review-queue',{office_id,query,status,page,size},signal),
+ reviewers:(office_id:string,document_id:string,query:string,page:number,size:3|5,signal?:AbortSignal)=>request<ReviewMembersPage>('/reviewers',{office_id,document_id,query,page,size},signal),
+ reviewHistory:(office_id:string,document_id:string,page:number,signal?:AbortSignal)=>request<ReviewHistoryPage>('/review-history',{office_id,document_id,page},signal),
  versions:(office_id:string,document_id:string,page:number,signal?:AbortSignal)=>request<DocumentVersionsPage>('/versions',{office_id,document_id,page},signal),
  preview:(office_id:string,version_id:string,signal?:AbortSignal)=>request<Blob>('/preview',{office_id,version_id},signal,true),
  state:(office_id:string,document_id:string,signal?:AbortSignal)=>request<WorkflowState>('/state',{office_id,document_id},signal),

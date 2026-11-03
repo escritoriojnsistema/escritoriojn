@@ -1,0 +1,13 @@
+export const reviewStatuses={in_review:'Em revisão',approved:'Aprovado',rejected:'Rejeitado',returned:'Devolvido para correção',withdrawn:'Retirado da revisão',superseded:'Substituído'} as const;
+export type ReviewStatus=keyof typeof reviewStatuses;
+export type ReviewEventKind='submit'|'approve'|'reject'|'return'|'withdraw';
+export const reviewEventLabels:Record<ReviewEventKind,string>={submit:'Encaminhado para revisão',approve:'Aprovado',reject:'Rejeitado',return:'Devolvido para correção',withdraw:'Retirado da revisão'};
+export type ReviewMetadata={status:ReviewStatus;reviewer_id:string|null;reviewer_name:string|null;prepared_by_name:string;due_at:string|null;submitted_at:string;last_event_id:string|null;last_reason:string|null;last_actor_name:string|null;can_decide:boolean;can_withdraw:boolean;can_submit:boolean};
+export type ReviewQueueItem={document_id:string;request_id:string;publication_id:string;protocol:string;title:string;revision:number;pending_count:number;review:ReviewMetadata};
+export type ReviewQueuePage={items:ReviewQueueItem[];total:number;page:number;page_size:number};
+export type ReviewMember={id:string;label:string;role_code:'owner'|'admin'|'employee'};
+export type ReviewMembersPage={items:ReviewMember[];total:number;page:number;page_size:number};
+export type ReviewHistoryItem={id:string;publication_id:string;revision:number;kind:ReviewEventKind;actor_name:string;reason:string;created_at:string;reviewer_name:string|null;due_at:string|null};
+export type ReviewHistoryPage={items:ReviewHistoryItem[];total:number;page:number;page_size:5};
+export type PublicReviewItem={title:string;revision:number;status:ReviewStatus;updated_at:string};
+export type PublicReviewPage={items:PublicReviewItem[];total:number;page:number;page_size:number};

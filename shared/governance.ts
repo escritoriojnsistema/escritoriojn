@@ -69,3 +69,5 @@ Object.assign(auditTargetNames,{template:'Modelo documental'});
 
 Object.assign(auditActionNames,{'documents.created':'Rascunho documental criado','documents.saved':'Revisão documental salva','documents.participants_changed':'Participantes do documento alterados','documents.prepared':'Preenchimento documental concluído'});
 Object.assign(auditTargetNames,{document:'Documento em preenchimento'});
+
+Object.assign(auditActionNames,{'documents.review_submitted':'Documento encaminhado para revisão','documents.review_approved':'Conteúdo documental aprovado','documents.review_rejected':'Documento rejeitado','documents.review_returned':'Documento devolvido para correção','documents.review_withdrawn':'Pedido de revisão retirado'});
