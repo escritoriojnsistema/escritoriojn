@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-03",
+  "base": "4667cb70732c2af0d04e131e5fd06e4acfb2fa68",
+  "stack": "React + Vite + TypeScript / Express / Supabase",
+  "node": "24.19.0",
+  "npm": "11.9.0",
+  "node_tests": {
+    "passed": 277,
+    "failed": 0
+  },
+  "database": {
+    "assertions_passed": 829,
+    "replays": 2,
+    "command": "JN_DB_DOCUMENTS21_ISOLATED=1 npm run test:db",
+    "isolated": true,
+    "limited_migrator": true,
+    "red_without_fix": "Fails provenance regression as expected"
+  },
+  "browser": {
+    "distinct_tests_passed": 75,
+    "final_suite_passed": 73,
+    "final_suite_rechecked_passed": 2,
+    "widths": [
+      320,
+      360,
+      768,
+      1440
+    ],
+    "rechecks": "One Vite navigation/context failure; one contract updated to scroll button above fixed navigation. Both passed targeted rerun. Earlier invalid synthetic draft and combobox label fixtures corrected."
+  },
+  "auth_real_local": {
+    "passed": 1,
+    "command": "node scripts/test-library-services.mjs",
+    "providers": [
+      "GoTrue",
+      "PostgREST",
+      "PostgreSQL"
+    ],
+    "browser": [
+      360,
+      1440
+    ],
+    "storage": "schema contract only; no Storage bytes exercised",
+    "flow": [
+      "Imported draft detail",
+      "Same version title/content edit",
+      "Approved detail",
+      "Client catalog includes other business category",
+      "External checklist visible, internal checklist/template text absent",
+      "Service exclusion removes offering"
+    ]
+  },
+  "build": "passed",
+  "typecheck": "passed",
+  "production_dependency_vulnerabilities": 0,
+  "independent_review": "three findings corrected and re-reviewed; no remaining blocking findings",
+  "migration": {
+    "file": "supabase/migrations/20261103160413_repair_template_library_and_service_management.sql",
+    "sha256": "fb5b1962cc937150118866aef4fa4c7ff6746869157ef898ae93a9437bbf16a4"
+  },
+  "hosted_business_writes": 0,
+  "new_individual_grants": 0,
+  "publication": "pending GitHub integration"
+}

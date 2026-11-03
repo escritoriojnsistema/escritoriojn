@@ -24,8 +24,10 @@ export function validMetadataCommand(v:unknown):v is import('./modelCommercial.j
 const versionReason=(v:unknown):v is string=>typeof v==='string'&&v.trim().length>0&&Array.from(v).length<=500&&!/[\u0000-\u001f\u007f]/.test(v);
 export function validVersionCommand(v:unknown):v is ModelVersionCommand {
  if(!object(v))return false;
- if(v.kind==='edit')return exact(v,['kind','version_id','definition','reason'])&&uuid(v.version_id)&&validTemplate(v.definition)&&versionReason(v.reason);
- return v.kind==='delete'&&exact(v,['kind','version_id','reason'])&&uuid(v.version_id)&&versionReason(v.reason);
+ const stamp=Object.hasOwn(v,'expected_edited_at')?['expected_edited_at']:[];
+ if(stamp.length&&!(v.expected_edited_at===null||typeof v.expected_edited_at==='string'&&v.expected_edited_at.length<=40&&Number.isFinite(Date.parse(v.expected_edited_at))))return false;
+ if(v.kind==='edit')return exact(v,['kind','version_id','definition','reason',...stamp])&&uuid(v.version_id)&&validTemplate(v.definition)&&versionReason(v.reason);
+ return v.kind==='delete'&&exact(v,['kind','version_id','reason',...stamp])&&uuid(v.version_id)&&versionReason(v.reason);
 }
 export function projectMetadata(v:unknown):import('./modelCommercial.js').ModelMetadata{
  if(!object(v)||!uuid(v.template_id)||!folderName(v.display_name)||!revision(v.revision,0)||!(v.archived_at===null||typeof v.archived_at==='string'&&Number.isFinite(Date.parse(v.archived_at))))throw Error('Invalid metadata');

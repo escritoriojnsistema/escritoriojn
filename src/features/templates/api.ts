@@ -46,7 +46,7 @@ async function request<T>(path: string, method: 'POST', body: unknown, signal?: 
 }
 export const templatesApi={
  search:(office_id:string,query:string,page:number,size:number,signal?:AbortSignal)=>request<TemplatePage>('/search','POST',{office_id,query,page,size},signal),
- detail:(office_id:string,template_id:string,page=1,signal?:AbortSignal)=>request<TemplateDetail>('/detail','POST',{office_id,template_id,page},signal),
+ detail:(office_id:string,template_id:string,page=1,signal?:AbortSignal,selected_number?:number)=>request<TemplateDetail>('/detail','POST',{office_id,template_id,page,...(selected_number===undefined?{}:{selected_number})},signal),
  save:(body:{office_id:string;template_id:string|null;definition:TemplateInput;expected_version:number;reason:string;idempotency_key:string},signal?:AbortSignal)=>request<TemplateDetail>('/save','POST',body,signal),
  approve:(body:{office_id:string;template_id:string;version_id:string;expected_version:number;reason:string;idempotency_key:string},signal?:AbortSignal)=>request<TemplateDetail>('/approve','POST',body,signal),
 };

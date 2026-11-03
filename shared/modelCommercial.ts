@@ -13,8 +13,8 @@ export type TemplateFolderCommand =
 export interface ModelMetadata { template_id: string; display_name: string; archived_at: string | null; revision: number }
 export type ModelMetadataCommand = { kind: 'rename'; name: string } | { kind: 'archive' } | { kind: 'restore' };
 export type ModelVersionCommand =
-  | { kind: 'edit'; version_id: string; definition: TemplateInput; reason: string }
-  | { kind: 'delete'; version_id: string; reason: string };
+  | { kind: 'edit'; version_id: string; definition: TemplateInput; reason: string; expected_edited_at?: string | null }
+  | { kind: 'delete'; version_id: string; reason: string; expected_edited_at?: string | null };
 
 export interface DocumentOfferInput {
   service_id: string; instructions: string; execution_level: 1 | 2 | 3; portal_enabled: boolean;

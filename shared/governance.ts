@@ -13,7 +13,7 @@ export const auditActionNames: Record<string, string> = {
  'access.policy_updated':'Prazo de acesso alterado','categories.created':'Categoria criada','categories.renamed':'Categoria renomeada','categories.deleted':'Categoria excluída','requests.archive_policy_changed':'Prazo de arquivo das solicitações alterado','requests.archived':'Solicitação arquivada','requests.report_created':'Relatório de solicitações criado',
  'checklists.model_published':'Modelo de checklist publicado', 'checklists.applied':'Checklist aplicado', 'checklists.item_updated':'Item de checklist atualizado',
  'requests.created':'Atendimento aberto', 'requests.status_changed':'Etapa do atendimento alterada', 'requests.transferred':'Responsável pelo atendimento alterado', 'requests.note_added':'Nota interna registrada', 'requests.triaged':'Solicitação classificada',
- 'services.created':'Serviço cadastrado', 'services.version_published':'Versão de serviço publicada',
+ 'services.archived':'Serviço excluído do catálogo', 'services.created':'Serviço cadastrado', 'services.version_published':'Versão de serviço publicada',
  'foundation.owner_provisioned': 'Proprietário provisionado', 'auth.client_registered': 'Cliente cadastrado', 'auth.registration_configured': 'Cadastro público configurado',
  'auth.customer_registration_received': 'Cadastro público recebido',
  'team.member_updated': 'Acesso atualizado', 'team.invitation_created': 'Convite criado', 'team.invitation_sent': 'Convite enviado',

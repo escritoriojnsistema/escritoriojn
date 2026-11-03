@@ -50,7 +50,29 @@ test('modelos: funcionário leitor abre aprovados e não recebe aba de rascunho'
 test('modelos: aprovação anterior fora da primeira página abre o texto aprovado',async({page})=>{
  await setup(page);const requested:number[]=[];
  await page.route('**/api/document-commercial/templates-search',r=>r.fulfill({json:{data:{items:[{id:templateId,code:declaration.code,name:'Título renomeado',kind:declaration.kind,demonstration:true,latest_version:7,current_version:1}],page:1,page_size:r.request().postDataJSON().size,total:1}}}));
- await page.route('**/api/templates/detail',r=>{const body=r.request().postDataJSON();requested.push(body.page);const versions=body.page===2?[{...version,approved_at:'2026-10-26T02:00:00.000Z',approved_by:user,approved_by_name:'Revisor',approval_reason:'Conferido'}]:[7,6,5,4,3].map(number=>({...version,number,id:`00000000-0000-4000-f000-00000000070${number}`,content:'Rascunho '+number}));return r.fulfill({json:{data:{...detail,latest_version:7,history_total:7,history_page:body.page,versions}}});});
+ await page.route('**/api/templates/detail',r=>{const body=r.request().postDataJSON();requested.push(body.selected_number);const versions=body.selected_number===1?[{...version,approved_at:'2026-10-26T02:00:00.000Z',approved_by:user,approved_by_name:'Revisor',approval_reason:'Conferido'}]:[7,6,5,4,3].map(number=>({...version,number,id:`00000000-0000-4000-f000-00000000070${number}`,content:'Rascunho '+number}));return r.fulfill({json:{data:{...detail,latest_version:7,history_total:7,history_page:body.selected_number===1?2:body.page,versions}}});});
  await page.goto('/modelos');await page.getByRole('tab',{name:'Aprovados',exact:true}).click();await page.getByRole('button',{name:'Ver modelo Título renomeado',exact:true}).click();
- await expect(page.getByLabel('Texto preservado da versão',{exact:true})).toHaveText(declaration.content);expect(requested).toEqual([2]);
+ await expect(page.getByLabel('Texto preservado da versão',{exact:true})).toHaveText(declaration.content);expect(requested).toEqual([1]);
+});
+
+for(const tab of ['Rascunhos','Aprovados'])test(`modelos: editar conteúdo na mesma versão em ${tab}`,async({page})=>{
+ const {state}=await setup(page);const commands:any[]=[];
+ await page.route('**/api/document-commercial/version-command',r=>{const b=r.request().postDataJSON();commands.push(b);state.name=b.command.definition.name;state.value.versions=state.value.versions.map(v=>v.id===b.command.version_id?{...v,...b.command.definition,edited_at:'2026-11-03T12:00:00.000Z'}:v);return r.fulfill({json:{data:state.value}});});
+ await page.goto('/modelos');await page.getByRole('tab',{name:tab,exact:true}).click();await page.getByRole('button',{name:'Ver modelo Título renomeado',exact:true}).click();
+ await page.getByRole('button',{name:'Editar conteúdo desta versão',exact:true}).click();
+ const input=page.getByLabel('Texto do modelo',{exact:true});await expect(input).toHaveValue(tab==='Aprovados'?declaration.content:'Rascunho novo');await input.fill('Texto corrigido '+declaration.content);
+ await page.getByLabel('Nome do modelo',{exact:true}).fill('Título corrigido');await page.getByLabel('Motivo da edição',{exact:true}).fill('Correção autorizada');
+ await page.getByRole('button',{name:'Salvar alterações nesta versão',exact:true}).click();
+ await expect.poll(()=>commands.length).toBe(1);expect(commands[0].command.version_id).toBe(tab==='Aprovados'?version.id:state.value.versions[0].id);
+ expect(commands[0].expected_version).toBe(2);expect(state.value.latest_version).toBe(2);expect(state.value.history_total).toBe(2);expect(state.value.versions[1].approved_at).toBeTruthy();
+ await expect(page.getByRole('heading',{name:'Título corrigido',exact:true}).first()).toBeVisible();
+});
+
+test('modelos: texto consultado acompanha os dois seletores antes de editar',async({page})=>{
+ const {state}=await setup(page);await page.goto('/modelos');await page.getByRole('button',{name:'Ver modelo Título renomeado',exact:true}).click();
+ await page.getByRole('combobox',{name:'Versão consultada',exact:true}).selectOption(version.id);
+ await expect(page.getByLabel('Texto preservado da versão',{exact:true})).toHaveText(declaration.content);
+ await page.getByRole('combobox',{name:'Versão',exact:true}).selectOption(state.value.versions[0].id);
+ await expect(page.getByLabel('Texto preservado da versão',{exact:true})).toHaveText('Rascunho novo');
+ await page.getByRole('button',{name:'Editar conteúdo desta versão',exact:true}).click();await expect(page.getByLabel('Texto do modelo',{exact:true})).toHaveValue('Rascunho novo');
 });

@@ -55,6 +55,7 @@ async function request<T>(path: string, method: 'POST' | 'PATCH', body: unknown,
   } finally { unsubscribe?.(); }
 }
 export const servicesApi = {
+  remove: (office_id: string, id: string, expected_version: number, reason: string, idempotency_key: string, signal?: AbortSignal) => request<import('../../../shared/services').ServiceRemoval>(`/${id}/archive`,'POST',{office_id,expected_version,reason,idempotency_key},signal),
   search: (office_id: string, query: string, page: number, size: number, signal?: AbortSignal) => request<ServicePage>('/search','POST',{office_id,query,page,size},signal),
   detail: (office_id: string, id: string, page=1, signal?: AbortSignal) => request<ServiceDetail>(`/${id}/detail`,'POST',{office_id,page},signal),
   create: (office_id: string, service: ServiceInput, reason: string, signal?: AbortSignal) => request<ServiceDetail>('','POST',{office_id,service,reason},signal),
