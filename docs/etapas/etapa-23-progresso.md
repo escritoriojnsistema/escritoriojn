@@ -14,3 +14,5 @@ Banco hospedado reconferido:5Auth/5vínculos/17grantsindividuais,0documentos/pub
 Pendências: concluir SQL2replays/Auth real/performance, corrigir2achados e re-revisar, homologar regressão, publicar GitHub→Vercel e conferir migration/ativos/dados; atualizar Livro/fecho. SemActions.
 
 T1–T4 concluídos:287Node/API,891SQL/2replays,112UI distintos(106+6rechecados),Authreal com2HTTPsimultâneos200/409 eeventoterminalúnico,buildpúblico/TS/auditprodução0. Medições20amostras:fila104/170ms p50/p95;resumo95/119ms. P1/P2 corrigidos e re-revisão independente aprovada. Sem pendências funcionais confirmadas. T5 em andamento: publicação e readback hospedados.
+
+T5 concluído: PR79/merge8db53aba; VercelCVwAMvj6SUCCESS porGit. Migration23 automática,36comandos/19corpos iguais; não reaplicar.8assets iguais/health200/6APIs401/3UIpúblicos. Integridade real5Auth/5vínculos/17grants/0documentos/publicações/eventos intacta. Publicação e limites no fecho23/provaJSON. Nenhuma pendência funcional P1/P2 confirmada; validação autenticada hospedada com contas reais não realizada. Próxima24 só por novo pedido.

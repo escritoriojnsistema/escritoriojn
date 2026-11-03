@@ -1,0 +1,140 @@
+{
+  "url": "https://escritoriojn.vercel.app",
+  "merge": "8db53aba6425372d4697c388e9939427941e9a5b",
+  "runtime_tree": "acb950a96b274e03882faaf588b436b4b56e473f",
+  "assets": {
+    "index-CWSOxkh5.css": "bb32df621e44dd9aa86e1fb4e36e82effc4e19e5c1081ef3e6ac3d2a2b216912",
+    "index-DiFKw-XG.js": "84b8256a6dd4bd81f7069eae7a3c56a64239bcf1cd6ee0cb213c4fd7ac99532d",
+    "supabase-DtuMx0jC.js": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+    "documents-BNe-Rb5H.css": "b6ae198f0f6452b3d449f783f721879e7a9025bee92d1d2ddd45a06f14d73f06",
+    "react-DYkIpRt7.js": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+    "rolldown-runtime-WkwZ5CU-.js": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+    "documents-B7lvyORy.js": "030e500b0a2f15d82e4ef105293e32058f141faa6fb8704b6b12a2cc8e07f504",
+    "icons-DdzyS6T-.js": "a1d168d3270526688bfcabddfade7d449c4b5481c6534cf13ed8be9267601853"
+  },
+  "routes": {
+    "/api/health": 200,
+    "/documentos": 200,
+    "/minhas-solicitacoes": 200,
+    "/api/document-workflow/review-queue": 401,
+    "/api/document-workflow/reviewers": 401,
+    "/api/document-workflow/review-history": 401,
+    "/api/document-workflow/request-reviews": 401,
+    "/api/document-workflow/command": 401,
+    "/api/document-workflow/versions": 401
+  },
+  "pull_request": 79,
+  "github": "https://github.com/escritoriojnsistema/escritoriojn/pull/79",
+  "feature_head": "4c03ea3c1c16bd339d9823b01a239f0548df66f0",
+  "vercel": {
+    "status": "success",
+    "url": "https://vercel.com/escritorio-jn/escritoriojn/CVwAMvj6wQwxwEyjDMGgicy27Nkg",
+    "via": "GitHub integration only"
+  },
+  "migration": {
+    "version": "20261103183425",
+    "name": "document_editorial_review23",
+    "automatic": true,
+    "manual_apply": false,
+    "ordered_statements_equal": 36,
+    "sha256": "abc4a9a1f02abd9aaa1e0ff6acc8f75a0229a4fdf2d45560a39ee8a968eb3931"
+  },
+  "explicit_function_bodies": {
+    "count": 19,
+    "equal": true,
+    "md5": {
+      "private.review_last23": "c6c04e9d87a3db5b588a292bfc52ea56",
+      "private.wf_approved": "35decb71325638526e1b73b55ea30171",
+      "private.review_status23": "892fd1ec3354eaea7a2bd3f7c730476a",
+      "private.review_sources23": "fd750bac65ae1c274d3e19041617c123",
+      "private.review_member23": "bfb4246f45ac79322778fb7d0d95035f",
+      "private.review_self23": "b736caa5062ac4a68017aac10341ddb2",
+      "private.review_info23": "eca2a3fe71b0e03715becbc4f5b9d85f",
+      "private.document_workflow_state": "781ccfc64be8a4fb83788060c954e225",
+      "private.document_workflow_command": "914efe223167da52cd9d007ae34befe9",
+      "private.document_review_queue": "9f27a91bf5f6c8f025c87d72bce1e88f",
+      "private.document_reviewers": "3c0d1e752578e4b00fc640f822994c0b",
+      "private.document_review_history": "e64bb6584f056d3ab861c43dba376e37",
+      "private.request_document_reviews": "95f0e2c512541f843c8e1265316c2d82",
+      "private.review_notice23": "6617030bd2e8fe714b9e644acfc0aa6f",
+      "private.notification_visible": "27579fa51ebcfc854347e625d4518439",
+      "public.document_review_queue": "2b8dea50e97e29e28e01173b73d4c3f3",
+      "public.document_reviewers": "2159f39e319f371827285896503b2e0b",
+      "public.document_review_history": "8dfbc12787c8523aab11f8135bb42ac3",
+      "public.request_document_reviews": "9b30f982e048b3b74fb332cd3365f7be"
+    }
+  },
+  "integrity": {
+    "documents": 0,
+    "auth_users": 5,
+    "memberships": 5,
+    "review_seed": [
+      "owner"
+    ],
+    "publications": 0,
+    "editorial_events": 0,
+    "individual_grants": 17,
+    "review_individual": 0
+  },
+  "wrappers": [
+    {
+      "anon": false,
+      "name": "document_review_history",
+      "definer": false,
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "document_review_queue",
+      "definer": false,
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "document_reviewers",
+      "definer": false,
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "request_document_reviews",
+      "definer": false,
+      "authenticated": true
+    }
+  ],
+  "event_table": {
+    "rls": true,
+    "raw_read": false,
+    "raw_write": false
+  },
+  "public_browser_tests": {
+    "passed": 3,
+    "widths": [
+      360,
+      1440
+    ]
+  },
+  "advisors": {
+    "security": {
+      "before_count": 109,
+      "after_count": 109,
+      "new": []
+    },
+    "performance": {
+      "before_count": 183,
+      "after_count": 185,
+      "new": [
+        {
+          "name": "unused_index",
+          "detail": "Index \\`document_editorial_events23_idx\\` on table \\`private.document_publication_events\\` has not been used"
+        },
+        {
+          "name": "unused_index",
+          "detail": "Index \\`document_review_assignee23_idx\\` on table \\`private.document_publication_events\\` has not been used"
+        }
+      ]
+    }
+  },
+  "actions_used": false,
+  "hosted_authenticated_journey": false
+}

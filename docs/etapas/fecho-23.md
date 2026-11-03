@@ -1,6 +1,6 @@
 # Fecho — Etapa 23
 
-Implementação e homologação local sobre `39b00ee`, preservando Etapa22 e correções03/11. Fonte oficial e contrato em [etapa-23.md](etapa-23.md). Publicação GitHub→Vercel em preparação; não declarar hospedado até readback do commit, migration e ativos.
+Implementação e homologação local sobre `39b00ee`, preservando Etapa22 e correções03/11. Fonte oficial e contrato em [etapa-23.md](etapa-23.md). Publicado via [PR79](https://github.com/escritoriojnsistema/escritoriojn/pull/79), merge `8db53aba6425372d4697c388e9939427941e9a5b`, árvore `acb950a96b274e03882faaf588b436b4b56e473f` igual à homologada; Vercel `CVwAMvj6wQwxwEyjDMGgicy27Nkg` SUCCESS em https://escritoriojn.vercel.app. [Readback](../evidencias/etapa-23/publicacao.json).
 
 ## Entrega e decisões
 
@@ -19,3 +19,9 @@ Revisão independente encontrou e corrigiu autoaprovação do remetente vigente 
 ## Limites
 
 Laboratório GoTrue/PostgREST/Postgres descartável, somente esquemaStorage; sem novos bytesPDF/SMTP nessa jornada. Sem usuários/grants/serviços/pagamentos fictícios hospedados. Sem aparelho físico ou jornada autenticada com contas reais. Proteção de senhas vazadas desativada é aviso preexistente, não alterado; [referência Supabase](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). ConectorVercel403 conhecido: acompanhar Git/status e domínio canônico, sem CLI/API de deploy. GitHub Actions não usado. Etapa24 não iniciada.
+
+## Conferência hospedada
+
+Migration20261103183425 automática apósGit:36comandos originais na mesma ordem e19corpos explícitos idênticos ao SQL testado. NÃO reaplicar.4RPCs públicas invoker autenticadas, zeroEXEC anônimo; eventos privados comRLS e nenhumSELECT/escrita bruta autenticada. documents.review seed somenteowner, zero grants individuais novos.5Auth/5vínculos/17grantsindividuais e0documentos/publicações/eventos preservados.
+
+8assets comSHA256 iguais ao build local público, health/páginas200,seisAPIsprivadas401 e3testesPlaywrightpúblicos360/1440 aprovados. Advisors semERROR/novosWARN;27FKssemíndice preexistentes intactos e2novosINFO de índices ainda sem uso em base sem documentos. Sem Edge/Storage/SMTP/env/contas reais alterados. Fechamento documental seguinte conserva runtime; nenhuma implementação24.
