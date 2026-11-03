@@ -68,6 +68,17 @@ pastas por permissão e permitir excluir pasta que só contém modelos excluído
   - exclusão removeu a versão da página (`history_total=0`) e arquivou o modelo;
   - nenhuma alteração de teste permaneceu no banco.
 
+## Publicação
+
+- Commit `cc09c8a` enviado para `main` no GitHub.
+- Vercel: deployment `dpl_37atNDaTAz3jRjVMWB3ErBjQKrjK`, estado `READY` e
+  `PROMOTED` em produção; sem GitHub Actions, conforme a regra do projeto.
+- `https://escritoriojn.vercel.app/` e `/api/health` responderam `200`.
+- A rota nova `/api/document-commercial/version-command` respondeu `401`
+  `AUTH_REQUIRED` sem sessão, em vez de `404`, confirmando que o backend
+  publicado contém a rota.
+- O bundle servido em produção foi `assets/index-BW1zTJEw.js`.
+
 ## Lacunas
 
 - O banco continua sem serviços/preços/ofertas reais. As categorias aparecem,
