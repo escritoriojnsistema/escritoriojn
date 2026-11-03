@@ -1,0 +1,73 @@
+{
+  "url": "https://escritoriojn.vercel.app",
+  "home_status": 200,
+  "health": {
+    "status": 200,
+    "body": {
+      "data": {
+        "status": "ok",
+        "service": "escritorio-jn-api"
+      }
+    }
+  },
+  "assets": [
+    {
+      "asset": "/assets/index-m63NLNrn.js",
+      "sha256": "79998d7f45252c17379d404bd93ce5bece27ec13b5006331f8281de1a8ada885",
+      "local_match": true
+    },
+    {
+      "asset": "/assets/rolldown-runtime-WkwZ5CU-.js",
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "local_match": true
+    },
+    {
+      "asset": "/assets/react-DYkIpRt7.js",
+      "sha256": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+      "local_match": true
+    },
+    {
+      "asset": "/assets/icons-DdzyS6T-.js",
+      "sha256": "a1d168d3270526688bfcabddfade7d449c4b5481c6534cf13ed8be9267601853",
+      "local_match": true
+    },
+    {
+      "asset": "/assets/supabase-DtuMx0jC.js",
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "local_match": true
+    },
+    {
+      "asset": "/assets/documents-BoEJSXbL.js",
+      "sha256": "3078189beff793e163f1cf375b213ec5eb8e0d298c87481d5b35643664b33c75",
+      "local_match": true
+    },
+    {
+      "asset": "/assets/documents-CjeEFXoB.css",
+      "sha256": "db73622678f80caa7a00c5acd744bf9e109190fe4dbc10a456137f10bc4f6850",
+      "local_match": true
+    },
+    {
+      "asset": "/assets/index-CWSOxkh5.css",
+      "sha256": "bb32df621e44dd9aa86e1fb4e36e82effc4e19e5c1081ef3e6ac3d2a2b216912",
+      "local_match": true
+    }
+  ],
+  "anonymous_barriers": {
+    "/api/templates/detail": 401,
+    "/api/services/00000000-0000-4000-a000-000000000001/archive": 401,
+    "/api/document-commercial/offers": 401,
+    "/api/categories/state": 401,
+    "/api/access-settings/state": 401
+  },
+  "runtime_commit": "65574ca19e9b62def592417997234c3212fe7564",
+  "runtime_tree": "c1a227c695de235f92916e56505a34a9ba58b2cc",
+  "pr": "https://github.com/escritoriojnsistema/escritoriojn/pull/77",
+  "vercel_status": "success",
+  "vercel_deployment": "https://vercel.com/escritorio-jn/escritoriojn/6Cbasji3njqgCwd4MsSAsKc1bgS3",
+  "build_settings": "Matched deployed public URL/key only; no privileged keys used",
+  "database_migration": "20261103160413",
+  "database_statements": 26,
+  "canonical_migration_equal": true,
+  "original_data_preserved": true,
+  "authenticated_browser_scope": "Real Auth local only; hosted check used safe schema/projections and anonymous barriers"
+}
