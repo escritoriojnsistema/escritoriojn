@@ -1,0 +1,82 @@
+{
+  "base": "39b00eea43898254abf74bb9c22f5bba19a75f3a",
+  "manual_drive_file": "1bIQImuHVK35cpVQsZdMe-m3RxKwEoo12",
+  "migration": "supabase/migrations/20261103183425_document_editorial_review23.sql",
+  "migration_sha256": "abc4a9a1f02abd9aaa1e0ff6acc8f75a0229a4fdf2d45560a39ee8a968eb3931",
+  "node_api": {
+    "passed": 287,
+    "failed": 0
+  },
+  "sql": {
+    "pass_lines": 891,
+    "fresh_replays": 2,
+    "limited_migrator": true
+  },
+  "auth_real": {
+    "passed": 1,
+    "duration_seconds": 20.2,
+    "services": "Disposable local GoTrue/PostgREST/PostgreSQL; Storage schema stub only",
+    "journey": [
+      "portal request",
+      "triage and transfer",
+      "editor prepare and submit",
+      "reviewer browser queue and return",
+      "new revision",
+      "revoked capability 403",
+      "reviewer browser approve",
+      "safe portal API status",
+      "simultaneous HTTP approve/reject yields 200 and 409 with one terminal event"
+    ]
+  },
+  "local_api_measurements": {
+    "samples_per_endpoint": 20,
+    "review_queue": {
+      "p50_ms": 104,
+      "p95_ms": 170
+    },
+    "request_reviews": {
+      "p50_ms": 95,
+      "p95_ms": 119
+    },
+    "hosted_sla": false
+  },
+  "build": "passed including typecheck and production public SDK settings",
+  "production_dependencies_vulnerabilities": 0,
+  "review": {
+    "initial": [
+      "P1 latest resubmitter selfapproval",
+      "P2 waived editorial veto unavailable"
+    ],
+    "fixes": "SQL command/projections/notices and public-wrapper regressions",
+    "rereview": "both addressed; no new P1/P2"
+  },
+  "ui": {
+    "distinct_contracts_passed": 112,
+    "first_run_passed": 106,
+    "recheck_passed": 6,
+    "widths": [
+      320,
+      360,
+      768,
+      1440
+    ],
+    "first_run_timeouts_or_timing_failures": 6,
+    "recheck_seconds": 16.9
+  },
+  "hosted_before": {
+    "auth_users": 5,
+    "memberships": 5,
+    "individual_grants": 17,
+    "documents": 0,
+    "publications": 0,
+    "editorial_events": 0,
+    "latest_migration": "20261103160413"
+  },
+  "limitations": [
+    "No hosted authenticated business mutation or real account change",
+    "No new PDF bytes or external SMTP verified in Auth23 lab",
+    "No physical device testing",
+    "No network zero-latency claim"
+  ],
+  "github_actions_used": false
+}

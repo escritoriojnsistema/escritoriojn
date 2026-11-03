@@ -1,0 +1,9 @@
+import {useEffect,useState} from 'react';
+import {reviewEventLabels,type ReviewHistoryPage} from '../../../shared/editorialReview';
+import {CommercialError} from '../documentCommercial/api';
+import {workflowApi} from './api';
+export function ReviewHistory({office,documentId,refresh,disabled,onDenied}:{office:string;documentId:string;refresh:number;disabled:boolean;onDenied:(status:number)=>void}){
+ const [data,setData]=useState<ReviewHistoryPage>(),[page,setPage]=useState(1),[error,setError]=useState('');
+ useEffect(()=>{const c=new AbortController();void workflowApi.reviewHistory(office,documentId,page,c.signal).then(v=>{if(!c.signal.aborted){setData(v);setError('');}}).catch(e=>{if(c.signal.aborted)return;if(e instanceof CommercialError&&[401,403].includes(e.status)){setData(undefined);onDenied(e.status);}setError(e instanceof Error?e.message:'Não foi possível consultar o histórico.');});return()=>c.abort();},[office,documentId,page,refresh]);
+ return <details className="review-history"><summary>Histórico editorial</summary>{error&&<p role="alert">{error}</p>}{data&&<>{data.items.length?<ol>{data.items.map(item=><li key={item.id}><strong>{reviewEventLabels[item.kind]} · Revisão {item.revision}</strong><p>{item.actor_name} · {new Date(item.created_at).toLocaleString('pt-BR')}</p><p>{item.reason}</p>{item.kind==='submit'&&<p>Responsável: {item.reviewer_name??'Fila compartilhada'} · Prazo: {item.due_at?new Date(item.due_at).toLocaleString('pt-BR'):'Sem prazo'}</p>}</li>)}</ol>:<p className="document-hint">Nenhum evento editorial registrado.</p>}<nav className="team-pagination" aria-label="Paginação do histórico editorial"><button disabled={disabled||data.page<=1} onClick={()=>setPage(data.page-1)}>Anterior</button><span>{data.total} eventos · {data.page}/{Math.max(1,Math.ceil(data.total/5))}</span><button disabled={disabled||data.page*5>=data.total} onClick={()=>setPage(data.page+1)}>Próxima</button></nav></>}</details>;
+}
