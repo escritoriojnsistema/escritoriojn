@@ -1,6 +1,6 @@
 # Fecho — Etapa 24
 
-Implementação e homologação local sobre main1e45dd3/Etapa23, com especificação/execução aprovadas pelo usuário e retomada incremental. [Contrato24](etapa-24.md), [verificação local](../evidencias/etapa-24/verificacao-local.json), [publicação/readback](../evidencias/etapa-24/publicacao.json). Publicação principal em andamento; não interpretar o PR81 de compatibilidade como entrega integral24.
+Implementação e homologação local sobre main1e45dd3/Etapa23, com especificação/execução aprovadas pelo usuário e retomada incremental. [Contrato24](etapa-24.md), [verificação local](../evidencias/etapa-24/verificacao-local.json), [publicação/readback](../evidencias/etapa-24/publicacao.json). Publicado pelo [PR82](https://github.com/escritoriojnsistema/escritoriojn/pull/82), merge `6b60aaa6f5744ba60af973787603979b3e8f0f1d`, árvore `0a376051c853cd9d3869ba3ed73187060e04fa11` igual à homologada; Vercel `59Fm6a2Y2VRwCCATjH8oF6h9yYp7` SUCCESS em https://escritoriojn.vercel.app.
 
 ## Entrega
 
@@ -24,4 +24,4 @@ No ambiente hospedado, pipeline11 sem scanner mantém quarentena e bloqueia conf
 
 ## Publicação
 
-Rollout compatível: PR81/merge8f1f8e76 publicou aceitação das duas capacidades; Vercel5sYpSD5uSUCCESS. Worker compatível document-artifacts21ACTIVE/JWT,8fontes iguais ao local e barreira anônima401 conferidas antes do schema. A publicação principal e comparação da migration20261104130612 serão registradas no readback; verificar histórico apósGit antes de qualquer aplicação manual, pois a integração pode aplicar automaticamente.
+Rollout compatível: PR81/merge8f1f8e76 publicou aceitação das duas capacidades; Vercel5sYpSD5uSUCCESS. Worker compatível document-artifacts21ACTIVE/JWT,8fontes iguais ao local e barreira anônima401 conferidas antes do schema. PR82 publicou o restante; migration20261104130612 aplicada automaticamente:24comandos normalizados na mesma ordem e13corpos MD5 idênticos ao SQL testado. NÃO reaplicar. ApósGit worker22ACTIVE/JWT com7fontesTS iguais ao local;8assets canônicos iguais ao build, health/páginas200,6APIsprivadas401 e3testesPlaywrightpúblicos360/1440 aprovados. Três wrappersINVOKER autenticados, semEXEC anônimo;2tabelasprivadasRLS/ACLfechadas. Contagens reais5Auth/5vínculos/17grantsindividuais e0documentos/publicações/arquivos/eventos mantidas;53migrations. Advisors semERROR/novoWARN;INFO deRLSprivadafechada/índicessemuso esperados. Proteção de senhas vazadas desativada permanece aviso preexistente, sem alteração automática: [referência Supabase](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection).

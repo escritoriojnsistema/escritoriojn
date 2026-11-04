@@ -57,6 +57,6 @@ Interfaces: SignatureState/Command e endpoints Task2; uploadAttachment reutiliza
 
 ## Task 5: Publicação e conferência
 
-- [ ] Commit/PR por GitHub; rollout compatível de worker/schema/runtime. Não aplicar schema antes do worker compatível.
-- [ ] GitHub→Vercel; consultar migration history apósGit antes de qualquer applymanual. Comparar corpos/ACLs e arquivos do worker com fonte testada.
-- [ ] Confirmar build/commit/assets/health/barreiras anônimas, conservar contagens reais. Registrar limitações sem alegar teste autenticado hospedado se não executado.
+- [x] Commit/PR por GitHub; rollout compatível de worker/schema/runtime. Não aplicar schema antes do worker compatível.
+- [x] GitHub→Vercel; consultar migration history apósGit antes de qualquer applymanual. Comparar corpos/ACLs e arquivos do worker com fonte testada.
+- [x] Confirmar build/commit/assets/health/barreiras anônimas, conservar contagens reais. Registrar limitações sem alegar teste autenticado hospedado se não executado.

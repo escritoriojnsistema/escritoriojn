@@ -1,5 +1,5 @@
 {
-  "status": "in_progress",
+  "status": "published_verified",
   "compatibility": {
     "pr": 81,
     "head": "66a79694fcbd3b7ad510892a8cfebc5a7cac6896",
@@ -9,7 +9,7 @@
       "url": "https://vercel.com/escritorio-jn/escritoriojn/5sYpSD5uan1FzvfjMedpmDGK4Tqa"
     }
   },
-  "stage24_published": false,
+  "stage24_published": true,
   "worker_compatible": {
     "version": 21,
     "status": "ACTIVE",
@@ -25,5 +25,138 @@
     "files": 0,
     "individual_grants": 17,
     "migrations": 52
-  }
+  },
+  "url": "https://escritoriojn.vercel.app",
+  "pull_request": 82,
+  "github": "https://github.com/escritoriojnsistema/escritoriojn/pull/82",
+  "feature_head": "5775a24cbcf50167e58b9d6e9e3a19e4e0f859bd",
+  "merge": "6b60aaa6f5744ba60af973787603979b3e8f0f1d",
+  "runtime_tree": "0a376051c853cd9d3869ba3ed73187060e04fa11",
+  "vercel": {
+    "status": "success",
+    "url": "https://vercel.com/escritorio-jn/escritoriojn/59Fm6a2Y2VRwCCATjH8oF6h9yYp7",
+    "via": "GitHub integration only"
+  },
+  "migration": {
+    "version": "20261104130612",
+    "name": "document_signatures24",
+    "automatic": true,
+    "manual_apply": false,
+    "statements": 24,
+    "normalized_ordered_sql_equal": true,
+    "sha256": "95120fb6fe0f5d77dccf44a7b4873bb13d9c37a6f38c57ff18e8d3a6262390f2",
+    "function_bodies": {
+      "count": 13,
+      "all_equal": true,
+      "md5": {
+        "public.document_signature_authorize": "643f3c6efce165db9c0a015762ea0d83",
+        "private.document_workflow_command": "2e47de230b6f24011ea98456950c7495",
+        "private.document_artifact_authorize": "6786fc5134b57c8d900d5be2f18c744f",
+        "private.wf_signed": "49c86901b7543bb69f6b5d9a17593c59",
+        "private.document_signature_authorize": "1f3491b9b3330cc348bee809c916fd4a",
+        "public.document_signature_command": "8bd26ad239b61175b797761ecd1590dc",
+        "public.document_signature_state": "c472d22775350240fcf6b5c4c926de6c",
+        "private.signature_exit_blockers24": "523cc51f4a7054f5515850fce35cdeb5",
+        "private.document_signature_command": "af8736e24c9ad0c26d4d26667688efeb",
+        "private.document_signature_state": "1592ae904d87c6e9c2d372203d64d33e",
+        "private.signature_file_ready24": "20bd8866d212db3f337a9affc20d21f5",
+        "private.signature_history24": "8d27af4b89a8d6af3dd30c904c5af215",
+        "private.signature_snapshot24": "a5766666310aef18ca9971e9a73f9fc9"
+      }
+    }
+  },
+  "assets": {
+    "documents-CMeeAq4j.css": "0f9df331b0304fdd7c3e61f1d769f08230b29e3b885d45ae7fd00ddc4656757d",
+    "documents-Dzb0hhkB.js": "1ef2c90d7331bb3d209cd01aafb18593b365a45be2e4ad3c1402e6fbc5c9baa0",
+    "icons-DdzyS6T-.js": "a1d168d3270526688bfcabddfade7d449c4b5481c6534cf13ed8be9267601853",
+    "index-CWSOxkh5.css": "bb32df621e44dd9aa86e1fb4e36e82effc4e19e5c1081ef3e6ac3d2a2b216912",
+    "index-CxJlPArm.js": "6813552edb698a92a0f5025865482e3bb5ebf5598bd694383e0d464b8239a5e5",
+    "react-DYkIpRt7.js": "044b72e32c8d3d3cd2952b5fbddf63ca7a27d0fb89297ec3d4fd0e019e8b99b0",
+    "rolldown-runtime-WkwZ5CU-.js": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+    "supabase-DtuMx0jC.js": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6"
+  },
+  "routes": {
+    "/api/health": 200,
+    "/documentos": 200,
+    "/minhas-solicitacoes": 200,
+    "/api/document-workflow/signature-state": 401,
+    "/api/document-workflow/signature-command": 401,
+    "/api/document-workflow/artifact": 401,
+    "/api/document-workflow/state": 401,
+    "/api/document-workflow/versions": 401,
+    "/api/document-workflow/review-queue": 401
+  },
+  "worker": {
+    "version": 22,
+    "status": "ACTIVE",
+    "verify_jwt": true,
+    "checks": [
+      {
+        "name": "document-artifacts/index.ts",
+        "equal": true
+      },
+      {
+        "name": "document-artifacts/handler.ts",
+        "equal": true
+      },
+      {
+        "name": "document-artifacts/preview-handler.ts",
+        "equal": true
+      },
+      {
+        "name": "document-artifacts/preview-renderer.ts",
+        "equal": true
+      },
+      {
+        "name": "document-artifacts/font.ts",
+        "equal": true
+      },
+      {
+        "name": "document-artifacts/renderer-v2.ts",
+        "equal": true
+      },
+      {
+        "name": "document-artifacts/renderer.ts",
+        "equal": true
+      }
+    ]
+  },
+  "public_browser_tests": 3,
+  "hosted_after": {
+    "auth_users": 5,
+    "memberships": 5,
+    "documents": 0,
+    "publications": 0,
+    "files": 0,
+    "individual_grants": 17,
+    "signature_events": 0,
+    "signature_commands": 0,
+    "migrations": 53
+  },
+  "access": {
+    "seed_only_owner": [
+      "documents.signatures.manage",
+      "documents.signatures.validate"
+    ],
+    "public_invoker_wrappers": 3,
+    "anonymous_execute": false,
+    "private_tables_rls": true,
+    "authenticated_direct_select_insert": false
+  },
+  "advisors": {
+    "security_error": 0,
+    "performance_error": 0,
+    "new_warnings": 0,
+    "existing_warning": "auth_leaked_password_protection",
+    "private_rls_without_policy_intentional": true,
+    "unused_indexes_expected_in_empty_module": true
+  },
+  "limits": [
+    "No hosted authenticated business fixture",
+    "No real cryptographic verification or real scanner proof",
+    "Quarantine remains blocked until actual scanner is configured",
+    "No physical device test",
+    "Local performance is not a hosted SLA"
+  ],
+  "github_actions_used": false
 }
