@@ -1,9 +1,13 @@
+import type {SignatureCommand,SignatureState} from '../../../shared/documentSignatures';
 import type {WorkflowCommand,WorkflowState,PortalDocuments,DocumentCashQueue} from '../../../shared/documentWorkflow';
 import {commercialRequest} from '../documentCommercial/api';
 import type {ReviewQueuePage,ReviewMembersPage,ReviewHistoryPage,ReviewStatus} from '../../../shared/editorialReview';
 import type {DocumentVersionsPage} from '../../../shared/documentVersions';
 const request=<T,>(path:string,body:unknown,signal?:AbortSignal,blob=false)=>commercialRequest<T>(path,body,signal,'/api/document-workflow',blob);
 export const workflowApi={
+ signatureState:(office_id:string,publication_id:string,page:number,signal?:AbortSignal)=>request<SignatureState>('/signature-state',{office_id,publication_id,page},signal),
+ signatureCommand:(office_id:string,publication_id:string,command:SignatureCommand,idempotency_key:string,signal?:AbortSignal)=>request<SignatureState>('/signature-command',{office_id,publication_id,command,idempotency_key},signal),
+ signing:(office_id:string,publication_id:string,signal?:AbortSignal)=>request<Blob>('/artifact',{office_id,publication_id,action:'signing'},signal,true),
  reviewQueue:(office_id:string,query:string,status:ReviewStatus|'',page:number,size:3|5,signal?:AbortSignal)=>request<ReviewQueuePage>('/review-queue',{office_id,query,status,page,size},signal),
  reviewers:(office_id:string,document_id:string,query:string,page:number,size:3|5,signal?:AbortSignal)=>request<ReviewMembersPage>('/reviewers',{office_id,document_id,query,page,size},signal),
  reviewHistory:(office_id:string,document_id:string,page:number,signal?:AbortSignal)=>request<ReviewHistoryPage>('/review-history',{office_id,document_id,page},signal),

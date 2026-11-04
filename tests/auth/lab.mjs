@@ -5,6 +5,7 @@ import { createServer, request as httpRequest } from 'node:http';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 import { createTeamInvitationHandler } from '../../supabase/functions/team-invitations/handler.ts';
+import { createDocumentArtifactsHandler } from '../../supabase/functions/document-artifacts/handler.ts';
 import { createPrivateAttachmentsHandler } from '../../supabase/functions/private-attachments/handler.ts';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
@@ -19,7 +20,7 @@ const images = {
 };
 
 /** Disposable local Auth, REST, Storage and SMTP. No hosted database or objects. */
-export async function createAuthLab({storage=true}={}) {
+export async function createAuthLab({storage=true,artifacts=false,storageRootfs}={}) {
   const id = randomUUID();
   const network = `jn-auth-lab-${id}`;
   const names = Object.fromEntries(Object.keys(images).map(key => [key, `${network}-${key}`]));
@@ -45,6 +46,7 @@ export async function createAuthLab({storage=true}={}) {
   let closed = false;
   let invitationHandler;
   let attachmentsHandler;
+  let artifactsHandler;
 
   // Keep session proxy/CA settings, but never inherit a remote Docker selector.
   const docker = (args, { input, env = {}, timeout = 60000 } = {}) => new Promise((resolve, reject) => {
@@ -105,7 +107,8 @@ export async function createAuthLab({storage=true}={}) {
       return;
     }
     const edge = request.url === '/functions/v1/team-invitations' ? invitationHandler
-      : request.url === '/functions/v1/private-attachments' ? attachmentsHandler : undefined;
+      : request.url === '/functions/v1/private-attachments' ? attachmentsHandler
+      : request.url === '/functions/v1/document-artifacts' ? artifactsHandler : undefined;
     if (edge) {
       try {
         let raw='';
@@ -114,7 +117,7 @@ export async function createAuthLab({storage=true}={}) {
           method:request.method,headers:request.headers,
           ...(!['GET','HEAD'].includes(request.method)?{body:raw}:{}),
         }));
-        response.writeHead(result.status,{...Object.fromEntries(result.headers),...cors});response.end(await result.text());
+        response.writeHead(result.status,{...Object.fromEntries(result.headers),...cors});response.end(Buffer.from(await result.arrayBuffer()));
       } catch {response.writeHead(503,{'content-type':'application/json',...cors}).end(JSON.stringify({error:{code:request.url==='/functions/v1/private-attachments'?'FILES_UNAVAILABLE':'TEAM_UNAVAILABLE'}}));}
       return;
     }
@@ -161,9 +164,11 @@ export async function createAuthLab({storage=true}={}) {
 
   const run = async (kind, env, extra = []) => {
     const name = names[kind];
+    // The optional rootfs launcher executes the verified pinned upstream Storage
+    // filesystem in chroot; only its bytes and /tmp use writable local tmpfs.
     const result = await docker(['run', '--detach', '--pull=missing', '--name', name,
       '--label', `jn.auth-lab=${id}`, '--network', network, '--network-alias', kind,
-      ...Object.keys(env).flatMap(key => ['--env', key]), ...extra, images[kind]], { env, timeout:kind==='storage'?180000:60000 });
+      ...Object.keys(env).flatMap(key => ['--env', key]), ...extra, ...(kind==='storage'&&storageRootfs?['--mount',`type=bind,source=${storageRootfs},target=/provider,readonly`,'--mount','type=bind,source=/dev/shm/jn-storage24-resolv.conf,target=/provider/etc/resolv.conf,readonly','--tmpfs','/provider/tmp:rw,nosuid,noexec,size=32m,mode=1777','--entrypoint','/bin/busybox','alpine:3.23.6@sha256:85fe1e81d6758c208f3e1eed4338a1997e19d4be002d4dd32d3100c9a8c010a0','chroot','/provider','/bin/sh','-c','cd /app && exec docker-entrypoint.sh node dist/start/server.js']:[images[kind]])], { env, timeout:kind==='storage'?180000:60000 });
     containers.add(name);
     return result;
   };
@@ -195,6 +200,7 @@ export async function createAuthLab({storage=true}={}) {
     const url = `http://127.0.0.1:${gateway.address().port}`;
     invitationHandler=createTeamInvitationHandler({url,anonKey,serviceRoleKey,siteUrl:'http://127.0.0.1:3005'});
     attachmentsHandler=createPrivateAttachmentsHandler({url,anonKey,serviceRoleKey});
+    if(artifacts)artifactsHandler=createDocumentArtifactsHandler({url,anonKey,serviceRoleKey});
     await docker(['network', 'create', '--label', `jn.auth-lab=${id}`, network]);
     networkCreated = true;
     await run('postgres', { POSTGRES_PASSWORD: passwords.postgres, POSTGRES_DB: 'auth_lab' },
@@ -288,7 +294,9 @@ export async function createAuthLab({storage=true}={}) {
     // Run the official provider migrations before app migrations create a
     // bucket or RLS policies. Storage bytes live only in this disposable tmpfs.
     if(storage){
+    if(storageRootfs&&!/^\/dev\/shm\/jn-storage24-root$/.test(storageRootfs))throw Error('Storage rootfs override is restricted to the local verified lab path.');
     await run('storage', {
+      ...(storageRootfs?{PATH:'/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',NODE_VERSION:'24.21.0',YARN_VERSION:'1.22.22',VERSION:'1.81.0'}:{}),
       ANON_KEY: anonKey, SERVICE_KEY: serviceRoleKey, AUTH_JWT_SECRET: jwtSecret,
       POSTGREST_URL: 'http://rest:3000',
       DATABASE_URL: `postgres://supabase_storage_admin:${passwords.storage}@postgres:5432/auth_lab?sslmode=disable`,
@@ -298,7 +306,7 @@ export async function createAuthLab({storage=true}={}) {
       TENANT_ID: 'auth-lab', REGION: 'local', ENABLE_IMAGE_TRANSFORMATION: 'false',
       STORAGE_PUBLIC_URL: `${url}/storage/v1`, REQUEST_ALLOW_X_FORWARDED_PATH: 'true',
       LOG_LEVEL: 'error',
-    }, ['--publish', '127.0.0.1::5000', '--tmpfs', '/var/lib/storage:rw,nosuid,noexec,size=96m,mode=1777']);
+    }, ['--publish', '127.0.0.1::5000', '--tmpfs', `${storageRootfs?'/provider':''}/var/lib/storage:rw,nosuid,noexec,size=96m,mode=1777`]);
     upstreams.storage = await portFor('storage', 5000);
     await ready('Storage', async () => {
       if (!await healthy(`${url}/storage/v1/status`)) return false;
@@ -332,18 +340,27 @@ export async function createAuthLab({storage=true}={}) {
         FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
         WHERE n.nspname='public' AND (has_function_privilege('authenticated',p.oid,'EXECUTE')
           OR has_function_privilege('service_role',p.oid,'EXECUTE'));`)).trim());
-      const deadline = Date.now() + 10000;
+      // The permission-scoped OpenAPI document can take over a second to render
+      // on the local provider. Retry transient fetch/body timeouts within one
+      // overall cache deadline; every expected executable RPC must still appear.
+      const deadline = Date.now() + 20000;
+      let missing = expected;
+      let lastFailure;
       while (Date.now() < deadline) {
         // OpenAPI is permission-scoped: the mail completion RPC is deliberately
         // invisible to authenticated users and visible only to service_role.
         const schemas=await Promise.all([schemaKey,serviceRoleKey].map(async token=>{
-          const response=await fetch(`${url}/rest/v1/`,{headers:{Authorization:`Bearer ${token}`},signal:AbortSignal.timeout(2000)});
-          return response.ok?await response.json():{};
+          try {
+            const response=await fetch(`${url}/rest/v1/`,{headers:{Authorization:`Bearer ${token}`},signal:AbortSignal.timeout(Math.max(1,Math.min(5000,deadline-Date.now())))});
+            if(!response.ok){lastFailure=`HTTP ${response.status}`;return {};}
+            return await response.json();
+          } catch(error) {lastFailure=error.name;return {};}
         }));
-        if(expected.every(name=>schemas.some(schema=>schema.paths?.[`/rpc/${name}`])))return;
+        missing=expected.filter(name=>!schemas.some(schema=>schema.paths?.[`/rpc/${name}`]));
+        if(!missing.length)return;
         await delay(100);
       }
-      throw new Error('Application migrations committed, but PostgREST schema cache did not refresh in 10 seconds.');
+      throw new Error(`Application migrations committed, but PostgREST schema cache did not refresh in 20 seconds. Missing RPCs: ${missing.join(', ')}.${lastFailure?` Last OpenAPI failure: ${lastFailure}.`:''}`);
     };
     return { url, anonKey, serviceRoleKey, mailUrl, databaseContainer: names.postgres, sql, migrate, close };
   } catch (error) {

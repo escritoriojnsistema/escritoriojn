@@ -1,3 +1,4 @@
+import {raceSignatures24} from './database-documents24.mjs';
 import { raceDocumentCommercial, raceFolderSession } from './database-document-commercial.mjs';
 import {raceManualImports21,verifyManualImportPayload21} from './database-templates21-manual-import.mjs';
 import {raceDocuments21,benchmarkDocuments21} from './database-documents21.mjs';
@@ -726,9 +727,10 @@ try {
   const organizationMigrations=allMigrations.filter(n=>n.includes('_organize_existing_templates_by_kind'));
   const versions22Migrations=allMigrations.filter(n=>n.includes('_document_versions22_'));
   const settingsMigrations=allMigrations.filter(n=>n>='20261102154519');
-  const verifySettings=database=>{
-    for(const file of settingsMigrations.filter(n=>(process.env.JN_DB_REPAIR_RED!=='1'||!n.includes('_repair_template_library_and_service_management'))&&(process.env.JN_DB_REVIEW23_RED!=='1'||!n.includes('_document_editorial_review23'))))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
-    let result='';for(const suite of ['categories-settings','access-inactivity','request-archives-settings','template-management-settings','categorized-request-catalog','library-services-regression','editorial-review23'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
+  const verifySettings=async database=>{
+    for(const file of settingsMigrations.filter(n=>(process.env.JN_DB_REPAIR_RED!=='1'||!n.includes('_repair_template_library_and_service_management'))&&(process.env.JN_DB_REVIEW23_RED!=='1'||!n.includes('_document_editorial_review23'))&&(process.env.JN_DB_SIGNATURE24_RED!=='1'||!n.includes('_document_signatures24'))))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+    let result='';for(const suite of ['categories-settings','access-inactivity','request-archives-settings','template-management-settings','categorized-request-catalog','library-services-regression','editorial-review23','documents24'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
+    result+=await raceSignatures24({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     return result;
   };
   const integratedMigrations=allMigrations.filter(n=>!settingsMigrations.includes(n)&&!versions22Migrations.includes(n)&&!organizationMigrations.includes(n)&&n>'20261027172917_templates21_manual_import.sql' && (process.env.JN_DB_INTEGRATED_ONLY_A!=='1' || n.includes('_document_commercial_')));
@@ -773,7 +775,7 @@ try {
         if(process.env.JN_DB_INTEGRATED_ONLY_A!=='1'){
           for(const file of versions22Migrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
           result+=sql(database,'postgres',readFileSync(`${root}tests/database/documents22.sql`,'utf8'));
-          result+=verifySettings(database);
+          result+=await verifySettings(database);
         }
         console.log(`${database} documents21 isolated:\n${result.trim()}`);continue;
       }
@@ -933,7 +935,7 @@ try {
     if(process.env.JN_DB_INTEGRATED_ONLY_A!=='1'){
       for(const file of versions22Migrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
       result+=sql(database,'postgres',readFileSync(`${root}tests/database/documents22.sql`,'utf8'));
-          result+=verifySettings(database);
+          result+=await verifySettings(database);
     }
     console.log(`${database} (${result.split('\n').filter(line => line.startsWith('PASS:')).length} verificações):\n${result.trim()}`);
   }
