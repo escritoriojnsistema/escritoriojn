@@ -1,0 +1,29 @@
+{
+  "status": "in_progress",
+  "compatibility": {
+    "pr": 81,
+    "head": "66a79694fcbd3b7ad510892a8cfebc5a7cac6896",
+    "merge": "8f1f8e76c03e5db0db27f931a291a3f0282b8aae",
+    "vercel": {
+      "status": "success",
+      "url": "https://vercel.com/escritorio-jn/escritoriojn/5sYpSD5uan1FzvfjMedpmDGK4Tqa"
+    }
+  },
+  "stage24_published": false,
+  "worker_compatible": {
+    "version": 21,
+    "status": "ACTIVE",
+    "verify_jwt": true,
+    "source_files_equal": 8,
+    "anonymous_status": 401
+  },
+  "hosted_baseline": {
+    "auth_users": 5,
+    "memberships": 5,
+    "documents": 0,
+    "publications": 0,
+    "files": 0,
+    "individual_grants": 17,
+    "migrations": 52
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "base": "1e45dd377d1f0c2bcbcae573a57b37883cebabb0",
+  "approval": "Usuário aprovou especificação e execução; retomada incremental autorizada",
+  "node": {
+    "tests": 300,
+    "passed": 300,
+    "failed": 0,
+    "command": "npm test"
+  },
+  "sql": {
+    "passed_lines": 961,
+    "signature24_passed_lines": 70,
+    "empty_replays": 2,
+    "restricted_migrator": true,
+    "race_cases": [
+      "same_expected_event",
+      "revoked_session_after_lock"
+    ],
+    "command": "JN_DB_DOCUMENTS21_ISOLATED=1 node scripts/test-database.mjs"
+  },
+  "ui": {
+    "passed": 39,
+    "extra_after_desktop_grid": 4,
+    "widths": [
+      320,
+      360,
+      768,
+      1440
+    ],
+    "command": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium node scripts/test-team-ui.mjs tests/browser/document-signatures-contract.spec.ts tests/browser/editorial-review-contract.spec.ts --grep formalizacao24|editorial23"
+  },
+  "build": true,
+  "typecheck": true,
+  "production_audit_vulnerabilities": 0,
+  "review": {
+    "P0": 0,
+    "P1": 0,
+    "P2_found": 1,
+    "P2_fixed": "signature_setup blocks output before expected signers; RED mutation reproduced, GREEN two replays passed",
+    "ui_final": "Sem P1/P2 concretos no complemento final; capturas320/1440 e código revisados"
+  },
+  "auth_storage": {
+    "passed": 1,
+    "duration_seconds": 10.8,
+    "official_storage_filesystem": true,
+    "temporary_readonly_chroot": true,
+    "real_scanner": false,
+    "real_cryptographic_signature": false,
+    "measurement": {
+      "local_measurement": "document-workflow/signature-state",
+      "samples": 20,
+      "p50_ms": 43,
+      "p95_ms": 57,
+      "payload_bytes": 1104,
+      "http_round_trips_per_sample": 1,
+      "scanner": "explicit local fixture only"
+    },
+    "proof": {
+      "proof": "signatures24",
+      "external_sha256": "0713cd7f4b34fcf5aa10722df86a53e9763bfddf538874773f13939b9b839ba0",
+      "external_size_bytes": 8937,
+      "base_sha256": "7e29ce5d0476a33b97c5854d8d0db54e96e7d69bd876d8f4975feb6302884c12",
+      "byte_identical": true,
+      "local_only": true,
+      "real_scanner": false
+    },
+    "command": "AUTH_LAB_STORAGE_ROOTFS=/dev/shm/jn-storage24-root PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium node --import tsx scripts/test-signatures24.mjs"
+  },
+  "hosted_fixtures": false,
+  "github_actions_used": false,
+  "migration_sha256": "95120fb6fe0f5d77dccf44a7b4873bb13d9c37a6f38c57ff18e8d3a6262390f2"
+}

@@ -8,7 +8,9 @@ test('API06 valida filtros, protege eventos e preserva identidade única por req
   const office='00000000-0000-4000-b000-000000000001', id='00000000-0000-4000-a000-000000000002';
   const calls:{path:string;body:Record<string,unknown>;authorization:string|undefined}[]=[];
   let mode='valid';let canonicalHash='';
-  const provider=createServer(async(req,res)=>{
+  // A renderização síncrona de 1001 eventos pode superar o keep-alive padrão
+  // de 5s; mantenha o socket do provedor local vivo até a RPC de selagem.
+  const provider=createServer({keepAliveTimeout:120000},async(req,res)=>{
     let raw='';for await(const part of req)raw+=part;
     const body=raw?JSON.parse(raw):{};calls.push({path:req.url!,body,authorization:req.headers.authorization});
     res.setHeader('Content-Type','application/json');
