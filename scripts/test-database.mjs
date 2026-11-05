@@ -1,3 +1,4 @@
+import {raceRelease25} from './database-documents25.mjs';
 import {raceSignatures24} from './database-documents24.mjs';
 import { raceDocumentCommercial, raceFolderSession } from './database-document-commercial.mjs';
 import {raceManualImports21,verifyManualImportPayload21} from './database-templates21-manual-import.mjs';
@@ -729,7 +730,8 @@ try {
   const settingsMigrations=allMigrations.filter(n=>n>='20261102154519');
   const verifySettings=async database=>{
     for(const file of settingsMigrations.filter(n=>(process.env.JN_DB_REPAIR_RED!=='1'||!n.includes('_repair_template_library_and_service_management'))&&(process.env.JN_DB_REVIEW23_RED!=='1'||!n.includes('_document_editorial_review23'))&&(process.env.JN_DB_SIGNATURE24_RED!=='1'||!n.includes('_document_signatures24'))))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
-    let result='';for(const suite of ['categories-settings','access-inactivity','request-archives-settings','template-management-settings','categorized-request-catalog','library-services-regression','editorial-review23','documents24'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
+    let result='';for(const suite of ['categories-settings','access-inactivity','request-archives-settings','template-management-settings','categorized-request-catalog','library-services-regression','editorial-review23','documents24','documents25'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
+    result+=await raceRelease25({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceSignatures24({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     return result;
   };
