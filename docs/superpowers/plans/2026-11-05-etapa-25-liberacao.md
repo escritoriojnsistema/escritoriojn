@@ -24,6 +24,6 @@ Concorrência financeira, perda de autoridade, validade durante espera, resposta
 - [x] Build, Node, SQL, contratosUI, jornada Auth quando disponível; revisar alteração completa.
 
 ### Task3: publicação e livro
-- [ ] Compatibilidade de capacidades antes do schema; Git/PR→Vercel semActions.
-- [ ] Readback migration/corpos/ACL/contagens, worker preservado, assets/health/barreiras.
-- [ ] Livro/AGENTS/cartão/fecho/evidências com testes realmente executados e limitações.
+- [x] Compatibilidade de capacidades antes do schema; Git/PR→Vercel semActions.
+- [x] Readback migration/corpos/ACL/contagens, worker preservado, assets/health/barreiras.
+- [x] Livro/AGENTS/cartão/fecho/evidências com testes realmente executados e limitações.
