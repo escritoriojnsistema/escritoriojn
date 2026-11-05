@@ -316,7 +316,7 @@ test('alterar acesso não promove funcionário para proprietário; criação exi
 for (const [role, manager] of [['owner', true], ['admin', false], ['employee', false], ['client', false]] as const) {
   test(`operação direta e menu móvel com Conta para ${role}`, async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 640 });
-    await session(page, ['foundation.access', ...(manager ? ['users.manage'] : [])], role);
+    await session(page, ['foundation.access', ...(manager ? ['users.manage','settings.access'] : [])], role);
     await page.goto(role === 'client' ? '/area-cliente' : '/painel');
     await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();
     await expect(page.locator('.access-visual')).toHaveCount(0);
@@ -329,7 +329,7 @@ for (const [role, manager] of [['owner', true], ['admin', false], ['employee', f
     const drawer = page.getByRole('dialog', { name: 'Menu de navegação' });
     await expect(drawer).toBeVisible();
     if (process.env.TEAM_UI_CAPTURE && role === 'owner') await page.screenshot({ path: '/workspace/shared/operacao-menu-360.png' });
-    await expect(drawer.getByRole('link', { name: 'Equipe e convites', exact: true })).toHaveCount(manager ? 1 : 0);
+    await expect(drawer.getByRole('link', { name: 'Configurações', exact: true })).toHaveCount(manager ? 1 : 0);
     await drawer.getByRole('link', { name: 'Conta', exact: true }).click();
     await expect(page).toHaveURL(role === 'client' ? '/minha-conta' : '/conta');
     await expect(page.getByRole('heading', { name: 'Conta', exact: true })).toBeVisible();
@@ -381,14 +381,15 @@ test('reativar conta com permissões efetivas vazias envia o acesso básico obri
 });
 
 test('sidebar desktop navega Conta e gestão; zoom mantém menu e conteúdo acessíveis', async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 }); await session(page); await dashboard(page); await page.goto('/painel');
+  await page.setViewportSize({ width: 1440, height: 900 }); await session(page,['foundation.access','users.manage','settings.access']); await dashboard(page); await page.goto('/painel');
   const sidebar = page.getByRole('complementary', { name: 'Navegação principal' });
   await expect(sidebar).toBeVisible();
   await expect(page.getByRole('button', { name: 'Abrir menu' })).toBeHidden();
   await sidebar.getByRole('link', { name: 'Conta', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Conta', exact: true })).toBeVisible();
   await expect(sidebar.getByRole('link', { name: 'Conta', exact: true })).toHaveAttribute('aria-current', 'page');
-  await sidebar.getByRole('link', { name: 'Equipe e convites', exact: true }).click();
+  await sidebar.getByRole('link', { name: 'Configurações', exact: true }).click();
+  await page.getByRole('navigation',{name:'Opções de configurações'}).getByRole('link',{name:/Equipe e convites/}).click();
   await expect(page.getByRole('heading', { name: 'Equipe e convites', exact: true })).toBeVisible();
   await page.setViewportSize({ width: 720, height: 450 }); // Effective CSS viewport at 200% desktop zoom.
   await expect(page.getByRole('button', { name: 'Abrir menu' })).toBeVisible();

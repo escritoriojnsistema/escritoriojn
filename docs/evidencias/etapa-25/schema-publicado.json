@@ -1,0 +1,170 @@
+{
+  "seeds": [
+    {
+      "role_code": "owner",
+      "created_at": "2026-11-05T13:05:27.954689+00:00",
+      "created_by": null,
+      "permission_code": "documents.exceptions.request",
+      "created_by_db_role": "postgres"
+    },
+    {
+      "role_code": "owner",
+      "created_at": "2026-11-05T13:05:27.954689+00:00",
+      "created_by": null,
+      "permission_code": "documents.exceptions.decide",
+      "created_by_db_role": "postgres"
+    }
+  ],
+  "counts": {
+    "auth": 7,
+    "files": 0,
+    "releases": 0,
+    "documents": 0,
+    "exceptions": 0,
+    "migrations": 54,
+    "memberships": 7,
+    "audit_events": 114,
+    "publications": 0,
+    "individual_grants": 17
+  },
+  "tables": [
+    {
+      "rls": true,
+      "name": "document_exception_events25",
+      "anon_access": false,
+      "authenticated_access": false
+    },
+    {
+      "rls": true,
+      "name": "document_release_commands25",
+      "anon_access": false,
+      "authenticated_access": false
+    },
+    {
+      "rls": true,
+      "name": "document_releases25",
+      "anon_access": false,
+      "authenticated_access": false
+    },
+    {
+      "rls": true,
+      "name": "release_authority25",
+      "anon_access": false,
+      "authenticated_access": false
+    }
+  ],
+  "functions": [
+    {
+      "md5": "208c30bc7f55b50c12c40a0cff85fe8e",
+      "anon": false,
+      "name": "avaliar_liberacao25",
+      "schema": "private",
+      "definer": false,
+      "authenticated": false
+    },
+    {
+      "md5": "a1a243b524b8c31804720c9c3ea0494f",
+      "anon": false,
+      "name": "document_artifact_authorize",
+      "schema": "public",
+      "definer": false,
+      "authenticated": true
+    },
+    {
+      "md5": "716442bc9627a2c470cdc00dd8e89272",
+      "anon": false,
+      "name": "document_artifact_authorize",
+      "schema": "private",
+      "definer": true,
+      "authenticated": true
+    },
+    {
+      "md5": "de4723b0072dfd9dcfaae38feeadedea",
+      "anon": false,
+      "name": "document_release_command",
+      "schema": "public",
+      "definer": false,
+      "authenticated": true
+    },
+    {
+      "md5": "7d4f397cc39082e681fb17339acb0cb1",
+      "anon": false,
+      "name": "document_release_command",
+      "schema": "private",
+      "definer": true,
+      "authenticated": true
+    },
+    {
+      "md5": "8ab9497f2b20366b2f23ef02b059dbfd",
+      "anon": false,
+      "name": "document_release_state",
+      "schema": "public",
+      "definer": false,
+      "authenticated": true
+    },
+    {
+      "md5": "65a7f376f332e7c69468c479294a8808",
+      "anon": false,
+      "name": "document_release_state",
+      "schema": "private",
+      "definer": true,
+      "authenticated": true
+    },
+    {
+      "md5": "cb1b67a00ee7d8d337d0314cc614dee8",
+      "anon": false,
+      "name": "release_authority_changed25",
+      "schema": "private",
+      "definer": true,
+      "authenticated": false
+    },
+    {
+      "md5": "f63ac292abd5596076aa934d798c2094",
+      "anon": false,
+      "name": "release_exception_valid25",
+      "schema": "private",
+      "definer": false,
+      "authenticated": false
+    },
+    {
+      "md5": "ae943867ab038e60eaad3d90b6e5290b",
+      "anon": false,
+      "name": "release_finance25",
+      "schema": "private",
+      "definer": false,
+      "authenticated": false
+    },
+    {
+      "md5": "c0a994ed1481ba4d36dbfbbf1b20f6cc",
+      "anon": false,
+      "name": "release_scope25",
+      "schema": "private",
+      "definer": false,
+      "authenticated": false
+    },
+    {
+      "md5": "05517ca3c5243dccf30a94b5d0df0722",
+      "anon": false,
+      "name": "signature_exit_blockers24",
+      "schema": "private",
+      "definer": false,
+      "authenticated": false
+    },
+    {
+      "md5": "6890dd8fb88aad77d444a4f5fc7cbdcb",
+      "anon": false,
+      "name": "wf_gate",
+      "schema": "private",
+      "definer": false,
+      "authenticated": false
+    },
+    {
+      "md5": "9dc0281d675dc0cb21770e6e7d35722d",
+      "anon": false,
+      "name": "wf_gate_before25",
+      "schema": "private",
+      "definer": false,
+      "authenticated": false
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "status": "published_verified",
+  "canonical": "https://escritoriojn.vercel.app",
+  "compatibility": {
+    "pr": 84,
+    "commit": "a4ae1396413c243e9599ad758086ae9c5186f797",
+    "merge": "563b6212d35eb154a112272964e255fceb19e534",
+    "vercel": "HWpxauQ2vRxKrzP5roBZtHcwWFJ9",
+    "status": "success"
+  },
+  "runtime": {
+    "pr": 85,
+    "commit": "d627c439cdf437009eeaddef94c2645476f2a796",
+    "merge": "e11226196d3b87f8871d884216de96b1d1376bdc",
+    "tree": "d509c97de5d8db40141dfbce2fb92ccd44c48e5a",
+    "local_tested_commit": "c61e9ec",
+    "vercel": "5TQGepAGoR9KeXGqm7vMdoeWSDZr",
+    "status": "success"
+  },
+  "database": {
+    "migration": "20261105124514_document_release25",
+    "automatic": true,
+    "statements_equal": 33,
+    "function_bodies_equal": 10,
+    "private_rls_tables": 4,
+    "invoker_public_wrappers": 2,
+    "individual_grants_created": 0,
+    "counts": {
+      "auth": 7,
+      "files": 0,
+      "releases": 0,
+      "documents": 0,
+      "exceptions": 0,
+      "migrations": 54,
+      "memberships": 7,
+      "audit_events": 114,
+      "publications": 0,
+      "individual_grants": 17
+    }
+  },
+  "worker": {
+    "version": 25,
+    "status": "ACTIVE",
+    "verify_jwt": true,
+    "files_equal": 7
+  },
+  "local": {
+    "node_api": 303,
+    "sql": 1033,
+    "sql_stage25": 72,
+    "ui24_25": 28,
+    "additional_ui_initial_passed": 78,
+    "additional_ui_rechecked": 5,
+    "additional_ui_stale_fixtures_corrected": 2,
+    "build": "pass",
+    "typecheck": "pass",
+    "production_vulnerabilities": 0
+  },
+  "remote_public_playwright": 3,
+  "limitations": [
+    "No new real Auth/Storage positive journey",
+    "Scanner absent continues quarantine blocking",
+    "No hosted fixtures or personal-account tests",
+    "Authorized download does not establish delivery receipt"
+  ],
+  "github_actions_used": false,
+  "vercel_publish_method": "GitHub integration only"
+}

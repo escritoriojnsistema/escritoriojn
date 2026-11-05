@@ -1,0 +1,26 @@
+[
+  {
+    "path": "/api/health",
+    "status": 200
+  },
+  {
+    "path": "/documentos",
+    "status": 200
+  },
+  {
+    "path": "/api/document-workflow/release-state",
+    "status": 401
+  },
+  {
+    "path": "/api/document-workflow/release-command",
+    "status": 401
+  },
+  {
+    "path": "/api/document-workflow/artifact",
+    "status": 401
+  },
+  {
+    "path": "/api/document-workflow/signature-state",
+    "status": 401
+  }
+]
