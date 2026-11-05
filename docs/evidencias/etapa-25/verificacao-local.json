@@ -1,0 +1,23 @@
+{
+  "base": "b951a0369cc49649e76967b9291722d937530c64",
+  "node_api": 303,
+  "sql_pass_lines_two_replays": 1033,
+  "stage25_sql_pass_lines": 72,
+  "ui_24_25": 28,
+  "widths": [
+    320,
+    360,
+    768,
+    1440
+  ],
+  "build": "passed",
+  "typecheck": "passed",
+  "production_vulnerabilities": 0,
+  "new_real_auth_storage_journey": false,
+  "review_fix": "delegation epoch: RED then GREEN in two SQL replays",
+  "limits": [
+    "No hosted fixtures or personal-account tests",
+    "Worker24 unchanged; scanner absent still blocks quarantine",
+    "No zero-latency SLA claimed"
+  ]
+}
