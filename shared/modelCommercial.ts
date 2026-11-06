@@ -26,7 +26,7 @@ export interface DocumentPublicOffer {
   template_id: string; template_version_id: string; service_version_id: string; offer_revision: number;
   name: string; template_code: string; folder_id: string | null; folder_name: string | null; folder_category: string | null;
   instructions: string; price_cents: number; service_id: string; service_code: string; service_category: string;
-  service_checklist: string[]; variables: DocumentOfferField[];
+  service_checklist: string[]; variables: DocumentOfferField[]; service_name?: string; can_book?: boolean;
 }
 export interface DocumentOffersPage { items: DocumentPublicOffer[]; folders: Array<{ id: string; name: string; category: string }>; total: number; page: number; page_size: number }
 export type PresenceStatus = 'available' | 'busy' | 'away';

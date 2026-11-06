@@ -14,6 +14,7 @@ export function CategoriesSettings({ office, onDenied, onPendingChange }: { offi
 }
 export default CategoriesSettings;
 function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: string; onDenied?: () => void; onPendingChange?:(pending:boolean)=>void }) {
+  const [level,setLevel]=useState<''|'1'|'2'|'3'>('');
   const [data, setData] = useState<CategoriesState>();
   const [error, setError] = useState<CategoriesError>();
   const [editor, setEditor] = useState<Editor>();
@@ -53,13 +54,14 @@ function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: st
   function choose(next?: Editor) {
     if (busyRef.current || intent.current) return;
     setEditor(next); setName(next && next.kind !== 'create' ? next.item.name : '');
+    setLevel(next && next.kind !== 'create' && next.item.execution_level ? String(next.item.execution_level) as '1'|'2'|'3' : '');
     setReason(''); setError(undefined); setMessage('');
   }
   async function submit(event: FormEvent) {
     event.preventDefault();
     if (busyRef.current || !editor || !data?.can_manage) return;
-    const command: CategoryCommand = editor.kind === 'create' ? { kind: 'create', name: name.trim(), reason: reason.trim() }
-      : editor.kind === 'rename' ? { kind: 'rename', category_id: editor.item.id, expected_revision: editor.item.revision, name: name.trim(), reason: reason.trim() }
+    const command: CategoryCommand = editor.kind === 'create' ? { kind: 'create', name: name.trim(), execution_level:Number(level) as 1|2|3, reason: reason.trim() }
+      : editor.kind === 'rename' ? { kind: 'rename', category_id: editor.item.id, expected_revision: editor.item.revision, name: name.trim(), execution_level:Number(level) as 1|2|3, reason: reason.trim() }
       : { kind: 'delete', category_id: editor.item.id, expected_revision: editor.item.revision, reason: reason.trim() };
     if (!validCategoryCommand(command)) { setError(new CategoriesError(422)); setMessage('Informe um nome de até 60 caracteres e um motivo de até 500 caracteres.'); return; }
     intent.current ??= { command, key: crypto.randomUUID() };
@@ -93,7 +95,8 @@ function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: st
         <h2>{editor.kind === 'create' ? 'Nova categoria' : editor.kind === 'rename' ? 'Renomear categoria' : `Excluir ${editor.item.name}`}</h2>
         <fieldset disabled={busy || uncertain}>
           {editor.kind !== 'delete' && <label className="team-field">Nome da categoria<input value={name} maxLength={60} onChange={event => setName(event.target.value)} /></label>}
-          {editor.kind === 'delete' && <p className="customer-note">A exclusão só é permitida quando não há vínculo com versões de serviços.</p>}
+          {editor.kind !== 'delete' && <label className="team-field">Nível de execução<select value={level} onChange={event=>setLevel(event.target.value as typeof level)} required><option value="">Selecione o nível</option><option value="1">Nível 1 — restrito</option><option value="2">Nível 2 — habilitação independente</option><option value="3">Nível 3 — geral</option></select></label>}
+          {editor.kind === 'delete' && <p className="customer-note">A categoria será arquivada. Serviços e histórico permanecem conservados.</p>}
           <label className="team-field">Motivo<input value={reason} maxLength={500} onChange={event => setReason(event.target.value)} /></label>
         </fieldset>
         {uncertain && <p className="customer-note">Repita a operação para confirmar o resultado. Os dados e a chave desta tentativa foram preservados.</p>}
@@ -103,7 +106,7 @@ function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: st
         </div>
       </form> : data && <>
         {items?.length ? <ul className="customer-list" aria-label="Categorias configuradas">{items.map(item => <li key={item.id}>
-          <div><strong>{item.name}</strong>{data.can_manage && <small>{item.services ?? 0} serviços com histórico · revisão {item.revision}</small>}</div>
+          <div><strong>{item.name}</strong><small>{item.execution_level ? `Nível ${item.execution_level}` : 'Nível pendente — não distribuir'}</small>{data.can_manage && <small>{item.services ?? 0} serviços com histórico · revisão {item.revision}</small>}</div>
           {data.can_manage && <div className="categories-actions">
             <button type="button" className="operation-icon-button" aria-label={`Renomear ${item.name}`} title="Renomear categoria" onClick={() => choose({ kind: 'rename', item })}><Pencil size={18} aria-hidden="true" /></button>
             <button type="button" className="operation-icon-button" aria-label={`Excluir ${item.name}`} title="Excluir categoria" onClick={() => choose({ kind: 'delete', item })}><Trash2 size={18} aria-hidden="true" /></button>

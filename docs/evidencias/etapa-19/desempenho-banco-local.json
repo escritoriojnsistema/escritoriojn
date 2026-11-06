@@ -3,22 +3,22 @@
   "views": {
     "obligations": {
       "samples": 12,
-      "median_ms": 199.13094800000545,
-      "p95_ms": 215.77065999998013
+      "median_ms": 260.8112719999626,
+      "p95_ms": 654.5507799999905
     },
     "movements": {
       "samples": 12,
-      "median_ms": 163.86780499998713,
-      "p95_ms": 198.9120680000051
+      "median_ms": 194.87018600001466,
+      "p95_ms": 516.158077
     },
     "cash": {
       "samples": 12,
-      "median_ms": 144.55184500000905,
-      "p95_ms": 149.9899649999861
+      "median_ms": 489.3073199999635,
+      "p95_ms": 660.8227590000024
     }
   },
   "projection": {
-    "total": 1134,
+    "total": 1150,
     "captured": 5,
     "payload_bytes": 3185
   },
@@ -31,12 +31,12 @@
         "Relation Name": "cash_entries",
         "Alias": "cash_entries",
         "Startup Cost": 0,
-        "Total Cost": 20.8,
-        "Plan Rows": 352,
-        "Plan Width": 300,
-        "Actual Startup Time": 0.02,
-        "Actual Total Time": 0.22,
-        "Actual Rows": 327,
+        "Total Cost": 20.38,
+        "Plan Rows": 335,
+        "Plan Width": 301,
+        "Actual Startup Time": 0.018,
+        "Actual Total Time": 0.252,
+        "Actual Rows": 335,
         "Actual Loops": 1,
         "Filter": "((office_id = '00000000-0000-4000-e000-000000000151'::uuid) AND (created_at >= CURRENT_DATE) AND (created_at < (CURRENT_DATE + 1)))",
         "Rows Removed by Filter": 0,
@@ -52,7 +52,7 @@
         "Temp Written Blocks": 0
       },
       "Planning": {
-        "Shared Hit Blocks": 386,
+        "Shared Hit Blocks": 410,
         "Shared Read Blocks": 0,
         "Shared Dirtied Blocks": 0,
         "Shared Written Blocks": 0,
@@ -63,9 +63,9 @@
         "Temp Read Blocks": 0,
         "Temp Written Blocks": 0
       },
-      "Planning Time": 1.06,
+      "Planning Time": 3.653,
       "Triggers": [],
-      "Execution Time": 0.553
+      "Execution Time": 0.294
     }
   ]
 }

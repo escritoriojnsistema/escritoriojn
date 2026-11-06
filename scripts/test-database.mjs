@@ -700,7 +700,7 @@ const benchmarkRequests = async database => {
 
 let started = false;
 try {
-  docker('run', '--rm', '--detach', '--network=none', '--name', name, '--tmpfs', '/var/lib/postgresql/data:rw,nosuid,noexec,size=512m',
+  docker('run', '--rm', '--detach', '--network=none', '--name', name, '--tmpfs', '/var/lib/postgresql/data:rw,nosuid,noexec,size=1024m',
     '-e', 'POSTGRES_HOST_AUTH_METHOD=trust', image);
   started = true;
   let ready = false;
@@ -721,21 +721,25 @@ try {
     CREATE ROLE service_role NOLOGIN BYPASSRLS;
     CREATE ROLE migrator LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS;
   `);
-  const allMigrations = readdirSync(`${root}supabase/migrations`).filter(name => name.endsWith('.sql')).sort();
+  const allMigrations = readdirSync(`${root}supabase/migrations`).filter(name => name.endsWith('.sql')&&(!process.env.JN_DB_STOP_BEFORE||name<process.env.JN_DB_STOP_BEFORE)).sort();
   const templateMigrations=allMigrations.filter(n=>n.includes('_templates_document_library'));
   const documentMigrations=allMigrations.filter(n=>n.includes('_documents21_editor'));
   const manualImportMigrations=allMigrations.filter(n=>n.includes('_templates21_manual_import'));
   const organizationMigrations=allMigrations.filter(n=>n.includes('_organize_existing_templates_by_kind'));
   const versions22Migrations=allMigrations.filter(n=>n.includes('_document_versions22_'));
-  const settingsMigrations=allMigrations.filter(n=>n>='20261102154519');
+  const correctionMigrations=allMigrations.filter(n=>n>='20261105150000');
+  const settingsMigrations=allMigrations.filter(n=>n>='20261102154519'&&n<'20261105150000');
   const verifySettings=async database=>{
     for(const file of settingsMigrations.filter(n=>(process.env.JN_DB_REPAIR_RED!=='1'||!n.includes('_repair_template_library_and_service_management'))&&(process.env.JN_DB_REVIEW23_RED!=='1'||!n.includes('_document_editorial_review23'))&&(process.env.JN_DB_SIGNATURE24_RED!=='1'||!n.includes('_document_signatures24'))))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
     let result='';for(const suite of ['categories-settings','access-inactivity','request-archives-settings','template-management-settings','categorized-request-catalog','library-services-regression','editorial-review23','documents24','documents25'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
     result+=await raceRelease25({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceSignatures24({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
+    for(const file of correctionMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+    if(correctionMigrations.length)for(const suite of ['request-levels','portal-request-returns','account-closure','catalog-sync','request-level-scope','request-routing','retention','privacy-settings','maintenance'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
+    if(correctionMigrations.length){const raceDb='corrections_role_race_'+(database.endsWith('_a')?'a':'b');sql('postgres','postgres',`CREATE DATABASE ${raceDb} TEMPLATE ${database} OWNER migrator;`);result+=execFileSync(process.execPath,[`${root}scripts/test-account-closure-race.mjs`,name,raceDb],{encoding:'utf8'});result+=execFileSync(process.execPath,[`${root}scripts/test-account-closure-invitation-race.mjs`,name,raceDb],{encoding:'utf8'});}
     return result;
   };
-  const integratedMigrations=allMigrations.filter(n=>!settingsMigrations.includes(n)&&!versions22Migrations.includes(n)&&!organizationMigrations.includes(n)&&n>'20261027172917_templates21_manual_import.sql' && (process.env.JN_DB_INTEGRATED_ONLY_A!=='1' || n.includes('_document_commercial_')));
+  const integratedMigrations=allMigrations.filter(n=>!settingsMigrations.includes(n)&&!correctionMigrations.includes(n)&&!versions22Migrations.includes(n)&&!organizationMigrations.includes(n)&&n>'20261027172917_templates21_manual_import.sql' && (process.env.JN_DB_INTEGRATED_ONLY_A!=='1' || n.includes('_document_commercial_')));
   const verifyOrganization=database=>{
     if(!organizationMigrations.length)return '';
     sql(database,'postgres',`CREATE TABLE test.organization_before AS SELECT (SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY id),'[]'::jsonb) FROM public.templates t) templates,(SELECT coalesce(jsonb_agg(to_jsonb(v) ORDER BY id),'[]'::jsonb) FROM public.template_versions v) versions,(SELECT coalesce(jsonb_agg(to_jsonb(a) ORDER BY office_id,version_id),'[]'::jsonb) FROM private.template_approvals a) approvals;CREATE TABLE test.organization_locations_before AS SELECT office_id,template_id,to_jsonb(l) snapshot FROM private.model_locations l;`);
@@ -747,7 +751,7 @@ try {
     return result+'PASS: organization replay preserves ids and revisions\n';
   };
   const migrations=allMigrations.filter(n=>!templateMigrations.includes(n)&&!documentMigrations.includes(n)&&!manualImportMigrations.includes(n)&&n<='20261027172917_templates21_manual_import.sql');
-  for (const database of process.env.JN_DB_HISTORY_PAYMENTS==='1'?[]:process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'?['foundation_replay_a']:['foundation_replay_a', 'foundation_replay_b']) {
+  for (const database of process.env.JN_DB_HISTORY_PAYMENTS==='1'?[]:process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'?['foundation_replay_a']:(process.env.JN_DB_SINGLE_REPLAY==='1'?['foundation_replay_a']:['foundation_replay_a', 'foundation_replay_b'])) {
     sql('postgres', 'postgres', `CREATE DATABASE ${database} OWNER migrator;`);
     sql(database, 'postgres', readFileSync(`${root}tests/database/bootstrap.sql`, 'utf8'));
     for (const migration of migrations.filter(n=>process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'&&n<'20261025042809'||n<'20261024133149')) {
@@ -952,10 +956,10 @@ try {
     for(const file of migrations.filter(n=>n<'20261024032407'))sql(history,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
     console.log(verifyPaymentHistory({root,migrations:migrations.filter(n=>n>='20261024032407'),sql:(user,input)=>sql(history,user,input)}).trim());
   }
-  console.log(process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'?'PASS: regressao P3 de auditoria financeira isolada com migration16 final.':process.env.JN_DB_HISTORY_PAYMENTS==='1'?'PASS: migracao de historico15 e replay antigo reais.':'PASS: dois replays vazios, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.');
+  console.log(process.env.JN_DB_FOCUS_CORRECTION_AUDIT==='1'?'PASS: regressao P3 de auditoria financeira isolada com migration16 final.':process.env.JN_DB_HISTORY_PAYMENTS==='1'?'PASS: migracao de historico15 e replay antigo reais.':process.env.JN_DB_SINGLE_REPLAY==='1'?'PASS: um replay vazio, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.':'PASS: dois replays vazios, migrador sem superusuário/BYPASSRLS e ACL/RLS/RPC reais.');
 } catch (error) {
   console.error(error.stderr?.toString() || error.message);
   process.exitCode = 1;
 } finally {
-  if (started) docker('rm', '--force', name);
+  if(started&&process.env.JN_DB_KEEP_CONTAINER==='1')console.log('LOCAL_DB_CONTAINER='+name);else if(started)docker('rm','--force',name);
 }

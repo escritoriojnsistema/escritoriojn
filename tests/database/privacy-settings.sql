@@ -1,0 +1,18 @@
+BEGIN;
+SELECT test.assert_true(NOT has_table_privilege('authenticated','private.privacy_controller_settings','SELECT,INSERT,UPDATE,DELETE'),'privacy: settings private ACL');
+SELECT test.assert_true(NOT has_function_privilege('anon','public.privacy_settings_save(uuid,integer,jsonb)','EXECUTE') AND has_function_privilege('anon','public.privacy_controller_public()','EXECUTE'),'privacy: anonymous projection cannot change settings');
+UPDATE private.client_registration_settings SET office_id='00000000-0000-4000-e000-000000000201';
+SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000201","session_id":"00000000-0000-4000-c000-000000000201"}';
+SELECT test.assert_true(public.privacy_settings_state('00000000-0000-4000-e000-000000000201')->>'configured'='false','privacy: initial notice remains explicitly unconfigured');
+SELECT test.expect_error($q$SELECT public.privacy_settings_save('00000000-0000-4000-e000-000000000201',0,'{"controller_name":"Controlador local","cnpj":"00000000000000","contact_email":"privacy@example.test","contact_phone":"","address":""}')$q$,'PT422','privacy: fake CNPJ cannot be published as official identification');
+SELECT test.assert_true(public.privacy_settings_save('00000000-0000-4000-e000-000000000201',0,'{"controller_name":"Controlador local","cnpj":"","contact_email":"privacy@example.test","contact_phone":"","address":"Endereço local"}')->>'revision'='1','privacy: superadministrator saves identity and contact');
+SELECT test.expect_error($q$SELECT public.privacy_settings_save('00000000-0000-4000-e000-000000000201',0,'{"controller_name":"Outro nome","cnpj":"","contact_email":"privacy@example.test","contact_phone":"","address":""}')$q$,'PT409','privacy: stale editor cannot overwrite new notice');
+RESET ROLE;UPDATE public.memberships SET role_code='admin' WHERE id='00000000-0000-4000-b000-000000000206';INSERT INTO private.team_member_permissions(membership_id,permission_code)VALUES('00000000-0000-4000-b000-000000000206','settings.access') ON CONFLICT DO NOTHING;SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000206","session_id":"00000000-0000-4000-c000-000000000206"}';
+SELECT test.expect_error($q$SELECT public.privacy_settings_state('00000000-0000-4000-e000-000000000201')$q$,'PT403','privacy: administrator cannot access owner configuration');
+RESET ROLE;
+SET ROLE anon;
+SELECT test.assert_true(public.privacy_controller_public()->'controller'->>'controller_name'='Controlador local' AND NOT(public.privacy_controller_public() ? 'updated_by'),'privacy: public notice reflects saved fields without management identifiers');
+RESET ROLE;
+ROLLBACK;

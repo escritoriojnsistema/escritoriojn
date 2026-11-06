@@ -11,6 +11,8 @@ import {OperationHeading} from './OperationLayout';
 import {operationRoleNames} from './navigation';
 import {AccountFields,normalizeAccountInput} from './AccountFields';
 import {accountApi,AccountError,confirmAccountEmail} from './accountApi';
+import {AccountClosure} from './AccountClosure';
+import {PrivacyLinks} from '../privacy/PrivacyLinks';
 import '../team/team.css';
 import '../requests/requests.css';
 
@@ -45,6 +47,7 @@ function AccountWorkspace({context,client}:{context:AccessContext;client:boolean
    {error&&<button className="team-text-button" disabled={busy} onClick={()=>{setError('');setRevision(n=>n+1);}}>Reabrir dados da conta</button>}</>}
   </section>
   {!blocked&&<div className="account-actions">{client?<Link className="primary-button" to={paths.clientRequests} state={{office_id:office,...(data?.correction_request_id?{request_id:data.correction_request_id}:{account_correction:true})}}><FilePenLine size={18} aria-hidden="true"/>{data?.correction_request_id?'Acompanhar correção':'Solicitar correção'}</Link>:changed&&<><button className="primary-button" form="account-edit" disabled={busy}><Save size={18} aria-hidden="true"/>Salvar alterações</button><button type="button" className="secondary-button" disabled={busy} onClick={()=>{setError('');setFeedback('');if(data)setValue({name:data.name,cpf:data.cpf,email:data.pending_email??data.email});}}>Cancelar</button></>}</div>}
+  <PrivacyLinks/>{client&&!blocked&&<AccountClosure key={auth.sessionKey+office} office={office}/>}
   <section className="operation-security" aria-labelledby="security-title"><div><h2 id="security-title"><KeyRound size={21} aria-hidden="true"/>Segurança</h2><p>Precisa de uma nova senha? Receba as instruções no seu e-mail.</p></div><Link className="secondary-button" to={`${paths.recovery}?area=${client?'client':'team'}`}>Recuperar senha<ArrowRight size={18} aria-hidden="true"/></Link></section>
  </>;
 }

@@ -14,3 +14,11 @@ import_map = "./functions/private-attachments/deno.json"
 verify_jwt = true
 entrypoint = "./functions/document-artifacts/index.ts"
 import_map = "./functions/document-artifacts/deno.json"
+
+[functions.account-closure]
+verify_jwt = true
+entrypoint = "./functions/account-closure/index.ts"
+
+[functions.retention]
+verify_jwt = true
+entrypoint = "./functions/retention/index.ts"

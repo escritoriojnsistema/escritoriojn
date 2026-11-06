@@ -1,0 +1,18 @@
+# Público, recuperação, privacidade e primeiro acesso
+
+## Rechecagem na retomada
+
+- Público: cinco testes aprovados; os dois testes de sessão foram executados separadamente com SDK simulado e ambos passaram (cliente e funcionário, sessão preservada). Esta contagem é da rechecagem, distinta da rodada histórica abaixo.
+- Nova comparação em 12 pares alternados AB/BA por viewport, navegador/contexto novo e cache CDP desabilitado/limpo. Mesmo processo de servidor estático, builds de produção, sem compressão ou throttling. Dados: `public-cold-paired-desktop.json` e `public-cold-paired-mobile.json`; script `scripts/measure-public-paired.mjs`.
+- Bytes: 1.351.244 → 646.444 (−52,16%). Desktop 1440×900: mediana FCP 376 → 358 ms; mobile 360×740: 376 → 334 ms. Ganho local observado, com variação de amostras; não comprova latência em dispositivo físico ou Vercel e não é SLA. A coleta não pareada anterior permanece abaixo, inclusive o resultado desfavorável de FCP.
+
+## Histórico da primeira coleta
+
+- RED antes: `tests/public-privacy.test.ts` falhou por ausência dos helpers (registrado no laboratório); GREEN posterior:2/2.
+- TypeScript `npx tsc --noEmit` e build Vite de produção passaram. Sem alteração no SDK AuthProvider/callback/PKCE; os providers permanecem acima do chunk operacional. Nenhum spinner/overlay introduzido. Telas privadas são aquecidas ao abrir login; navegação privada subsequente usa o módulo já carregado.
+- UI bundle de produção servido com fallback SPA local:16 testes aprovados;2 de sessão pulados nessa rodada por exigir laboratório SDK dedicado. Inclui navegação sem recarregar SPA, rotas diretas/aliases, home e Portal da Equipe textual, layouts320/360/768/1440, avisos nas entradas cliente/equipe/signup, ausência de checkbox de consentimento genérico, persistência/releitura da preferência necessária e recuperação anônima sem mutações.
+- Sessão SDK local com output exclusivo:2/2 aprovados, employee→/conta e client→/minha-conta, sem logout e armazenamento do token idêntico antes/depois.
+- Os testes de autenticação usam somente respostas simuladas no laboratório local e não são prova de Supabase hospedado/SMTP. Nenhum dado/conta real alterado. Rodadas iniciais Vite sofreram reinício causado por alterações simultâneas no servidor; rodadas Playwright com output compartilhado sofreram ENOENT de traces. A rodada final de apresentação usa bundle estático e a de sessão usa output exclusivo.
+- Primeiro acesso: Chromium novo por contexto, cache desabilitado pelo CDP, três amostras por versão, mesmo servidor estático sem compressão, desktop1440×900. Dados brutos em public-cold-before.json/public-cold-after.json; script reprodutível scripts/measure-public-cold.mjs. Antes1.351.244bytes/10recursos; depois646.423bytes/8recursos: redução52,16% na transferência. O grupo monolítico documents foi removido e telas operacionais saíram da entrada. SDK permanece inicial para manter restauração da sessão/PKCE.
+- FCP observado antes1584/712/780ms (mediana780); depois1084/944/1084ms (mediana1084). Ambiente compartilhado sob execução de múltiplos testes: a redução de bytes está comprovada, mas esta coleta não demonstra melhora de FCP. Não é medição de produção/SLA. Não existe service worker/cache de respostas privadas.
+- Sem migration/API para consentimento: opcionais não existem e não se registra consentimento fictício. Preferência local versionada não contém PII nem concede acesso. Controlador/canal/bases/prazos específicos ainda pendentes, explicitados nos avisos; ver public-privacy-sources.md. Não considerar política jurídica final concluída sem essa confirmação.

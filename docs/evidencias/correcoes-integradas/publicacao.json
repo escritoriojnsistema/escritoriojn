@@ -1,0 +1,89 @@
+{
+  "status": "schema_publicado_runtime_em_publicacao",
+  "schema_pr": 87,
+  "schema_merge": "6c6f30af08171d74a61eccbaee405cdb8ed688e8",
+  "migrations": [
+    {
+      "version": "20261105150001",
+      "statements": 68,
+      "matched": 68,
+      "misses": []
+    },
+    {
+      "version": "20261105150002",
+      "statements": 38,
+      "matched": 38,
+      "misses": []
+    },
+    {
+      "version": "20261105150003",
+      "statements": 29,
+      "matched": 29,
+      "misses": []
+    },
+    {
+      "version": "20261105150005",
+      "statements": 2,
+      "matched": 2,
+      "misses": []
+    },
+    {
+      "version": "20261106012810",
+      "statements": 56,
+      "matched": 56,
+      "misses": []
+    },
+    {
+      "version": "20261106012914",
+      "statements": 8,
+      "matched": 8,
+      "misses": []
+    },
+    {
+      "version": "20261106013315",
+      "statements": 15,
+      "matched": 15,
+      "misses": []
+    },
+    {
+      "version": "20261106014243",
+      "statements": 13,
+      "matched": 13,
+      "misses": []
+    }
+  ],
+  "native_scheduler": [
+    {
+      "worker": "account-closure",
+      "last_error_code": null,
+      "status_code": 200,
+      "timed_out": false,
+      "error_msg": null,
+      "content": "{\"data\":{\"processed\":0,\"pending\":0}}"
+    },
+    {
+      "worker": "retention",
+      "last_error_code": null,
+      "status_code": 200,
+      "timed_out": false,
+      "error_msg": null,
+      "content": "{\"data\":{\"processed\":0,\"pending\":0}}"
+    }
+  ],
+  "tests": {
+    "node": 334,
+    "sql_replay_a": 1910,
+    "sql_replay_b": 1916,
+    "sql_pass_lines": 3827,
+    "real_auth_api_storage_retention": true,
+    "ui_requests_collection_archive_account": 27,
+    "ui_privacy_settings": 3,
+    "ui_retention": 13,
+    "ui_retention_rechecks": 2
+  },
+  "remarks": [
+    "Nenhuma fixture hospedada ou novo nível/preço/aprovação real.",
+    "Dados de privacidade explicitamente fictícios por pedido do usuário; superadministrador pode editar.",
+    "Aviso anterior de senhas comprometidas permanece; índices e projeção pública tiveram revisão adicional."
+  ]
+}

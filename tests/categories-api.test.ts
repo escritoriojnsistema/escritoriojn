@@ -12,8 +12,8 @@ const key = '00000000-0000-4000-c000-000000000731';
 const category = { id, name: 'Rural', revision: 1, is_documents: false, created_at: '2026-11-02T14:00:00.000Z', services: 2 };
 
 test('categorias: comandos estritos exigem motivo e versão, sem autoridade do navegador', () => {
-  assert.equal(validCategoryCommand({ kind: 'create', name: 'Rural', reason: 'Organizar catálogo' }), true);
-  assert.equal(validCategoryCommand({ kind: 'rename', category_id: id, expected_revision: 1, name: 'Rural e imóveis', reason: 'Ajustar rótulo' }), true);
+  assert.equal(validCategoryCommand({ kind: 'create', name: 'Rural', execution_level:3, reason: 'Organizar catálogo' }), true);
+  assert.equal(validCategoryCommand({ kind: 'rename', category_id: id, expected_revision: 1, name: 'Rural e imóveis', execution_level:2, reason: 'Ajustar rótulo' }), true);
   assert.equal(validCategoryCommand({ kind: 'delete', category_id: id, expected_revision: 1, reason: 'Sem uso' }), true);
   for (const command of [
     { kind: 'create', name: 'Rural' }, { kind: 'create', name: '', reason: 'Teste' },
@@ -62,7 +62,7 @@ test('categorias: API autenticada preserva chave e mapeia erros sem expor detalh
   const base = `http://127.0.0.1:${(server.address() as { port: number }).port}/api/categories`;
   const headers = { Authorization: 'Bearer categories-test-token', 'Content-Type': 'application/json' };
   const send = (path: string, body: unknown) => fetch(base + path, { method: 'POST', headers, body: JSON.stringify(body) });
-  const command = { office_id: office, command: { kind: 'rename', category_id: id, expected_revision: 1, name: 'Rural e imóveis', reason: 'Organizar catálogo' }, idempotency_key: key };
+  const command = { office_id: office, command: { kind: 'rename', category_id: id, expected_revision: 1, name: 'Rural e imóveis', execution_level:2, reason: 'Organizar catálogo' }, idempotency_key: key };
   try {
     await t.test('anônimo negado e Bearer preservado até a fonte oficial', async () => {
       assert.equal((await fetch(base + '/state', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ office_id: office }) })).status, 401);

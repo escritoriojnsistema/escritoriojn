@@ -1,0 +1,10 @@
+BEGIN;
+SELECT test.assert_true(NOT has_table_privilege('authenticated','private.maintenance_schedule_settings','SELECT,INSERT,UPDATE,DELETE'),'maintenance: credential configuration private');
+SELECT test.assert_true(NOT has_function_privilege('anon','public.maintenance_authorize(text,text)','EXECUTE') AND NOT has_function_privilege('authenticated','public.maintenance_authorize(text,text)','EXECUTE') AND has_function_privilege('service_role','public.maintenance_authorize(text,text)','EXECUTE'),'maintenance: only Edge server verifies scheduler secrets');
+SELECT test.assert_true(NOT has_function_privilege('service_role','private.maintenance_secret(text)','EXECUTE') AND NOT has_function_privilege('authenticated','private.configure_maintenance(text,text)','EXECUTE'),'maintenance: secrets cannot be fetched or configured by API roles');
+SELECT test.assert_true(NOT private.dispatch_maintenance('retention'),'maintenance: unconfigured schedule cannot dispatch');
+SET ROLE service_role;
+SELECT test.assert_true(public.maintenance_authorize('retention',repeat('a',64))->>'authorized'='false','maintenance: invented secret cannot authorize work');
+RESET ROLE;
+SELECT test.expect_error($q$SELECT private.configure_maintenance('https://external.invalid','not-a-jwt')$q$,'PT422','maintenance: arbitrary callback destinations are rejected');
+ROLLBACK;

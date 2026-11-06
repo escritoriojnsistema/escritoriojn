@@ -1,3 +1,4 @@
+import type {PreintakeInput} from './request-levels.js';
 import type {AccountCorrection} from './account.js';
 import type { ServiceAdjustment, ServiceInput, ServiceQuote } from './services.js';
 
@@ -11,7 +12,7 @@ export const publicRequestStatusLabels: Record<PublicRequestStatus,string> = {re
 export type RequestItemInput = {service_id:string;quantity:number;adjustment:ServiceAdjustment;fields:Record<string,string>;participant_ids:string[];checklist:string[]};
 export type StaffRequestInput = {origin:'presencial'|'whatsapp';title:string;customer_id:string|null;assignee_id:string|null;priority:'normal'|'urgent';priority_reason:string;items:RequestItemInput[];internal_note:string};
 export type PortalRequestInput = {origin:'portal';title:string;message:string;category_id?:string};
-export type CreateRequestInput = StaffRequestInput|PortalRequestInput;
+export type CreateRequestInput = StaffRequestInput|PortalRequestInput|(PreintakeInput & {preintake:true});
 export type CancellationReview = {charges_reviewed:true;refunds_reviewed:true;deliveries_reviewed:true;external_reviewed:true};
 export type RequestMutation =
  | {kind:'status';status:RequestStatus;reason:string;cancellation_review?:CancellationReview}
@@ -25,7 +26,7 @@ export type RequestPage = {items:(RequestSummary|StaffRequestSummary)[];total:nu
 export type RequestHistory = {id:string;kind:'created'|'status'|'transfer'|'note'|'triage';actor_id:string;actor_name:string|null;reason:string;from_status:RequestStatus|null;to_status:RequestStatus|null;from_assignee:string|null;to_assignee:string|null;created_at:string};
 export type StoredRequestItem = {id:string;snapshot:ServiceQuote;fields:Record<string,string>;participant_ids:string[];checklist:string[]};
 export type PortalRequestDetail = RequestSummary & {portal:true;message:string;services:string[];assignee_name:string|null;correction?:AccountCorrection};
-export type StaffRequestDetail = StaffRequestSummary & {portal:false;customer_id:string|null;message:string;priority_reason:string;items:StoredRequestItem[];history:RequestHistory[];history_page:number;history_total:number;can_update:boolean;can_transfer:boolean;can_cancel:boolean;can_reclaim:boolean;following_only:boolean;correction?:AccountCorrection};
+export type StaffRequestDetail = StaffRequestSummary & {preintake?:boolean;can_collect?:boolean;can_handoff?:boolean;execution_level?:1|2|3|null;portal:false;customer_id:string|null;message:string;priority_reason:string;items:StoredRequestItem[];history:RequestHistory[];history_page:number;history_total:number;can_update:boolean;can_transfer:boolean;can_cancel:boolean;can_reclaim:boolean;following_only:boolean;correction?:AccountCorrection};
 export type RequestDetail = PortalRequestDetail|StaffRequestDetail;
 export type RequestMutationResult = RequestDetail|{access_lost:true};
 export type RequestOption = {id:string;label:string;role_code?:'owner'|'admin'|'employee';eligible?:boolean;is_self?:boolean;corrections_eligible?:boolean;definition?:ServiceInput};

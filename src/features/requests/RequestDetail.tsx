@@ -1,3 +1,6 @@
+import {RequestTransferException} from './RequestTransferException';
+import {RequestCollection} from './RequestCollection';
+import {PortalRequestReturn} from './PortalRequestReturn';
 import {modelApi} from '../documentCommercial/modelApi';
 import {IntakeRequestItem} from '../documentCommercial/IntakeRequestItem';
 import { useEffect, useState, type FormEvent } from 'react';
@@ -13,14 +16,15 @@ import { RequestItems, itemInputs, type DraftItem } from './RequestItems';
 import type { RequestsError } from './api';
 const date=(value:string)=>new Date(value).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
 const originLabels={presencial:'Presencial',whatsapp:'WhatsApp',portal:'Portal do cliente'};
-export function RequestDetail({office,data,permissions,busy,onHistory,onMutate,onFailure,onUpdated}:{office:string;data:Detail;permissions:string[];busy:boolean;onHistory:(page:number)=>void;onMutate:(mutation:RequestMutation)=>void;onFailure:(failure:RequestsError)=>void;onUpdated?:(data:Detail)=>void}){
+export function RequestDetail({office,data,permissions,busy,onHistory,onMutate,onFailure,onUpdated,onAccessLost}:{office:string;data:Detail;permissions:string[];busy:boolean;onHistory:(page:number)=>void;onMutate:(mutation:RequestMutation)=>void;onFailure:(failure:RequestsError)=>void;onUpdated?:(data:Detail)=>void;onAccessLost:()=>void}){
  return <article className="request-detail">
   <p className="request-protocol">{data.protocol} · {data.portal?publicRequestStatusLabels[data.public_status]:requestStatusLabels[data.status]}</p>
   {data.category_name&&<p className="customer-note">Categoria: {data.category_name}</p>}
   <dl className="service-facts"><div><dt>Abertura</dt><dd>{date(data.created_at)}</dd></div><div><dt>Última atualização</dt><dd>{date(data.updated_at)}</dd></div></dl>
   {data.correction&&<AccountCorrectionDetail key={data.id} office={office} data={data} onUpdated={onUpdated??(()=>{})} onFailure={onFailure}/>}
+  {data.portal&&!data.correction&&<PortalRequestReturn key={data.id} office={office} requestId={data.id} onFailure={onFailure} onUpdated={onUpdated}/> }
   {data.portal&&<RequestReviewStatus office={office} requestId={data.id} onFailure={onFailure}/>}
-  {data.portal?<><dl className="service-facts"><div><dt>Quem está atendendo</dt><dd>{data.assignee_name??'Aguardando atendimento'}</dd></div></dl>{data.message&&<section className="request-message"><h2>Sua mensagem</h2><p>{data.message}</p></section>}{data.services.length>0&&<section className="request-message"><h2>Serviços</h2><ul>{data.services.map((name,index)=><li key={index}>{name}</li>)}</ul></section>}<p className="customer-note">Acompanhe aqui as atualizações da equipe. Concluído indica o encerramento do atendimento.</p></>:<StaffDetail office={office} data={data} permissions={permissions} busy={busy} onHistory={onHistory} onMutate={onMutate} onFailure={onFailure}/>}
+  {data.portal?<><dl className="service-facts"><div><dt>Quem está atendendo</dt><dd>{data.assignee_name??'Aguardando atendimento'}</dd></div></dl>{data.message&&<section className="request-message"><h2>Sua mensagem</h2><p>{data.message}</p></section>}{data.services.length>0&&<section className="request-message"><h2>Serviços</h2><ul>{data.services.map((name,index)=><li key={index}>{name}</li>)}</ul></section>}<p className="customer-note">Acompanhe aqui as atualizações da equipe. Concluído indica o encerramento do atendimento.</p></>:<><RequestCollection key={data.id} office={office} data={data} busy={busy} onUpdated={onUpdated??(()=>{})} onFailure={onFailure} onAccessLost={onAccessLost}/><RequestTransferException key={data.id} office={office} data={data} busy={busy} onUpdated={onUpdated??(()=>{})} onFailure={onFailure} onAccessLost={onAccessLost}/><StaffDetail office={office} data={data} permissions={permissions} busy={busy} onHistory={onHistory} onMutate={onMutate} onFailure={onFailure}/></>}
  </article>;
 }
 function StaffDetail({office,data,permissions,busy,onHistory,onMutate,onFailure}:{office:string;data:StaffRequestDetail;permissions:string[];busy:boolean;onHistory:(page:number)=>void;onMutate:(mutation:RequestMutation)=>void;onFailure:(failure:RequestsError)=>void}){
