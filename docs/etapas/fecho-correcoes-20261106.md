@@ -1,4 +1,4 @@
-# Correções integradas posteriores à Etapa 25 — 06/11/2026
+# Correções integradas posteriores à Etapa 25 — publicadas em06/11/2026
 
 Implementação autorizada pelo pedido de correções e pela instrução de concluir e publicar. Preserva a Etapa 25 e não inicia a Etapa 26. Base conferida: `9fa6910`; checkpoint preservado: `288baf2`.
 
@@ -31,9 +31,10 @@ Entrada pública reduzida de 1.351.244 para 650.907 bytes (−51,83%). Em 12 par
 ## Publicação e operação
 
 - [PR87 — schema](https://github.com/escritoriojnsistema/escritoriojn/pull/87), merge `6c6f30af08171d74a61eccbaee405cdb8ed688e8`; VercelSUCCESS. Oito migrations aplicadas automaticamente: histórico54→62, 229 comandos correspondentes aos arquivos testados; não reaplicar.
-- Workers `account-closure` e `retention` ACTIVE/v2, JWT obrigatório. Cron/Vault configurados: fechamento a cada5min e retenção a cadahora. Chamadas reais pelo pg_net retornaram200, processed0/pending0. Sem chaves privilegiadas em Express/Vercel/browser ou Git.
+- Workers `account-closure` e `retention` ACTIVE/v3, JWT obrigatório. Cron/Vault configurados: fechamento a cada5min e retenção a cadahora. Chamadas reais pelo pg_net retornaram200, processed0/pending0. Sem chaves privilegiadas em Express/Vercel/browser ou Git.
 - Antes do frontend: 7Auth, 7vínculos, 17grants individuais, 114eventos e0documentos/arquivos/contas encerradas preservados. Nenhuma classificação jurídica, nível, aprovação ou preço fictício criado no ambiente hospedado.
-- Runtime e índices finais: publicação em andamento; registrar PR, deploy, readback e alias antes do fecho definitivo.
+- [PR88 — runtime e índices](https://github.com/escritoriojnsistema/escritoriojn/pull/88), merge `18dae986067bae8359cfcbcb119e463c8ba4173e`, Vercel `5io3E4DtEmKjLg41pehP752QdScz` SUCCESS. Árvore `3deedf97accd723cfe0418d422ef4410e84ed861` idêntica à homologada;63migrations e257comandos conferidos. A nona migration cobriu26referências e tornou a projeção pública invoker pré-analisada. Nenhum WARN novo de exposição ou FK sem índice novo permanece; o aviso anterior de proteção de senhas comprometidas está documentado nas evidências.
+- Canonical https://escritoriojn.vercel.app:8assets SHA256 iguais ao build local, home/health200,5APIs privadas401, privacidade pública200 com exemplos explícitos.5testes públicos canônicos passaram;2casos de sessão foram pulados nessa rodada pública, já verificados no laboratório SDK. Workersv3 ACTIVE/JWTtrue com fontes iguais, dois jobs ativos e chamadas reais pg_net→Edge retornando200,processed0/pending0. Nenhuma fixture hospedada.
 
 ## Escolhas operacionais que permanecem configuráveis
 
