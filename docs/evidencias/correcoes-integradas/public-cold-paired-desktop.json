@@ -1,0 +1,3715 @@
+{
+  "date": "2026-11-05T19:13:04.206Z",
+  "method": "12 alternating pairs, AB/BA order, new browser+context each run, cache disabled+cleared, same Node server process on two ports, no compression/throttling, local static production builds, 1440x900",
+  "runs": [
+    {
+      "pair": 0,
+      "variant": "before",
+      "fcp": 516,
+      "fp": 284,
+      "navigation": {
+        "name": "http://127.0.0.1:4189/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 366,
+        "navigationId": 2390,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1.3999999985098839,
+        "domainLookupStart": 1.3999999985098839,
+        "domainLookupEnd": 1.3999999985098839,
+        "connectStart": 1.3999999985098839,
+        "secureConnectionStart": 0,
+        "connectEnd": 1.3999999985098839,
+        "requestStart": 3.199999999254942,
+        "responseStart": 54.19999999925494,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 54.19999999925494,
+        "responseEnd": 57.600000001490116,
+        "transferSize": 1714,
+        "encodedBodySize": 1414,
+        "decodedBodySize": 1414,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 158.30000000074506,
+        "domContentLoadedEventStart": 365.1000000014901,
+        "domContentLoadedEventEnd": 365.30000000074506,
+        "domComplete": 366,
+        "loadEventStart": 366,
+        "loadEventEnd": 366,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "/assets/index-CqdgIdOz.js",
+          "type": "script",
+          "start": 82.69999999925494,
+          "end": 175.30000000074506,
+          "duration": 92.60000000149012,
+          "bytes": 469669
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 83,
+          "end": 101,
+          "duration": 18,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/icons-DdzyS6T-.js",
+          "type": "other",
+          "start": 83.10000000149012,
+          "end": 156.60000000149012,
+          "duration": 73.5,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/react-DYkIpRt7.js",
+          "type": "other",
+          "start": 83.10000000149012,
+          "end": 175.5,
+          "duration": 92.39999999850988,
+          "bytes": 259535
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 83.19999999925494,
+          "end": 177.89999999850988,
+          "duration": 94.69999999925494,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/documents-BWKfj32I.js",
+          "type": "other",
+          "start": 83.19999999925494,
+          "end": 178,
+          "duration": 94.80000000074506,
+          "bytes": 207157
+        },
+        {
+          "name": "/assets/documents-C0bZtWRn.css",
+          "type": "link",
+          "start": 83.30000000074506,
+          "end": 100.80000000074506,
+          "duration": 17.5,
+          "bytes": 40294
+        },
+        {
+          "name": "/assets/index-CWSOxkh5.css",
+          "type": "link",
+          "start": 83.39999999850988,
+          "end": 141.39999999850988,
+          "duration": 58,
+          "bytes": 64814
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 399.30000000074506,
+          "end": 405,
+          "duration": 5.699999999254942,
+          "bytes": 527
+        },
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "css",
+          "start": 450.19999999925494,
+          "end": 455.6000000014901,
+          "duration": 5.400000002235174,
+          "bytes": 80644
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 267,
+          "duration": 99
+        }
+      ],
+      "headingAt": 415.5,
+      "lcp": [
+        {
+          "start": 516,
+          "renderTime": 516,
+          "loadTime": 0,
+          "size": 30303,
+          "url": ""
+        },
+        {
+          "start": 556,
+          "renderTime": 556,
+          "loadTime": 488.3999999985099,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4189/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 0,
+      "variant": "after",
+      "fcp": 348,
+      "fp": 112,
+      "navigation": {
+        "name": "http://127.0.0.1:4190/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 194.10000000149012,
+        "navigationId": 6612,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 2.400000002235174,
+        "domainLookupStart": 2.400000002235174,
+        "domainLookupEnd": 2.400000002235174,
+        "connectStart": 2.400000002235174,
+        "secureConnectionStart": 0,
+        "connectEnd": 2.400000002235174,
+        "requestStart": 5.199999999254942,
+        "responseStart": 8.400000002235174,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 8.400000002235174,
+        "responseEnd": 9.199999999254942,
+        "transferSize": 1626,
+        "encodedBodySize": 1326,
+        "decodedBodySize": 1326,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 58,
+        "domContentLoadedEventStart": 164.40000000223517,
+        "domContentLoadedEventEnd": 164.40000000223517,
+        "domComplete": 164.80000000074506,
+        "loadEventStart": 194.10000000149012,
+        "loadEventEnd": 194.10000000149012,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 8,
+      "bytes": 646444,
+      "resources": [
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "link",
+          "start": 24.400000002235174,
+          "end": 41.69999999925494,
+          "duration": 17.299999997019768,
+          "bytes": 80644
+        },
+        {
+          "name": "/assets/index-DKqTKJjt.js",
+          "type": "script",
+          "start": 27.699999999254942,
+          "end": 42.69999999925494,
+          "duration": 15,
+          "bytes": 55723
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 27.800000000745058,
+          "end": 44.100000001490116,
+          "duration": 16.300000000745058,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/react-C-G-5Uwp.js",
+          "type": "other",
+          "start": 27.800000000745058,
+          "end": 53.100000001490116,
+          "duration": 25.300000000745058,
+          "bytes": 259542
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 27.900000002235174,
+          "end": 53.30000000074506,
+          "duration": 25.399999998509884,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/icons-1f0VWjOT.js",
+          "type": "other",
+          "start": 28,
+          "end": 52.80000000074506,
+          "duration": 24.800000000745058,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/index-BLGA0es1.css",
+          "type": "link",
+          "start": 28.100000001490116,
+          "end": 41.30000000074506,
+          "duration": 13.199999999254942,
+          "bytes": 21404
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 235.60000000149012,
+          "end": 241.69999999925494,
+          "duration": 6.099999997764826,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 118.40000000223517,
+          "duration": 77
+        }
+      ],
+      "headingAt": 235.30000000074506,
+      "lcp": [
+        {
+          "start": 348,
+          "renderTime": 348,
+          "loadTime": 237,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4190/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 1,
+      "variant": "after",
+      "fcp": 344,
+      "fp": 88,
+      "navigation": {
+        "name": "http://127.0.0.1:4190/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 172,
+        "navigationId": 5902,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1.1000000014901161,
+        "domainLookupStart": 1.1000000014901161,
+        "domainLookupEnd": 1.1000000014901161,
+        "connectStart": 1.1000000014901161,
+        "secureConnectionStart": 0,
+        "connectEnd": 1.1000000014901161,
+        "requestStart": 6.800000000745058,
+        "responseStart": 8.600000001490116,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 8.600000001490116,
+        "responseEnd": 10,
+        "transferSize": 1626,
+        "encodedBodySize": 1326,
+        "decodedBodySize": 1326,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 28.400000002235174,
+        "domContentLoadedEventStart": 171.70000000298023,
+        "domContentLoadedEventEnd": 171.70000000298023,
+        "domComplete": 172,
+        "loadEventStart": 172,
+        "loadEventEnd": 172,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "high"
+        }
+      },
+      "requests": 8,
+      "bytes": 646444,
+      "resources": [
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "link",
+          "start": 21.800000000745058,
+          "end": 66.60000000149012,
+          "duration": 44.80000000074506,
+          "bytes": 80644
+        },
+        {
+          "name": "/assets/index-DKqTKJjt.js",
+          "type": "script",
+          "start": 22.100000001490116,
+          "end": 37.30000000074506,
+          "duration": 15.199999999254942,
+          "bytes": 55723
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 22.5,
+          "end": 35.600000001490116,
+          "duration": 13.100000001490116,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/react-C-G-5Uwp.js",
+          "type": "other",
+          "start": 22.600000001490116,
+          "end": 66.80000000074506,
+          "duration": 44.19999999925494,
+          "bytes": 259542
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 22.700000002980232,
+          "end": 66.90000000223517,
+          "duration": 44.19999999925494,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/index-BLGA0es1.css",
+          "type": "link",
+          "start": 23,
+          "end": 33.80000000074506,
+          "duration": 10.800000000745058,
+          "bytes": 21404
+        },
+        {
+          "name": "/assets/icons-1f0VWjOT.js",
+          "type": "other",
+          "start": 23,
+          "end": 73.20000000298023,
+          "duration": 50.20000000298023,
+          "bytes": 13013
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 202.80000000074506,
+          "end": 205.5,
+          "duration": 2.699999999254942,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 94.10000000149012,
+          "duration": 78
+        },
+        {
+          "start": 218.80000000074506,
+          "duration": 50
+        }
+      ],
+      "headingAt": 218.80000000074506,
+      "lcp": [
+        {
+          "start": 344,
+          "renderTime": 344,
+          "loadTime": 270.20000000298023,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4190/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 1,
+      "variant": "before",
+      "fcp": 368,
+      "fp": 132,
+      "navigation": {
+        "name": "http://127.0.0.1:4189/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 196.80000000074506,
+        "navigationId": 308,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1.5999999977648258,
+        "domainLookupStart": 1.5999999977648258,
+        "domainLookupEnd": 1.5999999977648258,
+        "connectStart": 1.5999999977648258,
+        "secureConnectionStart": 0,
+        "connectEnd": 1.5999999977648258,
+        "requestStart": 24.300000000745058,
+        "responseStart": 25.800000000745058,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 25.800000000745058,
+        "responseEnd": 28.699999999254942,
+        "transferSize": 1714,
+        "encodedBodySize": 1414,
+        "decodedBodySize": 1414,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 62.399999998509884,
+        "domContentLoadedEventStart": 196.39999999850988,
+        "domContentLoadedEventEnd": 196.5,
+        "domComplete": 196.80000000074506,
+        "loadEventStart": 196.80000000074506,
+        "loadEventEnd": 196.80000000074506,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "high"
+        }
+      },
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "/assets/index-CqdgIdOz.js",
+          "type": "script",
+          "start": 44.599999997764826,
+          "end": 55.899999998509884,
+          "duration": 11.300000000745058,
+          "bytes": 469669
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 47.399999998509884,
+          "end": 54.899999998509884,
+          "duration": 7.5,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/react-DYkIpRt7.js",
+          "type": "other",
+          "start": 47.5,
+          "end": 70.59999999776483,
+          "duration": 23.099999997764826,
+          "bytes": 259535
+        },
+        {
+          "name": "/assets/icons-DdzyS6T-.js",
+          "type": "other",
+          "start": 47.599999997764826,
+          "end": 66.19999999925494,
+          "duration": 18.600000001490116,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 47.69999999925494,
+          "end": 69.80000000074506,
+          "duration": 22.100000001490116,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/documents-BWKfj32I.js",
+          "type": "other",
+          "start": 47.69999999925494,
+          "end": 70,
+          "duration": 22.300000000745058,
+          "bytes": 207157
+        },
+        {
+          "name": "/assets/index-CWSOxkh5.css",
+          "type": "link",
+          "start": 47.80000000074506,
+          "end": 65.30000000074506,
+          "duration": 17.5,
+          "bytes": 64814
+        },
+        {
+          "name": "/assets/documents-C0bZtWRn.css",
+          "type": "link",
+          "start": 47.80000000074506,
+          "end": 64.80000000074506,
+          "duration": 17,
+          "bytes": 40294
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 246.80000000074506,
+          "end": 252.19999999925494,
+          "duration": 5.399999998509884,
+          "bytes": 527
+        },
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "css",
+          "start": 278.5,
+          "end": 283.30000000074506,
+          "duration": 4.800000000745058,
+          "bytes": 80644
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 143.89999999850988,
+          "duration": 53
+        }
+      ],
+      "headingAt": 265.80000000074506,
+      "lcp": [
+        {
+          "start": 368,
+          "renderTime": 368,
+          "loadTime": 0,
+          "size": 30303,
+          "url": ""
+        },
+        {
+          "start": 392,
+          "renderTime": 392,
+          "loadTime": 339.8999999985099,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4189/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 2,
+      "variant": "before",
+      "fcp": 412,
+      "fp": 104,
+      "navigation": {
+        "name": "http://127.0.0.1:4189/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 264,
+        "navigationId": 1831,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 3.300000000745058,
+        "domainLookupStart": 3.300000000745058,
+        "domainLookupEnd": 3.300000000745058,
+        "connectStart": 3.300000000745058,
+        "secureConnectionStart": 0,
+        "connectEnd": 3.300000000745058,
+        "requestStart": 6.800000000745058,
+        "responseStart": 7.699999999254942,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 7.699999999254942,
+        "responseEnd": 8.5,
+        "transferSize": 1714,
+        "encodedBodySize": 1414,
+        "decodedBodySize": 1414,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 37.399999998509884,
+        "domContentLoadedEventStart": 263.5,
+        "domContentLoadedEventEnd": 263.69999999925494,
+        "domComplete": 263.8999999985099,
+        "loadEventStart": 264,
+        "loadEventEnd": 264,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "/assets/index-CqdgIdOz.js",
+          "type": "script",
+          "start": 28.199999999254942,
+          "end": 73.5,
+          "duration": 45.30000000074506,
+          "bytes": 469669
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 28.800000000745058,
+          "end": 72.69999999925494,
+          "duration": 43.899999998509884,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/react-DYkIpRt7.js",
+          "type": "other",
+          "start": 28.899999998509884,
+          "end": 78,
+          "duration": 49.100000001490116,
+          "bytes": 259535
+        },
+        {
+          "name": "/assets/icons-DdzyS6T-.js",
+          "type": "other",
+          "start": 29,
+          "end": 73.09999999776483,
+          "duration": 44.099999997764826,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 29,
+          "end": 78.5,
+          "duration": 49.5,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/documents-BWKfj32I.js",
+          "type": "other",
+          "start": 29.099999997764826,
+          "end": 78.80000000074506,
+          "duration": 49.70000000298023,
+          "bytes": 207157
+        },
+        {
+          "name": "/assets/documents-C0bZtWRn.css",
+          "type": "link",
+          "start": 29.199999999254942,
+          "end": 72.30000000074506,
+          "duration": 43.100000001490116,
+          "bytes": 40294
+        },
+        {
+          "name": "/assets/index-CWSOxkh5.css",
+          "type": "link",
+          "start": 29.300000000745058,
+          "end": 72.39999999850988,
+          "duration": 43.099999997764826,
+          "bytes": 64814
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 305.30000000074506,
+          "end": 311,
+          "duration": 5.699999999254942,
+          "bytes": 527
+        },
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "css",
+          "start": 307.5,
+          "end": 313.19999999925494,
+          "duration": 5.699999999254942,
+          "bytes": 80644
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 163.19999999925494,
+          "duration": 101
+        }
+      ],
+      "headingAt": 304.8999999985099,
+      "lcp": [
+        {
+          "start": 412,
+          "renderTime": 412,
+          "loadTime": 0,
+          "size": 30303,
+          "url": ""
+        },
+        {
+          "start": 448,
+          "renderTime": 448,
+          "loadTime": 374.30000000074506,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4189/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 2,
+      "variant": "after",
+      "fcp": 384,
+      "fp": 124,
+      "navigation": {
+        "name": "http://127.0.0.1:4190/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 210.69999999925494,
+        "navigationId": 5685,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 2.5,
+        "domainLookupStart": 2.5,
+        "domainLookupEnd": 2.5,
+        "connectStart": 2.5,
+        "secureConnectionStart": 0,
+        "connectEnd": 2.5,
+        "requestStart": 5.199999999254942,
+        "responseStart": 9.599999997764826,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 9.599999997764826,
+        "responseEnd": 10.199999999254942,
+        "transferSize": 1626,
+        "encodedBodySize": 1326,
+        "decodedBodySize": 1326,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 99.29999999701977,
+        "domContentLoadedEventStart": 210.39999999850988,
+        "domContentLoadedEventEnd": 210.5,
+        "domComplete": 210.69999999925494,
+        "loadEventStart": 210.69999999925494,
+        "loadEventEnd": 210.69999999925494,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 8,
+      "bytes": 646444,
+      "resources": [
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "link",
+          "start": 34.899999998509884,
+          "end": 81.59999999776483,
+          "duration": 46.69999999925494,
+          "bytes": 80644
+        },
+        {
+          "name": "/assets/index-DKqTKJjt.js",
+          "type": "script",
+          "start": 37.29999999701977,
+          "end": 81.29999999701977,
+          "duration": 44,
+          "bytes": 55723
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 37.399999998509884,
+          "end": 81,
+          "duration": 43.600000001490116,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/react-C-G-5Uwp.js",
+          "type": "other",
+          "start": 37.5,
+          "end": 84.89999999850988,
+          "duration": 47.399999998509884,
+          "bytes": 259542
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 37.599999997764826,
+          "end": 85,
+          "duration": 47.400000002235174,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/index-BLGA0es1.css",
+          "type": "link",
+          "start": 37.69999999925494,
+          "end": 80.79999999701977,
+          "duration": 43.099999997764826,
+          "bytes": 21404
+        },
+        {
+          "name": "/assets/icons-1f0VWjOT.js",
+          "type": "other",
+          "start": 37.69999999925494,
+          "end": 85.19999999925494,
+          "duration": 47.5,
+          "bytes": 13013
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 241.09999999776483,
+          "end": 245.59999999776483,
+          "duration": 4.5,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 141.19999999925494,
+          "duration": 71
+        }
+      ],
+      "headingAt": 280,
+      "lcp": [
+        {
+          "start": 384,
+          "renderTime": 384,
+          "loadTime": 294.0999999977648,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4190/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 3,
+      "variant": "after",
+      "fcp": 356,
+      "fp": 96,
+      "navigation": {
+        "name": "http://127.0.0.1:4190/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 131.80000000074506,
+        "navigationId": 6766,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 2.800000000745058,
+        "domainLookupStart": 2.800000000745058,
+        "domainLookupEnd": 2.800000000745058,
+        "connectStart": 2.800000000745058,
+        "secureConnectionStart": 0,
+        "connectEnd": 2.800000000745058,
+        "requestStart": 4,
+        "responseStart": 4.800000000745058,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 4.800000000745058,
+        "responseEnd": 6.600000001490116,
+        "transferSize": 1626,
+        "encodedBodySize": 1326,
+        "decodedBodySize": 1326,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 45.69999999925494,
+        "domContentLoadedEventStart": 130.80000000074506,
+        "domContentLoadedEventEnd": 131.30000000074506,
+        "domComplete": 131.80000000074506,
+        "loadEventStart": 131.80000000074506,
+        "loadEventEnd": 131.80000000074506,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "high"
+        }
+      },
+      "requests": 8,
+      "bytes": 646444,
+      "resources": [
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "link",
+          "start": 21.199999999254942,
+          "end": 28.900000002235174,
+          "duration": 7.700000002980232,
+          "bytes": 80644
+        },
+        {
+          "name": "/assets/index-DKqTKJjt.js",
+          "type": "script",
+          "start": 22.600000001490116,
+          "end": 33.5,
+          "duration": 10.899999998509884,
+          "bytes": 55723
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 23.600000001490116,
+          "end": 33.600000001490116,
+          "duration": 10,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/react-C-G-5Uwp.js",
+          "type": "other",
+          "start": 24.900000002235174,
+          "end": 41.19999999925494,
+          "duration": 16.299999997019768,
+          "bytes": 259542
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 26.5,
+          "end": 41.400000002235174,
+          "duration": 14.900000002235174,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/index-BLGA0es1.css",
+          "type": "link",
+          "start": 26.800000000745058,
+          "end": 39.69999999925494,
+          "duration": 12.899999998509884,
+          "bytes": 21404
+        },
+        {
+          "name": "/assets/icons-1f0VWjOT.js",
+          "type": "other",
+          "start": 26.800000000745058,
+          "end": 41.30000000074506,
+          "duration": 14.5,
+          "bytes": 13013
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 199.19999999925494,
+          "end": 206,
+          "duration": 6.800000000745058,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [],
+      "headingAt": 220.5,
+      "lcp": [
+        {
+          "start": 356,
+          "renderTime": 356,
+          "loadTime": 234.69999999925494,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4190/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 3,
+      "variant": "before",
+      "fcp": 392,
+      "fp": 108,
+      "navigation": {
+        "name": "http://127.0.0.1:4189/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 198.79999999701977,
+        "navigationId": 6652,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.8999999985098839,
+        "domainLookupStart": 0.8999999985098839,
+        "domainLookupEnd": 0.8999999985098839,
+        "connectStart": 0.8999999985098839,
+        "secureConnectionStart": 0,
+        "connectEnd": 0.8999999985098839,
+        "requestStart": 4.099999997764826,
+        "responseStart": 9,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 9,
+        "responseEnd": 10,
+        "transferSize": 1714,
+        "encodedBodySize": 1414,
+        "decodedBodySize": 1414,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 67.19999999925494,
+        "domContentLoadedEventStart": 193.89999999850988,
+        "domContentLoadedEventEnd": 194.39999999850988,
+        "domComplete": 198.79999999701977,
+        "loadEventStart": 198.79999999701977,
+        "loadEventEnd": 198.79999999701977,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "high"
+        }
+      },
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "/assets/index-CqdgIdOz.js",
+          "type": "script",
+          "start": 55.19999999925494,
+          "end": 87.69999999925494,
+          "duration": 32.5,
+          "bytes": 469669
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 57.5,
+          "end": 73,
+          "duration": 15.5,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/react-DYkIpRt7.js",
+          "type": "other",
+          "start": 57.599999997764826,
+          "end": 87.39999999850988,
+          "duration": 29.800000000745058,
+          "bytes": 259535
+        },
+        {
+          "name": "/assets/icons-DdzyS6T-.js",
+          "type": "other",
+          "start": 57.69999999925494,
+          "end": 79.59999999776483,
+          "duration": 21.899999998509884,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 57.79999999701977,
+          "end": 87.79999999701977,
+          "duration": 30,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/documents-BWKfj32I.js",
+          "type": "other",
+          "start": 57.79999999701977,
+          "end": 92.19999999925494,
+          "duration": 34.400000002235174,
+          "bytes": 207157
+        },
+        {
+          "name": "/assets/documents-C0bZtWRn.css",
+          "type": "link",
+          "start": 60.599999997764826,
+          "end": 86.39999999850988,
+          "duration": 25.800000000745058,
+          "bytes": 40294
+        },
+        {
+          "name": "/assets/index-CWSOxkh5.css",
+          "type": "link",
+          "start": 60.79999999701977,
+          "end": 86.5,
+          "duration": 25.700000002980232,
+          "bytes": 64814
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 258.0999999977648,
+          "end": 267,
+          "duration": 8.900000002235174,
+          "bytes": 527
+        },
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "css",
+          "start": 272.3999999985099,
+          "end": 281.8999999985099,
+          "duration": 9.5,
+          "bytes": 80644
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 115.19999999925494,
+          "duration": 85
+        },
+        {
+          "start": 203.09999999776483,
+          "duration": 52
+        }
+      ],
+      "headingAt": 269.79999999701977,
+      "lcp": [
+        {
+          "start": 392,
+          "renderTime": 392,
+          "loadTime": 0,
+          "size": 30303,
+          "url": ""
+        },
+        {
+          "start": 424,
+          "renderTime": 424,
+          "loadTime": 356.79999999701977,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4189/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 4,
+      "variant": "before",
+      "fcp": 392,
+      "fp": 92,
+      "navigation": {
+        "name": "http://127.0.0.1:4189/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 200.10000000149012,
+        "navigationId": 1432,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.6000000014901161,
+        "domainLookupStart": 0.6000000014901161,
+        "domainLookupEnd": 0.6000000014901161,
+        "connectStart": 0.6000000014901161,
+        "secureConnectionStart": 0,
+        "connectEnd": 0.6000000014901161,
+        "requestStart": 27,
+        "responseStart": 34.899999998509884,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 34.899999998509884,
+        "responseEnd": 35.30000000074506,
+        "transferSize": 1714,
+        "encodedBodySize": 1414,
+        "decodedBodySize": 1414,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 66.10000000149012,
+        "domContentLoadedEventStart": 199.80000000074506,
+        "domContentLoadedEventEnd": 199.89999999850988,
+        "domComplete": 200.10000000149012,
+        "loadEventStart": 200.10000000149012,
+        "loadEventEnd": 200.10000000149012,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "high"
+        }
+      },
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "/assets/index-CqdgIdOz.js",
+          "type": "script",
+          "start": 48,
+          "end": 64.39999999850988,
+          "duration": 16.399999998509884,
+          "bytes": 469669
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 48.399999998509884,
+          "end": 70.39999999850988,
+          "duration": 22,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/icons-DdzyS6T-.js",
+          "type": "other",
+          "start": 48.399999998509884,
+          "end": 71.5,
+          "duration": 23.100000001490116,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 48.399999998509884,
+          "end": 74.69999999925494,
+          "duration": 26.300000000745058,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/react-DYkIpRt7.js",
+          "type": "other",
+          "start": 48.399999998509884,
+          "end": 74.5,
+          "duration": 26.100000001490116,
+          "bytes": 259535
+        },
+        {
+          "name": "/assets/documents-BWKfj32I.js",
+          "type": "other",
+          "start": 48.399999998509884,
+          "end": 75.39999999850988,
+          "duration": 27,
+          "bytes": 207157
+        },
+        {
+          "name": "/assets/documents-C0bZtWRn.css",
+          "type": "link",
+          "start": 48.600000001490116,
+          "end": 62.5,
+          "duration": 13.899999998509884,
+          "bytes": 40294
+        },
+        {
+          "name": "/assets/index-CWSOxkh5.css",
+          "type": "link",
+          "start": 48.600000001490116,
+          "end": 64.5,
+          "duration": 15.899999998509884,
+          "bytes": 64814
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 248.80000000074506,
+          "end": 253.19999999925494,
+          "duration": 4.399999998509884,
+          "bytes": 527
+        },
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "css",
+          "start": 292.6000000014901,
+          "end": 330.1000000014901,
+          "duration": 37.5,
+          "bytes": 80644
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 145.89999999850988,
+          "duration": 54
+        }
+      ],
+      "headingAt": 279.30000000074506,
+      "lcp": [
+        {
+          "start": 392,
+          "renderTime": 392,
+          "loadTime": 0,
+          "size": 30303,
+          "url": ""
+        },
+        {
+          "start": 432,
+          "renderTime": 432,
+          "loadTime": 356.80000000074506,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4189/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 4,
+      "variant": "after",
+      "fcp": 388,
+      "fp": 92,
+      "navigation": {
+        "name": "http://127.0.0.1:4190/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 161.69999999925494,
+        "navigationId": 1762,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.8999999985098839,
+        "domainLookupStart": 0.8999999985098839,
+        "domainLookupEnd": 0.8999999985098839,
+        "connectStart": 0.8999999985098839,
+        "secureConnectionStart": 0,
+        "connectEnd": 0.8999999985098839,
+        "requestStart": 3.300000000745058,
+        "responseStart": 6.5,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 6.5,
+        "responseEnd": 10.099999997764826,
+        "transferSize": 1626,
+        "encodedBodySize": 1326,
+        "decodedBodySize": 1326,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 71.89999999850988,
+        "domContentLoadedEventStart": 159.89999999850988,
+        "domContentLoadedEventEnd": 160.09999999776483,
+        "domComplete": 161.69999999925494,
+        "loadEventStart": 161.69999999925494,
+        "loadEventEnd": 161.69999999925494,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 8,
+      "bytes": 646444,
+      "resources": [
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "link",
+          "start": 23.5,
+          "end": 52.399999998509884,
+          "duration": 28.899999998509884,
+          "bytes": 80644
+        },
+        {
+          "name": "/assets/index-DKqTKJjt.js",
+          "type": "script",
+          "start": 23.899999998509884,
+          "end": 62.19999999925494,
+          "duration": 38.30000000074506,
+          "bytes": 55723
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 23.899999998509884,
+          "end": 61.099999997764826,
+          "duration": 37.19999999925494,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/icons-1f0VWjOT.js",
+          "type": "other",
+          "start": 24,
+          "end": 66.30000000074506,
+          "duration": 42.30000000074506,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 24,
+          "end": 64.89999999850988,
+          "duration": 40.899999998509884,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/react-C-G-5Uwp.js",
+          "type": "other",
+          "start": 24,
+          "end": 64.69999999925494,
+          "duration": 40.69999999925494,
+          "bytes": 259542
+        },
+        {
+          "name": "/assets/index-BLGA0es1.css",
+          "type": "link",
+          "start": 24.099999997764826,
+          "end": 59.899999998509884,
+          "duration": 35.80000000074506,
+          "bytes": 21404
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 210.69999999925494,
+          "end": 251,
+          "duration": 40.30000000074506,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 103,
+          "duration": 59
+        }
+      ],
+      "headingAt": 210.30000000074506,
+      "lcp": [
+        {
+          "start": 388,
+          "renderTime": 388,
+          "loadTime": 214.69999999925494,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4190/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 5,
+      "variant": "after",
+      "fcp": 368,
+      "fp": 100,
+      "navigation": {
+        "name": "http://127.0.0.1:4190/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 187.30000000074506,
+        "navigationId": 5602,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1.800000000745058,
+        "domainLookupStart": 1.800000000745058,
+        "domainLookupEnd": 1.800000000745058,
+        "connectStart": 1.800000000745058,
+        "secureConnectionStart": 0,
+        "connectEnd": 1.800000000745058,
+        "requestStart": 3,
+        "responseStart": 5.199999999254942,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 5.199999999254942,
+        "responseEnd": 7.199999999254942,
+        "transferSize": 1626,
+        "encodedBodySize": 1326,
+        "decodedBodySize": 1326,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 40.69999999925494,
+        "domContentLoadedEventStart": 160.19999999925494,
+        "domContentLoadedEventEnd": 187,
+        "domComplete": 187.19999999925494,
+        "loadEventStart": 187.30000000074506,
+        "loadEventEnd": 187.30000000074506,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 8,
+      "bytes": 646444,
+      "resources": [
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "link",
+          "start": 26,
+          "end": 35.80000000074506,
+          "duration": 9.800000000745058,
+          "bytes": 80644
+        },
+        {
+          "name": "/assets/index-DKqTKJjt.js",
+          "type": "script",
+          "start": 26.300000000745058,
+          "end": 38.099999997764826,
+          "duration": 11.799999997019768,
+          "bytes": 55723
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 26.399999998509884,
+          "end": 38.80000000074506,
+          "duration": 12.400000002235174,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 26.599999997764826,
+          "end": 41.5,
+          "duration": 14.900000002235174,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/react-C-G-5Uwp.js",
+          "type": "other",
+          "start": 26.599999997764826,
+          "end": 41.30000000074506,
+          "duration": 14.700000002980232,
+          "bytes": 259542
+        },
+        {
+          "name": "/assets/icons-1f0VWjOT.js",
+          "type": "other",
+          "start": 26.699999999254942,
+          "end": 39.80000000074506,
+          "duration": 13.100000001490116,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/index-BLGA0es1.css",
+          "type": "link",
+          "start": 26.800000000745058,
+          "end": 37.30000000074506,
+          "duration": 10.5,
+          "bytes": 21404
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 212.80000000074506,
+          "end": 220.80000000074506,
+          "duration": 8,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 112.09999999776483,
+          "duration": 77
+        }
+      ],
+      "headingAt": 229.5,
+      "lcp": [
+        {
+          "start": 368,
+          "renderTime": 368,
+          "loadTime": 252.89999999850988,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4190/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 5,
+      "variant": "before",
+      "fcp": 340,
+      "fp": 112,
+      "navigation": {
+        "name": "http://127.0.0.1:4189/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 189.60000000149012,
+        "navigationId": 991,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.8000000007450581,
+        "domainLookupStart": 0.8000000007450581,
+        "domainLookupEnd": 0.8000000007450581,
+        "connectStart": 0.8000000007450581,
+        "secureConnectionStart": 0,
+        "connectEnd": 0.8000000007450581,
+        "requestStart": 1.8999999985098839,
+        "responseStart": 4.100000001490116,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 4.100000001490116,
+        "responseEnd": 5.100000001490116,
+        "transferSize": 1714,
+        "encodedBodySize": 1414,
+        "decodedBodySize": 1414,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 31.699999999254942,
+        "domContentLoadedEventStart": 189.19999999925494,
+        "domContentLoadedEventEnd": 189.30000000074506,
+        "domComplete": 189.60000000149012,
+        "loadEventStart": 189.60000000149012,
+        "loadEventEnd": 189.60000000149012,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "/assets/index-CqdgIdOz.js",
+          "type": "script",
+          "start": 20.899999998509884,
+          "end": 74.10000000149012,
+          "duration": 53.20000000298023,
+          "bytes": 469669
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 21.300000000745058,
+          "end": 39.100000001490116,
+          "duration": 17.800000000745058,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/react-DYkIpRt7.js",
+          "type": "other",
+          "start": 21.399999998509884,
+          "end": 78.39999999850988,
+          "duration": 57,
+          "bytes": 259535
+        },
+        {
+          "name": "/assets/icons-DdzyS6T-.js",
+          "type": "other",
+          "start": 21.5,
+          "end": 41,
+          "duration": 19.5,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 21.5,
+          "end": 78.69999999925494,
+          "duration": 57.19999999925494,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/documents-BWKfj32I.js",
+          "type": "other",
+          "start": 21.600000001490116,
+          "end": 79,
+          "duration": 57.399999998509884,
+          "bytes": 207157
+        },
+        {
+          "name": "/assets/documents-C0bZtWRn.css",
+          "type": "link",
+          "start": 21.699999999254942,
+          "end": 35.30000000074506,
+          "duration": 13.600000001490116,
+          "bytes": 40294
+        },
+        {
+          "name": "/assets/index-CWSOxkh5.css",
+          "type": "link",
+          "start": 22.100000001490116,
+          "end": 38,
+          "duration": 15.899999998509884,
+          "bytes": 64814
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 213.89999999850988,
+          "end": 218,
+          "duration": 4.100000001490116,
+          "bytes": 527
+        },
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "css",
+          "start": 245.39999999850988,
+          "end": 278.80000000074506,
+          "duration": 33.400000002235174,
+          "bytes": 80644
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 123.5,
+          "duration": 66
+        }
+      ],
+      "headingAt": 222.5,
+      "lcp": [
+        {
+          "start": 340,
+          "renderTime": 340,
+          "loadTime": 0,
+          "size": 30303,
+          "url": ""
+        },
+        {
+          "start": 396,
+          "renderTime": 396,
+          "loadTime": 314,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4189/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 6,
+      "variant": "before",
+      "fcp": 356,
+      "fp": 144,
+      "navigation": {
+        "name": "http://127.0.0.1:4189/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 202.29999999701977,
+        "navigationId": 552,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1,
+        "domainLookupStart": 1,
+        "domainLookupEnd": 1,
+        "connectStart": 1,
+        "secureConnectionStart": 0,
+        "connectEnd": 1,
+        "requestStart": 9.099999997764826,
+        "responseStart": 40.399999998509884,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 40.399999998509884,
+        "responseEnd": 41.79999999701977,
+        "transferSize": 1714,
+        "encodedBodySize": 1414,
+        "decodedBodySize": 1414,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 73.5,
+        "domContentLoadedEventStart": 200.79999999701977,
+        "domContentLoadedEventEnd": 200.89999999850988,
+        "domComplete": 202.29999999701977,
+        "loadEventStart": 202.29999999701977,
+        "loadEventEnd": 202.29999999701977,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "/assets/index-CqdgIdOz.js",
+          "type": "script",
+          "start": 60.69999999925494,
+          "end": 76.09999999776483,
+          "duration": 15.399999998509884,
+          "bytes": 469669
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 63.5,
+          "end": 74.39999999850988,
+          "duration": 10.899999998509884,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/icons-DdzyS6T-.js",
+          "type": "other",
+          "start": 63.599999997764826,
+          "end": 75.79999999701977,
+          "duration": 12.199999999254942,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/react-DYkIpRt7.js",
+          "type": "other",
+          "start": 63.599999997764826,
+          "end": 76.29999999701977,
+          "duration": 12.699999999254942,
+          "bytes": 259535
+        },
+        {
+          "name": "/assets/documents-C0bZtWRn.css",
+          "type": "link",
+          "start": 63.899999998509884,
+          "end": 75.09999999776483,
+          "duration": 11.199999999254942,
+          "bytes": 40294
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 63.899999998509884,
+          "end": 76.79999999701977,
+          "duration": 12.899999998509884,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/documents-BWKfj32I.js",
+          "type": "other",
+          "start": 63.899999998509884,
+          "end": 77,
+          "duration": 13.100000001490116,
+          "bytes": 207157
+        },
+        {
+          "name": "/assets/index-CWSOxkh5.css",
+          "type": "link",
+          "start": 64,
+          "end": 75.39999999850988,
+          "duration": 11.399999998509884,
+          "bytes": 64814
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 239.79999999701977,
+          "end": 244.79999999701977,
+          "duration": 5,
+          "bytes": 527
+        },
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "css",
+          "start": 280.8999999985099,
+          "end": 285.69999999925494,
+          "duration": 4.800000000745058,
+          "bytes": 80644
+        }
+      ],
+      "longtasks": [],
+      "headingAt": 269,
+      "lcp": [
+        {
+          "start": 356,
+          "renderTime": 356,
+          "loadTime": 0,
+          "size": 30303,
+          "url": ""
+        },
+        {
+          "start": 384,
+          "renderTime": 384,
+          "loadTime": 309.69999999925494,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4189/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 6,
+      "variant": "after",
+      "fcp": 360,
+      "fp": 108,
+      "navigation": {
+        "name": "http://127.0.0.1:4190/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 145.60000000149012,
+        "navigationId": 1308,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1.199999999254942,
+        "domainLookupStart": 1.199999999254942,
+        "domainLookupEnd": 1.199999999254942,
+        "connectStart": 1.199999999254942,
+        "secureConnectionStart": 0,
+        "connectEnd": 1.199999999254942,
+        "requestStart": 3.399999998509884,
+        "responseStart": 4.300000000745058,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 4.300000000745058,
+        "responseEnd": 4.800000000745058,
+        "transferSize": 1626,
+        "encodedBodySize": 1326,
+        "decodedBodySize": 1326,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 53.19999999925494,
+        "domContentLoadedEventStart": 145.19999999925494,
+        "domContentLoadedEventEnd": 145.30000000074506,
+        "domComplete": 145.5,
+        "loadEventStart": 145.60000000149012,
+        "loadEventEnd": 145.60000000149012,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 8,
+      "bytes": 646444,
+      "resources": [
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "link",
+          "start": 19.5,
+          "end": 41.399999998509884,
+          "duration": 21.899999998509884,
+          "bytes": 80644
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 22,
+          "end": 35.899999998509884,
+          "duration": 13.899999998509884,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/index-DKqTKJjt.js",
+          "type": "script",
+          "start": 22,
+          "end": 41,
+          "duration": 19,
+          "bytes": 55723
+        },
+        {
+          "name": "/assets/react-C-G-5Uwp.js",
+          "type": "other",
+          "start": 22.100000001490116,
+          "end": 42,
+          "duration": 19.899999998509884,
+          "bytes": 259542
+        },
+        {
+          "name": "/assets/index-BLGA0es1.css",
+          "type": "link",
+          "start": 22.199999999254942,
+          "end": 35.600000001490116,
+          "duration": 13.400000002235174,
+          "bytes": 21404
+        },
+        {
+          "name": "/assets/icons-1f0VWjOT.js",
+          "type": "other",
+          "start": 22.199999999254942,
+          "end": 45.19999999925494,
+          "duration": 23,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 22.199999999254942,
+          "end": 42.19999999925494,
+          "duration": 20,
+          "bytes": 214692
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 210.89999999850988,
+          "end": 217.19999999925494,
+          "duration": 6.300000000745058,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 94.39999999850988,
+          "duration": 51
+        },
+        {
+          "start": 151.39999999850988,
+          "duration": 52
+        }
+      ],
+      "headingAt": 224.5,
+      "lcp": [
+        {
+          "start": 360,
+          "renderTime": 360,
+          "loadTime": 244.60000000149012,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4190/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 7,
+      "variant": "after",
+      "fcp": 296,
+      "fp": 92,
+      "navigation": {
+        "name": "http://127.0.0.1:4190/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 143.89999999850988,
+        "navigationId": 5427,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1.0999999977648258,
+        "domainLookupStart": 1.0999999977648258,
+        "domainLookupEnd": 1.0999999977648258,
+        "connectStart": 1.0999999977648258,
+        "secureConnectionStart": 0,
+        "connectEnd": 1.0999999977648258,
+        "requestStart": 2.2999999970197678,
+        "responseStart": 5.599999997764826,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 5.599999997764826,
+        "responseEnd": 6.399999998509884,
+        "transferSize": 1626,
+        "encodedBodySize": 1326,
+        "decodedBodySize": 1326,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 71.5,
+        "domContentLoadedEventStart": 143.5,
+        "domContentLoadedEventEnd": 143.69999999925494,
+        "domComplete": 143.89999999850988,
+        "loadEventStart": 143.89999999850988,
+        "loadEventEnd": 143.89999999850988,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "high"
+        }
+      },
+      "requests": 8,
+      "bytes": 646444,
+      "resources": [
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "link",
+          "start": 42.899999998509884,
+          "end": 51.599999997764826,
+          "duration": 8.699999999254942,
+          "bytes": 80644
+        },
+        {
+          "name": "/assets/index-DKqTKJjt.js",
+          "type": "script",
+          "start": 43.19999999925494,
+          "end": 58.599999997764826,
+          "duration": 15.399999998509884,
+          "bytes": 55723
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 43.29999999701977,
+          "end": 59.29999999701977,
+          "duration": 16,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/react-C-G-5Uwp.js",
+          "type": "other",
+          "start": 43.29999999701977,
+          "end": 65.79999999701977,
+          "duration": 22.5,
+          "bytes": 259542
+        },
+        {
+          "name": "/assets/icons-1f0VWjOT.js",
+          "type": "other",
+          "start": 43.399999998509884,
+          "end": 59.599999997764826,
+          "duration": 16.199999999254942,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 43.399999998509884,
+          "end": 65.89999999850988,
+          "duration": 22.5,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/index-BLGA0es1.css",
+          "type": "link",
+          "start": 43.5,
+          "end": 51.29999999701977,
+          "duration": 7.799999997019768,
+          "bytes": 21404
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 238.89999999850988,
+          "end": 244.69999999925494,
+          "duration": 5.800000000745058,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 90.29999999701977,
+          "duration": 54
+        }
+      ],
+      "headingAt": 174.89999999850988,
+      "lcp": [
+        {
+          "start": 296,
+          "renderTime": 296,
+          "loadTime": 178.89999999850988,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4190/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 7,
+      "variant": "before",
+      "fcp": 352,
+      "fp": 100,
+      "navigation": {
+        "name": "http://127.0.0.1:4189/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 179.09999999776483,
+        "navigationId": 3208,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1.5,
+        "domainLookupStart": 1.5,
+        "domainLookupEnd": 1.5,
+        "connectStart": 1.5,
+        "secureConnectionStart": 0,
+        "connectEnd": 1.5,
+        "requestStart": 3.199999999254942,
+        "responseStart": 6.199999999254942,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 6.199999999254942,
+        "responseEnd": 8,
+        "transferSize": 1714,
+        "encodedBodySize": 1414,
+        "decodedBodySize": 1414,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 78.89999999850988,
+        "domContentLoadedEventStart": 178.69999999925494,
+        "domContentLoadedEventEnd": 178.89999999850988,
+        "domComplete": 179.09999999776483,
+        "loadEventStart": 179.09999999776483,
+        "loadEventEnd": 179.09999999776483,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "/assets/index-CqdgIdOz.js",
+          "type": "script",
+          "start": 21.899999998509884,
+          "end": 83.09999999776483,
+          "duration": 61.19999999925494,
+          "bytes": 469669
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 22.199999999254942,
+          "end": 69.19999999925494,
+          "duration": 47,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/react-DYkIpRt7.js",
+          "type": "other",
+          "start": 22.199999999254942,
+          "end": 82.5,
+          "duration": 60.30000000074506,
+          "bytes": 259535
+        },
+        {
+          "name": "/assets/icons-DdzyS6T-.js",
+          "type": "other",
+          "start": 22.300000000745058,
+          "end": 76.59999999776483,
+          "duration": 54.29999999701977,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 22.399999998509884,
+          "end": 83.19999999925494,
+          "duration": 60.80000000074506,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/documents-C0bZtWRn.css",
+          "type": "link",
+          "start": 22.5,
+          "end": 64.59999999776483,
+          "duration": 42.099999997764826,
+          "bytes": 40294
+        },
+        {
+          "name": "/assets/documents-BWKfj32I.js",
+          "type": "other",
+          "start": 22.5,
+          "end": 83.30000000074506,
+          "duration": 60.80000000074506,
+          "bytes": 207157
+        },
+        {
+          "name": "/assets/index-CWSOxkh5.css",
+          "type": "link",
+          "start": 47.80000000074506,
+          "end": 66.30000000074506,
+          "duration": 18.5,
+          "bytes": 64814
+        },
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "css",
+          "start": 208.19999999925494,
+          "end": 212.30000000074506,
+          "duration": 4.100000001490116,
+          "bytes": 80644
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 296.5999999977648,
+          "end": 303.8999999985099,
+          "duration": 7.300000000745058,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 109.59999999776483,
+          "duration": 69
+        }
+      ],
+      "headingAt": 206.69999999925494,
+      "lcp": [
+        {
+          "start": 352,
+          "renderTime": 352,
+          "loadTime": 0,
+          "size": 30303,
+          "url": ""
+        },
+        {
+          "start": 384,
+          "renderTime": 384,
+          "loadTime": 296,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4189/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 8,
+      "variant": "before",
+      "fcp": 376,
+      "fp": 116,
+      "navigation": {
+        "name": "http://127.0.0.1:4189/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 227.30000000074506,
+        "navigationId": 5803,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 2.7000000029802322,
+        "domainLookupStart": 2.7000000029802322,
+        "domainLookupEnd": 2.7000000029802322,
+        "connectStart": 2.7000000029802322,
+        "secureConnectionStart": 0,
+        "connectEnd": 2.7000000029802322,
+        "requestStart": 5.5,
+        "responseStart": 8.5,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 8.5,
+        "responseEnd": 8.900000002235174,
+        "transferSize": 1714,
+        "encodedBodySize": 1414,
+        "decodedBodySize": 1414,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 107.40000000223517,
+        "domContentLoadedEventStart": 226.90000000223517,
+        "domContentLoadedEventEnd": 227,
+        "domComplete": 227.30000000074506,
+        "loadEventStart": 227.30000000074506,
+        "loadEventEnd": 227.30000000074506,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "high"
+        }
+      },
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "/assets/index-CqdgIdOz.js",
+          "type": "script",
+          "start": 29.100000001490116,
+          "end": 87.60000000149012,
+          "duration": 58.5,
+          "bytes": 469669
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 29.5,
+          "end": 77,
+          "duration": 47.5,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/icons-DdzyS6T-.js",
+          "type": "other",
+          "start": 29.5,
+          "end": 83.60000000149012,
+          "duration": 54.100000001490116,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/react-DYkIpRt7.js",
+          "type": "other",
+          "start": 29.5,
+          "end": 87.90000000223517,
+          "duration": 58.400000002235174,
+          "bytes": 259535
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 29.600000001490116,
+          "end": 88,
+          "duration": 58.399999998509884,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/documents-BWKfj32I.js",
+          "type": "other",
+          "start": 29.700000002980232,
+          "end": 90.5,
+          "duration": 60.79999999701977,
+          "bytes": 207157
+        },
+        {
+          "name": "/assets/documents-C0bZtWRn.css",
+          "type": "link",
+          "start": 29.800000000745058,
+          "end": 79.40000000223517,
+          "duration": 49.600000001490116,
+          "bytes": 40294
+        },
+        {
+          "name": "/assets/index-CWSOxkh5.css",
+          "type": "link",
+          "start": 29.900000002235174,
+          "end": 76.70000000298023,
+          "duration": 46.80000000074506,
+          "bytes": 64814
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 279.30000000074506,
+          "end": 283.6000000014901,
+          "duration": 4.300000000745058,
+          "bytes": 527
+        },
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "css",
+          "start": 302.70000000298023,
+          "end": 309.30000000074506,
+          "duration": 6.599999997764826,
+          "bytes": 80644
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 133.60000000149012,
+          "duration": 94
+        }
+      ],
+      "headingAt": 291,
+      "lcp": [
+        {
+          "start": 376,
+          "renderTime": 376,
+          "loadTime": 0,
+          "size": 30303,
+          "url": ""
+        },
+        {
+          "start": 400,
+          "renderTime": 400,
+          "loadTime": 330.6000000014901,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4189/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 8,
+      "variant": "after",
+      "fcp": 360,
+      "fp": 124,
+      "navigation": {
+        "name": "http://127.0.0.1:4190/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 193.30000000074506,
+        "navigationId": 8697,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1,
+        "domainLookupStart": 1,
+        "domainLookupEnd": 1,
+        "connectStart": 1,
+        "secureConnectionStart": 0,
+        "connectEnd": 1,
+        "requestStart": 5.100000001490116,
+        "responseStart": 7.300000000745058,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 7.300000000745058,
+        "responseEnd": 7.5,
+        "transferSize": 1626,
+        "encodedBodySize": 1326,
+        "decodedBodySize": 1326,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 89.19999999925494,
+        "domContentLoadedEventStart": 193,
+        "domContentLoadedEventEnd": 193,
+        "domComplete": 193.19999999925494,
+        "loadEventStart": 193.30000000074506,
+        "loadEventEnd": 193.30000000074506,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 8,
+      "bytes": 646444,
+      "resources": [
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "link",
+          "start": 28.400000002235174,
+          "end": 76.80000000074506,
+          "duration": 48.399999998509884,
+          "bytes": 80644
+        },
+        {
+          "name": "/assets/index-DKqTKJjt.js",
+          "type": "script",
+          "start": 28.600000001490116,
+          "end": 77.80000000074506,
+          "duration": 49.19999999925494,
+          "bytes": 55723
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 28.699999999254942,
+          "end": 77.5,
+          "duration": 48.80000000074506,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 28.699999999254942,
+          "end": 86,
+          "duration": 57.30000000074506,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/react-C-G-5Uwp.js",
+          "type": "other",
+          "start": 28.699999999254942,
+          "end": 85.90000000223517,
+          "duration": 57.20000000298023,
+          "bytes": 259542
+        },
+        {
+          "name": "/assets/index-BLGA0es1.css",
+          "type": "link",
+          "start": 28.800000000745058,
+          "end": 42.69999999925494,
+          "duration": 13.899999998509884,
+          "bytes": 21404
+        },
+        {
+          "name": "/assets/icons-1f0VWjOT.js",
+          "type": "other",
+          "start": 28.800000000745058,
+          "end": 85.69999999925494,
+          "duration": 56.899999998509884,
+          "bytes": 13013
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 210.80000000074506,
+          "end": 218,
+          "duration": 7.199999999254942,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 128,
+          "duration": 65
+        }
+      ],
+      "headingAt": 221,
+      "lcp": [
+        {
+          "start": 360,
+          "renderTime": 360,
+          "loadTime": 222.19999999925494,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4190/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 9,
+      "variant": "after",
+      "fcp": 304,
+      "fp": 92,
+      "navigation": {
+        "name": "http://127.0.0.1:4190/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 152.89999999850988,
+        "navigationId": 5011,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 25.100000001490116,
+        "domainLookupStart": 25.100000001490116,
+        "domainLookupEnd": 25.100000001490116,
+        "connectStart": 25.100000001490116,
+        "secureConnectionStart": 0,
+        "connectEnd": 25.100000001490116,
+        "requestStart": 26.899999998509884,
+        "responseStart": 28.699999999254942,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 28.699999999254942,
+        "responseEnd": 29.899999998509884,
+        "transferSize": 1626,
+        "encodedBodySize": 1326,
+        "decodedBodySize": 1326,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 60.30000000074506,
+        "domContentLoadedEventStart": 152.39999999850988,
+        "domContentLoadedEventEnd": 152.5,
+        "domComplete": 152.80000000074506,
+        "loadEventStart": 152.89999999850988,
+        "loadEventEnd": 152.89999999850988,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "high"
+        }
+      },
+      "requests": 8,
+      "bytes": 646444,
+      "resources": [
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "link",
+          "start": 46,
+          "end": 63.69999999925494,
+          "duration": 17.699999999254942,
+          "bytes": 80644
+        },
+        {
+          "name": "/assets/index-DKqTKJjt.js",
+          "type": "script",
+          "start": 46.600000001490116,
+          "end": 63.19999999925494,
+          "duration": 16.599999997764826,
+          "bytes": 55723
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 46.69999999925494,
+          "end": 63.100000001490116,
+          "duration": 16.400000002235174,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/react-C-G-5Uwp.js",
+          "type": "other",
+          "start": 46.69999999925494,
+          "end": 65.19999999925494,
+          "duration": 18.5,
+          "bytes": 259542
+        },
+        {
+          "name": "/assets/icons-1f0VWjOT.js",
+          "type": "other",
+          "start": 46.80000000074506,
+          "end": 68.19999999925494,
+          "duration": 21.399999998509884,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 46.80000000074506,
+          "end": 65.39999999850988,
+          "duration": 18.599999997764826,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/index-BLGA0es1.css",
+          "type": "link",
+          "start": 46.899999998509884,
+          "end": 61.5,
+          "duration": 14.600000001490116,
+          "bytes": 21404
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 185.60000000149012,
+          "end": 189.69999999925494,
+          "duration": 4.099999997764826,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [],
+      "headingAt": 185.30000000074506,
+      "lcp": [
+        {
+          "start": 304,
+          "renderTime": 304,
+          "loadTime": 187.60000000149012,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4190/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 9,
+      "variant": "before",
+      "fcp": 408,
+      "fp": 96,
+      "navigation": {
+        "name": "http://127.0.0.1:4189/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 214.80000000074506,
+        "navigationId": 3036,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.6000000014901161,
+        "domainLookupStart": 0.6000000014901161,
+        "domainLookupEnd": 0.6000000014901161,
+        "connectStart": 0.6000000014901161,
+        "secureConnectionStart": 0,
+        "connectEnd": 0.6000000014901161,
+        "requestStart": 4.800000000745058,
+        "responseStart": 6.900000002235174,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 6.900000002235174,
+        "responseEnd": 7.5,
+        "transferSize": 1714,
+        "encodedBodySize": 1414,
+        "decodedBodySize": 1414,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 90.30000000074506,
+        "domContentLoadedEventStart": 214.5,
+        "domContentLoadedEventEnd": 214.60000000149012,
+        "domComplete": 214.80000000074506,
+        "loadEventStart": 214.80000000074506,
+        "loadEventEnd": 214.80000000074506,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "/assets/index-CqdgIdOz.js",
+          "type": "script",
+          "start": 20.900000002235174,
+          "end": 69.90000000223517,
+          "duration": 49,
+          "bytes": 469669
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 22.800000000745058,
+          "end": 35.80000000074506,
+          "duration": 13,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/icons-DdzyS6T-.js",
+          "type": "other",
+          "start": 23.100000001490116,
+          "end": 36,
+          "duration": 12.899999998509884,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/react-DYkIpRt7.js",
+          "type": "other",
+          "start": 23.100000001490116,
+          "end": 66.30000000074506,
+          "duration": 43.19999999925494,
+          "bytes": 259535
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 23.200000002980232,
+          "end": 70.10000000149012,
+          "duration": 46.899999998509884,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/documents-BWKfj32I.js",
+          "type": "other",
+          "start": 23.200000002980232,
+          "end": 70.20000000298023,
+          "duration": 47,
+          "bytes": 207157
+        },
+        {
+          "name": "/assets/documents-C0bZtWRn.css",
+          "type": "link",
+          "start": 23.300000000745058,
+          "end": 33.400000002235174,
+          "duration": 10.100000001490116,
+          "bytes": 40294
+        },
+        {
+          "name": "/assets/index-CWSOxkh5.css",
+          "type": "link",
+          "start": 23.300000000745058,
+          "end": 36,
+          "duration": 12.699999999254942,
+          "bytes": 64814
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 278.4000000022352,
+          "end": 286.30000000074506,
+          "duration": 7.899999998509884,
+          "bytes": 527
+        },
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "css",
+          "start": 322.20000000298023,
+          "end": 327.6000000014901,
+          "duration": 5.399999998509884,
+          "bytes": 80644
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 112.70000000298023,
+          "duration": 102
+        },
+        {
+          "start": 218.30000000074506,
+          "duration": 57
+        }
+      ],
+      "headingAt": 310.5,
+      "lcp": [
+        {
+          "start": 408,
+          "renderTime": 408,
+          "loadTime": 0,
+          "size": 30303,
+          "url": ""
+        },
+        {
+          "start": 440,
+          "renderTime": 440,
+          "loadTime": 373.30000000074506,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4189/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 10,
+      "variant": "before",
+      "fcp": 376,
+      "fp": 148,
+      "navigation": {
+        "name": "http://127.0.0.1:4189/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 213.90000000223517,
+        "navigationId": 5217,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1.9000000022351742,
+        "domainLookupStart": 1.9000000022351742,
+        "domainLookupEnd": 1.9000000022351742,
+        "connectStart": 1.9000000022351742,
+        "secureConnectionStart": 0,
+        "connectEnd": 1.9000000022351742,
+        "requestStart": 6.800000000745058,
+        "responseStart": 13.200000002980232,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 13.200000002980232,
+        "responseEnd": 15,
+        "transferSize": 1714,
+        "encodedBodySize": 1414,
+        "decodedBodySize": 1414,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 57.600000001490116,
+        "domContentLoadedEventStart": 213.30000000074506,
+        "domContentLoadedEventEnd": 213.40000000223517,
+        "domComplete": 213.90000000223517,
+        "loadEventStart": 213.90000000223517,
+        "loadEventEnd": 213.90000000223517,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "/assets/index-CqdgIdOz.js",
+          "type": "script",
+          "start": 51.400000002235174,
+          "end": 68.30000000074506,
+          "duration": 16.899999998509884,
+          "bytes": 469669
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 51.70000000298023,
+          "end": 64,
+          "duration": 12.299999997019768,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/icons-DdzyS6T-.js",
+          "type": "other",
+          "start": 51.70000000298023,
+          "end": 64.40000000223517,
+          "duration": 12.699999999254942,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/react-DYkIpRt7.js",
+          "type": "other",
+          "start": 51.70000000298023,
+          "end": 64.80000000074506,
+          "duration": 13.099999997764826,
+          "bytes": 259535
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 51.900000002235174,
+          "end": 72.20000000298023,
+          "duration": 20.300000000745058,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/documents-C0bZtWRn.css",
+          "type": "link",
+          "start": 52,
+          "end": 63.80000000074506,
+          "duration": 11.800000000745058,
+          "bytes": 40294
+        },
+        {
+          "name": "/assets/documents-BWKfj32I.js",
+          "type": "other",
+          "start": 52,
+          "end": 72.30000000074506,
+          "duration": 20.300000000745058,
+          "bytes": 207157
+        },
+        {
+          "name": "/assets/index-CWSOxkh5.css",
+          "type": "link",
+          "start": 52.100000001490116,
+          "end": 63.900000002235174,
+          "duration": 11.800000000745058,
+          "bytes": 64814
+        },
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "css",
+          "start": 266.6000000014901,
+          "end": 272.20000000298023,
+          "duration": 5.600000001490116,
+          "bytes": 80644
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 320,
+          "end": 347.6000000014901,
+          "duration": 27.600000001490116,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 153.70000000298023,
+          "duration": 60
+        }
+      ],
+      "headingAt": 265.6000000014901,
+      "lcp": [
+        {
+          "start": 376,
+          "renderTime": 376,
+          "loadTime": 0,
+          "size": 30303,
+          "url": ""
+        },
+        {
+          "start": 404,
+          "renderTime": 404,
+          "loadTime": 318.9000000022352,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4189/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 10,
+      "variant": "after",
+      "fcp": 344,
+      "fp": 100,
+      "navigation": {
+        "name": "http://127.0.0.1:4190/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 173.89999999850988,
+        "navigationId": 7317,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1,
+        "domainLookupStart": 1,
+        "domainLookupEnd": 1,
+        "connectStart": 1,
+        "secureConnectionStart": 0,
+        "connectEnd": 1,
+        "requestStart": 2.199999999254942,
+        "responseStart": 3.199999999254942,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 3.199999999254942,
+        "responseEnd": 5.5,
+        "transferSize": 1626,
+        "encodedBodySize": 1326,
+        "decodedBodySize": 1326,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 86.09999999776483,
+        "domContentLoadedEventStart": 172.39999999850988,
+        "domContentLoadedEventEnd": 172.5,
+        "domComplete": 173.79999999701977,
+        "loadEventStart": 173.89999999850988,
+        "loadEventEnd": 173.89999999850988,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 8,
+      "bytes": 646444,
+      "resources": [
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "link",
+          "start": 26.5,
+          "end": 75.39999999850988,
+          "duration": 48.899999998509884,
+          "bytes": 80644
+        },
+        {
+          "name": "/assets/index-DKqTKJjt.js",
+          "type": "script",
+          "start": 28.199999999254942,
+          "end": 70.5,
+          "duration": 42.30000000074506,
+          "bytes": 55723
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 28.299999997019768,
+          "end": 70.19999999925494,
+          "duration": 41.900000002235174,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 28.399999998509884,
+          "end": 76,
+          "duration": 47.600000001490116,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/react-C-G-5Uwp.js",
+          "type": "other",
+          "start": 28.399999998509884,
+          "end": 75.79999999701977,
+          "duration": 47.399999998509884,
+          "bytes": 259542
+        },
+        {
+          "name": "/assets/icons-1f0VWjOT.js",
+          "type": "other",
+          "start": 28.5,
+          "end": 86.59999999776483,
+          "duration": 58.099999997764826,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/index-BLGA0es1.css",
+          "type": "link",
+          "start": 28.599999997764826,
+          "end": 69.89999999850988,
+          "duration": 41.30000000074506,
+          "bytes": 21404
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 202,
+          "end": 206,
+          "duration": 4,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 104.89999999850988,
+          "duration": 70
+        }
+      ],
+      "headingAt": 215.59999999776483,
+      "lcp": [
+        {
+          "start": 344,
+          "renderTime": 344,
+          "loadTime": 228.39999999850988,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4190/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 11,
+      "variant": "after",
+      "fcp": 376,
+      "fp": 100,
+      "navigation": {
+        "name": "http://127.0.0.1:4190/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 190.79999999701977,
+        "navigationId": 2737,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.8999999985098839,
+        "domainLookupStart": 0.8999999985098839,
+        "domainLookupEnd": 0.8999999985098839,
+        "connectStart": 0.8999999985098839,
+        "secureConnectionStart": 0,
+        "connectEnd": 0.8999999985098839,
+        "requestStart": 2.099999997764826,
+        "responseStart": 6.5,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 6.5,
+        "responseEnd": 6.899999998509884,
+        "transferSize": 1626,
+        "encodedBodySize": 1326,
+        "decodedBodySize": 1326,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 35.69999999925494,
+        "domContentLoadedEventStart": 189.69999999925494,
+        "domContentLoadedEventEnd": 189.79999999701977,
+        "domComplete": 190.69999999925494,
+        "loadEventStart": 190.79999999701977,
+        "loadEventEnd": 190.79999999701977,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "high"
+        }
+      },
+      "requests": 8,
+      "bytes": 646444,
+      "resources": [
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "link",
+          "start": 25.099999997764826,
+          "end": 68.69999999925494,
+          "duration": 43.600000001490116,
+          "bytes": 80644
+        },
+        {
+          "name": "/assets/index-DKqTKJjt.js",
+          "type": "script",
+          "start": 25.5,
+          "end": 64.5,
+          "duration": 39,
+          "bytes": 55723
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 25.599999997764826,
+          "end": 64.19999999925494,
+          "duration": 38.600000001490116,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/react-C-G-5Uwp.js",
+          "type": "other",
+          "start": 25.599999997764826,
+          "end": 70.19999999925494,
+          "duration": 44.600000001490116,
+          "bytes": 259542
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 25.699999999254942,
+          "end": 70.89999999850988,
+          "duration": 45.19999999925494,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/index-BLGA0es1.css",
+          "type": "link",
+          "start": 25.799999997019768,
+          "end": 63.899999998509884,
+          "duration": 38.100000001490116,
+          "bytes": 21404
+        },
+        {
+          "name": "/assets/icons-1f0VWjOT.js",
+          "type": "other",
+          "start": 25.799999997019768,
+          "end": 73.59999999776483,
+          "duration": 47.80000000074506,
+          "bytes": 13013
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 228.29999999701977,
+          "end": 231.29999999701977,
+          "duration": 3,
+          "bytes": 527
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 115.69999999925494,
+          "duration": 75
+        }
+      ],
+      "headingAt": 264.0999999977648,
+      "lcp": [
+        {
+          "start": 376,
+          "renderTime": 376,
+          "loadTime": 275.19999999925494,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4190/images/recepcao-jn.webp"
+        }
+      ]
+    },
+    {
+      "pair": 11,
+      "variant": "before",
+      "fcp": 372,
+      "fp": 132,
+      "navigation": {
+        "name": "http://127.0.0.1:4189/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 198.30000000074506,
+        "navigationId": 7411,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 24.400000002235174,
+        "domainLookupStart": 24.400000002235174,
+        "domainLookupEnd": 24.400000002235174,
+        "connectStart": 24.400000002235174,
+        "secureConnectionStart": 0,
+        "connectEnd": 24.400000002235174,
+        "requestStart": 30.100000001490116,
+        "responseStart": 31.699999999254942,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 31.699999999254942,
+        "responseEnd": 32.69999999925494,
+        "transferSize": 1714,
+        "encodedBodySize": 1414,
+        "decodedBodySize": 1414,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 50.900000002235174,
+        "domContentLoadedEventStart": 197.30000000074506,
+        "domContentLoadedEventEnd": 198,
+        "domComplete": 198.19999999925494,
+        "loadEventStart": 198.30000000074506,
+        "loadEventEnd": 198.30000000074506,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "/assets/index-CqdgIdOz.js",
+          "type": "script",
+          "start": 45.5,
+          "end": 60.900000002235174,
+          "duration": 15.400000002235174,
+          "bytes": 469669
+        },
+        {
+          "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+          "type": "other",
+          "start": 45.69999999925494,
+          "end": 65.19999999925494,
+          "duration": 19.5,
+          "bytes": 899
+        },
+        {
+          "name": "/assets/icons-DdzyS6T-.js",
+          "type": "other",
+          "start": 45.80000000074506,
+          "end": 68.60000000149012,
+          "duration": 22.800000000745058,
+          "bytes": 13013
+        },
+        {
+          "name": "/assets/react-DYkIpRt7.js",
+          "type": "other",
+          "start": 45.80000000074506,
+          "end": 68.80000000074506,
+          "duration": 23,
+          "bytes": 259535
+        },
+        {
+          "name": "/assets/documents-C0bZtWRn.css",
+          "type": "link",
+          "start": 45.900000002235174,
+          "end": 64.40000000223517,
+          "duration": 18.5,
+          "bytes": 40294
+        },
+        {
+          "name": "/assets/index-CWSOxkh5.css",
+          "type": "link",
+          "start": 45.900000002235174,
+          "end": 64.80000000074506,
+          "duration": 18.899999998509884,
+          "bytes": 64814
+        },
+        {
+          "name": "/assets/supabase-DtuMx0jC.js",
+          "type": "other",
+          "start": 45.900000002235174,
+          "end": 69.60000000149012,
+          "duration": 23.699999999254942,
+          "bytes": 214692
+        },
+        {
+          "name": "/assets/documents-BWKfj32I.js",
+          "type": "other",
+          "start": 45.900000002235174,
+          "end": 74,
+          "duration": 28.099999997764826,
+          "bytes": 207157
+        },
+        {
+          "name": "/favicon.svg",
+          "type": "other",
+          "start": 254.19999999925494,
+          "end": 259.5,
+          "duration": 5.300000000745058,
+          "bytes": 527
+        },
+        {
+          "name": "/images/recepcao-jn.webp",
+          "type": "css",
+          "start": 277.5,
+          "end": 281,
+          "duration": 3.5,
+          "bytes": 80644
+        }
+      ],
+      "longtasks": [
+        {
+          "start": 146.69999999925494,
+          "duration": 52
+        }
+      ],
+      "headingAt": 268.6000000014901,
+      "lcp": [
+        {
+          "start": 372,
+          "renderTime": 372,
+          "loadTime": 0,
+          "size": 30303,
+          "url": ""
+        },
+        {
+          "start": 404,
+          "renderTime": 404,
+          "loadTime": 335.9000000022352,
+          "size": 1032480,
+          "url": "http://127.0.0.1:4189/images/recepcao-jn.webp"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+PASS: GoTrue JWT UID/session_id and future server session timestamps verified for all actors
+{"provider_order_probe":{"logout_status":204,"getuser_after_logout":403,"sessions_after_logout":0}}
+PASS: real global logout removes sessions and same JWT getUser is denied; worker must verify identity before revocation
+{"provider_soft_delete":{"sessions":0,"refresh":0,"identities":1,"retained_fk":true,"retained_auth":true,"deleted_at":true,"email_erased":false,"password_erased":true}}
+PASS: real GoTrue soft delete clears credentials/sessions, denies saved refresh/JWT/password and preserves user UUID/FK
+PASS: narrow Auth email guard still rejects soft deletion of an active account without closure tombstone
+PASS: real category create/ACL and required-category request → staff return → own edit/idempotent retry → resubmit with stale-version and third-party denials
+PASS: real API rejects staff closure/unacknowledged closure and accepts empty authorized export
+PASS: real Storage private object exists and unrelated client cannot download it
+PASS: real Auth/API/Storage PDF and ZIP exports preserve exact authorized official document bytes
+{"provider_sessions_revoked":true,"provider_disabled":true}
+PASS: real API committed tombstone, discarded optional observation and disabled memberships
+{"after_closure_provider_rows":{"sessions":0,"active_refresh":0,"deleted":true,"fk_preserved":true}}
+PASS: saved access JWT, saved refresh token and fresh password login cannot reactivate closed account
+PASS: archive dynamically includes official document linked after closure
+PASS: real archive API shows closed account to authorized owner, preserves the official document inventory and denies unrelated client
+PASS: real service JWT + independent scheduler secret drains pending provider soft deletion idempotently and keeps unrelated session valid
+PASS: real API zero-day local policy/classification + legal hold/release → automatic worker claim → real Storage PDF erasure + source redaction; hashes/ledger/history/unrelated PDF preserved and retry idempotent
+PASS: closing account retained unrelated Storage bytes; no purge of unknown objects
+{"proof":"corrections-real","local_only":true,"providers":{"auth":true,"rest":true,"api":true,"storage":true},"edge_gateway":false,"retention_purge":true,"document_export":"byte-identical-PDF-and-ZIP","archive_documents":"three-including-postclosure","scanner":false}

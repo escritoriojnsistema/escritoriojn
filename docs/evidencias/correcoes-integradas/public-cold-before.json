@@ -1,0 +1,147 @@
+{
+  "url": "http://127.0.0.1:4186/",
+  "cacheDisabled": true,
+  "runs": [
+    {
+      "fcp": 1584,
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "http://127.0.0.1:4186/assets/index-CqdgIdOz.js",
+          "bytes": 469669
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/rolldown-runtime-WkwZ5CU-.js",
+          "bytes": 899
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/react-DYkIpRt7.js",
+          "bytes": 259535
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/icons-DdzyS6T-.js",
+          "bytes": 13013
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/supabase-DtuMx0jC.js",
+          "bytes": 214692
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/documents-BWKfj32I.js",
+          "bytes": 207157
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/documents-C0bZtWRn.css",
+          "bytes": 40294
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/index-CWSOxkh5.css",
+          "bytes": 64814
+        },
+        {
+          "name": "http://127.0.0.1:4186/images/recepcao-jn.webp",
+          "bytes": 80644
+        },
+        {
+          "name": "http://127.0.0.1:4186/favicon.svg",
+          "bytes": 527
+        }
+      ]
+    },
+    {
+      "fcp": 712,
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "http://127.0.0.1:4186/assets/index-CqdgIdOz.js",
+          "bytes": 469669
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/rolldown-runtime-WkwZ5CU-.js",
+          "bytes": 899
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/react-DYkIpRt7.js",
+          "bytes": 259535
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/icons-DdzyS6T-.js",
+          "bytes": 13013
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/supabase-DtuMx0jC.js",
+          "bytes": 214692
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/documents-BWKfj32I.js",
+          "bytes": 207157
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/documents-C0bZtWRn.css",
+          "bytes": 40294
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/index-CWSOxkh5.css",
+          "bytes": 64814
+        },
+        {
+          "name": "http://127.0.0.1:4186/favicon.svg",
+          "bytes": 527
+        },
+        {
+          "name": "http://127.0.0.1:4186/images/recepcao-jn.webp",
+          "bytes": 80644
+        }
+      ]
+    },
+    {
+      "fcp": 780,
+      "requests": 10,
+      "bytes": 1351244,
+      "resources": [
+        {
+          "name": "http://127.0.0.1:4186/assets/index-CqdgIdOz.js",
+          "bytes": 469669
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/rolldown-runtime-WkwZ5CU-.js",
+          "bytes": 899
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/react-DYkIpRt7.js",
+          "bytes": 259535
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/icons-DdzyS6T-.js",
+          "bytes": 13013
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/supabase-DtuMx0jC.js",
+          "bytes": 214692
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/documents-BWKfj32I.js",
+          "bytes": 207157
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/documents-C0bZtWRn.css",
+          "bytes": 40294
+        },
+        {
+          "name": "http://127.0.0.1:4186/assets/index-CWSOxkh5.css",
+          "bytes": 64814
+        },
+        {
+          "name": "http://127.0.0.1:4186/favicon.svg",
+          "bytes": 527
+        },
+        {
+          "name": "http://127.0.0.1:4186/images/recepcao-jn.webp",
+          "bytes": 80644
+        }
+      ]
+    }
+  ]
+}

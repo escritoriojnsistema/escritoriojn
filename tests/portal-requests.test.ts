@@ -1,0 +1,22 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {portalRequestState,validPortalCommand} from '../server/modules/portal-requests/dto.js';
+const id='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+const state={request_id:id,version:4,title:'Pedido',message:'Mensagem',reason:'Corrigir informações',can_edit:true,can_hide:true,can_resubmit:true,hidden:false,inputs:[{item_id:id,name:'Modelo',answers:{nome:'Ana'},fields:[{key:'nome',label:'Nome',required:true}]}]};
+test('portal state strips notes, internal IDs and unrelated payload',()=>{assert.deepEqual(portalRequestState({...state,internal_notes:'secret',customer_id:id}),state);});
+test('portal state fails closed on malformed version/authority/inputs',()=>{for(const value of [{...state,version:0},{...state,can_edit:'true'},{...state,inputs:[{...state.inputs[0],answers:{nome:4}}]}])assert.throws(()=>portalRequestState(value));});
+test('portal commands require complete edit, bounded own answers and no authority fields',()=>{assert.ok(validPortalCommand({kind:'save',title:'Pedido',message:'Mensagem',inputs:[{item_id:id,answers:{nome:'Ana'}}]}));assert.ok(validPortalCommand({kind:'resubmit'}));assert.ok(validPortalCommand({kind:'hide'}));for(const command of [{kind:'save',title:'',message:'x',inputs:[]},{kind:'hide',status:'cancelado'},{kind:'resubmit',assignee_id:id},{kind:'save',title:'x',message:'x',inputs:[{item_id:id,answers:{nome:4}}]},{kind:'save',title:'x',message:'x',inputs:[{item_id:id,answers:{nome:'a'.repeat(2001)}}]}])assert.equal(validPortalCommand(command),false);});
+import express from 'express';
+import {createServer} from 'node:http';
+import {portalRequestsRouter} from '../server/modules/portal-requests/router.js';
+test('portal API preserves concurrency/idempotency and excludes internals',async()=>{
+ const calls:{path:string;body:Record<string,unknown>;auth?:string}[]=[];let mode='ok';
+ const provider=createServer(async(req,res)=>{let body='';for await(const x of req)body+=x;calls.push({path:req.url??'',body:body?JSON.parse(body):{},auth:req.headers.authorization});res.setHeader('content-type','application/json');if(req.url==='/auth/v1/user'){res.end(JSON.stringify({id,aud:'authenticated'}));return;}if(mode==='bad'){res.statusCode=409;res.end(JSON.stringify({code:'PT409',message:'REQUEST_CONFLICT'}));return;}res.end(JSON.stringify({...state,internal_notes:'TOP SECRET'}));});await new Promise<void>(r=>provider.listen(0,'127.0.0.1',r));
+ const old={url:process.env.VITE_SUPABASE_URL,key:process.env.VITE_SUPABASE_PUBLISHABLE_KEY};process.env.VITE_SUPABASE_URL=`http://127.0.0.1:${(provider.address() as {port:number}).port}`;process.env.VITE_SUPABASE_PUBLISHABLE_KEY='sb_publishable_test';
+ const app=express();app.use('/api/portal-requests',portalRequestsRouter);const server=app.listen(0,'127.0.0.1');await new Promise<void>(r=>server.once('listening',r));const base=`http://127.0.0.1:${(server.address() as {port:number}).port}/api/portal-requests/${id}`;
+ const send=(path:string,body:unknown)=>fetch(base+path,{method:'POST',headers:{Authorization:'Bearer portal-test-token','Content-Type':'application/json'},body:JSON.stringify(body)});
+ try{assert.equal((await fetch(base+'/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({office_id:id})})).status,401);const response=await send('/state',{office_id:id});assert.equal(response.status,200);assert.match(response.headers.get('cache-control')??'',/private.*no-store/);assert.deepEqual((await response.json()).data,state);assert.ok(calls.every(c=>c.auth==='Bearer portal-test-token'));
+ const payload={office_id:id,expected_version:4,idempotency_key:id,command:{kind:'resubmit'}};assert.equal((await send('/command',payload)).status,200);assert.equal(calls.at(-1)?.body.p_idempotency_key,id);assert.equal(calls.at(-1)?.body.p_expected_version,4);
+ for(const changes of [{expected_version:0},{idempotency_key:'bad'},{command:{kind:'resubmit',assignee_id:id}},{actor_id:id}])assert.equal((await send('/command',{...payload,...changes})).status,422);mode='bad';assert.equal((await send('/command',payload)).status,409);
+ }finally{if(old.url===undefined)delete process.env.VITE_SUPABASE_URL;else process.env.VITE_SUPABASE_URL=old.url;if(old.key===undefined)delete process.env.VITE_SUPABASE_PUBLISHABLE_KEY;else process.env.VITE_SUPABASE_PUBLISHABLE_KEY=old.key;server.closeAllConnections();server.close();provider.closeAllConnections();provider.close();}
+});

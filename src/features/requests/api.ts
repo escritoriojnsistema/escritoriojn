@@ -16,7 +16,7 @@ export class RequestsError extends Error {
       : 'Atendimento indisponível no momento. Confira sua conexão e tente novamente.');
   }
 }
-async function request<T>(path: string, method: 'POST' | 'PATCH', body: unknown, signal?: AbortSignal): Promise<T> {
+async function request<T>(path: string, method: 'POST' | 'PATCH', body: unknown, signal?: AbortSignal,base='/api/requests'): Promise<T> {
   if (!supabase) throw new RequestsError(503);
   const controller = new AbortController();
   let changedSession = false;
@@ -33,7 +33,7 @@ async function request<T>(path: string, method: 'POST' | 'PATCH', body: unknown,
       }
     });
     unsubscribe = () => subscription.data.subscription.unsubscribe();
-    const response = await authenticatedFetch(`/api/requests${path}`, {
+    const response = await authenticatedFetch(`${base}${path}`, {
       method, body: JSON.stringify(body), cache: 'no-store',
       headers: { Authorization: `Bearer ${data.session.access_token}`, 'Content-Type': 'application/json' },
       signal: AbortSignal.any([controller.signal, AbortSignal.timeout(25_000), ...(signal ? [signal] : [])]),
@@ -59,7 +59,14 @@ export const requestsApi = {
  search:(office_id:string,query:string,scope:'mine'|'queue',status:RequestFilterStatus,page:number,size:number,signal?:AbortSignal)=>request<RequestPage>('/search','POST',{office_id,query,scope,status,page,size},signal),
  options:(office_id:string,kind:RequestOptionKind,query:string,page:number,size:number,signal?:AbortSignal)=>request<RequestOptions>('/options','POST',{office_id,kind,query,page,size},signal),
  detail:(office_id:string,id:string,page=1,signal?:AbortSignal)=>request<RequestDetail>(`/${id}/detail`,'POST',{office_id,page},signal),
- create:(office_id:string,input:CreateRequestInput,idempotency_key:string,signal?:AbortSignal)=>request<RequestDetail>('','POST',{office_id,request:input,idempotency_key},signal),
+ create:(office_id:string,input:CreateRequestInput,idempotency_key:string,signal?:AbortSignal)=>'preintake' in input ? request<RequestDetail>('/preintake','POST',{office_id,value:((({preintake,...value})=>value)(input)),idempotency_key},signal,'/api/request-levels') : request<RequestDetail>('','POST',{office_id,request:input,idempotency_key},signal),
  mutate:(office_id:string,id:string,expected_version:number,mutation:RequestMutation,signal?:AbortSignal)=>request<RequestMutationResult>(`/${id}/actions`,'POST',{office_id,expected_version,mutation},signal),
 };
 export const requestsError=(cause:unknown)=>cause instanceof RequestsError?cause:new RequestsError(503);
+
+export const requestLevelsApi={
+ update:(office_id:string,request_id:string,expected_version:number,value:{title:string;message:string;customer_id:string|null;internal_note:string},signal?:AbortSignal)=>request<RequestDetail>('/update-preintake','POST',{office_id,request_id,expected_version,value},signal,'/api/request-levels'),
+ handoff:(office_id:string,request_id:string,expected_version:number,reason:string,signal?:AbortSignal)=>request<RequestMutationResult>('/handoff','POST',{office_id,request_id,expected_version,reason},signal,'/api/request-levels'),
+ transfer:(office_id:string,request_id:string,expected_version:number,assignee_id:string,reason:string,signal?:AbortSignal)=>request<RequestMutationResult>('/transfer-exception','POST',{office_id,request_id,expected_version,assignee_id,reason},signal,'/api/request-levels'),
+ revoke:(office_id:string,request_id:string,expected_version:number,reason:string,signal?:AbortSignal)=>request<RequestDetail>('/revoke-exception','POST',{office_id,request_id,expected_version,reason},signal,'/api/request-levels')
+};

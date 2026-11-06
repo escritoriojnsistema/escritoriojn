@@ -1,3 +1,6 @@
+import {loadOperations} from '../../app/loadOperations';
+import {useAuth} from '../auth/AuthProvider';
+import {recoveryReturn} from '../auth/recoveryReturn';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { ArrowLeft, UserPlus, ArrowRight, Mail, UserRound } from 'lucide-react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
@@ -8,12 +11,14 @@ import { PasswordField } from './PasswordField';
 import { portalLogin, PortalAccessError } from '../auth/portalLogin';
 export default function AccessPage() {
   const location = useLocation();
+  const auth=useAuth();
   const pathname = normalizePathname(location.pathname);
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const signup = pathname === paths.signup;
   const recovery = pathname === paths.recovery;
   const team = pathname === paths.team || (recovery && params.get('area') !== 'client');
+  useEffect(()=>{if(!signup&&!recovery)void loadOperations().catch(()=>{});},[signup,recovery]);
   const loginAttempt = useRef<AbortController | null>(null);
   useEffect(() => () => loginAttempt.current?.abort(), []);
   const [busy, setBusy] = useState(false);
@@ -54,6 +59,6 @@ export default function AccessPage() {
       {!recovery && <><div className="password-label"><label htmlFor="password">Senha</label>{!signup && <Link to={`${paths.recovery}?area=${team ? 'team' : 'client'}`}>Esqueci minha senha</Link>}</div><PasswordField fresh={signup} /></>}
       <button className="primary-button" type="submit" disabled={!supabase || busy}>{signup ? 'Criar conta de cliente' : recovery ? 'Enviar instruções' : `Entrar na área ${team ? 'da equipe' : 'do cliente'}`}<ArrowRight size={18} aria-hidden="true" /></button>
     </fieldset></form>
-    {recovery || signup ? <Link className="return-login" to={signup || !team ? paths.client : paths.team}><ArrowLeft size={17} aria-hidden="true" />Voltar para entrar</Link> : team ? <p className="access-help">O acesso da equipe é gerenciado pelo escritório.</p> : <Link className="return-login" to={paths.signup}><UserPlus size={17} aria-hidden="true" />Ainda não tem conta? Cadastre-se</Link>}
+    {recovery || signup ? <Link className="return-login" to={recovery?recoveryReturn(auth.status,auth.contexts.map(c=>c.role_code),team?'team':'client'):paths.client}><ArrowLeft size={17} aria-hidden="true" />{recovery?'Voltar':'Voltar para entrar'}</Link> : team ? <p className="access-help">O acesso da equipe é gerenciado pelo escritório.</p> : <Link className="return-login" to={paths.signup}><UserPlus size={17} aria-hidden="true" />Ainda não tem conta? Cadastre-se</Link>}
   </AccessShell>;
 }

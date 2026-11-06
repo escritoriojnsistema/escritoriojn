@@ -1,8 +1,8 @@
 {
   "environment": "Disposable PostgreSQL17; includes Docker/psql process; no hosted SLA",
   "samples": 12,
-  "median_ms": 205.3808699999936,
-  "p95_ms": 318.06489700000384,
+  "median_ms": 121.39130600000499,
+  "p95_ms": 137.642404000042,
   "explain": [
     {
       "Plan": {
@@ -16,12 +16,12 @@
         "Startup Cost": 0.27,
         "Total Cost": 8.29,
         "Plan Rows": 1,
-        "Plan Width": 296,
-        "Actual Startup Time": 0.021,
-        "Actual Total Time": 0.021,
+        "Plan Width": 297,
+        "Actual Startup Time": 0.02,
+        "Actual Total Time": 0.02,
         "Actual Rows": 0,
         "Actual Loops": 1,
-        "Index Cond": "((office_id = '00000000-0000-4000-e000-000000000151'::uuid) AND (session_id = '72c8fe02-4b12-408b-a1e6-f0320c1e0c12'::uuid))",
+        "Index Cond": "((office_id = '00000000-0000-4000-e000-000000000151'::uuid) AND (session_id = '3d1b8100-3df3-4310-b0ec-c03f6c0d1021'::uuid))",
         "Rows Removed by Index Recheck": 0,
         "Shared Hit Blocks": 2,
         "Shared Read Blocks": 0,
@@ -35,7 +35,7 @@
         "Temp Written Blocks": 0
       },
       "Planning": {
-        "Shared Hit Blocks": 339,
+        "Shared Hit Blocks": 337,
         "Shared Read Blocks": 0,
         "Shared Dirtied Blocks": 0,
         "Shared Written Blocks": 0,
@@ -46,9 +46,9 @@
         "Temp Read Blocks": 0,
         "Temp Written Blocks": 0
       },
-      "Planning Time": 1.168,
+      "Planning Time": 0.669,
       "Triggers": [],
-      "Execution Time": 0.073
+      "Execution Time": 0.644
     }
   ]
 }

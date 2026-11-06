@@ -1,0 +1,20 @@
+import {useEffect,useRef,useState} from 'react';
+import {closureNotice,closureReasons,type ClosureInput} from '../../../shared/accountClosure';
+import {commercialRequest} from '../documentCommercial/api';
+import {useAuth} from '../auth/AuthProvider';
+export function AccountClosure({office}:{office:string}){
+ const auth=useAuth(),[open,setOpen]=useState(false),[step,setStep]=useState(1),[reason,setReason]=useState(''),[observation,setObservation]=useState(''),[ack,setAck]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(''),[message,setMessage]=useState('');const pending=useRef<AbortController|null>(null),flight=useRef(false);
+ useEffect(()=>()=>pending.current?.abort(),[]);
+ async function act(exporting:boolean){if(flight.current)return;flight.current=true;setBusy(true);setError('');const c=new AbortController();pending.current=c;try{
+ if(exporting){const blob=await commercialRequest<Blob>('/export',{office_id:office},c.signal,'/api/account-closure',true);if(c.signal.aborted)return;if(!blob.size){setMessage('Nenhum documento próprio está liberado para exportação. Você pode prosseguir.');return;}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=blob.type.includes('zip')?'Meus Documentos.zip':'Meus Documentos.pdf';a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);setMessage('Arquivo preparado. Confira o download antes de encerrar sua conta.');}
+ else{await commercialRequest('/close',{office_id:office,input:{reason:reason as ClosureInput['reason'],observation,acknowledged:true,export_offered:true} satisfies ClosureInput},c.signal,'/api/account-closure');if(!c.signal.aborted)await auth.logout();}
+ }catch(e){if(!c.signal.aborted)setError(e instanceof Error?e.message:'Não foi possível concluir.');}finally{flight.current=false;if(!c.signal.aborted)setBusy(false);}}
+ return <section className="operation-security account-closure" aria-label="Encerrar conta"><div><h2>Excluir minha conta</h2><p>Encerre o acesso e consulte como os dados são tratados.</p>{!open&&<button className="secondary-button" onClick={()=>setOpen(true)}>Excluir minha conta</button>}
+ {open&&<><p>Etapa {step} de 4</p>{error&&<p role="alert">{error}</p>}{message&&<p role="status">{message}</p>}
+ {step===1&&<><label className="team-field">Motivo obrigatório<select value={reason} onChange={e=>setReason(e.target.value)}><option value="">Selecione um motivo</option>{Object.entries(closureReasons).map(([key,label])=><option key={key} value={key}>{label}</option>)}</select></label><label className="team-field">Observação opcional<textarea maxLength={1000} value={observation} onChange={e=>setObservation(e.target.value)}/></label></>}
+ {step===2&&<><h3>Baixe Meus Documentos</h3><p>Os documentos próprios atualmente autorizados serão reunidos em um PDF ou ZIP. Documentos com pendências permanecem protegidos. Você pode continuar sem baixar, inclusive se não houver documentos.</p><button className="secondary-button" disabled={busy} onClick={()=>void act(true)}>Baixar Meus Documentos</button></>}
+ {step===3&&<><p>{closureNotice}</p><label><input type="checkbox" checked={ack} onChange={e=>setAck(e.target.checked)}/>Li e estou ciente do encerramento e da conservação restrita dos dados necessários.</label></>}
+ {step===4&&<p>Ao confirmar, o acesso será encerrado em todos os dispositivos. Esta ação não poderá ser desfeita pelo portal. As obrigações e o acervo protegido permanecem sujeitos à política aplicável.</p>}
+ <div className="account-actions">{step>1&&<button className="secondary-button" disabled={busy} onClick={()=>setStep(s=>s-1)}>Voltar</button>}{step<4?<button className="primary-button" disabled={busy||(step===1&&!reason)||(step===3&&!ack)} onClick={()=>setStep(s=>s+1)}>Continuar</button>:<button className="primary-button" disabled={busy||!reason||!ack} onClick={()=>void act(false)}>Confirmar exclusão da conta</button>}<button className="secondary-button" disabled={busy} onClick={()=>{setOpen(false);setStep(1);setAck(false);setError('');}}>Cancelar</button></div></>}
+ </div></section>;
+}
