@@ -12,7 +12,8 @@ export const publicRequestStatusLabels: Record<PublicRequestStatus,string> = {re
 export type RequestItemInput = {service_id:string;quantity:number;adjustment:ServiceAdjustment;fields:Record<string,string>;participant_ids:string[];checklist:string[]};
 export type StaffRequestInput = {origin:'presencial'|'whatsapp';title:string;customer_id:string|null;assignee_id:string|null;priority:'normal'|'urgent';priority_reason:string;items:RequestItemInput[];internal_note:string};
 export type PortalRequestInput = {origin:'portal';title:string;message:string;category_id?:string};
-export type CreateRequestInput = StaffRequestInput|PortalRequestInput|(PreintakeInput & {preintake:true});
+export type StaffCategoryRequestInput = StaffRequestInput & {category_id:string;message:string};
+export type CreateRequestInput = StaffRequestInput|StaffCategoryRequestInput|PortalRequestInput|(PreintakeInput & {preintake:true});
 export type CancellationReview = {charges_reviewed:true;refunds_reviewed:true;deliveries_reviewed:true;external_reviewed:true};
 export type RequestMutation =
  | {kind:'status';status:RequestStatus;reason:string;cancellation_review?:CancellationReview}

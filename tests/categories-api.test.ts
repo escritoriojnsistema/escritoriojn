@@ -38,6 +38,17 @@ test('categorias: projeção retém apenas metadados necessários e rejeita font
   ]) assert.throws(() => categoriesState(value));
 });
 
+test('categorias: arquivo de gestão fica separado dos seletores ativos e privado para o cliente', () => {
+  const archived={...category,id:'00000000-0000-4000-a000-000000000732',archived_at:'2026-11-06T19:00:00.000Z'};
+  assert.deepEqual(categoriesState({can_manage:true,items:[category],archived_items:[archived]}),{can_manage:true,items:[category],archived_items:[archived]});
+  assert.deepEqual(categoriesState({can_manage:false,items:[],archived_items:[archived]}),{can_manage:false,items:[]});
+  for(const value of [
+    {can_manage:true,items:[category],archived_items:[{...category,archived_at:archived.archived_at}]},
+    {can_manage:true,items:[],archived_items:[{...archived,archived_at:'invalid'}]},
+    {can_manage:true,items:[],archived_items:[archived,archived]},
+  ]) assert.throws(()=>categoriesState(value));
+});
+
 test('categorias: API autenticada preserva chave e mapeia erros sem expor detalhes privados', async t => {
   let mode = 'ok';
   const calls: { url: string; body: Record<string, unknown>; authorization?: string }[] = [];

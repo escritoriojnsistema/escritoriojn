@@ -34,5 +34,5 @@ export interface DocumentPresence { status: PresenceStatus | 'offline'; capacity
 export interface DocumentBookingInput { template_id: string; template_version_id: string; service_version_id: string; offer_revision: number; origin: 'portal' | 'presencial' | 'whatsapp'; answers: Record<string, string>; customer_id: string | null; assignee_id: string | null }
 export interface DocumentBookingResult { request_id: string; protocol: string; status: string; waiting: boolean }
 export interface DocumentIntakeView { request_id: string; request_item_id: string; template_version_id: string; model_name: string; answers: Record<string, string> }
-export interface ModelCommercialState { metadata: ModelMetadata; offer: DocumentOffer | null; can_manage: boolean; can_manage_metadata: boolean }
+export interface ModelCommercialState { metadata: ModelMetadata; offer: DocumentOffer | null; offer_revision?: number; can_manage: boolean; can_manage_metadata: boolean }
 export interface DocumentDispatchPage { items: Array<{ id: string; protocol: string; title: string; created_at: string }>; members: Array<{ membership_id: string; name: string; role: 'owner' | 'admin' | 'employee'; status: PresenceStatus | 'offline'; capacity: number; active_load: number }>; total: number; page: number; page_size: number; members_limit: number; members_total: number }

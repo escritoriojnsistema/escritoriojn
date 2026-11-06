@@ -10,3 +10,11 @@ test('comercial: API autentica, fecha payload e não expõe extras da RPC',async
  assert.equal((await send('/folder-command',{office_id:id,command:{kind:'create',name:'Pasta'},idempotency_key:id})).status,200);
  }finally{server.closeAllConnections();provider.closeAllConnections();await Promise.all([new Promise<void>(r=>server.close(()=>r())),new Promise<void>(r=>provider.close(()=>r()))]);for(const [i,key]of ['VITE_SUPABASE_URL','VITE_SUPABASE_PUBLISHABLE_KEY'].entries())if(before[i]===undefined)delete process.env[key];else process.env[key]=before[i];}
 });
+
+// The retained revision belongs to the association, even while no service is selected.
+test('comercial: estado desvinculado conserva revisão sem expor vínculo histórico', async()=>{
+ const {projectCommercialState}=await import('../shared/modelCommercialValidation.js');
+ const source={metadata:{template_id:id,display_name:'Modelo',archived_at:null,revision:0},offer:null,offer_revision:7,can_manage:true,can_manage_metadata:true,old_service_id:id};
+ assert.deepEqual(projectCommercialState(source),{metadata:source.metadata,offer:null,offer_revision:7,can_manage:true,can_manage_metadata:true});
+ for(const offer_revision of [-1,1.5,'7',null])assert.throws(()=>projectCommercialState({...source,offer_revision}));
+});

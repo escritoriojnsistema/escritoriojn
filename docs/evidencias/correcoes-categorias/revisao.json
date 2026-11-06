@@ -1,0 +1,18 @@
+{
+  "review": "Independent read-only source review",
+  "base": "bc2e5ba2",
+  "domains": [
+    "catalog associations and history",
+    "canonical category projections and archives",
+    "portal document RPC ACL",
+    "staff category opening and legacy RPC compatibility",
+    "service model picker search, pagination and unfiled models"
+  ],
+  "resolved_findings": [
+    "Preserve urgent priority and reason for collection",
+    "Preserve pre-migration preintake idempotent replay with current authorization"
+  ],
+  "outstanding_P0_P1_P2": 0,
+  "limits": "Source review is separate from test execution and hosted readback. Any subsequent implementation changes require targeted re-review.",
+  "targeted_recheck": "Explicit service table lock serializes archival through backfill and trigger installation; no identified deadlock cycle. Reviewed after final source change."
+}

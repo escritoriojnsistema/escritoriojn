@@ -735,7 +735,7 @@ try {
     result+=await raceRelease25({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceSignatures24({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     for(const file of correctionMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
-    if(correctionMigrations.length)for(const suite of ['request-levels','portal-request-returns','account-closure','catalog-sync','request-level-scope','request-routing','retention','privacy-settings','maintenance'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
+    if(correctionMigrations.length)for(const suite of ['request-levels','portal-request-returns','account-closure','catalog-sync','request-level-scope','request-routing','retention','privacy-settings','maintenance','portal-documents-access','portal-documents-published','staff-category-opening']){try{result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));}catch(error){console.error(`Final-schema suite failed: ${database}/${suite}`);throw error;}}
     if(correctionMigrations.length){const raceDb='corrections_role_race_'+(database.endsWith('_a')?'a':'b');sql('postgres','postgres',`CREATE DATABASE ${raceDb} TEMPLATE ${database} OWNER migrator;`);result+=execFileSync(process.execPath,[`${root}scripts/test-account-closure-race.mjs`,name,raceDb],{encoding:'utf8'});result+=execFileSync(process.execPath,[`${root}scripts/test-account-closure-invitation-race.mjs`,name,raceDb],{encoding:'utf8'});}
     return result;
   };

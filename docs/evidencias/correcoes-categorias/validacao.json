@@ -1,0 +1,36 @@
+{
+  "node_api": {
+    "passed": 339,
+    "failed": 0,
+    "skipped": 0
+  },
+  "production_build": {
+    "frontend_typescript": "passed",
+    "vite": "passed",
+    "server_typescript": "passed"
+  },
+  "browser": {
+    "requests_regression": 14,
+    "staff_category_opening": 8,
+    "service_link_contracts": 2,
+    "widths": [
+      360,
+      1440
+    ]
+  },
+  "real_auth_api_db_browser": {
+    "passed": 1,
+    "duration_seconds": 11.5,
+    "flow": "archive service, clear model service, sixth approved model pagination and search, link via Services UI, new client price, archive category and edit archived metadata"
+  },
+  "database_full_replays": {
+    "passed": true,
+    "restricted_migrator": true,
+    "replays": [
+      1961,
+      1967
+    ],
+    "pass_lines_including_runner": 3929
+  },
+  "hosted_fixtures": false
+}

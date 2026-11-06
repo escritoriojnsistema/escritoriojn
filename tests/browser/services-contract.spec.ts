@@ -110,3 +110,35 @@ for(const width of [320,1440])test(`serviços: excluir com motivo e repetir a me
  await expect(page.getByRole('status')).toContainText('Serviço excluído');expect(commands).toHaveLength(2);expect(commands[0]).toEqual(commands[1]);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
+for(const width of [360,1440])test(`vínculo paginado: sexto modelo, busca e retry em ${width}px`,async({page})=>{
+ await page.setViewportSize({width,height:900});await setup(page,[...permissions,'templates.manage','requests.read']);
+ const folder='44444444-4444-4444-8444-444444444444';
+ const models=Array.from({length:6},(_,i)=>({id:`55555555-5555-4555-8555-55555555555${i}`,code:`MODEL-${i+1}`,name:`Modelo ${i+1}`,current_version:1,demonstration:false}));
+ const attempts:Array<{template_id:string;idempotency_key:string}>=[];
+ await page.route('**/api/document-commercial/**',async r=>{
+  const path=new URL(r.request().url()).pathname,b=r.request().postDataJSON();
+  if(path.endsWith('/presence'))return r.fulfill({json:{data:{status:'offline',capacity:1,last_seen:null,session_current:false}}});
+  if(path.endsWith('/offer-for-service'))return r.fulfill({json:{data:null}});
+  if(path.endsWith('/folders'))return r.fulfill({json:{data:{folders:[{id:folder,name:'Pasta de teste',revision:1,category:'Documentos'}],locations:[],can_manage:true}}});
+  if(path.endsWith('/templates-search')){
+   const filtered=models.filter(m=>!b.query||m.name.includes(b.query));
+   return r.fulfill({json:{data:{items:filtered.slice((b.page-1)*b.size,b.page*b.size),total:filtered.length,page:b.page,page_size:b.size}}});
+  }
+  if(path.endsWith('/offer-attach')){
+   attempts.push(b);if(attempts.length<=2)return r.fulfill({status:503,json:{error:{code:'UNAVAILABLE'}}});
+   return r.fulfill({json:{data:{template_id:b.template_id,name:'Modelo 5',template_code:'MODEL-5',folder_name:'Pasta de teste',folder_category:'Documentos',service_category:'Cópias',price_cents:50,offer_revision:2,service_checklist:[]}}});
+  }
+  return r.fulfill({status:404,json:{error:{code:'NOT_FOUND'}}});
+ });
+ await page.goto('/servicos');await page.getByRole('button',{name:'Ver serviço Xerox de Teste',exact:true}).click();
+ const region=page.getByRole('region',{name:'Documento vinculado ao serviço'}),picker=region.getByRole('combobox',{name:/^Documento/});
+ await region.getByRole('combobox',{name:/^Pasta/}).selectOption(folder);
+ await expect(picker.locator('option')).toHaveCount(6);await expect(picker.locator(`option[value="${models[5].id}"]`)).toHaveCount(0);
+ await region.getByRole('button',{name:'Próxima',exact:true}).click();await expect(picker.locator(`option[value="${models[5].id}"]`)).toHaveCount(1);await picker.selectOption(models[5].id);
+ await region.getByRole('button',{name:'Vincular documento',exact:true}).click();await expect(region.getByRole('alert')).toBeVisible();
+ await region.getByRole('button',{name:'Vincular documento',exact:true}).click();await expect.poll(()=>attempts.length).toBe(2);expect(attempts[1].idempotency_key).toBe(attempts[0].idempotency_key);
+ await region.getByLabel('Buscar documento',{exact:true}).fill('Modelo 5');await expect(picker.locator(`option[value="${models[4].id}"]`)).toHaveCount(1);await picker.selectOption(models[4].id);
+ await region.getByRole('button',{name:'Vincular documento',exact:true}).click();await expect(region.getByRole('status')).toContainText('Documento vinculado');
+ expect(attempts[2].idempotency_key).not.toBe(attempts[0].idempotency_key);expect(attempts[2].template_id).toBe(models[4].id);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
