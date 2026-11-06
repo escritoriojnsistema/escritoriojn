@@ -1,8 +1,8 @@
 {
-  "status": "implementado_homologado_publicacao_em_andamento",
+  "status": "concluido_publicado_verificado",
   "base": "9fa691028c9400005a068212dd7d185408ab271a",
   "branch": "fix/correcoes-integradas-20261105",
-  "production": "Etapa25",
+  "production": "Correções pós-Etapa25 — PR88",
   "hosted_migrations_applied": true,
   "github_actions_used": false,
   "files_changed": [
@@ -153,11 +153,13 @@
     "worker_scheduler_contract": "JWT servidor + header independente; RED/GREEN, sem configuracao hospedada",
     "real_auth_api_storage_retention": true,
     "privacy_settings_ui": 3,
-    "retention_compact_ui": 13
+    "retention_compact_ui": 13,
+    "production_public_ui": 5,
+    "published_assets_equal": 8,
+    "hosted_migrations": 63,
+    "scheduler_native": "2workers200/JWTtrue/Vault"
   },
-  "pending": [
-    "publicacao runtime GitHub Vercel e readback final"
-  ],
+  "pending": [],
   "limits": [
     "Browser e worker destas correcoes usam respostas simuladas; SQL real em PostgreSQL local descartavel",
     "Suite historica executa antes das migrations novas; suites especificas depois",

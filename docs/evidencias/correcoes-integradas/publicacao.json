@@ -1,8 +1,30 @@
 {
-  "status": "schema_publicado_runtime_em_publicacao",
+  "status": "publicado_e_verificado",
+  "runtime_pr": 88,
+  "runtime_merge": "18dae986067bae8359cfcbcb119e463c8ba4173e",
+  "runtime_source_tree": "3deedf97accd723cfe0418d422ef4410e84ed861",
+  "vercel_runtime": "5io3E4DtEmKjLg41pehP752QdScz",
+  "origin": "https://escritoriojn.vercel.app",
   "schema_pr": 87,
   "schema_merge": "6c6f30af08171d74a61eccbaee405cdb8ed688e8",
-  "migrations": [
+  "schema": {
+    "auth": 7,
+    "files": 0,
+    "events": 114,
+    "members": 7,
+    "closures": 0,
+    "documents": 0,
+    "public_notice": {
+      "revision": 0,
+      "configured": false
+    },
+    "last_migration": "20261106132841",
+    "migration_count": 63,
+    "individual_grants": 17,
+    "anon_private_schema_usage": false,
+    "public_projection_invoker": true
+  },
+  "statement_checks": [
     {
       "version": "20261105150001",
       "statements": 68,
@@ -50,9 +72,147 @@
       "statements": 13,
       "matched": 13,
       "misses": []
+    },
+    {
+      "version": "20261106132841",
+      "statements": 28,
+      "matched": 28
     }
   ],
-  "native_scheduler": [
+  "statement_total": 257,
+  "private_tables": [
+    {
+      "name": "private.account_closures",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.account_retention_holds",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.account_retention_policies",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.closed_account_documents",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.closed_account_offices",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.maintenance_schedule_settings",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.portal_hidden_files",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.portal_intake_forms",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.portal_intake_revisions",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.portal_request_commands",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.portal_request_visibility",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.privacy_controller_settings",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.request_level_exceptions",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.request_preintake_events",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.request_preintakes",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.retention_items",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.retention_policy_history",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.retention_purges",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    },
+    {
+      "name": "private.retention_redaction_context",
+      "rls": true,
+      "anon_table_access": false,
+      "authenticated_table_access": false
+    }
+  ],
+  "workers": [
+    {
+      "name": "account-closure",
+      "version": 3,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "files_equal": true
+    },
+    {
+      "name": "retention",
+      "version": 3,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "files_equal": true
+    }
+  ],
+  "scheduler_native": [
     {
       "worker": "account-closure",
       "last_error_code": null,
@@ -70,20 +230,49 @@
       "content": "{\"data\":{\"processed\":0,\"pending\":0}}"
     }
   ],
+  "synchronization": {
+    "category_count": 15,
+    "closure_dispatch": true,
+    "retention_dispatch": true,
+    "unclassified_categories": 15,
+    "duplicate_category_names": 0,
+    "missing_service_category_links": 0
+  },
   "tests": {
-    "node": 334,
+    "node_api": 334,
     "sql_replay_a": 1910,
     "sql_replay_b": 1916,
     "sql_pass_lines": 3827,
     "real_auth_api_storage_retention": true,
-    "ui_requests_collection_archive_account": 27,
-    "ui_privacy_settings": 3,
-    "ui_retention": 13,
-    "ui_retention_rechecks": 2
+    "requests_collection_archive_account_ui": 27,
+    "privacy_settings_ui": 3,
+    "retention_ui": 13,
+    "retention_copy_recheck": 2,
+    "public_portal_privacy_returns_regression": 12,
+    "public_homes_production": 5,
+    "password_mock_sdk_previous": 2
   },
-  "remarks": [
-    "Nenhuma fixture hospedada ou novo nível/preço/aprovação real.",
-    "Dados de privacidade explicitamente fictícios por pedido do usuário; superadministrador pode editar.",
-    "Aviso anterior de senhas comprometidas permanece; índices e projeção pública tiveram revisão adicional."
+  "advisors": {
+    "new_domain_unindexed_fks": 0,
+    "remaining_old_unindexed_fks": 27,
+    "security_warns": [
+      {
+        "name": "auth_leaked_password_protection",
+        "count": 1,
+        "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+      }
+    ],
+    "note": "Proteção de senha comprometida é aviso anterior, fora das alterações; nenhum WARN de exposição definer novo permanece."
+  },
+  "choices_required": [
+    "Preencher identificação real em Configurações → Privacidade; exemplos são explícitos por escolha do usuário.",
+    "Escolher níveis das15categorias pendentes; nenhum nível definitivo foi inventado.",
+    "Aprovar políticas por classe/tipo e marcos reais; nenhum prazo universal foi imposto."
+  ],
+  "limits": [
+    "Sem fixtures ou expurgos de teste hospedados.",
+    "Jornada positiva Auth/Storage realizada em laboratório real local; navegação pública e workers nativos verificados hospedados.",
+    "Backups e classes independentes de cadastro/financeiro/atendimento obedecem políticas próprias; não se afirma eliminação total de dados pessoais.",
+    "Dispositivo físico e scanner real não exercitados."
   ]
 }
