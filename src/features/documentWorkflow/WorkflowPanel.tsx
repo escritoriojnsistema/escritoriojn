@@ -1,3 +1,4 @@
+import {DeliveryPanel} from './DeliveryPanel';
 import {ReleasePanel} from './ReleasePanel';
 import {SignaturePanel} from './SignaturePanel';
 import {useEffect,useRef,useState} from 'react';
@@ -22,7 +23,7 @@ export function WorkflowPanel({office,documentId,revision,disabled,onDenied,onCh
  const publication=state?.publications.find(p=>p.revision===revision);
  const review=publication?.review;
  const needsReason=['freeze','approve','reject','return','withdraw','handoff'].includes(action);
- const actions=[{id:'refresh',label:'Atualizar etapas',allowed:true},{id:'release',label:'Liberação e exceção financeira',allowed:!!publication},{id:'formalization',label:'Formalização manual e assinatura',allowed:!!publication},{id:'freeze',label:review?.status==='withdrawn'?'Reencaminhar para revisão':'Encaminhar para revisão',allowed:!conflict&&!!state?.can_work&&(review?review.can_submit:!publication)},
+ const actions=[{id:'refresh',label:'Atualizar etapas',allowed:true},{id:'delivery',label:'Entregas e impressão',allowed:!!publication},{id:'release',label:'Liberação e exceção financeira',allowed:!!publication},{id:'formalization',label:'Formalização manual e assinatura',allowed:!!publication},{id:'freeze',label:review?.status==='withdrawn'?'Reencaminhar para revisão':'Encaminhar para revisão',allowed:!conflict&&!!state?.can_work&&(review?review.can_submit:!publication)},
  {id:'approve',label:'Aprovar documento',allowed:!conflict&&!!publication&&(review?review.can_decide:!!state?.can_review&&publication.review_required)},
  {id:'reject',label:'Rejeitar documento',allowed:!conflict&&!!review?.can_decide},
  {id:'return',label:'Devolver para correção',allowed:!conflict&&!!review?.can_decide},
@@ -39,14 +40,14 @@ export function WorkflowPanel({office,documentId,revision,disabled,onDenied,onCh
   if(action==='download'){download(publication.id);return;}
   if(action==='approve'||action==='reject'||action==='return'||action==='withdraw'||action==='handoff')command({kind:action,publication_id:publication.id,expected_revision:revision,reason:reason.trim(),...(['approve','reject','return','withdraw'].includes(action)?{expected_event_id:review?.last_event_id??null}:{})});
  }
- return <section className="document-workflow" aria-label="Revisão, caixa e entrega"><div hidden={action==='formalization'||action==='release'}><h2>Revisão, caixa e entrega</h2>
+ return <section className="document-workflow" aria-label="Revisão, caixa e entrega"><div hidden={action==='formalization'||action==='release'||action==='delivery'}><h2>Revisão, caixa e entrega</h2>
  <p className="document-hint">A revisão usa o preenchimento salvo e concluído. Aprovação, assinatura e envio ao caixa continuam separados.</p>
  {error&&<p role="alert" className="form-feedback error">{error}</p>}{message&&<p role="status" className="form-feedback">{message}</p>}
  {review&&<div className="review-summary"><p>{reviewStatuses[review.status]} · Responsável: {review.reviewer_name??'Fila compartilhada'}</p><p>Preparado por {review.prepared_by_name} · Prazo: {review.due_at?new Date(review.due_at).toLocaleString('pt-BR'):'Sem prazo'}</p>{review.last_reason&&<p>Observação interna: {review.last_reason}</p>}</div>}
  {publication&&<p className="document-hint">Revisão {publication.revision} · {publication.ready?'Disponível para o cliente vinculado':publication.blockers.map(b=>workflowBlockers[b]).join(' · ')}</p>}
  </div>
  <label className="team-field">Ação documental<select aria-label="Ação documental" value={action} disabled={locked} onChange={e=>setAction(e.target.value)}>{actions.map(a=><option key={a.id} value={a.id} disabled={!a.allowed}>{a.label}</option>)}</select></label>
- <div hidden={action==='formalization'||action==='release'}>
+ <div hidden={action==='formalization'||action==='release'||action==='delivery'}>
  {action==='freeze'&&actions.find(a=>a.id==='freeze')?.allowed&&<><ReviewMemberPicker office={office} documentId={documentId} value={reviewer} onChange={setReviewer} disabled={locked} onError={fail}/><label className="team-field">Prazo interno (opcional)<input type="datetime-local" value={due} disabled={locked} onChange={e=>setDue(e.target.value)}/></label></>}
  {needsReason&&<label className="team-field">Motivo ou evidência da etapa<input value={reason} disabled={locked} maxLength={500} onChange={e=>setReason(e.target.value)} placeholder="Descreva a conferência realizada"/></label>}
  <button className="primary-button" disabled={busy||disabled||signaturePending||!attempt.current&&(!actions.find(a=>a.id===action)?.allowed||needsReason&&!reason.trim())} onClick={execute}>Registrar ação</button>
@@ -54,6 +55,7 @@ export function WorkflowPanel({office,documentId,revision,disabled,onDenied,onCh
  {conflict&&<p role="status" className="document-hint">Sua observação foi preservada. Selecione Atualizar etapas para reconferir a revisão e a decisão atuais antes de registrar uma nova ação.</p>}
  <ReviewHistory office={office} documentId={documentId} refresh={historyRefresh} disabled={locked} onDenied={onDenied}/>
  </div>
+ <div hidden={action!=='delivery'}>{publication&&<DeliveryPanel key={publication.id} office={office} publicationId={publication.id} active={action==='delivery'} disabled={busy||disabled||!!attempt.current} onDenied={onDenied} onChanged={()=>{setTick(t=>t+1);onChanged?.();}} onPendingChange={pending=>{setSignaturePending(pending);onPendingChange?.(pending||!!attempt.current);}}/>}</div>
  <div hidden={action!=='release'}>{publication&&<ReleasePanel key={publication.id} office={office} publicationId={publication.id} active={action==='release'} disabled={busy||disabled||!!attempt.current} onDenied={onDenied} onChanged={()=>{setTick(t=>t+1);onChanged?.();}} onPendingChange={pending=>{setSignaturePending(pending);onPendingChange?.(pending||!!attempt.current);}}/>}</div>
  <div hidden={action!=='formalization'}>
  {publication&&<SignaturePanel key={publication.id} office={office} publicationId={publication.id} active={action==='formalization'} disabled={busy||disabled||!!attempt.current} onDenied={onDenied} onChanged={()=>{setTick(t=>t+1);onChanged?.();}} onPendingChange={pending=>{setSignaturePending(pending);onPendingChange?.(pending||!!attempt.current);}}/>}

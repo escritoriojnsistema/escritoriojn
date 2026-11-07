@@ -1,0 +1,27 @@
+import {documentExact as exact,documentObject as object,documentUuid as uuid} from './documents.js';
+import {workflowBlockers} from './documentWorkflow.js';
+export const deliveryChannels={download:'Download privado',print:'Impressão final',whatsapp:'WhatsApp manual'};
+export const deliveryStatuses={attempt:'Tentativa',available:'Disponibilizado',confirmed:'Recebimento confirmado',revoked:'Acesso futuro revogado'};
+export type DeliveryCommand={kind:'begin';channel:'print'|'whatsapp';expected_revision:number;recipient_customer_id:string;contact_position:number|null;expected_phone:string|null;recipient_checked:true}|{kind:'available'|'confirm'|'revoke';delivery_id:string;expected_event_id:string;reason:string};
+export type DeliveryEvent={id:string;kind:keyof typeof deliveryStatuses;reason:string|null;actor_name:string;created_at:string};
+export type Delivery={id:string;channel:keyof typeof deliveryChannels;revision:number;sha256:string;recipient_name:string;recipient_customer_id:string|null;phone:string|null;status:keyof typeof deliveryStatuses;last_event_id:string;created_at:string;actor_name:string;events:DeliveryEvent[]};
+export type DeliveryState={publication_id:string;revision:number;ready:boolean;blockers:string[];can_deliver:boolean;can_revoke:boolean;recipient:{id:string;name:string;contacts:{position:number;phone:string}[]}|null;items:Delivery[];total:number;page:number;page_size:5};
+const phone=(v:unknown):v is string=>typeof v==='string'&&/^55[0-9]{10,11}$/.test(v);
+const integer=(v:unknown,min=0):v is number=>typeof v==='number'&&Number.isSafeInteger(v)&&v>=min;
+const text=(v:unknown,max=120):v is string=>typeof v==='string'&&v.length>0&&Array.from(v).length<=max&&!/[\u0000-\u001f\u007f]/.test(v);
+const time=(v:unknown):v is string=>typeof v==='string'&&Number.isFinite(Date.parse(v));
+export function validDeliveryCommand(v:unknown):v is DeliveryCommand{
+ if(!object(v))return false;
+ if(v.kind==='begin')return exact(v,['kind','channel','expected_revision','recipient_customer_id','contact_position','expected_phone','recipient_checked'])&&['print','whatsapp'].includes(String(v.channel))&&integer(v.expected_revision,1)&&v.expected_revision<=2147483646&&uuid(v.recipient_customer_id)&&v.recipient_checked===true&&(v.channel==='print'?v.contact_position===null&&v.expected_phone===null:integer(v.contact_position)&&v.contact_position<=3&&phone(v.expected_phone));
+ return exact(v,['kind','delivery_id','expected_event_id','reason'])&&['available','confirm','revoke'].includes(String(v.kind))&&uuid(v.delivery_id)&&uuid(v.expected_event_id)&&text(v.reason,500)&&Array.from(v.reason).length>=5&&v.reason===v.reason.trim();
+}
+export function projectDeliveryState(v:unknown):DeliveryState{
+ if(!object(v)||!uuid(v.publication_id)||!integer(v.revision,1)||typeof v.ready!=='boolean'||typeof v.can_deliver!=='boolean'||typeof v.can_revoke!=='boolean'||!Array.isArray(v.blockers)||v.blockers.some(b=>!Object.hasOwn(workflowBlockers,String(b)))||v.ready!==(v.blockers.length===0)||!Array.isArray(v.items)||v.items.length>5||!integer(v.total)||!integer(v.page,1)||v.page_size!==5)throw Error('Invalid delivery state');
+ let recipient:DeliveryState['recipient']=null;
+ if(v.recipient!==null){const r=v.recipient;if(!object(r)||!uuid(r.id)||!text(r.name)||!Array.isArray(r.contacts)||r.contacts.length>4)throw Error('Invalid recipient');recipient={id:r.id,name:r.name,contacts:r.contacts.map(c=>{if(!object(c)||!integer(c.position)||c.position>3||!phone(c.phone))throw Error('Invalid phone');return {position:c.position,phone:c.phone};})};}
+ const items=v.items.map((d):Delivery=>{if(!object(d)||!uuid(d.id)||!Object.hasOwn(deliveryChannels,String(d.channel))||!Object.hasOwn(deliveryStatuses,String(d.status))||!integer(d.revision,1)||typeof d.sha256!=='string'||!/^[a-f0-9]{64}$/.test(d.sha256)||!text(d.recipient_name)||!(d.recipient_customer_id===null||uuid(d.recipient_customer_id))||!(d.phone===null||phone(d.phone))||!uuid(d.last_event_id)||!time(d.created_at)||!text(d.actor_name)||!Array.isArray(d.events)||d.events.length>4)throw Error('Invalid delivery');
+ const events=d.events.map((e):DeliveryEvent=>{if(!object(e)||!uuid(e.id)||!Object.hasOwn(deliveryStatuses,String(e.kind))||!(e.reason===null||text(e.reason,500))||!text(e.actor_name)||!time(e.created_at))throw Error('Invalid delivery event');return {id:e.id,kind:e.kind as DeliveryEvent['kind'],reason:e.reason,actor_name:e.actor_name,created_at:e.created_at};});
+ return {id:d.id,channel:d.channel as Delivery['channel'],revision:d.revision,sha256:d.sha256,recipient_name:d.recipient_name,recipient_customer_id:d.recipient_customer_id,phone:d.phone,status:d.status as Delivery['status'],last_event_id:d.last_event_id,created_at:d.created_at,actor_name:d.actor_name,events};});
+ return {publication_id:v.publication_id,revision:v.revision,ready:v.ready,blockers:[...v.blockers] as string[],can_deliver:v.can_deliver,can_revoke:v.can_revoke,recipient,items,total:v.total,page:v.page,page_size:5};
+}
+export function whatsappDeliveryUrl(phoneNumber:string){if(!phone(phoneNumber))throw Error('Confira o telefone vinculado.');return 'https://wa.me/'+phoneNumber+'?text='+encodeURIComponent('Olá. Confira o destinatário antes de anexar o documento combinado.');}

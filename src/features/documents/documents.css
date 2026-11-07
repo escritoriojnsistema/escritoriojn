@@ -13,3 +13,5 @@
 @media(min-width:1000px){.signature-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px;row-gap:8px}.signature-panel>h3,.signature-panel>p,.signature-panel>details,.signature-panel>fieldset{grid-column:1/-1}.signature-panel>.team-field{margin:0;min-width:0}.signature-panel>.primary-button{grid-column:2;justify-self:start;align-self:end}.signature-panel textarea{min-height:70px}}
 /* One workspace at a time: retain preview state while reviewing/releasing. */
 #document-panel-files:has(> .document-delivery-actions[open]) > .document-versions { display: none; }
+
+.document-workflow .document-deliveries{margin-top:8px;padding-top:8px}.document-deliveries .team-actions a,.document-deliveries>details>summary{min-height:44px;display:flex;align-items:center}.document-deliveries .review-summary p{margin-block:5px}

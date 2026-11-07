@@ -1,0 +1,11 @@
+# Etapa26 — entrega rastreável
+
+Base: main2a96843, Etapa25 e correções07/11. Fonte: cartão26 do Drive1djLW4wAiTt7z02MZwVX_4pm1Swu1Z3yg. Implementação autorizada pelo pedido atual; preservar React/Vite/Express, gate25, bytes/worker24, configurações e dados reais.
+
+Estender o fluxo existente com deliveries imutáveis e eventos de tentativa, disponibilização, confirmação e revogação. Download autenticado gera disponibilização, nunca recebimento. Impressão final usa os mesmos bytes/gate; solicitar impressão não comprova impressão física. WhatsApp manual exige telefone da ficha do destinatário vinculado, conferência explícita e arquivo baixado pelo canal privado; abrir conversa não envia arquivo, registrar envio exige declaração/evidência, confirmação é separada. Sem URL pública/assinada, sem PII em logs/auditoria/URLs internas; wa.me contém apenas telefone conferido e texto genérico, por ação explícita.
+
+Destinatário limitado ao cliente do pedido; substituição arbitrária negada. Capacidade documents.deliver para novas impressões/WhatsApp/declarações; documents.deliveries.revoke adicional owner/admin para bloquear novos acessos finais da publicação. Revalidação de sessão, responsabilidade, capacidade, vínculo, revisão, hash e snapshot financeiro a cada acesso/disponibilização. Revogação conservadora da publicação não apaga arquivos já obtidos e nova versão exige nova avaliação. Downloads mantêm as permissões anteriores e portal próprio. Histórico da equipe paginado5, operador/data do servidor, eventos append-only com idempotência/versão esperada.
+
+Uma seção Entregas no seletor documental existente, CSS Equipe, uma área por vez, sem loader ou quinto atalho. Histórico recolhível, ações separadas em seletor/um botão.503 preserva chave/corpo;409 reconfere;401/403 limpa. Não modificar motores PDF/Edge, cadastro/ambiente, Auth ou serviços reais. GitHub→Vercel; sem Actions/deployCLI. Banco após Git: conferir histórico antes de aplicar. Publicação só se comprovada; lacunas no Livro/fecho.
+
+Abordagem escolhida: eventos associados ao release25 e ações humanas explícitas. Evita pipeline/Storage/worker paralelos. Downloads internos para imprimir/WhatsApp também aparecem como disponibilização do arquivo ao operador, enquanto o canal final conserva tentativa até declaração humana.
