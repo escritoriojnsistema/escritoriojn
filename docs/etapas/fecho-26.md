@@ -1,5 +1,7 @@
 # Fecho26 — entregas, impressão e WhatsApp manual
 
+> Revisão posterior de07/11/2026: quatro pendênciasP2 reproduzidas, ainda sem correção. Ver [relatório integral](revisao-26-20261107.md). O estado de publicação e as provas abaixo são históricos; não significam ausência dos defeitos identificados na revisão.
+
 Estado: concluída, publicada e verificada em https://escritoriojn.vercel.app pela integração GitHub→Vercel. Base `2a96843`/Etapa25 mais correções07/11 conferida antes de editar. [Cartão do Drive](etapa-26.md), [escopo](../superpowers/specs/2026-11-07-etapa-26-entregas.md).
 
 ## Comportamento
