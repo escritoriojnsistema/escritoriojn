@@ -3,18 +3,18 @@
   "views": {
     "obligations": {
       "samples": 12,
-      "median_ms": 161.21389299997827,
-      "p95_ms": 191.12121399998432
+      "median_ms": 260.8112719999626,
+      "p95_ms": 654.5507799999905
     },
     "movements": {
       "samples": 12,
-      "median_ms": 133.9128330000094,
-      "p95_ms": 159.44148199999472
+      "median_ms": 194.87018600001466,
+      "p95_ms": 516.158077
     },
     "cash": {
       "samples": 12,
-      "median_ms": 114.72489599999972,
-      "p95_ms": 132.24730400001863
+      "median_ms": 489.3073199999635,
+      "p95_ms": 660.8227590000024
     }
   },
   "projection": {
@@ -31,11 +31,11 @@
         "Relation Name": "cash_entries",
         "Alias": "cash_entries",
         "Startup Cost": 0,
-        "Total Cost": 18.38,
-        "Plan Rows": 255,
-        "Plan Width": 297,
-        "Actual Startup Time": 0.026,
-        "Actual Total Time": 0.288,
+        "Total Cost": 20.38,
+        "Plan Rows": 335,
+        "Plan Width": 301,
+        "Actual Startup Time": 0.018,
+        "Actual Total Time": 0.252,
         "Actual Rows": 335,
         "Actual Loops": 1,
         "Filter": "((office_id = '00000000-0000-4000-e000-000000000151'::uuid) AND (created_at >= CURRENT_DATE) AND (created_at < (CURRENT_DATE + 1)))",
@@ -52,7 +52,7 @@
         "Temp Written Blocks": 0
       },
       "Planning": {
-        "Shared Hit Blocks": 351,
+        "Shared Hit Blocks": 410,
         "Shared Read Blocks": 0,
         "Shared Dirtied Blocks": 0,
         "Shared Written Blocks": 0,
@@ -63,9 +63,9 @@
         "Temp Read Blocks": 0,
         "Temp Written Blocks": 0
       },
-      "Planning Time": 0.935,
+      "Planning Time": 3.653,
       "Triggers": [],
-      "Execution Time": 0.312
+      "Execution Time": 0.294
     }
   ]
 }
