@@ -52,3 +52,7 @@ Advisors semERROR;INFO deRLSprivadassem policy/índices ainda sem uso é compat�
 - [x] SemActions,fixtureshospedadas ou envioexterno não solicitado; próximo27somente por novo pedido.
 
 Fechamento seguinte somente documental; não repetir banco/E2E/deploy funcional sem mudança executável.
+
+## Fecho das correções
+
+R1–R4 corrigidos e publicados pelo [PR98](https://github.com/escritoriojnsistema/escritoriojn/pull/98), merge7d5c2d7. Vercel3Qhy7aLMJcYqy4dDjG3dsAMof1R7SUCCESS; migration20261107194252 aplicada automaticamente,6comandos e4corposprivadosMD5iguais ao SQL homologado.347Node/API,build/typecheck,doisreplaysSQL1.523PASS,13UI e jornadaAuth/REST/Storage/PDF local aprovados. Bundlecanônicoindex-BRWmov8L/OperationalRoutes-Dvjbf4mo conferido com os novos campos,health200/trêsAPIs401. Nenhuma fixture hospedada, envioWhatsApp ou impressão física. As pendências anteriores deste documento registram o estado histórico da revisão; foram resolvidas por este fecho.
