@@ -13,14 +13,6 @@ ALTER TABLE private.document_offering_detachments ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON private.document_offering_detachments FROM PUBLIC,anon,authenticated,service_role;
 CREATE TRIGGER document_offering_detachments_immutable BEFORE UPDATE OR DELETE ON private.document_offering_detachments
  FOR EACH ROW EXECUTE FUNCTION private.templates_immutable20();
--- Serialize service archival across backfill and trigger installation.
--- The migration transaction must not miss an archive between these operations.
-LOCK TABLE public.services IN SHARE ROW EXCLUSIVE MODE;
--- Repair current metadata for already archived services without restoring them.
-INSERT INTO private.document_offering_detachments
- SELECT o.office_id,o.template_id,o.service_id,o.revision,s.archived_at,to_jsonb(o)
- FROM private.document_offerings o JOIN public.services s ON s.office_id=o.office_id AND s.id=o.service_id
- WHERE s.archived_at IS NOT NULL;
 CREATE FUNCTION private.document_offer_is_linked(o private.document_offerings) RETURNS boolean
 LANGUAGE sql STABLE SECURITY INVOKER SET search_path='' AS $$
  SELECT o.template_id IS NOT NULL AND NOT EXISTS(SELECT FROM private.document_offering_detachments d
@@ -36,9 +28,18 @@ BEGIN
  ON CONFLICT DO NOTHING;
  RETURN NEW;
 END $$;
-CREATE TRIGGER document_offerings_detach_archived_service AFTER UPDATE OF archived_at ON public.services
+-- One atomic statement works for migration runners using autocommit as well.
+-- Lock, backfill and trigger installation must remain in this same DO block.
+DO $sync$ BEGIN
+ LOCK TABLE public.services IN SHARE ROW EXCLUSIVE MODE;
+ INSERT INTO private.document_offering_detachments
+ SELECT o.office_id,o.template_id,o.service_id,o.revision,s.archived_at,to_jsonb(o)
+ FROM private.document_offerings o JOIN public.services s ON s.office_id=o.office_id AND s.id=o.service_id
+ WHERE s.archived_at IS NOT NULL;
+ CREATE TRIGGER document_offerings_detach_archived_service AFTER UPDATE OF archived_at ON public.services
  FOR EACH ROW WHEN(NEW.archived_at IS NOT NULL AND OLD.archived_at IS NULL)
  EXECUTE FUNCTION private.document_offerings_detach_archived_service();
+END $sync$;
 REVOKE ALL ON FUNCTION private.document_offer_is_linked(private.document_offerings),private.document_offerings_detach_archived_service() FROM PUBLIC,anon,authenticated,service_role;
 
 DO $m$ DECLARE n text;s text;updated text;BEGIN
