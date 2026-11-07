@@ -1,0 +1,57 @@
+{
+  "status": "published_verified",
+  "canonical": "https://escritoriojn.vercel.app",
+  "date_utc": "2026-11-07",
+  "base": "2a96843767bef80dcb674fd82c3519f1ff64e42c",
+  "compatibility": {
+    "pr": 95,
+    "commit": "4d6e0b1cdb875dd8edcf4a75c05751df1f4a713a",
+    "merge": "dcffe3f4a1c40450735c3114ed9fd65d09aac98b",
+    "vercel": "BgWQuY3684bEEhi1xdHvQ6F664No",
+    "status": "success"
+  },
+  "runtime": {
+    "pr": 96,
+    "commit": "fae99b308cfa99dc8030ccd2f523629f82a29787",
+    "merge": "0ff5a764b9c3d8054f39e2b6bfa322fb1a73b317",
+    "tree": "851b5bfe8b6c5ef3b6d4786199d245624c9d8232",
+    "vercel": "Gu1WoD4PzXBQgW55ykmtyVUAWpGp",
+    "status": "success",
+    "tested_tree_equal": true
+  },
+  "database": {
+    "migration": {
+      "version": "20261107144130",
+      "name": "document_deliveries26",
+      "automatic_via_git": true,
+      "statements_equal_in_order": 32,
+      "file_sha256": "e4fa9c914858661c2d102454f03b111810d5281ca4f1656e46eb0608c6086ec6"
+    },
+    "migrations": 67,
+    "auth_users": 7,
+    "memberships": 7,
+    "individual_grants": 17,
+    "documents": 0,
+    "files": 0,
+    "publications": 0,
+    "deliveries": 0
+  },
+  "verification": {
+    "local": "verificacao.json",
+    "canonical_assets": "bundle-publicado.json",
+    "canonical_assets_equal": 8,
+    "anonymous_api_barriers_401": 5,
+    "public_browser_tests_passed": 3,
+    "rls_tables": 3,
+    "public_invoker_wrappers": 3,
+    "private_function_bodies_equal": 7,
+    "hosted_personal_accounts_used": false,
+    "hosted_fixtures_created": false
+  },
+  "edge": "existing artifact worker unchanged; real handler exercised locally",
+  "github_actions": false,
+  "vercel_release_method": "GitHub integration only",
+  "manual_migration_apply": false,
+  "next_stage": 27,
+  "next_stage_started": false
+}

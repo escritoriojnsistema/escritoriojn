@@ -1,0 +1,122 @@
+{
+  "seed": [
+    {
+      "role": "owner",
+      "permission": "documents.deliver"
+    },
+    {
+      "role": "owner",
+      "permission": "documents.deliveries.revoke"
+    }
+  ],
+  "functions": [
+    {
+      "anon": false,
+      "name": "avaliar_liberacao25",
+      "schema": "private",
+      "definer": false,
+      "source_md5": "6580c8ebeaa61f544426696ab8c17c1a",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "delivery_actor26",
+      "schema": "private",
+      "definer": false,
+      "source_md5": "88a7aaf817430518267bb0ef305e4399",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "delivery_download26",
+      "schema": "private",
+      "definer": true,
+      "source_md5": "b00f04b5d1e9d05ac93475dddf59f0d0",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "delivery_redaction26",
+      "schema": "private",
+      "definer": true,
+      "source_md5": "b398a92b6f8231e5fb0689ceaf6cc1d0",
+      "authenticated": false
+    },
+    {
+      "anon": false,
+      "name": "document_delivery_access",
+      "schema": "public",
+      "definer": false,
+      "source_md5": "80ad81a029e8a310355dcb83f932926c",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "document_delivery_access",
+      "schema": "private",
+      "definer": true,
+      "source_md5": "efae16e2e8c1eebc2e86a4113f2be639",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "document_delivery_command",
+      "schema": "public",
+      "definer": false,
+      "source_md5": "ce33c5f0216eeeecfaa0efbc8816c908",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "document_delivery_command",
+      "schema": "private",
+      "definer": true,
+      "source_md5": "752d2bbf71f52dbf875ffde886907afc",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "document_delivery_state",
+      "schema": "public",
+      "definer": false,
+      "source_md5": "6645894065a5d74e983d089524ca1fce",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "document_delivery_state",
+      "schema": "private",
+      "definer": true,
+      "source_md5": "81090f78954ec9db1a203ec4040c9c0f",
+      "authenticated": true
+    },
+    {
+      "anon": false,
+      "name": "retention_redact_document",
+      "schema": "private",
+      "definer": true,
+      "source_md5": "881e47df8060498ac4c598e16d101095",
+      "authenticated": false
+    }
+  ],
+  "rls_tables": [
+    {
+      "rls": true,
+      "table": "deliveries",
+      "raw_anon": false,
+      "raw_authenticated": false
+    },
+    {
+      "rls": true,
+      "table": "delivery_commands26",
+      "raw_anon": false,
+      "raw_authenticated": false
+    },
+    {
+      "rls": true,
+      "table": "delivery_events26",
+      "raw_anon": false,
+      "raw_authenticated": false
+    }
+  ]
+}

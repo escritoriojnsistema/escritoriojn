@@ -1,0 +1,35 @@
+{
+  "security": {
+    "levels": {
+      "INFO": 1,
+      "WARN": 1
+    },
+    "warnings": [
+      {
+        "name": "auth_leaked_password_protection",
+        "level": "WARN",
+        "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+      }
+    ],
+    "stage26": [
+      {
+        "name": "rls_enabled_no_policy",
+        "level": "INFO",
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+      }
+    ]
+  },
+  "performance": {
+    "levels": {
+      "INFO": 2
+    },
+    "warnings": [],
+    "stage26": [
+      {
+        "name": "unused_index",
+        "level": "INFO",
+        "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+      }
+    ]
+  }
+}

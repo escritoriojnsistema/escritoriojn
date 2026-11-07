@@ -25,7 +25,9 @@
       360,
       768,
       1440
-    ]
+    ],
+    "stage26_final_repeat_passed": 9,
+    "canonical_public_passed": 3
   },
   "build": {
     "frontend": true,

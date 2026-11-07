@@ -1,0 +1,87 @@
+{
+  "origin": "https://escritoriojn.vercel.app",
+  "home": 200,
+  "health": 200,
+  "entry": "/assets/index-B2EE63MX.js",
+  "assets": [
+    {
+      "path": "OperationalRoutes-BycjbBrB.js",
+      "status": 200,
+      "bytes": 683858,
+      "sha256": "d2a8acaa9ee3ae7168e6e2e8e9a7aa8a8dbdc41eb7e6b9adc8c89f063789dc13",
+      "matches_local": true
+    },
+    {
+      "path": "OperationalRoutes-DixErSPb.css",
+      "status": 200,
+      "bytes": 84623,
+      "sha256": "d49ba928b6ca83c0792b079e86f8898376a1e7cd9c9271f9781d79f9254723aa",
+      "matches_local": true
+    },
+    {
+      "path": "icons-1f0VWjOT.js",
+      "status": 200,
+      "bytes": 12713,
+      "sha256": "ac3e1e837ac63798fcbfcaf323caaaae63e0dd53bd86589f6d543399a9219152",
+      "matches_local": true
+    },
+    {
+      "path": "index-B2EE63MX.js",
+      "status": 200,
+      "bytes": 59886,
+      "sha256": "ad3eb2d2692c1df626982220fb7eff5dbf3d941f2668bc813503f82764271603",
+      "matches_local": true
+    },
+    {
+      "path": "index-DGkYv4c9.css",
+      "status": 200,
+      "bytes": 21127,
+      "sha256": "5f94931df612eef55ee7de8856c34c777e2ddd3448c1a1cafd3d033f3dbf7b86",
+      "matches_local": true
+    },
+    {
+      "path": "react-C-G-5Uwp.js",
+      "status": 200,
+      "bytes": 259242,
+      "sha256": "1f2fda457afd0d175c0532313c24cf789618f713c21ca4c83588bf14bef06d1e",
+      "matches_local": true
+    },
+    {
+      "path": "rolldown-runtime-WkwZ5CU-.js",
+      "status": 200,
+      "bytes": 599,
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "matches_local": true
+    },
+    {
+      "path": "supabase-DtuMx0jC.js",
+      "status": 200,
+      "bytes": 214392,
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "matches_local": true
+    }
+  ],
+  "anonymous_api_barriers": [
+    {
+      "path": "/api/document-workflow/delivery-state",
+      "anonymous": 401
+    },
+    {
+      "path": "/api/document-workflow/delivery-command",
+      "anonymous": 401
+    },
+    {
+      "path": "/api/document-workflow/artifact",
+      "anonymous": 401
+    },
+    {
+      "path": "/api/document-workflow/release-state",
+      "anonymous": 401
+    },
+    {
+      "path": "/api/document-workflow/portal",
+      "anonymous": 401
+    }
+  ],
+  "authenticated_business_tests": "disposable local Auth/REST/Express/Storage/PDF; no hosted fixture"
+}

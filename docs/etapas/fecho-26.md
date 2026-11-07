@@ -1,6 +1,6 @@
 # Fecho26 — entregas, impressão e WhatsApp manual
 
-Estado: implementação e homologação local concluídas; compatibilidadePR95 integrada, runtime/schema em publicação. Base `2a96843`/Etapa25 mais correções07/11 conferida antes de editar. [Cartão do Drive](etapa-26.md), [escopo](../superpowers/specs/2026-11-07-etapa-26-entregas.md).
+Estado: concluída, publicada e verificada em https://escritoriojn.vercel.app pela integração GitHub→Vercel. Base `2a96843`/Etapa25 mais correções07/11 conferida antes de editar. [Cartão do Drive](etapa-26.md), [escopo](../superpowers/specs/2026-11-07-etapa-26-entregas.md).
 
 ## Comportamento
 
@@ -28,4 +28,25 @@ Entregas e impressão integra o seletor documental existente; sem quinta aba/ata
 
 Jornada Auth/REST/Express/Storage/PDF real local aprovada com `scripts/test-deliveries26-real.mjs`: download/artefato preservados byte a byte, tentativa/idempotência, disponibilização negada antes de acesso privado, confirmação explícita e revogação bloqueando equipe/portal, sem afetar outra publicação. O pull padrão do Storage falhou por falta de espaçoVFS; a recuperação usou rootfs da mesma imagem oficial fixada, manifest/layersSHA256conferidos, via lançador já existente no laboratório. Nenhuma alteração do produto/worker para contornar o teste. Não houve envioWhatsApp externo, impressão física, teste de scanner/assinatura criptográfica, aparelho físico ou uso de conta pessoal hospedada.
 
-Sem alteração dos motoresPDF/workerEdge, Auth, cadastro/serviços/preços reais ou configuraçõesVercel: não se aplica modificar essas camadas além da integração Git existente. Supabase/migration e runtimeFrontend/Express têm impacto e exigem publicação/readback. Produção inicial:66migrations/7Auth/7vínculos/17grantsindividuais/0documentos/arquivos/publicações/releases. Nenhuma fixture hospedada. CompatibilidadePR95/commit`4d6e0b1`/merge`dcffe3f4` integrada; previewVercel`2ezDwRUm`SUCCESS, sem migration. SemActions/deployCLI/API Vercel. Próximo checkpoint: publicar GitHub→Vercel e conferir migration20261107144130/ACL/fontes/canônico; consultar histórico antes de qualquerapplymanual. Não iniciar27 nem declarar26publicada até as provas.
+Sem alteração dos motoresPDF/workerEdge, Auth, cadastro/serviços/preços reais ou configuraçõesVercel: não se aplica modificar essas camadas além da integração Git existente. Supabase/migration e runtimeFrontend/Express foram publicados e conferidos. Nenhuma fixture hospedada. SemActions/deployCLI/API Vercel. Etapa27 não iniciada.
+
+## Publicação e conferência hospedada
+
+Compatibilidade[PR95](https://github.com/escritoriojnsistema/escritoriojn/pull/95):commit`4d6e0b1`,merge`dcffe3f4`,Vercel`BgWQuY3684bEEhi1xdHvQ6F664No`SUCCESS, antes do schema. Runtime/schema[PR96](https://github.com/escritoriojnsistema/escritoriojn/pull/96):commit`fae99b3`,merge`0ff5a764`,árvore`851b5bfe`igualàhomologada,Vercel`Gu1WoD4PzXBQgW55ykmtyVUAWpGp`SUCCESS. [Publicação](../evidencias/etapa-26/publicacao.json).
+
+Migration`20261107144130` aplicada automaticamente apósGit:32comandos na mesma ordem iguais ao arquivo,7corposprivadosMD5iguais,3wrapperspúblicosINVOKERsóauthenticated/semEXECanônimo e3tabelasRLS/ACLfechadas. Seed2somenteowner, nenhum grantindividual novo. Histórico66→67;7Auth/7vínculos/17grantsindividuais e0documentos/arquivos/publicações/entregas preservados. **NÃO reaplicar migration.** [Schema](../evidencias/etapa-26/schema-publicado.json),[ACL](../evidencias/etapa-26/acl-publicada.json).
+
+Build com configuração pública extraída do próprio bundle publicado:8assetscanônicosSHA256iguaisao build,entry`index-B2EE63MX.js`,home/health200,5APIs401;3contratosbrowserpúblicos360/1440passaram.9UI26repetidos para capturar apresentação final passaram novamente. [Bundle/barreiras](../evidencias/etapa-26/bundle-publicado.json). Sem jornada com contas pessoais hospedadas; positivafoicomprovadanolaboratório real.
+
+Advisors semERROR;INFO deRLSprivadassem policy/índices ainda sem uso é compatível comACLfechada/base vazia; nenhumaFK26semíndice. WARNpreexistente de proteção de senhas vazadas desativada preservado, sem mudança deAuth: [orientaçãoSupabase](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). [Advisors](../evidencias/etapa-26/advisors.json).
+
+## Checklist final
+
+- [x] Etapa26 conforme cartão doDrive; tentativa/disponibilização/confirmação distintas.
+- [x] PadrãoDesktop/MobileEquipe, até4açõesprincipais; sem novo atalho/aba, histórico recolhível/paginado e rolagemnatural quando necessária.
+- [x] Mesmo painel/fluxo, sem loaders visíveis;503mantémtentativa,401/403limpa.
+- [x] Backend↔Frontend revisados; índices e revalidações necessárias preservados, sem prometer latênciazero.
+- [x] Backend,Frontend,Supabase,GitHub,Vercel eLivro conferidos; PDF/Edge e cadastro/Auth preservados.
+- [x] SemActions,fixtureshospedadas ou envioexterno não solicitado; próximo27somente por novo pedido.
+
+Fechamento seguinte somente documental; não repetir banco/E2E/deploy funcional sem mudança executável.
