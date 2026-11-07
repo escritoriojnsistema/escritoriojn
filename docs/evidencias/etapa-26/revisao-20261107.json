@@ -1,0 +1,131 @@
+{
+  "date_utc": "2026-11-07",
+  "reviewed_commit": "eee246786508b14319530fec768549efc61e0ab1",
+  "findings": {
+    "R1": "P2 original session binding missing; reproduced SQL",
+    "R2": "P2 replay result selects intervening delivery; reproduced SQL and browser",
+    "R3": "P2 stale confirmed WhatsApp link after contact update; reproduced browser",
+    "R4": "P2 initial503 has no enabled in-panel retry; reproduced browser"
+  },
+  "node_api": {
+    "passed": 346,
+    "failed": 0
+  },
+  "browser_existing": {
+    "passed": 37,
+    "failed": 0,
+    "stages": [
+      24,
+      25,
+      26
+    ]
+  },
+  "browser_defect_probes": {
+    "reproduced": 3,
+    "not_fix_tests": true
+  },
+  "sql_existing": {
+    "clean_replays": 2,
+    "pass_lines": 1519
+  },
+  "sql_defect_probe": {
+    "clean_replays": 1,
+    "confirmed": [
+      "begin replay returns a later download first, not the original attempt",
+      "different session can authorize original attempt",
+      "availability accepted with a release from a different session than the attempt"
+    ]
+  },
+  "build": true,
+  "production_dependency_vulnerabilities": 0,
+  "real_local": {
+    "proof": "etapa26-real-local",
+    "auth": true,
+    "rest": true,
+    "express": true,
+    "storage": true,
+    "edge_handler": true,
+    "pdf_bytes_identical": true,
+    "print_attempt_separate": true,
+    "manual_availability_requires_private_release": true,
+    "confirmation_explicit": true,
+    "revocation_denies_team_and_portal": true,
+    "other_publication_preserved": true,
+    "external_whatsapp_sent": false,
+    "physical_print": false,
+    "scanner": false
+  },
+  "hosted_readonly": {
+    "migration": "20261107144130",
+    "statements": 32,
+    "private_function_bodies_match": 7,
+    "private_tables_rls_closed_acl": 3,
+    "vercel_github_status": "success",
+    "deployment": "HUDgeGNrdy1WstgDL2ZuWCopAuA3",
+    "home": 200,
+    "health": 200,
+    "assets": [
+      {
+        "path": "OperationalRoutes-BycjbBrB.js",
+        "matches_published_evidence": true
+      },
+      {
+        "path": "OperationalRoutes-DixErSPb.css",
+        "matches_published_evidence": true
+      },
+      {
+        "path": "icons-1f0VWjOT.js",
+        "matches_published_evidence": true
+      },
+      {
+        "path": "index-B2EE63MX.js",
+        "matches_published_evidence": true
+      },
+      {
+        "path": "index-DGkYv4c9.css",
+        "matches_published_evidence": true
+      },
+      {
+        "path": "react-C-G-5Uwp.js",
+        "matches_published_evidence": true
+      },
+      {
+        "path": "rolldown-runtime-WkwZ5CU-.js",
+        "matches_published_evidence": true
+      },
+      {
+        "path": "supabase-DtuMx0jC.js",
+        "matches_published_evidence": true
+      }
+    ],
+    "barriers": [
+      {
+        "endpoint": "delivery-state",
+        "status": 401
+      },
+      {
+        "endpoint": "delivery-command",
+        "status": 401
+      },
+      {
+        "endpoint": "artifact",
+        "status": 401
+      },
+      {
+        "endpoint": "release-state",
+        "status": 401
+      },
+      {
+        "endpoint": "portal",
+        "status": 401
+      }
+    ]
+  },
+  "changes": "local review documentation only; no runtime, schema or publication changes",
+  "limitations": [
+    "No hosted authenticated business journey",
+    "No physical printing, external WhatsApp, real scanner or cryptographic validation",
+    "No hosted load benchmark",
+    "UI role fixtures do not establish individual production validation for all roles"
+  ]
+}

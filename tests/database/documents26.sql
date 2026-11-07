@@ -44,6 +44,18 @@ SELECT public.document_delivery_command(:'o25',:'p25',:'dc26',:'dk26') AS starte
 SELECT test.assert_true(:'started26'::jsonb#>>'{items,0,status}'='attempt','26: opening print is only attempt');
 SELECT :'started26'::jsonb#>>'{items,0,id}' AS delivery26 \gset
 SELECT test.assert_true(public.document_delivery_command(:'o25',:'p25',:'dc26',:'dk26')#>>'{items,0,id}'=:'delivery26','26: retry begin preserves delivery');
+SAVEPOINT review26;
+RESET ROLE;
+INSERT INTO auth.sessions(id,user_id) VALUES('00000000-0000-4000-c000-000000009926','00000000-0000-4000-a000-000000000201');
+SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000201","session_id":"00000000-0000-4000-c000-000000009926"}';
+SELECT test.expect_error(format('SELECT public.document_delivery_access(%L,%L,%L)',:'o25',:'p25',:'delivery26'),'PT409','26 review: another session cannot access original attempt');
+ROLLBACK TO SAVEPOINT review26;
+SELECT public.document_delivery_command(:'o25',:'p25',:'dc26',gen_random_uuid()) FROM generate_series(1,6);
+SELECT public.document_delivery_command(:'o25',:'p25',:'dc26',:'dk26') AS replay26 \gset
+SELECT test.assert_true(:'replay26'::jsonb->>'result_delivery_id'=:'delivery26' AND (:'replay26'::jsonb->>'page')::integer>1 AND EXISTS(SELECT FROM jsonb_array_elements(:'replay26'::jsonb->'items')v WHERE v->>'id'=:'delivery26'),'26 review: replay locates original delivery beyond first page');
+ROLLBACK TO SAVEPOINT review26;
+
 SELECT test.expect_error(format('SELECT public.document_delivery_command(%L,%L,%L,%L)',:'o25',:'p25',(:'dc26'::jsonb||jsonb_build_object('channel','whatsapp'))::text,:'dk26'),'PT409','26: changed retry denied');
 SELECT test.expect_error(format('SELECT public.document_delivery_command(%L,%L,%L,gen_random_uuid())',:'o25',:'p25',(:'dc26'::jsonb||jsonb_build_object('recipient_customer_id','00000000-0000-4000-a000-000000000999'))::text),'PT403','26: arbitrary recipient denied');
 SELECT test.expect_error(format('SELECT public.document_delivery_command(%L,%L,%L,gen_random_uuid())',:'o25',:'p25',(:'dc26'::jsonb||jsonb_build_object('recipient_checked',false))::text),'PT422','26: recipient check mandatory');

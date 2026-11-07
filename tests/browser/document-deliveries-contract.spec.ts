@@ -31,7 +31,7 @@ async function setup(page:Page,initial:'none'|'in_review'|'withdrawn'='in_review
 const delivery='00000000-0000-4000-8000-000000000030';
 async function deliveries(page:Page,ready=true){
  await setup(page);const value={publication_id:publication,revision:1,ready,blockers:ready?[]:['payment'],can_deliver:true,can_revoke:true,recipient:{id:doc21,name:'Destinatário de teste',contacts:[{position:0,phone:'5511999999999'}]},items:[] as any[],total:0,page:1,page_size:5};const state={value,posts:[] as any[],failures:[] as number[],reads:0};
- await page.route('**/api/document-workflow/delivery-*',r=>{if(r.request().url().endsWith('delivery-command')){const b=r.request().postDataJSON();state.posts.push(b);const status=state.failures.shift();if(status)return r.fulfill({status,json:{error:{code:'FIXTURE'}}});if(b.command.kind==='begin'){value.items=[{id:delivery,channel:b.command.channel,revision:1,sha256:'a'.repeat(64),recipient_name:'Destinatário de teste',recipient_customer_id:doc21,phone:b.command.channel==='whatsapp'?'5511999999999':null,status:'attempt',last_event_id:event,created_at:detail.updated_at,actor_name:'Operador de teste',events:[]}];value.total=1;}}else state.reads++;return r.fulfill({json:{data:value}});});
+ await page.route('**/api/document-workflow/delivery-*',r=>{if(r.request().url().endsWith('delivery-command')){const b=r.request().postDataJSON();state.posts.push(b);const status=state.failures.shift();if(status)return r.fulfill({status,json:{error:{code:'FIXTURE'}}});if(b.command.kind==='begin'){value.items=[{id:delivery,channel:b.command.channel,revision:1,sha256:'a'.repeat(64),recipient_name:'Destinatário de teste',recipient_customer_id:doc21,phone:b.command.channel==='whatsapp'?'5511999999999':null,contact_position:b.command.channel==='whatsapp'?0:null,status:'attempt',last_event_id:event,created_at:detail.updated_at,actor_name:'Operador de teste',events:[]}];value.total=1;}}else state.reads++;return r.fulfill({json:{data:r.request().url().endsWith('delivery-command')?{...value,result_delivery_id:delivery}:value}});});
  await page.goto('/documentos?aba=issued');await page.getByRole('button',{name:'Abrir documento Contrato de Teste',exact:true}).click();await page.getByRole('tab',{name:'Versões e PDF',exact:true}).click();await page.getByText('Revisão e entrega',{exact:true}).click();await page.getByLabel('Ação documental').selectOption('delivery');await expect(page.getByRole('heading',{name:'Entregas e impressão',exact:true})).toBeVisible();return state;
 }
 for(const width of [320,360,768,1440])test(`entregas26 canal e destinatário compactos ${width}`,async({page})=>{
@@ -41,3 +41,32 @@ test('entregas26 bloqueia impressão pendente sem chamar mutação',async({page}
 test('entregas26 repete tentativa503 com chave e dados originais',async({page})=>{const s=await deliveries(page);s.failures.push(503);await page.getByLabel('Operação de entrega').selectOption('print');await page.getByLabel('Conferi o destinatário e o canal').check();await page.getByRole('button',{name:'Registrar entrega',exact:true}).click();await expect(page.getByRole('alert')).toBeVisible();await page.getByRole('button',{name:'Registrar entrega',exact:true}).click();await expect.poll(()=>s.posts.length).toBe(2);expect(s.posts[0]).toEqual(s.posts[1]);});
 for(const code of [401,403])test(`entregas26 descarta destinatário após ${code}`,async({page})=>{const s=await deliveries(page);s.failures.push(code);await page.getByLabel('Operação de entrega').selectOption('print');await page.getByLabel('Conferi o destinatário e o canal').check();await page.getByRole('button',{name:'Registrar entrega',exact:true}).click();await expect(page.getByLabel('Conferi o destinatário e o canal')).toHaveCount(0);});
 test('entregas26 exige nova conferência quando telefone oficial muda durante revalidação',async({page})=>{const s=await deliveries(page);await page.getByLabel('Operação de entrega').selectOption('whatsapp');await page.getByLabel('Telefone vinculado').selectOption('0');await page.getByLabel('Conferi o destinatário e o canal').check();s.value.recipient.contacts[0].phone='5511888888888';await page.getByLabel('Ação documental').selectOption('release');await page.getByLabel('Ação documental').selectOption('delivery');await expect.poll(()=>s.reads).toBe(2);await expect(page.getByLabel('Conferi o destinatário e o canal')).not.toBeChecked();await expect(page.getByRole('button',{name:'Registrar entrega',exact:true})).toBeDisabled();expect(s.posts.length).toBe(0);});
+
+test('audit26 initial503 permite atualizar no painel',async({page})=>{
+ await setup(page);
+ await page.route('**/api/document-workflow/delivery-state',r=>r.fulfill({status:503,json:{error:{code:'UNAVAILABLE'}}}));
+ await page.goto('/documentos?aba=issued');await page.getByRole('button',{name:'Abrir documento Contrato de Teste',exact:true}).click();await page.getByRole('tab',{name:'Versões e PDF',exact:true}).click();await page.getByText('Revisão e entrega',{exact:true}).click();await page.getByLabel('Ação documental').selectOption('delivery');
+ await expect(page.getByRole('alert')).toBeVisible();
+ await expect(page.getByRole('button',{name:'Registrar entrega',exact:true})).toBeEnabled();
+ await expect(page.getByLabel('Operação de entrega')).toHaveCount(0);
+});
+
+test('audit26 changed contact removes old conversation link',async({page})=>{
+ const s=await deliveries(page);await page.getByLabel('Operação de entrega').selectOption('whatsapp');await page.getByLabel('Telefone vinculado').selectOption('0');await page.getByLabel('Conferi o destinatário e o canal').check();await page.getByRole('button',{name:'Registrar entrega',exact:true}).click();
+ await expect(page.getByRole('link',{name:'Abrir conversa conferida'})).toBeVisible();
+ s.value.recipient.contacts[0].phone='5511888888888';await page.getByRole('button',{name:'Registrar entrega',exact:true}).click();await expect.poll(()=>s.reads).toBe(2);
+ await expect(page.getByRole('link',{name:'Abrir conversa conferida'})).toHaveCount(0);
+});
+
+test('audit26 replay selects original attempt',async({page})=>{
+ const s=await deliveries(page);let n=0;
+ const manual={id:delivery,channel:'print',revision:1,sha256:'a'.repeat(64),recipient_name:'Destinatário de teste',recipient_customer_id:doc21,phone:null,status:'attempt',last_event_id:event,created_at:detail.updated_at,actor_name:'Operador',events:[]};
+ const other={...manual,id:reviewer,channel:'download',status:'available'};
+ await page.route('**/api/document-workflow/delivery-command',r=>{n++;if(n===1)return r.fulfill({status:503,json:{error:{code:'UNAVAILABLE'}}});s.value.items=[other,manual];s.value.total=7;s.value.page=2;return r.fulfill({json:{data:{...s.value,result_delivery_id:delivery}}});});
+ await page.getByLabel('Operação de entrega').selectOption('print');await page.getByLabel('Conferi o destinatário e o canal').check();await page.getByRole('button',{name:'Registrar entrega',exact:true}).click();await expect(page.getByRole('alert')).toBeVisible();await page.getByRole('button',{name:'Registrar entrega',exact:true}).click();
+ await expect(page.getByLabel('Entrega selecionada')).toHaveValue(delivery);
+ await expect(page.getByRole('button',{name:'Obter arquivo final',exact:true})).toBeVisible();
+});
+test('audit26 same phone at another position requires new confirmation',async({page})=>{
+ const s=await deliveries(page);await page.getByLabel('Operação de entrega').selectOption('whatsapp');await page.getByLabel('Telefone vinculado').selectOption('0');await page.getByLabel('Conferi o destinatário e o canal').check();await page.getByRole('button',{name:'Registrar entrega',exact:true}).click();await expect(page.getByRole('link',{name:'Abrir conversa conferida'})).toBeVisible();s.value.recipient.contacts[0].position=1;await page.getByRole('button',{name:'Registrar entrega',exact:true}).click();await expect.poll(()=>s.reads).toBe(2);await expect(page.getByRole('link',{name:'Abrir conversa conferida'})).toHaveCount(0);
+});
