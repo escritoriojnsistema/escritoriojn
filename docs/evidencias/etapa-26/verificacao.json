@@ -1,0 +1,65 @@
+{
+  "base": "2a96843767bef80dcb674fd82c3519f1ff64e42c",
+  "date_utc": "2026-11-07",
+  "node_api": {
+    "passed": 346,
+    "failed": 0
+  },
+  "database": {
+    "command": "JN_DB_DOCUMENTS21_ISOLATED=1 npm run test:db",
+    "empty_replays": 2,
+    "pass_lines": 1519,
+    "stage26_printed_assertions": 48,
+    "additional_retention_assertions": 6,
+    "migrator_superuser": false,
+    "migrator_bypassrls": false
+  },
+  "browser": {
+    "initial_passed": 36,
+    "initial_failed": 1,
+    "new_stage26_passed": 9,
+    "historical_failed_scenario": "formalizacao24 configura sem quinta aba em 1440: editor missing after navigation",
+    "isolated_recheck_passed": 1,
+    "widths": [
+      320,
+      360,
+      768,
+      1440
+    ]
+  },
+  "build": {
+    "frontend": true,
+    "server": true,
+    "typecheck": true,
+    "production_vulnerabilities": 0,
+    "known_warning": "OperationalRoutes chunk >500kB"
+  },
+  "review": {
+    "independent": true,
+    "important_findings": 2,
+    "fixed_with_regression": [
+      "available requires later private release25 of exact actor/session/recipient/file/hash",
+      "recipient check bound to official recipient/contact snapshot"
+    ]
+  },
+  "real_local": {
+    "proof": "etapa26-real-local",
+    "auth": true,
+    "rest": true,
+    "express": true,
+    "storage": true,
+    "edge_handler": true,
+    "pdf_bytes_identical": true,
+    "print_attempt_separate": true,
+    "manual_availability_requires_private_release": true,
+    "confirmation_explicit": true,
+    "revocation_denies_team_and_portal": true,
+    "other_publication_preserved": true,
+    "external_whatsapp_sent": false,
+    "physical_print": false,
+    "scanner": false
+  },
+  "remote_fixture_mutations": false,
+  "github_actions": false,
+  "vercel_release_method": "GitHub integration only"
+}

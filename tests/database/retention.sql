@@ -27,6 +27,11 @@ ALTER TABLE public.requests ENABLE TRIGGER USER;
 -- Personal participant snapshot belongs to the same verified subject; no shared holder.
 INSERT INTO public.document_participants(office_id,document_id,revision,position,customer_id,role,label,snapshot)
  SELECT f.office,f.doc,d.revision,999,f.customer,'party','Sensitive local fixture label','{"name":"PERSONAL PARTICIPANT FIXTURE"}' FROM retention_fixture f JOIN public.documents d ON d.id=f.doc;
+DO $d26$ BEGIN IF to_regclass('private.deliveries') IS NOT NULL THEN
+ INSERT INTO private.deliveries(id,office_id,publication_id,revision,recipient_customer_id,recipient_name,phone,contact_position,channel,actor_id,session_id,sha256,size_bytes,scope)
+ SELECT '76000000-0000-4000-a000-000000000001',f.office,p.id,p.revision,f.customer,'Destinatário sensível de laboratório','5511999999999',0,'whatsapp','00000000-0000-4000-a000-000000000201','00000000-0000-4000-c000-000000000201',repeat('a',64),100,'{}' FROM retention_fixture f JOIN private.document_publications p ON p.office_id=f.office AND p.document_id=f.doc LIMIT 1;
+ INSERT INTO private.delivery_events26(delivery_id,kind,actor_id,reason)VALUES('76000000-0000-4000-a000-000000000001','attempt','00000000-0000-4000-a000-000000000201','Observação pessoal de laboratório');
+ END IF;END$d26$;
 CREATE TEMP TABLE retention_before AS SELECT
  (SELECT md5(coalesce(string_agg(to_jsonb(x)::text,'' ORDER BY x.id),'')) FROM private.document_publication_events x) events_hash,
  (SELECT md5(coalesce(string_agg(to_jsonb(x)::text,'' ORDER BY x.id),'')) FROM private.cash_entries x) ledger_hash,
@@ -109,6 +114,11 @@ SELECT test.assert_true((SELECT md5(coalesce(string_agg(to_jsonb(x)::text,'' ORD
 SELECT test.assert_true(NOT EXISTS(SELECT FROM private.document_intake_apply_commands c WHERE c.document_id=(SELECT doc FROM retention_fixture) AND c.input<>'{}'),'retention: document command full personal input erased');
 SELECT test.assert_true((SELECT md5(coalesce(string_agg((to_jsonb(c)-'input')::text,'' ORDER BY c.idempotency_key),'')) FROM private.document_intake_apply_commands c WHERE c.document_id=(SELECT doc FROM retention_fixture))=(SELECT apply_metadata_hash FROM retention_before),'retention: command identity and expected revision preserved');
 SELECT test.expect_error($q$UPDATE private.document_intake_apply_commands SET input='{"content":"Restore personal fixture"}' WHERE document_id=(SELECT doc FROM retention_fixture)$q$,'PT409','retention: command personal input cannot be restored outside private context');
+DO $d26$ BEGIN IF to_regclass('private.deliveries') IS NOT NULL THEN
+ PERFORM test.assert_true((SELECT phone IS NULL AND recipient_name='Registro preservado' FROM private.deliveries WHERE id='76000000-0000-4000-a000-000000000001'),'26: retention erases delivery phone and name');
+ PERFORM test.assert_true(NOT EXISTS(SELECT FROM private.delivery_events26 WHERE delivery_id='76000000-0000-4000-a000-000000000001' AND reason IS NOT NULL),'26: retention erases personal delivery notes');
+ PERFORM test.assert_true((SELECT sha256=repeat('a',64) AND revision>0 FROM private.deliveries WHERE id='76000000-0000-4000-a000-000000000001'),'26: retention conserves delivery evidence hash and version');
+ END IF;END$d26$;
 SELECT test.assert_true(NOT EXISTS(SELECT FROM private.retention_redaction_context),'retention: one-transaction erasure authority removed');
 SELECT test.expect_error($q$UPDATE private.document_versions SET content='Restore personal text' WHERE document_id=(SELECT doc FROM retention_fixture)$q$,'PT409','retention: erased personal sources cannot be restored by ordinary update');
 SELECT test.assert_true(EXISTS(SELECT FROM private.retention_items WHERE target_id=(SELECT doc FROM retention_fixture) AND purged_at IS NOT NULL),'retention: physical erasure recorded');
