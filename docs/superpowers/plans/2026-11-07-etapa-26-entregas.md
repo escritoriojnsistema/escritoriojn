@@ -29,5 +29,5 @@ Sem Actions/deployCLI/fixtures hospedadas; conservar PDF/worker e permissões ex
 
 ## Task3: Fecho/publicação
 - [x] Revisão independente e correção verificada dos achados relevantes.
-- [ ] Atualizar Livro/AGENTS/cartão/fecho com provas reais, limites e checkpoint27 somente após conclusão26.
-- [ ] GitHub→Vercel, conferir schema_migrations/ACL/hashes do SQL, health/barreiras/bundle; sem aplicar duas vezes. Registrar eventual bloqueio externo sem alegar publicação.
+- [x] Atualizar Livro/AGENTS/cartão/fecho com provas reais, limites e checkpoint27 somente após conclusão26.
+- [x] GitHub→Vercel, conferir schema_migrations/ACL/hashes do SQL, health/barreiras/bundle; sem aplicar duas vezes. Registrar eventual bloqueio externo sem alegar publicação.

@@ -1,0 +1,17 @@
+{
+  "migration": {
+    "version": "20261107144130",
+    "name": "document_deliveries26",
+    "automatic_via_git": true,
+    "statements_equal_in_order": 32,
+    "file_sha256": "e4fa9c914858661c2d102454f03b111810d5281ca4f1656e46eb0608c6086ec6"
+  },
+  "migrations": 67,
+  "auth_users": 7,
+  "memberships": 7,
+  "individual_grants": 17,
+  "documents": 0,
+  "files": 0,
+  "publications": 0,
+  "deliveries": 0
+}
