@@ -1,0 +1,65 @@
+{
+  "origin": "https://escritoriojn.vercel.app",
+  "home": 200,
+  "health": 200,
+  "assets": [
+    {
+      "path": "OperationalRoutes-Cq1qofMY.js",
+      "sha256": "ed1d764360cba99b6b7e8e6507c75928cb16d17937fbe976663e445bb2be7309"
+    },
+    {
+      "path": "OperationalRoutes-DtHa1lQP.css",
+      "sha256": "24b64490e7e82e6495f93159f7d7a566d1f306dcda20c482a95ef711cc487262"
+    },
+    {
+      "path": "icons-1f0VWjOT.js",
+      "sha256": "ac3e1e837ac63798fcbfcaf323caaaae63e0dd53bd86589f6d543399a9219152"
+    },
+    {
+      "path": "index-BLGA0es1.css",
+      "sha256": "d154e154a49ab996803e9a5470edcce15d6d8135369220e61bf3a4ff984ae24f"
+    },
+    {
+      "path": "index-CAh4tI0I.js",
+      "sha256": "e92591668d3a40fb92c1dc8210b7074d7512e2bda79ef4d25c84e3fdb388cb3d"
+    },
+    {
+      "path": "react-C-G-5Uwp.js",
+      "sha256": "1f2fda457afd0d175c0532313c24cf789618f713c21ca4c83588bf14bef06d1e"
+    },
+    {
+      "path": "rolldown-runtime-WkwZ5CU-.js",
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e"
+    },
+    {
+      "path": "supabase-DtuMx0jC.js",
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6"
+    }
+  ],
+  "private_api_denials": [
+    {
+      "path": "/api/requests",
+      "status": 401
+    },
+    {
+      "path": "/api/categories/state",
+      "status": 401
+    },
+    {
+      "path": "/api/document-workflow/portal",
+      "status": 401
+    },
+    {
+      "path": "/api/document-commercial/model-state",
+      "status": 401
+    },
+    {
+      "path": "/api/document-commercial/offer-attach",
+      "status": 401
+    }
+  ],
+  "privacy_public": {
+    "status": 200,
+    "configured": false
+  }
+}
