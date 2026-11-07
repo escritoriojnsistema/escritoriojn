@@ -23,5 +23,16 @@ export function categoriesState(value: unknown): CategoriesState {
     }
     return category;
   });
-  return { items, can_manage: value.can_manage };
+  let archived_items: ServiceCategory[] | undefined;
+  if (value.can_manage && value.archived_items !== undefined) {
+    if (!Array.isArray(value.archived_items)) throw Error('Invalid archived categories');
+    const archived = value.archived_items;
+    archived_items = categoriesState({can_manage:true,items:archived}).items.map((item,index) => {
+      const raw = archived[index];
+      if (!record(raw) || typeof raw.archived_at !== 'string' || !Number.isFinite(Date.parse(raw.archived_at)) || ids.has(item.id)) throw Error('Invalid archived category');
+      ids.add(item.id);
+      return {...item,archived_at:raw.archived_at};
+    });
+  }
+  return { items, ...(archived_items === undefined ? {} : {archived_items}), can_manage: value.can_manage };
 }

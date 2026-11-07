@@ -17,11 +17,13 @@ export const validRequestItems=(v:unknown):v is RequestItemInput[]=>Array.isArra
 export function validCreateRequest(v:unknown):v is CreateRequestInput {
  if(!record(v))return false;
  if(v.origin==='portal')return ((Object.hasOwn(v,'category_id')?fields(v,['origin','title','message','category_id']):fields(v,['origin','title','message']))&&(!Object.hasOwn(v,'category_id')||uuid(v.category_id))) && requestText(v.title,120) && requestText(v.message,2000,1,true);
- return fields(v,['origin','title','customer_id','assignee_id','priority','priority_reason','items','internal_note'])
+ const categorized=Object.hasOwn(v,'category_id');
+ return fields(v,categorized?['origin','category_id','title','message','customer_id','assignee_id','priority','priority_reason','items','internal_note']:['origin','title','customer_id','assignee_id','priority','priority_reason','items','internal_note'])
+  && (!categorized||(uuid(v.category_id)&&requestText(v.message,2000,0,true)))
   && ['presencial','whatsapp'].includes(String(v.origin)) && requestText(v.title,120)
   && (v.customer_id===null||uuid(v.customer_id)) && (v.assignee_id===null||uuid(v.assignee_id))
   && ['normal','urgent'].includes(String(v.priority)) && requestText(v.priority_reason,500,v.priority==='urgent'?1:0)
-  && (v.priority!=='normal'||v.priority_reason==='') && validRequestItems(v.items) && requestText(v.internal_note,2000,0,true);
+  && (v.priority!=='normal'||v.priority_reason==='') && (categorized&&Array.isArray(v.items)&&v.items.length===0||validRequestItems(v.items)) && requestText(v.internal_note,2000,0,true);
 }
 export function validRequestMutation(v:unknown):v is RequestMutation {
  if(!record(v))return false;

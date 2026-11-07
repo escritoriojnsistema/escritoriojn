@@ -38,6 +38,7 @@ requestsRouter.post('/options',async(req,res)=>{
 requestsRouter.post('/',async(req,res)=>{
  const b:unknown=req.body;
  if(Object.keys(req.query).length||!fields(b,['office_id','request','idempotency_key'])||!uuid(b.office_id)||!uuid(b.idempotency_key)||!validCreateRequest(b.request)){invalid(res);return;}
+ if(b.request.origin!=='portal'&&'category_id' in b.request){await rpc(res,'staff_category_request_create',{p_office_id:b.office_id,p_request:b.request,p_idempotency_key:b.idempotency_key},'detail',201);return;}
  if(b.request.origin==='portal'&&b.request.category_id){await rpc(res,'categorized_request_create',{p_office_id:b.office_id,p_request:b.request,p_idempotency_key:b.idempotency_key},'detail',201);return;}
  await rpc(res,'request_create',{p_office_id:b.office_id,p_request:b.request,p_idempotency_key:b.idempotency_key,p_request_id:randomUUID()},'detail',201);
 });

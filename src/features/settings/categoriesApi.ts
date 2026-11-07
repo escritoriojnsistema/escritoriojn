@@ -8,7 +8,7 @@ export class CategoriesError extends Error {
     super(status === 401 ? 'Sua sessão expirou. Entre novamente para continuar.'
       : status === 403 ? 'Seu acesso não permite esta operação em categorias.'
       : status === 404 ? 'A categoria não está mais disponível. Atualize a lista.'
-      : code === 'CATEGORY_IN_USE' ? 'Esta categoria possui histórico de serviços e não pode ser excluída. Você pode renomeá-la.'
+      : code === 'CATEGORY_IN_USE' ? 'O histórico desta categoria foi preservado. Atualize a lista para conferir o estado atual.'
       : status === 409 ? 'A categoria mudou ou este nome já existe. Atualize a lista e confira os dados.'
       : status === 422 ? 'Confira o nome, a categoria, a versão e o motivo.'
       : 'Não foi possível confirmar a operação. Tente novamente com os mesmos dados.');

@@ -6,10 +6,11 @@ export type ServiceCategory = {
   revision: number;
   execution_level?: 1 | 2 | 3 | null;
   is_documents: boolean;
+  archived_at?: string;
   created_at?: string;
   services?: number;
 };
-export type CategoriesState = { items: ServiceCategory[]; can_manage: boolean };
+export type CategoriesState = { items: ServiceCategory[]; archived_items?: ServiceCategory[]; can_manage: boolean };
 export type CategoryCommand =
   | { kind: 'create'; name: string; execution_level: 1 | 2 | 3; reason: string }
   | { kind: 'rename'; category_id: string; expected_revision: number; name: string; execution_level: 1 | 2 | 3; reason: string }

@@ -46,6 +46,13 @@ test('atendimentos10: API valida, preserva idempotência e projeta cliente sem d
    assert.deepEqual(calls.at(-1)?.body,{p_office_id:office,p_request:{...input.request,category_id:id},p_idempotency_key:key});
    for(const category_id of [null,'bad',12])assert.equal((await send('',{...input,request:{...input.request,category_id}})).status,422);
   });
+  await t.test('equipe envia categoria sem decidir modalidade no navegador',async()=>{
+   const request={origin:'presencial',category_id:id,title:'Abertura categorizada',message:'Dados',customer_id:null,assignee_id:null,priority:'normal',priority_reason:'',items:[],internal_note:''};
+   assert.equal((await send('',{...input,request})).status,201);
+   assert.equal(calls.at(-1)?.url,'/rest/v1/rpc/staff_category_request_create');
+   assert.deepEqual(calls.at(-1)?.body,{p_office_id:office,p_request:request,p_idempotency_key:key});
+   for(const extra of [{preintake:true},{mode:'execution'},{execution_level:1}])assert.equal((await send('',{...input,request:{...request,...extra}})).status,422);
+  });
   await t.test('portal não aceita responsável, nota, preço ou pessoa arbitrários',async()=>{
    for(const extra of [{created_by:id},{customer_id:id},{assignee_id:id},{internal_note:'secret'},{items:[]},{price_cents:1}])assert.equal((await send('',{...input,request:{...input.request,...extra}})).status,422);
    for(const change of [{idempotency_key:'bad'},{actor_id:id},{request:{...input.request,title:''}},{request:{...input.request,message:'x'.repeat(2001)}}])assert.equal((await send('',{...input,...change})).status,422);

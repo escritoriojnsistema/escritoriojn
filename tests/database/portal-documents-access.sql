@@ -1,0 +1,37 @@
+-- Final-schema regression: earlier workflow tests run before the portal ACL revocation.
+-- All fictional fixtures are local and rolled back.
+BEGIN;
+INSERT INTO auth.users(id,email_confirmed_at) VALUES('00000000-0000-4000-a000-000000000951',clock_timestamp());
+INSERT INTO auth.sessions(id,user_id)VALUES('00000000-0000-4000-c000-000000000951','00000000-0000-4000-a000-000000000951');
+INSERT INTO public.offices(id,name)VALUES('00000000-0000-4000-e000-000000000951','Portal ACL fictício');
+INSERT INTO public.profiles(id,display_name)VALUES('00000000-0000-4000-a000-000000000951','Cliente fictício');
+INSERT INTO public.memberships(id,office_id,user_id,role_code)VALUES('00000000-0000-4000-b000-000000000951','00000000-0000-4000-e000-000000000951','00000000-0000-4000-a000-000000000951','client');
+SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000951","session_id":"00000000-0000-4000-c000-000000000951"}';
+SELECT test.assert_true(public.portal_documents_page('00000000-0000-4000-e000-000000000951',1)='{"items":[],"total":0,"page":1,"page_size":5}'::jsonb,'portal documents: authenticated client reaches final-schema empty page');
+SELECT test.assert_true(public.portal_documents_page('00000000-0000-4000-e000-000000000951',2)->>'page'='2','portal documents: empty pagination usable');
+SELECT test.expect_error($q$SELECT public.portal_documents_page('00000000-0000-4000-e000-000000000951',0)$q$,'PT403','portal documents: invalid page rejected');
+SELECT test.expect_error($q$SELECT public.portal_documents_page('00000000-0000-4000-e000-000000000952',1)$q$,'PT403','portal documents: other office denied');
+SET request.jwt.claims='{}';
+SELECT test.expect_error($q$SELECT public.portal_documents_page('00000000-0000-4000-e000-000000000951',1)$q$,'PT401','portal documents: JWT identity required');
+RESET ROLE;
+SELECT test.assert_true(NOT has_function_privilege('anon','public.portal_documents_page(uuid,integer)','EXECUTE') AND NOT has_function_privilege('anon','private.portal_documents_page(uuid,integer)','EXECUTE') AND NOT has_function_privilege('service_role','private.portal_documents_page(uuid,integer)','EXECUTE'),'portal documents: no anonymous or worker access added');
+SELECT test.assert_true(NOT has_function_privilege('authenticated','private.portal_intake_answers(private.document_intakes)','EXECUTE') AND NOT has_function_privilege('authenticated','private.request_in_scope_before_portal_returns(public.requests,public.memberships)','EXECUTE') AND NOT has_function_privilege('authenticated','private.files_storage_allowed_before_portal_returns(text,text,text,jsonb)','EXECUTE'),'portal documents: internal and legacy helpers remain private');
+SELECT test.assert_true(NOT EXISTS(SELECT FROM pg_policy WHERE polrelid='storage.objects'::regclass AND polname IN('attachments_insert','attachments_select','attachments_insert_gate','attachments_select_gate') AND (coalesce(pg_get_expr(polqual,polrelid),'')||coalesce(pg_get_expr(polwithcheck,polrelid),'')) LIKE '%files_storage_allowed_before_portal_returns%'),'portal documents: Storage OID dependencies still bind current guard');
+SELECT test.assert_true((SELECT NOT prosecdef FROM pg_proc WHERE oid='public.portal_documents_page(uuid,integer)'::regprocedure),'portal documents: public wrapper remains invoker');
+UPDATE public.memberships SET role_code='owner' WHERE id='00000000-0000-4000-b000-000000000951';
+SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000951","session_id":"00000000-0000-4000-c000-000000000951"}';
+SELECT test.expect_error($q$SELECT public.portal_documents_page('00000000-0000-4000-e000-000000000951',1)$q$,'PT403','portal documents: staff cannot use client projection');
+RESET ROLE;
+UPDATE public.memberships SET role_code='client',active=false WHERE id='00000000-0000-4000-b000-000000000951';
+SET ROLE authenticated;
+SELECT test.expect_error($q$SELECT public.portal_documents_page('00000000-0000-4000-e000-000000000951',1)$q$,'PT403','portal documents: inactive membership denied');
+RESET ROLE;
+UPDATE public.memberships SET active=true WHERE id='00000000-0000-4000-b000-000000000951';
+DELETE FROM auth.sessions WHERE id='00000000-0000-4000-c000-000000000951';
+SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000951","session_id":"00000000-0000-4000-c000-000000000951"}';
+SELECT test.expect_error($q$SELECT public.portal_documents_page('00000000-0000-4000-e000-000000000951',1)$q$,'PT401','portal documents: revoked session denied');
+RESET ROLE;
+ROLLBACK;

@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-06",
+  "base_commit": "bc2e5ba2a9c91a28b3ebca953503140192be2a32",
+  "migration_count": 63,
+  "last_migration": "20261106132841",
+  "auth_users": 7,
+  "memberships": 7,
+  "individual_grants": 17,
+  "documents": 0,
+  "templates": 64,
+  "services": 2,
+  "archived_services": 1,
+  "offerings": 1,
+  "central_categories": 15,
+  "categories_with_pending_level": 15,
+  "authenticated_portal_documents_private_execute": false,
+  "source": "Hosted metadata read-only; no personal data or fixtures",
+  "service_versions_without_central_category": 0,
+  "duplicate_central_categories": 0,
+  "historical_links_to_archived_services": 1
+}

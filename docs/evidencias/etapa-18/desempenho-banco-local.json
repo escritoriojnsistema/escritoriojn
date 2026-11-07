@@ -1,8 +1,8 @@
 {
   "environment": "Disposable PostgreSQL17; includes Docker/psql process; no hosted SLA",
   "samples": 12,
-  "median_ms": 121.39130600000499,
-  "p95_ms": 137.642404000042,
+  "median_ms": 120.49819800001569,
+  "p95_ms": 141.23935199994594,
   "explain": [
     {
       "Plan": {
@@ -17,11 +17,11 @@
         "Total Cost": 8.29,
         "Plan Rows": 1,
         "Plan Width": 297,
-        "Actual Startup Time": 0.02,
-        "Actual Total Time": 0.02,
+        "Actual Startup Time": 0.016,
+        "Actual Total Time": 0.016,
         "Actual Rows": 0,
         "Actual Loops": 1,
-        "Index Cond": "((office_id = '00000000-0000-4000-e000-000000000151'::uuid) AND (session_id = '3d1b8100-3df3-4310-b0ec-c03f6c0d1021'::uuid))",
+        "Index Cond": "((office_id = '00000000-0000-4000-e000-000000000151'::uuid) AND (session_id = '7365d237-4278-4e91-8dac-63d8fdc8bd46'::uuid))",
         "Rows Removed by Index Recheck": 0,
         "Shared Hit Blocks": 2,
         "Shared Read Blocks": 0,
@@ -46,9 +46,9 @@
         "Temp Read Blocks": 0,
         "Temp Written Blocks": 0
       },
-      "Planning Time": 0.669,
+      "Planning Time": 0.686,
       "Triggers": [],
-      "Execution Time": 0.644
+      "Execution Time": 0.041
     }
   ]
 }
