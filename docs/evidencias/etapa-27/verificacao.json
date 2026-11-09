@@ -40,7 +40,25 @@
     "memberships": 7,
     "individual_grants": 17
   },
-  "publication": "pending",
+  "publication": {
+    "runtime_pr": 100,
+    "checkpoint_pr": 101,
+    "runtime_merge": "942bdf2d61b17925fe9b409c6428a40721c4fd64",
+    "continuity_commit": "567c4d5",
+    "vercel": "DAyvFMo3PhJ7Atd9aQL3vwYEfaXL",
+    "state": "success",
+    "migration": "20261109020126",
+    "commands": 24,
+    "private_bodies_md5_equal": 3,
+    "private_tables_rls_closed_acl": 4,
+    "users": 7,
+    "memberships": 7,
+    "individual_grants": 17,
+    "hosted_rural_fixtures": 0,
+    "canonical_assets_equal": 8,
+    "health": 200,
+    "anonymous_apis401": 3
+  },
   "github_actions": false,
   "method": "GitHub→Vercel"
 }

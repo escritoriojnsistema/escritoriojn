@@ -1,4 +1,4 @@
-# Etapa27 — validação e publicação
+# Etapa27 — publicada e verificada
 
 Base41a7a92 e correções26 conferidas antes de editar; [cartão27](etapa-27.md).
 
@@ -15,3 +15,13 @@ Sem envio externo, fixture ou concessão hospedada, consulta oficialCAFIR/SNCR/C
 ## Conferência da integraçãoGit
 
 PR100 integrado em942bdf2. Preview da branchd780066 READY/VercelFoDDf8LVyFuWp91Uq1cASXiRaREh. Em09/11/2026 às02:20UTC, produção ainda servia41a7a92/Etapa26 e migration mais recente era20261107194252. Este checkpoint registra a diferença entre homologação e publicação; o deploy de produção e o schema27 continuam pendentes até readback. Build com as configurações públicas extraídas do bundle canônico passou. Nenhum redeployVercelAPI/CLI ou migration manual executado.
+
+## Publicação confirmada
+
+PR100/runtime942bdf2,PR101/checkpointdbd3859 e continuidade567c4d5. PreviewFoDDf8LVSUCCESS; produçãoDgJJgS1h eDAyvFMo3SUCCESS. O checkpoint anterior registra a espera pela integração, resolvida pela atualizaçãoGit subsequente; nenhum deployAPI/CLI foi acionado.
+
+Supabase aplicou automaticamente20261109020126:24comandos,3corposprivadosMD5iguais ao SQL testado e4tabelascomRLS/ACLfechadas.7Auth/7vínculos/17grantsindividuais e0imóveis/partes/vínculosrurais hospedados. Não reaplicar. Domínio canônico com8assetsSHA256iguais ao build público,entryindex-CPueSQpb.js,health200 e/rural/state,/rural/command,/document-workflow/delivery-state anônimos401. [Bundle](../evidencias/etapa-27/bundle-publicado.json).
+
+Advisors semERROR;INFO deRLSprivadassem policy é intencional e protegido porACLfechada. WARNpreexistente de proteção de senhas vazadas desativada permanece: [orientaçãoSupabase](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). Não houve alteraçãoAuth ou plano.
+
+Checklist: cartãoDrive atendido; Desktop/Mobile e quatro atalhos preservados; seções no mesmo fluxo com histórico/seletores paginados; sem loaders; índices e reutilização do núcleo revisados; backend,frontend,Supabase,GitHub,Vercel,Livro eAGENTS conferidos. Rolagem natural permanece para formulários longos/zoom; sem promessa de latênciazero. Jornada positiva hospedada com conta pessoal não foi executada; laboratório real eUI comfixtures são evidências distintas.

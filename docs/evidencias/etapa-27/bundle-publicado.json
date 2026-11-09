@@ -1,0 +1,44 @@
+{
+  "origin": "https://escritoriojn.vercel.app",
+  "entry": "/assets/index-CPueSQpb.js",
+  "assets": [
+    {
+      "asset": "OperationalRoutes-CWaMWWSN.js",
+      "matches": true
+    },
+    {
+      "asset": "react-C-G-5Uwp.js",
+      "matches": true
+    },
+    {
+      "asset": "supabase-DtuMx0jC.js",
+      "matches": true
+    },
+    {
+      "asset": "index-CPueSQpb.js",
+      "matches": true
+    },
+    {
+      "asset": "icons-1f0VWjOT.js",
+      "matches": true
+    },
+    {
+      "asset": "OperationalRoutes-BaGFz1u9.css",
+      "matches": true
+    },
+    {
+      "asset": "rolldown-runtime-WkwZ5CU-.js",
+      "matches": true
+    },
+    {
+      "asset": "index-DGkYv4c9.css",
+      "matches": true
+    }
+  ],
+  "health": 200,
+  "barriers": {
+    "rural/state": 401,
+    "rural/command": 401,
+    "document-workflow/delivery-state": 401
+  }
+}
