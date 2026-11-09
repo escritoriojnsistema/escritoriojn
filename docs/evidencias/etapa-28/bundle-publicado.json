@@ -1,0 +1,73 @@
+{
+  "checked_at": "2026-11-09T20:09:46.221389+00:00",
+  "base_url": "https://escritoriojn.vercel.app",
+  "assets": [
+    {
+      "file": "OperationalRoutes-C5AsLJPo.js",
+      "sha256": "7fdde95ae1e8793f3ebf3aedb6aa205693cde91b68a6d102148d479c8a1e8ebf",
+      "matches": true
+    },
+    {
+      "file": "OperationalRoutes-CLJPzkt5.css",
+      "sha256": "8085a65ca6fb0627fdcd52b4da1105a612b6fcf2c4e13c1a2ba28a3e95bae1b1",
+      "matches": true
+    },
+    {
+      "file": "icons-D-dRSePb.js",
+      "sha256": "a2c5b19a56d02557367c2898ecf48ecff56314844a79ef187650451e5f36ef78",
+      "matches": true
+    },
+    {
+      "file": "index-DGkYv4c9.css",
+      "sha256": "5f94931df612eef55ee7de8856c34c777e2ddd3448c1a1cafd3d033f3dbf7b86",
+      "matches": true
+    },
+    {
+      "file": "index-MnBHwWtD.js",
+      "sha256": "e13545144b176e1721db80d3def9d757b69891a21ffc7bbcb087a8ee19ae743e",
+      "matches": true
+    },
+    {
+      "file": "react-C-G-5Uwp.js",
+      "sha256": "1f2fda457afd0d175c0532313c24cf789618f713c21ca4c83588bf14bef06d1e",
+      "matches": true
+    },
+    {
+      "file": "rolldown-runtime-WkwZ5CU-.js",
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "matches": true
+    },
+    {
+      "file": "supabase-DtuMx0jC.js",
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "matches": true
+    }
+  ],
+  "checks": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "path": "/api/rural/ditr-state",
+      "status": 401
+    },
+    {
+      "path": "/api/rural/ditr-command",
+      "status": 401
+    },
+    {
+      "path": "/api/rural/state",
+      "status": 401
+    },
+    {
+      "path": "/api/document-workflow/delivery-state",
+      "status": 401
+    }
+  ],
+  "html_asset_references_match": true
+}
