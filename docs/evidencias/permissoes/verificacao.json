@@ -15,14 +15,22 @@
   "node_passed": 350,
   "database": {
     "replays": 2,
-    "pass_lines": 1558
+    "pass_lines": 1575,
+    "legacy_invites_seeded_before_migration": true,
+    "split_direct_and_delegated_grants_preserved": true,
+    "direct_permissions_separated": true
   },
   "ui": {
-    "initial_passed": 39,
-    "stale_contract_selectors": 4,
-    "corrected_selector_rechecks_passed": 4,
-    "new_discard_role_case_passed": 1,
-    "distinct_passed": 44
+    "main_batch": 47,
+    "main_initial_passed": 46,
+    "contract_marker_recheck_passed": 1,
+    "additional_legacy_removal_passed": 1,
+    "distinct_passed": 48,
+    "widths": [
+      360,
+      768,
+      1440
+    ]
   },
   "real_local": {
     "proof": "permissions-real-local",
@@ -36,8 +44,18 @@
     "revocation_same_session": true,
     "legacy_customer_access_preserved": true,
     "owner_preserved": true,
-    "storage_unchanged": true
+    "storage_unchanged": true,
+    "temporary_rights_not_materialized": true,
+    "legacy_form_rejected": true
   },
   "publication": "pending",
-  "github_actions": false
+  "github_actions": false,
+  "independent_review": {
+    "important_findings_corrected": [
+      "incomplete legacy invite translation",
+      "split-source grants composition",
+      "roster controls discarding drafts"
+    ],
+    "additional_preexisting_bug_corrected": "effective grants materialized as permanent; direct-only versioned write contract now enforced"
+  }
 }

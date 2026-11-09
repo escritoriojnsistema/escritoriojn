@@ -1,5 +1,26 @@
 RESET ROLE;
 BEGIN;
+SELECT test.assert_true((SELECT permission_code=ANY(ARRAY['rural.records.manage']) FROM private.team_member_permissions WHERE membership_id='29100000-0000-4000-8000-000000000001' AND permission_code='rural.records.manage'),'permissions: direct source retains rural record flag');
+SELECT test.assert_true((SELECT allowed_permissions @> ARRAY['rural.records.manage'] FROM private.team_delegations WHERE membership_id='29100000-0000-4000-8000-000000000002' AND revoked_at IS NULL),'permissions: delegated source retains rural record flag');
+SELECT private.team_validate_assignment(jsonb_build_object('allowed_roles',ARRAY['admin'],'allowed_permissions',ARRAY(SELECT code FROM public.permissions)),'admin',ARRAY(SELECT permission_code FROM private.team_member_permissions WHERE membership_id='29100000-0000-4000-8000-000000000001'));
+SELECT test.assert_true(true,'permissions: saving direct grants does not require materializing temporary prerequisites');
+SELECT test.assert_true(private.team_permissions_for_member('29100000-0000-4000-8000-000000000001') @> ARRAY['customers.read','customers.update','requests.read','files.read','rural.read','rural.records.manage'] AND private.team_permissions_for_member('29100000-0000-4000-8000-000000000002') @> ARRAY['customers.read','customers.update','requests.read','files.read','rural.read','rural.records.manage'],'permissions: both split-source arrangements preserve effective rural authority');
+SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000201","session_id":"00000000-0000-4000-c000-000000000201"}';
+SELECT public.team_dashboard('00000000-0000-4000-e000-000000000201','members',1,'Administrador divisão','all') AS splitdashboard \gset
+SELECT test.assert_true((SELECT bool_and(v ? 'direct_permissions') FROM jsonb_array_elements(:'splitdashboard'::jsonb->'items')v),'permissions: dashboard separates direct and effective grants');
+RESET ROLE;
+UPDATE private.team_delegations SET revoked_at=clock_timestamp() WHERE membership_id IN('29100000-0000-4000-8000-000000000001','29100000-0000-4000-8000-000000000002');
+SELECT test.assert_true(NOT private.team_permissions_for_member('29100000-0000-4000-8000-000000000001') @> ARRAY['customers.read','customers.update','requests.read','files.read','rural.read','rural.records.manage'] AND NOT private.team_permissions_for_member('29100000-0000-4000-8000-000000000002') @> ARRAY['customers.read','customers.update','requests.read','files.read','rural.read','rural.records.manage'],'permissions: revoking delegation removes effective rural authority in both split arrangements');
+
+
+SELECT test.assert_true((SELECT permissions @> ARRAY['rural.read','rural.parties.manage'] AND permissions @> ARRAY['rural.records.manage'] FROM private.team_invitations WHERE email='permission-edit-migration@example.test'),'permissions: legacy edit invite preserves dormant flags without invalidating acceptance');
+SELECT test.assert_true((SELECT permissions @> ARRAY['rural.create'] FROM private.team_invitations WHERE email='permission-create-migration@example.test'),'permissions: incomplete legacy create invite remains usable');
+SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000201","session_id":"00000000-0000-4000-c000-000000000201"}';
+SELECT public.team_claim_delivery('00000000-0000-4000-e000-000000000201',(SELECT (v->>'id')::uuid FROM jsonb_array_elements(public.team_dashboard('00000000-0000-4000-e000-000000000201','invitations',1,'permission-edit-migration','all')->'items')v LIMIT 1),gen_random_uuid());
+RESET ROLE;
+
 INSERT INTO public.customers(id,office_id,kind,name,created_by)VALUES('28000000-0000-4000-8000-000000000001','00000000-0000-4000-e000-000000000201','person','Cliente do funcionário','00000000-0000-4000-a000-000000000202'),('28000000-0000-4000-8000-000000000002','00000000-0000-4000-e000-000000000201','person','Cliente de outro responsável','00000000-0000-4000-a000-000000000201');
 INSERT INTO private.team_member_permissions(membership_id,permission_code)SELECT '00000000-0000-4000-b000-000000000202',p FROM unnest(ARRAY['foundation.access','customers.read','customers.create','customers.update','customers.read_all'])p ON CONFLICT DO NOTHING;
 DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000202' AND permission_code LIKE 'rural.%';
@@ -39,5 +60,10 @@ SET ROLE authenticated;
 SELECT test.expect_error($q$SELECT public.rural_state27('00000000-0000-4000-e000-000000000201',NULL,1)$q$,'PT403','permissions: revocation takes effect with same session JWT');
 RESET ROLE;
 SELECT test.assert_true(private.team_permissions_for_member('00000000-0000-4000-b000-000000000201') @> ARRAY['rural.read','rural.read_all','rural.create','rural.parties.manage','rural.records.manage'],'permissions: owner retains all rural rights');
-SELECT test.expect_error($q$SELECT private.team_validate_assignment('{"allowed_roles":["employee"],"allowed_permissions":["foundation.access","rural.create"]}', 'employee',ARRAY['foundation.access','rural.create'])$q$,'PT422','permissions: invalid rural dependency denied during assignment');
+INSERT INTO private.team_member_permissions VALUES('00000000-0000-4000-b000-000000000202','rural.read');
+DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000202' AND permission_code='customers.create';
+SET ROLE authenticated;
+SELECT test.expect_error(format('SELECT public.rural_command27(%L,NULL,%L,gen_random_uuid())','00000000-0000-4000-e000-000000000201',:'pcmd'),'PT403','permissions: rural flag cannot bypass customer prerequisites');
+RESET ROLE;
+
 ROLLBACK;

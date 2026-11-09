@@ -43,7 +43,7 @@ export type TeamDelegation = {
 };
 export type TeamMember = {
   id: string; user_id: string; name: string | null; email: string; role_code: TeamRole;
-  active: boolean; access_active: boolean; permissions: string[]; cpf_masked: string | null;
+  active: boolean; access_active: boolean; permissions: string[]; direct_permissions?:string[]; cpf_masked: string | null;
   can_edit: boolean; archived?: boolean; protected_owner: boolean; delegation: TeamDelegation | null;
 };
 export type DeliveryStatus = 'pending' | 'sending' | 'sent' | 'failed';

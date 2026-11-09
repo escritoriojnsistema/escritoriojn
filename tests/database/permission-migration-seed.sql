@@ -1,0 +1,11 @@
+SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000201","session_id":"00000000-0000-4000-c000-000000000201"}';
+SELECT public.team_create_invitation('00000000-0000-4000-e000-000000000201','permission-edit-migration@example.test','Pessoa Convite Editar','52998224725','employee',ARRAY['foundation.access','customers.read','customers.update'],clock_timestamp()+interval '1 day',gen_random_uuid());
+SELECT public.team_create_invitation('00000000-0000-4000-e000-000000000201','permission-create-migration@example.test','Pessoa Convite Criar','52998224725','employee',ARRAY['foundation.access','customers.create'],clock_timestamp()+interval '1 day',gen_random_uuid());
+RESET ROLE;
+INSERT INTO auth.users(id,email,email_confirmed_at)VALUES('29000000-0000-4000-8000-000000000001','split-a@example.test',clock_timestamp()),('29000000-0000-4000-8000-000000000002','split-b@example.test',clock_timestamp());
+INSERT INTO public.profiles(id,display_name)VALUES('29000000-0000-4000-8000-000000000001','Administrador divisão A'),('29000000-0000-4000-8000-000000000002','Administrador divisão B');
+INSERT INTO public.memberships(id,office_id,user_id,role_code)VALUES('29100000-0000-4000-8000-000000000001','00000000-0000-4000-e000-000000000201','29000000-0000-4000-8000-000000000001','admin'),('29100000-0000-4000-8000-000000000002','00000000-0000-4000-e000-000000000201','29000000-0000-4000-8000-000000000002','admin');
+INSERT INTO private.team_member_permissions SELECT '29100000-0000-4000-8000-000000000001',unnest(ARRAY['foundation.access','customers.read','customers.update']);
+INSERT INTO private.team_member_permissions SELECT '29100000-0000-4000-8000-000000000002',unnest(ARRAY['foundation.access','requests.read','files.read']);
+INSERT INTO private.team_delegations(office_id,membership_id,allowed_roles,allowed_permissions,expires_at,created_by)VALUES('00000000-0000-4000-e000-000000000201','29100000-0000-4000-8000-000000000001',ARRAY['employee'],ARRAY['foundation.access','requests.read','files.read'],clock_timestamp()+interval '1 day','00000000-0000-4000-a000-000000000201'),('00000000-0000-4000-e000-000000000201','29100000-0000-4000-8000-000000000002',ARRAY['employee'],ARRAY['foundation.access','customers.read','customers.update'],clock_timestamp()+interval '1 day','00000000-0000-4000-a000-000000000201');

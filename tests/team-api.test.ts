@@ -78,7 +78,8 @@ test('API de equipe conserva autorização e resultado real do envio', async t =
     await t.test('poder não vem de metadata e erro SQL não vaza',async()=>{
       mode='forbidden';const denied=await fetch(`${base}?office_id=${office}`,{headers});
       assert.equal(denied.status,403);assert.equal((await denied.json()).error.code,'TEAM_FORBIDDEN');
-      mode='last-owner';const owner=await send(`/members/${id}`,{office_id:office,role_code:'employee',active:false,permissions:['foundation.access']},'PATCH');
+      const stale=await send(`/members/${id}`,{office_id:office,role_code:'employee',active:true,permissions:['foundation.access']},'PATCH');assert.equal(stale.status,409);assert.equal((await stale.json()).error.code,'TEAM_STALE_FORM');
+      mode='last-owner';const owner=await send(`/members/${id}`,{office_id:office,role_code:'employee',active:false,permissions:['foundation.access'],permissions_source:'direct-v1'},'PATCH');
       assert.equal(owner.status,409);assert.equal((await owner.json()).error.code,'LAST_OWNER');
       mode='internal';const failed=await fetch(`${base}?office_id=${office}`,{headers});
       assert.equal(failed.status,503);assert.ok(!JSON.stringify(await failed.json()).includes('private SQL'));

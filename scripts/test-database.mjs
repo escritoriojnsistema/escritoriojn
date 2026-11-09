@@ -732,7 +732,7 @@ try {
   const verifySettings=async database=>{
     for(const file of settingsMigrations.filter(n=>(process.env.JN_DB_REPAIR_RED!=='1'||!n.includes('_repair_template_library_and_service_management'))&&(process.env.JN_DB_REVIEW23_RED!=='1'||!n.includes('_document_editorial_review23'))&&(process.env.JN_DB_SIGNATURE24_RED!=='1'||!n.includes('_document_signatures24'))))sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
     let result='';for(const suite of ['categories-settings','access-inactivity','request-archives-settings','template-management-settings','categorized-request-catalog','library-services-regression','editorial-review23','documents24','documents25'])result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));
-    for(const file of correctionMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
+    for(const file of correctionMigrations){if(file.includes('_modular_permissions_rural'))sql(database,'postgres',readFileSync(`${root}tests/database/permission-migration-seed.sql`,'utf8'));sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);}
     if(allMigrations.some(n=>n.includes('_document_deliveries26')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/documents26.sql`,'utf8'));
     if(allMigrations.some(n=>n.includes('_rural_properties27')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/rural27.sql`,'utf8'));
     if(allMigrations.some(n=>n.includes('_modular_permissions_rural')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/permission-modules.sql`,'utf8'));
