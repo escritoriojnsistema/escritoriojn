@@ -1,0 +1,43 @@
+RESET ROLE;
+BEGIN;
+INSERT INTO public.customers(id,office_id,kind,name,created_by)VALUES('28000000-0000-4000-8000-000000000001','00000000-0000-4000-e000-000000000201','person','Cliente do funcionário','00000000-0000-4000-a000-000000000202'),('28000000-0000-4000-8000-000000000002','00000000-0000-4000-e000-000000000201','person','Cliente de outro responsável','00000000-0000-4000-a000-000000000201');
+INSERT INTO private.team_member_permissions(membership_id,permission_code)SELECT '00000000-0000-4000-b000-000000000202',p FROM unnest(ARRAY['foundation.access','customers.read','customers.create','customers.update','customers.read_all'])p ON CONFLICT DO NOTHING;
+DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000202' AND permission_code LIKE 'rural.%';
+SET ROLE authenticated;
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000202","session_id":"00000000-0000-4000-c000-000000000202"}';
+SELECT test.expect_error($q$SELECT public.rural_state27('00000000-0000-4000-e000-000000000201',NULL,1)$q$,'PT403','permissions: employee cannot inherit rural access from customers');
+RESET ROLE;
+INSERT INTO private.team_member_permissions VALUES('00000000-0000-4000-b000-000000000202','rural.read');
+SET ROLE authenticated;
+SELECT jsonb_build_object('kind','create','customer_id','28000000-0000-4000-8000-000000000001','name','Imóvel autorizado','municipality','Teste','state','MG','location','','identifiers','{}'::jsonb) AS pcmd \gset
+SELECT test.expect_error(format('SELECT public.rural_command27(%L,NULL,%L,gen_random_uuid())','00000000-0000-4000-e000-000000000201',:'pcmd'),'PT403','permissions: read cannot create rural property');
+RESET ROLE;
+INSERT INTO private.team_member_permissions VALUES('00000000-0000-4000-b000-000000000202','rural.create');
+SET ROLE authenticated;
+SELECT public.rural_command27('00000000-0000-4000-e000-000000000201',NULL,:'pcmd',gen_random_uuid())->>'id' AS ruralp \gset
+SELECT test.assert_true(public.rural_state27('00000000-0000-4000-e000-000000000201',:'ruralp',1)#>>'{property,id}'=:'ruralp','permissions: authorized employee can create and read own rural property');
+RESET ROLE;
+UPDATE public.memberships SET role_code='admin' WHERE id='00000000-0000-4000-b000-000000000202';
+DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000202' AND permission_code='rural.create';
+SET ROLE authenticated;
+SELECT test.expect_error(format('SELECT public.rural_command27(%L,NULL,%L,gen_random_uuid())','00000000-0000-4000-e000-000000000201',:'pcmd'),'PT403','permissions: administrator title does not grant rural creation');
+RESET ROLE;
+INSERT INTO private.team_member_permissions VALUES('00000000-0000-4000-b000-000000000202','rural.create');
+SET ROLE authenticated;
+SELECT test.assert_true(public.rural_command27('00000000-0000-4000-e000-000000000201',NULL,:'pcmd',gen_random_uuid())->>'id' IS NOT NULL,'permissions: authorized administrator can create rural property');
+RESET ROLE;
+INSERT INTO private.rural_properties(office_id,customer_id,name,municipality,state,location,created_by)VALUES('00000000-0000-4000-e000-000000000201','28000000-0000-4000-8000-000000000002','Imóvel de outro escopo','Teste','MG','','00000000-0000-4000-a000-000000000201') RETURNING id AS outsidep \gset
+SET ROLE authenticated;
+SELECT test.expect_error(format('SELECT public.rural_state27(%L,%L,1)','00000000-0000-4000-e000-000000000201',:'outsidep'),'PT404','permissions: customers read_all alone does not widen rural scope');
+RESET ROLE;
+INSERT INTO private.team_member_permissions VALUES('00000000-0000-4000-b000-000000000202','rural.read_all');
+SET ROLE authenticated;
+SELECT test.assert_true(public.rural_state27('00000000-0000-4000-e000-000000000201',:'outsidep',1)#>>'{property,id}'=:'outsidep','permissions: explicit rural read_all and customer scope allow office property');
+RESET ROLE;
+DELETE FROM private.team_member_permissions WHERE membership_id='00000000-0000-4000-b000-000000000202' AND permission_code='rural.read';
+SET ROLE authenticated;
+SELECT test.expect_error($q$SELECT public.rural_state27('00000000-0000-4000-e000-000000000201',NULL,1)$q$,'PT403','permissions: revocation takes effect with same session JWT');
+RESET ROLE;
+SELECT test.assert_true(private.team_permissions_for_member('00000000-0000-4000-b000-000000000201') @> ARRAY['rural.read','rural.read_all','rural.create','rural.parties.manage','rural.records.manage'],'permissions: owner retains all rural rights');
+SELECT test.expect_error($q$SELECT private.team_validate_assignment('{"allowed_roles":["employee"],"allowed_permissions":["foundation.access","rural.create"]}', 'employee',ARRAY['foundation.access','rural.create'])$q$,'PT422','permissions: invalid rural dependency denied during assignment');
+ROLLBACK;

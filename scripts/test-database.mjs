@@ -735,6 +735,7 @@ try {
     for(const file of correctionMigrations)sql(database,'migrator',`BEGIN;${readFileSync(`${root}supabase/migrations/${file}`,'utf8')}COMMIT;`);
     if(allMigrations.some(n=>n.includes('_document_deliveries26')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/documents26.sql`,'utf8'));
     if(allMigrations.some(n=>n.includes('_rural_properties27')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/rural27.sql`,'utf8'));
+    if(allMigrations.some(n=>n.includes('_modular_permissions_rural')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/permission-modules.sql`,'utf8'));
     result+=await raceRelease25({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceSignatures24({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     if(correctionMigrations.length)for(const suite of ['request-levels','portal-request-returns','account-closure','catalog-sync','request-level-scope','request-routing','retention','privacy-settings','maintenance','portal-documents-access','portal-documents-published','staff-category-opening']){try{result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));}catch(error){console.error(`Final-schema suite failed: ${database}/${suite}`);throw error;}}

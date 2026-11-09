@@ -1,0 +1,43 @@
+{
+  "baseline": {
+    "users": 7,
+    "memberships": 7,
+    "grants": 17,
+    "permissions": 81,
+    "old_grant_hash": "06f48171d5c950f97f16c1c272dcff1f"
+  },
+  "catalog": {
+    "old_assignable": 79,
+    "new": 5,
+    "total": 84,
+    "modules": 17
+  },
+  "node_passed": 350,
+  "database": {
+    "replays": 2,
+    "pass_lines": 1558
+  },
+  "ui": {
+    "initial_passed": 39,
+    "stale_contract_selectors": 4,
+    "corrected_selector_rechecks_passed": 4,
+    "new_discard_role_case_passed": 1,
+    "distinct_passed": 44
+  },
+  "real_local": {
+    "proof": "permissions-real-local",
+    "auth": true,
+    "rest": true,
+    "express": true,
+    "grant_via_team_api": true,
+    "admin_without_cap_denied": true,
+    "employee_authorized": true,
+    "self_escalation_denied": true,
+    "revocation_same_session": true,
+    "legacy_customer_access_preserved": true,
+    "owner_preserved": true,
+    "storage_unchanged": true
+  },
+  "publication": "pending",
+  "github_actions": false
+}

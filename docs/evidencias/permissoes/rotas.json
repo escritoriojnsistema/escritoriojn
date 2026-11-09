@@ -1,0 +1,819 @@
+[
+  {
+    "module": "cash",
+    "routes": [
+      [
+        "post",
+        "/dashboard"
+      ],
+      [
+        "post",
+        "/configuration"
+      ],
+      [
+        "post",
+        "/configure"
+      ],
+      [
+        "post",
+        "/open"
+      ],
+      [
+        "post",
+        "/statement"
+      ],
+      [
+        "post",
+        "/eligible-charges"
+      ],
+      [
+        "post",
+        "/client-finance"
+      ],
+      [
+        "post",
+        "/operate"
+      ],
+      [
+        "post",
+        "/dashboard-filtered"
+      ],
+      [
+        "post",
+        "/payments"
+      ],
+      [
+        "post",
+        "/payment"
+      ],
+      [
+        "post",
+        "/correction-sources"
+      ],
+      [
+        "post",
+        "/correction"
+      ],
+      [
+        "post",
+        "/finance17"
+      ],
+      [
+        "post",
+        "/expense"
+      ],
+      [
+        "post",
+        "/transfer"
+      ],
+      [
+        "post",
+        "/receipt"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "templates",
+    "routes": [
+      [
+        "post",
+        "/search"
+      ],
+      [
+        "post",
+        "/detail"
+      ],
+      [
+        "post",
+        "/save"
+      ],
+      [
+        "post",
+        "/approve"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/templates/router.ts"
+  },
+  {
+    "module": "categories",
+    "routes": [
+      [
+        "post",
+        "/state"
+      ],
+      [
+        "post",
+        "/command"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/categories/router.ts"
+  },
+  {
+    "module": "attachments",
+    "routes": [
+      [
+        "post",
+        "/search"
+      ],
+      [
+        "post",
+        "/requests"
+      ],
+      [
+        "post",
+        "/intents"
+      ],
+      [
+        "post",
+        "/policy"
+      ],
+      [
+        "post",
+        "/policy/update"
+      ],
+      [
+        "post",
+        "/cleanup-plan"
+      ],
+      [
+        "post",
+        "/process"
+      ],
+      [
+        "post",
+        "/:id/download"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/attachments/router.ts"
+  },
+  {
+    "module": "access-settings",
+    "routes": [
+      [
+        "post",
+        "/state"
+      ],
+      [
+        "post",
+        "/policy"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/access-settings/router.ts"
+  },
+  {
+    "module": "services",
+    "routes": [
+      [
+        "post",
+        "/search"
+      ],
+      [
+        "post",
+        "/"
+      ],
+      [
+        "post",
+        "/:id/detail"
+      ],
+      [
+        "post",
+        "/:id/versions"
+      ],
+      [
+        "post",
+        "/:id/quote"
+      ],
+      [
+        "post",
+        "/:id/archive"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/services/router.ts"
+  },
+  {
+    "module": "charges",
+    "routes": [
+      [
+        "post",
+        "/view"
+      ],
+      [
+        "post",
+        "/create"
+      ],
+      [
+        "post",
+        "/mutate"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/charges/router.ts"
+  },
+  {
+    "module": "checklists",
+    "routes": [
+      [
+        "post",
+        "/model"
+      ],
+      [
+        "post",
+        "/model/publish"
+      ],
+      [
+        "post",
+        "/entries/update"
+      ],
+      [
+        "post",
+        "/notify"
+      ],
+      [
+        "post",
+        "/notifications"
+      ],
+      [
+        "post",
+        "/notifications/read"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/checklists/router.ts"
+  },
+  {
+    "module": "team",
+    "routes": [
+      [
+        "get",
+        "/"
+      ],
+      [
+        "post",
+        "/invitations"
+      ],
+      [
+        "post",
+        "/invitations/:id/send"
+      ],
+      [
+        "post",
+        "/invitations/:id/revoke"
+      ],
+      [
+        "patch",
+        "/members/:id"
+      ],
+      [
+        "put",
+        "/delegations/:id"
+      ],
+      [
+        "post",
+        "/delegations/:id/revoke"
+      ],
+      [
+        "get",
+        "/invitations/:id/state"
+      ],
+      [
+        "post",
+        "/invitations/:id/verify"
+      ],
+      [
+        "post",
+        "/invitations/:id/accept"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/team/router.ts"
+  },
+  {
+    "module": "customer-relations",
+    "routes": [
+      [
+        "post",
+        "/state"
+      ],
+      [
+        "post",
+        "/candidates"
+      ],
+      [
+        "post",
+        "/command"
+      ],
+      [
+        "post",
+        "/merge/preview"
+      ],
+      [
+        "post",
+        "/merge"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/customer-relations/router.ts"
+  },
+  {
+    "module": "requests",
+    "routes": [
+      [
+        "post",
+        "/search"
+      ],
+      [
+        "post",
+        "/options"
+      ],
+      [
+        "post",
+        "/"
+      ],
+      [
+        "post",
+        "/:id/detail"
+      ],
+      [
+        "post",
+        "/:id/actions"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/requests/router.ts"
+  },
+  {
+    "module": "governance",
+    "routes": [
+      [
+        "get",
+        "/audit"
+      ],
+      [
+        "post",
+        "/audit/export"
+      ],
+      [
+        "get",
+        "/audit/policy"
+      ],
+      [
+        "post",
+        "/audit/policy"
+      ],
+      [
+        "post",
+        "/audit/verify"
+      ],
+      [
+        "get",
+        "/archives"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/governance/router.ts"
+  },
+  {
+    "module": "finance",
+    "routes": [
+      [
+        "post",
+        "/quick/context"
+      ],
+      [
+        "post",
+        "/quick/operate"
+      ],
+      [
+        "post",
+        "/reports/context"
+      ],
+      [
+        "post",
+        "/reports/options"
+      ],
+      [
+        "post",
+        "/reports/page"
+      ],
+      [
+        "post",
+        "/reports/settings"
+      ],
+      [
+        "post",
+        "/reports/export"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/finance/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "routes": [
+      [
+        "post",
+        "/folders"
+      ],
+      [
+        "post",
+        "/folder-command"
+      ],
+      [
+        "post",
+        "/templates-search"
+      ],
+      [
+        "post",
+        "/model-state"
+      ],
+      [
+        "post",
+        "/metadata-command"
+      ],
+      [
+        "post",
+        "/version-command"
+      ],
+      [
+        "post",
+        "/duplicate"
+      ],
+      [
+        "post",
+        "/offer-manage"
+      ],
+      [
+        "post",
+        "/offer-for-service"
+      ],
+      [
+        "post",
+        "/offer-attach"
+      ],
+      [
+        "post",
+        "/offers"
+      ],
+      [
+        "post",
+        "/offer-form"
+      ],
+      [
+        "post",
+        "/booking"
+      ],
+      [
+        "post",
+        "/presence"
+      ],
+      [
+        "post",
+        "/presence-update"
+      ],
+      [
+        "post",
+        "/intake"
+      ],
+      [
+        "post",
+        "/intake-start"
+      ],
+      [
+        "post",
+        "/intake-apply"
+      ],
+      [
+        "post",
+        "/intake-booked"
+      ],
+      [
+        "post",
+        "/dispatch"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "routes": [
+      [
+        "post",
+        "/state"
+      ],
+      [
+        "post",
+        "/delivery-state"
+      ],
+      [
+        "post",
+        "/delivery-command"
+      ],
+      [
+        "post",
+        "/release-state"
+      ],
+      [
+        "post",
+        "/release-command"
+      ],
+      [
+        "post",
+        "/signature-state"
+      ],
+      [
+        "post",
+        "/signature-command"
+      ],
+      [
+        "post",
+        "/review-queue"
+      ],
+      [
+        "post",
+        "/reviewers"
+      ],
+      [
+        "post",
+        "/review-history"
+      ],
+      [
+        "post",
+        "/request-reviews"
+      ],
+      [
+        "post",
+        "/versions"
+      ],
+      [
+        "post",
+        "/preview"
+      ],
+      [
+        "get",
+        "X-Document-SHA256"
+      ],
+      [
+        "get",
+        "X-Document-Version"
+      ],
+      [
+        "get",
+        "Content-Type"
+      ],
+      [
+        "get",
+        "Content-Length"
+      ],
+      [
+        "post",
+        "/command"
+      ],
+      [
+        "post",
+        "/portal"
+      ],
+      [
+        "post",
+        "/cash-queue"
+      ],
+      [
+        "post",
+        "/cash-claim"
+      ],
+      [
+        "post",
+        "/artifact"
+      ],
+      [
+        "get",
+        "X-Document-SHA256"
+      ],
+      [
+        "get",
+        "X-Document-Publication"
+      ],
+      [
+        "get",
+        "Content-Type"
+      ],
+      [
+        "get",
+        "Content-Length"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "retention",
+    "routes": [
+      [
+        "post",
+        "/:action"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/retention/router.ts"
+  },
+  {
+    "module": "portal-requests",
+    "routes": [
+      [
+        "post",
+        "/:id/:operation"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/portal-requests/router.ts"
+  },
+  {
+    "module": "request-archives",
+    "routes": [
+      [
+        "post",
+        "/policy"
+      ],
+      [
+        "post",
+        "/policy/set"
+      ],
+      [
+        "post",
+        "/search"
+      ],
+      [
+        "post",
+        "/:id/archive"
+      ],
+      [
+        "post",
+        "/report"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/request-archives/router.ts"
+  },
+  {
+    "module": "notifications",
+    "routes": [
+      [
+        "post",
+        "/summary"
+      ],
+      [
+        "post",
+        "/search"
+      ],
+      [
+        "post",
+        "/read"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/notifications/router.ts"
+  },
+  {
+    "module": "auth",
+    "routes": [
+      [
+        "get",
+        "/context"
+      ],
+      [
+        "get",
+        "Authorization"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/auth/router.ts"
+  },
+  {
+    "module": "request-levels",
+    "routes": [
+      [
+        "post",
+        "/:action"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/request-levels/router.ts"
+  },
+  {
+    "module": "privacy",
+    "routes": [
+      [
+        "get",
+        "/public"
+      ],
+      [
+        "post",
+        "/:action"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/privacy/router.ts"
+  },
+  {
+    "module": "account-closure",
+    "routes": [
+      [
+        "post",
+        "/:action"
+      ],
+      [
+        "get",
+        "X-Document-SHA256"
+      ],
+      [
+        "get",
+        "X-Document-Publication"
+      ],
+      [
+        "get",
+        "Content-Type"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/account-closure/router.ts"
+  },
+  {
+    "module": "customers",
+    "routes": [
+      [
+        "post",
+        "/search"
+      ],
+      [
+        "post",
+        "/"
+      ],
+      [
+        "post",
+        "/:id/detail"
+      ],
+      [
+        "patch",
+        "/:id"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/customers/router.ts"
+  },
+  {
+    "module": "documents",
+    "routes": [
+      [
+        "post",
+        "/search"
+      ],
+      [
+        "post",
+        "/options"
+      ],
+      [
+        "post",
+        "/detail"
+      ],
+      [
+        "post",
+        "/create"
+      ],
+      [
+        "post",
+        "/operate"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/documents/router.ts"
+  },
+  {
+    "module": "account",
+    "routes": [
+      [
+        "post",
+        "/:action"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/account/router.ts"
+  },
+  {
+    "module": "rural",
+    "routes": [
+      [
+        "post",
+        "/:operation"
+      ]
+    ],
+    "authentication": true,
+    "file": "server/modules/rural/router.ts"
+  }
+]

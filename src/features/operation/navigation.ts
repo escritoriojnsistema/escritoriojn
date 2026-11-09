@@ -27,7 +27,7 @@ export function operationNavigation(contexts: AccessContext[], client: boolean):
   const items: OperationItem[] = [{ key: 'home', label: 'Início', path: paths.panel }];
   if (staff(contexts, ['requests.read'])) items.push({ key: 'requests', label: 'Solicitações', path: paths.requests });
   if (staff(contexts, ['customers.read'])) items.push({ key: 'customers', label: 'Clientes', path: paths.customers });
-  if (staff(contexts, ['customers.read'])) items.push({key:'rural',label:'Imóveis rurais',path:paths.rural});
+  if (staff(contexts, ['customers.read','rural.read'])) items.push({key:'rural',label:'Imóveis rurais',path:paths.rural});
 
   if (staff(contexts, ['documents.read', 'requests.read', 'customers.read']) || staff(contexts, ['templates.read'])) items.push({ key: 'documents', label: 'Documentos', path: paths.documents });
   if (staff(contexts, ['services.read'])) items.push({ key: 'services', label: 'Serviços', path: paths.services });

@@ -124,7 +124,9 @@ for (const role of ['owner', 'admin', 'employee', 'client']) test(`logo em recup
   await expect(page).toHaveURL(home);
   await page.getByRole('link', { name: 'Abrir conta', exact: true }).click();
   await page.getByRole('link', { name: 'Recuperar senha', exact: true }).click();
-  await page.getByRole('link', { name: 'Voltar ao início', exact: true }).click();
+  await page.locator('a.return-login').click();
+  await expect(page).toHaveURL(role === 'client' ? '/minha-conta' : '/conta');
+  await page.getByRole('banner', {name:'Barra da conta'}).getByRole('link', { name: 'Escritório JN — início', exact: true }).click();
   await expect(page).toHaveURL(home);
   await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();
   const shortcuts = page.getByRole('navigation', { name: 'Atalhos do aplicativo' });
@@ -371,6 +373,7 @@ test('reativar conta com permissões efetivas vazias envia o acesso básico obri
   await page.route(`**/api/team/members/${member.id}`, route => route.fulfill({ json: { data: { ok: true } } }));
   await page.goto('/equipe');
   await page.getByRole('button', { name: `Editar acesso de ${member.name}`, exact: true }).click();
+  await page.getByRole('button',{name:/Acesso geral e configurações.*permissões habilitadas/}).click();
   await expect(page.getByRole('checkbox', { name: 'Acesso básico Obrigatório', exact: true })).toBeChecked();
   await page.getByLabel('Conta ativa neste escritório').check();
   const [request] = await Promise.all([

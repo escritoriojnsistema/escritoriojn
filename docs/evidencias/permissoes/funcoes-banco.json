@@ -1,0 +1,812 @@
+[
+  {
+    "code": "access.manage",
+    "checked_functions": [
+      "access_policies_state"
+    ]
+  },
+  {
+    "code": "accounts.corrections.apply",
+    "checked_functions": [
+      "account_correction_apply",
+      "account_correction_json"
+    ]
+  },
+  {
+    "code": "accounts.corrections.read",
+    "checked_functions": [
+      "account_correction_apply",
+      "account_correction_create",
+      "account_correction_json",
+      "document_version_scope22",
+      "notifications_page",
+      "notifications_summary",
+      "request_in_scope_before_execution_levels",
+      "request_mutate",
+      "request_options",
+      "retention_request_scope_as"
+    ]
+  },
+  {
+    "code": "archives.manage",
+    "checked_functions": [
+      "archive_membership",
+      "archives_page",
+      "deleted_account_documents",
+      "deleted_accounts_page",
+      "restore_archive",
+      "retention_actor",
+      "retention_reserve_as",
+      "retention_target_visible_as",
+      "retention_worker_claim"
+    ]
+  },
+  {
+    "code": "audit.archives",
+    "checked_functions": [
+      "audit_report_access",
+      "audit_view_access"
+    ]
+  },
+  {
+    "code": "audit.export",
+    "checked_functions": [
+      "audit_export",
+      "audit_report_access",
+      "audit_report_begin"
+    ]
+  },
+  {
+    "code": "audit.manage",
+    "checked_functions": [
+      "audit_policy_set"
+    ]
+  },
+  {
+    "code": "audit.read",
+    "checked_functions": [
+      "audit_export",
+      "audit_policy_get",
+      "audit_policy_set",
+      "audit_privileged",
+      "audit_report_access",
+      "audit_report_begin",
+      "audit_report_seal",
+      "audit_view_access"
+    ]
+  },
+  {
+    "code": "cash.closure.adjust",
+    "checked_functions": [
+      "closure_operate",
+      "closure_state"
+    ]
+  },
+  {
+    "code": "cash.closure.approve",
+    "checked_functions": [
+      "closure_json18",
+      "closure_operate"
+    ]
+  },
+  {
+    "code": "cash.manage",
+    "checked_functions": [
+      "cash_configure",
+      "cash_dashboard_filtered_record",
+      "cash_dashboard_record"
+    ]
+  },
+  {
+    "code": "cash.open",
+    "checked_functions": [
+      "cash_dashboard_filtered_record",
+      "cash_dashboard_record",
+      "cash_open",
+      "cash_operate",
+      "cash_operate_before15",
+      "cash_operate_before18",
+      "cash_statement_finance16",
+      "cash_statement_record_before15",
+      "closure_operate",
+      "closure_state",
+      "correction_operate",
+      "correction_sources",
+      "document_cash_can_work",
+      "document_cash_claim",
+      "expense_operate",
+      "finance19_actor",
+      "payment_operate",
+      "transfer_operate"
+    ]
+  },
+  {
+    "code": "cash.read",
+    "checked_functions": [
+      "cash_actor",
+      "closure_can18",
+      "document_cash_queue"
+    ]
+  },
+  {
+    "code": "cash.read_all",
+    "checked_functions": [
+      "cash_dashboard",
+      "cash_dashboard_filtered",
+      "cash_dashboard_filtered_record",
+      "cash_dashboard_record",
+      "cash_payments_page",
+      "cash_statement",
+      "closure_json18",
+      "closure_operate",
+      "closure_record",
+      "closure_state",
+      "finance17_page",
+      "finance19_filters",
+      "finance_report_context",
+      "finance_report_options",
+      "payment_receipt"
+    ]
+  },
+  {
+    "code": "cash.transfer",
+    "checked_functions": [
+      "finance17_page",
+      "transfer_operate"
+    ]
+  },
+  {
+    "code": "categories.manage",
+    "checked_functions": [
+      "service_categories_command",
+      "service_categories_state"
+    ]
+  },
+  {
+    "code": "charges.adjust",
+    "checked_functions": [
+      "cash_operate_before15",
+      "cash_statement_finance16",
+      "cash_statement_record_before15",
+      "charges_mutate",
+      "charges_view_record",
+      "correction_operate",
+      "correction_sources"
+    ]
+  },
+  {
+    "code": "charges.cancel",
+    "checked_functions": [
+      "charges_mutate",
+      "charges_view_record"
+    ]
+  },
+  {
+    "code": "charges.create",
+    "checked_functions": [
+      "charges_create",
+      "charges_view_record",
+      "document_cash_claim",
+      "finance19_actor"
+    ]
+  },
+  {
+    "code": "charges.read",
+    "checked_functions": [
+      "cash_statement_finance16",
+      "cash_statement_record_before15",
+      "charges_actor",
+      "document_cash_can_work",
+      "finance19_actor"
+    ]
+  },
+  {
+    "code": "checklists.manage",
+    "checked_functions": [
+      "checklists_model",
+      "checklists_publish"
+    ]
+  },
+  {
+    "code": "checklists.read",
+    "checked_functions": [
+      "checklists_actor",
+      "checklists_notifications"
+    ]
+  },
+  {
+    "code": "checklists.update",
+    "checked_functions": [
+      "checklists_apply",
+      "checklists_notify",
+      "checklists_update",
+      "checklists_view"
+    ]
+  },
+  {
+    "code": "checklists.waive",
+    "checked_functions": [
+      "checklists_update",
+      "checklists_view"
+    ]
+  },
+  {
+    "code": "customers.create",
+    "checked_functions": [
+      "customer_create",
+      "customers_actor",
+      "rural_command27"
+    ]
+  },
+  {
+    "code": "customers.merge",
+    "checked_functions": [
+      "customer_merge",
+      "customer_merge_preview",
+      "customer_relation_candidates",
+      "customer_relations_state",
+      "customers_actor"
+    ]
+  },
+  {
+    "code": "customers.read",
+    "checked_functions": [
+      "customers_actor",
+      "document_artifact_complete",
+      "document_assignment_guard",
+      "document_booking_create",
+      "document_dispatch",
+      "document_version_complete",
+      "documents_access21_before_retention",
+      "finance_report_options",
+      "release_exception_valid25",
+      "request_customer",
+      "request_options",
+      "retention_classify",
+      "retention_hold",
+      "retention_reserve_as",
+      "retention_state",
+      "retention_target_visible_as",
+      "retention_worker_claim",
+      "review_member23"
+    ]
+  },
+  {
+    "code": "customers.read_all",
+    "checked_functions": [
+      "customer_detail",
+      "customer_in_scope",
+      "customers_page",
+      "document_version_sources22",
+      "documents_customer_visible21",
+      "retention_customer_scope_as"
+    ]
+  },
+  {
+    "code": "customers.relate",
+    "checked_functions": [
+      "customer_relation_candidates",
+      "customer_relation_command",
+      "customer_relations_state",
+      "customers_actor"
+    ]
+  },
+  {
+    "code": "customers.update",
+    "checked_functions": [
+      "customer_create",
+      "customer_detail",
+      "customer_update",
+      "customers_actor",
+      "rural_command27"
+    ]
+  },
+  {
+    "code": "customers.verify",
+    "checked_functions": [
+      "customer_relation_candidates",
+      "customer_relation_command",
+      "customer_relations_state",
+      "customers_actor"
+    ]
+  },
+  {
+    "code": "documents.create",
+    "checked_functions": [
+      "document_assignment_guard",
+      "document_booking_create",
+      "document_create",
+      "document_dispatch",
+      "document_intake_start",
+      "document_intake_view",
+      "document_options"
+    ]
+  },
+  {
+    "code": "documents.deliver",
+    "checked_functions": [
+      "document_delivery_access",
+      "document_delivery_command",
+      "document_delivery_state"
+    ]
+  },
+  {
+    "code": "documents.deliveries.revoke",
+    "checked_functions": [
+      "document_delivery_command",
+      "document_delivery_state"
+    ]
+  },
+  {
+    "code": "documents.exceptions.decide",
+    "checked_functions": [
+      "document_release_command",
+      "document_release_state",
+      "release_exception_valid25"
+    ]
+  },
+  {
+    "code": "documents.exceptions.request",
+    "checked_functions": [
+      "document_release_command",
+      "document_release_state"
+    ]
+  },
+  {
+    "code": "documents.read",
+    "checked_functions": [
+      "document_artifact_complete",
+      "document_assignment_guard",
+      "document_booking_create",
+      "document_dispatch",
+      "document_version_complete",
+      "documents_access21_before_retention",
+      "notification_visible_before_portal_returns",
+      "release_exception_valid25",
+      "retention_target_visible_as",
+      "retention_worker_claim",
+      "review_member23",
+      "review_notice23"
+    ]
+  },
+  {
+    "code": "documents.review",
+    "checked_functions": [
+      "notification_visible_before_portal_returns",
+      "review_member23"
+    ]
+  },
+  {
+    "code": "documents.signatures.manage",
+    "checked_functions": [
+      "document_signature_authorize",
+      "document_signature_command",
+      "document_signature_state"
+    ]
+  },
+  {
+    "code": "documents.signatures.validate",
+    "checked_functions": [
+      "document_signature_command",
+      "document_signature_state"
+    ]
+  },
+  {
+    "code": "documents.update",
+    "checked_functions": [
+      "document_artifact_begin",
+      "document_artifact_complete",
+      "document_detail",
+      "document_intake_apply",
+      "document_operate",
+      "document_options",
+      "document_workflow_command",
+      "document_workflow_state",
+      "review_info23"
+    ]
+  },
+  {
+    "code": "expenses.approve",
+    "checked_functions": [
+      "expense_operate",
+      "finance17_page"
+    ]
+  },
+  {
+    "code": "expenses.create",
+    "checked_functions": [
+      "expense_operate",
+      "finance17_page"
+    ]
+  },
+  {
+    "code": "expenses.pay",
+    "checked_functions": [
+      "expense_operate",
+      "finance17_page"
+    ]
+  },
+  {
+    "code": "expenses.read",
+    "checked_functions": [
+      "expense_operate",
+      "finance17_page"
+    ]
+  },
+  {
+    "code": "files.copy",
+    "checked_functions": [
+      "files_file_json",
+      "files_process_claim",
+      "files_process_complete"
+    ]
+  },
+  {
+    "code": "files.manage",
+    "checked_functions": [
+      "files_cleanup_plan",
+      "files_policy_get",
+      "files_policy_set",
+      "files_process_claim",
+      "files_process_complete",
+      "retention_reserve_as",
+      "retention_worker_claim"
+    ]
+  },
+  {
+    "code": "files.read",
+    "checked_functions": [
+      "document_signature_command",
+      "files_actor",
+      "retention_reserve_as",
+      "retention_target_visible_as",
+      "retention_worker_claim"
+    ]
+  },
+  {
+    "code": "files.upload",
+    "checked_functions": [
+      "files_actor",
+      "files_begin_upload",
+      "files_file_json",
+      "files_process_claim",
+      "files_process_complete",
+      "files_storage_allowed_before_portal_returns"
+    ]
+  },
+  {
+    "code": "finance.reports.export",
+    "checked_functions": [
+      "finance19_actor",
+      "finance_report_context"
+    ]
+  },
+  {
+    "code": "finance.reports.manage",
+    "checked_functions": [
+      "finance19_settings"
+    ]
+  },
+  {
+    "code": "finance.reports.read",
+    "checked_functions": [
+      "finance19_actor",
+      "finance19_settings"
+    ]
+  },
+  {
+    "code": "finance.reports.read_all",
+    "checked_functions": [
+      "finance19_filters",
+      "finance_report_context",
+      "finance_report_options"
+    ]
+  },
+  {
+    "code": "foundation.access",
+    "checked_functions": [
+      "access_policies_state",
+      "account_correction_create",
+      "archive_membership",
+      "cash_actor",
+      "checklists_notice",
+      "customers_actor",
+      "document_artifact_complete",
+      "document_assignment_guard",
+      "document_booking_create",
+      "document_cash_can_work",
+      "document_dispatch",
+      "document_version_complete",
+      "documents_access21_before_retention",
+      "governance_actor",
+      "member_execution_level",
+      "notifications_actor",
+      "release_exception_valid25",
+      "request_assignee",
+      "request_can_collect",
+      "request_execution_allowed",
+      "request_options",
+      "requests_actor",
+      "retention_reserve_as",
+      "retention_target_visible_as",
+      "retention_worker_claim",
+      "review_member23",
+      "review_notice23",
+      "service_categories_command",
+      "service_categories_state",
+      "services_actor",
+      "team_dashboard",
+      "team_finish_delivery",
+      "team_invitation_authority",
+      "templates_actor20"
+    ]
+  },
+  {
+    "code": "quick.perform",
+    "checked_functions": [
+      "finance19_actor"
+    ]
+  },
+  {
+    "code": "receipts.issue",
+    "checked_functions": [
+      "finance17_page",
+      "payment_receipt"
+    ]
+  },
+  {
+    "code": "receipts.read",
+    "checked_functions": [
+      "finance17_page",
+      "payment_receipt"
+    ]
+  },
+  {
+    "code": "requests.archives.manage",
+    "checked_functions": [
+      "request_archives_actor"
+    ]
+  },
+  {
+    "code": "requests.cancel",
+    "checked_functions": [
+      "request_detail_record_before_categories",
+      "request_mutate"
+    ]
+  },
+  {
+    "code": "requests.create",
+    "checked_functions": [
+      "account_correction_create",
+      "categorized_request_create",
+      "document_booking_create",
+      "finance19_actor",
+      "quick_operate",
+      "request_can_collect",
+      "request_create",
+      "request_preintake_create",
+      "request_preintake_create_before_category_opening",
+      "request_preintake_handoff",
+      "request_preintake_update",
+      "requests_actor",
+      "staff_category_request_create"
+    ]
+  },
+  {
+    "code": "requests.level1",
+    "checked_functions": [
+      "member_execution_level"
+    ]
+  },
+  {
+    "code": "requests.level2",
+    "checked_functions": [
+      "member_execution_level"
+    ]
+  },
+  {
+    "code": "requests.read",
+    "checked_functions": [
+      "account_correction_create",
+      "cash_statement_finance16",
+      "cash_statement_record_before15",
+      "checklists_notice",
+      "document_artifact_complete",
+      "document_assignment_guard",
+      "document_booking_create",
+      "document_cash_can_work",
+      "document_dispatch",
+      "document_version_complete",
+      "document_version_scope22",
+      "documents_access21_before_retention",
+      "files_actor",
+      "finance19_actor",
+      "member_execution_level",
+      "notification_visible_before23",
+      "notification_visible_before_portal_returns",
+      "notifications_page",
+      "notifications_summary",
+      "release_exception_valid25",
+      "request_archives_actor",
+      "request_assignee",
+      "request_can_collect",
+      "request_can_reclaim_before_levels",
+      "request_execution_allowed",
+      "request_in_scope_before_execution_levels",
+      "request_options",
+      "requests_actor",
+      "retention_classify",
+      "retention_request_scope_as",
+      "retention_reserve_as",
+      "retention_state",
+      "retention_target_visible_as",
+      "retention_worker_claim",
+      "review_member23",
+      "review_notice23"
+    ]
+  },
+  {
+    "code": "requests.read_all",
+    "checked_functions": [
+      "document_dispatch_page",
+      "document_version_scope22",
+      "notifications_page",
+      "request_archive_command",
+      "request_archives_actor",
+      "request_archives_page",
+      "request_in_scope_before_execution_levels",
+      "retention_request_scope_as"
+    ]
+  },
+  {
+    "code": "requests.reclaim",
+    "checked_functions": [
+      "request_can_reclaim_before_levels",
+      "request_mutate"
+    ]
+  },
+  {
+    "code": "requests.transfer",
+    "checked_functions": [
+      "checklists_view",
+      "request_detail_record_before_categories",
+      "request_level_revoke",
+      "request_level_transfer",
+      "request_mutate"
+    ]
+  },
+  {
+    "code": "requests.update",
+    "checked_functions": [
+      "document_dispatch",
+      "finance19_actor",
+      "request_detail_record_before_categories",
+      "request_mutate"
+    ]
+  },
+  {
+    "code": "services.approve",
+    "checked_functions": [
+      "services_normalize_input"
+    ]
+  },
+  {
+    "code": "services.courtesy",
+    "checked_functions": [],
+    "dynamic_check": "services_snapshot: services. || adjustment.kind, with kind=courtesy"
+  },
+  {
+    "code": "services.discount",
+    "checked_functions": [
+      "charges_mutate",
+      "charges_view_record"
+    ]
+  },
+  {
+    "code": "services.manage",
+    "checked_functions": [
+      "document_offer_attach",
+      "document_offer_manage",
+      "files_policy_get",
+      "files_policy_set",
+      "model_commercial_state",
+      "service_detail",
+      "services_actor"
+    ]
+  },
+  {
+    "code": "services.perform",
+    "checked_functions": [
+      "document_assignment_guard",
+      "document_booking_create",
+      "document_dispatch",
+      "finance19_actor",
+      "request_capture_items",
+      "services_actor",
+      "services_normalize_input"
+    ]
+  },
+  {
+    "code": "services.price_override",
+    "checked_functions": [
+      "quick_operate",
+      "services_snapshot"
+    ]
+  },
+  {
+    "code": "services.read",
+    "checked_functions": [
+      "document_assignment_guard",
+      "document_booking_create",
+      "document_dispatch",
+      "document_offer_attach",
+      "document_offer_manage",
+      "finance19_actor",
+      "model_commercial_state",
+      "request_capture_items",
+      "request_options",
+      "services_actor"
+    ]
+  },
+  {
+    "code": "services.surcharge",
+    "checked_functions": [
+      "charges_mutate",
+      "charges_view_record"
+    ]
+  },
+  {
+    "code": "settings.access",
+    "checked_functions": [
+      "privacy_settings_actor"
+    ]
+  },
+  {
+    "code": "templates.approve",
+    "checked_functions": [
+      "model_can_read_drafts",
+      "template_approve",
+      "template_detail20",
+      "templates_actor20"
+    ]
+  },
+  {
+    "code": "templates.manage",
+    "checked_functions": [
+      "document_offer_attach",
+      "document_offer_manage",
+      "model_can_read_drafts",
+      "model_commercial_state",
+      "model_duplicate",
+      "model_folders_command",
+      "model_folders_state",
+      "model_metadata_command",
+      "model_version_command",
+      "template_detail20",
+      "template_save"
+    ]
+  },
+  {
+    "code": "templates.read",
+    "checked_functions": [
+      "document_create",
+      "document_options",
+      "templates_actor20"
+    ]
+  },
+  {
+    "code": "users.manage",
+    "checked_functions": [
+      "team_finish_delivery",
+      "team_invitation_authority",
+      "team_permissions_for_member"
+    ]
+  },
+  {
+    "code": "users.owners.create",
+    "checked_functions": [
+      "team_invitation_authority",
+      "team_permissions_for_member"
+    ]
+  }
+]
