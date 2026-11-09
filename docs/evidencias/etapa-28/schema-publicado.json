@@ -1,0 +1,88 @@
+{
+  "tables": [
+    {
+      "rls": true,
+      "name": "ditr_cases28",
+      "closed_anon": true,
+      "closed_authenticated": true
+    },
+    {
+      "rls": true,
+      "name": "ditr_evidence28",
+      "closed_anon": true,
+      "closed_authenticated": true
+    },
+    {
+      "rls": true,
+      "name": "ditr_calendars28",
+      "closed_anon": true,
+      "closed_authenticated": true
+    },
+    {
+      "rls": true,
+      "name": "ditr_commands28",
+      "closed_anon": true,
+      "closed_authenticated": true
+    }
+  ],
+  "baseline": {
+    "auth": 7,
+    "grants": 22,
+    "parties": 0,
+    "records": 0,
+    "properties": 0,
+    "grants_hash": "5fe59fdb26a96922477ca273a8f44042",
+    "memberships": 7,
+    "membership_hash": "bb1fbb728b05bba957ba955da81005e5",
+    "auth_identity_hash": "8b2526040dca9b8c7b40420819b2492e"
+  },
+  "functions": [
+    {
+      "md5": "6a6aff636afff216ea03ae12e94a17c9",
+      "name": "ditr_case_guard28",
+      "schema": "private",
+      "arguments": ""
+    },
+    {
+      "md5": "8aaf0efabd0193f794073cdedc6ced7a",
+      "name": "ditr_case_view28",
+      "schema": "private",
+      "arguments": "d private.ditr_cases28, m memberships"
+    },
+    {
+      "md5": "9ab8c098cd3d7a16ae0a7fdfc5797e54",
+      "name": "ditr_command28",
+      "schema": "private",
+      "arguments": "o uuid, p uuid, c jsonb, k uuid"
+    },
+    {
+      "md5": "8f4378b1aefd082b30d365e304c95708",
+      "name": "ditr_state28",
+      "schema": "private",
+      "arguments": "o uuid, p uuid, y integer, cid uuid, page integer"
+    },
+    {
+      "md5": "2c951bb2e192adf729afae5a9d9e9a95",
+      "name": "ditr_command28",
+      "schema": "public",
+      "arguments": "o uuid, p uuid, c jsonb, k uuid"
+    },
+    {
+      "md5": "e0d490e79438d5db24a2348cb4f87446",
+      "name": "ditr_state28",
+      "schema": "public",
+      "arguments": "o uuid, p uuid, y integer, cid uuid, page integer"
+    }
+  ],
+  "migration": {
+    "name": "ditr28_exercises_rectifications",
+    "version": "20261109181450",
+    "statements": 27
+  },
+  "fixtures28": {
+    "cases": 0,
+    "commands": 0,
+    "evidence": 0,
+    "calendars": 0
+  }
+}

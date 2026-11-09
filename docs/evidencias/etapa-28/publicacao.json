@@ -1,0 +1,23 @@
+{
+  "date_utc": "2026-11-09",
+  "runtime_pr": 104,
+  "runtime_feature": "c0e00c0665ea4af3c5c39d052951792627a9204f",
+  "runtime_merge": "f9adc71dfc7160ad3248eb3cc4af727de2a9acf7",
+  "tested_tree": "13fb65b25a7c775f75a5f44da55210403e54368e",
+  "vercel_preview": "dpl_1vu5cKBzJrx4p77b85krJGZ3SAe9",
+  "vercel_production": "dpl_2QpeKJts7tqW5NEXghfrYV6wJiJQ",
+  "vercel_state": "READY",
+  "production_url": "https://escritoriojn.vercel.app",
+  "migration": "20261109181450",
+  "migration_automatically_applied": true,
+  "migration_statements": 27,
+  "matching_function_definitions": 6,
+  "private_tables_rls_acl_closed": 4,
+  "matching_public_assets": 8,
+  "public_browser_tests": 3,
+  "auth_membership_grants_hashes_preserved": true,
+  "hosted_fixtures": 0,
+  "github_actions": false,
+  "direct_vercel_deploy": false,
+  "next_stage": 29
+}

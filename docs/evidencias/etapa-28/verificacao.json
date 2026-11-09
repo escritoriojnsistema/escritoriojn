@@ -17,8 +17,10 @@
   ],
   "build_typecheck": true,
   "production_dependency_vulnerabilities": 0,
-  "review": "Independent API and whole-change reviews: no confirmed P1/P2; hosted publication pending",
+  "review": "Independent API and whole-change reviews: no confirmed P1/P2",
   "hosted_fixtures": false,
   "github_actions": false,
-  "direct_vercel_deploy": false
+  "direct_vercel_deploy": false,
+  "public_browser_tests": 3,
+  "publication": "Confirmed via GitHub\u2192Vercel and automatic Supabase migration; publicacao.json"
 }
