@@ -4,7 +4,7 @@ import { paths } from '../../app/routes';
 export const operationRoleNames = {
   owner: 'Super administrador', admin: 'Administrador', employee: 'Funcionário', client: 'Cliente',
 };
-export type OperationItem = { key: 'settings' | 'catalog' | 'portalDocuments' | 'documents' | 'templates' | 'quick' | 'reports' | 'expenses' | 'payments' | 'cash' | 'charges' | 'home' | 'checklists' | 'notifications' | 'requests' | 'attachments' | 'customers' | 'services' | 'team' | 'audit' | 'archives' | 'account'; label: string; path: string };
+export type OperationItem = { key: 'rural' | 'settings' | 'catalog' | 'portalDocuments' | 'documents' | 'templates' | 'quick' | 'reports' | 'expenses' | 'payments' | 'cash' | 'charges' | 'home' | 'checklists' | 'notifications' | 'requests' | 'attachments' | 'customers' | 'services' | 'team' | 'audit' | 'archives' | 'account'; label: string; path: string };
 const staff = (contexts: AccessContext[], permissions: string[]) => contexts.some(context => context.role_code !== 'client' && permissions.every(permission => context.permissions.includes(permission)));
 /**
  * One destination per subject. Client and team menus never share entries:
@@ -27,6 +27,8 @@ export function operationNavigation(contexts: AccessContext[], client: boolean):
   const items: OperationItem[] = [{ key: 'home', label: 'Início', path: paths.panel }];
   if (staff(contexts, ['requests.read'])) items.push({ key: 'requests', label: 'Solicitações', path: paths.requests });
   if (staff(contexts, ['customers.read'])) items.push({ key: 'customers', label: 'Clientes', path: paths.customers });
+  if (staff(contexts, ['customers.read'])) items.push({key:'rural',label:'Imóveis rurais',path:paths.rural});
+
   if (staff(contexts, ['documents.read', 'requests.read', 'customers.read']) || staff(contexts, ['templates.read'])) items.push({ key: 'documents', label: 'Documentos', path: paths.documents });
   if (staff(contexts, ['services.read'])) items.push({ key: 'services', label: 'Serviços', path: paths.services });
   if (staff(contexts, ['requests.read', 'checklists.read'])) items.push({ key: 'checklists', label: 'Checklist', path: paths.checklists });

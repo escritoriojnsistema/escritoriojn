@@ -1,3 +1,4 @@
+import {ruralRouter} from './modules/rural/router.js';
 import {requestLevelsRouter} from './modules/request-levels/router.js';
 import {privacyRouter} from './modules/privacy/router.js';
 import {retentionRouter} from './modules/retention/router.js';
@@ -59,6 +60,7 @@ api.use('/portal-requests',portalRequestsRouter);
 api.use('/team',teamRouter);
 api.use('/governance',governanceRouter);
 api.use('/customers',customersRouter);
+api.use('/rural',ruralRouter);
 api.use('/customer-relations',customerRelationsRouter);
 api.use('/services',servicesRouter);
 api.use('/requests',requestsRouter);

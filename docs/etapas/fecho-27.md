@@ -1,0 +1,13 @@
+# Etapa27 — validação e publicação
+
+Base41a7a92 e correções26 conferidas antes de editar; [cartão27](etapa-27.md).
+
+Cadastro em `/imoveis-rurais`, separado de Clientes e integrado ao layout/menu existente. Clientes existentes são selecionados com nome/máscara; cliente de referência define escopo de gestão, sem presumir título de propriedade. Pessoas exigem papel explícito e período; encerrar período conserva o registro e permite acrescentar outro. Atendimentos exigem responsável/triagem atual e pessoa vinculada; arquivos precisam pertencer ao mesmo atendimento. Referência11 protege arquivo contra limpeza operacional; associação não valida arquivo nem autoriza download. Um atendimento não pode ser atribuído a dois imóveis. Histórico por exercício é referência interna; ITR/DITR/órgãos não são simulados.
+
+Permissões existentes customers.read/create/update e escopo08, sem novas concessões individuais. Cliente do portal excluído, sem direito implícito por CPF ou associação. WrappersINVOKER, tabelasprivadasRLS/ACLfechadas, FKs compostas por escritório, eventos semPII e comandos idempotentes/versão esperada. Semsegredos/StorageURL/cacheprivado; seleção/cancelamento de respostas por sessão/escritório,401/403bloqueiam e503preserva tentativa. Listas/seletores/histórico paginados5; demais atalhos na sidebar, quatro atalhosmóveis preservados. Layoutreutilizado comCSSlocal evitando inversão de ordem herdada deEquipe. Sem loaders ou promessa de latênciazero.
+
+Build/typecheck passaram;347Node/API históricos mais2testesDTO/API27 passaram.3UI27 em320/360/1440 e13regressões26 passaram, com3UI27repetidos após acabamento. DoisreplaysSQL1.539PASS passaram; replayfinal769PASS e8assertivas27focadas após endurecimento final também passaram. JornadaAuth/REST/Express/Storage/PDF real local aprovada com doisimóveis, período, arquivoquarentena do pipeline11 vinculado ao atendimento e clienteportal negado. Auditprodução0. Status final de publicação será registrado após readback; não reaplicar migration histórica26. SemActions/deployCLI/VercelAPI oufixtureshospedadas. Etapa28 não iniciada.
+
+## Limites da homologação
+
+Sem envio externo, fixture ou concessão hospedada, consulta oficialCAFIR/SNCR/CAR, transmissãoDITR ou documento oficial. Sem aparelho físico, benchmark de carga ou política jurídica de retenção nova. A imagemStorage oficial fixada precisou de rootfsverificadoSHA emshm e preparação de pontos de montagem efêmeros devido a falta de espaçoVFS; nenhum produto/worker foi alterado para simular sucesso. Identificadores são referências informadas e não certificam regularidade. O cliente de referência controla escopo08; atribuições/papéis rurais não criam login nem concedem acesso ao acervo.
