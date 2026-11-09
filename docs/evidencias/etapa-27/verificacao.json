@@ -1,0 +1,46 @@
+{
+  "base": "41a7a9298d9981729f9ab4c14c308ac12be9452e",
+  "date_utc": "2026-11-09",
+  "node_existing": 347,
+  "new_dto_api": 2,
+  "build": true,
+  "production_vulnerabilities": 0,
+  "sql": {
+    "empty_replays": 2,
+    "pass_lines": 1539,
+    "final_single_replay_pass_lines": 769,
+    "final_focused27": 8
+  },
+  "ui": {
+    "new": 3,
+    "regression26": 13,
+    "final_new_repeat": 3,
+    "widths": [
+      320,
+      360,
+      1440
+    ],
+    "fixtures": true
+  },
+  "real_local": {
+    "proof": "etapa27-real-local",
+    "auth": true,
+    "rest": true,
+    "express": true,
+    "storage_fixture": true,
+    "two_properties": true,
+    "period": true,
+    "request_file_link": true,
+    "client_denied": true,
+    "idempotency": true
+  },
+  "hosted_before": {
+    "latest_migration": "20261107194252",
+    "auth_users": 7,
+    "memberships": 7,
+    "individual_grants": 17
+  },
+  "publication": "pending",
+  "github_actions": false,
+  "method": "GitHub→Vercel"
+}

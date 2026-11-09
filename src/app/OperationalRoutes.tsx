@@ -1,3 +1,4 @@
+import RuralPage from '../features/rural/RuralPage';
 import SettingsPage from '../features/settings/SettingsPage';
 import ArchivesHubPage from '../features/settings/ArchivesHubPage';
 import DocumentsHubPage from '../features/documents/DocumentsHubPage';
@@ -28,6 +29,7 @@ export default function OperationalRoutes({operationKey}:{operationKey:string}){
     <Route path={paths.panel} element={<PanelPage key={`team:${operationKey}`} />} />
     <Route path={paths.clientPanel} element={<PanelPage key={`client:${operationKey}`} />} />
     <Route path={paths.authenticated} element={<PanelPage key={operationKey} />} />
+    <Route path={paths.rural} element={<RuralPage key={operationKey}/>} />
     <Route path={paths.customers} element={<CustomersPage key={operationKey} />} />
     <Route path={paths.requests} element={<RequestsPage key={`requests:${operationKey}`} />} />
     <Route path={paths.clientRequests} element={<RequestsPage key={`client-requests:${operationKey}`} client />} />

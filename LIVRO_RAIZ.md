@@ -1,5 +1,7 @@
 # Livro Raiz — Escritório JN
 
+- **Etapa27 em validação (09/11/2026):** base41a7a92/correções26 preservadas. Cadastro rural, papéis/períodos, associação de atendimento/arquivo e histórico por exercício implementados localmente; integrações e provas em [fecho27](docs/etapas/fecho-27.md). Schema/API/frontend ainda não publicados; não iniciar28.
+
 - **Correções26 publicadas/verificadas:** PR98,merge7d5c2d7,Vercel3Qhy7aLMSUCCESS. Quatro achadosR1–R4 corrigidos;347Node/API,build/typecheck,doisreplaysSQL1.523PASS,13UI e jornada real local Auth/Storage/PDF aprovados. Migration20261107194252 aplicada automaticamente porGit,6comandos/4corposMD5iguais; não reaplicar. Bundlecanônico index-BRWmov8L/OperationalRoutes-Dvjbf4mo contém correções;health200 e3APIs401. SemActions,fixtureshospedadas ou envioexterno. Registros em andamento abaixo são históricos e superados por este fecho; Etapa27 não iniciada.
 
 - **Correções26 em validação:** quatro achados corrigidos localmente: sessão original obrigatória, resultado idempotente por identidade/página, contato por posição/telefone e atualização após503.347Node/API,build,9UI existentes e4novas regressões browser passaram. Dois replaysSQL1.523PASS aprovaram as regressões; publicaçãoGitHub→Vercel/Supabase pendente. Migration nova20261107194252, sem reaplicar a anterior. Nenhum deploy realizado até este checkpoint.
