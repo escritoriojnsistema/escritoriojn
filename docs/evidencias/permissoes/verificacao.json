@@ -48,7 +48,29 @@
     "temporary_rights_not_materialized": true,
     "legacy_form_rejected": true
   },
-  "publication": "pending",
+  "publication": {
+    "pr": 102,
+    "merge": "81502ebc750054dbe0986980ba45d244710d7513",
+    "tested_head": "7239fe8bca8af71a3ad8d2cacf32a5bc44d02e82",
+    "vercel": "E94JofPCGNHEhLU3NqWFpnW7JGdQ",
+    "state": "success",
+    "target": "production",
+    "method": "GitHub→Vercel",
+    "migration": "20261109125636",
+    "migration_statements_equal": 13,
+    "private_function_definitions_equal": 8,
+    "old_grants_unchanged": true,
+    "users": 7,
+    "memberships": 7,
+    "individual_grants": 22,
+    "new_equivalent_rural_grants": 5,
+    "hosted_rural_fixtures": 0,
+    "canonical_assets_equal": 8,
+    "home": 200,
+    "health": 200,
+    "anonymous_apis401": 3,
+    "public_browser_passed": 3
+  },
   "github_actions": false,
   "independent_review": {
     "important_findings_corrected": [

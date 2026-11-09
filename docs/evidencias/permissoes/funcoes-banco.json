@@ -2,14 +2,20 @@
   {
     "code": "access.manage",
     "checked_functions": [
-      "access_policies_state"
+      "access_policies_state",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "accounts.corrections.apply",
     "checked_functions": [
       "account_correction_apply",
-      "account_correction_json"
+      "account_correction_json",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -24,7 +30,10 @@
       "request_in_scope_before_execution_levels",
       "request_mutate",
       "request_options",
-      "retention_request_scope_as"
+      "retention_request_scope_as",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -38,14 +47,20 @@
       "retention_actor",
       "retention_reserve_as",
       "retention_target_visible_as",
-      "retention_worker_claim"
+      "retention_worker_claim",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "audit.archives",
     "checked_functions": [
       "audit_report_access",
-      "audit_view_access"
+      "audit_view_access",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -53,13 +68,19 @@
     "checked_functions": [
       "audit_export",
       "audit_report_access",
-      "audit_report_begin"
+      "audit_report_begin",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "audit.manage",
     "checked_functions": [
-      "audit_policy_set"
+      "audit_policy_set",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -72,21 +93,30 @@
       "audit_report_access",
       "audit_report_begin",
       "audit_report_seal",
-      "audit_view_access"
+      "audit_view_access",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "cash.closure.adjust",
     "checked_functions": [
       "closure_operate",
-      "closure_state"
+      "closure_state",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "cash.closure.approve",
     "checked_functions": [
       "closure_json18",
-      "closure_operate"
+      "closure_operate",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -94,7 +124,10 @@
     "checked_functions": [
       "cash_configure",
       "cash_dashboard_filtered_record",
-      "cash_dashboard_record"
+      "cash_dashboard_record",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -117,6 +150,9 @@
       "expense_operate",
       "finance19_actor",
       "payment_operate",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment",
       "transfer_operate"
     ]
   },
@@ -125,7 +161,10 @@
     "checked_functions": [
       "cash_actor",
       "closure_can18",
-      "document_cash_queue"
+      "document_cash_queue",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -145,21 +184,30 @@
       "finance19_filters",
       "finance_report_context",
       "finance_report_options",
-      "payment_receipt"
+      "payment_receipt",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "cash.transfer",
     "checked_functions": [
       "finance17_page",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment",
       "transfer_operate"
     ]
   },
   {
     "code": "categories.manage",
     "checked_functions": [
+      "safe_audit_changes",
       "service_categories_command",
-      "service_categories_state"
+      "service_categories_state",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -171,14 +219,20 @@
       "charges_mutate",
       "charges_view_record",
       "correction_operate",
-      "correction_sources"
+      "correction_sources",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "charges.cancel",
     "checked_functions": [
       "charges_mutate",
-      "charges_view_record"
+      "charges_view_record",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -187,7 +241,10 @@
       "charges_create",
       "charges_view_record",
       "document_cash_claim",
-      "finance19_actor"
+      "finance19_actor",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -197,21 +254,30 @@
       "cash_statement_record_before15",
       "charges_actor",
       "document_cash_can_work",
-      "finance19_actor"
+      "finance19_actor",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "checklists.manage",
     "checked_functions": [
       "checklists_model",
-      "checklists_publish"
+      "checklists_publish",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "checklists.read",
     "checked_functions": [
       "checklists_actor",
-      "checklists_notifications"
+      "checklists_notifications",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -220,14 +286,20 @@
       "checklists_apply",
       "checklists_notify",
       "checklists_update",
-      "checklists_view"
+      "checklists_view",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "checklists.waive",
     "checked_functions": [
       "checklists_update",
-      "checklists_view"
+      "checklists_view",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -235,7 +307,10 @@
     "checked_functions": [
       "customer_create",
       "customers_actor",
-      "rural_command27"
+      "rural_command27",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -245,7 +320,10 @@
       "customer_merge_preview",
       "customer_relation_candidates",
       "customer_relations_state",
-      "customers_actor"
+      "customers_actor",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -268,7 +346,10 @@
       "retention_state",
       "retention_target_visible_as",
       "retention_worker_claim",
-      "review_member23"
+      "review_member23",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -279,7 +360,11 @@
       "customers_page",
       "document_version_sources22",
       "documents_customer_visible21",
-      "retention_customer_scope_as"
+      "retention_customer_scope_as",
+      "rural_scope_permissions",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -288,7 +373,10 @@
       "customer_relation_candidates",
       "customer_relation_command",
       "customer_relations_state",
-      "customers_actor"
+      "customers_actor",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -298,7 +386,10 @@
       "customer_detail",
       "customer_update",
       "customers_actor",
-      "rural_command27"
+      "rural_command27",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -307,7 +398,10 @@
       "customer_relation_candidates",
       "customer_relation_command",
       "customer_relations_state",
-      "customers_actor"
+      "customers_actor",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -319,7 +413,10 @@
       "document_dispatch",
       "document_intake_start",
       "document_intake_view",
-      "document_options"
+      "document_options",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -327,14 +424,20 @@
     "checked_functions": [
       "document_delivery_access",
       "document_delivery_command",
-      "document_delivery_state"
+      "document_delivery_state",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "documents.deliveries.revoke",
     "checked_functions": [
       "document_delivery_command",
-      "document_delivery_state"
+      "document_delivery_state",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -342,14 +445,20 @@
     "checked_functions": [
       "document_release_command",
       "document_release_state",
-      "release_exception_valid25"
+      "release_exception_valid25",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "documents.exceptions.request",
     "checked_functions": [
       "document_release_command",
-      "document_release_state"
+      "document_release_state",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -366,14 +475,20 @@
       "retention_target_visible_as",
       "retention_worker_claim",
       "review_member23",
-      "review_notice23"
+      "review_notice23",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "documents.review",
     "checked_functions": [
       "notification_visible_before_portal_returns",
-      "review_member23"
+      "review_member23",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -381,14 +496,20 @@
     "checked_functions": [
       "document_signature_authorize",
       "document_signature_command",
-      "document_signature_state"
+      "document_signature_state",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "documents.signatures.validate",
     "checked_functions": [
       "document_signature_command",
-      "document_signature_state"
+      "document_signature_state",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -402,35 +523,50 @@
       "document_options",
       "document_workflow_command",
       "document_workflow_state",
-      "review_info23"
+      "review_info23",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "expenses.approve",
     "checked_functions": [
       "expense_operate",
-      "finance17_page"
+      "finance17_page",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "expenses.create",
     "checked_functions": [
       "expense_operate",
-      "finance17_page"
+      "finance17_page",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "expenses.pay",
     "checked_functions": [
       "expense_operate",
-      "finance17_page"
+      "finance17_page",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "expenses.read",
     "checked_functions": [
       "expense_operate",
-      "finance17_page"
+      "finance17_page",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -438,7 +574,10 @@
     "checked_functions": [
       "files_file_json",
       "files_process_claim",
-      "files_process_complete"
+      "files_process_complete",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -450,7 +589,10 @@
       "files_process_claim",
       "files_process_complete",
       "retention_reserve_as",
-      "retention_worker_claim"
+      "retention_worker_claim",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -460,7 +602,10 @@
       "files_actor",
       "retention_reserve_as",
       "retention_target_visible_as",
-      "retention_worker_claim"
+      "retention_worker_claim",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -471,27 +616,39 @@
       "files_file_json",
       "files_process_claim",
       "files_process_complete",
-      "files_storage_allowed_before_portal_returns"
+      "files_storage_allowed_before_portal_returns",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "finance.reports.export",
     "checked_functions": [
       "finance19_actor",
-      "finance_report_context"
+      "finance_report_context",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "finance.reports.manage",
     "checked_functions": [
-      "finance19_settings"
+      "finance19_settings",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "finance.reports.read",
     "checked_functions": [
       "finance19_actor",
-      "finance19_settings"
+      "finance19_settings",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -499,7 +656,10 @@
     "checked_functions": [
       "finance19_filters",
       "finance_report_context",
-      "finance_report_options"
+      "finance_report_options",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -532,46 +692,64 @@
       "retention_worker_claim",
       "review_member23",
       "review_notice23",
+      "safe_audit_changes",
       "service_categories_command",
       "service_categories_state",
       "services_actor",
       "team_dashboard",
       "team_finish_delivery",
       "team_invitation_authority",
+      "team_scope_for_member",
+      "team_validate_assignment",
       "templates_actor20"
     ]
   },
   {
     "code": "quick.perform",
     "checked_functions": [
-      "finance19_actor"
+      "finance19_actor",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "receipts.issue",
     "checked_functions": [
       "finance17_page",
-      "payment_receipt"
+      "payment_receipt",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "receipts.read",
     "checked_functions": [
       "finance17_page",
-      "payment_receipt"
+      "payment_receipt",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "requests.archives.manage",
     "checked_functions": [
-      "request_archives_actor"
+      "request_archives_actor",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "requests.cancel",
     "checked_functions": [
       "request_detail_record_before_categories",
-      "request_mutate"
+      "request_mutate",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -589,19 +767,28 @@
       "request_preintake_handoff",
       "request_preintake_update",
       "requests_actor",
-      "staff_category_request_create"
+      "safe_audit_changes",
+      "staff_category_request_create",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "requests.level1",
     "checked_functions": [
-      "member_execution_level"
+      "member_execution_level",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "requests.level2",
     "checked_functions": [
-      "member_execution_level"
+      "member_execution_level",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -642,7 +829,10 @@
       "retention_target_visible_as",
       "retention_worker_claim",
       "review_member23",
-      "review_notice23"
+      "review_notice23",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -655,14 +845,20 @@
       "request_archives_actor",
       "request_archives_page",
       "request_in_scope_before_execution_levels",
-      "retention_request_scope_as"
+      "retention_request_scope_as",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "requests.reclaim",
     "checked_functions": [
       "request_can_reclaim_before_levels",
-      "request_mutate"
+      "request_mutate",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -672,7 +868,10 @@
       "request_detail_record_before_categories",
       "request_level_revoke",
       "request_level_transfer",
-      "request_mutate"
+      "request_mutate",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -681,25 +880,85 @@
       "document_dispatch",
       "finance19_actor",
       "request_detail_record_before_categories",
-      "request_mutate"
+      "request_mutate",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
+    ]
+  },
+  {
+    "code": "rural.create",
+    "checked_functions": [
+      "rural_command27",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
+    ]
+  },
+  {
+    "code": "rural.parties.manage",
+    "checked_functions": [
+      "rural_command27",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
+    ]
+  },
+  {
+    "code": "rural.read",
+    "checked_functions": [
+      "rural_access27",
+      "rural_command27",
+      "rural_state27",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
+    ]
+  },
+  {
+    "code": "rural.read_all",
+    "checked_functions": [
+      "rural_scope_permissions",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
+    ]
+  },
+  {
+    "code": "rural.records.manage",
+    "checked_functions": [
+      "rural_command27",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "services.approve",
     "checked_functions": [
-      "services_normalize_input"
+      "safe_audit_changes",
+      "services_normalize_input",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "services.courtesy",
-    "checked_functions": [],
-    "dynamic_check": "services_snapshot: services. || adjustment.kind, with kind=courtesy"
+    "checked_functions": [
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
+    ],
+    "dynamic_check": "services_snapshot checks 'services.' || adjustment kind"
   },
   {
     "code": "services.discount",
     "checked_functions": [
       "charges_mutate",
-      "charges_view_record"
+      "charges_view_record",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -710,8 +969,11 @@
       "files_policy_get",
       "files_policy_set",
       "model_commercial_state",
+      "safe_audit_changes",
       "service_detail",
-      "services_actor"
+      "services_actor",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -722,15 +984,21 @@
       "document_dispatch",
       "finance19_actor",
       "request_capture_items",
+      "safe_audit_changes",
       "services_actor",
-      "services_normalize_input"
+      "services_normalize_input",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "services.price_override",
     "checked_functions": [
       "quick_operate",
-      "services_snapshot"
+      "safe_audit_changes",
+      "services_snapshot",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
@@ -745,26 +1013,38 @@
       "model_commercial_state",
       "request_capture_items",
       "request_options",
-      "services_actor"
+      "safe_audit_changes",
+      "services_actor",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "services.surcharge",
     "checked_functions": [
       "charges_mutate",
-      "charges_view_record"
+      "charges_view_record",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "settings.access",
     "checked_functions": [
-      "privacy_settings_actor"
+      "privacy_settings_actor",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment"
     ]
   },
   {
     "code": "templates.approve",
     "checked_functions": [
       "model_can_read_drafts",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment",
       "template_approve",
       "template_detail20",
       "templates_actor20"
@@ -782,6 +1062,9 @@
       "model_folders_state",
       "model_metadata_command",
       "model_version_command",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment",
       "template_detail20",
       "template_save"
     ]
@@ -791,22 +1074,29 @@
     "checked_functions": [
       "document_create",
       "document_options",
+      "safe_audit_changes",
+      "team_scope_for_member",
+      "team_validate_assignment",
       "templates_actor20"
     ]
   },
   {
     "code": "users.manage",
     "checked_functions": [
+      "safe_audit_changes",
       "team_finish_delivery",
       "team_invitation_authority",
-      "team_permissions_for_member"
+      "team_permissions_for_member",
+      "team_scope_for_member"
     ]
   },
   {
     "code": "users.owners.create",
     "checked_functions": [
+      "safe_audit_changes",
       "team_invitation_authority",
-      "team_permissions_for_member"
+      "team_permissions_for_member",
+      "team_scope_for_member"
     ]
   }
 ]
