@@ -1,0 +1,86 @@
+{
+  "migration": {
+    "version": "20261109125636",
+    "name": "modular_permissions_rural",
+    "automatic_via_git": true,
+    "statements_equal_in_order": 13,
+    "file_sha256": "15c2b021b7e1f4eb873d945de9c809a0a6b5b496310768fa84daae6b3ebb8852"
+  },
+  "functions": [
+    {
+      "schema": "private",
+      "name": "rural_access27",
+      "args": "o uuid, p uuid, write_cap text",
+      "md5": "48ab2f8c65707c12be1241073d94bd16"
+    },
+    {
+      "schema": "private",
+      "name": "rural_command27",
+      "args": "o uuid, p uuid, c jsonb, k uuid",
+      "md5": "b6995f0be352b422337f2bfed521c52d"
+    },
+    {
+      "schema": "private",
+      "name": "rural_scope_permissions",
+      "args": "r private.rural_properties, u uuid",
+      "md5": "f65933bbe78ef9cd73662b2046beccd9"
+    },
+    {
+      "schema": "private",
+      "name": "rural_state27",
+      "args": "o uuid, p uuid, page integer",
+      "md5": "4c0125df4282aae2441e16f8926f4b27"
+    },
+    {
+      "schema": "private",
+      "name": "safe_audit_changes",
+      "args": "p_changes jsonb",
+      "md5": "41e64ee4c224209c5531e82a851edc13"
+    },
+    {
+      "schema": "private",
+      "name": "team_dashboard",
+      "args": "p_office_id uuid, p_kind text, p_page integer, p_query text, p_status text",
+      "md5": "411252121ac8f22db445adcef890bf65"
+    },
+    {
+      "schema": "private",
+      "name": "team_scope_for_member",
+      "args": "p_membership_id uuid",
+      "md5": "e4bdb1192b0caede436630f507a808d2"
+    },
+    {
+      "schema": "private",
+      "name": "team_validate_assignment",
+      "args": "p_actor jsonb, p_role text, p_permissions text[], p_creating_owner boolean",
+      "md5": "8d408bbad237f4f724fff1363452f019"
+    }
+  ],
+  "all_8_match_clean_local_replay": true,
+  "closed_rls_tables": [
+    "property_commands27",
+    "property_parties",
+    "property_records27",
+    "rural_properties"
+  ],
+  "preservation": {
+    "users": 7,
+    "memberships": 7,
+    "grants": 22,
+    "permission_codes": 86,
+    "old_grant_hash": "06f48171d5c950f97f16c1c272dcff1f",
+    "rural_properties": 0,
+    "historical_delegations": 0
+  },
+  "security_advisor": {
+    "error": 0,
+    "warn": [
+      {
+        "name": "auth_leaked_password_protection",
+        "preexisting": true,
+        "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+      }
+    ],
+    "info": "142 existing RLS-without-policy tables, including private RPC-only tables; no policy opened"
+  }
+}

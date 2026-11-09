@@ -1,0 +1,71 @@
+{
+  "origin": "https://escritoriojn.vercel.app",
+  "home": 200,
+  "health": 200,
+  "entry": "/assets/index-DBIaMjco.js",
+  "assets": [
+    {
+      "path": "OperationalRoutes-DaFs5O0w.css",
+      "bytes": 86143,
+      "sha256": "8a82d5f1644fe3b1d9393b25a268874fc94dc578eb372a6d0302d273cf8654af",
+      "matches_local": true
+    },
+    {
+      "path": "OperationalRoutes-Dc3sCaze.js",
+      "bytes": 708001,
+      "sha256": "194074f5ae243d9fc85972bd729b24d0e3168ad8f4e83d24f2f10a3210a6c9af",
+      "matches_local": true
+    },
+    {
+      "path": "icons-D-dRSePb.js",
+      "bytes": 13003,
+      "sha256": "a2c5b19a56d02557367c2898ecf48ecff56314844a79ef187650451e5f36ef78",
+      "matches_local": true
+    },
+    {
+      "path": "index-DBIaMjco.js",
+      "bytes": 59940,
+      "sha256": "983603f16ff35fa83518dba481bac690a7b84a23f6b79c25403abeaba55b079e",
+      "matches_local": true
+    },
+    {
+      "path": "index-DGkYv4c9.css",
+      "bytes": 21127,
+      "sha256": "5f94931df612eef55ee7de8856c34c777e2ddd3448c1a1cafd3d033f3dbf7b86",
+      "matches_local": true
+    },
+    {
+      "path": "react-C-G-5Uwp.js",
+      "bytes": 259242,
+      "sha256": "1f2fda457afd0d175c0532313c24cf789618f713c21ca4c83588bf14bef06d1e",
+      "matches_local": true
+    },
+    {
+      "path": "rolldown-runtime-WkwZ5CU-.js",
+      "bytes": 599,
+      "sha256": "2629f2ad3cb75a57d98de697127f5af7d777ef572bbcdfa6e3ce8f438cd4527e",
+      "matches_local": true
+    },
+    {
+      "path": "supabase-DtuMx0jC.js",
+      "bytes": 214392,
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "matches_local": true
+    }
+  ],
+  "anonymous_api_barriers": [
+    {
+      "path": "/api/team",
+      "anonymous": 401
+    },
+    {
+      "path": "/api/rural/state",
+      "anonymous": 401
+    },
+    {
+      "path": "/api/rural/command",
+      "anonymous": 401
+    }
+  ],
+  "authenticated_business_tests": "disposable local Auth/PostgREST/Express; no hosted fixtures"
+}
