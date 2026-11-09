@@ -1,0 +1,13 @@
+{
+  "auth": 7,
+  "grants": 22,
+  "parties": 0,
+  "records": 0,
+  "migrations": 70,
+  "properties": 0,
+  "grants_hash": "5fe59fdb26a96922477ca273a8f44042",
+  "memberships": 7,
+  "membership_hash": "bb1fbb728b05bba957ba955da81005e5",
+  "latest_migration": "20261109125636",
+  "auth_identity_hash": "8b2526040dca9b8c7b40420819b2492e"
+}

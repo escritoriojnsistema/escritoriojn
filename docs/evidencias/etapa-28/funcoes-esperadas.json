@@ -1,0 +1,38 @@
+[
+  {
+    "md5": "6a6aff636afff216ea03ae12e94a17c9",
+    "name": "ditr_case_guard28",
+    "schema": "private",
+    "arguments": ""
+  },
+  {
+    "md5": "8aaf0efabd0193f794073cdedc6ced7a",
+    "name": "ditr_case_view28",
+    "schema": "private",
+    "arguments": "d private.ditr_cases28, m memberships"
+  },
+  {
+    "md5": "9ab8c098cd3d7a16ae0a7fdfc5797e54",
+    "name": "ditr_command28",
+    "schema": "private",
+    "arguments": "o uuid, p uuid, c jsonb, k uuid"
+  },
+  {
+    "md5": "8f4378b1aefd082b30d365e304c95708",
+    "name": "ditr_state28",
+    "schema": "private",
+    "arguments": "o uuid, p uuid, y integer, cid uuid, page integer"
+  },
+  {
+    "md5": "2c951bb2e192adf729afae5a9d9e9a95",
+    "name": "ditr_command28",
+    "schema": "public",
+    "arguments": "o uuid, p uuid, c jsonb, k uuid"
+  },
+  {
+    "md5": "e0d490e79438d5db24a2348cb4f87446",
+    "name": "ditr_state28",
+    "schema": "public",
+    "arguments": "o uuid, p uuid, y integer, cid uuid, page integer"
+  }
+]

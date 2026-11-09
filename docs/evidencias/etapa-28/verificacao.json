@@ -1,0 +1,24 @@
+{
+  "date_utc": "2026-11-09",
+  "base": "3a9c3e9f78cfbe05da67c333d12da2e65e9fb8db",
+  "node_tests": 354,
+  "node_failed": 0,
+  "sql_empty_replays": 1,
+  "sql_pass_lines": 2063,
+  "sql28_assertions": 36,
+  "ui28": 14,
+  "regression_ui": 10,
+  "reference_ui": 5,
+  "widths": [
+    320,
+    360,
+    768,
+    1440
+  ],
+  "build_typecheck": true,
+  "production_dependency_vulnerabilities": 0,
+  "review": "Independent API and whole-change reviews: no confirmed P1/P2; hosted publication pending",
+  "hosted_fixtures": false,
+  "github_actions": false,
+  "direct_vercel_deploy": false
+}

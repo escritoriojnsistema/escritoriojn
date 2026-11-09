@@ -30,6 +30,7 @@ export const auditActionNames: Record<string, string> = {
 };
 
 Object.assign(auditActionNames,{
+ 'rural.ditr_create':'Declaração ITR/DITR registrada','rural.ditr_evidence':'Evidência externa de ITR/DITR registrada','rural.ditr_calendar':'Conferência do calendário ITR/DITR registrada',
  'cash.closure_recorded':'Conferência por meio registrada','cash.closure_reviewed':'Divergência de fechamento revisada','cash.closure_adjusted':'Ajuste de conferência registrado',
  'expenses.create':'Conta a pagar registrada','expenses.approve':'Despesa aprovada','expenses.pay':'Despesa paga','cash.transferred':'Movimentação entre contas registrada','receipts.issued':'Recibo de pagamento emitido',
  'audit.policy_changed':'Prazo de arquivamento da auditoria alterado','audit.report_started':'Preparação de relatório de auditoria registrada','notifications.read':'Aviso marcado como lido',
