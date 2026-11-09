@@ -11,3 +11,7 @@ Build/typecheck passaram;347Node/API históricos mais2testesDTO/API27 passaram.3
 ## Limites da homologação
 
 Sem envio externo, fixture ou concessão hospedada, consulta oficialCAFIR/SNCR/CAR, transmissãoDITR ou documento oficial. Sem aparelho físico, benchmark de carga ou política jurídica de retenção nova. A imagemStorage oficial fixada precisou de rootfsverificadoSHA emshm e preparação de pontos de montagem efêmeros devido a falta de espaçoVFS; nenhum produto/worker foi alterado para simular sucesso. Identificadores são referências informadas e não certificam regularidade. O cliente de referência controla escopo08; atribuições/papéis rurais não criam login nem concedem acesso ao acervo.
+
+## Conferência da integraçãoGit
+
+PR100 integrado em942bdf2. Preview da branchd780066 READY/VercelFoDDf8LVyFuWp91Uq1cASXiRaREh. Em09/11/2026 às02:20UTC, produção ainda servia41a7a92/Etapa26 e migration mais recente era20261107194252. Este checkpoint registra a diferença entre homologação e publicação; o deploy de produção e o schema27 continuam pendentes até readback. Build com as configurações públicas extraídas do bundle canônico passou. Nenhum redeployVercelAPI/CLI ou migration manual executado.
