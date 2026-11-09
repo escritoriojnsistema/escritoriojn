@@ -9,7 +9,7 @@ const user = '22222222-2222-4222-8222-222222222222';
 const invitation = '33333333-3333-4333-8333-333333333333';
 const scope: TeamScope = { role_code: 'owner', allowed_roles: ['employee', 'admin', 'owner'], allowed_permissions: ['foundation.access', 'audit.read'], can_create_owner: true, can_delegate: true };
 function roster(page = 1): TeamDashboard {
-  return { kind: 'members', scope, total: 6, page, page_size: 5, counts: { members: 6, invitations: 0 }, items: Array.from({ length: page === 1 ? 5 : 1 }, (_, index) => ({ id: `44444444-4444-4444-8444-44444444444${index}`, user_id: user, name: page === 1 ? `Pessoa da Equipe ${index + 1}` : 'Pessoa da Segunda Página', email: `pessoa${index}@example.test`, role_code: index === 0 ? 'owner' as const : index === 1 ? 'admin' as const : 'employee' as const, active: true, access_active: true, permissions: ['foundation.access'], cpf_masked: '***.***.***-25', can_edit: true, protected_owner: index === 0, delegation: null })) };
+  return { kind: 'members', scope, total: 6, page, page_size: 5, counts: { members: 6, invitations: 0 }, items: Array.from({ length: page === 1 ? 5 : 1 }, (_, index) => ({ id: `44444444-4444-4444-8444-44444444444${index}`, user_id: user, name: page === 1 ? `Pessoa da Equipe ${index + 1}` : 'Pessoa da Segunda Página', email: `pessoa${index}@example.test`, role_code: index === 0 ? 'owner' as const : index === 1 ? 'admin' as const : 'employee' as const, active: true, access_active: true, permissions: ['foundation.access'], direct_permissions:['foundation.access'], cpf_masked: '***.***.***-25', can_edit: true, protected_owner: index === 0, delegation: null })) };
 }
 async function session(page: Page, permissions = ['foundation.access', 'users.manage'], role = 'owner') {
   await page.route('**/api/account/read',r=>r.fulfill({json:{data:{name:'Pessoa de Teste',cpf:null,email:'fixture@example.test',version:'a'.repeat(64),cpf_masked:null,pending_email:null,can_edit:role!=='client'}}}));
@@ -124,7 +124,9 @@ for (const role of ['owner', 'admin', 'employee', 'client']) test(`logo em recup
   await expect(page).toHaveURL(home);
   await page.getByRole('link', { name: 'Abrir conta', exact: true }).click();
   await page.getByRole('link', { name: 'Recuperar senha', exact: true }).click();
-  await page.getByRole('link', { name: 'Voltar ao início', exact: true }).click();
+  await page.locator('a.return-login').click();
+  await expect(page).toHaveURL(role === 'client' ? '/minha-conta' : '/conta');
+  await page.getByRole('banner', {name:'Barra da conta'}).getByRole('link', { name: 'Escritório JN — início', exact: true }).click();
   await expect(page).toHaveURL(home);
   await expect(page.getByRole('heading', { name: 'Área de operação', exact: true })).toBeVisible();
   const shortcuts = page.getByRole('navigation', { name: 'Atalhos do aplicativo' });
@@ -366,18 +368,19 @@ test('reativar conta com permissões efetivas vazias envia o acesso básico obri
   const member = data.items[2];
   member.active = false;
   member.access_active = false;
-  member.permissions = [];
+  member.permissions = [];member.direct_permissions=[];
   await dashboard(page, data);
   await page.route(`**/api/team/members/${member.id}`, route => route.fulfill({ json: { data: { ok: true } } }));
   await page.goto('/equipe');
   await page.getByRole('button', { name: `Editar acesso de ${member.name}`, exact: true }).click();
+  await page.getByRole('button',{name:/Acesso geral e configurações.*permissões habilitadas/}).click();
   await expect(page.getByRole('checkbox', { name: 'Acesso básico Obrigatório', exact: true })).toBeChecked();
   await page.getByLabel('Conta ativa neste escritório').check();
   const [request] = await Promise.all([
     page.waitForRequest(request => request.method() === 'PATCH' && new URL(request.url()).pathname === `/api/team/members/${member.id}`),
     page.getByRole('button', { name: 'Salvar acesso', exact: true }).click(),
   ]);
-  expect(request.postDataJSON()).toEqual({ office_id: office, role_code: 'employee', active: true, permissions: ['foundation.access'] });
+  expect(request.postDataJSON()).toEqual({ office_id: office, role_code: 'employee', active: true, permissions: ['foundation.access'], permissions_source:'direct-v1' });
 });
 
 test('sidebar desktop navega Conta e gestão; zoom mantém menu e conteúdo acessíveis', async ({ page }) => {

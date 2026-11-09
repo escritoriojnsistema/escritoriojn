@@ -97,7 +97,8 @@ teamRouter.post('/invitations/:id/revoke',async(req,res)=>{
 });
 teamRouter.patch('/members/:id',async(req,res)=>{
   const b:unknown=req.body;
-  if(!emptyQuery(req) || !v.uuid(req.params.id) || !v.fields(b,['office_id','role_code','active','permissions']) || !v.uuid(b.office_id)
+  if(emptyQuery(req)&&v.uuid(req.params.id)&&v.fields(b,['office_id','role_code','active','permissions'])&&v.uuid(b.office_id)&&v.role(b.role_code)&&typeof b.active==='boolean'&&v.permissions(b.permissions)){errorResponse(res,409,'TEAM_STALE_FORM','Atualize a equipe antes de salvar permissões. O formulário antigo não distingue direitos permanentes e delegados.');return;}
+  if(!emptyQuery(req) || !v.uuid(req.params.id) || !v.fields(b,['office_id','role_code','active','permissions','permissions_source']) || b.permissions_source!=='direct-v1' || !v.uuid(b.office_id)
     || !v.role(b.role_code) || typeof b.active!=='boolean' || !v.permissions(b.permissions)) {invalid(res);return;}
   const data=await rpc(res,'team_set_member',{p_office_id:b.office_id,p_membership_id:req.params.id,p_role_code:b.role_code,p_active:b.active,p_permissions:b.permissions,p_request_id:randomUUID()});
   if(data)res.json({data});

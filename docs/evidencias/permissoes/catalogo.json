@@ -1,0 +1,188 @@
+[
+  {
+    "module": "Acesso geral e configurações",
+    "total": 3,
+    "permissions": [
+      "foundation.access",
+      "settings.access",
+      "access.manage"
+    ]
+  },
+  {
+    "module": "Clientes",
+    "total": 7,
+    "permissions": [
+      "customers.merge",
+      "customers.relate",
+      "customers.create",
+      "customers.verify",
+      "customers.read",
+      "customers.read_all",
+      "customers.update"
+    ]
+  },
+  {
+    "module": "Serviços",
+    "total": 8,
+    "permissions": [
+      "services.courtesy",
+      "services.discount",
+      "services.perform",
+      "services.price_override",
+      "services.surcharge",
+      "services.approve",
+      "services.manage",
+      "services.read"
+    ]
+  },
+  {
+    "module": "Solicitações e atendimentos",
+    "total": 12,
+    "permissions": [
+      "quick.perform",
+      "requests.cancel",
+      "requests.level1",
+      "requests.level2",
+      "requests.reclaim",
+      "requests.transfer",
+      "requests.create",
+      "categories.manage",
+      "requests.archives.manage",
+      "requests.read",
+      "requests.read_all",
+      "requests.update"
+    ]
+  },
+  {
+    "module": "Anexos dos atendimentos",
+    "total": 4,
+    "permissions": [
+      "files.copy",
+      "files.upload",
+      "files.manage",
+      "files.read"
+    ]
+  },
+  {
+    "module": "Checklists e pendências",
+    "total": 4,
+    "permissions": [
+      "checklists.waive",
+      "checklists.manage",
+      "checklists.read",
+      "checklists.update"
+    ]
+  },
+  {
+    "module": "Correções cadastrais",
+    "total": 2,
+    "permissions": [
+      "accounts.corrections.read",
+      "accounts.corrections.apply"
+    ]
+  },
+  {
+    "module": "Documentos",
+    "total": 10,
+    "permissions": [
+      "documents.deliver",
+      "documents.deliveries.revoke",
+      "documents.exceptions.request",
+      "documents.create",
+      "documents.exceptions.decide",
+      "documents.review",
+      "documents.signatures.validate",
+      "documents.signatures.manage",
+      "documents.read",
+      "documents.update"
+    ]
+  },
+  {
+    "module": "Modelos documentais",
+    "total": 3,
+    "permissions": [
+      "templates.approve",
+      "templates.manage",
+      "templates.read"
+    ]
+  },
+  {
+    "module": "Cobranças",
+    "total": 4,
+    "permissions": [
+      "charges.cancel",
+      "charges.create",
+      "charges.read",
+      "charges.adjust"
+    ]
+  },
+  {
+    "module": "Caixa",
+    "total": 7,
+    "permissions": [
+      "cash.transfer",
+      "cash.open",
+      "cash.closure.approve",
+      "cash.manage",
+      "cash.read",
+      "cash.read_all",
+      "cash.closure.adjust"
+    ]
+  },
+  {
+    "module": "Despesas e contas a pagar",
+    "total": 4,
+    "permissions": [
+      "expenses.pay",
+      "expenses.create",
+      "expenses.approve",
+      "expenses.read"
+    ]
+  },
+  {
+    "module": "Relatórios financeiros",
+    "total": 4,
+    "permissions": [
+      "finance.reports.export",
+      "finance.reports.manage",
+      "finance.reports.read",
+      "finance.reports.read_all"
+    ]
+  },
+  {
+    "module": "Recibos",
+    "total": 2,
+    "permissions": [
+      "receipts.issue",
+      "receipts.read"
+    ]
+  },
+  {
+    "module": "Auditoria",
+    "total": 4,
+    "permissions": [
+      "audit.archives",
+      "audit.export",
+      "audit.manage",
+      "audit.read"
+    ]
+  },
+  {
+    "module": "Arquivados do escritório",
+    "total": 1,
+    "permissions": [
+      "archives.manage"
+    ]
+  },
+  {
+    "module": "Imóveis rurais",
+    "total": 5,
+    "permissions": [
+      "rural.create",
+      "rural.read",
+      "rural.read_all",
+      "rural.parties.manage",
+      "rural.records.manage"
+    ]
+  }
+]

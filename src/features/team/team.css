@@ -60,3 +60,4 @@
  .team-editing .team-header, .team-editing .team-toolbar, .team-editing .team-roster { display: none; }
  .team-editing .team-editor { border-bottom: 0; padding: 0; }
 }
+.permission-modules{min-width:0}.permission-module{border-bottom:1px solid #dce4e8}.permission-module-heading{display:flex;width:100%;min-height:48px;gap:8px;align-items:center;text-align:left;padding:8px 0;background:transparent;border:0;color:#103248}.permission-module-heading>span{flex:1}.permission-module-heading small,.permission-module-content small{display:block;color:#617887;font-size:12px;line-height:1.5}.permission-module-content{padding:4px 0 12px}.permission-module-content .team-check{align-items:flex-start;min-height:44px;padding-block:6px}.permission-module-content input{flex-shrink:0}.permission-module-heading[aria-expanded=true]>svg:last-child{transform:rotate(180deg)}

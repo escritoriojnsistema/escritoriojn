@@ -1,0 +1,1482 @@
+[
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/dashboard",
+    "rpc_references": [
+      "cash_dashboard"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/configuration",
+    "rpc_references": [
+      "cash_configuration"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/configure",
+    "rpc_references": [
+      "cash_configure"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/open",
+    "rpc_references": [
+      "cash_open"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/statement",
+    "rpc_references": [
+      "cash_statement"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/eligible-charges",
+    "rpc_references": [
+      "cash_eligible_charges"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/client-finance",
+    "rpc_references": [
+      "cash_client_finance"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/operate",
+    "rpc_references": [
+      "cash_operate"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/dashboard-filtered",
+    "rpc_references": [
+      "cash_dashboard_filtered"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/payments",
+    "rpc_references": [
+      "cash_payments_page"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/payment",
+    "rpc_references": [
+      "payment_operate"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/correction-sources",
+    "rpc_references": [
+      "correction_sources"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/correction",
+    "rpc_references": [
+      "correction_operate"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/finance17",
+    "rpc_references": [
+      "finance17_page"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/expense",
+    "rpc_references": [
+      "expense_operate"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/transfer",
+    "rpc_references": [
+      "transfer_operate"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "cash",
+    "method": "POST",
+    "route": "/receipt",
+    "rpc_references": [
+      "payment_receipt"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/cash/router.ts"
+  },
+  {
+    "module": "templates",
+    "method": "POST",
+    "route": "/search",
+    "rpc_references": [
+      "templates_page"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/templates/router.ts"
+  },
+  {
+    "module": "templates",
+    "method": "POST",
+    "route": "/detail",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/templates/router.ts"
+  },
+  {
+    "module": "templates",
+    "method": "POST",
+    "route": "/save",
+    "rpc_references": [
+      "template_save"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/templates/router.ts"
+  },
+  {
+    "module": "templates",
+    "method": "POST",
+    "route": "/approve",
+    "rpc_references": [
+      "template_approve"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/templates/router.ts"
+  },
+  {
+    "module": "categories",
+    "method": "POST",
+    "route": "/state",
+    "rpc_references": [
+      "service_categories_state"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/categories/router.ts"
+  },
+  {
+    "module": "categories",
+    "method": "POST",
+    "route": "/command",
+    "rpc_references": [
+      "service_categories_command"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/categories/router.ts"
+  },
+  {
+    "module": "attachments",
+    "method": "POST",
+    "route": "/search",
+    "rpc_references": [
+      "files_page"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/attachments/router.ts"
+  },
+  {
+    "module": "attachments",
+    "method": "POST",
+    "route": "/requests",
+    "rpc_references": [
+      "files_requests_page"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/attachments/router.ts"
+  },
+  {
+    "module": "attachments",
+    "method": "POST",
+    "route": "/intents",
+    "rpc_references": [
+      "files_begin_upload"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/attachments/router.ts"
+  },
+  {
+    "module": "attachments",
+    "method": "POST",
+    "route": "/policy",
+    "rpc_references": [
+      "files_policy_get"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/attachments/router.ts"
+  },
+  {
+    "module": "attachments",
+    "method": "POST",
+    "route": "/policy/update",
+    "rpc_references": [
+      "files_policy_set"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/attachments/router.ts"
+  },
+  {
+    "module": "attachments",
+    "method": "POST",
+    "route": "/cleanup-plan",
+    "rpc_references": [
+      "files_cleanup_plan"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/attachments/router.ts"
+  },
+  {
+    "module": "attachments",
+    "method": "POST",
+    "route": "/process",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/attachments/router.ts"
+  },
+  {
+    "module": "attachments",
+    "method": "POST",
+    "route": "/:id/download",
+    "rpc_references": [
+      "files_download"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/attachments/router.ts"
+  },
+  {
+    "module": "access-settings",
+    "method": "POST",
+    "route": "/state",
+    "rpc_references": [
+      "access_policies_state"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/access-settings/router.ts"
+  },
+  {
+    "module": "access-settings",
+    "method": "POST",
+    "route": "/policy",
+    "rpc_references": [
+      "access_policies_set"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/access-settings/router.ts"
+  },
+  {
+    "module": "services",
+    "method": "POST",
+    "route": "/search",
+    "rpc_references": [
+      "services_page"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/services/router.ts"
+  },
+  {
+    "module": "services",
+    "method": "POST",
+    "route": "/",
+    "rpc_references": [
+      "service_create"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/services/router.ts"
+  },
+  {
+    "module": "services",
+    "method": "POST",
+    "route": "/:id/detail",
+    "rpc_references": [
+      "service_detail"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/services/router.ts"
+  },
+  {
+    "module": "services",
+    "method": "POST",
+    "route": "/:id/versions",
+    "rpc_references": [
+      "service_publish"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/services/router.ts"
+  },
+  {
+    "module": "services",
+    "method": "POST",
+    "route": "/:id/quote",
+    "rpc_references": [
+      "service_quote"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/services/router.ts"
+  },
+  {
+    "module": "services",
+    "method": "POST",
+    "route": "/:id/archive",
+    "rpc_references": [
+      "service_archive"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/services/router.ts"
+  },
+  {
+    "module": "charges",
+    "method": "POST",
+    "route": "/view",
+    "rpc_references": [
+      "charges_view"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/charges/router.ts"
+  },
+  {
+    "module": "charges",
+    "method": "POST",
+    "route": "/create",
+    "rpc_references": [
+      "charges_create"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/charges/router.ts"
+  },
+  {
+    "module": "charges",
+    "method": "POST",
+    "route": "/mutate",
+    "rpc_references": [
+      "charges_mutate"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/charges/router.ts"
+  },
+  {
+    "module": "checklists",
+    "method": "POST",
+    "route": "/model",
+    "rpc_references": [
+      "checklists_model"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/checklists/router.ts"
+  },
+  {
+    "module": "checklists",
+    "method": "POST",
+    "route": "/model/publish",
+    "rpc_references": [
+      "checklists_publish"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/checklists/router.ts"
+  },
+  {
+    "module": "checklists",
+    "method": "POST",
+    "route": "/entries/update",
+    "rpc_references": [
+      "checklists_update"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/checklists/router.ts"
+  },
+  {
+    "module": "checklists",
+    "method": "POST",
+    "route": "/notify",
+    "rpc_references": [
+      "checklists_notify"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/checklists/router.ts"
+  },
+  {
+    "module": "checklists",
+    "method": "POST",
+    "route": "/notifications",
+    "rpc_references": [
+      "checklists_notifications"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/checklists/router.ts"
+  },
+  {
+    "module": "checklists",
+    "method": "POST",
+    "route": "/notifications/read",
+    "rpc_references": [
+      "checklists_read"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/checklists/router.ts"
+  },
+  {
+    "module": "team",
+    "method": "GET",
+    "route": "/",
+    "rpc_references": [
+      "team_dashboard"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/team/router.ts"
+  },
+  {
+    "module": "team",
+    "method": "POST",
+    "route": "/invitations",
+    "rpc_references": [
+      "team_create_invitation"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/team/router.ts"
+  },
+  {
+    "module": "team",
+    "method": "POST",
+    "route": "/invitations/:id/send",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/team/router.ts"
+  },
+  {
+    "module": "team",
+    "method": "POST",
+    "route": "/invitations/:id/revoke",
+    "rpc_references": [
+      "team_revoke_invitation"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/team/router.ts"
+  },
+  {
+    "module": "team",
+    "method": "PATCH",
+    "route": "/members/:id",
+    "rpc_references": [
+      "team_set_member"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/team/router.ts"
+  },
+  {
+    "module": "team",
+    "method": "PUT",
+    "route": "/delegations/:id",
+    "rpc_references": [
+      "team_set_delegation"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/team/router.ts"
+  },
+  {
+    "module": "team",
+    "method": "POST",
+    "route": "/delegations/:id/revoke",
+    "rpc_references": [
+      "team_revoke_delegation"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/team/router.ts"
+  },
+  {
+    "module": "team",
+    "method": "GET",
+    "route": "/invitations/:id/state",
+    "rpc_references": [
+      "team_invitation_state"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/team/router.ts"
+  },
+  {
+    "module": "team",
+    "method": "POST",
+    "route": "/invitations/:id/verify",
+    "rpc_references": [
+      "team_verify_invitation"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/team/router.ts"
+  },
+  {
+    "module": "team",
+    "method": "POST",
+    "route": "/invitations/:id/accept",
+    "rpc_references": [
+      "team_accept_invitation"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/team/router.ts"
+  },
+  {
+    "module": "customer-relations",
+    "method": "POST",
+    "route": "/state",
+    "rpc_references": [
+      "customer_relations_state"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/customer-relations/router.ts"
+  },
+  {
+    "module": "customer-relations",
+    "method": "POST",
+    "route": "/candidates",
+    "rpc_references": [
+      "customer_relation_candidates"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/customer-relations/router.ts"
+  },
+  {
+    "module": "customer-relations",
+    "method": "POST",
+    "route": "/command",
+    "rpc_references": [
+      "customer_relation_command"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/customer-relations/router.ts"
+  },
+  {
+    "module": "customer-relations",
+    "method": "POST",
+    "route": "/merge/preview",
+    "rpc_references": [
+      "customer_merge_preview"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/customer-relations/router.ts"
+  },
+  {
+    "module": "customer-relations",
+    "method": "POST",
+    "route": "/merge",
+    "rpc_references": [
+      "customer_merge"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/customer-relations/router.ts"
+  },
+  {
+    "module": "requests",
+    "method": "POST",
+    "route": "/search",
+    "rpc_references": [
+      "requests_page"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/requests/router.ts"
+  },
+  {
+    "module": "requests",
+    "method": "POST",
+    "route": "/options",
+    "rpc_references": [
+      "request_options"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/requests/router.ts"
+  },
+  {
+    "module": "requests",
+    "method": "POST",
+    "route": "/",
+    "rpc_references": [
+      "categorized_request_create",
+      "request_create",
+      "staff_category_request_create"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/requests/router.ts"
+  },
+  {
+    "module": "requests",
+    "method": "POST",
+    "route": "/:id/detail",
+    "rpc_references": [
+      "request_detail"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/requests/router.ts"
+  },
+  {
+    "module": "requests",
+    "method": "POST",
+    "route": "/:id/actions",
+    "rpc_references": [
+      "request_mutate"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/requests/router.ts"
+  },
+  {
+    "module": "governance",
+    "method": "GET",
+    "route": "/audit",
+    "rpc_references": [
+      "audit_history_page",
+      "audit_report_chunk"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/governance/router.ts"
+  },
+  {
+    "module": "governance",
+    "method": "POST",
+    "route": "/audit/export",
+    "rpc_references": [
+      "audit_report_begin",
+      "audit_report_reference",
+      "audit_report_seal"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/governance/router.ts"
+  },
+  {
+    "module": "governance",
+    "method": "GET",
+    "route": "/audit/policy",
+    "rpc_references": [
+      "audit_policy_get"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/governance/router.ts"
+  },
+  {
+    "module": "governance",
+    "method": "POST",
+    "route": "/audit/policy",
+    "rpc_references": [
+      "audit_policy_set"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/governance/router.ts"
+  },
+  {
+    "module": "governance",
+    "method": "POST",
+    "route": "/audit/verify",
+    "rpc_references": [
+      "audit_report_reference"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/governance/router.ts"
+  },
+  {
+    "module": "governance",
+    "method": "GET",
+    "route": "/archives",
+    "rpc_references": [
+      "archives_page"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/governance/router.ts"
+  },
+  {
+    "module": "finance",
+    "method": "POST",
+    "route": "/quick/context",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/finance/router.ts"
+  },
+  {
+    "module": "finance",
+    "method": "POST",
+    "route": "/quick/operate",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/finance/router.ts"
+  },
+  {
+    "module": "finance",
+    "method": "POST",
+    "route": "/reports/context",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/finance/router.ts"
+  },
+  {
+    "module": "finance",
+    "method": "POST",
+    "route": "/reports/options",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/finance/router.ts"
+  },
+  {
+    "module": "finance",
+    "method": "POST",
+    "route": "/reports/page",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/finance/router.ts"
+  },
+  {
+    "module": "finance",
+    "method": "POST",
+    "route": "/reports/settings",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/finance/router.ts"
+  },
+  {
+    "module": "finance",
+    "method": "POST",
+    "route": "/reports/export",
+    "rpc_references": [
+      "finance_report_authorize",
+      "finance_report_begin",
+      "finance_report_chunk"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/finance/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/folders",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/folder-command",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/templates-search",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/model-state",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/metadata-command",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/version-command",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/duplicate",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/offer-manage",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/offer-for-service",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/offer-attach",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/offers",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/offer-form",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/booking",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/presence",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/presence-update",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/intake",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/intake-start",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/intake-apply",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/intake-booked",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-commercial",
+    "method": "POST",
+    "route": "/dispatch",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-commercial/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/state",
+    "rpc_references": [
+      "document_workflow_state"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/delivery-state",
+    "rpc_references": [
+      "document_delivery_state"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/delivery-command",
+    "rpc_references": [
+      "document_delivery_command"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/release-state",
+    "rpc_references": [
+      "document_release_state"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/release-command",
+    "rpc_references": [
+      "document_release_command"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/signature-state",
+    "rpc_references": [
+      "document_signature_state"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/signature-command",
+    "rpc_references": [
+      "document_signature_command"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/review-queue",
+    "rpc_references": [
+      "document_review_queue"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/reviewers",
+    "rpc_references": [
+      "document_reviewers"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/review-history",
+    "rpc_references": [
+      "document_review_history"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/request-reviews",
+    "rpc_references": [
+      "request_document_reviews"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/versions",
+    "rpc_references": [
+      "document_versions_page"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/preview",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "GET",
+    "route": "X-Document-SHA256",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "GET",
+    "route": "X-Document-Version",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "GET",
+    "route": "Content-Type",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "GET",
+    "route": "Content-Length",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/command",
+    "rpc_references": [
+      "document_workflow_command"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/portal",
+    "rpc_references": [
+      "portal_documents_page"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/cash-queue",
+    "rpc_references": [
+      "document_cash_queue"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/cash-claim",
+    "rpc_references": [
+      "document_cash_claim"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "POST",
+    "route": "/artifact",
+    "rpc_references": [
+      "document_delivery_access"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "GET",
+    "route": "X-Document-SHA256",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "GET",
+    "route": "X-Document-Publication",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "GET",
+    "route": "Content-Type",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "document-workflow",
+    "method": "GET",
+    "route": "Content-Length",
+    "rpc_references": [
+      "document_delivery_access"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/document-workflow/router.ts"
+  },
+  {
+    "module": "retention",
+    "method": "POST",
+    "route": "/:action",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/retention/router.ts"
+  },
+  {
+    "module": "portal-requests",
+    "method": "POST",
+    "route": "/:id/:operation",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/portal-requests/router.ts"
+  },
+  {
+    "module": "request-archives",
+    "method": "POST",
+    "route": "/policy",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/request-archives/router.ts"
+  },
+  {
+    "module": "request-archives",
+    "method": "POST",
+    "route": "/policy/set",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/request-archives/router.ts"
+  },
+  {
+    "module": "request-archives",
+    "method": "POST",
+    "route": "/search",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/request-archives/router.ts"
+  },
+  {
+    "module": "request-archives",
+    "method": "POST",
+    "route": "/:id/archive",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/request-archives/router.ts"
+  },
+  {
+    "module": "request-archives",
+    "method": "POST",
+    "route": "/report",
+    "rpc_references": [
+      "request_archives_report_begin",
+      "request_archives_report_get"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/request-archives/router.ts"
+  },
+  {
+    "module": "notifications",
+    "method": "POST",
+    "route": "/summary",
+    "rpc_references": [
+      "notifications_summary"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/notifications/router.ts"
+  },
+  {
+    "module": "notifications",
+    "method": "POST",
+    "route": "/search",
+    "rpc_references": [
+      "notifications_page"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/notifications/router.ts"
+  },
+  {
+    "module": "notifications",
+    "method": "POST",
+    "route": "/read",
+    "rpc_references": [
+      "notifications_read"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/notifications/router.ts"
+  },
+  {
+    "module": "auth",
+    "method": "GET",
+    "route": "/context",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/auth/router.ts"
+  },
+  {
+    "module": "auth",
+    "method": "GET",
+    "route": "Authorization",
+    "rpc_references": [
+      "my_access_context",
+      "session_activity"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/auth/router.ts"
+  },
+  {
+    "module": "request-levels",
+    "method": "POST",
+    "route": "/:action",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/request-levels/router.ts"
+  },
+  {
+    "module": "privacy",
+    "method": "GET",
+    "route": "/public",
+    "rpc_references": [
+      "privacy_controller_public"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/privacy/router.ts"
+  },
+  {
+    "module": "privacy",
+    "method": "POST",
+    "route": "/:action",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/privacy/router.ts"
+  },
+  {
+    "module": "account-closure",
+    "method": "POST",
+    "route": "/:action",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/account-closure/router.ts"
+  },
+  {
+    "module": "account-closure",
+    "method": "GET",
+    "route": "X-Document-SHA256",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/account-closure/router.ts"
+  },
+  {
+    "module": "account-closure",
+    "method": "GET",
+    "route": "X-Document-Publication",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/account-closure/router.ts"
+  },
+  {
+    "module": "account-closure",
+    "method": "GET",
+    "route": "Content-Type",
+    "rpc_references": [
+      "account_export_manifest"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/account-closure/router.ts"
+  },
+  {
+    "module": "customers",
+    "method": "POST",
+    "route": "/search",
+    "rpc_references": [
+      "customers_page"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/customers/router.ts"
+  },
+  {
+    "module": "customers",
+    "method": "POST",
+    "route": "/",
+    "rpc_references": [
+      "customer_create"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/customers/router.ts"
+  },
+  {
+    "module": "customers",
+    "method": "POST",
+    "route": "/:id/detail",
+    "rpc_references": [
+      "customer_detail"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/customers/router.ts"
+  },
+  {
+    "module": "customers",
+    "method": "PATCH",
+    "route": "/:id",
+    "rpc_references": [
+      "customer_update"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/customers/router.ts"
+  },
+  {
+    "module": "documents",
+    "method": "POST",
+    "route": "/search",
+    "rpc_references": [
+      "documents_page"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/documents/router.ts"
+  },
+  {
+    "module": "documents",
+    "method": "POST",
+    "route": "/options",
+    "rpc_references": [
+      "document_options"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/documents/router.ts"
+  },
+  {
+    "module": "documents",
+    "method": "POST",
+    "route": "/detail",
+    "rpc_references": [
+      "document_detail"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/documents/router.ts"
+  },
+  {
+    "module": "documents",
+    "method": "POST",
+    "route": "/create",
+    "rpc_references": [
+      "document_create"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/documents/router.ts"
+  },
+  {
+    "module": "documents",
+    "method": "POST",
+    "route": "/operate",
+    "rpc_references": [
+      "document_operate"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/documents/router.ts"
+  },
+  {
+    "module": "account",
+    "method": "POST",
+    "route": "/:action",
+    "rpc_references": [],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/account/router.ts"
+  },
+  {
+    "module": "rural",
+    "method": "POST",
+    "route": "/:operation",
+    "rpc_references": [
+      "rural_command27",
+      "rural_state27"
+    ],
+    "authorization": "Bearer/getUser then RPC authority/ownership; see function map",
+    "source": "server/modules/rural/router.ts"
+  }
+]
