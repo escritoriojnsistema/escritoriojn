@@ -11,6 +11,6 @@ Alternativas: estender rural29 exigiria imóvel artificial e capacidades rurais 
 - [x] API/portal: state/command Bearer/no-store, validação e projeção allowlist; resumo público factual sem campos internos.
 - [x] UI: área especializada no detalhe existente, uma área por vez, padrão Equipe/Convites, máximo4 ações primárias, complementos pelo menu, sem loaders;503 conserva tentativa,409 reconfere,401/403 limpa.
 - [x] Testes: Node/API/SQL real local/UI320–1440 e regressões; build/TS; revisão independente final.
-- [ ] GitHub→Vercel: PR semActions, confirmar deploy e histórico remoto antes de aplicar migration; atualizar Livro/fecho com estado real.
+- [x] GitHub→Vercel: PR semActions, confirmar deploy e histórico remoto antes de aplicar migration; atualizar Livro/fecho com estado real.
 
 Revisão: chamadas diretas por funcionário; sessão/autoridade revogada; arquivo de outro pedido; sigilo em JSON/lista/bytes; transferência/retry; checklist posterior não muda snapshot; prazo sem fonte/alerta/data; conclusão nunca quita/aprova/entrega. Serviços/preços e concessões reais permanecem configuração do gestor, sem fixtures hospedadas.

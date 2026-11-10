@@ -21,7 +21,11 @@ Honorários consultam o ledger13. `specialized_expenses30` apenas associa despes
 
 ## Publicação
 
-Checkpoint: implementação e validação locais; GitHub/Vercel/Supabase hospedado ainda não publicados nesta revisão do fecho. Publicação será exclusivamente GitHub→Vercel, sem Actions ou deploy direto. Conferir histórico remoto depois do Git antes de aplicar qualquer migration. Não alegar publicação sem leitura de commit/deploy/schema.
+Publicada pelo [PR110](https://github.com/escritoriojnsistema/escritoriojn/pull/110), featuree0cd77b5/merge135a6f0c; árvore379982cb idêntica à homologada. Preview8fBUgNcr e produçãoHSf67D59 READY pela integração GitHub→Vercel. https://escritoriojn.vercel.app. Sem Actions/deploy direto.
+
+Supabase aplicou automaticamente migration20261110193000:54 comandos correspondentes ao arquivo normalizado,17 definições iguais ao laboratório,6 tabelas privadas com RLS/ACL fechadas e2 wrappers INVOKER negando anônimo. **NÃO reaplicar.** Setenta assets publicados iguais ao build com conexão pública de produção; home/health200, APIs privadas401/no-store e8 cenários públicos de navegador aprovados. Integridade dos registros existentes conferida privadamente e preservada; somente o resultado booleano foi publicado. [Publicação](../evidencias/etapa-30/publicacao.json) · [Schema](../evidencias/etapa-30/schema-publicado.json) · [Bundle](../evidencias/etapa-30/bundle-publicado.json).
+
+Advisors: nenhum ERROR ou alerta novo de segurança/performance neste domínio. INFO de RLS privada sem policy é intencional com ACL fechada; proteção contra senhas vazadas desativada é WARN preexistente de Auth, fora desta etapa ([orientação Supabase](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection)).
 
 ## Limites
 

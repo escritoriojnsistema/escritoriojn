@@ -1,0 +1,79 @@
+{
+  "migration": "20261110193000",
+  "automatically_applied": true,
+  "stored_statements": 54,
+  "normalized_statements_match_file": true,
+  "function_definitions_match_local": 17,
+  "private_rls_acl_closed_tables": 6,
+  "public_wrappers_invoker_anon_denied": 2,
+  "functions": [
+    {
+      "signature": "private.files_begin_upload(uuid,jsonb,uuid)",
+      "md5": "1875a91e3a0ba4687596623083c4da4f"
+    },
+    {
+      "signature": "private.files_download(uuid,uuid,uuid)",
+      "md5": "69c33737bdb2751d5388537899874a1c"
+    },
+    {
+      "signature": "private.files_file_json(files,memberships)",
+      "md5": "aa8a6abf0703fef8dfdd6568e3f5f529"
+    },
+    {
+      "signature": "private.files_page(uuid,uuid,integer,integer)",
+      "md5": "2a543fed654e5462dea148c33f1e4e76"
+    },
+    {
+      "signature": "private.files_process_claim(uuid,text,jsonb,uuid)",
+      "md5": "a6522fa525d3c3877e876b4284d287f2"
+    },
+    {
+      "signature": "private.files_storage_allowed(text,text,text,jsonb)",
+      "md5": "102fcc35d918cc3829c828686c892d4c"
+    },
+    {
+      "signature": "private.request_summary(requests,boolean)",
+      "md5": "40615d761debc4ead787543953f63b54"
+    },
+    {
+      "signature": "private.specialized_close30()",
+      "md5": "aa7dcc3629fad0667e911bfc136db1af"
+    },
+    {
+      "signature": "private.specialized_command30(uuid,uuid,jsonb,uuid)",
+      "md5": "80aa23890220d5b19d18088ad8cc6e21"
+    },
+    {
+      "signature": "private.specialized_file_allowed30(files)",
+      "md5": "00f784e53faff8b37712dee5d91da17e"
+    },
+    {
+      "signature": "private.specialized_file_guard30()",
+      "md5": "9dba241c8c8febf46c42740e970bb641"
+    },
+    {
+      "signature": "private.specialized_file_protect30()",
+      "md5": "1ed04ce9eb0b6e2ca7e1dfe235dac5db"
+    },
+    {
+      "signature": "private.specialized_file_reference30()",
+      "md5": "790337a85e2d0622013fc50f70b1b7c2"
+    },
+    {
+      "signature": "private.specialized_guard30()",
+      "md5": "5c24273f2f91ce3f543c41fa8d750822"
+    },
+    {
+      "signature": "private.specialized_progress30(private.specialized_cases,requests)",
+      "md5": "126670a055f0ebc9087b011422e53037"
+    },
+    {
+      "signature": "private.specialized_request30(uuid,uuid,boolean)",
+      "md5": "29c3d2c43b001e10440943a6df8bb1d3"
+    },
+    {
+      "signature": "private.specialized_state30(uuid,uuid,integer)",
+      "md5": "3367d2b69f8eae8e7a3ae72ac97a9c4c"
+    }
+  ]
+}
