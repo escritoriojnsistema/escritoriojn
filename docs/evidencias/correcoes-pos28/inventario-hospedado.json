@@ -1,0 +1,23 @@
+{
+  "checked_date_utc": "2026-11-09",
+  "services": 2,
+  "documents": 0,
+  "ditr_cases": 0,
+  "latest_migration": "20261109181450",
+  "property_parties": 0,
+  "property_records": 0,
+  "rural_properties": 0,
+  "required_rural_role_permissions": [
+    {
+      "role_code": "owner",
+      "permissions": [
+        "customers.read",
+        "customers.update",
+        "requests.read",
+        "rural.read",
+        "rural.records.manage"
+      ]
+    }
+  ],
+  "scope": "Somente leitura agregada; não identifica a sessão pessoal do usuário. Nenhum cadastro ou permissão foi criado."
+}

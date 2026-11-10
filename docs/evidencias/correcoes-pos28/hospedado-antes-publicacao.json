@@ -1,0 +1,16 @@
+{
+  "auth": 7,
+  "grants": 22,
+  "services": 2,
+  "documents": 0,
+  "checked_at": "2026-11-10T11:57:00.132534+00:00",
+  "ditr_cases": 0,
+  "grants_hash": "5fe59fdb26a96922477ca273a8f44042",
+  "memberships": 7,
+  "membership_hash": "bb1fbb728b05bba957ba955da81005e5",
+  "latest_migration": "20261109181450",
+  "property_parties": 0,
+  "property_records": 0,
+  "rural_properties": 0,
+  "auth_identity_hash": "8b2526040dca9b8c7b40420819b2492e"
+}

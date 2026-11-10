@@ -50,3 +50,9 @@ for(const width of [320,360,768,1440])test(`despesas17: formulário padrão cabe
  const input=page.getByLabel('Favorecido',{exact:true});if(width<768)expect(await input.evaluate(e=>parseFloat(getComputedStyle(e).fontSize))).toBeGreaterThanOrEqual(16);
  await mkdir('docs/evidencias/etapa-17',{recursive:true});await page.screenshot({path:`docs/evidencias/etapa-17/despesa-${width}.png`,fullPage:true});
 });
+
+test('retorno de despesa prioriza Cancelar local e preserva lista após reset',async({page})=>{
+ await setup(page);await fillExpense(page);await expect(page.getByRole('main').getByRole('link',{name:/^Voltar/})).toBeHidden();
+ await page.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(page.getByRole('heading',{name:'Nova despesa',exact:true})).toHaveCount(0);
+ await expect(page.getByRole('main').getByRole('link',{name:'Voltar ao caixa',exact:true})).toBeVisible();
+});

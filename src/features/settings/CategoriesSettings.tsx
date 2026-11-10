@@ -105,7 +105,7 @@ function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: st
         {uncertain && <p className="customer-note">Repita a operação para confirmar o resultado. Os dados e a chave desta tentativa foram preservados.</p>}
         <div className="categories-actions">
           <button className="primary-button" type="submit" disabled={busy}>{editor.kind === 'delete' ? 'Excluir categoria' : 'Salvar categoria'}</button>
-          <button className="team-text-button" type="button" disabled={busy || uncertain} onClick={() => choose()}>Cancelar</button>
+          <button data-operation-local-return className="team-text-button" type="button" disabled={busy || uncertain} onClick={() => choose()}>Cancelar</button>
         </div>
       </form> : data && <>
         {items?.length ? <ul className="customer-list" aria-label="Categorias configuradas">{items.map(item => <li key={item.id}>

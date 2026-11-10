@@ -92,7 +92,7 @@ test('auditoria filtra, pagina, mostra referência e exporta com capacidade',asy
  const downloaded=page.waitForEvent('download');await page.getByRole('button',{name:'Exporta'}).click();expect((await downloaded).suggestedFilename()).toMatch(/^JN-AUD-.*\.pdf$/);await expect(page.getByRole('status').filter({hasText:'PDF completo registrado'})).toContainText('PDF completo registrado');
 });
 test('restaurar referência exige confirmação e nunca envia active; histórico restaurado disponível',async({page})=>{
- await setup(page);await page.goto('/arquivados');
+ await setup(page);await page.goto('/arquivados');await page.getByRole('tab',{name:'Cadastros e referências',exact:true}).click();
  let sent=false;await page.route('**/api/governance/archives/*/restore',route=>{sent=true;expect(route.request().postDataJSON()).toEqual({office_id:office});return route.fulfill({json:{data:{ok:true}}});});
  page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Restaurar referência',exact:true}).first().click();await expect(page.getByRole('status').filter({hasText:'O acesso continua inativo'})).toContainText('O acesso continua inativo');expect(sent).toBe(true);
  await page.getByLabel('Estado do arquivo').selectOption('restored');await expect(page.getByRole('button',{name:'Restaurar referência',exact:true})).toHaveCount(0);

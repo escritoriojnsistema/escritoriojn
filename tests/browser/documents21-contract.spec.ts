@@ -55,3 +55,13 @@ test('etapa22: tentativa503 retém chave e bloqueia abas/menu até confirmação
  await page.route('**/api/document-workflow/command',r=>{commands.push(r.request().postDataJSON());if(fail){fail=false;return r.fulfill({status:503,json:{error:{code:'UNAVAILABLE'}}});}return r.fulfill({json:{data:workflow}});});
  await edit(page);await page.getByRole('tab',{name:'Versões e PDF',exact:true}).click();await page.getByText('Revisão e entrega',{exact:true}).click();await page.getByLabel('Motivo ou evidência da etapa',{exact:true}).fill('Conferência local');await page.getByRole('button',{name:'Registrar ação',exact:true}).click();await expect(page.getByRole('button',{name:'Registrar ação'})).toBeVisible();await expect(page.getByRole('tab',{name:'Texto',exact:true})).toBeDisabled();await expect(page.getByRole('tab',{name:'Modelos',exact:true})).toBeDisabled();await expect(page.locator('.operation-sidebar').getByRole('button',{name:'Descartar edição local e reabrir'})).toBeDisabled();await page.getByRole('button',{name:'Registrar ação'}).click();await expect(page.getByRole('tab',{name:'Texto',exact:true})).toBeEnabled();expect(commands).toHaveLength(2);expect(commands[0]).toEqual(commands[1]);
 });
+
+test('retorno principal de criação mantém tentativa503 até confirmar o mesmo rascunho',async({page})=>{
+ const state=await setup(page);const attempts:unknown[]=[];let failed=false;
+ await page.route('**/api/documents/create',r=>{attempts.push(r.request().postDataJSON());if(!failed){failed=true;return r.fulfill({status:503,json:{error:{code:'DOCUMENTS_UNAVAILABLE'}}});}return r.fulfill({json:{data:state.value}});});
+ await page.goto('/documentos?aba=issued');await page.getByRole('button',{name:'Novo documento',exact:true}).click();
+ await page.getByLabel('Atendimento',{exact:true}).selectOption(request21);await page.getByLabel('Item do atendimento',{exact:true}).selectOption(item21);await page.getByLabel('Modelo aprovado',{exact:true}).selectOption(version21);
+ await page.getByRole('button',{name:'Criar rascunho',exact:true}).click();await expect(page.getByRole('alert')).toBeVisible();
+ const back=page.getByRole('main').getByRole('button',{name:'Voltar à lista',exact:true});await expect(back).toBeVisible();await expect(back).toBeDisabled();
+ await page.getByRole('button',{name:'Criar rascunho',exact:true}).click();await expect(page.getByLabel('Texto em edição',{exact:true})).toBeVisible();expect(attempts).toHaveLength(2);expect(attempts[0]).toEqual(attempts[1]);await expect(back).toBeEnabled();
+});

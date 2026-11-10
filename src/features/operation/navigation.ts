@@ -32,10 +32,16 @@ export function operationNavigation(contexts: AccessContext[], client: boolean):
   if (staff(contexts, ['documents.read', 'requests.read', 'customers.read']) || staff(contexts, ['templates.read'])) items.push({ key: 'documents', label: 'Documentos', path: paths.documents });
   if (staff(contexts, ['services.read'])) items.push({ key: 'services', label: 'Serviços', path: paths.services });
   if (staff(contexts, ['requests.read', 'checklists.read'])) items.push({ key: 'checklists', label: 'Checklist', path: paths.checklists });
-  if (contexts.some(context => context.role_code !== 'client' && (context.permissions.includes('cash.read') || context.permissions.includes('charges.read') || context.permissions.includes('expenses.read') || context.permissions.includes('cash.transfer')))) items.push({ key: 'cash', label: 'Caixa', path: paths.cash });
+  if (staff(contexts, ['cash.read']) || staff(contexts, ['requests.read','charges.read'])) items.push({ key: 'cash', label: 'Caixa', path: paths.cash });
   if (staff(contexts, ['files.read', 'requests.read'])) items.push({ key: 'attachments', label: 'Anexos', path: paths.attachments });
   items.push({ key: 'notifications', label: 'Notificações', path: paths.notifications });
   if (contexts.some(c=>c.role_code!=='client'&&c.permissions.includes('settings.access'))) items.push({key:'settings',label:'Configurações',path:paths.settings});
+  // Independent grants must remain reachable even when this office does not
+  // grant Settings. Never combine permissions from different offices.
+  const outsideSettings=contexts.filter(c=>!c.permissions.includes('settings.access'));
+  if(staff(outsideSettings,['users.manage']))items.push({key:'team',label:'Equipe e convites',path:paths.teamManagement});
+  if(staff(outsideSettings,['audit.read']))items.push({key:'audit',label:'Auditoria',path:paths.audit});
+  if(outsideSettings.some(c=>c.role_code!=='client'&&(c.permissions.includes('archives.manage')||['owner','admin'].includes(c.role_code)&&['requests.read','requests.archives.manage'].every(p=>c.permissions.includes(p)))))items.push({key:'archives',label:'Arquivados',path:paths.settingsArchives});
   items.push({ key: 'account', label: 'Conta', path: paths.account });
   return items;
 }

@@ -6,6 +6,7 @@ import type {ClosureMode} from './CashClosurePanel';
 import {CashStatement} from './CashStatement';
 import {cashMoney} from './CashSessions';
 import type {CashFilters} from '../../../shared/cash';
+import {quickRequiredPermissions} from '../../../shared/finance19';
 import {useCallback,useEffect,useRef,useState} from 'react';
 import {Link,Navigate} from 'react-router-dom';
 import {RefreshCw} from 'lucide-react';
@@ -68,9 +69,10 @@ function CashWorkspace({context,contexts,onOffice}:{context:AccessContext;contex
  const configure=(input:CashConfigure,key:string)=>command(signal=>cashApi.configure(office,input,key,signal),v=>{adoptConfiguration(v.configuration);setConfigPage(1);setUnitFilter(null);setFeedback('Configuração financeira registrada.');});
  const canAll=(data?.can_read_all??true)&&context.permissions.includes('cash.read_all'),canManage=(data?.can_manage??true)&&context.permissions.includes('cash.manage');
  const canCharges=context.permissions.includes('requests.read')&&context.permissions.includes('charges.read'),canExpenses=mayCash&&['expenses.read','cash.transfer'].some(permission=>context.permissions.includes(permission)),canReports=context.permissions.includes('finance.reports.read')&&context.permissions.includes('cash.read');
+ const canQuick=['own','all'].includes(tab)&&!statement&&quickRequiredPermissions.every(permission=>context.permissions.includes(permission));
  const shown=data?.scope===scope?data:undefined,controlsBusy=busy||statementBusy;
  function changeTab(next:Tab){if(mutation.current||statementBusy)return;setTab(next);setStatement(undefined);setFeedback('');setIssues({});if(next==='own'||next==='all'){setScope(next);setPage(1);}}
- return <OperationLayout busy={busy||statementBusy} contextActions={statement&&closureTools?.sessionId===statement?<><p>Conferência do caixa</p><button type="button" disabled={controlsBusy} onClick={()=>closureAction('view')}>Ver conferências</button>{closureTools.canAdjust&&<button type="button" disabled={controlsBusy} onClick={()=>closureAction('adjust')}>Ajustar conferência anterior</button>}</>:undefined}><div className="cash-main team-main">
+ return <OperationLayout busy={busy||statementBusy} contextActions={<>{canQuick&&<Link to={paths.quick} aria-disabled={controlsBusy||undefined} onClick={event=>{if(controlsBusy)event.preventDefault();}}>Atendimento rápido</Link>}{statement&&closureTools?.sessionId===statement&&<><p>Conferência do caixa</p><button type="button" disabled={controlsBusy} onClick={()=>closureAction('view')}>Ver conferências</button>{closureTools.canAdjust&&<button type="button" disabled={controlsBusy} onClick={()=>closureAction('adjust')}>Ajustar conferência anterior</button>}</>}</>}><div className="cash-main team-main">
   <OperationHeading context={context} showRole={false} title="Caixa" description="Operação individual, recebimentos e conferência financeira."/>
   {contexts.length>1&&<label className="team-field team-office">Escritório<select disabled={controlsBusy} value={office} onChange={e=>onOffice(e.target.value)}>{contexts.map(c=><option value={c.office_id} key={c.office_id}>{c.office_name}</option>)}</select></label>}
   {feedback&&<p role="status" className="form-feedback">{feedback}</p>}{Object.entries(issues).map(([source,error])=><p key={source} role="alert" className="form-feedback error">{error.message}</p>)}

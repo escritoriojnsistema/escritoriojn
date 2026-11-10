@@ -58,3 +58,10 @@ test('cash14: troca de identidade aborta abertura antiga e não reapresenta valo
 test('cash14: consolidação usa consulta autorizada e separa visualmente autoria',async({page})=>{
  await setup(page);await page.route('**/api/cash/dashboard',r=>{const scope=r.request().postDataJSON().scope;return r.fulfill({json:{data:{...empty,scope,sessions:scope==='all'?[{...session,is_self:false,operator_name:'Operador A Fictício'}]:[],total:scope==='all'?1:0}}});});await page.goto('/caixa');await page.getByRole('tab',{name:'Consolidação',exact:true}).click();await expect(page.getByRole('heading',{name:'Caixas do escritório',exact:true})).toBeVisible();await expect(page.getByText(/Operador A Fictício/)).toBeVisible();await expect(page.getByRole('button',{name:'Abrir meu caixa',exact:true})).toHaveCount(0);await page.getByRole('tab',{name:'Meu caixa',exact:true}).click();await expect(page.getByText(/Operador A Fictício/)).toHaveCount(0);await expect(page.getByLabel('Fundo inicial (R$)',{exact:true})).toBeVisible();
 });
+
+test('retorno do caixa distingue reset da abertura e fechamento do editor de configuração',async({page})=>{
+ await setup(page);await page.goto('/caixa');const back=page.getByRole('main').getByRole('link',{name:'Voltar ao início',exact:true,includeHidden:true});
+ await expect(back).toBeVisible();await page.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(back).toBeVisible();
+ await page.getByRole('tab',{name:'Configuração',exact:true}).click();await page.getByText('Unidades · 1',{exact:true}).click();await page.getByRole('button',{name:'Adicionar unidade',exact:true}).click();
+ await expect(page.getByRole('heading',{name:'Adicionar unidade',exact:true})).toBeVisible();await expect(back).toHaveCount(1);await expect(back).toBeHidden();await page.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(back).toBeVisible();
+});
