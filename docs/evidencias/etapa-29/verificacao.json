@@ -1,0 +1,42 @@
+{
+  "date_utc": "2026-11-10",
+  "base": "379ca434f00c9509c460c0f5d47a87cf6069a099",
+  "node_api": {
+    "passed": 365,
+    "failed": 0
+  },
+  "sql": {
+    "complete_empty_replay_passed": true,
+    "assertions_per_replay": 2084,
+    "specific29_assertions": 22,
+    "migrator": "NOSUPERUSER NOBYPASSRLS",
+    "schema_md5": "schema-local.json"
+  },
+  "browser": {
+    "specific29_final": 8,
+    "requests10_rural27_ditr28_regression": 31,
+    "widths": [
+      320,
+      360,
+      768,
+      1440
+    ],
+    "primary_above_mobile_navigation": true,
+    "loader_visible": false,
+    "max_mobile_links": 4
+  },
+  "real_local": "real-local.json",
+  "typecheck": true,
+  "build": true,
+  "independent_review": {
+    "initial_p2": 2,
+    "resolved": 2,
+    "remaining_p1_p2": 0
+  },
+  "migration": "20261110134917_rural_workflow29",
+  "migration_sha256": "937c88411ee0361ea81ec503765580bfb364517b58412cf7f1b0f6e36453e011",
+  "github_actions": false,
+  "direct_vercel_deploy": false,
+  "hosted_fixtures": 0,
+  "publication": "pending"
+}
