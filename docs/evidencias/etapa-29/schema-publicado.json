@@ -1,0 +1,10 @@
+{
+  "migration": "20261110134917",
+  "automatically_applied": true,
+  "stored_statements": 31,
+  "matching_source": true,
+  "matching_function_definitions": 7,
+  "private_tables_rls_acl_closed": 4,
+  "wrappers_invoker_anon_denied": 2,
+  "schema_sha256": "937c88411ee0361ea81ec503765580bfb364517b58412cf7f1b0f6e36453e011"
+}
