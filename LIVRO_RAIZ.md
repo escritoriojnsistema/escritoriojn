@@ -1,6 +1,10 @@
 # Livro Raiz — Escritório JN
 
-## Checkpoint atual: Etapa 29 publicada e verificada
+## Checkpoint atual: Etapa 30 em validação final
+
+Implementação local conectada ao núcleo existente: casos previdenciários/jurídicos, checklists versionados, encaminhamento/complementação, notas privadas, anexos médicos/estratégicos restritos, prazos manuais e integração dos honorários/despesas. Publicação GitHub→Vercel e conferência do schema hospedado pendentes; não afirmar Etapa30 publicada neste checkpoint. [Plano30](docs/etapas/plano-30.md) · [Fecho30](docs/etapas/fecho-30.md) · [Manual30](docs/etapas/etapa-30.md).
+
+## Base preservada: Etapa 29 publicada e verificada
 
 Data:10/11/2026. [PR108](https://github.com/escritoriojnsistema/escritoriojn/pull/108), feature `a97797f7`, merge `4d770217`, árvore `c2c586a7` igual à homologada. Vercel `43c925iA` READY, produção pela integração GitHub→Vercel. Site: https://escritoriojn.vercel.app.
 
@@ -25,4 +29,4 @@ Migration `20261110134917_rural_workflow29` aplicada automaticamente pelo Git:31
 - Preservar identidade, escopo e autoridade atuais. Cache ou vínculo cadastral não concede acesso. Troca de sessão/autoridade limpa dados;503 conserva a tentativa,409 exige reconferência e401/403 bloqueia.
 - O histórico integral das etapas anteriores permanece no Git e nos cartões/fechos existentes. Esta consolidação evita republicar os detalhes antigos de auditoria no checkpoint público.
 
-Próxima etapa:30, somente por novo pedido. Nenhuma implementação de30 foi iniciada.
+Etapa30 autorizada pelo pedido atual. Próxima31 somente por novo pedido, após conclusão e publicação comprovadas da30.

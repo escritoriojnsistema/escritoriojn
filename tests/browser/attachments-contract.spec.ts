@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { createHash } from 'node:crypto';
 test.skip(!process.env.TEAM_UI_CONTRACT,'Contrato visual com Auth e Storage fictícios; laboratório real tem prova própria.');
+test.beforeEach(async({page})=>{await page.route('**/api/document-commercial/presence',r=>r.fulfill({json:{data:{status:'offline',capacity:1,last_seen:null,session_current:false}}}));});
 const office='11111111-1111-4111-8111-111111111111',user='22222222-2222-4222-8222-222222222222',requestId='33333333-3333-4333-8333-333333333333',itemId='44444444-4444-4444-8444-444444444444',fileId='55555555-5555-4555-8555-555555555555';
 const permissions=['foundation.access','requests.read','files.read','files.upload','files.copy','files.manage','services.manage','customers.read','users.manage'];
 const policy={max_bytes:10*1024*1024,mime_types:['application/pdf','image/png','image/jpeg'],version:1};
@@ -30,7 +31,7 @@ async function select(page:Page){await page.getByRole('button',{name:'Selecionar
 test('anexos: rota, vazio e menu mantêm acesso ao fluxo10 e até quatro atalhos',async({page})=>{
  await page.setViewportSize({width:360,height:640});await setup(page,{empty:true});await page.goto('/anexos');
  await expect(page.getByRole('heading',{name:'Anexos privados',exact:true})).toBeVisible();await expect(page.getByText(/Nenhuma solicitação disponível/)).toBeVisible();await expect(page.getByRole('link',{name:'Ir para solicitações',exact:true})).toHaveAttribute('href','/solicitacoes');
- expect(await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link').count()).toBeLessThanOrEqual(4);await page.getByRole('button',{name:'Abrir menu',exact:true}).click();await expect(page.getByRole('navigation',{name:'Menu da operação'}).getByRole('link',{name:'Anexos privados',exact:true})).toBeVisible();
+ expect(await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link').count()).toBeLessThanOrEqual(4);await page.getByRole('button',{name:'Abrir menu',exact:true}).click();await expect(page.getByRole('navigation',{name:'Menu da operação'}).getByRole('link',{name:'Anexos',exact:true})).toBeVisible();
  await expect(page.locator('[role="progressbar"],.spinner,.loading-overlay')).toHaveCount(0);
 });
 for(const [width,height]of [[320,400],[360,640],[1440,900]])test(`anexos: seleção, política e upload privado em quarentena em ${width}px`,async({page})=>{

@@ -8,7 +8,7 @@ export const attachmentName=(v:unknown):v is string=>requestText(v,180)&&!/[<>:"
 export function filenameMatches(name:string,mime:string){const extension=name.split('.').at(-1)?.toLowerCase();return mime==='application/pdf'?extension==='pdf':mime==='image/png'?extension==='png':mime==='image/jpeg'&&['jpg','jpeg'].includes(extension??'');}
 export const validMimes=(v:unknown):v is AttachmentMime[]=>Array.isArray(v)&&v.length>=1&&v.length<=3&&new Set(v).size===v.length&&v.every(attachmentMime);
 export function validUploadInput(v:unknown):v is AttachmentUploadInput {
- return fields(v,['request_id','request_item_id','name','mime_type','size_bytes','sha256','classification','idempotency_key'])&&uuid(v.request_id)&&(v.request_item_id===null||uuid(v.request_item_id))&&attachmentName(v.name)&&attachmentMime(v.mime_type)&&filenameMatches(v.name,v.mime_type)&&positive(v.size_bytes,attachmentMaxBytes)&&attachmentHash(v.sha256)&&['documento','identificacao','comprovante'].includes(String(v.classification))&&uuid(v.idempotency_key);
+ return fields(v,['request_id','request_item_id','name','mime_type','size_bytes','sha256','classification','idempotency_key'])&&uuid(v.request_id)&&(v.request_item_id===null||uuid(v.request_item_id))&&attachmentName(v.name)&&attachmentMime(v.mime_type)&&filenameMatches(v.name,v.mime_type)&&positive(v.size_bytes,attachmentMaxBytes)&&attachmentHash(v.sha256)&&['documento','identificacao','comprovante','medico','estrategico'].includes(String(v.classification))&&uuid(v.idempotency_key);
 }
 export function validProcessInput(v:unknown):v is AttachmentProcessInput {
  if(!fields(v,['action','args']))return false;

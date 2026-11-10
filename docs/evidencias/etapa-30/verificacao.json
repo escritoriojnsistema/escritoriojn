@@ -1,0 +1,17 @@
+{
+  "node_tests": 371,
+  "node_failures": 0,
+  "full_schema_replay_assertions": 2113,
+  "targeted_sql_assertions": 29,
+  "related_browser_tests": 60,
+  "requests_rural_regression_tests": 39,
+  "typecheck": true,
+  "build": true,
+  "production_dependency_vulnerabilities": 0,
+  "independent_static_review": true,
+  "remaining_p1_p2": 0,
+  "real_local_auth_api_database_storage": true,
+  "github_actions": false,
+  "direct_vercel_deploy": false,
+  "hosted_fixtures": 0
+}

@@ -1,5 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 test.skip(!process.env.TEAM_UI_CONTRACT, "Fictitious UI contract.");
+test.beforeEach(async({page})=>{await page.route('**/api/document-commercial/presence',r=>r.fulfill({json:{data:{status:'offline',capacity:1,last_seen:null,session_current:false}}}));});
 const office = "11111111-1111-4111-8111-111111111111",
   user = "22222222-2222-4222-8222-222222222222",
   id = "33333333-3333-4333-8333-333333333333";
@@ -273,7 +274,7 @@ test("adjust and cancel preserve explicit decision and versions", async ({
     .fill("Cancelamento autorizado");
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Confirmar cancelamento" }).click();
-  await expect(page.getByText(/Estado: cancelada/)).toBeVisible();
+  await expect(page.getByText(/Estado: Cancelada/)).toBeVisible();
   expect(body.expected_version).toBe(2);
   expect(body.mutation.kind).toBe("cancel");
 });

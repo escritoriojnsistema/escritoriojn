@@ -1,5 +1,5 @@
 import {useEffect,useRef,useState,type FormEvent} from 'react';
-import {Link,Navigate} from 'react-router-dom';
+import {Link,Navigate,useLocation} from 'react-router-dom';
 import {RefreshCw} from 'lucide-react';
 import type {AccessContext} from '../../../shared/access';
 import type {CashDashboard} from '../../../shared/cash';
@@ -20,7 +20,7 @@ type Editor={kind:'create'}|{kind:'approve'|'pay';expense:Expense}|{kind:'moveme
 const names={pending:'Aguardando aprovação',approved:'Aprovada',paid:'Paga'};
 const movementNames={sangria:'Sangria',reforco:'Reforço',transfer:'Transferência'};
 export default function ExpensesPage({embedded=false,office:fixedOffice}:{embedded?:boolean;office?:string}={}){
- const auth=useAuth(),[office,setOffice]=useState('');
+ const auth=useAuth(),location=useLocation(),[office,setOffice]=useState<string>(typeof location.state?.office_id==='string'?location.state.office_id:'');
  const contexts=auth.contexts.filter(c=>c.role_code!=='client'&&c.permissions.includes('cash.read')&&['expenses.read','cash.transfer'].some(p=>c.permissions.includes(p)));
  const context=contexts.find(c=>c.office_id===(fixedOffice??office))??contexts[0];
  if(auth.status==='loading')return <OperationalFeedback status="loading"/>;
