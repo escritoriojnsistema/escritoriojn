@@ -1,0 +1,31 @@
+{
+  "date_utc": "2026-11-10",
+  "base": "9772f32c55d06b6cf8942fb265c7816f9e799ddd",
+  "node_api_tests": 362,
+  "node_failed": 0,
+  "back_ui_new": 37,
+  "back_regressions": 48,
+  "entry_ui": 5,
+  "reachability_ui": 4,
+  "rural27_ditr28_restore_ui": 20,
+  "build_typecheck": true,
+  "independent_review": "No confirmed remaining P1/P2; 8 focused Node checks and source review",
+  "real_auth_performance": {
+    "roles": [
+      "owner",
+      "admin",
+      "employee",
+      "client"
+    ],
+    "samples_per_role_per_version": 3,
+    "password_checks_removed": false,
+    "before_after": "performance.json",
+    "production_sla": false
+  },
+  "sql_or_auth_hosted_changes": false,
+  "new_migration": false,
+  "hosted_fixtures": false,
+  "github_actions": false,
+  "direct_vercel_deploy": false,
+  "publication": "pending"
+}

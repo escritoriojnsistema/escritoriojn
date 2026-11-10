@@ -20,7 +20,9 @@ const images = {
 };
 
 /** Disposable local Auth, REST, Storage and SMTP. No hosted database or objects. */
-export async function createAuthLab({storage=true,artifacts=false,storageRootfs}={}) {
+export async function createAuthLab({storage=true,artifacts=false,storageRootfs,frontendOrigins=[]}={}) {
+  if (!frontendOrigins.every(origin => /^http:\/\/(127\.0\.0\.1|localhost):\d{2,5}$/.test(origin))) throw new Error('Auth lab frontend origins must be loopback HTTP origins.');
+  const allowedOrigins = ['http://127.0.0.1:3005', 'http://localhost:3005', ...frontendOrigins];
   const id = randomUUID();
   const network = `jn-auth-lab-${id}`;
   const names = Object.fromEntries(Object.keys(images).map(key => [key, `${network}-${key}`]));
@@ -97,7 +99,7 @@ export async function createAuthLab({storage=true,artifacts=false,storageRootfs}
 
   const gateway = createServer(async (request, response) => {
     const origin = request.headers.origin;
-    const cors = ['http://127.0.0.1:3005', 'http://localhost:3005'].includes(origin)
+    const cors = allowedOrigins.includes(origin)
       ? { 'access-control-allow-origin': origin, vary: 'Origin' } : {};
     if (request.method === 'OPTIONS') {
       response.writeHead(204, { ...cors,

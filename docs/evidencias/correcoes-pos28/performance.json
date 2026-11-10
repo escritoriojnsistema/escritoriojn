@@ -1,0 +1,3312 @@
+{
+  "baselineCommit": "9772f32",
+  "kind": "local-real-provider-production-build",
+  "conditions": {
+    "samples": 3,
+    "viewport": "1440x900",
+    "network": {
+      "latency_ms": 60,
+      "download_bits_per_second": 10000000,
+      "upload_bits_per_second": 10000000
+    },
+    "cpuSlowdown": 4,
+    "cacheDisabled": true,
+    "transport": "Express static uncompressed; not hosted Vercel compression/RTT",
+    "roles": [
+      "owner",
+      "admin",
+      "employee",
+      "client"
+    ],
+    "auth": "real local GoTrue; actual SDK password + live RPC + official adoption; Storage omitted"
+  },
+  "runs": {
+    "before": {
+      "public": [
+        {
+          "fcp_ms": 1088,
+          "resource_bytes": 651379,
+          "js_bytes": 548781,
+          "js_resources": [
+            {
+              "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+              "bytes": 899
+            },
+            {
+              "name": "/assets/index-ozfmzrMQ.js",
+              "bytes": 60345
+            },
+            {
+              "name": "/assets/icons-D-dRSePb.js",
+              "bytes": 13303
+            },
+            {
+              "name": "/assets/supabase-DtuMx0jC.js",
+              "bytes": 214692
+            },
+            {
+              "name": "/assets/react-C-G-5Uwp.js",
+              "bytes": 259542
+            }
+          ]
+        },
+        {
+          "fcp_ms": 1084,
+          "resource_bytes": 651379,
+          "js_bytes": 548781,
+          "js_resources": [
+            {
+              "name": "/assets/index-ozfmzrMQ.js",
+              "bytes": 60345
+            },
+            {
+              "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+              "bytes": 899
+            },
+            {
+              "name": "/assets/react-C-G-5Uwp.js",
+              "bytes": 259542
+            },
+            {
+              "name": "/assets/supabase-DtuMx0jC.js",
+              "bytes": 214692
+            },
+            {
+              "name": "/assets/icons-D-dRSePb.js",
+              "bytes": 13303
+            }
+          ]
+        },
+        {
+          "fcp_ms": 1116,
+          "resource_bytes": 651379,
+          "js_bytes": 548781,
+          "js_resources": [
+            {
+              "name": "/assets/index-ozfmzrMQ.js",
+              "bytes": 60345
+            },
+            {
+              "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+              "bytes": 899
+            },
+            {
+              "name": "/assets/supabase-DtuMx0jC.js",
+              "bytes": 214692
+            },
+            {
+              "name": "/assets/react-C-G-5Uwp.js",
+              "bytes": 259542
+            },
+            {
+              "name": "/assets/icons-D-dRSePb.js",
+              "bytes": 13303
+            }
+          ]
+        }
+      ],
+      "profiles": {
+        "owner": [
+          {
+            "form_ready_ms": 2468.6945220000016,
+            "loginPage": {
+              "fcp_ms": 1132,
+              "resource_bytes": 1465123,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "login_to_panel_ms": 935.2565700000014,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 128.203
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 69.366
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 67.045
+              }
+            ],
+            "refresh_ms": 1678.9212750000006,
+            "refreshPaint": {
+              "fcp_ms": 1660,
+              "resource_bytes": 1468585,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 71.747
+              }
+            ],
+            "reopen_ms": 2425.7373439999974,
+            "reopenPaint": {
+              "fcp_ms": 2152,
+              "resource_bytes": 1469112,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 2451.9545270000017,
+            "loginPage": {
+              "fcp_ms": 1044,
+              "resource_bytes": 1465123,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "login_to_panel_ms": 957.6020500000013,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 166.272
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 70.627
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 67.917
+              }
+            ],
+            "refresh_ms": 1752.0297969999992,
+            "refreshPaint": {
+              "fcp_ms": 1696,
+              "resource_bytes": 1468584,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 101.446
+              }
+            ],
+            "reopen_ms": 2337.607170000003,
+            "reopenPaint": {
+              "fcp_ms": 2068,
+              "resource_bytes": 1469112,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 2481.8533719999978,
+            "loginPage": {
+              "fcp_ms": 1088,
+              "resource_bytes": 1465123,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "login_to_panel_ms": 947.5020420000001,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 110.17399999999999
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 66.40400000000001
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 65.226
+              }
+            ],
+            "refresh_ms": 1622.478470999995,
+            "refreshPaint": {
+              "fcp_ms": 1612,
+              "resource_bytes": 1468585,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 76.893
+              }
+            ],
+            "reopen_ms": 2431.321063999996,
+            "reopenPaint": {
+              "fcp_ms": 2164,
+              "resource_bytes": 1469112,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            }
+          }
+        ],
+        "admin": [
+          {
+            "form_ready_ms": 2501.4275039999993,
+            "loginPage": {
+              "fcp_ms": 1084,
+              "resource_bytes": 1465123,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "login_to_panel_ms": 940.373523000002,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 103.908
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 67.743
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 67.897
+              }
+            ],
+            "refresh_ms": 1695.636298000005,
+            "refreshPaint": {
+              "fcp_ms": 1564,
+              "resource_bytes": 1466588,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 73.33099999999999
+              }
+            ],
+            "reopen_ms": 2346.4040170000007,
+            "reopenPaint": {
+              "fcp_ms": 2036,
+              "resource_bytes": 1467115,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 2571.1105069999976,
+            "loginPage": {
+              "fcp_ms": 1120,
+              "resource_bytes": 1465123,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "login_to_panel_ms": 970.2768270000015,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 111.461
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 67.21300000000001
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 64.647
+              }
+            ],
+            "refresh_ms": 1645.114241000003,
+            "refreshPaint": {
+              "fcp_ms": 1532,
+              "resource_bytes": 1466588,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 63.74
+              }
+            ],
+            "reopen_ms": 2316.427910999999,
+            "reopenPaint": {
+              "fcp_ms": 1932,
+              "resource_bytes": 1467115,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 2421.742747000004,
+            "loginPage": {
+              "fcp_ms": 1040,
+              "resource_bytes": 1465123,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "login_to_panel_ms": 939.2406270000065,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 109.894
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 67.14699999999999
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 65.522
+              }
+            ],
+            "refresh_ms": 1639.0220839999965,
+            "refreshPaint": {
+              "fcp_ms": 1544,
+              "resource_bytes": 1466588,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 66.04899999999999
+              }
+            ],
+            "reopen_ms": 2285.25748,
+            "reopenPaint": {
+              "fcp_ms": 1956,
+              "resource_bytes": 1467115,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            }
+          }
+        ],
+        "employee": [
+          {
+            "form_ready_ms": 2363.4114420000114,
+            "loginPage": {
+              "fcp_ms": 992,
+              "resource_bytes": 1465123,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "login_to_panel_ms": 899.9924980000069,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 107.124
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 69.023
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 67.15299999999999
+              }
+            ],
+            "refresh_ms": 1624.0881430000009,
+            "refreshPaint": {
+              "fcp_ms": 1572,
+              "resource_bytes": 1466594,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 71.9
+              }
+            ],
+            "reopen_ms": 2493.0362840000016,
+            "reopenPaint": {
+              "fcp_ms": 2108,
+              "resource_bytes": 1467121,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 2401.267423000012,
+            "loginPage": {
+              "fcp_ms": 1012,
+              "resource_bytes": 1465123,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "login_to_panel_ms": 936.3952589999972,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 110.41499999999999
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 67.37
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 69.776
+              }
+            ],
+            "refresh_ms": 1642.0958779999928,
+            "refreshPaint": {
+              "fcp_ms": 1544,
+              "resource_bytes": 1466594,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 65.22
+              }
+            ],
+            "reopen_ms": 2326.1913499999937,
+            "reopenPaint": {
+              "fcp_ms": 2000,
+              "resource_bytes": 1467121,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 2452.9141080000118,
+            "loginPage": {
+              "fcp_ms": 1012,
+              "resource_bytes": 1465123,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "login_to_panel_ms": 957.7045609999914,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 116.953
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 66.471
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 66.895
+              }
+            ],
+            "refresh_ms": 1657.163711000001,
+            "refreshPaint": {
+              "fcp_ms": 1548,
+              "resource_bytes": 1466594,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 77.048
+              }
+            ],
+            "reopen_ms": 2348.4514330000093,
+            "reopenPaint": {
+              "fcp_ms": 2064,
+              "resource_bytes": 1467121,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            }
+          }
+        ],
+        "client": [
+          {
+            "form_ready_ms": 2444.2755139999936,
+            "loginPage": {
+              "fcp_ms": 1064,
+              "resource_bytes": 1465123,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "login_to_panel_ms": 953.3726079999906,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 114.613
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 68.673
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 66.966
+              }
+            ],
+            "refresh_ms": 1643.7487549999933,
+            "refreshPaint": {
+              "fcp_ms": 1576,
+              "resource_bytes": 1466589,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 70.37
+              }
+            ],
+            "reopen_ms": 2389.887130999996,
+            "reopenPaint": {
+              "fcp_ms": 2116,
+              "resource_bytes": 1467116,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 2423.354237000007,
+            "loginPage": {
+              "fcp_ms": 992,
+              "resource_bytes": 1465123,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "login_to_panel_ms": 942.4983480000083,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 136.224
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 66.93799999999999
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 67.52
+              }
+            ],
+            "refresh_ms": 1639.9198800000013,
+            "refreshPaint": {
+              "fcp_ms": 1568,
+              "resource_bytes": 1466590,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 79.827
+              }
+            ],
+            "reopen_ms": 2360.0550020000082,
+            "reopenPaint": {
+              "fcp_ms": 2056,
+              "resource_bytes": 1467117,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 2414.273411000002,
+            "loginPage": {
+              "fcp_ms": 1040,
+              "resource_bytes": 1465123,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "login_to_panel_ms": 965.206898000004,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 114.137
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 67.597
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 64.905
+              }
+            ],
+            "refresh_ms": 1645.1612430000096,
+            "refreshPaint": {
+              "fcp_ms": 1576,
+              "resource_bytes": 1466590,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 80.375
+              }
+            ],
+            "reopen_ms": 2399.795253000004,
+            "reopenPaint": {
+              "fcp_ms": 2096,
+              "resource_bytes": 1467117,
+              "js_bytes": 1273722,
+              "js_resources": [
+                {
+                  "name": "/assets/index-ozfmzrMQ.js",
+                  "bytes": 60345
+                },
+                {
+                  "name": "/assets/rolldown-runtime-WkwZ5CU-.js",
+                  "bytes": 899
+                },
+                {
+                  "name": "/assets/react-C-G-5Uwp.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-D-dRSePb.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/OperationalRoutes-CDfqSAla.js",
+                  "bytes": 724941
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "after": {
+      "public": [
+        {
+          "fcp_ms": 1076,
+          "resource_bytes": 651492,
+          "js_bytes": 548894,
+          "js_resources": [
+            {
+              "name": "/assets/index-WhLGOQYz.js",
+              "bytes": 60331
+            },
+            {
+              "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+              "bytes": 1026
+            },
+            {
+              "name": "/assets/react-D1JyAsuP.js",
+              "bytes": 259542
+            },
+            {
+              "name": "/assets/icons-DsZbN-GM.js",
+              "bytes": 13303
+            },
+            {
+              "name": "/assets/supabase-DtuMx0jC.js",
+              "bytes": 214692
+            }
+          ]
+        },
+        {
+          "fcp_ms": 1044,
+          "resource_bytes": 651492,
+          "js_bytes": 548894,
+          "js_resources": [
+            {
+              "name": "/assets/index-WhLGOQYz.js",
+              "bytes": 60331
+            },
+            {
+              "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+              "bytes": 1026
+            },
+            {
+              "name": "/assets/react-D1JyAsuP.js",
+              "bytes": 259542
+            },
+            {
+              "name": "/assets/icons-DsZbN-GM.js",
+              "bytes": 13303
+            },
+            {
+              "name": "/assets/supabase-DtuMx0jC.js",
+              "bytes": 214692
+            }
+          ]
+        },
+        {
+          "fcp_ms": 980,
+          "resource_bytes": 651492,
+          "js_bytes": 548894,
+          "js_resources": [
+            {
+              "name": "/assets/index-WhLGOQYz.js",
+              "bytes": 60331
+            },
+            {
+              "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+              "bytes": 1026
+            },
+            {
+              "name": "/assets/react-D1JyAsuP.js",
+              "bytes": 259542
+            },
+            {
+              "name": "/assets/supabase-DtuMx0jC.js",
+              "bytes": 214692
+            },
+            {
+              "name": "/assets/icons-DsZbN-GM.js",
+              "bytes": 13303
+            }
+          ]
+        }
+      ],
+      "profiles": {
+        "owner": [
+          {
+            "form_ready_ms": 1787.8997330000275,
+            "loginPage": {
+              "fcp_ms": 1028,
+              "resource_bytes": 697935,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "login_to_panel_ms": 975.0612580000015,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 120.524
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 67.978
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 68.916
+              }
+            ],
+            "refresh_ms": 1047.5321629999962,
+            "refreshPaint": {
+              "fcp_ms": 1000,
+              "resource_bytes": 701397,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 69.503
+              }
+            ],
+            "reopen_ms": 2059.353181000013,
+            "reopenPaint": {
+              "fcp_ms": 1176,
+              "resource_bytes": 701924,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 1749.9617040000157,
+            "loginPage": {
+              "fcp_ms": 1028,
+              "resource_bytes": 697935,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "login_to_panel_ms": 934.5551879999985,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 111.277
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 70.544
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 81.251
+              }
+            ],
+            "refresh_ms": 954.9142139999894,
+            "refreshPaint": {
+              "fcp_ms": 964,
+              "resource_bytes": 701397,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 68.003
+              }
+            ],
+            "reopen_ms": 1973.3663869999873,
+            "reopenPaint": {
+              "fcp_ms": 1116,
+              "resource_bytes": 701924,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 1734.418594000017,
+            "loginPage": {
+              "fcp_ms": 1004,
+              "resource_bytes": 697935,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "login_to_panel_ms": 965.3267749999941,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 119.39099999999999
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 68.88000000000001
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 65.118
+              }
+            ],
+            "refresh_ms": 1022.2043070000072,
+            "refreshPaint": {
+              "fcp_ms": 972,
+              "resource_bytes": 701396,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 99.839
+              }
+            ],
+            "reopen_ms": 1971.3096289999958,
+            "reopenPaint": {
+              "fcp_ms": 1108,
+              "resource_bytes": 701923,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            }
+          }
+        ],
+        "admin": [
+          {
+            "form_ready_ms": 1843.8287280000222,
+            "loginPage": {
+              "fcp_ms": 1096,
+              "resource_bytes": 697935,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "login_to_panel_ms": 973.2249650000012,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 118.066
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 67.647
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 70.47999999999999
+              }
+            ],
+            "refresh_ms": 1098.1361049999832,
+            "refreshPaint": {
+              "fcp_ms": 1024,
+              "resource_bytes": 699400,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 76.868
+              }
+            ],
+            "reopen_ms": 1919.8524170000164,
+            "reopenPaint": {
+              "fcp_ms": 1060,
+              "resource_bytes": 699927,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 1870.2428010000149,
+            "loginPage": {
+              "fcp_ms": 1144,
+              "resource_bytes": 697935,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "login_to_panel_ms": 937.8357330000144,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 114.654
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 65.617
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 64.961
+              }
+            ],
+            "refresh_ms": 978.0970200000156,
+            "refreshPaint": {
+              "fcp_ms": 976,
+              "resource_bytes": 699400,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 65.565
+              }
+            ],
+            "reopen_ms": 1948.7853389999946,
+            "reopenPaint": {
+              "fcp_ms": 1116,
+              "resource_bytes": 699927,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 1886.8732469999813,
+            "loginPage": {
+              "fcp_ms": 1088,
+              "resource_bytes": 697935,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "login_to_panel_ms": 1005.6969399999944,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 118.875
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 66.827
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 67.389
+              }
+            ],
+            "refresh_ms": 1141.9495109999843,
+            "refreshPaint": {
+              "fcp_ms": 1044,
+              "resource_bytes": 699400,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 69.004
+              }
+            ],
+            "reopen_ms": 2010.2171549999912,
+            "reopenPaint": {
+              "fcp_ms": 1132,
+              "resource_bytes": 699927,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            }
+          }
+        ],
+        "employee": [
+          {
+            "form_ready_ms": 1749.7522079999908,
+            "loginPage": {
+              "fcp_ms": 996,
+              "resource_bytes": 697935,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "login_to_panel_ms": 964.415909000003,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 119.604
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 68.367
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 65.51299999999999
+              }
+            ],
+            "refresh_ms": 1118.4621380000026,
+            "refreshPaint": {
+              "fcp_ms": 1064,
+              "resource_bytes": 699403,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 63.302
+              }
+            ],
+            "reopen_ms": 2044.9787509999878,
+            "reopenPaint": {
+              "fcp_ms": 1152,
+              "resource_bytes": 699932,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 1776.9738939999952,
+            "loginPage": {
+              "fcp_ms": 1044,
+              "resource_bytes": 697935,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "login_to_panel_ms": 942.1852189999772,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 113.455
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 65.958
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 63.91
+              }
+            ],
+            "refresh_ms": 971.9523219999974,
+            "refreshPaint": {
+              "fcp_ms": 968,
+              "resource_bytes": 699405,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 68.97500000000001
+              }
+            ],
+            "reopen_ms": 1999.8345110000228,
+            "reopenPaint": {
+              "fcp_ms": 1076,
+              "resource_bytes": 699932,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 1800.0861429999932,
+            "loginPage": {
+              "fcp_ms": 1032,
+              "resource_bytes": 697935,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "login_to_panel_ms": 940.333759000001,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 103.58800000000001
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 65.284
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 64.276
+              }
+            ],
+            "refresh_ms": 1093.9699189999956,
+            "refreshPaint": {
+              "fcp_ms": 1028,
+              "resource_bytes": 699405,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 72.292
+              }
+            ],
+            "reopen_ms": 1955.0685130000056,
+            "reopenPaint": {
+              "fcp_ms": 1080,
+              "resource_bytes": 699932,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            }
+          }
+        ],
+        "client": [
+          {
+            "form_ready_ms": 1741.8969510000024,
+            "loginPage": {
+              "fcp_ms": 992,
+              "resource_bytes": 697935,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "login_to_panel_ms": 988.3884470000048,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 120.929
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 69.41199999999999
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 69.03099999999999
+              }
+            ],
+            "refresh_ms": 984.9129610000236,
+            "refreshPaint": {
+              "fcp_ms": 988,
+              "resource_bytes": 699401,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 72.534
+              }
+            ],
+            "reopen_ms": 1925.5192659999884,
+            "reopenPaint": {
+              "fcp_ms": 1036,
+              "resource_bytes": 699927,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 1760.9451349999872,
+            "loginPage": {
+              "fcp_ms": 1044,
+              "resource_bytes": 697935,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "login_to_panel_ms": 926.0326820000191,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 108.577
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 67.352
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 67.646
+              }
+            ],
+            "refresh_ms": 1040.3763829999953,
+            "refreshPaint": {
+              "fcp_ms": 980,
+              "resource_bytes": 699402,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 79.94399999999999
+              }
+            ],
+            "reopen_ms": 1938.4192590000166,
+            "reopenPaint": {
+              "fcp_ms": 1048,
+              "resource_bytes": 699929,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            }
+          },
+          {
+            "form_ready_ms": 1732.9078399999999,
+            "loginPage": {
+              "fcp_ms": 980,
+              "resource_bytes": 697935,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "login_to_panel_ms": 947.3003250000183,
+            "login_phases": [
+              {
+                "path": "/auth/v1/token",
+                "method": "POST",
+                "duration_ms": 109.914
+              },
+              {
+                "path": "/rest/v1/rpc/my_access_context",
+                "method": "POST",
+                "duration_ms": 66.162
+              },
+              {
+                "path": "/auth/v1/user",
+                "method": "GET",
+                "duration_ms": 65.70200000000001
+              }
+            ],
+            "refresh_ms": 1079.3935760000022,
+            "refreshPaint": {
+              "fcp_ms": 1052,
+              "resource_bytes": 699401,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            },
+            "refresh_phases": [
+              {
+                "path": "/api/auth/context",
+                "method": "GET",
+                "duration_ms": 64.97200000000001
+              }
+            ],
+            "reopen_ms": 2009.8949879999855,
+            "reopenPaint": {
+              "fcp_ms": 1104,
+              "resource_bytes": 699929,
+              "js_bytes": 580133,
+              "js_resources": [
+                {
+                  "name": "/assets/index-WhLGOQYz.js",
+                  "bytes": 60331
+                },
+                {
+                  "name": "/assets/rolldown-runtime-XKyaHtl9.js",
+                  "bytes": 1026
+                },
+                {
+                  "name": "/assets/react-D1JyAsuP.js",
+                  "bytes": 259542
+                },
+                {
+                  "name": "/assets/icons-DsZbN-GM.js",
+                  "bytes": 13303
+                },
+                {
+                  "name": "/assets/supabase-DtuMx0jC.js",
+                  "bytes": 214692
+                },
+                {
+                  "name": "/assets/OperationalRoutes-DREYXRdw.js",
+                  "bytes": 13388
+                },
+                {
+                  "name": "/assets/OperationLayout-K7zFi6rr.js",
+                  "bytes": 17851
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "assertions": "PASS: four roles each retain one password/RPC/adoption, no duplicate API context on login; live context required on cold restored sessions; initial JS <65% of baseline"
+}

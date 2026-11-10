@@ -36,8 +36,8 @@ export default defineConfig(({ mode }) => {
   }
   return {
     plugins: [localApi(), react(), tailwindcss()],
-    // Shared runtime remains stable. Operational screens are fetched from the
-    // access form, before sign-in, without remounting Auth/PKCE providers.
+    // Shared runtime remains stable. The access form warms the small panel
+    // router; business screens are fetched only when their route is opened.
     build: { rolldownOptions: { output: { codeSplitting: { groups: [
       { name: 'supabase', test: /node_modules\/@supabase\// },
       { name: 'react', test: /node_modules\/(react|react-dom|react-router|react-router-dom|scheduler)\// },
