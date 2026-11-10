@@ -1,9 +1,15 @@
-# Especializados — regras afetadas pelas Etapas27–29
+# Especializados — regras afetadas pelas Etapas27–30
 
-Fonte: Drive `1yEVpE58Mb6FLk1yvMklsByazOkdu9dRs`, consultada09/11/2026. Recorte pertinente; Etapa30 fora do escopo.
+Fonte: Drive `1yEVpE58Mb6FLk1yvMklsByazOkdu9dRs`, consultada09/11/2026. Recorte pertinente às etapas27–30, atualizado em10/11/2026.
 
 Rural reutiliza clientes, pedidos, checklists, arquivos, cobranças, aprovações e entregas existentes. Acrescenta imóvel, ciclo/exercício e dados específicos. Não criar CRM/financeiro paralelo. Imóvel é entidade própria com identificação/localização e pessoas com papel/período. Um cliente pode ter vários imóveis e um imóvel vários titulares; não usar CPF+ano como chaveDITR. CAR/CCIR não comprovam automaticamente propriedade ou regularidade. Honorário não é tributo; conclusão interna não é aceitação pelo órgão. Portal e acervo não ganham direitos automaticamente por vínculo cadastral.
 
 CCIR/CAR29 reutiliza o atendimento10, o imóvel27 e a instância de checklist12, com configuração versionada por serviço. Funcionário organiza e encaminha; análise, preparação, complementação e resultado são ações do proprietário autenticado, além das capacidades vigentes. A categoria deve permitir a preparação pela equipe autorizada; configurar CCIR/CAR não concede nível, papel ou acesso cadastral/rural. Encaminhamento e complementação usam transferência10 e preservam acompanhamento conforme o escopo vigente.
 
 Pendência compartilhável é texto explícito do proprietário para o portal do próprio pedido; nenhuma nota estratégica, imóvel, arquivo ou evidência privada é projetada. Resultado externo informado protege arquivo/hash11 sem liberar quarentena. Entrega confirmada deriva somente do registro26 com mesmo pedido/arquivo/hash e sem revogação; cancelar segue10, e conclusão não quita, aprova ou entrega.
+
+RF14: salário-maternidade, aposentadoria, requerimentos, ofícios e casos jurídicos usam os clientes, pedidos, checklists12, arquivos11, cobranças e documentos/entrega existentes. Funcionário recebe e organiza somente o autorizado; condução e atos reservados exigem responsável atual owner/admin e capacidade específica. Encaminhamento ao proprietário e complementação ao preparador reutilizam transferência10. Participantes são os clientes já registrados no item, filtrados pelo escopo08.
+
+Caso captura modalidade/configuração e instância imutável do checklist. Protocolo externo é informação do responsável, separado do estágio interno. Nota estratégica é privada e exige specialized.sensitive, além do escopo atual; nunca entra no resumo/JSON do cliente. Anexos médico/estratégico exigem a mesma capacidade específica desde o upload e ficam protegidos contra cópia/referência compartilhável, inclusive Storage. Restrição não substitui scanner; quarentena continua bloqueada. Documento compartilhável deve ser produzido/revisado no fluxo21–26.
+
+Prazo/marco registra tipo interno/externo, data conferida manualmente, fonte, data da conferência, responsável atual, alerta e conclusão autenticada. Não automatizar contagem jurídica/administrativa com dias corridos; feriados e regra competente não estão implementados. Alerta aparece no acompanhamento do caso conforme data conferida; não se promete envio externo. Checklist é orientação operacional, sem promessa de elegibilidade/deferimento. Honorários vêm das cobranças13 e despesas do módulo18, com aprovação/pagamento existentes; conclusão interna não altera esses controles.

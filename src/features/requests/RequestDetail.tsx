@@ -1,3 +1,6 @@
+import {SpecializedPanel} from '../specialized/SpecializedPanel';
+import {specializedKinds,specializedStages} from '../../../shared/specialized';
+import type {ReactNode} from 'react';
 import {RuralWorkflowPanel} from '../rural/RuralWorkflowPanel';
 import {ruralStages} from '../../../shared/ruralWorkflow';
 import {RequestTransferException} from './RequestTransferException';
@@ -18,20 +21,22 @@ import { RequestItems, itemInputs, type DraftItem } from './RequestItems';
 import type { RequestsError } from './api';
 const date=(value:string)=>new Date(value).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
 const originLabels={presencial:'Presencial',whatsapp:'WhatsApp',portal:'Portal do cliente'};
-export function RequestDetail({office,data,permissions,busy,onHistory,onMutate,onFailure,onUpdated,onAccessLost,onPendingChange}:{office:string;data:Detail;permissions:string[];busy:boolean;onHistory:(page:number)=>void;onMutate:(mutation:RequestMutation)=>void;onFailure:(failure:RequestsError)=>void;onUpdated?:(data:Detail)=>void;onAccessLost:()=>void;onPendingChange?:(value:boolean)=>void}){
- const [ruralExpanded,setRuralExpanded]=useState(false);
- useEffect(()=>setRuralExpanded(false),[data.id]);
+export function RequestDetail({office,data,permissions,busy,onHistory,onMutate,onFailure,onUpdated,onAccessLost,onPendingChange,onActionsChange}:{office:string;data:Detail;permissions:string[];busy:boolean;onHistory:(page:number)=>void;onMutate:(mutation:RequestMutation)=>void;onFailure:(failure:RequestsError)=>void;onUpdated?:(data:Detail)=>void;onAccessLost:()=>void;onPendingChange?:(value:boolean)=>void;onActionsChange?:(v:ReactNode)=>void}){
+ const [ruralExpanded,setRuralExpanded]=useState(false),[specializedExpanded,setSpecializedExpanded]=useState(false);
+ useEffect(()=>{setRuralExpanded(false);setSpecializedExpanded(false);},[data.id]);
  return <article className="request-detail">
   <p className="request-protocol">{data.protocol} · {data.portal?publicRequestStatusLabels[data.public_status]:requestStatusLabels[data.status]}</p>
   {data.portal&&data.rural_progress&&<section className="request-message" aria-label="Progresso CCIR/CAR"><h2>{data.rural_progress.kind} · {ruralStages[data.rural_progress.stage]}</h2>{data.rural_progress.pending&&<p>Pendência compartilhada: {data.rural_progress.pending}</p>}<p className="customer-note">Conclusão interna não confirma aceitação pelo órgão. O resultado segue as regras de liberação e entrega.</p></section>}
-  {!data.portal&&['rural.read','customers.read','requests.read','checklists.read'].every(p=>permissions.includes(p))&&<RuralWorkflowPanel onExpandedChange={setRuralExpanded} key={data.id} office={office} requestId={data.id} requestVersion={data.version} onPendingChange={onPendingChange} onUpdated={onUpdated} onFailure={onFailure}/>}
-  <div hidden={ruralExpanded}>
+  {data.portal&&data.specialized_progress&&<section className="request-message" aria-label="Progresso previdenciário e jurídico"><h2>{specializedKinds[data.specialized_progress.kind]} · {specializedStages[data.specialized_progress.stage]}</h2>{data.specialized_progress.pending&&<p>Pendência compartilhada: {data.specialized_progress.pending}</p>}<p className="customer-note">Andamento factual. Não há promessa de deferimento. Conclusão interna não libera automaticamente documentos.</p></section>}
+  {!data.portal&&!ruralExpanded&&['specialized.read','customers.read','requests.read','checklists.read'].every(p=>permissions.includes(p))&&<SpecializedPanel key={`specialized:${data.id}`} requestProtocol={data.protocol} office={office} requestId={data.id} requestVersion={data.version} permissions={permissions} onExpandedChange={setSpecializedExpanded} onActionsChange={onActionsChange} onPendingChange={onPendingChange} onUpdated={onUpdated} onFailure={onFailure}/>}
+  {!data.portal&&!specializedExpanded&&['rural.read','customers.read','requests.read','checklists.read'].every(p=>permissions.includes(p))&&<RuralWorkflowPanel onExpandedChange={setRuralExpanded} key={`rural:${data.id}`} office={office} requestId={data.id} requestVersion={data.version} onPendingChange={onPendingChange} onUpdated={onUpdated} onFailure={onFailure}/>}
+  <div hidden={ruralExpanded||specializedExpanded}>
   {data.category_name&&<p className="customer-note">Categoria: {data.category_name}</p>}
   <dl className="service-facts"><div><dt>Abertura</dt><dd>{date(data.created_at)}</dd></div><div><dt>Última atualização</dt><dd>{date(data.updated_at)}</dd></div></dl>
-  {data.correction&&<AccountCorrectionDetail key={data.id} office={office} data={data} onUpdated={onUpdated??(()=>{})} onFailure={onFailure}/>}
+  {data.correction&&<AccountCorrectionDetail key={`correction:${data.id}`} office={office} data={data} onUpdated={onUpdated??(()=>{})} onFailure={onFailure}/>}
   {data.portal&&!data.correction&&<PortalRequestReturn key={data.id} office={office} requestId={data.id} onFailure={onFailure} onUpdated={onUpdated}/> }
   {data.portal&&<RequestReviewStatus office={office} requestId={data.id} onFailure={onFailure}/>}
-  {data.portal?<><dl className="service-facts"><div><dt>Quem está atendendo</dt><dd>{data.assignee_name??'Aguardando atendimento'}</dd></div></dl>{data.message&&<section className="request-message"><h2>Sua mensagem</h2><p>{data.message}</p></section>}{data.services.length>0&&<section className="request-message"><h2>Serviços</h2><ul>{data.services.map((name,index)=><li key={index}>{name}</li>)}</ul></section>}<p className="customer-note">Acompanhe aqui as atualizações da equipe. Concluído indica o encerramento do atendimento.</p></>:<><RequestCollection key={data.id} office={office} data={data} busy={busy} onUpdated={onUpdated??(()=>{})} onFailure={onFailure} onAccessLost={onAccessLost}/><RequestTransferException key={data.id} office={office} data={data} busy={busy} onUpdated={onUpdated??(()=>{})} onFailure={onFailure} onAccessLost={onAccessLost}/><StaffDetail office={office} data={data} permissions={permissions} busy={busy} onHistory={onHistory} onMutate={onMutate} onFailure={onFailure}/></>}
+  {data.portal?<><dl className="service-facts"><div><dt>Quem está atendendo</dt><dd>{data.assignee_name??'Aguardando atendimento'}</dd></div></dl>{data.message&&<section className="request-message"><h2>Sua mensagem</h2><p>{data.message}</p></section>}{data.services.length>0&&<section className="request-message"><h2>Serviços</h2><ul>{data.services.map((name,index)=><li key={index}>{name}</li>)}</ul></section>}<p className="customer-note">Acompanhe aqui as atualizações da equipe. Concluído indica o encerramento do atendimento.</p></>:<><RequestCollection key={`collection:${data.id}`} office={office} data={data} busy={busy} onUpdated={onUpdated??(()=>{})} onFailure={onFailure} onAccessLost={onAccessLost}/><RequestTransferException key={`transfer:${data.id}`} office={office} data={data} busy={busy} onUpdated={onUpdated??(()=>{})} onFailure={onFailure} onAccessLost={onAccessLost}/><StaffDetail office={office} data={data} permissions={permissions} busy={busy} onHistory={onHistory} onMutate={onMutate} onFailure={onFailure}/></>}
   </div>
  </article>;
 }

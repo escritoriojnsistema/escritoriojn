@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { RefreshCw } from "lucide-react";
 import type { AccessContext } from "../../../shared/access";
 import {
@@ -32,7 +32,8 @@ const media =
   "(max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px)";
 export default function ChargesPage({embedded=false,office:fixedOffice}:{embedded?:boolean;office?:string}={}) {
   const auth = useAuth();
-  const [office, setOffice] = useState("");
+  const location=useLocation();
+  const [office, setOffice] = useState<string>(typeof location.state?.office_id==='string'?location.state.office_id:'');
   const contexts = auth.contexts.filter(
     (c) =>
       c.role_code !== "client" &&
@@ -71,7 +72,8 @@ function Workspace({
   embedded: boolean;
   onOffice: (id: string) => void;
 }) {
-  const [request, setRequest] = useState("");
+  const location=useLocation();
+  const [request, setRequest] = useState<string>(location.state?.office_id===context.office_id&&typeof location.state?.request_id==='string'?location.state.request_id:'');
   const [data, setData] = useState<ChargeView>();
   const [error, setError] = useState<ChargesError>();
   const [feedback, setFeedback] = useState("");

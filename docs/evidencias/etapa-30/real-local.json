@@ -1,0 +1,30 @@
+{
+  "proof": "etapa30-real-local",
+  "date_utc": "2026-11-10",
+  "auth": true,
+  "postgrest": true,
+  "express": true,
+  "storage": true,
+  "restricted_upload_validation": true,
+  "sensitive_bytes_denied_to_employee": true,
+  "ordinary_metadata_hidden": true,
+  "private_notes_hidden": true,
+  "reserved_direct_rpc_denied": true,
+  "handoff_and_complement_transfer": true,
+  "idempotency_after_transfer": true,
+  "own_portal_factual_progress": true,
+  "other_client_denied": true,
+  "manual_deadline_gate": true,
+  "fees_from_existing_ledger": true,
+  "expense_link_preserves_pending_status": true,
+  "checklist_required": true,
+  "quarantine_preserved": true,
+  "hosted_writes": false,
+  "state_roundtrip_ms_local": [
+    79.26,
+    80.28,
+    99.44,
+    97.38,
+    84.7
+  ]
+}

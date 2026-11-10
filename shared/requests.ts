@@ -1,3 +1,4 @@
+import type {SpecializedProgress} from './specialized.js';
 import type {RuralProgress} from './ruralWorkflow.js';
 import type {PreintakeInput} from './request-levels.js';
 import type {AccountCorrection} from './account.js';
@@ -22,7 +23,7 @@ export type RequestMutation =
  | {kind:'transfer';assignee_id:string;reason:string}
  | {kind:'note';note:string}
  | {kind:'triage';customer_id:string|null;items:RequestItemInput[];reason:string};
-export type RequestSummary = {rural_progress?:RuralProgress;category_id?:string;category_name?:string;id:string;protocol:string;title:string;public_status:PublicRequestStatus;created_at:string;updated_at:string};
+export type RequestSummary = {specialized_progress?:SpecializedProgress;rural_progress?:RuralProgress;category_id?:string;category_name?:string;id:string;protocol:string;title:string;public_status:PublicRequestStatus;created_at:string;updated_at:string};
 export type StaffRequestSummary = RequestSummary & {status:RequestStatus;origin:'presencial'|'whatsapp'|'portal';priority:'normal'|'urgent';created_by:string;created_by_name?:string|null;assignee_id:string|null;assignee_name:string|null;customer_name:string|null;version:number};
 export type RequestPage = {items:(RequestSummary|StaffRequestSummary)[];total:number;page:number;page_size:number;portal:boolean};
 export type RequestHistory = {id:string;kind:'created'|'status'|'transfer'|'note'|'triage';actor_id:string;actor_name:string|null;reason:string;from_status:RequestStatus|null;to_status:RequestStatus|null;from_assignee:string|null;to_assignee:string|null;created_at:string};
