@@ -3,12 +3,14 @@ import {authenticatedClient} from '../auth/client.js';
 import {errorResponse} from '../../errors.js';
 import {fields,uuid} from '../team/validation.js';
 import {ruralState,ruralResult} from '../../../shared/rural.js';
+import {ruralWorkflowRouter} from './workflowRouter.js';
 import {ditrRouter} from './ditrRouter.js';
 export const ruralRouter=Router();
 ruralRouter.use((_q,r,n)=>{r.setHeader('Cache-Control','private, no-store');r.setHeader('CDN-Cache-Control','no-store');r.vary('Authorization');n();});
 ruralRouter.use(async(q,r,n)=>{const a=await authenticatedClient(q,r);if(a){r.locals.rural=a;n();}});
 ruralRouter.use(json({limit:'6kb'}));
 ruralRouter.use(ditrRouter);
+ruralRouter.use(ruralWorkflowRouter);
 ruralRouter.post('/:operation',async(q,r)=>{
  const b=q.body;const command=q.params.operation==='command';
  if(Object.keys(q.query).length||!['state','command'].includes(q.params.operation)||!fields(b,command?['office_id','property_id','command','key']:['office_id','property_id','page'])||!uuid(b.office_id)||!(b.property_id===null||uuid(b.property_id))||(command? !uuid(b.key)||!b.command||typeof b.command!=='object':typeof b.page!=='number'||!Number.isInteger(b.page)||b.page<1||b.page>100000)){errorResponse(r,422,'RURAL_VALIDATION','Confira os campos informados.');return;}

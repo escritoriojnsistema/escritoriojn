@@ -1,0 +1,32 @@
+{
+  "state_roundtrip_ms_local": [
+    111.77,
+    99.75,
+    150.36,
+    191.39,
+    146.89
+  ],
+  "proof": "etapa29-real-local",
+  "date_utc": "2026-11-10",
+  "auth": true,
+  "postgrest": true,
+  "express": true,
+  "employee_open_upload_follow": true,
+  "owner_only_direct_rpc": true,
+  "handoff_and_complement_transfer": true,
+  "idempotency_after_transfer": true,
+  "own_portal_progress": true,
+  "other_client_denied": true,
+  "checklist_required_gate": true,
+  "quarantine_preserved": true,
+  "result_follows_existing_release": true,
+  "hosted_writes": false,
+  "state_roundtrip_ms_local_initial": [
+    58.7,
+    60.06,
+    52.92,
+    63.07,
+    59.35
+  ],
+  "state_roundtrip_final_condition": "Concurrent full SQL replay and Node/build on the same local executor; not a production SLA"
+}

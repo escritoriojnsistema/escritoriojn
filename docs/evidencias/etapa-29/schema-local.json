@@ -1,0 +1,30 @@
+[
+  {
+    "md5": "5b64e9c8373d113d9db353af4a1a6d29",
+    "signature": "private.request_summary(requests,boolean)"
+  },
+  {
+    "md5": "893cb8834365194ee3efb2f4f4a972e1",
+    "signature": "private.rural_case_guard29()"
+  },
+  {
+    "md5": "5d6cc369cbbcc58616ffaa5f50cfd7a6",
+    "signature": "private.rural_close_guard29()"
+  },
+  {
+    "md5": "ed6f2c445d8f5dab73f9cde20064682f",
+    "signature": "private.rural_progress29(private.rural_cases29,requests)"
+  },
+  {
+    "md5": "e80393d6be0883ae8df7c4f288c306d9",
+    "signature": "private.rural_request29(uuid,uuid,boolean)"
+  },
+  {
+    "md5": "67b065f3c97e7ee859d437befef7ae88",
+    "signature": "private.rural_workflow_command29(uuid,uuid,jsonb,uuid)"
+  },
+  {
+    "md5": "843e6666ac8962e16c6b316d42b609d6",
+    "signature": "private.rural_workflow_state29(uuid,uuid,integer)"
+  }
+]
