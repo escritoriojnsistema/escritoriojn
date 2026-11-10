@@ -1,4 +1,4 @@
-# Etapa29 — encaminhamento CCIR/CAR
+# Etapa29 — publicada e verificada
 
 Base `379ca43`, Etapa28 e correções pós28 conferidas no Livro/Git antes de qualquer alteração. [Cartão oficial e fonte](etapa-29.md), [plano](plano-29.md). Não inicia30.
 
@@ -16,4 +16,10 @@ Verificação local e revisão: Node/API completo, TypeScript/build, replaySQL c
 
 Performance: umaRPC de estado por abertura/atualização, seletores/histórico limitados e índices nasFKs e consultas; painel acessado sob demanda dentro da rota lazy existente. Sem polling ou cache de autoridade novo. Amostras locais API↔banco em real-local.json, semSLA nem promessa de atraso zero.
 
-Publicação GitHub→Vercel e conferência de Supabase: em verificação neste checkpoint. Não alegar publicada até registrar PR/commit/deployment/URL e readback do schema. Migration `20261110134917_rural_workflow29` deverá ser conferida no histórico apósGit antes de qualquer aplicação manual; não reaplicar se automática. Nenhuma Action/deployCLI/API Vercel, fixture/Auth/grant hospedado, preço, aprovação ou credencial alterado por este trabalho.
+Publicação confirmada: [PR108](https://github.com/escritoriojnsistema/escritoriojn/pull/108), feature `a97797f7`, merge `4d770217`, árvore `c2c586a7` idêntica à homologada. Preview `3TSa8t4s` e produção `43c925iA` READY, origem Git. O domínio canônico serve os 70 assets com SHA256 igual ao build local configurado; HTML aponta à entrada atual, home/health200 e quatro APIs privadas401. Oito testes públicos de navegador passaram em360/1440. [Publicação](../evidencias/etapa-29/publicacao.json), [bundle](../evidencias/etapa-29/bundle-publicado.json).
+
+Supabase aplicou automaticamente a migration `20261110134917_rural_workflow29`:31 comandos iguais ao arquivo, sete definições iguais ao laboratório, quatro tabelas privadas com RLS/ACL fechadas e dois wrappers INVOKER com acesso anônimo negado. **NÃO reaplicar.** As tabelas29 continuam vazias, sem configurações ou fixtures artificiais. Conferência privada confirmou a integridade dos registros hospedados anteriores, sem os publicar. [Prova de schema](../evidencias/etapa-29/schema-publicado.json).
+
+Advisors sem ERROR. O INFO de RLS privada sem policy é intencional com ACL fechada; índices novos sem uso são esperados antes da operação. A proteção de senhas vazadas desativada é aviso preexistente, sem alteração de Auth; [orientação Supabase](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). A revisão automática bloqueou o envio de hashes/contagens de registros de identidade/permissão para GitHub público; o material novo foi retirado da árvore publicada e a conferência ficou somente local. O Livro atual foi consolidado para não republicar detalhes antigos; o histórico integral permanece no Git e nos fechos anteriores.
+
+Checklist: cartão do Drive atendido, Desktop/Mobile e ações/navegação conferidos, sem loader, uma área de fluxo por vez e rolagem natural quando necessária. Backend, Frontend, Supabase, GitHub, Vercel e Livro conectados e verificados. Nenhuma Action, deploy direto, transmissão oficial, conta pessoal hospedada usada, configuração fictícia ou credencial alterada. As provas positivas autenticadas são do laboratório; as hospedadas são schema, bundle e barreiras públicas. Serviços/checklists, preços e níveis reais precisam ser configurados pelo gestor antes do uso. Etapa30 somente por novo pedido.

@@ -10,7 +10,8 @@
     "assertions_per_replay": 2084,
     "specific29_assertions": 22,
     "migrator": "NOSUPERUSER NOBYPASSRLS",
-    "schema_md5": "schema-local.json"
+    "schema_md5": "schema-local.json",
+    "independent_final_replays": 2
   },
   "browser": {
     "specific29_final": 8,
@@ -38,5 +39,6 @@
   "github_actions": false,
   "direct_vercel_deploy": false,
   "hosted_fixtures": 0,
-  "publication": "pending"
+  "publication": "confirmed",
+  "publication_evidence": "publicacao.json"
 }
