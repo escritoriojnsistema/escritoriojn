@@ -27,5 +27,7 @@
   "hosted_fixtures": false,
   "github_actions": false,
   "direct_vercel_deploy": false,
-  "publication": "pending"
+  "publication": "Confirmed GitHub PR106\u2192Vercel production,69assets/HTML and unchanged Supabase hashes; publicacao.json",
+  "production_dependency_vulnerabilities": 0,
+  "public_browser_tests": 9
 }

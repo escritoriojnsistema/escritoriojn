@@ -23,7 +23,7 @@ Medianas em milissegundos; os valores brutos e as três amostras de cada caso es
 | Funcionário | 1642→1094 | 2348→2000 | 2064→1080 | 936→942 |
 | Cliente | 1644→1040 | 2390→1938 | 2096→1048 | 953→947 |
 
-JavaScript transferido na abertura do login: **1.273.722→580.133 bytes (−54,45%)**, igual nos quatro papéis. O módulo operacional monolítico de724KB passou a um roteador de13KB e layout compartilhado de17KB; as telas de negócio são recursos separados. A página pública anônima manteve FCP na mesma ordem:1088→1044ms, com sobreposição entre amostras. A verificação de credenciais também ficou na mesma ordem; a melhoria é no código transferido, na reabertura e na renderização, sem promessa de eliminar a latência do provedor.
+JavaScript transferido na abertura do login: **1.273.722→580.133 bytes (−54,45%)**, igual nos quatro papéis. O módulo operacional monolítico de724KB passou a um conjunto de roteador/painel/layout de cerca de30KB; as telas de negócio são recursos separados. A página pública anônima manteve FCP na mesma ordem:1088→1044ms, com sobreposição entre amostras. A verificação de credenciais também ficou na mesma ordem; a melhoria é no código transferido, na reabertura e na renderização, sem promessa de eliminar a latência do provedor.
 
 Durações HTTP medianas por fase, incluindo a rede controlada: senha113→116ms, RPC67→67ms e adoção/getUser67→67ms. Não houve remoção de chamadas ou alteração do backend para produzir os ganhos.
 

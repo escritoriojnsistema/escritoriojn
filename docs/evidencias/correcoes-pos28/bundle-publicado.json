@@ -1,0 +1,378 @@
+{
+  "checked_at": "2026-11-10T12:03:58.641746+00:00",
+  "base_url": "https://escritoriojn.vercel.app",
+  "html_asset_references_match": true,
+  "assets": [
+    {
+      "file": "AccountPage-BJc8FLhx.js",
+      "sha256": "b278fc28df007c4cafaa5e9e637c430d38c34118b70d0ccaa0858689b8cf9348",
+      "matches": true
+    },
+    {
+      "file": "ArchivesHubPage-CEIEARfv.js",
+      "sha256": "33f6e1595d4c65d0efc5d3be059a8cd73e4820380296338416f8083602528ed8",
+      "matches": true
+    },
+    {
+      "file": "AttachmentRequestPicker-DZQQx4hP.js",
+      "sha256": "d724396b1150c97765210576cd529a9d5de324110b30adfd6a7d2e60f8e61deb",
+      "matches": true
+    },
+    {
+      "file": "AttachmentsPage-C58rG4fF.js",
+      "sha256": "49324bf3bc8dc62a56f23ffe4aaad6e183d02b72065e9ad75b6c4bb2a5c0980d",
+      "matches": true
+    },
+    {
+      "file": "AttachmentsPage-pZCWzThB.css",
+      "sha256": "8ffeac54f51357e9743114b88881eece4da8334a1740ba59ddab49b868cff8ed",
+      "matches": true
+    },
+    {
+      "file": "CashPage-CnpqKWa2.js",
+      "sha256": "b263e86087460e50e4329ad080207fcd14cf6386e12d9bacbba1909d56b44168",
+      "matches": true
+    },
+    {
+      "file": "ChargesPage-Bf0KNS_2.css",
+      "sha256": "f5b7c5a78ad06ecc594e7bc93303da5921f6542ec39de531f57b0700c92469be",
+      "matches": true
+    },
+    {
+      "file": "ChargesPage-BwQJG0mg.js",
+      "sha256": "f4c2a152250969a3c070c39fc30771887e2b7f51dcf76eb49409c6f10703eb64",
+      "matches": true
+    },
+    {
+      "file": "ChecklistsPage-Dch8a4Lj.js",
+      "sha256": "820df8ebd69930ed315595121ac627d3d138ea16694f5948d01f46658476363e",
+      "matches": true
+    },
+    {
+      "file": "ClientDocumentsPage-BIGvhA_S.js",
+      "sha256": "216f653928d00743ab8384dbd4064125567bbd73cb24990c3f687d6300732307",
+      "matches": true
+    },
+    {
+      "file": "CustomersPage-B6fCQr0r.css",
+      "sha256": "a318c1395b485ac9a1016d032d112ea311a322831645bd28c5d17d55da72fda3",
+      "matches": true
+    },
+    {
+      "file": "CustomersPage-DJhImXiE.js",
+      "sha256": "864f3b82dacaebe1c42a2ec4988fa0dc7897c90ec64704a8363e54ad93998bd5",
+      "matches": true
+    },
+    {
+      "file": "DocumentCatalogPage-B5e9hxP9.js",
+      "sha256": "62fc6bd5db0bac380cc44794a68afac65f61f237693c73dd48e9eb940b87618e",
+      "matches": true
+    },
+    {
+      "file": "DocumentsHubPage-BvILgF9d.js",
+      "sha256": "d5e3dff0c8236c4ec6ceaa4d6050baaabb2b59b5a87661dd4c433a2d0bd2d7c7",
+      "matches": true
+    },
+    {
+      "file": "ExpensesPage-DMaqwEu5.js",
+      "sha256": "67a98dc0a171e60a3efca2288dbf19999acf29376fb333a5e7ef72ef8ba48743",
+      "matches": true
+    },
+    {
+      "file": "GovernancePage-C5Jh6ny8.css",
+      "sha256": "dbd1e9e9b1f19fee04b717972870960257da01a2313c0e1f7842f1eccc32981e",
+      "matches": true
+    },
+    {
+      "file": "GovernancePage-D5qxc-Hj.js",
+      "sha256": "6a48a36bba45f202c610bcf74302dd2b517f29d3f231fa7db4cae8073ddf99f4",
+      "matches": true
+    },
+    {
+      "file": "InvitationPage-CM9ZMbtK.js",
+      "sha256": "fa096630628f897eab484886db453daf86538a6d377aaa7112b0dfbf8b71eff6",
+      "matches": true
+    },
+    {
+      "file": "NotificationsPage-kv8K6Tl-.js",
+      "sha256": "d0853dfd99580d6a1c384ab2fc8b6612dace41bfc13d4384cd08169bc5c51934",
+      "matches": true
+    },
+    {
+      "file": "OperationalRoutes-B_Ql3SqJ.js",
+      "sha256": "9a027710f9a60629a3dbfc3b722a8176b15d92a6cea73584d5ac6f04510bf5a8",
+      "matches": true
+    },
+    {
+      "file": "OperationalRoutes-DSy53Iye.css",
+      "sha256": "688ce65d54a2f05adefabba49fb5db378d54f698f8927e8615007f971f08c764",
+      "matches": true
+    },
+    {
+      "file": "PaymentsPage-CvlyfLYb.js",
+      "sha256": "6a6070e25ab452a2f9fd0a61c5761108ff70e3df3971bd004187c37a704b951d",
+      "matches": true
+    },
+    {
+      "file": "QuickPage-dG_jwc6q.js",
+      "sha256": "3943b0af1dcb7dc4537cfe77e08f89867fe47cdf4dfe0ee26a41a51cd87e687a",
+      "matches": true
+    },
+    {
+      "file": "ReportsPage-IWxek1K8.js",
+      "sha256": "b8adb57b99418bb1a490efa12c7c9fc27ac36c8b8db7a4f9d430d0dcf33448e3",
+      "matches": true
+    },
+    {
+      "file": "RequestArchivesPanel-BzSLcUqC.js",
+      "sha256": "439fb888cfe2abad23c2676d05a9a9709709d761b1fcda57c5424fc3b66328fa",
+      "matches": true
+    },
+    {
+      "file": "RequestArchivesPanel-D2QPikoR.css",
+      "sha256": "7ac24c8390f590a3cda2641c015285a08b82d3444de26fffe26907f707aa0618",
+      "matches": true
+    },
+    {
+      "file": "RequestPicker-CuuLsqYu.js",
+      "sha256": "c6c0f42e979e04c26e8ae80984c916442d3ed47c659ede9d4978d6eb684b0a86",
+      "matches": true
+    },
+    {
+      "file": "RequestsPage-QTxb_l8R.js",
+      "sha256": "3b7df81ad7f93b1eb61c59ae94c38d6b9d575bbfe003dd0cecc0e688222e3fe1",
+      "matches": true
+    },
+    {
+      "file": "RuralPage-BPM33CAG.js",
+      "sha256": "4ef6562f3cf08e536805a5df36e1b95150fda3dc91ef31aeb206d2ddeec89d77",
+      "matches": true
+    },
+    {
+      "file": "RuralPage-MvXNzXFv.css",
+      "sha256": "4470c27fba13df99c6168dbb9bf2696f43d3466298cde2cae3a077ef33e2ddba",
+      "matches": true
+    },
+    {
+      "file": "ServicesPage-BTFL--8Z.js",
+      "sha256": "2ec3f2337bcc2e924143cbc69912f458cf0bd51d6b224e6c94eb6937fdc9ebb2",
+      "matches": true
+    },
+    {
+      "file": "SettingsPage-CJabBFAM.css",
+      "sha256": "b029d2812f4bcdbc482e766c0e9f3ed3dc2ab7e4e2476466d7b6db740336fceb",
+      "matches": true
+    },
+    {
+      "file": "SettingsPage-DuZek5Rh.js",
+      "sha256": "403d0df1f6aea32c9d85451876b5faaf74d0a98be029b320e67580045a25e768",
+      "matches": true
+    },
+    {
+      "file": "TeamPage-C9CFbIrJ.js",
+      "sha256": "8398c5de4dd1bf1899903176717e29b1720bdb80e23c5e3c3b3df1984de0f9be",
+      "matches": true
+    },
+    {
+      "file": "accountApi-2qCPkioc.js",
+      "sha256": "eadae664e43755f0503f96ca6f9d4f15aa2db16dc07b5c1c44c7109cd37e3b8d",
+      "matches": true
+    },
+    {
+      "file": "api-B0j6dYuz.js",
+      "sha256": "69492e0ef674174a096017c4b0f63cf6654537ed402817f0f0bf7cbf3da2da4e",
+      "matches": true
+    },
+    {
+      "file": "api-BjBBpSFV.js",
+      "sha256": "e8ce393f242a4e99eb76d9fb2c340b24a9c97c4f0a41e0bf9da89b04951d84ab",
+      "matches": true
+    },
+    {
+      "file": "api-C9EMW7bf.js",
+      "sha256": "55ef306340b3674a10d819593dbaf6169092520873f3ff13d1dfe0b4dd18cbc0",
+      "matches": true
+    },
+    {
+      "file": "api-C9atYrHR.js",
+      "sha256": "15e2b960ccf2bc46f195d2537489830877c404611a27a23472014f56f0f34aed",
+      "matches": true
+    },
+    {
+      "file": "api-Fs1iJMzM.js",
+      "sha256": "337fbaa8ea37ce329b36ca084d2838de4ba391a5462305391a46c652d8e326b4",
+      "matches": true
+    },
+    {
+      "file": "api-Ub8eMX5v.js",
+      "sha256": "8f423730c301a6170f2e3cdda8b1532a447b419af6f5818a35904ee75d507ceb",
+      "matches": true
+    },
+    {
+      "file": "cash-Cg_9yg06.js",
+      "sha256": "e8ad2d05b7a4c5add3e0e30b28489c6db500d61e00ae77a73b5a4386beb16269",
+      "matches": true
+    },
+    {
+      "file": "cash-CoPWn5TS.js",
+      "sha256": "014a3e22d2d310d9c8e1eef332df62e1d714f562620633143c5a021c1a634906",
+      "matches": true
+    },
+    {
+      "file": "cash-d0AVfaiE.css",
+      "sha256": "64447df86d0c8b688dd3010daeaa99d8d076251e8f0bb70c350c32ef9280faa1",
+      "matches": true
+    },
+    {
+      "file": "categoriesApi-DLvpejEI.js",
+      "sha256": "141d73e67aff0a2ade5a688fe8c940569e25959d09795171dff8bcd68122d154",
+      "matches": true
+    },
+    {
+      "file": "charges-DqnIfIcm.js",
+      "sha256": "a222d3a688f01dc2463b3aaa8b5d8c261265524ccd1166deb4a296c7d7243972",
+      "matches": true
+    },
+    {
+      "file": "checklists-lmMBiC5n.css",
+      "sha256": "85caf66c7fb6221b48756617f55c35c9c1bf3dd1a9ba36ec0446391b4e577b6e",
+      "matches": true
+    },
+    {
+      "file": "checklists-wuyBsTVx.js",
+      "sha256": "dd84b4e1882dcf7fc73c59c7796f288e20e872a50b5e32b23d9fa56141b18aef",
+      "matches": true
+    },
+    {
+      "file": "customers-j5QmuAak.css",
+      "sha256": "81b3e0c9f736f83392354fc141b17255c72de6fb861f83005a76daf8d5ef05b1",
+      "matches": true
+    },
+    {
+      "file": "documents-DrSiWZof.css",
+      "sha256": "63aa6ce3a02f9c527e1c42bb324c1c6c2462104f3db390787675bf605a43ba53",
+      "matches": true
+    },
+    {
+      "file": "documents-s2QcCoqH.js",
+      "sha256": "e0033e67205ac444f783f3f17f8fd8396daf3c2f9535427f1b2cfeffcf674bca",
+      "matches": true
+    },
+    {
+      "file": "editorialReview-NZxF7tB7.js",
+      "sha256": "fe9ce793ca3bbdf1084d9c9b2f0cbe3a9226032c5b08d74a42a82ed4db9f50b4",
+      "matches": true
+    },
+    {
+      "file": "finance-DjJBF1Wh.js",
+      "sha256": "6aad83aa474f64a3329be08e8c91762e7beffc12d08aa39db5400f8a5355c3ff",
+      "matches": true
+    },
+    {
+      "file": "finance-KQtEBO-D.css",
+      "sha256": "44257444748e6d4a55bc2fe0c73d38927126b19ef1029f6a6e23cca602b49a66",
+      "matches": true
+    },
+    {
+      "file": "icons-DsZbN-GM.js",
+      "sha256": "9dfb740c15d3ec41e11fc530435978c0fec6bdbd4916d1279d502d7defaed0f5",
+      "matches": true
+    },
+    {
+      "file": "index-C6QHV9TS.js",
+      "sha256": "13560ff1754c5cba4236fdd3292c2ec32c47f224677fbee470967654f4da0cef",
+      "matches": true
+    },
+    {
+      "file": "index-DGkYv4c9.css",
+      "sha256": "5f94931df612eef55ee7de8856c34c777e2ddd3448c1a1cafd3d033f3dbf7b86",
+      "matches": true
+    },
+    {
+      "file": "react-D1JyAsuP.js",
+      "sha256": "1dc6ad68d890c626c36ffd0f306c0b13511d0656c4603cd069b2e0943236154d",
+      "matches": true
+    },
+    {
+      "file": "requests-CleA0v8p.js",
+      "sha256": "594a9187a88a6808a246ea3143fca579aa803e546e9c479c25a9d767f2467a43",
+      "matches": true
+    },
+    {
+      "file": "requests-blLX8RGz.css",
+      "sha256": "a670f79f74cf3e348bfe6c729878c62f0aa4c08b40ffff29696ef1fd8f32ca84",
+      "matches": true
+    },
+    {
+      "file": "rolldown-runtime-XKyaHtl9.js",
+      "sha256": "548d1dbf321e7d2ae804fcc158b588706a7c52f8ca175de1490c6ccb4dbe55b7",
+      "matches": true
+    },
+    {
+      "file": "services-B0CwZmXB.css",
+      "sha256": "8857ab20c1943e8d7225acee8954824125a5984775d19993eb007a1b245a8a50",
+      "matches": true
+    },
+    {
+      "file": "services-DlAzteeK.js",
+      "sha256": "9ec5e6bd8143aee982b37b688668274a1be00120295c62210f3a86ee0a84800e",
+      "matches": true
+    },
+    {
+      "file": "settings-BOvBVAui.css",
+      "sha256": "ea7cb26ebba9d2dc652bb4da8d44e004b2ecb4e7a74c1c8ed37aa790050a0154",
+      "matches": true
+    },
+    {
+      "file": "supabase-DtuMx0jC.js",
+      "sha256": "cbd4eb09998778677a096913dd8741158d9882e11eb8156cb8e866f8d65b16a6",
+      "matches": true
+    },
+    {
+      "file": "team-Bk1BAQ5U.css",
+      "sha256": "dc73846de29c429e313613b818f7d29231ce64ad4f654f4a82a4cd32bb673eec",
+      "matches": true
+    },
+    {
+      "file": "team-DL8ChSmJ.js",
+      "sha256": "52458ee13e8f437fdfa4b5f249ff8a5fa3903469c2ce65098c82f4fe5a735dff",
+      "matches": true
+    },
+    {
+      "file": "templates-GU7-9ca7.css",
+      "sha256": "12806f91e46decbb56f03e662e8480531a4a2d7912f068a0cd202c3bd6e6a7d6",
+      "matches": true
+    },
+    {
+      "file": "validation-DIbRXWV6.js",
+      "sha256": "0b2a500a8ad4453441a6d3e51faf443469eb0be068fb3c927dd381598a983dc1",
+      "matches": true
+    }
+  ],
+  "checks": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "path": "/api/rural/state",
+      "status": 401
+    },
+    {
+      "path": "/api/rural/ditr-state",
+      "status": 401
+    },
+    {
+      "path": "/api/rural/ditr-command",
+      "status": 401
+    },
+    {
+      "path": "/api/document-workflow/delivery-state",
+      "status": 401
+    }
+  ]
+}

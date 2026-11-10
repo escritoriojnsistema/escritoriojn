@@ -1,4 +1,4 @@
-# Correções após28 — homologação final
+# Correções após28 — publicadas e verificadas
 
 Pedido: explicar o acesso às funções01–28, corrigir retornos ausentes/escondidos e investigar a abertura inicial/reabertura e o login dos quatro perfis. Base `9772f32`, Etapa28 publicada, Livro e regras conferidos antes das alterações. Nenhuma etapa29 iniciada.
 
@@ -22,6 +22,14 @@ Benchmark real local com GoTrue/PostgREST/PostgreSQL, três amostras por papel, 
 
 ## Verificação e publicação
 
-362 testes Node/API completos passaram; testes focados de retorno/menu8, acessoQuick4, entrada5 e rural/ITR/restauração20 passaram; build e TypeScript passaram. Jornada real dos quatro papéis inclui12logins,12refreshes e12restaurações por lado da comparação, com validação atual. 37 cenários novos de retorno e48regressões finais passaram, após corrigir cinco problemas de altura e dois contratos legados de teste; as asserções foram preservadas. Revisão independente semP1/P2 confirmado. PublicaçãoGitHub→Vercel e conferência dos artefatos pendentes neste checkpoint. Nenhuma alteração de schema/API/Auth hospedado foi necessária; Supabase foi conferido somente por leitura. Não repetir migrations históricas. SemActions, fixtures hospedadas ou deploydireto.
+362 testes Node/API completos passaram; testes focados de retorno/menu8, acessoQuick4, entrada5 e rural/ITR/restauração20 passaram; build e TypeScript passaram. Jornada real dos quatro papéis inclui12logins,12refreshes e12restaurações por lado da comparação, com validação atual. 37 cenários novos de retorno e48regressões finais passaram, após corrigir cinco problemas de altura e dois contratos legados de teste; as asserções foram preservadas. Revisão independente semP1/P2 confirmado. Publicação e conferência final confirmadas abaixo. Nenhuma alteração de schema/API/Auth hospedado foi necessária; Supabase foi conferido somente por leitura. Não repetir migrations históricas. SemActions, fixtures hospedadas ou deploydireto.
 
 Capturas de Acessos com dados inteiramente fictícios: [antes320](../evidencias/correcoes-pos28/retorno-before-320-acessos.png), [depois320](../evidencias/correcoes-pos28/retorno-after-320-acessos.png), [antes1440](../evidencias/correcoes-pos28/retorno-before-1440-acessos.png), [depois1440](../evidencias/correcoes-pos28/retorno-after-1440-acessos.png).
+
+## Publicação confirmada
+
+[PR106](https://github.com/escritoriojnsistema/escritoriojn/pull/106), feature `c61421e`, merge `6026951ddbdb657567371aaffd5021b23d1ee787`, árvore `6ad711d7daadd2a23d434a2b86e099f4fd68071c` idêntica à homologada. Preview `Gq7A9WTK` e produção `9jgYzTiM` SUCCESS pela integração Git. Os69assets servidos têm SHA256 igual ao build local e o HTML referencia a entrada atual. Home/health200, quatro APIs privadas401; nove testes públicos de Auth/Rural em360/1440 passaram no domínio canônico. [ProvaGit/Vercel](../evidencias/correcoes-pos28/publicacao.json), [bundle](../evidencias/correcoes-pos28/bundle-publicado.json).
+
+Supabase permanece com71migrations, última `20261109181450`: nenhum schema foi alterado/reaplicado. Sete identidades, sete vínculos e22concessões conservam contagens e hashes; nenhum imóvel/casoDITR/documento foi inserido. [Antes](../evidencias/correcoes-pos28/hospedado-antes-publicacao.json) e [depois](../evidencias/correcoes-pos28/hospedado-apos-publicacao.json). Backend/API/Auth e dados: conferidos, sem mudança necessária. Nenhuma conta pessoal hospedada foi usada nos testes autenticados; evidência positiva de login/restauração é o laboratório real local, separado das provas de UI com fixtures e dos testes públicos em produção.
+
+As correções não dispensam os dados/permissões listados no mapa. Para visualizar28, abra um imóvel cadastrado; para criar caso, acrescente contribuinte e atendimento vinculado elegíveis. A senha continua dependendo do provedor e da rede: não houve ganho significativo nessa validação nem promessa de entrada instantânea. Sem pendências técnicas bloqueantes deste ajuste; Etapa29 aguarda novo pedido.
