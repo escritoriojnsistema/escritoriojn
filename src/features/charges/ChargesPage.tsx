@@ -220,7 +220,7 @@ function Workspace({
             ) : (
               <div className="charges-toolbar">
                 <strong>{data?.protocol ?? "Atendimento selecionado"}</strong>
-                <button
+                <button data-operation-local-return
                   className="team-text-button"
                   disabled={busy}
                   onClick={() => select("")}

@@ -139,3 +139,35 @@
 @media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
  .operation-presence select, .operation-presence input { font-size: 16px; }
 }
+
+/* Local detail controls keep their existing state and take precedence over the page parent. */
+.operation-back { margin: 0 0 8px; }
+.operation-back-control { display: inline-flex; align-items: center; justify-content: flex-start; gap: 8px; min-height: 44px; max-width: 100%; padding: 8px 0; border: 0; background: transparent; color: #36576b; font-size: 13px; text-align: left; }
+.operation-back-control svg { flex-shrink: 0; }
+.operation-back-control:hover { color: #103248; text-decoration: underline; }
+.operation-back-control[aria-disabled=true], .operation-back-control:disabled { opacity: .6; cursor: default; text-decoration: none; }
+.operation-main:has([data-operation-local-return]) > .operation-back { display: none; }
+
+.operation-main .settings-tabs { flex-wrap: wrap; }
+
+@media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
+ /* Account keeps its existing compact form: the page return shares the title row. */
+ .operation-main:has(> .operation-account) { position: relative; }
+ .operation-main:has(> .operation-account) > .operation-back { position: absolute; top: 16px; right: 16px; max-width: 140px; margin: 0; }
+ .operation-main:has(> .operation-account) > .operation-heading .eyebrow,
+ .operation-main:has(> .operation-account) > .operation-heading h1 { padding-right: 140px; }
+}
+
+@media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
+ /* The document editor retains room for its completion action above the shortcuts. */
+ .operation-main:has(> .documents-main) { position: relative; }
+ .operation-main:has(> .documents-main) > .operation-back { position: absolute; top: 8px; right: 16px; max-width: 140px; margin: 0; }
+ .operation-main > .documents-main > .operation-heading .eyebrow,
+ .operation-main > .documents-main > .operation-heading h1 { padding-right: 140px; }
+}
+
+@media (min-width: 1201px) {
+ .operation-main:has(> .team-main > .team-header) { position: relative; }
+ .operation-main:has(> .team-main > .team-header) > .operation-back { position: absolute; top: 8px; right: clamp(20px,3vw,44px); max-width: 140px; margin: 0; }
+ .operation-main > .team-main > .team-header > div { padding-right: 140px; }
+}

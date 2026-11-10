@@ -18,11 +18,13 @@ import '../requests/requests.css';
 
 export default function AccountPage(){
  const client=normalizePathname(useLocation().pathname)===paths.clientAccount;
- return <OperationalAccess client={client}>{contexts=><AccountWorkspace key={contexts[0].user_id+contexts[0].office_id} context={contexts[0]} client={client}/>}</OperationalAccess>;
+ const [busy,setBusy]=useState(false);
+ return <OperationalAccess client={client} busy={busy}>{contexts=><AccountWorkspace key={contexts[0].user_id+contexts[0].office_id} context={contexts[0]} client={client} onPendingChange={setBusy}/>}</OperationalAccess>;
 }
-function AccountWorkspace({context,client}:{context:AccessContext;client:boolean}){
+function AccountWorkspace({context,client,onPendingChange}:{context:AccessContext;client:boolean;onPendingChange:(pending:boolean)=>void}){
  const auth=useAuth(),[data,setData]=useState<AccountData>(),[value,setValue]=useState<AccountInput>({name:context.display_name??'',cpf:null,email:''}),[busy,setBusy]=useState(false),[error,setError]=useState(''),[feedback,setFeedback]=useState(''),[revision,setRevision]=useState(0),[blocked,setBlocked]=useState(false);
  const pending=useRef<AbortController|null>(null),busyRef=useRef(false),office=context.office_id;
+ useEffect(()=>{onPendingChange(busy);return()=>onPendingChange(false);},[busy,onPendingChange]);
  useEffect(()=>()=>pending.current?.abort(),[]);
  useEffect(()=>{const controller=new AbortController();void accountApi.read(office,controller.signal).then(result=>{if(!controller.signal.aborted){setData(result);setValue({name:result.name,cpf:result.cpf,email:result.pending_email??result.email});setError('');}}).catch(cause=>{if(!controller.signal.aborted){setError(cause instanceof Error?cause.message:'Não foi possível consultar a conta.');if(cause instanceof AccountError&&[401,403].includes(cause.status)){setBlocked(true);setData(undefined);setValue({name:'',cpf:null,email:''});}}});return()=>controller.abort();},[office,revision]);
  const normalized=normalizeAccountInput(value),changed=!!data&&(normalized.name!==data.name||normalized.cpf!==data.cpf||normalized.email!==(data.pending_email??data.email));
@@ -46,7 +48,7 @@ function AccountWorkspace({context,client}:{context:AccessContext;client:boolean
    {data?.pending_email&&<div><p className="customer-note">E-mail pendente de confirmação: {data.pending_email}. O acesso atual continua em {data.email} até a confirmação.</p><button className="team-text-button" disabled={busy} onClick={()=>void confirm()}><MailCheck size={18} aria-hidden="true"/>Enviar confirmação</button></div>}
    {error&&<button className="team-text-button" disabled={busy} onClick={()=>{setError('');setRevision(n=>n+1);}}>Reabrir dados da conta</button>}</>}
   </section>
-  {!blocked&&<div className="account-actions">{client?<Link className="primary-button" to={paths.clientRequests} state={{office_id:office,...(data?.correction_request_id?{request_id:data.correction_request_id}:{account_correction:true})}}><FilePenLine size={18} aria-hidden="true"/>{data?.correction_request_id?'Acompanhar correção':'Solicitar correção'}</Link>:changed&&<><button className="primary-button" form="account-edit" disabled={busy}><Save size={18} aria-hidden="true"/>Salvar alterações</button><button type="button" className="secondary-button" disabled={busy} onClick={()=>{setError('');setFeedback('');if(data)setValue({name:data.name,cpf:data.cpf,email:data.pending_email??data.email});}}>Cancelar</button></>}</div>}
+  {!blocked&&<div className="account-actions">{client?<Link className="primary-button" to={paths.clientRequests} state={{office_id:office,...(data?.correction_request_id?{request_id:data.correction_request_id}:{account_correction:true})}}><FilePenLine size={18} aria-hidden="true"/>{data?.correction_request_id?'Acompanhar correção':'Solicitar correção'}</Link>:changed&&<><button className="primary-button" form="account-edit" disabled={busy}><Save size={18} aria-hidden="true"/>Salvar alterações</button><button data-operation-local-return type="button" className="secondary-button" disabled={busy} onClick={()=>{setError('');setFeedback('');if(data)setValue({name:data.name,cpf:data.cpf,email:data.pending_email??data.email});}}>Cancelar</button></>}</div>}
   <PrivacyLinks/>{client&&!blocked&&<AccountClosure key={auth.sessionKey+office} office={office}/>}
   <section className="operation-security" aria-labelledby="security-title"><div><h2 id="security-title"><KeyRound size={21} aria-hidden="true"/>Segurança</h2><p>Precisa de uma nova senha? Receba as instruções no seu e-mail.</p></div><Link className="secondary-button" to={`${paths.recovery}?area=${client?'client':'team'}`}>Recuperar senha<ArrowRight size={18} aria-hidden="true"/></Link></section>
  </>;

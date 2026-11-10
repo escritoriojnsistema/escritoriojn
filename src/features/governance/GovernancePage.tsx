@@ -13,7 +13,7 @@ import '../team/team.css';
 import './governance.css';
 const compactMedia='(max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px)';
 const when=(value:string)=>new Date(value).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});
-export default function GovernancePage({mode,embedded=false,officeId}:{mode:'audit'|'archives';embedded?:boolean;officeId?:string}){
+export default function GovernancePage({mode,embedded=false,officeId,onPendingChange}:{mode:'audit'|'archives';embedded?:boolean;officeId?:string;onPendingChange?:(pending:boolean)=>void}){
  const auth=useAuth();const capability=mode==='audit'?'audit.read':'archives.manage';
  const contexts=auth.contexts.filter(c=>c.role_code!=='client'&&c.permissions.includes(capability));
  const [selectedOffice,setSelectedOffice]=useState('');const context=contexts.find(c=>c.office_id===(officeId??selectedOffice))??contexts[0];
@@ -27,6 +27,7 @@ export default function GovernancePage({mode,embedded=false,officeId}:{mode:'aud
  const [filters,setFilters]=useState<AuditFilters>(emptyAuditFilters);const [draft,setDraft]=useState<AuditFilters>(emptyAuditFilters);const [filtering,setFiltering]=useState(false);
  const [detail,setDetail]=useState<{scope:string;event:AuditEvent}|null>(null);
  const [busy,setBusy]=useState(false);const [feedback,setFeedback]=useState('');const [mutationError,setMutationError]=useState<GovernanceError>();
+ useEffect(()=>{onPendingChange?.(busy);return()=>onPendingChange?.(false);},[busy,onPendingChange]);
  const key=`${authority}:${page}:${size}:${status}:${view}:${JSON.stringify(filters)}:${revision}`;
  const [resource,setResource]=useState<{key:string;data?:PageData<AuditEvent>|PageData<ArchiveEntry>;error?:GovernanceError}>({key:''});
  useEffect(()=>{scopeRef.current=authority;policyEdited.current=false;setDays(90);return()=>{scopeRef.current='';pending.current?.abort();};},[authority]);
