@@ -16,7 +16,7 @@ test('projeção de acesso remove campos não publicados e copia permissões',()
 test('projeção de acesso filtra portal, escritório e foundation vigentes',()=>{
  assert.deepEqual(project([row],'client'),[]);
  assert.deepEqual(project([{...row,role_code:'client'}],'team'),[]);
- assert.deepEqual(project([{...row,role_code:'client'}],'client'),[{...row,role_code:'client'}]);
+ assert.deepEqual(project([{...row,role_code:'client'}],'client'),[{...row,role_code:'client',permissions:[]}]);
  assert.deepEqual(project([row],'team','00000000-0000-4000-b000-000000000002'),[]);
  assert.deepEqual(project([{...row,permissions:['audit.read']}]),[]);
  assert.deepEqual(project([]),[]);
