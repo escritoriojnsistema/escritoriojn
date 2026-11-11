@@ -32,9 +32,9 @@
   "browser_stage33_tests": 20,
   "browser_regression_distinct_tests": 93,
   "browser_failed_cases_rechecked": 2,
-  "browser_recheck_tests": 14,
+  "browser_recheck_tests": 18,
   "browser_final_unresolved_failures": 0,
-  "browser_note": "19 stage33 tests plus the new-nonce recovery case passed. Regression batch91passed: one old retry contract updated for explicit retry, one trace-output collision resolved by isolated recheck. All14 request/return tests passed on recheck.",
+  "browser_note": "19 stage33 tests plus the new-nonce recovery case passed. Regression batch91passed: one old retry contract updated for explicit retry, one trace-output collision resolved by isolated recheck. All18 request/return tests passed on recheck.",
   "browser_viewports": [
     320,
     375,

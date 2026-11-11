@@ -1,6 +1,6 @@
 # Etapa 33 — Pedidos digitais
 
-Implementação local concluída em11/11/2026; publicação GitHub→Vercel e conferência hospedada em andamento. ManualDrive33 e regra portal-pwa/RF16 conferidos antes das alterações. Base32: maind905485, AGENTS/Livro/fecho32. Stack preservada: React19.3.1, Vite8.3.4, TypeScript7.0.2, Express5.3.0, SupabaseJS2.118.0, Node24.22.1/npm11.9.0.
+Publicada e verificada em11/11/2026 pelo [PR117](https://github.com/escritoriojnsistema/escritoriojn/pull/117), feature338130ef/mergee996b8d5. PreviewFKCXkQSX e produçãoMJEL3RKK READY, origemGit: https://escritoriojn.vercel.app. ManualDrive33 e regra portal-pwa/RF16 conferidos antes das alterações. Base32: maind905485, AGENTS/Livro/fecho32. Stack preservada: React19.3.1, Vite8.3.4, TypeScript7.0.2, Express5.3.0, SupabaseJS2.118.0, Node24.22.1/npm11.9.0.
 
 ## Comportamento implementado
 
@@ -23,8 +23,21 @@ Mesma chave/corpo/sessão reconcilia o mesmo pedido. NonceUUID em sessionStorage
 
 386testes Node sem falhas; tipos/build aprovados; auditoria de dependências de produção sem vulnerabilidades. Dois replaysSQL vazios completos aprovados:2.203/2.209verificações e duas corridas de fechamento/convite, migrador sem superusuário/BYPASSRLS. Lab real local Auth/REST/Express/Storage: publicação, abertura concorrente com mesma chave, retomada própria, terceiro negado por UUID/nonce/Storage, PDF real em quarentena, confirmação única na fila/responsável, complementação e notificação sem nota interna, booking com campos do modelo+serviço.
 
-20contratosUI33 e93cenários distintos de regressão31/32/catálogo/pedidos/serviços/anexos aprovados. Os14testes de pedidos/retornos foram reconferidos após atualizar a expectativa do retry explícito e resolver colisão local dos rastros. Resultados em [verificacao-local.json](../evidencias/etapa-33/verificacao-local.json). Revisão independente somente leitura não encontrou bloqueios após corrigir retirada da publicação, revisão da versão visível, navegação503 e retomada401/403. Evidências visuais em `docs/evidencias/etapa-33/`.
+20contratosUI33 e93cenários distintos de regressão31/32/catálogo/pedidos/serviços/anexos aprovados. Os18testes de pedidos/retornos foram reconferidos após atualizar a expectativa do retry explícito e resolver colisão local dos rastros. Resultados em [verificacao-local.json](../evidencias/etapa-33/verificacao-local.json). Revisão independente somente leitura não encontrou bloqueios após corrigir retirada da publicação, revisão da versão visível, navegação503 e retomada401/403. Evidências visuais em `docs/evidencias/etapa-33/`.
 
-Migration: `20261111190203_portal_intake33.sql`. Antes de qualquer aplicação manual, consultar histórico remoto. Nenhuma fixture/Auth/grant foi criado no ambiente hospedado por esta implementação. Não usar Actions ou deploy direto: somente GitHub→Vercel. Provas de PR/merge/READY, schema, integridade e bundle serão acrescentadas após publicação.
+Migration `20261111190203_portal_intake33.sql` aplicada automaticamente pela integraçãoGit. **NÃO reaplicar.**69instruções normalizadas e34definições canônicas correspondem ao replay local; seis tabelasRLS/ACLfechadas, seis wrappersINVOKER autenticados, helpers fechados, dois triggers de preparação/cota e buckets privados conferidos. Zero registros33 hospedados; nenhuma fixture/Auth/grant criada por esta implementação. Nenhuma nova advertência de segurança ou FK33sem índice. A proteção contra senha vazada desativada é aviso preexistente: https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection.
+
+19cenários públicos hospedados31/32/33 aprovados; health200 e74assets idênticos byte a byte ao build com configuração pública real. Jornadas privadas foram comprovadas no lab local real; não foram usados logins privados hospedados. Integridade:170/173fingerprints exatos; dados de negócio/identidades/memberships/permissões/delegações preservados. Atividade concorrente de login19:54 e manutenção alterou auth.users/session_activities/maintenance_schedule_settings; as sete contas permanecem e não se afirma igualdade integral desses fingerprints de runtime. Nenhuma escritaAuth hospedada foi feita por esta tarefa.
+
+Provas: [publicação](../evidencias/etapa-33/publicacao.json), [schema/integridade](../evidencias/etapa-33/schema-publicado.json), [bundle](../evidencias/etapa-33/bundle-publicado.json). Publicação somente GitHub→Vercel, semActions/deploydireto.
 
 Próxima etapa34 apenas mediante novo pedido. Ler este fecho, Livro/AGENTS, cartão/plano33 e regra afetada; não recriar formulário, protocolo, fila, Storage ou financeiro.
+
+## Aceite
+
+- [x] Manual33 e integrações09/10/11/12/21/31/32.
+- [x] PadrãoEquipe/Convites Desktop/Mobile, até4atalhos e demais destinos no menu.
+- [x] Uma área por vez, formulários em grade, rolagem natural mínima e controles acessíveis.
+- [x] Transições sem loaders; tentativa503/retomada protegidas.
+- [x] Backend/frontend e índices/cotas/RLS/ACL conferidos.
+- [x] Supabase, GitHub→Vercel e Livro/AGENTS/evidências atualizados.
