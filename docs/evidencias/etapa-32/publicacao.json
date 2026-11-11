@@ -1,0 +1,23 @@
+{
+  "date_utc": "2026-11-11",
+  "status": "published_verified",
+  "url": "https://escritoriojn.vercel.app",
+  "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/115",
+  "feature_sha": "cac404d5a7721aa71c939bd91beeae5446f9da74",
+  "merge_sha": "53e58309d0bb34ec85c40ac8516a8cec1f194e0c",
+  "tested_tree": "cc3075e6eb129e5301ef8077316aad8a6367ddad",
+  "deployment_id": "dpl_2BLauwyRVxRDfqMyQWwy6eqREqJg",
+  "deployment_state": "READY",
+  "source": "git",
+  "preview_id": "dpl_4ubyH9ds5bSxMRfCQVWjuHEZrSX8",
+  "preview_state": "READY",
+  "github_vercel_only": true,
+  "github_actions_used": false,
+  "direct_vercel_deploy": false,
+  "hosted_public_tests": 12,
+  "hosted_public_failures": 0,
+  "health": "200",
+  "bundle_assets_equal": 72,
+  "hosted_private_logins_tested": false,
+  "hosted_fixtures_created": false
+}

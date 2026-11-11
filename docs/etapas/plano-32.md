@@ -14,7 +14,7 @@ Interface: Documentos→Meus documentos reutilizado, busca POST/páginas3mobile/
 - [x] Contrato/API: DTOs allowlist e4POST Bearer/no-store; erros semPII; novas projeções de histórico na API existente de pedidos.
 - [x] UI: gestão por publicação e portal/documentos/Solicitações com estados compactos, sem dados internos/cache persistente, navegação pendente protegida.
 - [x] Verificação: comprador/vendedor/terceiro, outra sessão/escritório, UUID/API/Storage, revogação durante leitura, nova versão/arquivo/permissão, financeiro de terceiro, tipos/build/Node/SQL/AuthStorage reais locais/UI.
-- [ ] Publicação GitHub→Vercel/semActions, conferir histórico remoto antes de eventual aplicação manual; atualizar Livro/fecho/evidências sem fixtures hospedadas.
+- [x] Publicação GitHub→Vercel/semActions, conferir histórico remoto antes de eventual aplicação manual; atualizar Livro/fecho/evidências sem fixtures hospedadas.
 
 Alternativas descartadas: ampliar wf_recipient por atendimento abriria todos os documentos da outra parte; ampliar request_in_scope abriria módulos operacionais. A autorização32 fica restrita à publicação e as projeções de pedidos só consultam dados públicos.
 
