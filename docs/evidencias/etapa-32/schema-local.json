@@ -1,0 +1,159 @@
+{
+  "functions": [
+    {
+      "md5": "f46afe98c5a65915a900b19bc57cc012",
+      "signature": "document_artifact_authorize(uuid,uuid,boolean)",
+      "security_definer": false
+    },
+    {
+      "md5": "dc83123ac69458f2dfda884f7b4ba125",
+      "signature": "portal_documents_page32(uuid,text,integer,integer)",
+      "security_definer": false
+    },
+    {
+      "md5": "778c94e43f5e4f268ee7c1f931928c5e",
+      "signature": "portal_documents_page(uuid,integer)",
+      "security_definer": false
+    },
+    {
+      "md5": "12c53469c79fbdb31a7d751c99d48bd5",
+      "signature": "portal_document_state32(uuid,uuid,integer,integer)",
+      "security_definer": false
+    },
+    {
+      "md5": "ed936e7c293cfb01738251cca189e269",
+      "signature": "portal_share_command32(uuid,uuid,jsonb,uuid)",
+      "security_definer": false
+    },
+    {
+      "md5": "03c5f14ee3d24490a6554b6952e0e974",
+      "signature": "portal_shares_state32(uuid,uuid,integer)",
+      "security_definer": false
+    },
+    {
+      "md5": "1b4268d38405fe01915265024e0a9c7b",
+      "signature": "private.avaliar_liberacao25(private.document_publications,memberships)",
+      "security_definer": false
+    },
+    {
+      "md5": "36319f4dc0b86080b6349a9157ba0764",
+      "signature": "private.avaliar_liberacao_before32(private.document_publications,memberships)",
+      "security_definer": false
+    },
+    {
+      "md5": "e30eb5332f29cc6aa35d9d0e761ea013",
+      "signature": "private.document_artifact_authorize(uuid,uuid,boolean)",
+      "security_definer": true
+    },
+    {
+      "md5": "9e656bd34a2d2b41e78c8412c9cb5ed2",
+      "signature": "private.finance_client_request(requests,memberships)",
+      "security_definer": false
+    },
+    {
+      "md5": "28a4f45282a9863ca2b60dc3b5652d9a",
+      "signature": "private.portal_artifact32(private.document_publications)",
+      "security_definer": false
+    },
+    {
+      "md5": "f9fb4dfb9c4d31c13fd18a51b35d81b0",
+      "signature": "private.portal_authority_invalidate32()",
+      "security_definer": true
+    },
+    {
+      "md5": "8b49ac3ccdd1827c7c92c0094ee70c6e",
+      "signature": "private.portal_documents_page32(uuid,text,integer,integer)",
+      "security_definer": true
+    },
+    {
+      "md5": "b063cc55d7860a01d9daf3ca68a9f5c6",
+      "signature": "private.portal_documents_page(uuid,integer)",
+      "security_definer": true
+    },
+    {
+      "md5": "883e780c56c1d8768b92f8340b1ffe7c",
+      "signature": "private.portal_document_state32(uuid,uuid,integer,integer)",
+      "security_definer": true
+    },
+    {
+      "md5": "df5293210c27f7b99b15ae5c4510ade3",
+      "signature": "private.portal_grant_valid32(private.portal_grants32,private.document_publications,memberships)",
+      "security_definer": false
+    },
+    {
+      "md5": "162645c514d45003563249d1ae89c2f2",
+      "signature": "private.portal_identity32(uuid,uuid,uuid)",
+      "security_definer": false
+    },
+    {
+      "md5": "b6264822966d346b3ee33705df5efd2c",
+      "signature": "private.portal_publication32(private.document_publications,memberships)",
+      "security_definer": false
+    },
+    {
+      "md5": "f6728ebb4477dadea92bcb9afc9bceb0",
+      "signature": "private.portal_recipient_customer32(private.document_publications,memberships)",
+      "security_definer": false
+    },
+    {
+      "md5": "31075b34ceff3fa876cbfc9617bd4b12",
+      "signature": "private.portal_request_detail32(uuid,uuid,integer)",
+      "security_definer": false
+    },
+    {
+      "md5": "76aea9e0225a54a1f210d6b26ae1c64b",
+      "signature": "private.portal_requests_page32(uuid,text,text,text,integer,integer)",
+      "security_definer": false
+    },
+    {
+      "md5": "0f63d69b577da4e7cc0ee32c422a6012",
+      "signature": "private.portal_request_summary32(requests,memberships)",
+      "security_definer": false
+    },
+    {
+      "md5": "27ee3b83ebd0878a767dff2a1ced14ea",
+      "signature": "private.portal_request_visible32(requests,memberships)",
+      "security_definer": false
+    },
+    {
+      "md5": "5a674e34b5f12fc3f25c49f15caf5624",
+      "signature": "private.portal_share_command32(uuid,uuid,jsonb,uuid)",
+      "security_definer": true
+    },
+    {
+      "md5": "a3cbd7c124120db19f2bdf7d445acf0a",
+      "signature": "private.portal_shares_state32(uuid,uuid,integer)",
+      "security_definer": true
+    },
+    {
+      "md5": "dfca8e82c755109134e39d8030c5aff2",
+      "signature": "private.request_detail_before32(uuid,uuid,integer)",
+      "security_definer": true
+    },
+    {
+      "md5": "d445fb12e5af0513f51a5030efbb98fc",
+      "signature": "private.request_detail(uuid,uuid,integer)",
+      "security_definer": true
+    },
+    {
+      "md5": "320cfee97ac92cf183c7a4857ce571a6",
+      "signature": "private.requests_page_before32(uuid,text,text,text,integer,integer)",
+      "security_definer": true
+    },
+    {
+      "md5": "e0c2731f78f63cfb3ad49c359205418e",
+      "signature": "private.requests_page(uuid,text,text,text,integer,integer)",
+      "security_definer": true
+    },
+    {
+      "md5": "55c91bb3e4b32dcae82cc01b0f812634",
+      "signature": "request_detail(uuid,uuid,integer)",
+      "security_definer": false
+    },
+    {
+      "md5": "b47f5cd4e94479e203a60321e4b3d3cb",
+      "signature": "requests_page(uuid,text,text,text,integer,integer)",
+      "security_definer": false
+    }
+  ]
+}

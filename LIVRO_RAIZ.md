@@ -1,5 +1,9 @@
 # Livro Raiz — Escritório JN
 
+## Etapa 32 — implementação local, publicação em conferência
+
+Manual32/Drive e checkpoint31 conferidos antes das mudanças. Acervo por identidade/publicação exata, gestão por participante/revisão/arquivo/prazo e histórico público das Solicitações. Reutiliza gates25/26, worker e identidade08/31; não amplia atendimento/anexos/financeiro alheio. Detalhes e estado real no [fecho32](docs/etapas/fecho-32.md), [plano32](docs/etapas/plano-32.md) e [cartão32](docs/etapas/etapa-32.md). Até confirmar schema e GitHub→Vercel, o último deploy verificado permanece31 abaixo.33 não iniciada.
+
 ## Checkpoint atual: Etapa 31 publicada e verificada
 
 Data:11/11/2026UTC. [PR112](https://github.com/escritoriojnsistema/escritoriojn/pull/112) publicou compatibilidade de acesso; [PR113](https://github.com/escritoriojnsistema/escritoriojn/pull/113), featuref7860608/mergedb62ea92, publicou runtime/schema31. VercelCvPcKh9k READY, origemGit, produção:https://escritoriojn.vercel.app. Árvore homologada95b47002.
