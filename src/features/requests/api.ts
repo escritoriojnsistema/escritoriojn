@@ -12,6 +12,7 @@ export class RequestsError extends Error {
       : code === 'CHARGE_CONFLICT' ? 'Cancele a cobrança ativa na área Cobranças antes de cancelar o atendimento.'
       : code === 'SERVICE_NOT_EFFECTIVE' ? 'Um serviço não possui versão vigente. Confira o catálogo.'
       : status === 409 ? 'A solicitação mudou. Reabra o atendimento antes de alterar novamente.'
+      : status === 429 ? 'Limite de pedidos atingido. Consulte suas solicitações e tente novamente mais tarde.'
       : status === 422 ? 'Confira os dados, participantes e limites de cada serviço.'
       : 'Atendimento indisponível no momento. Confira sua conexão e tente novamente.');
   }

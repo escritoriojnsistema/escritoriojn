@@ -21,7 +21,7 @@ SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000201","session_i
 SELECT public.service_publish(:'ocat',:'scat',(:'defcat'::jsonb||jsonb_build_object('fields',jsonb_build_array(jsonb_build_object('key','purpose','label','Finalidade','type','text','required',true)),'effective_from',NULL)),:'vcat'::int,'Informação adicional não torna oferta interna',gen_random_uuid());
 RESET ROLE;
 SELECT coalesce(private.document_offer_projection(o,clock_timestamp()),'null'::jsonb) AS fields_cat FROM private.document_offerings o WHERE office_id=:'ocat' AND template_id=:'tcat' \gset
-SELECT test.assert_true(:'fields_cat'::jsonb IS NOT NULL AND :'fields_cat'::jsonb->>'can_book'='false','catalog: informational approved offers stay visible when assisted intake is required');
+SELECT test.assert_true(:'fields_cat'::jsonb IS NOT NULL AND (CASE WHEN to_regprocedure('private.portal_service_open33(uuid,jsonb,uuid)') IS NULL THEN :'fields_cat'::jsonb->>'can_book'='false' ELSE :'fields_cat'::jsonb->>'can_book'='true' AND jsonb_array_length(:'fields_cat'::jsonb->'service_fields')=1 END),'catalog: approved fields remain visible and use structured portal33 when installed');
 SELECT test.assert_true(NOT(:'fields_cat'::jsonb ?| ARRAY['content','internal_note','actor_id']),'catalog: no private content leaks through public projection');
 SELECT to_jsonb(o) AS stored_offer FROM private.document_offerings o WHERE office_id=:'ocat' AND template_id=:'tcat' \gset
 SELECT max(number) AS vcat FROM public.service_versions WHERE office_id=:'ocat' AND service_id=:'scat' \gset

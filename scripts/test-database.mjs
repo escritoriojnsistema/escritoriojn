@@ -743,6 +743,7 @@ try {
     if(allMigrations.some(n=>n.includes('_portal_identity31')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/portal-identity31.sql`,'utf8'));
     if(allMigrations.some(n=>n.includes('_portal_identity31')))result+=await racePortalIdentity31({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     if(allMigrations.some(n=>n.includes('_portal_documents32')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/portal32.sql`,'utf8'));
+    if(allMigrations.some(n=>n.includes('_portal_intake33')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/portal33.sql`,'utf8'));
     result+=await raceRelease25({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceSignatures24({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     if(correctionMigrations.length)for(const suite of ['request-levels','portal-request-returns','account-closure','catalog-sync','request-level-scope','request-routing','retention','privacy-settings','maintenance','portal-documents-access','portal-documents-published','staff-category-opening']){try{result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));}catch(error){console.error(`Final-schema suite failed: ${database}/${suite}`);throw error;}}

@@ -1,0 +1,3 @@
+import {useEffect} from 'react';
+// Keep the exact in-memory command/File until its outcome is known.
+export function usePendingNavigation33(pending:boolean){useEffect(()=>{if(!pending)return;const leave=(e:BeforeUnloadEvent)=>{e.preventDefault();};const click=(e:MouseEvent)=>{if(e.target instanceof Element&&e.target.closest('a')){e.preventDefault();e.stopImmediatePropagation();}};window.addEventListener('beforeunload',leave);document.addEventListener('click',click,true);return()=>{window.removeEventListener('beforeunload',leave);document.removeEventListener('click',click,true);};},[pending]);}

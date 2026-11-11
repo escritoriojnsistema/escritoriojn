@@ -1,0 +1,210 @@
+{
+  "canonical_functions": [
+    {
+      "md5": "adb8639e256415de55ba166c38077da5",
+      "args": "p_office_id uuid, p_value jsonb, p_idempotency_key uuid",
+      "name": "document_booking_create",
+      "schema": "private"
+    },
+    {
+      "md5": "aa7973c421cc55982f4047e6415dd871",
+      "args": "o private.document_offerings, at_time timestamp with time zone",
+      "name": "document_offer_projection",
+      "schema": "private"
+    },
+    {
+      "md5": "3493aa13b6597ea6350c12c1784753ed",
+      "args": "o private.document_offerings, at_time timestamp with time zone",
+      "name": "document_offer_projection_before33",
+      "schema": "private"
+    },
+    {
+      "md5": "9c8ab59bde811eef8618be177df404cc",
+      "args": "r public.requests",
+      "name": "portal_booking_result33",
+      "schema": "private"
+    },
+    {
+      "md5": "7754e3f62d26078f89210e5fccdf7fd0",
+      "args": "r public.requests",
+      "name": "portal_draft33",
+      "schema": "private"
+    },
+    {
+      "md5": "225fc03bb1011b58229e7b1ecd42c3a6",
+      "args": "",
+      "name": "portal_preparation_guard33",
+      "schema": "private"
+    },
+    {
+      "md5": "acf59d0e6b537d70be3850b9b2113ab1",
+      "args": "",
+      "name": "portal_rate33",
+      "schema": "private"
+    },
+    {
+      "md5": "5868b71bacec4c3d6441cc32cb56cec1",
+      "args": "p_office_id uuid, p_request_id uuid, p_expected_version integer, p_command jsonb, p_idempotency_key uuid",
+      "name": "portal_request_command",
+      "schema": "private"
+    },
+    {
+      "md5": "4e49d632e3c091efd4b43cb2a55a0a3c",
+      "args": "p_office_id uuid, p_request_id uuid, p_expected_version integer, p_command jsonb, p_idempotency_key uuid",
+      "name": "portal_request_command_before33",
+      "schema": "private"
+    },
+    {
+      "md5": "fcc7ad79ec8b2a44edd844a6f64f557f",
+      "args": "o uuid, k uuid",
+      "name": "portal_request_resume33",
+      "schema": "private"
+    },
+    {
+      "md5": "c575bc97d5989e8336e922e96c1150c2",
+      "args": "r public.requests",
+      "name": "portal_request_state_record",
+      "schema": "private"
+    },
+    {
+      "md5": "c26b7fea090bd7d6c45633b689ea084f",
+      "args": "r public.requests",
+      "name": "portal_request_state_record_before33",
+      "schema": "private"
+    },
+    {
+      "md5": "4e4c8da4790119229c9e2be9e2218089",
+      "args": "o uuid, sid uuid",
+      "name": "portal_service_form33",
+      "schema": "private"
+    },
+    {
+      "md5": "80f9c75a41cdca79ceb584d47acb8360",
+      "args": "o uuid, sid uuid",
+      "name": "portal_service_manage33",
+      "schema": "private"
+    },
+    {
+      "md5": "021134a2a49c5afa9280149965086c30",
+      "args": "o uuid, v jsonb, k uuid",
+      "name": "portal_service_open33",
+      "schema": "private"
+    },
+    {
+      "md5": "23d149f714a8709bdc7f428a48f8500b",
+      "args": "f private.portal_service_forms33",
+      "name": "portal_service_projection33",
+      "schema": "private"
+    },
+    {
+      "md5": "e1fc14f4b653340715deed73606892c7",
+      "args": "o uuid, sid uuid, c jsonb, k uuid",
+      "name": "portal_service_publish33",
+      "schema": "private"
+    },
+    {
+      "md5": "1a4a50b4f4bdb2f05b5a66bccf5d7d36",
+      "args": "o uuid, cid uuid, q text, page integer, size integer",
+      "name": "portal_services33",
+      "schema": "private"
+    },
+    {
+      "md5": "6d939b5a2e25dca6670cf2d9ac84d78f",
+      "args": "r public.requests",
+      "name": "portal_submission_valid33",
+      "schema": "private"
+    },
+    {
+      "md5": "fb36236b74afd31167dd1bcf3cfc095f",
+      "args": "r public.requests, m public.memberships",
+      "name": "request_can_work",
+      "schema": "private"
+    },
+    {
+      "md5": "77cae3865bfd6f8b24b9757099811fec",
+      "args": "r public.requests, m public.memberships",
+      "name": "request_can_work_before33",
+      "schema": "private"
+    },
+    {
+      "md5": "43f177f10048aa54bb667b462529516b",
+      "args": "r public.requests, m public.memberships, p_page integer",
+      "name": "request_detail_record",
+      "schema": "private"
+    },
+    {
+      "md5": "9b29c13a232df8ef8246e970375dde7d",
+      "args": "r public.requests, m public.memberships, p_page integer",
+      "name": "request_detail_record_before33",
+      "schema": "private"
+    },
+    {
+      "md5": "bc2efd5d18986cc6b3b2646aceb1db2c",
+      "args": "p_office_id uuid, p_query text, p_scope text, p_status text, p_page integer, p_size integer",
+      "name": "requests_page_before32",
+      "schema": "private"
+    },
+    {
+      "md5": "de25857ae9b340e6631e35f99c100687",
+      "args": "defs jsonb, answers jsonb, complete boolean",
+      "name": "service_answers33",
+      "schema": "private"
+    },
+    {
+      "md5": "ac669df942fb5159a1443bc009500874",
+      "args": "o uuid, sid uuid, legacy jsonb",
+      "name": "service_checklist33",
+      "schema": "private"
+    },
+    {
+      "md5": "11816a7ac0f57a84108d400953c0727c",
+      "args": "o uuid, item uuid",
+      "name": "service_intake_answers33",
+      "schema": "private"
+    },
+    {
+      "md5": "1ed927d35fa1cb3ce8dc3051269dc944",
+      "args": "",
+      "name": "service_intake_guard33",
+      "schema": "private"
+    },
+    {
+      "md5": "b920cda02563382dd8cb6ecaf457f743",
+      "args": "o uuid, k uuid",
+      "name": "portal_request_resume33",
+      "schema": "public"
+    },
+    {
+      "md5": "45c7a25af5393ee64bd6dd81c157ce97",
+      "args": "o uuid, sid uuid",
+      "name": "portal_service_form33",
+      "schema": "public"
+    },
+    {
+      "md5": "51dfeb0190f0673f60bf4cff08e56ed7",
+      "args": "o uuid, sid uuid",
+      "name": "portal_service_manage33",
+      "schema": "public"
+    },
+    {
+      "md5": "9cf89adcf726ee0398bcdebfabe9535f",
+      "args": "o uuid, v jsonb, k uuid",
+      "name": "portal_service_open33",
+      "schema": "public"
+    },
+    {
+      "md5": "35f8ad5b7fe58c029ec2f7f2ff9b798c",
+      "args": "o uuid, sid uuid, c jsonb, k uuid",
+      "name": "portal_service_publish33",
+      "schema": "public"
+    },
+    {
+      "md5": "54d76e4983fc217490110e56aecd505e",
+      "args": "o uuid, cid uuid, q text, page integer, size integer",
+      "name": "portal_services33",
+      "schema": "public"
+    }
+  ],
+  "migration": "20261111190203",
+  "source": "fresh replay foundation_replay_a"
+}
