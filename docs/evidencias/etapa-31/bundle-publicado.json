@@ -1,0 +1,11 @@
+{
+  "date_utc": "2026-11-11",
+  "url": "https://escritoriojn.vercel.app",
+  "runtime_commit": "db62ea922b8b1cddfe0af8a30c80af98172b0825",
+  "matching_assets": 72,
+  "missing_assets": 0,
+  "different_assets": 0,
+  "public_build_configuration_grounded": true,
+  "production_key_type": "publishable",
+  "credentials_published": false
+}

@@ -1,12 +1,16 @@
 # Livro Raiz — Escritório JN
 
-## Checkpoint atual: Etapa 31 implementada e em verificação/publicação
+## Checkpoint atual: Etapa 31 publicada e verificada
 
-Base:Etapa30 publicada/PR110, merge135a6f0c, seguida do fechoPR111. Identidade31 reutiliza Auth04/identidade08 e gates25/26; convite de256bits/24h/usoúnico, vínculo por conta confirmada+conferência administrativa, duplicidade explícita e representante separado por atendimento/prazo/escopo de andamento público. Cliente sem foundation.access. Conta→Meu vínculo no portal e Clientes→Vínculos integram a jornada, sem login/financeiro/autorizações paralelos.
+Data:11/11/2026UTC. [PR112](https://github.com/escritoriojnsistema/escritoriojn/pull/112) publicou compatibilidade de acesso; [PR113](https://github.com/escritoriojnsistema/escritoriojn/pull/113), featuref7860608/mergedb62ea92, publicou runtime/schema31. VercelCvPcKh9k READY, origemGit, produção:https://escritoriojn.vercel.app. Árvore homologada95b47002.
 
-Locais:376Node/build/TS/audit0;2.137 verificações no replay completoSQL final, corrida real de consumo único, Auth/REST/Express/recuperação reais locais. 66cenáriosUI finais aprovados, mais6SQL sobre publicação histórica; publicação restante em andamento. PR112/merge4bcc15a/Vercel3jq49aotREADY publicou compatibilidade do acesso antes do schema; isso não conclui a31 hospedada.
+Conta→Meu vínculo no portal e Clientes→Vínculos usam conta04/identidade08 existentes: convite manual após conferência administrativa, código256bits/24h/usoúnico, hash privado, conta e contato confirmados, duplicidades explícitas. Recuperação não troca pessoa. Cliente sem foundation.access; atores internos e gates25/26 preservados. Representante tem identidade própria e autorização distinta por atendimento, até30dias, apenas andamento público; revogação interrompe acesso sem ressuscitar grant antigo após reconferência.
 
-[Fecho31](docs/etapas/fecho-31.md) · [Plano31](docs/etapas/plano-31.md) · [Cartão31](docs/etapas/etapa-31.md). Base preservada:[fecho30](docs/etapas/fecho-30.md),[fecho29](docs/etapas/fecho-29.md),[correções pós28](docs/etapas/fecho-correcoes-pos28.md). Histórico integral noGit.
+Aprovados376Node,2.137 verificações no replaySQL final,23SQL31 posteriores,6SQL de publicação histórica,66cenáriosUI e8públicos hospedados. Auth/REST/Express e recuperação reais locais, concorrência de consumo único, TypeScript/build/audit de produção0. Layout320–1920, até4atalhos mobile/menu, sem loaders e sem novo cadastro/login/financeiro. p95local do estado≈11ms/100amostras, sem alegar SLA hospedado.
+
+Migration20261110233856 aplicada automaticamente peloGit:32comandos correspondentes,13definições iguais,3tabelas privadasRLS/ACL fechadas e2wrappersINVOKER. **NÃO reaplicar.**72assets publicados iguais ao build com configuração pública real. Cadastros/Auth/memberships e concessões individuais preservados na conferência privada; nenhuma fixture, conta ou autorização de teste hospedada. Advisor de senha vazada desativada é preexistente, sem nova advertência de segurança.
+
+[Fecho31](docs/etapas/fecho-31.md) · [Plano31](docs/etapas/plano-31.md) · [Cartão31](docs/etapas/etapa-31.md) · [Publicação](docs/evidencias/etapa-31/publicacao.json) · [Schema](docs/evidencias/etapa-31/schema-publicado.json) · [Bundle](docs/evidencias/etapa-31/bundle-publicado.json). Base preservada:[fecho30](docs/etapas/fecho-30.md),[fecho29](docs/etapas/fecho-29.md),[correções pós28](docs/etapas/fecho-correcoes-pos28.md). Histórico integral noGit.
 
 ## Continuidade obrigatória
 
@@ -19,4 +23,4 @@ Locais:376Node/build/TS/audit0;2.137 verificações no replay completoSQL final,
 - Preservar identidade, escopo e autoridade atuais. Cache ou vínculo cadastral não concede acesso. Troca de sessão/autoridade limpa dados;503 conserva a tentativa,409 exige reconferência e401/403 bloqueia.
 - O histórico integral das etapas anteriores permanece no Git e nos cartões/fechos existentes. Esta consolidação evita republicar os detalhes antigos de auditoria no checkpoint público.
 
-Próximo checkpoint: concluir publicação/verificação31 e registrar evidências. Etapa32 somente por novo pedido.
+Próxima etapa:32, somente por novo pedido. Nenhuma implementação de32 foi iniciada.
