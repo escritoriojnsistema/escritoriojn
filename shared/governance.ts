@@ -24,6 +24,7 @@ export const auditActionNames: Record<string, string> = {
  'audit.exported': 'Auditoria exportada', 'archives.archived': 'Acesso arquivado', 'archives.restored': 'Referência restaurada',
  'customers.assignment_grant': 'Acesso ao cliente atribuído', 'customers.assignment_revoke': 'Acesso ao cliente revogado',
  'customers.representation_grant': 'Representação registrada', 'customers.representation_revoke': 'Representação revogada',
+ 'portal.service_published':'Formulário de serviço publicado no portal',
  'portal.document_grant':'Documento autorizado no portal', 'portal.document_revoke':'Autorização documental revogada',
  'portal.issue':'Convite de vínculo criado', 'portal.accept':'Vínculo do portal confirmado', 'portal.revoke_invite':'Convite de vínculo revogado', 'portal.represent':'Andamento autorizado ao representante', 'portal.revoke_representation':'Acesso do representante revogado',
  'customers.identity_verify': 'Identidade conferida', 'customers.identity_revoke': 'Conferência de identidade revogada',

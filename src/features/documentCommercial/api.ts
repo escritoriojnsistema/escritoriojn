@@ -4,7 +4,7 @@ import {supabase} from '../auth/browser';
 import {sessionScope} from '../auth/sessionScope';
 import {authenticatedFetch} from '../auth/authenticatedFetch';
 export class CommercialError extends Error {
- constructor(public status:number){super(status===401?'Sua sessão foi encerrada. Entre novamente.':status===403?'Seu acesso não permite esta operação.':status===404?'Registro não encontrado.':status===409?'Os dados mudaram ou a operação exige conferência. Atualize antes de continuar.':status===422?'Confira os campos informados.':'Serviço indisponível. Repita a mesma tentativa.');}
+ constructor(public status:number){super(status===401?'Sua sessão foi encerrada. Entre novamente.':status===403?'Seu acesso não permite esta operação.':status===404?'Registro não encontrado.':status===409?'Os dados mudaram ou a operação exige conferência. Atualize antes de continuar.':status===429?'Limite de pedidos atingido. Consulte suas solicitações e tente novamente mais tarde.':status===422?'Confira os campos informados.':'Serviço indisponível. Repita a mesma tentativa.');}
 }
 export async function commercialRequest<T>(path:string,body:unknown,signal?:AbortSignal,base='/api/document-commercial',blob=false):Promise<T>{
  if(!supabase)throw new CommercialError(503);

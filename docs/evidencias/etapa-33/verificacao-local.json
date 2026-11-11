@@ -1,0 +1,60 @@
+{
+  "date_utc": "2026-11-11",
+  "node_tests": 386,
+  "node_failures": 0,
+  "typecheck_and_build": true,
+  "production_dependency_vulnerabilities": 0,
+  "database_replays": [
+    {
+      "database": "foundation_replay_a",
+      "checks": 2203
+    },
+    {
+      "database": "foundation_replay_b",
+      "checks": 2209
+    }
+  ],
+  "database_concurrent_closure_checks": 2,
+  "database_stage33_assertions": 34,
+  "migrator_superuser": false,
+  "migrator_bypassrls": false,
+  "real_auth_rest_express_storage": true,
+  "same_key_concurrent_open_one_protocol": true,
+  "real_pdf_quarantine_private_storage": true,
+  "other_client_uuid_nonce_storage_denied": true,
+  "existing_queue_return_notification_and_model_booking": true,
+  "local_api_latency": {
+    "samples": 20,
+    "p50_ms": 181.6,
+    "p95_ms": 222.98,
+    "note": "Local authenticated HTTP+Auth+REST+Postgres; concurrent verification workload; no hosted SLA"
+  },
+  "browser_stage33_tests": 20,
+  "browser_regression_distinct_tests": 93,
+  "browser_failed_cases_rechecked": 2,
+  "browser_recheck_tests": 14,
+  "browser_final_unresolved_failures": 0,
+  "browser_note": "19 stage33 tests plus the new-nonce recovery case passed. Regression batch91passed: one old retry contract updated for explicit retry, one trace-output collision resolved by isolated recheck. All14 request/return tests passed on recheck.",
+  "browser_viewports": [
+    320,
+    375,
+    768,
+    1440
+  ],
+  "browser_roles": [
+    "owner",
+    "admin",
+    "employee",
+    "client"
+  ],
+  "no_visible_loader": true,
+  "max_mobile_shortcuts": 4,
+  "independent_review": "No remaining blocker; read-only, no remote services",
+  "migration_file": "supabase/migrations/20261111190203_portal_intake33.sql",
+  "migration_sha256": "1ba02d1dfccdccea47eaa259ac627e3902a3847c053db0dee569ea07ef0ae4dd",
+  "canonical_functions": 34,
+  "migration_statements": 69,
+  "hosted_fixtures_created": false,
+  "github_actions_used": false,
+  "direct_vercel_deploy_used": false
+}
