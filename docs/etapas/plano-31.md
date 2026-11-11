@@ -12,6 +12,8 @@ Alternativas descartadas: segundo cadastro duplicaria04/08; ampliar finance_clie
 - [x] Backend: POST Bearer/no-store, corpo estrito e DTO allowlist; erros genéricos.
 - [x] Frontend: Clientes→Vínculos→Identidade/Representantes e Conta do cliente, componentes comuns, sem loaders; token só em memória e nunca URL/storage/log.
 - [x] Verificar expiração/reuso/conta errada/duplicidade/contato alterado/recuperação/representante revogado; Node/SQL/UI320–1440/build.
-- [ ] GitHub→Vercel semActions; conferir histórico/schema hospedado antes de reaplicar migrations; Livro/fecho com provas reais.
+- [x] GitHub→Vercel semActions; conferir histórico/schema hospedado antes de reaplicar migrations; Livro/fecho com provas reais.
 
 Riscos prioritários: replay concorrente, seleção equivocada da conta, resposta de sessão anterior, grants excessivos ao representante e vazamento do token. Convite é entregue manualmente após conferência administrativa ao contato confirmado, sem alegar envio automático.
+
+Status: APROVÁVEL — publicada/verificada peloPR113 após compatPR112;32comandos/13definições/72assets conferidos. Detalhes nofecho31; próxima32por novo pedido.

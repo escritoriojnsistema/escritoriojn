@@ -29,6 +29,12 @@ Cliente não recebe foundation.access: projeção permissions=[], regras própri
 
 ## Publicação e continuidade
 
-PR112/merge4bcc15a, Vercel3jq49aot READY: compatibilidade do login publicada antes do schema31. Runtime/schema31 homologados localmente, aguardando publicação pela integração; NÃO afirmar conclusão hospedada neste checkpoint. Antes de qualquer aplicação manual, consultar schema_migrations apósGit e comparar comandos. Nenhuma migration anterior deve ser reaplicada.
+**APROVÁVEL — publicada e verificada.** PR112/merge4bcc15a/Vercel3jq49aotREADY publicou compatibilidade do login antes do schema31. PR113/featuref7860608/mergedb62ea92, árvore95b47002, VercelCvPcKh9kREADY/origemGit: https://escritoriojn.vercel.app.
+
+Migration20261110233856 foi aplicada automaticamente pela integração apósGit.32comandos correspondentes ao arquivo e13definições finais iguais ao Postgres17 homologado.3tabelas novasRLS/ACL fechadas;2wrappersINVOKER/autenticado/anonnegado;cliente sem foundation.access. **NÃO reaplicar.** Nenhuma aplicação manual foi feita.
+
+72assets publicados iguais byteabyte ao build com configuração pública real,8cenários públicos hospedados aprovados, home/health200 e APIs privadas401/no-store. Cadastros/Auth/memberships e permissões individuais conferidos e preservados; não publicar contagens/hashes sensíveis. Zero registros de teste31 hospedados. Advisor mantém apenas aviso de senha vazada desativada já existente; tabelas privadas novas seguem fechamento deliberado porRLS/ACL/RPC. Não houve contratação ou alteração de configuraçãoAuth.
+
+Evidências:[verificação local](../evidencias/etapa-31/verificacao-local.json),[schema](../evidencias/etapa-31/schema-publicado.json),[bundle](../evidencias/etapa-31/bundle-publicado.json),[publicação](../evidencias/etapa-31/publicacao.json). Sem mudanças emActions ou deploydiretoVercel. Limites: homologação de contas/recuperação ocorreu em laboratório real local, testes hospedados foram públicos/read-only e conferência de schema/integridade; não houve login privado de usuário real ou envio de convite real de teste.
 
 Próxima32 somente por novo pedido; nenhuma função de32 foi iniciada.

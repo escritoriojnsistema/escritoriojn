@@ -1,0 +1,16 @@
+{
+  "date_utc": "2026-11-11",
+  "migration": "20261110233856",
+  "automatically_applied_after_git": true,
+  "matching_stored_statements": 32,
+  "matching_function_definitions": 13,
+  "private_tables_rls_acl_closed": 3,
+  "public_wrappers_invoker_anon_denied": 2,
+  "client_foundation_removed": true,
+  "hosted_test_fixtures": 0,
+  "hosted_integrity_unchanged": true,
+  "sensitive_integrity_values_published": false,
+  "advisor_new_warning_or_error": false,
+  "advisor_preexisting_warning": "auth_leaked_password_protection",
+  "manual_migration_applied": false
+}
