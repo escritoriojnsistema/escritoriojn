@@ -32,4 +32,9 @@ SELECT test.assert_true(EXISTS(SELECT FROM jsonb_array_elements(:'published_port
 SELECT test.assert_true(NOT EXISTS(SELECT FROM jsonb_array_elements(:'published_portal_result'::jsonb->'items') i WHERE i ?| ARRAY['content','object_path','customer_id','created_by','request_id','document_id']),'portal published: client projection excludes private data and storage path');
 SELECT test.expect_error(format('SELECT public.document_artifact_authorize(%L,%L,false)','00000000-0000-4000-e000-000000000201',:'published_portal_id'),'PT422','portal published: historical fixture with incomplete signature cannot access canonical bytes');
 RESET ROLE;
+-- Etapa31: a real historical artifact must disappear immediately without its verified identity.
+UPDATE private.customer_relations SET revoked_at=clock_timestamp(),revoked_by='00000000-0000-4000-a000-000000000201',version=version+1 WHERE office_id='00000000-0000-4000-e000-000000000201' AND membership_id='00000000-0000-4000-b000-000000000205' AND relation_type='identity' AND revoked_at IS NULL;
+SET ROLE authenticated;
+SELECT test.assert_true(public.portal_documents_page('00000000-0000-4000-e000-000000000201',1)->>'total'='0','31: historical published artifacts are hidden without verified link');
+RESET ROLE;
 ROLLBACK;

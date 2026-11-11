@@ -1,3 +1,4 @@
+import {PortalIdentityPanel} from '../portal-identity/PortalIdentityPanel';
 import {useEffect,useRef,useState,type FormEvent} from 'react';
 import {KeyRound,ArrowRight,CircleUserRound,Save,FilePenLine,MailCheck} from 'lucide-react';
 import {Link,useLocation} from 'react-router-dom';
@@ -22,9 +23,9 @@ export default function AccountPage(){
  return <OperationalAccess client={client} busy={busy}>{contexts=><AccountWorkspace key={contexts[0].user_id+contexts[0].office_id} context={contexts[0]} client={client} onPendingChange={setBusy}/>}</OperationalAccess>;
 }
 function AccountWorkspace({context,client,onPendingChange}:{context:AccessContext;client:boolean;onPendingChange:(pending:boolean)=>void}){
- const auth=useAuth(),[data,setData]=useState<AccountData>(),[value,setValue]=useState<AccountInput>({name:context.display_name??'',cpf:null,email:''}),[busy,setBusy]=useState(false),[error,setError]=useState(''),[feedback,setFeedback]=useState(''),[revision,setRevision]=useState(0),[blocked,setBlocked]=useState(false);
+ const auth=useAuth(),[data,setData]=useState<AccountData>(),[value,setValue]=useState<AccountInput>({name:context.display_name??'',cpf:null,email:''}),[busy,setBusy]=useState(false),[error,setError]=useState(''),[feedback,setFeedback]=useState(''),[revision,setRevision]=useState(0),[blocked,setBlocked]=useState(false),[identityOpen,setIdentityOpen]=useState(false),[identityBusy,setIdentityBusy]=useState(false);
  const pending=useRef<AbortController|null>(null),busyRef=useRef(false),office=context.office_id;
- useEffect(()=>{onPendingChange(busy);return()=>onPendingChange(false);},[busy,onPendingChange]);
+ useEffect(()=>{onPendingChange(busy||identityBusy);return()=>onPendingChange(false);},[busy,identityBusy,onPendingChange]);
  useEffect(()=>()=>pending.current?.abort(),[]);
  useEffect(()=>{const controller=new AbortController();void accountApi.read(office,controller.signal).then(result=>{if(!controller.signal.aborted){setData(result);setValue({name:result.name,cpf:result.cpf,email:result.pending_email??result.email});setError('');}}).catch(cause=>{if(!controller.signal.aborted){setError(cause instanceof Error?cause.message:'Não foi possível consultar a conta.');if(cause instanceof AccountError&&[401,403].includes(cause.status)){setBlocked(true);setData(undefined);setValue({name:'',cpf:null,email:''});}}});return()=>controller.abort();},[office,revision]);
  const normalized=normalizeAccountInput(value),changed=!!data&&(normalized.name!==data.name||normalized.cpf!==data.cpf||normalized.email!==(data.pending_email??data.email));
@@ -39,6 +40,7 @@ function AccountWorkspace({context,client,onPendingChange}:{context:AccessContex
   finally{if(!controller.signal.aborted){busyRef.current=false;setBusy(false);}if(pending.current===controller)pending.current=null;}
  }
  async function confirm(){if(!data?.pending_email||busyRef.current||blocked)return;const controller=new AbortController();pending.current=controller;busyRef.current=true;setBusy(true);setError('');try{await emailConfirmation(data.pending_email,controller.signal);}catch(cause){if(!controller.signal.aborted)setError(cause instanceof Error?cause.message:'Não foi possível enviar a confirmação.');}finally{if(!controller.signal.aborted){setBusy(false);busyRef.current=false;}}}
+ if(client&&identityOpen)return <><OperationHeading context={context} title="Vínculo do portal" description="Confirme a identidade e acompanhe suas autorizações." showRole={false}/><button data-operation-local-return className="team-text-button" disabled={identityBusy} onClick={()=>setIdentityOpen(false)}>Voltar à conta</button><PortalIdentityPanel key={auth.sessionKey+office} office={office} onPendingChange={setIdentityBusy} onFatal={()=>setBlocked(true)}/></>;
  return <>
   <OperationHeading context={context} title="Conta" showRole={false} description={client?'Consulte seus dados e solicite correções.':'Edite os dados pessoais do seu acesso ao escritório.'}/>
   <section className="operation-account" aria-labelledby="account-title"><div className="operation-section-title"><CircleUserRound size={23} aria-hidden="true"/><h2 id="account-title">Dados de acesso</h2></div>
@@ -49,7 +51,7 @@ function AccountWorkspace({context,client,onPendingChange}:{context:AccessContex
    {error&&<button className="team-text-button" disabled={busy} onClick={()=>{setError('');setRevision(n=>n+1);}}>Reabrir dados da conta</button>}</>}
   </section>
   {!blocked&&<div className="account-actions">{client?<Link className="primary-button" to={paths.clientRequests} state={{office_id:office,...(data?.correction_request_id?{request_id:data.correction_request_id}:{account_correction:true})}}><FilePenLine size={18} aria-hidden="true"/>{data?.correction_request_id?'Acompanhar correção':'Solicitar correção'}</Link>:changed&&<><button className="primary-button" form="account-edit" disabled={busy}><Save size={18} aria-hidden="true"/>Salvar alterações</button><button data-operation-local-return type="button" className="secondary-button" disabled={busy} onClick={()=>{setError('');setFeedback('');if(data)setValue({name:data.name,cpf:data.cpf,email:data.pending_email??data.email});}}>Cancelar</button></>}</div>}
-  <PrivacyLinks/>{client&&!blocked&&<AccountClosure key={auth.sessionKey+office} office={office}/>}
+  <div>{client&&!blocked&&<button className="team-text-button" disabled={busy} onClick={()=>setIdentityOpen(true)}>Meu vínculo no portal</button>}</div><PrivacyLinks/>{client&&!blocked&&<AccountClosure key={auth.sessionKey+office} office={office}/>}
   <section className="operation-security" aria-labelledby="security-title"><div><h2 id="security-title"><KeyRound size={21} aria-hidden="true"/>Segurança</h2><p>Precisa de uma nova senha? Receba as instruções no seu e-mail.</p></div><Link className="secondary-button" to={`${paths.recovery}?area=${client?'client':'team'}`}>Recuperar senha<ArrowRight size={18} aria-hidden="true"/></Link></section>
  </>;
 }

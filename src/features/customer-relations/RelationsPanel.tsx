@@ -1,8 +1,9 @@
+import { PortalIdentityPanel } from '../portal-identity/PortalIdentityPanel';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Assignment, CustomerMergePreview, CustomerRelationCommand, CustomerRelationsState, RelationCandidate, Representation, RepresentationKind, VerifiedIdentity } from '../../../shared/customerRelations';
-import { customersError, type CustomersError } from '../customers/api';
+import { customersError, CustomersError } from '../customers/api';
 import { relationsApi } from './api';
 import { RelationCandidates } from './RelationCandidates';
 import './relations.css';
@@ -16,7 +17,10 @@ const compactMedia = '(max-width: 900px), (hover: none) and (pointer: coarse) an
 function date(value: string) { return new Date(value).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }); }
 function localNow() { const now = new Date(); return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16); }
 
-export function RelationsPanel({ office, customerId, auditAllowed, onExit, onFatal }: { office: string; customerId: string; auditAllowed: boolean; onExit: () => void; onFatal: (error: CustomersError) => void }) {
+export function RelationsPanel({ office, customerId, auditAllowed, onExit, onFatal, onPendingChange }: { office: string; customerId: string; auditAllowed: boolean; onExit: () => void; onFatal: (error: CustomersError) => void; onPendingChange: (busy: boolean) => void }) {
+  const [portalMode, setPortalMode] = useState<'identity' | 'representations'>();
+  const [portalBusy, setPortalBusy] = useState(false);
+  useEffect(() => { onPendingChange(portalBusy); return () => onPendingChange(false); }, [portalBusy, onPendingChange]);
   const [state, setState] = useState<CustomerRelationsState>();
   const [section, setSection] = useState<Section>('overview');
   const [editing, setEditing] = useState(false);
@@ -91,12 +95,13 @@ export function RelationsPanel({ office, customerId, auditAllowed, onExit, onFat
   const rows = state && section !== 'overview' ? state[section] : [];
   const count = Math.max(1, Math.ceil(rows.length / size));
   const pageRows = rows.slice((page - 1) * size, page * size);
+  if (portalMode && state) return <section className="relations-panel"><button data-operation-local-return className="team-text-button" disabled={portalBusy} onClick={() => { setPortalMode(undefined); setRevision(n => n + 1); }}><ArrowLeft size={18} aria-hidden="true"/>Voltar aos vínculos</button><PortalIdentityPanel office={office} customerId={state.customer.id} representations={state.representations} mode={portalMode} onPendingChange={setPortalBusy} onFatal={status => failed(new CustomersError(status))}/></section>;
   return <section className="relations-panel" aria-label="Vínculos do cliente">
-    {state && <><div className="relation-heading"><h2>{section === 'overview' ? 'Vínculos' : sections[section]}</h2><span>{state.customer.name}</span></div><p className="customer-note">Representação e identidade não liberam documentos ou portal.</p></>}
+    {state && <><div className="relation-heading"><h2>{section === 'overview' ? 'Vínculos' : sections[section]}</h2><span>{state.customer.name}</span></div><p className="customer-note">A identidade conferida vincula a conta; documentos seguem as regras de liberação. A representação exige autorização separada.</p></>}
     {error && <div><p className="form-feedback error" role="alert">{error}</p>{!state && <button className="team-text-button" disabled={busy} onClick={() => { setError(''); setRevision(value => value + 1); }}>Tentar novamente</button>}</div>}
     {message && <p className="form-feedback" role="status">{message}</p>}
     {state && (section === 'overview' ? <div className="relation-overview">{Object.entries(sections).map(([key, label]) => <button className="relation-overview-button" key={key} onClick={() => navigate(key as Section)}><strong>{label}</strong><span>{state[key as keyof typeof sections].length}{state.truncated[key as keyof typeof sections] ? '+' : ''} registros<ArrowRight size={18} aria-hidden="true" /></span></button>)}</div> : <>
-      <div className="relation-toolbar"><button className="team-text-button" onClick={() => navigate('overview')}><ArrowLeft size={18} aria-hidden="true" />Vínculos</button>{allowed && !editing && !revoke && <button className="primary-button" disabled={busy} onClick={() => { clearForm(); setEditing(true); setError(''); setMessage(''); }}>{section === 'merges' ? 'Revisar duplicidade' : section === 'identities' ? 'Conferir identidade' : 'Adicionar vínculo'}</button>}</div>
+      <div className="relation-toolbar"><button className="team-text-button" onClick={() => navigate('overview')}><ArrowLeft size={18} aria-hidden="true" />Vínculos</button>{allowed && !editing && !revoke && (section === 'identities' || section === 'representations' && state.capabilities.can_verify) && <button className="secondary-button" disabled={busy} onClick={() => setPortalMode(section === 'identities' ? 'identity' : 'representations')}>{section === 'identities' ? 'Convite do portal' : 'Autorizar andamento'}</button>}{allowed && !editing && !revoke && <button className="primary-button" disabled={busy} onClick={() => { clearForm(); setEditing(true); setError(''); setMessage(''); }}>{section === 'merges' ? 'Revisar duplicidade' : section === 'identities' ? 'Conferir identidade' : 'Adicionar vínculo'}</button>}</div>
       {editing ? <div className="relation-editor">
         {!preview && <RelationCandidates key={section} office={office} kind={section === 'assignments' ? 'team' : section === 'identities' ? 'client' : 'customers'} exclude={state.customer.id} disabled={busy} onSelect={setCandidate} onError={failed} />}
         {section === 'merges' ? preview ? <form onSubmit={event => { event.preventDefault(); void mergeStep(true); }}><dl className="merge-preview"><div><dt>Origem preservada no histórico</dt><dd>{preview.source.name}</dd></div><div><dt>Destino ativo · nome e tipo mantidos</dt><dd>{preview.expected.name} · {preview.expected.kind === 'person' ? 'Pessoa física' : 'Pessoa jurídica'}</dd></div><div><dt>Resultado previsto</dt><dd>{preview.expected.identifier_masked ?? 'Sem identificador'} · {preview.expected.contact_count} contatos{preview.expected.copies_identifier ? ' · identificador conservado da origem' : ''}</dd></div></dl><p className="customer-note">A origem deixa a lista ativa. Históricos e referências são preservados; os vínculos da origem serão revogados, sem transferir direitos.</p>{preview.conflicts.length > 0 && <p className="form-feedback error" role="alert">{preview.conflicts.map(item => conflictNames[item]).join(' · ')}</p>}<label className="team-field">Referência da conferência<input required maxLength={500} value={evidence} disabled={busy} onChange={event => setEvidence(event.target.value)} aria-describedby="evidence-help" /></label><p id="evidence-help" className="customer-note">Informe somente a referência interna. Não inclua CPF, contato ou relato pessoal.</p><div className="relation-actions"><button type="button" className="team-text-button" onClick={() => { pending.current?.abort(); pending.current = null; setBusy(false); setPreview(undefined); setCandidate(undefined); setEvidence(''); }}>Voltar à seleção</button><button className="primary-button" disabled={busy || !preview.can_merge || !evidence.trim()}>Confirmar mesclagem</button></div></form> : <button className="primary-button" disabled={busy || !candidate} onClick={() => void mergeStep(false)}>Ver prévia da mesclagem</button> : <form onSubmit={save}>
