@@ -1,0 +1,92 @@
+{
+  "date_utc": "2026-11-11",
+  "project": "mcsuoxnubpqenyvbefee",
+  "migration": "20261111131744",
+  "migration_name": "portal_documents32",
+  "applied_by": "Git integration",
+  "manual_apply": false,
+  "do_not_reapply": true,
+  "statements_verified": 54,
+  "normalized_statements_equal": true,
+  "canonical_functions_verified": 31,
+  "canonical_functions_equal": true,
+  "protections": {
+    "tables": [
+      {
+        "rls": true,
+        "name": "portal_grant_events32",
+        "anon_access": false,
+        "service_role_access": false,
+        "authenticated_access": false
+      },
+      {
+        "rls": true,
+        "name": "portal_grants32",
+        "anon_access": false,
+        "service_role_access": false,
+        "authenticated_access": false
+      },
+      {
+        "rls": true,
+        "name": "portal_share_commands32",
+        "anon_access": false,
+        "service_role_access": false,
+        "authenticated_access": false
+      }
+    ],
+    "buckets": [
+      {
+        "name": "jn-document-artifacts",
+        "public": false
+      },
+      {
+        "name": "request-attachments",
+        "public": false
+      }
+    ],
+    "wrappers": [
+      {
+        "name": "portal_document_state32",
+        "anon_execute": false,
+        "security_definer": false,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "portal_documents_page32",
+        "anon_execute": false,
+        "security_definer": false,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "portal_share_command32",
+        "anon_execute": false,
+        "security_definer": false,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "portal_shares_state32",
+        "anon_execute": false,
+        "security_definer": false,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      }
+    ],
+    "helpers_closed": true,
+    "no_hosted_grants": true,
+    "authority_triggers": 3,
+    "no_hosted_commands": true,
+    "no_hosted_grant_events": true
+  },
+  "business_integrity_preserved": true,
+  "auth_profiles_permissions_delegations_preserved": true,
+  "new_stage32_unindexed_foreign_keys": 0,
+  "security_advisor_new_warnings": 0,
+  "preexisting_warning": {
+    "name": "auth_leaked_password_protection",
+    "url": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+  },
+  "private_rls_without_policies": "Intentional RPC-only access; direct ACLs closed"
+}

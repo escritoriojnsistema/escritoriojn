@@ -12,7 +12,7 @@ Mudança de versão/bytes/identidade/autoridade invalida o acesso. O epoch25 cob
 
 ## Camadas e apresentação
 
-- Frontend React/Vite/TypeScript: áreas existentes reutilizadas, páginas3mobile/5desktop, uma área por vez, atalhos mobileaté4 e extras na sidebar. Equipe/Convites e quatro perfis preservados. Sem spinner/overlay/rótulo de carregamento. Dados privados só em memória e separados por sessão/escritório/permissões; revalidação em foco/30s.401/403/404 remove conteúdo;503 preserva tentativa exata e bloqueia navegação de comando.
+- Frontend React19.3.1/Vite8.3.4/TypeScript7.0.2 (Node24.22.1/npm11.9.0): áreas existentes reutilizadas, páginas3mobile/5desktop, uma área por vez, atalhos mobileaté4 e extras na sidebar. Equipe/Convites e quatro perfis preservados. Sem spinner/overlay/rótulo de carregamento. Dados privados só em memória e separados por sessão/escritório/permissões; revalidação em foco/30s.401/403/404 remove conteúdo;503 preserva tentativa exata e bloqueia navegação de comando.
 - Backend Express:4 POST Bearer/no-store, validação de campos exatos, DTO allowlist e erros genéricos. API existente de solicitações recebe projeção pública explícita de histórico; cliente não fornece autoridade nem caminhoStorage.
 - Supabase: migration20261111131744,3tabelas privadasRLS/ACL fechadas, eventos/comandos imutáveis,4wrappersINVOKER autenticados, idempotência por sessão/chave/corpo, mutex do escritório e escopo explícito do emissor. Índices reaproveitam identidade/pedidos/publicações e cobrem grants/FKs. Sem nova concessão individual ou mudança deAuth.
 - Storage/worker: interfaces e configuração preservadas; sem URL pública ou assinada. A modificação da autorizaçãoRPC mantém revalidação real dos bytes e destinatário correto.
@@ -30,4 +30,10 @@ Limites: cenários autenticados são locais com provedores reais; hospedado ser�
 
 ## Publicação e continuidade
 
-APROVÁVEL localmente. Publicação e conferências hospedadas pendentes. Não reaplicar migration sem consultar o histórico. Próxima33 somente por novo pedido.
+**APROVÁVEL — publicada e verificada.** [PR115](https://github.com/escritoriojnsistema/escritoriojn/pull/115), featurecac404d5/merge53e58309, árvore homologadacc3075e6. Preview4ubyH9dsREADY e produção2BLauwyRREADY, origemGit: https://escritoriojn.vercel.app. NenhumActions ou deploydiretoVercel.
+
+Migration20261111131744 aplicada automaticamente pela integraçãoGit.54instruções normalizadas iguais ao arquivo e31definições finais iguais ao Postgres17 homologado.3tabelasRLS/ACLfechadas,4wrappersINVOKER/autenticado/anonnegado e3triggers de invalidação instalados. **NÃO reaplicar.** Buckets continuam privados; nenhuma fixture/conta/grant32 hospedada. Cadastros/identidades/documentos/Auth/profiles/memberships/permissões individuais/delegações conferidos e preservados por comparação privada; não publicar contagens/hashes de negócio.
+
+72assets publicados iguais byteabyte ao build com configuração pública real.12cenários públicos hospedados aprovados; home/health200, APIs32e31 anônimas401/no-store e destinos privados exigem login Desktop/Mobile. Advisors: nenhuma nova advertência de segurança nem FK32 sem índice; avisoAuth preexistente eRLSsem policies nas tabelas privadas permanecem documentados. Nenhuma configuração/planoAuth foi alterada.
+
+[Verificação local](../evidencias/etapa-32/verificacao-local.json) · [Schema](../evidencias/etapa-32/schema-publicado.json) · [Bundle](../evidencias/etapa-32/bundle-publicado.json) · [Publicação](../evidencias/etapa-32/publicacao.json). Livro/AGENTS atualizados. Próxima33 somente por novo pedido; não iniciada.
