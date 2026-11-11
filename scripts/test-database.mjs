@@ -1,3 +1,4 @@
+import {racePortalIdentity31} from './database-portal-identity31.mjs';
 import {raceRelease25} from './database-documents25.mjs';
 import {raceSignatures24} from './database-documents24.mjs';
 import { raceDocumentCommercial, raceFolderSession } from './database-document-commercial.mjs';
@@ -739,6 +740,8 @@ try {
     if(allMigrations.some(n=>n.includes('_ditr28_exercises_rectifications')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/ditr28.sql`,'utf8'));
     if(allMigrations.some(n=>n.includes('_rural_workflow29')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/rural29.sql`,'utf8'));
     result+=sql(database,'postgres',readFileSync(`${root}tests/database/specialized30.sql`,'utf8'));
+    if(allMigrations.some(n=>n.includes('_portal_identity31')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/portal-identity31.sql`,'utf8'));
+    if(allMigrations.some(n=>n.includes('_portal_identity31')))result+=await racePortalIdentity31({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceRelease25({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceSignatures24({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     if(correctionMigrations.length)for(const suite of ['request-levels','portal-request-returns','account-closure','catalog-sync','request-level-scope','request-routing','retention','privacy-settings','maintenance','portal-documents-access','portal-documents-published','staff-category-opening']){try{result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));}catch(error){console.error(`Final-schema suite failed: ${database}/${suite}`);throw error;}}

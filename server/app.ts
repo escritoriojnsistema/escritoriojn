@@ -1,3 +1,4 @@
+import {portalIdentityRouter} from './modules/portal-identity/router.js';
 import {specializedRouter} from './modules/specialized/router.js';
 import {ruralRouter} from './modules/rural/router.js';
 import {requestLevelsRouter} from './modules/request-levels/router.js';
@@ -52,6 +53,7 @@ api.use('/categories',categoriesRouter);
 api.use('/access-settings',accessSettingsRouter);
 api.use('/request-archives',requestArchivesRouter);
 api.use('/auth',authRouter);
+api.use('/portal-identity',portalIdentityRouter);
 api.use('/account',accountRouter);
 api.use('/account-closure',accountClosureRouter);
 api.use('/privacy',privacyRouter);

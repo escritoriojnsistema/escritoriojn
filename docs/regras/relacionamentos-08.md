@@ -1,5 +1,7 @@
 # Relacionamentos, identidade e mesclagem — Etapa08
 
+Atualização31: identidade08 continua canônica. Convite seguro31 a confirma/cria sem segundo cadastro; a conferência administrativa08 permanece válida. `portal_enabled:false` neste DTO legado não é uma decisão de entrega: liberação de documentos continua nos gates25/26. Representação08 sozinha não concede portal; autorização31 é separada, com atendimento, escopo de andamento público, prazo e revogação. Ver docs/etapas/plano-31.md.
+
 Contrato do banco e transporte para API/UI. Fonte tipada: `shared/customerRelations.ts`; migração `20261020182035_customer_relationships_identity_merge.sql`. Nenhuma operação deste contrato cria conta Auth, concede portal ou autoriza documento. A evidência é uma referência privada de conferência humana, nunca prova inferida de CPF/e-mail.
 
 ## Autorização e persistência
