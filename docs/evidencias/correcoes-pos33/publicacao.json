@@ -1,0 +1,30 @@
+{
+  "runtime_pr": 119,
+  "runtime_pr_url": "https://github.com/escritoriojnsistema/escritoriojn/pull/119",
+  "feature_commit": "a6470f2603b2109ece5fafd58d5538061fff2a7b",
+  "merge_commit": "78b6b154b74a59fdd79f7fe0772ce6aa1955e882",
+  "runtime_tree": "46e33f0e79068739bd1f66b12e3cd03cc1b5ee68",
+  "preview": {
+    "id": "dpl_ESZgqjBBd2rztUjgrDD259RciWSt",
+    "state": "READY",
+    "source": "git",
+    "commit": "a6470f2603b2109ece5fafd58d5538061fff2a7b"
+  },
+  "runtime_production": {
+    "id": "dpl_DRjydN7wtftZkPP9A9NnwzfW9v5h",
+    "state": "READY",
+    "source": "git",
+    "target": "production",
+    "commit": "78b6b154b74a59fdd79f7fe0772ce6aa1955e882",
+    "url": "escritoriojn-fgao1a62h-escritorio-jn.vercel.app"
+  },
+  "canonical_url": "https://escritoriojn.vercel.app",
+  "method": "GitHub→Vercel",
+  "github_actions_used": false,
+  "direct_deploy_used": false,
+  "stage34_started": false,
+  "production_assets_verified": 74,
+  "hosted_public_browser_tests_passed": 26,
+  "hosted_authenticated_personal_sessions_tested": false,
+  "hosted_mutations_or_fixtures": false
+}

@@ -25,3 +25,9 @@ Resultados finais e publicação são registrados em `docs/evidencias/correcoes-
 Revisão independente reproduziu e confirmou a correção de aceite de cliente para equipe, quota com marcador antigo e resposta tardia entre duas sessões. Fixtures31 foram corrigidas para começar no portal de equipe ao testar equipe, em vez de abrir primeiro o portal de cliente e trocar silenciosamente a resposta de papel. O teste de restauração rural agora exige que nem o módulo privado seja montado antes da autorização.
 
 Mapa completo: [Etapas01–33](mapa-acessos-01-33.md). Publicação exclusivamente por GitHub→Vercel, sem Actions/deploy direto. A conferência hospedada testa saúde, barreiras anônimas, no-store e bytes dos assets; não afirma ausência de latência física nem acesso autenticado a dados reais do usuário.
+
+## Publicação conferida
+
+[PR119](https://github.com/escritoriojnsistema/escritoriojn/pull/119), featurea6470f2/merge78b6b15, árvore46e33f0. PreviewESZgqjBB e produçãoDRjydN7READY, sourceGit.391Node,337cenários distintos de navegador aprovados (244regressões intactas +93casos afetados finais, com os últimos26reexecutados após os ajustes finais),8cenáriosAuthreais locais,26públicos hospedados. Os74assets da produção têm SHA256 idêntico ao build local; entradaHTMLno-store e saúde200. Sem sessão pessoal autenticada hospedada. Fonte e evidências em [publicacao.json](../evidencias/correcoes-pos33/publicacao.json), [verificacao.json](../evidencias/correcoes-pos33/verificacao.json) e [bundle-publicado.json](../evidencias/correcoes-pos33/bundle-publicado.json).
+
+O fecho documental registra a publicação já conferida e preserva os bytes do runtime; continua somente GitHub→Vercel, semActions. Nenhuma migration/Auth/grant/fixture hospedado escrito.
