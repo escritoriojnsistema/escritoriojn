@@ -1,0 +1,148 @@
+{
+  "date_utc": "2026-11-11",
+  "project": "mcsuoxnubpqenyvbefee",
+  "migration": "20261111190203",
+  "migration_name": "portal_intake33",
+  "applied_by": "Git integration",
+  "manual_apply": false,
+  "do_not_reapply": true,
+  "statements_verified": 69,
+  "normalized_statements_equal": true,
+  "canonical_functions_verified": 34,
+  "canonical_functions_equal": true,
+  "protections": {
+    "tables": [
+      {
+        "rls": true,
+        "name": "portal_service_forms33",
+        "anon_access": false,
+        "service_role_access": false,
+        "authenticated_access": false
+      },
+      {
+        "rls": true,
+        "name": "portal_service_commands33",
+        "anon_access": false,
+        "service_role_access": false,
+        "authenticated_access": false
+      },
+      {
+        "rls": true,
+        "name": "service_intakes33",
+        "anon_access": false,
+        "service_role_access": false,
+        "authenticated_access": false
+      },
+      {
+        "rls": true,
+        "name": "service_intake_revisions33",
+        "anon_access": false,
+        "service_role_access": false,
+        "authenticated_access": false
+      },
+      {
+        "rls": true,
+        "name": "portal_request_limits33",
+        "anon_access": false,
+        "service_role_access": false,
+        "authenticated_access": false
+      },
+      {
+        "rls": true,
+        "name": "service_intake_commands33",
+        "anon_access": false,
+        "service_role_access": false,
+        "authenticated_access": false
+      }
+    ],
+    "buckets": [
+      {
+        "name": "request-attachments",
+        "public": false
+      },
+      {
+        "name": "jn-document-artifacts",
+        "public": false
+      }
+    ],
+    "wrappers": [
+      {
+        "name": "portal_service_publish33",
+        "anon_execute": false,
+        "security_definer": false,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "portal_service_open33",
+        "anon_execute": false,
+        "security_definer": false,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "portal_services33",
+        "anon_execute": false,
+        "security_definer": false,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "portal_service_form33",
+        "anon_execute": false,
+        "security_definer": false,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "portal_request_resume33",
+        "anon_execute": false,
+        "security_definer": false,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      },
+      {
+        "name": "portal_service_manage33",
+        "anon_execute": false,
+        "security_definer": false,
+        "service_role_execute": false,
+        "authenticated_execute": true
+      }
+    ],
+    "helpers_closed": true,
+    "new_hosted_rows": 0,
+    "request_triggers": 2
+  },
+  "integrity": {
+    "tables_compared": 173,
+    "unchanged_fingerprints": 170,
+    "business_identity_membership_permissions_delegations_unchanged": true,
+    "account_count_unchanged": true,
+    "runtime_differences": [
+      {
+        "name": "auth.users",
+        "before_count": 7,
+        "after_count": 7
+      },
+      {
+        "name": "private.maintenance_schedule_settings",
+        "before_count": 2,
+        "after_count": 2
+      },
+      {
+        "name": "private.session_activities",
+        "before_count": 82,
+        "after_count": 83
+      }
+    ],
+    "note": "Concurrent Auth login/session activity and scheduled maintenance changed runtime table fingerprints. Full Auth.users fingerprint equality is not claimed. This task made no hosted Auth/data/grant writes; migration33 contains no such backfill."
+  },
+  "new_stage33_unindexed_foreign_keys": 0,
+  "new_security_warnings": 0,
+  "preexisting_warning": {
+    "name": "auth_leaked_password_protection",
+    "url": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+  },
+  "private_rls_without_policies": "Intentional RPC-only access; direct ACLs closed",
+  "unused_new_indexes": "No production intake data generated; retain integrity/FK/rate indexes"
+}
