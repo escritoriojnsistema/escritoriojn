@@ -1,7 +1,7 @@
 import {test,expect,type Page} from '@playwright/test';
 test.skip(!process.env.TEAM_UI_CONTRACT,'Contrato visual fictício; autoridade real tem SQL/Auth próprios.');
 const office='11111111-1111-4111-8111-111111111111',user='22222222-2222-4222-8222-222222222222',id='33333333-3333-4333-8333-333333333333',date='2026-11-10T12:00:00Z';
-async function setup(page:Page){
+async function setup(page:Page,openClient=true){
  const token=`e30.${Buffer.from(JSON.stringify({sub:user,exp:Math.floor(Date.now()/1000)+3600,role:'authenticated',session_id:office})).toString('base64url')}.fixture`;
  await page.addInitScript(({token,user})=>localStorage.setItem('sb-team-ui-auth-token',JSON.stringify({access_token:token,refresh_token:'fixture',token_type:'bearer',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:user,aud:'authenticated',email:'fixture@example.test',app_metadata:{},user_metadata:{}}})),{token,user});
  await page.route('https://team-ui.supabase.co/**',r=>r.fulfill({json:{id:user,aud:'authenticated',email:'fixture@example.test'}}));
@@ -11,13 +11,13 @@ async function setup(page:Page){
  let linked=false;const state=()=>({customer_version:null,requests:[],identity:linked?{name:'Maria de Teste',verified_at:date}:null,invitations:[],representations:[],limit:20});
  await page.route('**/api/portal-identity/state',r=>r.fulfill({json:{data:state()}}));
  const commands:unknown[]=[];let fail=false;await page.route('**/api/portal-identity/command',r=>{commands.push(r.request().postDataJSON());if(fail){fail=false;return r.fulfill({status:503,json:{error:{code:'PORTAL_UNAVAILABLE'}}});}linked=true;return r.fulfill({json:{data:{id}}});});
- await page.goto('/minha-conta');await page.getByRole('button',{name:'Meu vínculo no portal',exact:true}).click();return{commands,fail:()=>{fail=true;}};
+ if(openClient){await page.goto('/minha-conta');await page.getByRole('button',{name:'Meu vínculo no portal',exact:true}).click();}return{commands,fail:()=>{fail=true;}};
 }
 for(const width of [320,375,768,1440])test(`31: client identity is compact and secure ${width}px`,async({page})=>{await page.setViewportSize({width,height:850});const s=await setup(page);await expect(page.getByText(/Seu vínculo ainda não foi conferido/)).toBeVisible();await page.getByLabel('Código do vínculo').fill('a'.repeat(64));await page.getByRole('button',{name:'Confirmar vínculo',exact:true}).click();await expect(page.getByText(/Identidade conferida: Maria de Teste/)).toBeVisible();expect(s.commands).toHaveLength(1);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await expect(page.getByText(/Carregando|Salvando|Aguarde/)).toHaveCount(0);expect(await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link').count()).toBeLessThanOrEqual(4);if(process.env.TEAM_UI_CAPTURE)await page.screenshot({path:`docs/evidencias/etapa-31/cliente-${width}.png`,fullPage:true});});
 test('31: uncertain response preserves exact attempt and prevents leaving',async({page})=>{const s=await setup(page);s.fail();await page.getByLabel('Código do vínculo').fill('b'.repeat(64));await page.getByRole('button',{name:'Confirmar vínculo',exact:true}).click();await expect(page.getByRole('button',{name:'Repetir a mesma tentativa'})).toBeVisible();await expect(page.getByRole('button',{name:'Voltar à conta',exact:true})).toBeDisabled();await expect(page.getByLabel('Código do vínculo')).toBeDisabled();await page.getByRole('button',{name:'Repetir a mesma tentativa'}).click();await expect(page.getByText(/Identidade conferida: Maria de Teste/)).toBeVisible();expect(s.commands[0]).toEqual(s.commands[1]);});
 test('31: revoked authority clears identity and token',async({page})=>{await setup(page);await page.getByLabel('Código do vínculo').fill('c'.repeat(64));await page.route('**/api/portal-identity/command',r=>r.fulfill({status:403,json:{error:{code:'PORTAL_403'}}}));await page.getByRole('button',{name:'Confirmar vínculo',exact:true}).click();await expect(page.getByLabel('Código do vínculo')).toHaveCount(0);await expect(page.getByText(/Acesso indisponível/)).toBeVisible();});
 async function staffSetup(page:Page,role='owner'){
- await setup(page);
+ await setup(page,false);
  const customer={id,kind:'person',name:'Maria de Teste',identifier:null,identifier_masked:null,contacts:[],created_at:date,version:1,can_update:true};
  await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,role_code:role,permissions:['foundation.access','customers.read','customers.read_all','customers.verify','customers.relate','requests.read'],office_name:'Escritório local',display_name:'Gestor'}]}}}));
  await page.route('**/api/customers**',r=>r.fulfill({json:{data:r.request().url().endsWith('/search')?{items:[customer],total:1,page:1,page_size:3}:customer}}));

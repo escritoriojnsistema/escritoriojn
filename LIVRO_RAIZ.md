@@ -1,6 +1,12 @@
 # Livro Raiz — Escritório JN
 
-## Checkpoint atual: Etapa 33 publicada e verificada
+## Correções atuais: acessos e portais após33
+
+Pedido11/11/2026 sobre a base main5558136. Revisão das etapas01–33: portal agora fica correlacionado à sessão verificada, revalida apenas a área escolhida e bloqueia montagem/API de telas do outro portal. Marca/Início segue a sessão; convite/callback permitem transição explícita revalidada, com proteção contra resposta de sessão antiga. Preferência versionada não contém poderes/tokens e usa fallback/revisão entre stores quando há quota. Destinos administrativos/financeiros autorizados estão explícitos na sidebar; quatro atalhos mobile preservados. Configurações escolhe escritório elegível por seção; Documentos respeita a aba na seleção inicial. Sino sem indicador pendente; lazy loading e comandos incertos preservados.
+
+Permissões continuam explícitas por escritório: cargo não libera todos os módulos. Nenhuma migration, fixture/Auth/grant hospedado foi alterado; última20261111190203/76migrations. Etapa34 não iniciada. [Fecho das correções](docs/etapas/fecho-correcoes-pos33.md) · [Mapa01–33](docs/etapas/mapa-acessos-01-33.md) · [Verificações](docs/evidencias/correcoes-pos33/verificacao.json) · [Publicação](docs/evidencias/correcoes-pos33/publicacao.json). Estado da publicação será preenchido após confirmação do GitHub→Vercel, sem Actions.
+
+## Última etapa implementada: Etapa 33 publicada e verificada
 
 Data:11/11/2026UTC. [PR117](https://github.com/escritoriojnsistema/escritoriojn/pull/117), feature338130ef/mergee996b8d5, previewFKCXkQSX e produçãoMJEL3RKK READY: https://escritoriojn.vercel.app. Base32 maind905485 conferida antes das mudanças. Formulários por serviço são publicados explicitamente em Serviços→Pedidos digitais; modelos conservam ofertas21. Cliente preenche campos09/quantidade/preço do servidor, confere/anexa pelo pipeline11 privado e confirma envio no mesmo protocolo10 para distribuição existente. Preparações ficam fora da fila operacional; retirada/mudança da publicação bloqueia primeiro envio antigo sem apagar seus dados. Devoluções12/status/histórico32/notificações preservados. Não há pagamento online, preço livre, nova capability ou concessão individual.
 

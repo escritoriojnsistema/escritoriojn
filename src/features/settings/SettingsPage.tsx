@@ -13,7 +13,8 @@ import './settings.css';
 export default function SettingsPage({section='home'}:{section?:'home'|'categories'|'access'|'privacy'}){
  const auth=useAuth(),[selected,setSelected]=useState(''),[busy,setBusy]=useState(false);
  const contexts=auth.contexts.filter(c=>c.role_code!=='client'&&c.permissions.includes('settings.access'));
- const context=contexts.find(c=>c.office_id===selected)??contexts[0];
+ const eligible=contexts.filter(c=>section==='home'||(section==='privacy'?c.role_code==='owner':['owner','admin'].includes(c.role_code)&&c.permissions.includes(section==='categories'?'categories.manage':'access.manage')));
+ const context=eligible.find(c=>c.office_id===selected)??eligible[0]??contexts[0];
  if(auth.status==='loading')return <OperationalFeedback status="loading"/>;
  if(auth.status==='signedOut'||auth.status==='expired')return <Navigate replace to={paths.team}/>;
  if(auth.status!=='authorized'||!context)return <OperationalFeedback status={auth.status==='unavailable'?'unavailable':'denied'}/>;
@@ -26,7 +27,7 @@ export default function SettingsPage({section='home'}:{section?:'home'|'categori
  const allowed=section==='home'||items.some(i=>i.path===(section==='categories'?paths.settingsCategories:section==='privacy'?paths.settingsPrivacy:paths.settingsAccess));
  return <OperationLayout busy={busy}><div className="settings-main">
  <OperationHeading context={context} showRole={false} title={section==='categories'?'Categorias':section==='access'?'Acessos':section==='privacy'?'Privacidade':'Configurações'} description={section==='home'?'Organização, pessoas e regras do escritório.':'Configuração oficial deste escritório.'}/>
- {contexts.length>1&&<label className="team-field">Escritório<select disabled={busy} value={context.office_id} onChange={e=>setSelected(e.target.value)}>{contexts.map(c=><option key={c.office_id} value={c.office_id}>{c.office_name}</option>)}</select></label>}
+ {eligible.length>1&&<label className="team-field">Escritório<select disabled={busy} value={context.office_id} onChange={e=>setSelected(e.target.value)}>{eligible.map(c=><option key={c.office_id} value={c.office_id}>{c.office_name}</option>)}</select></label>}
  {!allowed?<p role="alert" className="form-feedback error">Seu acesso não permite alterar esta configuração.</p>:section==='home'?<nav aria-label="Opções de configurações" className="settings-destinations">{items.map(({label,description,path,icon:Icon})=><Link key={path} to={path}><Icon size={22} aria-hidden="true"/><span><strong>{label}</strong><small>{description}</small></span></Link>)}{!items.length&&<p>Nenhuma configuração adicional foi concedida ao seu acesso.</p>}</nav>:section==='categories'?<CategoriesSettings key={context.office_id} office={context.office_id} onPendingChange={setBusy}/>:section==='privacy'?<PrivacySettings key={context.office_id} office={context.office_id} onPendingChange={setBusy}/>:<AccessSettings key={context.office_id} office={context.office_id} onPendingChange={setBusy}/>}
  </div></OperationLayout>;
 }

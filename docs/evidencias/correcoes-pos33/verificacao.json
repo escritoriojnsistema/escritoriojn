@@ -1,0 +1,54 @@
+{
+  "base_commit": "55581369e6b85a846bf692f5dcadf5f168da761f",
+  "last_implemented_stage": 33,
+  "new_stage_started": false,
+  "node": {
+    "passed": 391,
+    "failed": 0
+  },
+  "browser": {
+    "distinct_current_cases_passed": 337,
+    "additional_regressions_passed": 244,
+    "final_affected_cases_passed": 93,
+    "last_run_passed": 26,
+    "initial_failures_resolved": true,
+    "notes": "Reexecutados arquivos afetados após fixtures31/Settings iniciarem o portal correto e incluírem o nível obrigatório; autosave/pedido digital repetidos com código estável, sem HMR durante o cenário. Módulos intactos mantiveram244aprovações."
+  },
+  "real_local_auth_rest_express_chromium": {
+    "passed": 8,
+    "roles": [
+      "owner",
+      "admin",
+      "employee",
+      "client"
+    ],
+    "widths": [
+      360,
+      1440
+    ],
+    "reload_and_real_token_refresh": true,
+    "same_uid_new_login_can_select_other_portal": true
+  },
+  "viewports_covered": [
+    320,
+    360,
+    375,
+    768,
+    1440
+  ],
+  "maximum_mobile_shortcuts": 4,
+  "opposite_module_fetch_blocked": true,
+  "invitation_callback_and_late_session_responses_tested": true,
+  "quota_stale_storage_tested": true,
+  "lazy_loading_and_no_visible_loaders_tested": true,
+  "typecheck_and_production_build": "PASS",
+  "independent_review": "Achados corrigidos e reproduzidos; nenhuma ressalva confirmada restante.",
+  "database": {
+    "identity_memberships_grants_unchanged": true,
+    "migrations": 76,
+    "latest_migration": "20261111190203",
+    "new_migration": false,
+    "hosted_fixtures_or_auth_writes": false
+  },
+  "publication": "Pending GitHub→Vercel verification; no Actions or direct deploy."
+}

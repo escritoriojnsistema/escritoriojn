@@ -24,7 +24,8 @@ export default function DocumentsHubPage(){
  const location=useLocation(),auth=useAuth(),[selected,setSelected]=useState<string>(()=>location.state?.office_id??''),[params,setParams]=useSearchParams(),[documentLayout,setDocumentLayout]=useState<DocumentsLayout>({actions:undefined,busy:false});
  useEffect(()=>{if(typeof location.state?.office_id==='string')setSelected(location.state.office_id);},[location.key]);
  const contexts=auth.contexts.filter(context=>canModels(context)||canIssued(context));
- const context=contexts.find(item=>item.office_id===selected)??contexts[0];
+ const requested=params.get('aba') as Tab|null;
+ const context=contexts.find(item=>item.office_id===selected)??contexts.find(item=>requested==='models'?canModels(item):requested==='issued'||requested==='reviews'?canIssued(item):false)??contexts[0];
  if(auth.status==='loading')return <OperationalFeedback status="loading"/>;
  if(auth.status==='signedOut'||auth.status==='expired')return <Navigate replace to={paths.team}/>;
  if(auth.status!=='authorized'||!context)return <OperationalFeedback status={auth.status==='unavailable'?'unavailable':'denied'}/>;
@@ -34,7 +35,6 @@ export default function DocumentsHubPage(){
   ['reviews','Revisões',canIssued(context)],
  ];
  const available=tabs.filter(([, ,show])=>show);
- const requested=params.get('aba') as Tab|null;
  const tab=available.some(([key])=>key===requested)?requested as Tab:available[0][0];
  return <OperationLayout busy={tab==='issued'?documentLayout.busy:modelsBusy} contextActions={tab==='issued'?documentLayout.actions:undefined}><div className="documents-main documents-hub">
   <OperationHeading context={context} showRole={false} title="Documentos" description="Modelos, documentos emitidos e revisão editorial no mesmo lugar."/>

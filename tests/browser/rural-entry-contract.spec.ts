@@ -13,8 +13,9 @@ for(const status of [200,403,503])test(`imóveis preserva URL ao restaurar sess�
  // This avoids a fixed sleep racing the lazy module download.
  await page.route('**/src/features/rural/RuralPage.tsx*',async r=>{const response=await r.fetch(),body=await response.text();expect(body).toMatch(/function RuralPage\(\)\s*\{/);await r.fulfill({response,body:body.replace(/function RuralPage\(\)\s*\{/,'function RuralPage(){globalThis.__ruralRendered=true;')});});
  await page.goto('/imoveis-rurais');await expect.poll(()=>requested).toBe(true);
- await page.waitForFunction(()=>(globalThis as typeof globalThis&{__ruralRendered?:boolean}).__ruralRendered);
- await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));
+ // The shared boundary now prevents even mounting a private page until the
+ // session is verified. Retain the URL and assert no early domain request.
+ expect(await page.evaluate(()=>(globalThis as typeof globalThis&{__ruralRendered?:boolean}).__ruralRendered)).not.toBe(true);
  try{
   expect(new URL(page.url()).pathname).toBe('/imoveis-rurais');expect(reads).toBe(0);await expect(page.getByText('Imóvel privado de teste')).toHaveCount(0);
  }finally{release();}

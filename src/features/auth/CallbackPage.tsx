@@ -7,10 +7,14 @@ import { callbackFailure } from './callbackFailure';
 import { invitationSession } from './invitationCallback';
 import { uuidPattern } from '../../../shared/access';
 import { AccessShell } from '../access/AccessShell';
+import {useAuth} from './AuthProvider';
+import {sessionScope} from './sessionScope';
 export default function CallbackPage() {
   const navigate = useNavigate();
+  const {selectPortal}=useAuth();
   const [failure, setFailure] = useState('');
-  const [area] = useState(() => new URLSearchParams(window.location.search).get('area') === 'team' ? 'team' : 'client');
+  const [area] = useState<'team'|'client'>(() => new URLSearchParams(window.location.search).get('area') === 'team' ? 'team' : 'client');
+  const [explicitArea] = useState(() => ['team','client'].includes(new URLSearchParams(window.location.search).get('area')??''));
   const [invite] = useState(() => { const id=new URLSearchParams(window.location.search).get('invite'); return id && uuidPattern.test(id)?id:null; });
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
@@ -32,6 +36,7 @@ export default function CallbackPage() {
       void supabase.auth.setSession({access_token:invitation.access_token,refresh_token:invitation.refresh_token}).then(({data,error})=>{
         if(!active)return;
         if(error || !data.session) {setFailure(callbackFailure(error));return;}
+        if(!selectPortal('team',sessionScope(data.session)))return;
         navigate(`${paths.invitation}?id=${encodeURIComponent(invitation.id)}`,{replace:true});
       }).catch(error=>{if(active)setFailure(callbackFailure(error));});
       return ()=>{active=false;};
@@ -45,9 +50,10 @@ export default function CallbackPage() {
       listener.subscription.unsubscribe();
       if (!active) return;
       if (error || !data.session) { setFailure(callbackFailure(error)); return; }
+      if(explicitArea&&!selectPortal(area,sessionScope(data.session)))return;
       navigate(recovering ? `${paths.reset}?area=${area}` : paths.authenticated, { replace: true });
     }).catch(error => { listener.subscription.unsubscribe(); if (active) setFailure(callbackFailure(error)); });
     return () => { active = false; listener.subscription.unsubscribe(); };
-  }, [navigate, area]);
+  }, [navigate, area, explicitArea, selectPortal]);
   return <AccessShell title={failure ? 'Confira seu link' : 'Acesso ao escritório'}>{failure ? <><p className="form-feedback error" role="alert">{failure}</p><Link className="primary-button" to={invite?`${paths.invitation}?id=${encodeURIComponent(invite)}`:`${paths.recovery}?area=${area}`}><ArrowRight size={18} aria-hidden="true" />{invite?'Voltar ao convite':'Solicitar novo link'}</Link></> : null}</AccessShell>;
 }
