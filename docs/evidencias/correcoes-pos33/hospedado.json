@@ -1,0 +1,33 @@
+{
+  "canonical_url": "https://escritoriojn.vercel.app",
+  "passed": 26,
+  "scope": "Chromium/HTTP públicos, sem login pessoal, cadastro ou mutação autenticada hospedada.",
+  "cases": [
+    "✓   1 tests/browser/account-public.spec.ts:2:1 › conta público: edição e propostas exigem sessão e não usam cache compartilhado (1.5s)",
+    "✓   3 tests/browser/portal-identity31-public.spec.ts:2:1 › 31: public caller cannot read or mutate identity, headers prevent shared caching (316ms)",
+    "✓   4 tests/browser/portal-identity31-public.spec.ts:3:126 › 31: private /minha-conta requires login 320px (1.5s)",
+    "✓   2 tests/browser/auth-public.spec.ts:2:1 › campos da equipe e cliente sem quadro interno ou sombra, inclusive autofill (4.2s)",
+    "✓   5 tests/browser/portal-identity31-public.spec.ts:3:126 › 31: private /clientes requires login 320px (1.3s)",
+    "✓   6 tests/browser/auth-public.spec.ts:28:1 › cadastro publico tem apenas campos de cliente e senha pode ser conferida (1.6s)",
+    "✓   7 tests/browser/portal-identity31-public.spec.ts:3:126 › 31: private /minha-conta requires login 1440px (1.8s)",
+    "✓   8 tests/browser/auth-public.spec.ts:38:1 › painel direto exige sessao e callback sem codigo nao segue redirect externo (2.0s)",
+    "✓   9 tests/browser/portal-identity31-public.spec.ts:3:126 › 31: private /clientes requires login 1440px (2.2s)",
+    "✓  10 tests/browser/auth-public.spec.ts:46:1 › callback limpa fragmento recusado e distingue expiracao do provedor (1.4s)",
+    "✓  11 tests/browser/portal32-public.spec.ts:2:1 › 32: anonymous calls cannot inspect or change portal documents; no shared cache (744ms)",
+    "✓  12 tests/browser/auth-public.spec.ts:57:1 › rota aninhada de autenticacao chega a API e exige sessao (723ms)",
+    "✓  14 tests/browser/auth-public.spec.ts:68:1 › rota aninhada desconhecida retorna erro da API com rastreio (258ms)",
+    "✓  13 tests/browser/portal32-public.spec.ts:3:195 › 32: /meus-documentos?aba=meus requires login 320px (1.6s)",
+    "✓  15 tests/browser/portal33-public.spec.ts:2:1 › 33: all digital intake endpoints deny anonymous access and shared caching (930ms)",
+    "✓  16 tests/browser/portal32-public.spec.ts:3:195 › 32: /minhas-solicitacoes requires login 320px (1.3s)",
+    "✓  17 tests/browser/portal33-public.spec.ts:3:177 › 33: /minhas-solicitacoes login gate 320px (2.5s)",
+    "✓  18 tests/browser/portal32-public.spec.ts:3:195 › 32: /documentos?aba=issued requires login 320px (1.7s)",
+    "✓  19 tests/browser/portal33-public.spec.ts:3:177 › 33: /modelos-disponiveis login gate 320px (1.7s)",
+    "✓  20 tests/browser/portal32-public.spec.ts:3:195 › 32: /meus-documentos?aba=meus requires login 1440px (1.8s)",
+    "✓  21 tests/browser/portal33-public.spec.ts:3:177 › 33: /servicos login gate 320px (1.7s)",
+    "✓  22 tests/browser/portal32-public.spec.ts:3:195 › 32: /minhas-solicitacoes requires login 1440px (1.6s)",
+    "✓  23 tests/browser/portal33-public.spec.ts:3:177 › 33: /minhas-solicitacoes login gate 1440px (1.2s)",
+    "✓  24 tests/browser/portal32-public.spec.ts:3:195 › 32: /documentos?aba=issued requires login 1440px (1.7s)",
+    "✓  25 tests/browser/portal33-public.spec.ts:3:177 › 33: /modelos-disponiveis login gate 1440px (1.8s)",
+    "✓  26 tests/browser/portal33-public.spec.ts:3:177 › 33: /servicos login gate 1440px (948ms)"
+  ]
+}

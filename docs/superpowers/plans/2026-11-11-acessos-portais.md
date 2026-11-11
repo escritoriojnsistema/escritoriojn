@@ -24,4 +24,4 @@
 - [x] Fixar portal na sessão verificada, filtrar contexto em toda revalidação e bloquear montagem do módulo oposto.
 - [x] Corrigir caminhos autorizados dos agrupadores/menu; inventariar etapas01–33 e testar seleção por escritório e papéis.
 - [x] Regressões Node/build/browser, revisão independente e verificações read-only de backend/Supabase.
-- [ ] Atualizar Livro/continuidade/evidências, publicar GitHub→Vercel e conferir produção.
+- [x] Atualizar Livro/continuidade/evidências, publicar GitHub→Vercel e conferir produção.

@@ -50,5 +50,12 @@
     "new_migration": false,
     "hosted_fixtures_or_auth_writes": false
   },
-  "publication": "Pending GitHub→Vercel verification; no Actions or direct deploy."
+  "publication": "GitHub PR119 → main78b6b15 → Vercel dpl_DRjydN7wtftZkPP9A9NnwzfW9v5h READY, source git, production.",
+  "hosted": {
+    "public_browser_tests_passed": 26,
+    "assets_equal_local_build": 74,
+    "health_status": 200,
+    "html_no_store": true,
+    "no_personal_credentials_or_authenticated_hosted_fixtures": true
+  }
 }
