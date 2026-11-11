@@ -24,7 +24,7 @@ Alternativas descartadas: formulário livre como única opção não cobre campo
 - [x] Contratos/API RED→GREEN: Bearer/no-store, corpos exatos, DTOallowlist, erros genéricos,429/retry, sem dados internos/preço/responsável forjados.
 - [x] Banco RED→GREEN: configuração explícita/versionada, abertura e retomada próprias, snapshot09/item10/retorno12/Storage11, booking compatível, limites e concorrência/idempotência. Migrador sem superusuário/BYPASSRLS. Verificar deriva de versão e validade após locks.
 - [x] UI: configuração de publicação, formulário por serviço/modelo, continuação com anexos e envio, retorno/revisão tipados e pendências; nonce sem PII, busy/navegação protegidos até nos incorporados. Dados tardios de outra sessão/escritório descartados.
-- [ ] Verificação: Node/tipos/build/audit; replay SQL completo e regressões31/32; Auth/REST/Express/Storage reais locais com comprador correto/terceiro, anexo real/quarentena, funcionário autorizado, reenvio e notificação semPII. Interface320/375/768/1440/quatro perfis e até4atalhos, sem loader/overflow.
+- [x] Verificação: Node/tipos/build/audit; replay SQL completo e regressões31/32; Auth/REST/Express/Storage reais locais com comprador correto/terceiro, anexo real/quarentena, funcionário autorizado, reenvio e notificação semPII. Interface320/375/768/1440/quatro perfis e até4atalhos, sem loader/overflow.
 - [x] Revisão independente de autoridade/retomada/replays/race/limites e arquitetura antes de publicar.
 - [ ] GitHub→Vercel apenas/semActions; consultar histórico remoto antes de aplicação manual; conferir schema/bundle/integridade/public endpoints; atualizarLivro/AGENTS/fecho e evidências.34 não iniciada.
 
