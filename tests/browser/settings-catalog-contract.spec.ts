@@ -21,8 +21,8 @@ async function setup(page:Page,role='owner',permissions=caps){
 for(const width of [360,1440]){
  test(`configurações: navegação, categorias e prazo personalizado em ${width}`,async({page})=>{
   await page.setViewportSize({width,height:900});const state=await setup(page);await page.goto('/configuracoes');
-  const nav=page.getByRole('navigation',{name:'Opções de configurações'});await expect(nav.getByRole('link')).toHaveCount(5);
-  await nav.getByRole('link',{name:/Categorias/}).click();await page.getByRole('button',{name:'Nova categoria'}).click();await page.getByLabel('Nome da categoria').fill('Categoria adicional');await page.getByLabel('Motivo').fill('Organização autorizada de teste');await page.getByRole('button',{name:'Salvar categoria'}).click();await expect(page.getByRole('status')).toContainText('criada');expect(state.commands[0].command.kind).toBe('create');
+  const nav=page.getByRole('navigation',{name:'Opções de configurações'});await expect(nav.getByRole('link')).toHaveCount(6);
+  await nav.getByRole('link',{name:/Categorias/}).click();await page.getByRole('button',{name:'Nova categoria'}).click();await page.getByLabel('Nome da categoria').fill('Categoria adicional');await page.getByLabel('Nível de execução').selectOption('1');await page.getByLabel('Motivo').fill('Organização autorizada de teste');await page.getByRole('button',{name:'Salvar categoria'}).click();await expect(page.getByRole('status')).toContainText('criada');expect(state.commands[0].command.kind).toBe('create');
   await page.goto('/configuracoes/acessos');const team=page.locator('form').filter({has:page.getByRole('heading',{name:'Equipe',exact:true})});await team.getByRole('combobox').selectOption('custom');await team.getByRole('spinbutton').fill('47');await team.getByRole('button',{name:'Salvar prazo da equipe'}).click();await expect(page.getByRole('status')).toContainText('salvo');expect(state.policies.team.idle_minutes).toBe(47);expect(state.policies.client.idle_minutes).toBe(30);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await expect(page.locator('[role="progressbar"],.loader,.spinner')).toHaveCount(0);
   if(width===360)expect(await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link').count()).toBeLessThanOrEqual(4);
@@ -34,9 +34,12 @@ for(const width of [360,1440]){
   await page.screenshot({path:`/workspace/scratch/catalog-${width}.png`,fullPage:true});
  });
 }
-test('configurações: cliente e funcionário não ganham gestão por conhecer a URL',async({page})=>{
- await setup(page,'client',['foundation.access']);await page.goto('/configuracoes');await expect(page.getByRole('navigation',{name:'Opções de configurações'})).toHaveCount(0);
- await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,office_name:'Teste',display_name:'Teste',role_code:'employee',permissions:['foundation.access','settings.access','access.manage','categories.manage']}]}}}));await page.goto('/configuracoes/acessos');await expect(page.getByRole('alert')).toContainText('não permite');await expect(page.getByRole('button',{name:'Salvar prazo da equipe'})).toHaveCount(0);
+for(const role of ['client','employee'])test(`configurações: ${role} não ganha gestão por conhecer a URL`,async({page})=>{
+ await setup(page,role,role==='client'?[]:['foundation.access','settings.access','access.manage','categories.manage']);
+ await page.goto(role==='client'?'/configuracoes':'/configuracoes/acessos');
+ if(role==='client'){await expect(page.getByRole('heading',{name:'Acesso não autorizado',exact:true})).toBeVisible();await expect(page.getByRole('navigation',{name:'Opções de configurações'})).toHaveCount(0);}
+ else await expect(page.getByRole('alert')).toContainText('não permite');
+ await expect(page.getByRole('button',{name:'Salvar prazo da equipe'})).toHaveCount(0);
 });
 test('configurações: administrador autorizado arquiva concluída com motivo',async({page})=>{
  const state=await setup(page,'admin');await page.goto('/solicitacoes');await page.getByText('Relatórios e prazo',{exact:true}).click();await page.getByRole('button',{name:'Arquivar',exact:true}).click();await page.getByLabel('Motivo',{exact:true}).fill('Atendimento finalizado e conferido');await page.getByRole('button',{name:'Confirmar arquivo',exact:true}).click();await expect(page.getByRole('status')).toContainText('arquivada');expect(state.archives[0]).toMatchObject({expected_version:3,reason:'Atendimento finalizado e conferido'});

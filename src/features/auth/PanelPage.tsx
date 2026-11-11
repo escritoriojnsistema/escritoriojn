@@ -8,7 +8,7 @@ import { OperationHeading } from '../operation/OperationLayout';
 export default function PanelPage() {
   const auth = useAuth();
   const pathname = normalizePathname(useLocation().pathname);
-  const client = pathname === paths.clientPanel;
+  const client = pathname === paths.clientPanel || pathname === paths.authenticated && auth.portal === 'client';
   if (pathname === paths.authenticated) {
     if (auth.status === 'loading') return <OperationalFeedback status="loading" />;
     if (auth.status === 'authorized') return <Navigate replace to={auth.contexts.some(context => context.role_code !== 'client') ? paths.panel : paths.clientPanel} />;

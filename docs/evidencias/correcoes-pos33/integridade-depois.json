@@ -1,0 +1,12 @@
+{
+  "checked_utc": "2026-11-11",
+  "scope": "Somente contagens e fingerprints; nenhuma escrita/Auth/grant/fixture hospedada.",
+  "accounts": 7,
+  "account_identity_hash": "606bef5c0db2ea6bb41ab15930e66c0a",
+  "memberships_hash": "8a5f07f454df12e028335d8b112497f9",
+  "memberships": 7,
+  "grants_hash": "356a93dc1da0f6887df90106a099a3f5",
+  "grants": 22,
+  "migrations": 76,
+  "latest_migration": "20261111190203"
+}

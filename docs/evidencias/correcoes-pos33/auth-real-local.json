@@ -1,0 +1,86 @@
+{
+  "checked_utc": "2026-11-11T21:10:50.572Z",
+  "scope": "Disposable local GoTrue/PostgREST/Postgres/Express + Chromium; no hosted accounts, tokens or fixtures.",
+  "proof": [
+    {
+      "role": "owner",
+      "width": 360,
+      "real_login": true,
+      "scoped_api": true,
+      "reload": true,
+      "token_refresh": true,
+      "opposite_module_not_mounted": true,
+      "new_session_can_select_portal": true
+    },
+    {
+      "role": "owner",
+      "width": 1440,
+      "real_login": true,
+      "scoped_api": true,
+      "reload": true,
+      "token_refresh": true,
+      "opposite_module_not_mounted": true,
+      "new_session_can_select_portal": true
+    },
+    {
+      "role": "admin",
+      "width": 360,
+      "real_login": true,
+      "scoped_api": true,
+      "reload": true,
+      "token_refresh": true,
+      "opposite_module_not_mounted": true,
+      "new_session_can_select_portal": true
+    },
+    {
+      "role": "admin",
+      "width": 1440,
+      "real_login": true,
+      "scoped_api": true,
+      "reload": true,
+      "token_refresh": true,
+      "opposite_module_not_mounted": true,
+      "new_session_can_select_portal": true
+    },
+    {
+      "role": "employee",
+      "width": 360,
+      "real_login": true,
+      "scoped_api": true,
+      "reload": true,
+      "token_refresh": true,
+      "opposite_module_not_mounted": true,
+      "new_session_can_select_portal": true
+    },
+    {
+      "role": "employee",
+      "width": 1440,
+      "real_login": true,
+      "scoped_api": true,
+      "reload": true,
+      "token_refresh": true,
+      "opposite_module_not_mounted": true,
+      "new_session_can_select_portal": true
+    },
+    {
+      "role": "client",
+      "width": 360,
+      "real_login": true,
+      "scoped_api": true,
+      "reload": true,
+      "token_refresh": true,
+      "opposite_module_not_mounted": true,
+      "new_session_can_select_portal": true
+    },
+    {
+      "role": "client",
+      "width": 1440,
+      "real_login": true,
+      "scoped_api": true,
+      "reload": true,
+      "token_refresh": true,
+      "opposite_module_not_mounted": true,
+      "new_session_can_select_portal": true
+    }
+  ]
+}

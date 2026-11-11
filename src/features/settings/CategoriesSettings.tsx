@@ -64,7 +64,7 @@ function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: st
     const command: CategoryCommand = editor.kind === 'create' ? { kind: 'create', name: name.trim(), execution_level:Number(level) as 1|2|3, reason: reason.trim() }
       : editor.kind === 'rename' ? { kind: 'rename', category_id: editor.item.id, expected_revision: editor.item.revision, name: name.trim(), execution_level:Number(level) as 1|2|3, reason: reason.trim() }
       : { kind: 'delete', category_id: editor.item.id, expected_revision: editor.item.revision, reason: reason.trim() };
-    if (!validCategoryCommand(command)) { setError(new CategoriesError(422)); setMessage('Informe um nome de até 60 caracteres e um motivo de até 500 caracteres.'); return; }
+    if (!validCategoryCommand(command)) { setError(new CategoriesError(422)); setMessage(editor.kind==='delete'?'Informe um motivo válido de até 500 caracteres.':'Informe um nome de até 60 caracteres, selecione o nível de execução e informe um motivo de até 500 caracteres.'); return; }
     intent.current ??= { command, key: crypto.randomUUID() };
     const saved = intent.current;
     const controller = new AbortController(); pending.current = controller; busyRef.current = true;

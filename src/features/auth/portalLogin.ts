@@ -4,6 +4,7 @@ import { createPortalClient, onBrowserSessionEnded, supabase } from './browser';
 import { guardAdoption } from './sessionStorage';
 import { rememberVerifiedPortal } from './verifiedPortalContext';
 import { sessionScope } from './sessionScope';
+import {rememberSessionPortal} from './sessionPortal';
 
 export class PortalAccessError extends Error {}
 
@@ -15,6 +16,7 @@ export async function portalLogin(email: string, password: string, team: boolean
   let adoptingToken: string | null = null;
   let adopted = false;
   let cancelHandoff = () => {};
+  let cancelPortal = () => {};
   let previousScope: string | undefined;
   // Abort an outstanding attempt if another tab/flow changes the main session.
   // SDK callbacks only signal cancellation; no nested SDK operations/locks.
@@ -51,6 +53,7 @@ export async function portalLogin(email: string, password: string, team: boolean
     }
     current.throwIfAborted();
     adoptingToken = data.session.access_token;
+    cancelPortal = rememberSessionPortal(data.session, team ? 'team' : 'client');
     const { error: adoptionError } = await guardAdoption(adoptingToken, { signal: current, previousToken }, () => supabase!.auth.setSession({ access_token: data.session!.access_token, refresh_token: data.session!.refresh_token }));
     if (adoptionError) throw adoptionError;
     adopted = true;
@@ -62,6 +65,7 @@ export async function portalLogin(email: string, password: string, team: boolean
     unsubscribeEnd();
     if (!adopted) {
       cancelHandoff();
+      cancelPortal();
       try { await attempt.auth.signOut({ scope: 'local' }); } catch { /* Only the isolated attempt is affected. */ }
     }
     await attempt.auth.dispose();

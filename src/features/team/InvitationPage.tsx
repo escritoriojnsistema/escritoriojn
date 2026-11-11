@@ -67,7 +67,8 @@ export default function InvitationPage() {
         const { error: passwordError } = await supabase.auth.updateUser({ password });
         if (passwordError) { setMessage(authError(passwordError)); return; }
       }
-      await teamApi.accept(id); auth.refresh(); navigate(paths.panel, { replace: true });
+      await teamApi.accept(id);
+      if(auth.selectPortal('team',auth.sessionKey))navigate(paths.panel, { replace: true });
     } catch (cause) { setError(teamError(cause)); }
     finally { setBusy(false); }
   }

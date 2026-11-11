@@ -1,5 +1,7 @@
 # Onde acessar as Etapas 01–28
 
+> Histórico pós28. Consulte o [mapa atualizado das Etapas01–33](mapa-acessos-01-33.md), com as correções de portais, sidebar e permissões de11/11/2026.
+
 Leitura inicial do código em 09/11/2026, a partir da base `9772f32`; mapa consolidado em 10/11/2026 com os ajustes de navegação desta revisão. Os cartões de etapa descrevem a entrega histórica; os caminhos abaixo seguem os componentes atuais, que reuniram várias entregas no mesmo lugar. Não existem 28 botões de menu.
 
 O [inventário hospedado de 09/11/2026](../evidencias/correcoes-pos28/inventario-hospedado.json), consultado somente por contagens, encontrou **zero imóveis, pessoas/períodos rurais, vínculos rurais de atendimento, casos ITR/DITR e documentos emitidos**, e dois serviços. Portanto, naquela leitura ainda faltavam os cadastros rurais para abrir um imóvel e seguir a Etapa28. Isso não identifica as permissões ou a tela da sessão pessoal do usuário, nem confirma que os dois serviços atendem às condições de cada fluxo.
