@@ -1,3 +1,4 @@
+import {portalPublicHistory32} from '../../../shared/portalDocuments.js';
 import {specializedProgress} from '../../../shared/specialized.js';
 import {ruralProgress} from '../../../shared/ruralWorkflow.js';
 import {accountCorrection} from '../account/dto.js';
@@ -41,7 +42,8 @@ export function requestDetail(v:unknown):RequestDetail {
  if(v.portal){
   if(!Array.isArray(v.services)||v.services.length>10||!v.services.every(x=>requestText(x,120)))throw Error('Invalid portal services');
   if(v.assignee_name!==undefined&&!nullableName(v.assignee_name))throw Error('Invalid attendant');
-  return {...base,portal:true,message:v.message,services:[...v.services],assignee_name:v.assignee_name??null,...(v.correction==null?{}:{correction:accountCorrection(v.correction)})};
+  if(v.linked_view!==undefined&&typeof v.linked_view!=='boolean')throw Error('Invalid portal view');
+  return {...base,portal:true,...(v.linked_view===true?{linked_view:true}:{}),...(v.portal_history===undefined?{}:{portal_history:portalPublicHistory32(v.portal_history)}),message:v.message,services:[...v.services],assignee_name:v.assignee_name??null,...(v.correction==null?{}:{correction:accountCorrection(v.correction)})};
  }
  for(const k of ['can_reclaim','following_only'])if(v[k]!==undefined&&typeof v[k]!=='boolean')throw Error('Invalid authority');
  const staff=staffSummary(v);

@@ -1,0 +1,46 @@
+{
+  "date_utc": "2026-11-11",
+  "node_tests": 381,
+  "node_failures": 0,
+  "database_final_replay_assertions": 2170,
+  "database_stage32_focused_assertions": 32,
+  "database_single_replay": true,
+  "migrator_superuser": false,
+  "migrator_bypassrls": false,
+  "real_auth_rest_express_storage_worker": true,
+  "real_pdf_exact_sha_buyer_seller": true,
+  "real_revocation_between_storage_and_second_authorization": true,
+  "real_identity_revoke_same_bearer_denied": true,
+  "production_dependency_vulnerabilities": 0,
+  "typecheck_and_build": true,
+  "migration_file": "supabase/migrations/20261111131744_portal_documents32.sql",
+  "migration_sha256": "253b7770c2d2d65e96529963a2c4f0052d52bf430aa977f1c33faddf1ef68c00",
+  "review_findings_fixed": [
+    "P1 issuer current request and customer scope",
+    "P2 persistent invalidation after scope restored"
+  ],
+  "local_full_api_latency": {
+    "samples": 40,
+    "p50_ms": 131.01,
+    "p95_ms": 328.44,
+    "note": "Concurrent local laboratory workload; no hosted SLA measurement"
+  },
+  "hosted_fixtures_created": false,
+  "browser_final_tests": 68,
+  "browser_final_failures": 0,
+  "browser_stage32_tests": 19,
+  "browser_viewports": [
+    320,
+    375,
+    768,
+    1440
+  ],
+  "browser_roles": [
+    "owner",
+    "admin",
+    "employee",
+    "client"
+  ],
+  "no_visible_loader": true,
+  "max_mobile_shortcuts": 4
+}
