@@ -1,0 +1,93 @@
+{
+  "date_utc": "2026-11-12",
+  "scope": "Correções posteriores à Etapa34; não inicia35",
+  "base": "904569e983d940bc7bf3dd812c4cbd1e9e35b81e",
+  "branch": "fix/portal-categorias-aceites",
+  "node": {
+    "passed": 406,
+    "failed": 0
+  },
+  "database": {
+    "checks": 2257,
+    "full_replay": "PASS",
+    "migrator_superuser": false,
+    "migrator_bypassrls": false
+  },
+  "real_local_integration": {
+    "command": "AUTH_LAB_STORAGE_ROOTFS=/dev/shm/jn-storage24-root node --import tsx scripts/test-category-intake-real.mjs",
+    "result": "PASS, exit0",
+    "coverage": [
+      "GoTrue signup missing acceptance rollback and checked metadata",
+      "immutable acceptance and server timestamp",
+      "real publication/authorization/RLS",
+      "concurrent open exact retry same protocol",
+      "other-client isolation",
+      "required answers and named slot binding",
+      "private PDF upload/validation/quarantine",
+      "existing queue and staff summary",
+      "existing service33 and model category capture"
+    ],
+    "hosted_fixtures": false
+  },
+  "browser": {
+    "new_scenarios": 33,
+    "new_scenarios_status": "PASS:20 footer/admin em rodada final;13 cliente em rodadas complementares (10+3), sem contar repetições",
+    "regression_passed": 54,
+    "regression_skipped": 2,
+    "fake_authority_in_contracts": true,
+    "widths": [
+      200,
+      320,
+      375,
+      768,
+      1440
+    ]
+  },
+  "review": {
+    "independent": true,
+    "important_findings": 4,
+    "fixed_with_red_green": 4,
+    "additional_fixes": [
+      "503/409 resumes existing protocol",
+      "service chooser back navigation",
+      "footer above two-row mobile shortcuts at reflow"
+    ]
+  },
+  "build": "PASS including TypeScript frontend/backend",
+  "production_dependency_audit": {
+    "vulnerabilities": 0
+  },
+  "rollout": [
+    "PR123 compatibility frontend first; confirm published signup metadata",
+    "dependent correction PR: category schema/API/frontend + registration acceptance enforcement"
+  ],
+  "hosted": {
+    "writes": false,
+    "migration_count": 76,
+    "last_migration": "20261111190203",
+    "new_migrations_applied": false,
+    "production_authorized": false
+  },
+  "limits": [
+    "No hosted private login/flow tests while new migrations pending",
+    "No physical mobile device or zero-latency SLA claim",
+    "No default real category forms, prices, users, permissions or optional tracking"
+  ],
+  "log_sha256": {
+    "category-node-final.log": "de8ffe0e6ebfaf616a16617d18c8c34a675933a134172ab85ea6e48f8c07554d",
+    "category-intake-database-final.log": "c31a494cbbb117c012cf6bf8fc6ffd745ee58f5ab66096785f055fd104a60ece",
+    "category-build-verified.log": "62891e474d1f5f1a13644dcce3d4e8242c391bcabd16c5c30670e42272bb8dce",
+    "category-regression.log": "93527c32b53af6dadcd9aa11ca3102f104be6d12f5495215ecd4a9b1cc42124b",
+    "category-review-red.log": "d441bdc263e21d0417275b4b31d3a4dcaadd940dad25d9f92a2dc116719b752e",
+    "category-tail.log": "301e4613c6f228864d1eed8131ce61d12557510633223ade88041eea7a260f93",
+    "category-client-confirm.log": "ae6920552bbc5255297f74d0e0b056e48a49abdd21b7c39182cbc11d3806a6e3",
+    "category-footer-admin-confirm.log": "6261ef3bd057930c39a43e7bcd8aa52cc0a10e1a2e683db43c25453d43685624",
+    "category-compat-build.log": "5a5e96f18cd494adac36cc23921cbb45b889817a11de7971ddeec162056398b2"
+  },
+  "compatibility": {
+    "commit": "79524ccf3bb278469128901e4ad7da1f1b0ef984",
+    "tree": "75040a4644a2b007f076f71c8b3356fcf40b9bfd",
+    "isolated_build": "PASS exit0",
+    "pr": 123
+  }
+}

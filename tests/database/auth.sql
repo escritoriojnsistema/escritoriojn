@@ -21,7 +21,7 @@ SET ROLE migrator;
 SELECT private.configure_client_registration((SELECT id FROM public.offices WHERE name='Escritorio Ficticio A'),true);
 RESET ROLE;
 INSERT INTO auth.users(id,email,email_confirmed_at,raw_user_meta_data) VALUES
-  ('00000000-0000-4000-a000-000000000005','novo@example.test',NULL,'{"display_name":"Cliente Ficticio","role":"owner","office_id":"forged"}');
+  ('00000000-0000-4000-a000-000000000005','novo@example.test',NULL,'{"display_name":"Cliente Ficticio","role":"owner","office_id":"forged","jn_client_acceptance":{"version":"2026-11-12.1","terms":true,"privacy":true,"cookies":true,"optional_cookies":false}}');
 SELECT test.assert_true((SELECT role_code FROM public.memberships WHERE user_id='00000000-0000-4000-a000-000000000005')='client'
   AND (SELECT display_name FROM public.profiles WHERE id='00000000-0000-4000-a000-000000000005')='Cliente Ficticio',
   'cadastro cria perfil minimo e somente client, ignorando papel/escritorio forjados');

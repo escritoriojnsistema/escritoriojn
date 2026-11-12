@@ -1,5 +1,9 @@
 # Livro Raiz — Escritório JN
 
+## Correções atuais — rodapé, aceites e categorias (implementadas; produção pendente)
+
+Pedido posterior à34, preservada na base904569e/PR123; branch fix/portal-categorias-aceites. Rodapé no fim das telas e três aceites antes da senha; campos e anexos configuráveis por categoria conectados ao mesmo protocolo/Storage privado/quarentena, com gestão autorizada e dados visíveis à equipe. Catálogo/modelos/serviços e seus anexos preservados. [Fecho](docs/etapas/correcoes-portal-categorias-aceites.md) · [Verificação](docs/evidencias/correcoes-portal-categorias-aceites/verificacao.json).406Node,2.257verificaçõesSQL reais, Auth/REST/Express/Storage real local, tipos/build/audit0 e regressões aprovados; quatro achados da revisão corrigidos com RED→GREEN. Novas migrations20261112143114/20261112143334 não aplicadas hospedadas (continua76/última20261111190203). Primeiro publicar cadastro compatível noPR123, depois integrar a correção com exigênciaAuth. GitHub/preview em fechamento, semActions/deploydireto. Produção não autorizada/publicada. Não refazer34 nem iniciar35.
+
 ## Etapa 34 — implementada e homologada, produção pendente
 
 Pedido12/11/2026 sobre maine6a14ff; última etapa publicada33 e correções pós33/navegação agrupada conferidas antes de modificar. Leitura voluntária com português local do dispositivo, prioridadept-BR, pausa/retomada/parada e fallback textual. Editor usa prévia resolvida; cliente usa texto extraído localmente dos mesmos bytesPDF liberados25/26/32, com reconferência após download. Mudança de texto/revisão/aba/visibilidade/autoridade interrompe; sem voz remota, IA contratada ou persistência. PDF.js/worker próprios carregam apenas sob demanda. Foco/teclado/zoom200 e reflow compartilhados,4atalhos e nenhuma interface de carregamento.
