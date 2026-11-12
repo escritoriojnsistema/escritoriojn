@@ -1,0 +1,169 @@
+{
+  "date_utc": "2026-11-12",
+  "authorized_by": "User: Então faça a publicação e aplique as migrações",
+  "url": "https://escritoriojn.vercel.app",
+  "target": "production",
+  "source": "git",
+  "github_actions_used": false,
+  "direct_deployment_used": false,
+  "compatibility_gate": {
+    "production_commit": "7783522eb0fd79348b0a34f74e0aaf906537d0f4",
+    "deployment": "dpl_CdJdicHRURr8ij8UxHan19CgzxXh",
+    "state": "READY",
+    "alias": "https://escritoriojn.vercel.app",
+    "html": 200,
+    "asset": "index-B4sYyTtS.js",
+    "signup_metadata": true,
+    "necessary_only": true
+  },
+  "release": {
+    "pr": 124,
+    "merge": "b449b54da5c2e6df1af79b228655e8be6bbdd7d8",
+    "tree": "7ef7d7d51488e946583690252acfec8a90dedd10",
+    "validated_feature": "464755dd45f6fd3c1094e805f8f08fab30f024b3",
+    "deployment": "dpl_43hrmZbeLhW1G3XGfq2ExjeHyNyo",
+    "state": "READY",
+    "alias_assigned": true
+  },
+  "database": {
+    "migration_count": 78,
+    "migrations": [
+      {
+        "version": "20261112143114",
+        "name": "category_intake",
+        "statements": 58
+      },
+      {
+        "version": "20261112143334",
+        "name": "registration_acceptances",
+        "statements": 12
+      }
+    ],
+    "applied_by": "Git integration",
+    "manual_apply": false,
+    "do_not_reapply": true,
+    "canonical_function_bodies": 28,
+    "canonical_function_bodies_match": true,
+    "dynamic_guards": 3,
+    "private_tables": 6,
+    "rls_closed_acl": true
+  },
+  "checks": [
+    {
+      "path": "/api/health",
+      "status": 200,
+      "cache": "no-store"
+    },
+    {
+      "path": "/cadastro",
+      "status": 200,
+      "cache": "private, no-store"
+    },
+    {
+      "path": "/api/category-intake/form",
+      "status": 401
+    },
+    {
+      "path": "/api/category-intake/state",
+      "status": 401
+    },
+    {
+      "path": "/api/portal-intake/services",
+      "status": 401
+    },
+    {
+      "path": "/api/portal-documents/state",
+      "status": 401
+    }
+  ],
+  "compiled_markers": {
+    "asset": "/assets/index-BjCqGjc6.js",
+    "status": 200,
+    "markers": {
+      "signup_metadata": true,
+      "registration_acceptance": true,
+      "privacy_footer": true,
+      "necessary_only": true
+    }
+  },
+  "public_browser": {
+    "passed": 18,
+    "failed": 0,
+    "command": "E2E_BASE_URL=https://escritoriojn.vercel.app PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npx playwright test tests/browser/footer-registration.spec.ts tests/browser/public-privacy.spec.ts tests/browser/reading34-public.spec.ts --grep-invert 'operação|Voltar preserva sessão' --workers=2",
+    "signup_payload_intercepted": true,
+    "hosted_account_created": false,
+    "log_sha256": "d4ceadfdfe6549191a215fc248fd6dad13c848e2b789b0022ec75bf378b0ac39"
+  },
+  "integrity": {
+    "existing_tables": 176,
+    "unchanged": 175,
+    "changed": [
+      {
+        "schema_name": "private",
+        "table_name": "maintenance_schedule_settings"
+      }
+    ],
+    "added": [
+      {
+        "schema_name": "private",
+        "table_name": "category_intake_commands",
+        "rows": "0",
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema_name": "private",
+        "table_name": "category_intake_files",
+        "rows": "0",
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema_name": "private",
+        "table_name": "category_intake_forms",
+        "rows": "0",
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema_name": "private",
+        "table_name": "category_intake_revisions",
+        "rows": "0",
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema_name": "private",
+        "table_name": "category_intakes",
+        "rows": "0",
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema_name": "private",
+        "table_name": "client_registration_acceptances",
+        "rows": "0",
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      }
+    ],
+    "identity_unchanged": true
+  },
+  "maintenance_change": {
+    "table": "private.maintenance_schedule_settings",
+    "explanation": "Existing dispatcher advanced last_dispatch_at during release",
+    "worker": "account-closure",
+    "last_dispatch_at": "2026-11-12T22:55:00.287311Z",
+    "settings_updated_at": "2026-11-06T13:20:01.043634Z",
+    "last_error_code": null
+  },
+  "observability": {
+    "deployment": "dpl_43hrmZbeLhW1G3XGfq2ExjeHyNyo",
+    "since": "15m",
+    "levels": [
+      "error",
+      "fatal"
+    ],
+    "matching_groups": 0,
+    "scope": "Vercel runtime log counts; point-in-time verification"
+  },
+  "limits": [
+    "No hosted private login or business fixture created",
+    "Real Auth/REST/Storage functional flow previously passed in disposable local lab",
+    "Authorized operator configures real category forms and document slots; none invented"
+  ]
+}

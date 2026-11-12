@@ -1,0 +1,1153 @@
+{
+  "checked_utc": "2026-11-12",
+  "identities": [
+    {
+      "accounts": 7,
+      "identity_hash": "8b27180a9abfde9fe03ad2885c69e4d7"
+    }
+  ],
+  "tables": [
+    {
+      "schema_name": "private",
+      "table_name": "access_policies",
+      "rows": "2",
+      "digest": "013fe9c6a304745c46e9cf63b45e8745"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "access_policy_commands",
+      "rows": "1",
+      "digest": "1dacc9f8634d37f8055a0e3bacd5105f"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "access_policy_history",
+      "rows": "3",
+      "digest": "68ad821cb51259eb87efb5d5c26e808e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "account_closures",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "account_corrections",
+      "rows": "1",
+      "digest": "fa3344e546a498b7f61f3ff4df54771e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "account_data",
+      "rows": "2",
+      "digest": "e1a7aebdf2a1acb4c21808aae5afc1e7"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "account_email_intents",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "account_retention_holds",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "account_retention_policies",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "archived_records",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "audit_policies",
+      "rows": "2",
+      "digest": "cb5e9aea9d674981b5aecc22d3af7b0c"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "audit_report_events",
+      "rows": "149",
+      "digest": "957b43056cfd013aa155f42ecf257ed4"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "audit_report_seals",
+      "rows": "3",
+      "digest": "575ac57ddec1d3cdce9e3e15fce15e81"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "audit_reports",
+      "rows": "3",
+      "digest": "6c0a581871f291857de6213acc84d6da"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "cash_closure_reviews",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "cash_closures",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "cash_commands",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "cash_entries",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "cash_movements",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "cash_sessions",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "cash_units",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "category_intake_commands",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "category_intake_files",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "category_intake_forms",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "category_intake_revisions",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "category_intakes",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "charge_commands",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "charge_events",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "charge_installments",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "charge_items",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "charges",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "checklist_entries",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "checklist_history",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "checklist_instances",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "checklist_model_versions",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "client_registration_acceptances",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "client_registration_settings",
+      "rows": "1",
+      "digest": "d61f4d4aaf5d6301d1ebcc20742a74d5"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "closed_account_documents",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "closed_account_offices",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "customer_merges",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "customer_registrations",
+      "rows": "2",
+      "digest": "28bc5bbb4fb568e2191327b1693c4e83"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "customer_relations",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "customer_snapshots",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "deadlines",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "deliveries",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "delivery_commands26",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "delivery_events26",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "ditr_calendars28",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "ditr_cases28",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "ditr_commands28",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "ditr_evidence28",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_artifact_jobs",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_cash_tasks",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_commands",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_exception_events25",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_intake_apply_commands",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_intakes",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_offering_commands",
+      "rows": "2",
+      "digest": "fc73baabea6c134de506fa1bf651e894"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_offering_detachments",
+      "rows": "1",
+      "digest": "4b02cc79578b67b8e72ad6e5a18e3d2d"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_offerings",
+      "rows": "1",
+      "digest": "604bad4167db683cb810a757ce0e6de5"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_preparations",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_presence",
+      "rows": "1",
+      "digest": "1107e9f7b835d49d27733b907fbcedaa"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_publication_events",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_publications",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_release_commands25",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_releases25",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_revisions",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_signature_commands24",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_signature_events24",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_version_accesses",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_version_files",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_versions",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "document_workflow_commands",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "expense_history",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "expenses",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "file_cleanup_plans",
+      "rows": "6",
+      "digest": "650615a2b7b41e22f24e35e091422b44"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "file_cleanup_reservations",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "file_process_leases",
+      "rows": "1",
+      "digest": "f2b29bad334a601119cd573c650d48c5"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "file_references",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "file_service_policies",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "finance_report_settings",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "finance_report_snapshots",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "financial_accounts",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "financial_transfers",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "internal_notifications",
+      "rows": "6",
+      "digest": "746abf410be01e2500848a7ab5112948"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "maintenance_schedule_settings",
+      "rows": "2",
+      "digest": "d517e5305df4fdf2a1a17e1aa5528e5a"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "model_duplicate_commands",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "model_folder_commands",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "model_folders",
+      "rows": "4",
+      "digest": "ded8b422a6238ea73630469c1db8fa9d"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "model_locations",
+      "rows": "64",
+      "digest": "e73dea08a84592e303b9707fe01a0de8"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "model_metadata",
+      "rows": "1",
+      "digest": "c1377f912f166a15752ee83c0f8a472b"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "model_metadata_events",
+      "rows": "1",
+      "digest": "e0efa2095240b484883b8cefe78250a3"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "payment_allocations",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "payment_decisions",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "payment_ledger_links",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "payment_methods",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "payment_receipts",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "payment_refunds",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "payment_reversals",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "payments",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_commands31",
+      "rows": "1",
+      "digest": "b9774725698abff4d329a7fdfc509bbc"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_grant_events32",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_grants32",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_hidden_files",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_intake_forms",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_intake_revisions",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_invites31",
+      "rows": "1",
+      "digest": "e253e5de9195eda7cf594bb2649c761c"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_representations31",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_request_commands",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_request_limits33",
+      "rows": "1",
+      "digest": "9efcbe55a77a14eb5e46b4416420c6e8"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_request_visibility",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_service_commands33",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_service_forms33",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "portal_share_commands32",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "privacy_controller_settings",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "property_commands27",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "property_parties",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "property_records27",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "quick_operations",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "release_authority25",
+      "rows": "1",
+      "digest": "adb893832eba1f6d53572aced70c3367"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "request_archive_commands",
+      "rows": "1",
+      "digest": "fa035439ddcc9e544da55fce14af07be"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "request_archive_policies",
+      "rows": "1",
+      "digest": "ec3b55d1475949c3cd4c349a28d55470"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "request_archive_policy_commands",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "request_archive_reports",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "request_archives",
+      "rows": "1",
+      "digest": "de537a4b6a11845d363d350197ff2d77"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "request_assignments",
+      "rows": "2",
+      "digest": "60cd095d7ee81cc4e0ec99917cd48bd4"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "request_categories",
+      "rows": "1",
+      "digest": "052073851ffedf785f77d0af4c8ddac5"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "request_counters",
+      "rows": "1",
+      "digest": "6a7124a5e0e0b2cc6342bf8da98e30c4"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "request_history",
+      "rows": "10",
+      "digest": "3f5ed6d18d462cfa58e063f5aeb4d61e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "request_level_exceptions",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "request_preintake_events",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "request_preintakes",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "retention_items",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "retention_policy_history",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "retention_purges",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "retention_redaction_context",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "rural_cases29",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "rural_commands29",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "rural_history29",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "rural_properties",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "rural_services29",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "service_archive_commands",
+      "rows": "1",
+      "digest": "94279adf34781268183cbd0148be661b"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "service_categories",
+      "rows": "15",
+      "digest": "f89ba63d17081c5cd05d38ca5df85153"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "service_category_commands",
+      "rows": "1",
+      "digest": "0ee40bd275149736c73ebf96dbef1346"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "service_intake_commands33",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "service_intake_revisions33",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "service_intakes33",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "service_version_categories",
+      "rows": "4",
+      "digest": "a24d3d14e7be6335673b1b1f6eee334d"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "session_activities",
+      "rows": "107",
+      "digest": "a67c072373c3b8b552979a962126b1ab"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "specialized_cases",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "specialized_commands30",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "specialized_expenses30",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "specialized_notes30",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "specialized_services30",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "staff_category_request_commands",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "team_delegations",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "team_invitations",
+      "rows": "2",
+      "digest": "1d9c113fafb5b2d1024217bd1694609a"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "team_member_identities",
+      "rows": "2",
+      "digest": "663deea008908154b5b67422a06ee0b1"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "team_member_permissions",
+      "rows": "22",
+      "digest": "3b458f0236f4eccdf67d856af1582572"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "template_approvals",
+      "rows": "1",
+      "digest": "218b3025995ba23237b9a4425645ecea"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "template_commands",
+      "rows": "1",
+      "digest": "ba76c51b910dbd5ed6df4b395e1fa6b5"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "template_import_batches",
+      "rows": "1",
+      "digest": "7d4fc73c90b9d92e06b0195bfc170d30"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "template_version_events",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "private",
+      "table_name": "upload_intents",
+      "rows": "1",
+      "digest": "229ced2a7f7e9d9e0a668a36ec9fee8e"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "audit_events",
+      "rows": "127",
+      "digest": "82b798188a38fef2155e06512519ae16"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "customer_contacts",
+      "rows": "2",
+      "digest": "7b8406a090910bb790edc91a9f5d2495"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "customers",
+      "rows": "2",
+      "digest": "995519de3cdcf217d92fbf8ee2ae9130"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "document_participants",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "documents",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "files",
+      "rows": "1",
+      "digest": "513be994515f16394548ad7b5c53b35a"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "memberships",
+      "rows": "7",
+      "digest": "b2114a624735956fdedbc05c6bb868ca"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "offices",
+      "rows": "1",
+      "digest": "cf6818d040c07766d6ef9ad9bc2762da"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "permissions",
+      "rows": "90",
+      "digest": "038859d5d8b111e90e15dc176f382f06"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "profiles",
+      "rows": "7",
+      "digest": "1035261c60d4b8e314bbd0ef65615692"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "request_items",
+      "rows": "0",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "requests",
+      "rows": "3",
+      "digest": "a1010db40130fdd637e39b677c6766c6"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "role_permissions",
+      "rows": "92",
+      "digest": "b39f5fa8128eade170f561665b8b0337"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "roles",
+      "rows": "4",
+      "digest": "92a44d4cf8137aebaef678bf63a0c2c0"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "service_versions",
+      "rows": "4",
+      "digest": "a4694cacd8e1294590a3cc90cf620f63"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "services",
+      "rows": "3",
+      "digest": "818eafd51adcf50019c1c08ec8ff2267"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "template_versions",
+      "rows": "64",
+      "digest": "53ed4fb137867fed4c0c8fcdb3491e1b"
+    },
+    {
+      "schema_name": "public",
+      "table_name": "templates",
+      "rows": "64",
+      "digest": "717095ee9e7ff1bcd6caac61288d2633"
+    }
+  ],
+  "comparison": {
+    "existing_tables": 176,
+    "unchanged": 175,
+    "changed": [
+      {
+        "schema_name": "private",
+        "table_name": "maintenance_schedule_settings"
+      }
+    ],
+    "added": [
+      {
+        "schema_name": "private",
+        "table_name": "category_intake_commands",
+        "rows": "0",
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema_name": "private",
+        "table_name": "category_intake_files",
+        "rows": "0",
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema_name": "private",
+        "table_name": "category_intake_forms",
+        "rows": "0",
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema_name": "private",
+        "table_name": "category_intake_revisions",
+        "rows": "0",
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema_name": "private",
+        "table_name": "category_intakes",
+        "rows": "0",
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema_name": "private",
+        "table_name": "client_registration_acceptances",
+        "rows": "0",
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      }
+    ],
+    "identity_unchanged": true,
+    "changed_explanation": "Existing account-closure scheduler dispatch advanced at22:55; settings updated_at remains2026-11-06, no error. No migration DML changes existing business rows."
+  }
+}
