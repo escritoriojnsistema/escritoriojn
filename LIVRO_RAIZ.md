@@ -1,10 +1,10 @@
 # Livro Raiz — Escritório JN
 
-## Ajuste atual: navegação agrupada — implementação para revisão
+## Ajuste atual: navegação agrupada — publicada e verificada
 
 Pedido11/11/2026 sobre main30fa60c, executado diretamente conforme solicitado. Barra lateral desktop/mobile mantém somente áreas principais, com navegação interna Solicitações/Anexos, Clientes/Imóveis rurais e Serviços/Checklist. Caixa conserva as áreas financeiras existentes. Configurações reúne administração e Conta por escritório/perfil, inclusive concessões independentes; cliente usa /minhas-configuracoes e só sua Conta. Atalho mobile Ajustes/engrenagem, demais ícones atualizados, no máximo quatro atalhos. Rotas preservadas, pai ativo, busy e isolamento de portal mantidos.
 
-Nenhuma alteração de API/Auth/banco/permissões/migrations; Etapa34 não iniciada. [Contrato e limites](docs/etapas/ajuste-navegacao-agrupada.md) · [Verificações](docs/evidencias/navegacao-agrupada/verificacao.json). Produção pendente de autorização específica; sem merge/deploy/Actions neste ajuste.
+Nenhuma alteração de API/Auth/banco/permissões/migrations; Etapa34 não iniciada. [Contrato e limites](docs/etapas/ajuste-navegacao-agrupada.md) · [Verificações](docs/evidencias/navegacao-agrupada/verificacao.json). Publicação autorizada explicitamente12/11/2026: [PR121](https://github.com/escritoriojnsistema/escritoriojn/pull/121), merge38c1e73, VercelGsKi4iGyb9READY, https://escritoriojn.vercel.app.24testes públicos aprovados e74assets conferidos com os marcadores da nova navegação; HTML/saúde200. Consulta agregada de logs sem erros/fatais nessa implantação. GitHub→Vercel, semActions/deploydireto. [Registro da publicação](docs/evidencias/navegacao-agrupada/publicacao.json).
 
 ## Correções atuais: acessos e portais após33 — publicadas e verificadas
 

@@ -63,7 +63,7 @@
     ]
   },
   "review": "Revisão independente somente leitura: nenhum bug concreto no diff.",
-  "production": "Não publicada. Branch/PR para revisão; sem merge/deploy/Actions.",
+  "production": "Publicada mediante autorização explícita do usuário em12/11/2026; PR121/merge38c1e73, Vercel READY,24testes públicos e74assets conferidos. Ver publicacao.json.",
   "limitations": [
     "Dados de negócio hospedados e logins pessoais não foram acessados.",
     "Sem alterações backend; validação API→banco real não se aplica ao diff."

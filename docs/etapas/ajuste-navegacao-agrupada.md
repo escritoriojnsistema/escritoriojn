@@ -23,4 +23,6 @@ Revisão independente somente leitura não identificou bug concreto no diff. Res
 
 Validação: build/tipos,393testesNode e27cenários finais distintos de navegador aprovados, incluindo os quatro perfis em320/375/768/1440. As rodadas iniciais e reexecuções estão discriminadas nas evidências; nenhuma falha permanece sem reconferência.
 
-Publicação de produção pendente de autorização específica; entregar em branch/PR revisável, sem merge, deploy direto ou GitHub Actions.
+Publicação de produção autorizada explicitamente pelo usuário em12/11/2026. PR121 integrado no merge38c1e73; implantação dpl_GsKi4iGyb9ptjvjRmH9UX9b11NRq READY, origemGit, domínio oficial https://escritoriojn.vercel.app.24cenários públicos aprovados em320/1440, incluindo a nova rota de Configurações do cliente.74assets públicos conferidos, com marcadores da navegação agrupada; HTML e saúde200. Consulta agregada dos logs dessa implantação sem erros/fatais. Não foram usados logins pessoais nem realizadas mutações de dados hospedados. Registro em docs/evidencias/navegacao-agrupada/publicacao.json.
+
+A continuidade documental e os testes públicos adicionados depois dessa conferência não alteram o runtime. Autorização desta publicação já fornecida; sem deploy direto ou GitHub Actions.
