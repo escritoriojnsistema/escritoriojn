@@ -5,7 +5,8 @@ test('campos da equipe e cliente sem quadro interno ou sombra, inclusive autofil
   await cdp.send('CSS.enable');
   for(const path of ['/login','/login-cliente','/cadastro','/recuperar-senha']) {
     await page.goto(path);
-    const fields=page.locator('input');
+    if(path==='/cadastro'){await expect(page.getByRole('checkbox')).toHaveCount(3);for(const checkbox of await page.getByRole('checkbox').all())await checkbox.check();}
+    const fields=page.locator('input:not([type=checkbox])');
     // The route is lazy: wait for the form before enumerating its controls.
     await expect(fields.first()).toBeVisible();
     for(const field of await fields.all()) {
@@ -15,7 +16,7 @@ test('campos da equipe e cliente sem quadro interno ou sombra, inclusive autofil
       await expect(field.locator('..')).toHaveCSS('border-top-color','rgb(16, 50, 72)');
     }
     const {root}=await cdp.send('DOM.getDocument');
-    const {nodeIds}=await cdp.send('DOM.querySelectorAll',{nodeId:root.nodeId,selector:'input'});
+    const {nodeIds}=await cdp.send('DOM.querySelectorAll',{nodeId:root.nodeId,selector:'input:not([type=checkbox])'});
     for(const nodeId of nodeIds) await cdp.send('CSS.forcePseudoState',{nodeId,forcedPseudoClasses:['autofill']});
     for(const field of await fields.all()) {
       expect(await field.evaluate(e=>e.matches(':autofill'))).toBe(true);
@@ -32,6 +33,7 @@ test('cadastro publico tem apenas campos de cliente e senha pode ser conferida',
   await expect(page.getByLabel('E-mail',{exact:true})).toHaveAttribute('autocomplete','email');
   await expect(page.getByLabel('Senha',{exact:true})).toHaveAttribute('autocomplete','new-password');
   await expect(page.locator('[name="role"], [name="office_id"]')).toHaveCount(0);
+  for(const checkbox of await page.getByRole('checkbox').all())await checkbox.check();
   await page.getByRole('button',{name:'Mostrar senha',exact:true}).click();
   await expect(page.getByLabel('Senha',{exact:true})).toHaveAttribute('type','text');
 });

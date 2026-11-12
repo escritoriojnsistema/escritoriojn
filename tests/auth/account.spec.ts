@@ -12,7 +12,7 @@ async function mailLink(email:string,type:string){
  throw Error('Local SMTP did not deliver the expected account message.');
 }
 async function payload(response:{status():number;text():Promise<string>;json():Promise<unknown>},status=200){expect(response.status(),await response.text()).toBe(status);return ((await response.json()) as {data:any}).data;}
-async function signup(page:Page,email:string){await page.goto('/cadastro');await page.getByLabel('Nome',{exact:true}).fill('Conta Fictícia');await page.getByLabel('E-mail',{exact:true}).fill(email);await page.getByLabel('Senha',{exact:true}).fill(password);await page.getByRole('button',{name:'Criar conta de cliente'}).click();await expect(page.getByRole('status')).toContainText('Confira seu e-mail');await page.goto(await mailLink(email,'signup'));await expect(page.getByRole('heading',{name:'Área de operação',exact:true})).toBeVisible();}
+async function signup(page:Page,email:string){await page.goto('/cadastro');await page.getByLabel('Nome',{exact:true}).fill('Conta Fictícia');await page.getByLabel('E-mail',{exact:true}).fill(email);for(const checkbox of await page.getByRole('checkbox').all())await checkbox.check();await page.getByLabel('Senha',{exact:true}).fill(password);await page.getByRole('button',{name:'Criar conta de cliente'}).click();await expect(page.getByRole('status')).toContainText('Confira seu e-mail');await page.goto(await mailLink(email,'signup'));await expect(page.getByRole('heading',{name:'Área de operação',exact:true})).toBeVisible();}
 test('conta real: cliente propõe, acesso separado, responsável aplica, Auth confirma e ficha sincroniza',async({page,request})=>{
  test.setTimeout(90_000);
  const email='account-client@example.test',nextEmail='account-client-corrected@example.test';

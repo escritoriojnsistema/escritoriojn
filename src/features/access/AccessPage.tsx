@@ -9,6 +9,8 @@ import { supabase, callbackUrl, authError } from '../auth/browser';
 import { AccessShell } from './AccessShell';
 import { PasswordField } from './PasswordField';
 import { portalLogin, PortalAccessError } from '../auth/portalLogin';
+import {registrationAcceptance} from '../../../shared/registrationAcceptance';
+import {RegistrationAcceptance, type RegistrationAcceptances} from './RegistrationAcceptance';
 export default function AccessPage() {
   const location = useLocation();
   const auth=useAuth();
@@ -23,10 +25,13 @@ export default function AccessPage() {
   useEffect(() => () => loginAttempt.current?.abort(), []);
   const [busy, setBusy] = useState(false);
   const [feedback, setFeedback] = useState<{ text: string; error: boolean } | null>(null);
+  const [accepted,setAccepted]=useState<RegistrationAcceptances>({terms:false,cookies:false,privacy:false});
+  const allAccepted=accepted.terms&&accepted.cookies&&accepted.privacy;
   const title = signup ? 'Crie sua conta' : recovery ? 'Esqueceu sua senha?' : team ? 'Área da Equipe' : 'Área do Cliente';
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); if (!supabase || busy) return;
     const values = new FormData(event.currentTarget);
+    if(signup&&(!allAccepted||['terms','cookies','privacy'].some(key=>values.get(`accept_${key}`)!=='on'))){setFeedback({text:'Confirme os três aceites antes de definir a senha e criar sua conta.',error:true});return;}
     const email = String(values.get('email')).trim();
     const password = String(values.get('password') ?? '');
     setBusy(true); setFeedback(null);
@@ -36,7 +41,7 @@ export default function AccessPage() {
         if (error) throw error;
         setFeedback({ text: 'Se houver uma conta para este e-mail, você receberá as instruções. Abra o link neste mesmo navegador.', error: false });
       } else if (signup) {
-        const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: callbackUrl(), data: { display_name: String(values.get('name')).trim() } } });
+        const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: callbackUrl(), data: { display_name: String(values.get('name')).trim(),jn_client_acceptance:registrationAcceptance } } });
         if (error) throw error;
         setFeedback({ text: 'Confira seu e-mail para confirmar o cadastro. Abra o link neste mesmo navegador. Se já tem conta, entre ou recupere sua senha.', error: false });
       } else {
@@ -56,8 +61,9 @@ export default function AccessPage() {
     <form onSubmit={submit} aria-busy={busy}><fieldset disabled={busy}>
       {signup && <div className="form-field"><label htmlFor="name">Nome</label><div className="input-wrap"><UserRound size={18} aria-hidden="true" /><input id="name" name="name" autoComplete="name" required minLength={2} maxLength={100} placeholder="Como podemos chamar você?" /></div></div>}
       <label htmlFor="email">E-mail</label><div className="input-wrap"><Mail size={18} aria-hidden="true" /><input id="email" name="email" type="email" autoComplete="email" maxLength={254} required placeholder="seuemail@exemplo.com" /></div>
-      {!recovery && <><div className="password-label"><label htmlFor="password">Senha</label>{!signup && <Link to={`${paths.recovery}?area=${team ? 'team' : 'client'}`}>Esqueci minha senha</Link>}</div><PasswordField fresh={signup} /></>}
-      <button className="primary-button" type="submit" disabled={!supabase || busy}>{signup ? 'Criar conta de cliente' : recovery ? 'Enviar instruções' : `Entrar na área ${team ? 'da equipe' : 'do cliente'}`}<ArrowRight size={18} aria-hidden="true" /></button>
+      {signup&&<RegistrationAcceptance accepted={accepted} onChange={(key,checked)=>setAccepted(current=>({...current,[key]:checked}))}/>}
+      {!recovery && <><div className="password-label"><label htmlFor="password">Senha</label>{!signup && <Link to={`${paths.recovery}?area=${team ? 'team' : 'client'}`}>Esqueci minha senha</Link>}</div><PasswordField fresh={signup} disabled={signup&&!allAccepted} /></>}
+      <button className="primary-button" type="submit" disabled={!supabase || busy || signup&&!allAccepted}>{signup ? 'Criar conta de cliente' : recovery ? 'Enviar instruções' : `Entrar na área ${team ? 'da equipe' : 'do cliente'}`}<ArrowRight size={18} aria-hidden="true" /></button>
     </fieldset></form>
     {recovery || signup ? <Link className="return-login" to={recovery?recoveryReturn(auth.status,auth.contexts.map(c=>c.role_code),team?'team':'client'):paths.client}><ArrowLeft size={17} aria-hidden="true" />{recovery?'Voltar':'Voltar para entrar'}</Link> : team ? <p className="access-help">O acesso da equipe é gerenciado pelo escritório.</p> : <Link className="return-login" to={paths.signup}><UserPlus size={17} aria-hidden="true" />Ainda não tem conta? Cadastre-se</Link>}
   </AccessShell>;

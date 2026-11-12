@@ -9,6 +9,7 @@ async function signup(page: Page, email: string, name: string) {
   await page.goto('/cadastro');
   await page.getByLabel('Nome',{exact:true}).fill(name);
   await page.getByLabel('E-mail',{exact:true}).fill(email);
+  for(const checkbox of await page.getByRole('checkbox').all())await checkbox.check();
   await page.getByLabel('Senha',{exact:true}).fill(password);
   await page.getByRole('button',{name:'Criar conta de cliente'}).click();
   await expect(page.getByRole('status')).toContainText('Confira seu e-mail');

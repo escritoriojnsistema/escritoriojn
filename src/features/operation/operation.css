@@ -199,3 +199,8 @@
  .operation-main .document-tabs-versions { flex-wrap:wrap; }
  .operation-main .document-tabs-versions button { flex:1 1 60px; min-width:0; overflow-wrap:anywhere; }
 }
+.operation-body{display:flex;flex-direction:column;min-height:100svh}
+.operation-main{flex:1}
+.operation-footer{padding-inline:clamp(20px,3vw,44px)}
+@media (max-width:900px), (hover:none) and (pointer:coarse) and (max-width:1200px){.operation-footer{padding-bottom:calc(72px + env(safe-area-inset-bottom))}}
+@container (max-width:240px){.operation-footer{padding-bottom:calc(128px + env(safe-area-inset-bottom))}}

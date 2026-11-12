@@ -6,7 +6,7 @@ for(const width of [320,360,768,1440]) test(`Portal da Equipe e transparência a
  await expect(page.getByRole('heading',{name:'Área da Equipe'})).toBeVisible();
  await expect(page.getByRole('link',{name:'Cookies e preferências'})).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
- for(const route of ['/login-cliente','/cadastro']){await page.goto(route);await expect(page.getByRole('link',{name:'Privacidade',exact:true})).toBeVisible();await expect(page.getByRole('checkbox')).toHaveCount(0);}
+ for(const route of ['/login-cliente','/cadastro']){await page.goto(route);await expect(page.getByRole('contentinfo').getByRole('link',{name:'Privacidade',exact:true})).toBeVisible();await expect(page.getByRole('checkbox')).toHaveCount(route==='/cadastro'?3:0);}
  await page.goto('/cookies');await expect(page.getByRole('heading',{name:'Cookies e preferências'})).toBeVisible();
  await page.getByRole('button',{name:'Salvar somente necessários'}).click();await expect(page.getByRole('status')).toContainText('Preferência salva');
  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('jn-privacy-notice-v1')!))).toEqual({policyVersion:'2026-11-06.1',necessary:true,optional:false,consent:false});

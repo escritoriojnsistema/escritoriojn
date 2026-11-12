@@ -101,6 +101,7 @@ test('cadastro confirma pelo SMTP local e continua somente cliente', async ({pag
   await page.goto('/cadastro');
   await page.getByLabel('Nome',{exact:true}).fill('Cliente de teste');
   await page.getByLabel('E-mail',{exact:true}).fill('signup@example.test');
+  for(const checkbox of await page.getByRole('checkbox').all())await checkbox.check();
   await page.getByLabel('Senha',{exact:true}).fill(password);
   await page.getByRole('button',{name:'Criar conta de cliente'}).click();
   await expect(page.getByRole('status')).toContainText('Confira seu e-mail');
