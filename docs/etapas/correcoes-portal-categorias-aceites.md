@@ -1,0 +1,28 @@
+# Correções — rodapé, cadastro e formulários por categoria
+
+Pedido do usuário após34; não inicia35. Base904569e/PR123 (Etapa34 em preview, produção pendente), branch `fix/portal-categorias-aceites`. AGENTS/Livro e módulos existentes conferidos antes de alterar.
+
+## Escopo e integração
+
+- Rodapé compartilhado no fim do fluxo, inclusive acesso, operação, indisponibilidade e404; sem overlay nos controles ou atalhos mobile.
+- Cadastro cliente: três aceites separados, não pré-marcados, antes da senha; senha/botão/submit protegidos. A declaração versionada de termos/privacidade/cookies necessários é validada pelo triggerAuth existente e registrada com horário do servidor, sem retroagir contas existentes ou habilitar rastreamento opcional. Convites legítimos e bootstrap preservados.
+- Configurações→Categorias→Formulário e anexos: gestor vigente com categories.manage publica campos tipados/opções/obrigatoriedade e slots de arquivos com nome, limite, formatos/classificação. Nenhum formulário, serviço ou preço real é inventado.
+- Portal: a categoria publicada mostra seus próprios campos e anexos. Serviço só aparece quando publicado; categoria sem configuração tem orientação explícita. Documentos mantém catálogo/modelos existentes; nova captura de categoria acompanha preparações por serviço/modelo. Respostas e slots ficam em snapshot do mesmo protocolo10, upload privado11/quarentena e envio/distribuição existentes33.
+- Backend `/api/category-intake` valida payload, autoridade e projeções; RLS/ACL fechadas e wrappers públicos INVOKER. Campos e anexos obrigatórios conferidos no servidor, inclusive no endpoint antigo de reenviar; arquivo alheio não satisfaz slot. Equipe autorizada vê respostas efetivas e anexos conforme files.read.
+- Novas migrations locais:20261112143114_category_intake e20261112143334_registration_acceptances. Não aplicadas no Supabase hospedado. Implantar UI de cadastro com metadata compatível antes do gate de aceites; não duplicar as76 migrations anteriores.
+
+## Verificação e limites
+
+Implementação e revisão concluídas:406 testesNode, tipos/build e auditoria de dependências de produção sem vulnerabilidades; replay realSQL com2.257 verificações e migrador sem superuser/BYPASSRLS. 33cenáriosUI distintos aprovados (20rodapé/admin e13cliente, em rodadas complementares). As suítes novas cobrem publicação/permissões, tipos/ordem/opções, anexos, retries503, reconciliação409, navegação e retomada sem segundo protocolo. Regressão de navegação agrupada/leitura34/layout/privacidade:54 aprovados e2 ignorados condicionalmente. ContratosUI usam autoridade fictícia; não substituem o laboratório real.
+
+Auth/REST/Express/Storage reais em laboratório descartável passaram pelo script `scripts/test-category-intake-real.mjs`: rejeição atômica de cadastro sem aceite, registro privado imutável com data do servidor, isolamento entre clientes, abertura concorrente idempotente, validação de dados/slots, PDF privado em quarentena, envio/fila e projeção à equipe. Preparações de serviço33 e modelo comercial capturam também a configuração da categoria. Nenhuma conta, grant, configuração ou arquivo fictício foi criado em produção.
+
+Revisão independente encontrou quatro falhas deUI, reproduzidas e corrigidas: edição de modelo não salva bloqueia envio/troca de área; anexos originais de serviço/modelo continuam acessíveis; retirada da publicação durante bind permite encerrar a preparação antiga; respostas locais não são perdidas em respostas de upload/save. Recuperação adicional503→409 retoma protocolo existente; retorno do seletor de serviço volta às categorias. Rodapé tem reserva adicional quando o zoom faz os atalhos ocuparem duas linhas (teste200px RED→GREEN). Sem spinner/overlay de carregamento; cache, lazy loading e fronteiras de sessão existentes preservados. Não se afirma latência física zero nem teste de aparelho móvel físico.
+
+Evidências em `docs/evidencias/correcoes-portal-categorias-aceites/verificacao.json` e capturas fictícias320/1440. Não se inventou formulário real para as categorias: gestor autorizado publica seus campos/documentos em Configurações→Categorias. Scanner ausente conserva quarentena. Migrations hospedadas continuam76, última20261111190203; as duas novas estão somente na branch.
+
+## Integração e próximo passo
+
+A entrega tem dois incrementos para manter compatibilidade: primeiroPR123 (Etapa34 + rodapé/cadastro com metadata, sem migration), depois a branch `fix/portal-categorias-aceites` (formulários, anexos, API/SQL e exigênciaAuth). O segundoPR é inicialmente baseado em `feat/etapa-34`. Após autorização de produção, integrarPR123 e confirmar seu código publicado no GitHub→Vercel antes de integrar as novas migrations; então ajustar a base do segundoPR para main. Não integrar automaticamente nem aplicar manualmente migrations antes de reler o históricoSupabase, pois a integraçãoGit já as aplica. Guia da primeira entrega: `compat-aceites.md`.
+
+Produção ainda não autorizada, semActions/deploydireto ou alteração hospedada. Preview não comprova formulário privado hospedado enquanto as migrations estiverem pendentes. Não refazer34;35 somente com novo pedido após aceite/publicação. [PR124](https://github.com/escritoriojnsistema/escritoriojn/pull/124), runtime576e60d, [prévia](https://escritoriojn-927nspma7-escritorio-jn.vercel.app)8dDLCGjREADY, origemGit/statusVercelsuccess; HTML/saúde200, barreiras anônimas401 e marcadores dos assets conferidos via conector. CompatibilidadePR123/79524cc com préviaHc2obGJREADY e saúde200. Registro em `../evidencias/correcoes-portal-categorias-aceites/preview.json`. Somente conferência pública/anonimizada hospedada, sem escrever dados de negócio.

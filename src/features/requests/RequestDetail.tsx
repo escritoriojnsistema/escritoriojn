@@ -1,3 +1,4 @@
+import {CategoryRequestSummary} from '../categoryIntake/CategoryRequestSummary';
 import {SpecializedPanel} from '../specialized/SpecializedPanel';
 import {specializedKinds,specializedStages} from '../../../shared/specialized';
 import type {ReactNode} from 'react';
@@ -25,6 +26,7 @@ export function RequestDetail({office,data,permissions,busy,onHistory,onMutate,o
  const [ruralExpanded,setRuralExpanded]=useState(false),[specializedExpanded,setSpecializedExpanded]=useState(false);
  useEffect(()=>{setRuralExpanded(false);setSpecializedExpanded(false);},[data.id]);
  return <article className="request-detail">
+  {!data.portal&&data.category_intake&&<CategoryRequestSummary state={data.category_intake} office={office}/>}
   <p className="request-protocol">{data.protocol} · {data.portal?publicRequestStatusLabels[data.public_status]:requestStatusLabels[data.status]}</p>
   {data.portal&&data.rural_progress&&<section className="request-message" aria-label="Progresso CCIR/CAR"><h2>{data.rural_progress.kind} · {ruralStages[data.rural_progress.stage]}</h2>{data.rural_progress.pending&&<p>Pendência compartilhada: {data.rural_progress.pending}</p>}<p className="customer-note">Conclusão interna não confirma aceitação pelo órgão. O resultado segue as regras de liberação e entrega.</p></section>}
   {data.portal&&data.specialized_progress&&<section className="request-message" aria-label="Progresso previdenciário e jurídico"><h2>{specializedKinds[data.specialized_progress.kind]} · {specializedStages[data.specialized_progress.stage]}</h2>{data.specialized_progress.pending&&<p>Pendência compartilhada: {data.specialized_progress.pending}</p>}<p className="customer-note">Andamento factual. Não há promessa de deferimento. Conclusão interna não libera automaticamente documentos.</p></section>}

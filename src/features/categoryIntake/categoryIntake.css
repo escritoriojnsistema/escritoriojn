@@ -1,0 +1,17 @@
+.category-intake-settings { min-width: 0; }
+.category-intake-settings h2 { margin: 8px 0; font-size: 18px; overflow-wrap: anywhere; }
+.category-intake-settings h3 { margin: 8px 0; font-size: 17px; }
+.category-intake-heading, .category-intake-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0; }
+.category-intake-heading h2 { flex: 1 1 240px; }
+.category-intake-toolbar h3 { flex: 1 1 160px; }
+.category-intake-settings fieldset { border: 0; padding: 0; margin: 8px 0; min-width: 0; }
+.category-intake-settings .team-field { min-width: 0; margin-bottom: 8px; }
+.category-intake-settings input:not([type=checkbox]), .category-intake-settings select, .category-intake-settings textarea { min-height: 44px; font-size: 16px; width: 100%; box-sizing: border-box; }
+.category-intake-settings textarea { resize: vertical; }
+.category-intake-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 12px; }
+.category-intake-check { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 16px; }
+.category-intake-check input { width: 20px; height: 20px; flex: 0 0 20px; }
+.category-intake-formats { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.category-intake-settings button { min-height: 44px; white-space: normal; }
+.category-intake-conflict { border-top: 1px solid var(--border, #d8dfe4); padding-top: 8px; overflow-wrap: anywhere; }
+@media(max-width:600px) { .category-intake-grid { grid-template-columns: minmax(0,1fr); } .category-intake-heading { align-items: flex-start; } }

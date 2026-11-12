@@ -1,3 +1,4 @@
+import {categoryIntakeRouter} from './modules/category-intake/router.js';
 import {portalIntakeRouter} from './modules/portal-intake/router.js';
 import {portalDocumentsRouter} from './modules/portal-documents/router.js';
 import {portalIdentityRouter} from './modules/portal-identity/router.js';
@@ -58,6 +59,7 @@ api.use('/auth',authRouter);
 api.use('/portal-identity',portalIdentityRouter);
 api.use('/portal-documents',portalDocumentsRouter);
 api.use('/portal-intake',portalIntakeRouter);
+api.use('/category-intake',categoryIntakeRouter);
 api.use('/account',accountRouter);
 api.use('/account-closure',accountClosureRouter);
 api.use('/privacy',privacyRouter);

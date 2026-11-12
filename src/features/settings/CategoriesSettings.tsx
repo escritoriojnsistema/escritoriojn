@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { ArrowLeft, ArrowRight, Pencil, Plus, RefreshCw, Trash2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ClipboardList, Pencil, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import { validCategoryCommand, type CategoriesState, type CategoryCommand, type ServiceCategory } from '../../../shared/categories';
 import { categoriesApi, categoriesError, CategoriesError } from './categoriesApi';
 import '../team/team.css';
 import '../customers/customers.css';
 import './categories.css';
+import { CategoryIntakeSettings } from '../categoryIntake/CategoryIntakeSettings';
 
 type Editor = { kind: 'create' } | { kind: 'rename' | 'delete'; item: ServiceCategory };
 type Intent = { command: CategoryCommand; key: string };
@@ -19,6 +20,7 @@ function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: st
   const [data, setData] = useState<CategoriesState>();
   const [error, setError] = useState<CategoriesError>();
   const [editor, setEditor] = useState<Editor>();
+  const [intakeCategory,setIntakeCategory]=useState<ServiceCategory>();
   const [name, setName] = useState(''), [reason, setReason] = useState(''), [message, setMessage] = useState('');
   const [revision, setRevision] = useState(0), [page, setPage] = useState(1);
   const [size, setSize] = useState(() => matchMedia('(max-width: 900px)').matches ? 3 : 5);
@@ -30,7 +32,7 @@ function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: st
   const onDeniedRef = useRef(onDenied);
   onDeniedRef.current = onDenied;
   function deny(failure: CategoriesError) {
-    setData(undefined); setEditor(undefined); setName(''); setReason(''); intent.current = undefined;
+    setData(undefined); setEditor(undefined); setIntakeCategory(undefined); setName(''); setReason(''); intent.current = undefined;
     setUncertain(false); setBlocked(true); setError(failure); onDeniedRef.current?.();
   }
   useEffect(() => {
@@ -84,6 +86,7 @@ function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: st
   const entries=archived ? data?.archived_items??[] : data?.items??[];
   const maxPage = Math.max(1, Math.ceil(entries.length / size));
   const shownPage = Math.min(page, maxPage), items = entries.slice((shownPage - 1) * size, shownPage * size);
+  if(intakeCategory&&data?.can_manage&&!blocked)return <CategoryIntakeSettings office={office} categoryId={intakeCategory.id} categoryName={intakeCategory.name} onBack={()=>setIntakeCategory(undefined)} onDenied={()=>deny(new CategoriesError(403))} onPendingChange={onPendingChange}/>;
   return <section className="categories-settings" aria-label="Categorias de serviços">
     <p className="customer-note">Categorias compartilhadas por Serviços e Solicitações. Documentos reúne contratos, declarações, requerimentos e ofícios; Rural inclui imóveis, ITR, DITR, CCIR e CAR; Previdenciário inclui salário-maternidade e aposentadoria.</p>
     {error && <p role="alert" className="form-feedback error">{error.message}</p>}
@@ -111,6 +114,7 @@ function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: st
         {items?.length ? <ul className="customer-list" aria-label="Categorias configuradas">{items.map(item => <li key={item.id}>
           <div><strong>{item.name}</strong>{item.archived_at&&<small>Arquivada — fora das novas solicitações</small>}<small>{item.execution_level ? `Nível ${item.execution_level}` : 'Nível pendente — não distribuir'}</small>{data.can_manage && <small>{item.services ?? 0} serviços com histórico · revisão {item.revision}</small>}</div>
           {data.can_manage && <div className="categories-actions">
+            {!item.archived_at&&<button type="button" className="operation-icon-button" aria-label={`Formulário e anexos de ${item.name}`} title="Formulário e anexos" onClick={()=>{setMessage('');setError(undefined);setIntakeCategory(item);}}><ClipboardList size={18} aria-hidden="true" /></button>}
             <button type="button" className="operation-icon-button" aria-label={`Editar ${item.name}`} title="Editar categoria" onClick={() => choose({ kind: 'rename', item })}><Pencil size={18} aria-hidden="true" /></button>
             {!item.archived_at&&<button type="button" className="operation-icon-button" aria-label={`Excluir ${item.name}`} title="Excluir categoria" onClick={() => choose({ kind: 'delete', item })}><Trash2 size={18} aria-hidden="true" /></button>}
           </div>}

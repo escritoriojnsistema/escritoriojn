@@ -6,7 +6,7 @@ SELECT id AS owner07_id FROM public.customers WHERE office_id='00000000-0000-400
 SELECT id AS company07_id FROM public.customers WHERE office_id='00000000-0000-4000-e000-000000000041' AND kind='company' \gset
 SELECT id AS other07_id FROM public.customers WHERE office_id='00000000-0000-4000-e000-000000000042' AND identifier='52998224725' \gset
 INSERT INTO auth.users(id,email,email_confirmed_at,raw_user_meta_data) VALUES
- ('00000000-0000-4000-a000-000000000061','signup-unique@example.test',NULL,'{"display_name":"Cadastro Portal Unico","role":"owner","office_id":"forged"}');
+ ('00000000-0000-4000-a000-000000000061','signup-unique@example.test',NULL,'{"display_name":"Cadastro Portal Unico","role":"owner","office_id":"forged","jn_client_acceptance":{"version":"2026-11-12.1","terms":true,"privacy":true,"cookies":true,"optional_cookies":false}}');
 SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000041","session_id":"00000000-0000-4000-c000-000000000041"}';
 SELECT test.assert_true(public.customers_page('00000000-0000-4000-e000-000000000041','Cadastro Portal Unico',1,3)->>'total'='0',
@@ -44,7 +44,7 @@ INSERT INTO public.customer_contacts(office_id,customer_id,position,kind,value) 
  ('00000000-0000-4000-e000-000000000041',:'company07_id',0,'email','signup-shared@example.test');
 SELECT count(*) AS before_shared_count FROM public.customers WHERE office_id='00000000-0000-4000-e000-000000000041' \gset
 INSERT INTO auth.users(id,email,email_confirmed_at,raw_user_meta_data) VALUES
- ('00000000-0000-4000-a000-000000000062','SIGNUP-SHARED@example.test',clock_timestamp(),'{"display_name":"Cadastro Portal Compartilhado"}');
+ ('00000000-0000-4000-a000-000000000062','SIGNUP-SHARED@example.test',clock_timestamp(),'{"display_name":"Cadastro Portal Compartilhado","jn_client_acceptance":{"version":"2026-11-12.1","terms":true,"privacy":true,"cookies":true,"optional_cookies":false}}');
 SELECT r.id AS shared_registration_id FROM private.customer_registrations r JOIN public.memberships m ON m.id=r.membership_id
  WHERE m.user_id='00000000-0000-4000-a000-000000000062' \gset
 SELECT test.assert_true((SELECT count(*) FROM public.customers WHERE office_id='00000000-0000-4000-e000-000000000041')=:'before_shared_count'::integer
@@ -84,19 +84,19 @@ SELECT test.assert_true((SELECT count(*) FROM public.customers WHERE created_by=
  'cadastro integrado: backfill repetido e confirmacao repetida sao idempotentes');
 -- Another email is a distinct Auth account; there is deliberately no identity merge by name.
 INSERT INTO auth.users(id,email,email_confirmed_at,raw_user_meta_data) VALUES
- ('00000000-0000-4000-a000-000000000063','signup-other-email@example.test',clock_timestamp(),'{"display_name":"Cadastro Portal Unico"}'),
- ('00000000-0000-4000-a000-000000000064','signup-no-name@example.test',clock_timestamp(),'{"display_name":"\u0001"}');
+ ('00000000-0000-4000-a000-000000000063','signup-other-email@example.test',clock_timestamp(),'{"display_name":"Cadastro Portal Unico","jn_client_acceptance":{"version":"2026-11-12.1","terms":true,"privacy":true,"cookies":true,"optional_cookies":false}}'),
+ ('00000000-0000-4000-a000-000000000064','signup-no-name@example.test',clock_timestamp(),'{"display_name":"\u0001","jn_client_acceptance":{"version":"2026-11-12.1","terms":true,"privacy":true,"cookies":true,"optional_cookies":false}}');
 SELECT test.assert_true((SELECT count(*) FROM public.customers WHERE name='Cadastro Portal Unico' AND office_id='00000000-0000-4000-e000-000000000041')=2
  AND (SELECT count(*) FROM private.customer_registrations r JOIN public.memberships m ON m.id=r.membership_id WHERE m.user_id='00000000-0000-4000-a000-000000000064')=1,
  'cadastro integrado: emails distintos nao combinam identidades e nome invalido tem fallback seguro');
 INSERT INTO auth.users(id,email,email_confirmed_at,invited_at,raw_user_meta_data) VALUES
- ('00000000-0000-4000-a000-000000000065','signup-invited@example.test',clock_timestamp(),clock_timestamp(),'{"display_name":"Convite Equipe"}');
+ ('00000000-0000-4000-a000-000000000065','signup-invited@example.test',clock_timestamp(),clock_timestamp(),'{"display_name":"Convite Equipe","jn_client_acceptance":{"version":"2026-11-12.1","terms":true,"privacy":true,"cookies":true,"optional_cookies":false}}');
 SELECT test.assert_true(NOT EXISTS(SELECT FROM private.customer_registrations r JOIN public.memberships m ON m.id=r.membership_id WHERE m.user_id='00000000-0000-4000-a000-000000000065'),
  'cadastro integrado: conta criada por convite Auth nao vira cliente operacional');
 -- Backfill accepts only the historical bootstrap event, never an arbitrary client membership.
 ALTER TABLE auth.users DISABLE TRIGGER jn_sync_customer_registration;
 INSERT INTO auth.users(id,email,email_confirmed_at,raw_user_meta_data) VALUES
- ('00000000-0000-4000-a000-000000000066','signup-backfill@example.test',clock_timestamp(),'{"display_name":"Cadastro Portal Historico"}');
+ ('00000000-0000-4000-a000-000000000066','signup-backfill@example.test',clock_timestamp(),'{"display_name":"Cadastro Portal Historico","jn_client_acceptance":{"version":"2026-11-12.1","terms":true,"privacy":true,"cookies":true,"optional_cookies":false}}');
 ALTER TABLE auth.users ENABLE TRIGGER jn_sync_customer_registration;
 SET ROLE migrator;
 SELECT private.sync_customer_registration('00000000-0000-4000-a000-000000000066');
@@ -120,7 +120,7 @@ SELECT test.assert_true(NOT EXISTS(SELECT FROM public.memberships WHERE user_id=
  AND NOT EXISTS(SELECT FROM public.customers WHERE created_by='00000000-0000-4000-a000-000000000067'),
  'cadastro integrado: convite de equipe preserva supressao do bootstrap e da ficha');
 INSERT INTO auth.users(id,email,email_confirmed_at,raw_user_meta_data) VALUES
- ('00000000-0000-4000-a000-000000000068','signup-inactive@example.test',NULL,'{"display_name":"Cadastro Portal Inativo"}');
+ ('00000000-0000-4000-a000-000000000068','signup-inactive@example.test',NULL,'{"display_name":"Cadastro Portal Inativo","jn_client_acceptance":{"version":"2026-11-12.1","terms":true,"privacy":true,"cookies":true,"optional_cookies":false}}');
 UPDATE public.memberships SET active=false WHERE user_id='00000000-0000-4000-a000-000000000068';
 UPDATE auth.users SET email_confirmed_at=clock_timestamp() WHERE id='00000000-0000-4000-a000-000000000068';
 SELECT test.assert_true(NOT EXISTS(SELECT FROM private.customer_registrations r JOIN public.memberships m ON m.id=r.membership_id WHERE m.user_id='00000000-0000-4000-a000-000000000068'),
@@ -140,7 +140,7 @@ SET ROLE migrator;
 SELECT private.configure_client_registration('00000000-0000-4000-e000-000000000042',true);
 RESET ROLE;
 INSERT INTO auth.users(id,email,email_confirmed_at,raw_user_meta_data) VALUES
- ('00000000-0000-4000-a000-000000000069','signup-shared@example.test',clock_timestamp(),'{"display_name":"Cadastro Portal Outro Escritorio"}');
+ ('00000000-0000-4000-a000-000000000069','signup-shared@example.test',clock_timestamp(),'{"display_name":"Cadastro Portal Outro Escritorio","jn_client_acceptance":{"version":"2026-11-12.1","terms":true,"privacy":true,"cookies":true,"optional_cookies":false}}');
 SELECT test.assert_true((SELECT count(*) FROM public.customers WHERE created_by='00000000-0000-4000-a000-000000000069' AND office_id='00000000-0000-4000-e000-000000000042')=1,
  'cadastro integrado: email em outro tenant nao bloqueia nem associa a ficha');
 SET ROLE migrator;
