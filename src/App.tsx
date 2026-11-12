@@ -21,7 +21,7 @@ function AppRoutes() {
   // Login/callback must stay mounted while adopting a provider session.
   const operationKey = JSON.stringify([auth.sessionKey, auth.contexts.map(context => [context.office_id, context.user_id, context.role_code, [...context.permissions].sort()])]);
   useEffect(() => { document.title = `Escritório JN | ${pageTitles[normalizePathname(pathname)] ?? 'Página não encontrada'}`; window.scrollTo(0, 0); }, [pathname]);
-  return <><a className="skip-link" href="#conteudo">Pular para o conteúdo</a><Routes>
+  return <><a className="skip-link" href="#conteudo" onClick={event=>{const main=document.getElementById('conteudo');if(main){event.preventDefault();main.tabIndex=-1;main.focus();main.scrollIntoView({block:'start'});}}}>Pular para o conteúdo</a><Routes>
     <Route path={paths.home} element={<HomePage />} />
     <Route path={paths.team} element={<AccessPage key={pathname} />} />
     <Route path={paths.client} element={<AccessPage key={pathname} />} />
