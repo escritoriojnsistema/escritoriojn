@@ -1,0 +1,36 @@
+{
+  "checked_at_utc": "2026-11-12T00:11:01.045195+00:00",
+  "authorization": "Usuário autorizou explicitamente a publicação em12/11/2026, reiterando autorização anterior.",
+  "runtime_pr": 121,
+  "runtime_pr_url": "https://github.com/escritoriojnsistema/escritoriojn/pull/121",
+  "feature_commit": "8fdd9ca61d69b7ef300d5a721352e6bf74b115ed",
+  "merge_commit": "38c1e73a9400b13406eb44ef9a0b2daa3b4e812a",
+  "preview": {
+    "id": "dpl_9G28Ke3SeHNvEPUhoc6kmwCswxvj",
+    "state": "READY"
+  },
+  "runtime_production": {
+    "id": "dpl_GsKi4iGyb9ptjvjRmH9UX9b11NRq",
+    "state": "READY",
+    "source": "git",
+    "target": "production",
+    "commit": "38c1e73a9400b13406eb44ef9a0b2daa3b4e812a",
+    "url": "escritoriojn-qjjheqri1-escritorio-jn.vercel.app"
+  },
+  "canonical_url": "https://escritoriojn.vercel.app",
+  "method": "GitHub→Vercel",
+  "github_actions_used": false,
+  "direct_deploy_used": false,
+  "hosted_public_browser_tests_passed": 24,
+  "public_asset_count": 74,
+  "html_status": 200,
+  "health_status": 200,
+  "runtime_error_scan": {
+    "scope": "Somente implantação publicada; consulta agregada error/fatal nos10min recentes",
+    "errors_found": 0
+  },
+  "personal_authenticated_sessions_tested": false,
+  "hosted_data_mutations": false,
+  "stage34_started": false,
+  "documentation_followup": "Somente continuidade e testes públicos; sem alterações de runtime."
+}
