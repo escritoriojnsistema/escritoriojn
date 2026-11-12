@@ -177,3 +177,25 @@
 .operation-section-navigation a[aria-current=page] { color: #103248; background: #edf3f5; font-weight: 600; }
 .operation-section-navigation a[aria-disabled=true] { opacity: .65; cursor: default; }
 .operation-section-navigation svg { flex-shrink: 0; }
+
+/* Reflow preserves natural scrolling and touch targets when text/zoom grows. */
+.operation-layout { container-type: inline-size; }
+.operation-heading > div { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+.operation-main .team-tabs { flex-wrap: wrap; }
+.operation-main .team-tabs button { white-space: normal; min-width: 0; overflow-wrap: anywhere; }
+.operation-main .team-pagination { flex-wrap: wrap; }
+.operation-main .customer-search { flex-wrap: wrap; }
+.operation-main .customer-search .team-field { flex-basis: 120px; }
+@container (max-width: 240px) {
+ .operation-mobile-bar { grid-template-columns:44px minmax(0,1fr); }
+ .operation-mobile-bar > .brand { grid-row:2; grid-column:1/-1; }
+ .operation-mobile-bar > .operation-header-actions { grid-row:1; grid-column:2; justify-self:end; }
+ .operation-mobile-nav { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .operation-mobile-nav a { min-width:0; max-width:none; overflow-wrap:anywhere; }
+ .operation-main { padding-bottom:calc(128px + env(safe-area-inset-bottom)); }
+ .operation-main .customer-toolbar { flex-wrap:wrap; }
+ .operation-main .customer-search { flex-basis:100%; }
+ .operation-main .team-pagination > span { flex-basis:100%; order:3; }
+ .operation-main .document-tabs-versions { flex-wrap:wrap; }
+ .operation-main .document-tabs-versions button { flex:1 1 60px; min-width:0; overflow-wrap:anywhere; }
+}

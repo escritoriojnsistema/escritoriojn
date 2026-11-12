@@ -13,8 +13,10 @@ textarea:focus, select:focus { outline: none; border-color: #103248; }
 input:autofill, textarea:autofill, select:autofill { background-clip: text !important; -webkit-text-fill-color: #193448; caret-color: #193448; }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
-.skip-link { position: fixed; top: -80px; left: 12px; z-index: 30; padding: 12px; background: #fff; }
+.skip-link { position: fixed; top: -200px; left: 12px; z-index: 30; padding: 12px; background: #fff; max-width:calc(100% - 24px); overflow-wrap:anywhere; }
 .skip-link:focus { top: 10px; }
+summary:focus-visible, [tabindex="0"]:focus-visible { outline: 3px solid #85602a; outline-offset: 3px; }
+:target, #conteudo { scroll-margin-top: 72px; }
 .public-site { min-height: 100svh; display: flex; flex-direction: column; }
 .site-header { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px max(5vw, calc((100vw - 1296px)/2)); background: #fdfdfc; }
 .brand { display: inline-flex; align-items: center; gap: 17px; width: fit-content; min-height: 44px; }
@@ -62,9 +64,19 @@ button:disabled { cursor: not-allowed; }
 .access-visual-copy > p:not(.eyebrow) { color: #d5dfe4; font-size: 14px; line-height: 1.8; }
 .visual-caption { position: absolute; bottom: 28px; left: 28px; font-size: 11px; color: #c5d2d8; }
 .access-main { padding: 30px 48px 24px; display: flex; flex-direction: column; min-width: 0; min-height: 100svh; }
-.access-topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.access-topbar { display: flex; flex-wrap:wrap; align-items: center; justify-content: space-between; gap: 12px; }
 .back-link { min-height: 44px; min-width: 44px; font-size: 12px; color: #5c7383; display: flex; align-items: center; gap: 10px; }
 .mobile-brand { display: none; }
+.mobile-brand { min-width:0; max-width:100%; }
+.mobile-brand .brand { max-width:100%; }
+.mobile-brand .brand-label { min-width:0; overflow-wrap:anywhere; }
+.access-content h1 { overflow-wrap:anywhere; }
+.access-layout { container-type:inline-size; }
+@container (max-width:240px) {
+ .input-wrap { gap:4px; padding-inline:8px; }
+ .input-wrap > svg { display:none; }
+ .password-label { flex-wrap:wrap; }
+}
 .access-content { width: 100%; max-width: 390px; margin: auto; padding: 12px 0; }
 .access-symbol { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: #edf3f5; margin-bottom: 10px; }
 .access-content .eyebrow { font-size: 8px; color: #855e29; letter-spacing: 1.7px; margin: 0 0 8px; }
@@ -145,4 +157,17 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 @media (max-width: 600px) and (max-height: 600px) {
  .access-content > .eyebrow { display: none; }
  .access-content { padding-block: 4px; }
+}
+/* Keep the public footer's four links reachable without shrinking touch targets. */
+@media (max-width:380px) and (max-height:600px) {
+ .site-footer { gap:0; }
+ .site-footer .privacy-links { font-size:11px; gap:0 8px; }
+ .landing-hero { padding-block:11px; }
+ .client-card { padding-block:8px; }
+ .access-content .access-privacy { font-size:11px; line-height:1.35; margin-top:8px; }
+ .access-content .privacy-links { font-size:11px; gap:0 8px; }
+ .health-result { padding-block:10px; }
+ .access-main { padding-top:8px; padding-bottom:max(8px,env(safe-area-inset-bottom)); }
+ .access-content .form-field { margin-bottom:4px; }
+ .access-content form .primary-button { margin-top:8px; }
 }

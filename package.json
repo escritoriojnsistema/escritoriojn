@@ -21,6 +21,7 @@
     "@vercel/functions": "3.10.1",
     "express": "5.3.0",
     "lucide-react": "0.546.0",
+    "pdfjs-dist": "6.5.438",
     "pdfkit": "0.17.2",
     "react": "19.3.1",
     "react-dom": "19.3.1",

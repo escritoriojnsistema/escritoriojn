@@ -1,5 +1,11 @@
 # Livro Raiz — Escritório JN
 
+## Etapa 34 — implementada e homologada, produção pendente
+
+Pedido12/11/2026 sobre maine6a14ff; última etapa publicada33 e correções pós33/navegação agrupada conferidas antes de modificar. Leitura voluntária com português local do dispositivo, prioridadept-BR, pausa/retomada/parada e fallback textual. Editor usa prévia resolvida; cliente usa texto extraído localmente dos mesmos bytesPDF liberados25/26/32, com reconferência após download. Mudança de texto/revisão/aba/visibilidade/autoridade interrompe; sem voz remota, IA contratada ou persistência. PDF.js/worker próprios carregam apenas sob demanda. Foco/teclado/zoom200 e reflow compartilhados,4atalhos e nenhuma interface de carregamento.
+
+Backend/Supabase preservados: sem endpoint/migration/RLS/grant/fixture/Auth novo;76migrations,última20261111190203. RelatóriosPDF antigos conservados; dependênciaPDF.js não altera o grafoPDFKit. GitHub→Vercel/semActions; produção34 ainda não publicada. [Fecho34](docs/etapas/fecho-34.md) · [Plano34](docs/etapas/plano-34.md) · [Cartão34](docs/etapas/etapa-34.md). 401Node, tipos/build/auditprodução0 e120cenáriosUI distintos aprovados; três achados de revisão corrigidos com RED→GREEN. Evidências e limites em docs/evidencias/etapa-34/verificacao.json; linksGit/preview serão registrados após criação. Próxima35 não iniciada.
+
 ## Ajuste atual: navegação agrupada — publicada e verificada
 
 Pedido11/11/2026 sobre main30fa60c, executado diretamente conforme solicitado. Barra lateral desktop/mobile mantém somente áreas principais, com navegação interna Solicitações/Anexos, Clientes/Imóveis rurais e Serviços/Checklist. Caixa conserva as áreas financeiras existentes. Configurações reúne administração e Conta por escritório/perfil, inclusive concessões independentes; cliente usa /minhas-configuracoes e só sua Conta. Atalho mobile Ajustes/engrenagem, demais ícones atualizados, no máximo quatro atalhos. Rotas preservadas, pai ativo, busy e isolamento de portal mantidos.
@@ -12,7 +18,7 @@ Pedido11/11/2026 sobre a base main5558136. Revisão das etapas01–33: portal ag
 
 Permissões continuam explícitas por escritório: cargo não libera todos os módulos. Nenhuma migration, fixture/Auth/grant hospedado foi alterado; última20261111190203/76migrations. Etapa34 não iniciada. [Fecho das correções](docs/etapas/fecho-correcoes-pos33.md) · [Mapa01–33](docs/etapas/mapa-acessos-01-33.md) · [Verificações](docs/evidencias/correcoes-pos33/verificacao.json) · [Publicação](docs/evidencias/correcoes-pos33/publicacao.json). Publicadas pelo [PR119](https://github.com/escritoriojnsistema/escritoriojn/pull/119), featurea6470f2/merge78b6b15, previewESZgqjBB e produçãoDRjydN7 READY, origemGit.391Node,337cenários distintos de navegador,8cenáriosAuthreais locais e26públicos hospedados aprovados;74assets iguais ao build. Identidades/vínculos/grants/migrations com fingerprints preservados. Fecho documental não altera runtime. GitHub→Vercel, semActions/deploydireto.
 
-## Última etapa implementada: Etapa 33 publicada e verificada
+## Última etapa publicada: Etapa 33, verificada
 
 Data:11/11/2026UTC. [PR117](https://github.com/escritoriojnsistema/escritoriojn/pull/117), feature338130ef/mergee996b8d5, previewFKCXkQSX e produçãoMJEL3RKK READY: https://escritoriojn.vercel.app. Base32 maind905485 conferida antes das mudanças. Formulários por serviço são publicados explicitamente em Serviços→Pedidos digitais; modelos conservam ofertas21. Cliente preenche campos09/quantidade/preço do servidor, confere/anexa pelo pipeline11 privado e confirma envio no mesmo protocolo10 para distribuição existente. Preparações ficam fora da fila operacional; retirada/mudança da publicação bloqueia primeiro envio antigo sem apagar seus dados. Devoluções12/status/histórico32/notificações preservados. Não há pagamento online, preço livre, nova capability ou concessão individual.
 
