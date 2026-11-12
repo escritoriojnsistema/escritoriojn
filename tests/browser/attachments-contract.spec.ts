@@ -31,7 +31,7 @@ async function select(page:Page){await page.getByRole('button',{name:'Selecionar
 test('anexos: rota, vazio e menu mantêm acesso ao fluxo10 e até quatro atalhos',async({page})=>{
  await page.setViewportSize({width:360,height:640});await setup(page,{empty:true});await page.goto('/anexos');
  await expect(page.getByRole('heading',{name:'Anexos privados',exact:true})).toBeVisible();await expect(page.getByText(/Nenhuma solicitação disponível/)).toBeVisible();await expect(page.getByRole('link',{name:'Ir para solicitações',exact:true})).toHaveAttribute('href','/solicitacoes');
- expect(await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link').count()).toBeLessThanOrEqual(4);await page.getByRole('button',{name:'Abrir menu',exact:true}).click();await expect(page.getByRole('navigation',{name:'Menu da operação'}).getByRole('link',{name:'Anexos',exact:true})).toBeVisible();
+ expect(await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link').count()).toBeLessThanOrEqual(4);await page.getByRole('button',{name:'Abrir menu',exact:true}).click();await expect(page.getByRole('navigation',{name:'Menu da operação'}).getByRole('link',{name:'Anexos',exact:true})).toHaveCount(0);await expect(page.getByRole('navigation',{name:'Menu da operação'}).getByRole('link',{name:'Solicitações',exact:true})).toHaveAttribute('aria-current','page');
  await expect(page.locator('[role="progressbar"],.spinner,.loading-overlay')).toHaveCount(0);
 });
 for(const [width,height]of [[320,400],[360,640],[1440,900]])test(`anexos: seleção, política e upload privado em quarentena em ${width}px`,async({page})=>{
@@ -53,8 +53,10 @@ test('anexos: retentativa preserva chave, rascunho e rótulo durante erro transi
  const button=page.getByRole('button',{name:'Enviar arquivo',exact:true});await button.click();await expect(button).toBeDisabled();await expect(page.getByText(/Carregando|Enviando|Aguarde/)).toHaveCount(0);release();await expect(page.getByRole('alert')).toContainText('indisponíveis');
  const refreshed=page.waitForResponse(r=>r.url().includes('/api/auth/context'));await page.evaluate(()=>window.dispatchEvent(new Event('focus')));await refreshed;await expect(page.getByRole('combobox',{name:'Classificação',exact:true})).toHaveValue('comprovante');await button.click();await expect(page.getByRole('list',{name:'Arquivos privados'})).toContainText('Quarentena');expect(bodies[0].input.idempotency_key).toBe(bodies[1].input.idempotency_key);
 });
-test('anexos: acesso exige as duas leituras; portal vê fluxo próprio',async({page})=>{
+test('anexos: acesso exige as duas leituras',async({page})=>{
  await setup(page,{caps:['foundation.access','files.read']});await page.goto('/anexos');await expect(page.getByRole('heading',{name:'Acesso não autorizado',exact:true})).toBeVisible();
+});
+test('anexos: portal vê fluxo próprio em sessão de cliente',async({page})=>{
  await setup(page,{empty:true,client:true});await page.goto('/meus-anexos');await expect(page.getByRole('link',{name:'Ir para minhas solicitações',exact:true})).toHaveAttribute('href','/minhas-solicitacoes');await expect(page.getByText('Gestão de anexos',{exact:true})).toHaveCount(0);
 });
 test('anexos: limpeza gera plano, retém órfãos e não executa plano vazio',async({page})=>{

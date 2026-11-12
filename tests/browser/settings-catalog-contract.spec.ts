@@ -21,7 +21,7 @@ async function setup(page:Page,role='owner',permissions=caps){
 for(const width of [360,1440]){
  test(`configurações: navegação, categorias e prazo personalizado em ${width}`,async({page})=>{
   await page.setViewportSize({width,height:900});const state=await setup(page);await page.goto('/configuracoes');
-  const nav=page.getByRole('navigation',{name:'Opções de configurações'});await expect(nav.getByRole('link')).toHaveCount(6);
+  const nav=page.getByRole('navigation',{name:'Opções de configurações'});await expect(nav.getByRole('link')).toHaveCount(7);
   await nav.getByRole('link',{name:/Categorias/}).click();await page.getByRole('button',{name:'Nova categoria'}).click();await page.getByLabel('Nome da categoria').fill('Categoria adicional');await page.getByLabel('Nível de execução').selectOption('1');await page.getByLabel('Motivo').fill('Organização autorizada de teste');await page.getByRole('button',{name:'Salvar categoria'}).click();await expect(page.getByRole('status')).toContainText('criada');expect(state.commands[0].command.kind).toBe('create');
   await page.goto('/configuracoes/acessos');const team=page.locator('form').filter({has:page.getByRole('heading',{name:'Equipe',exact:true})});await team.getByRole('combobox').selectOption('custom');await team.getByRole('spinbutton').fill('47');await team.getByRole('button',{name:'Salvar prazo da equipe'}).click();await expect(page.getByRole('status')).toContainText('salvo');expect(state.policies.team.idle_minutes).toBe(47);expect(state.policies.client.idle_minutes).toBe(30);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await expect(page.locator('[role="progressbar"],.loader,.spinner')).toHaveCount(0);

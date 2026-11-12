@@ -1,5 +1,11 @@
 # Livro Raiz — Escritório JN
 
+## Ajuste atual: navegação agrupada — implementação para revisão
+
+Pedido11/11/2026 sobre main30fa60c, executado diretamente conforme solicitado. Barra lateral desktop/mobile mantém somente áreas principais, com navegação interna Solicitações/Anexos, Clientes/Imóveis rurais e Serviços/Checklist. Caixa conserva as áreas financeiras existentes. Configurações reúne administração e Conta por escritório/perfil, inclusive concessões independentes; cliente usa /minhas-configuracoes e só sua Conta. Atalho mobile Ajustes/engrenagem, demais ícones atualizados, no máximo quatro atalhos. Rotas preservadas, pai ativo, busy e isolamento de portal mantidos.
+
+Nenhuma alteração de API/Auth/banco/permissões/migrations; Etapa34 não iniciada. [Contrato e limites](docs/etapas/ajuste-navegacao-agrupada.md) · [Verificações](docs/evidencias/navegacao-agrupada/verificacao.json). Produção pendente de autorização específica; sem merge/deploy/Actions neste ajuste.
+
 ## Correções atuais: acessos e portais após33 — publicadas e verificadas
 
 Pedido11/11/2026 sobre a base main5558136. Revisão das etapas01–33: portal agora fica correlacionado à sessão verificada, mantém somente a área escolhida na projeção revalidada e bloqueia montagem/API de telas do outro portal. Marca/Início segue a sessão; convite/callback permitem transição explícita revalidada, com proteção contra resposta de sessão antiga. Preferência versionada não contém poderes/tokens e usa fallback/revisão entre stores quando há quota. Destinos administrativos/financeiros autorizados estão explícitos na sidebar; quatro atalhos mobile preservados. Configurações escolhe escritório elegível por seção; Documentos respeita a aba na seleção inicial. Sino sem indicador pendente; lazy loading e comandos incertos preservados.

@@ -80,7 +80,7 @@ for (const width of [360, 1440]) test(`clientes: lista, busca privada, paginaç�
     expect(createIcon?.height).toBeGreaterThanOrEqual(18);
     await expect(nav.getByRole('link')).toHaveCount(4);
     await expect(nav.getByRole('link').nth(1)).toHaveText('Clientes');
-    await expect(nav.getByRole('link', { name: 'Conta', exact: true })).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'Ajustes', exact: true })).toBeVisible();
   }
   await capture(page, 'lista', width);
   expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1)).toBe(true);
@@ -185,7 +185,7 @@ test('sem identificador cria ficha sem preencher documento artificial', async ({
   await page.getByRole('button', { name: 'Criar cliente', exact: true }).click();
   expect((await request).postDataJSON().customer.identifier).toBe(''); await expect(page.getByText('Não informado', { exact: true })).toBeVisible();
 });
-for (const destination of ['lista', 'outro escritório']) test(`resultado de cadastro cancelado não troca a tela ao voltar para ${destination}`, async ({ page }) => {
+for (const destination of ['lista', 'outro escritório']) test(`cadastro pendente bloqueia saída e depois permite voltar para ${destination}`, async ({ page }) => {
   await setup(page, capabilities, 'owner', true); await page.goto('/clientes'); await page.getByRole('button', { name: 'Novo cliente', exact: true }).click();
   await page.getByLabel('Nome completo').fill('Cadastro cancelado');
   let release!: () => void, done!: () => void;
@@ -195,9 +195,14 @@ for (const destination of ['lista', 'outro escritório']) test(`resultado de cad
   await page.getByRole('button', { name: 'Criar cliente', exact: true }).click(); await request;
   await expect(page.getByRole('button', { name: 'Criar cliente', exact: true })).toBeDisabled();
   await expect(page.getByText(/Carregando|Salvando|Aguarde/)).toHaveCount(0);
+  try {
+    await expect(page.getByRole('button', { name: 'Voltar à lista', exact: true })).toBeDisabled();
+    await expect(page.getByRole('combobox', { name: 'Escritório', exact: true })).toBeDisabled();
+  } finally { release(); }
+  await complete;
+  await expect(page.getByRole('heading', { name: 'Ficha do cliente', exact: true })).toBeVisible();
   if (destination === 'lista') await page.getByRole('button', { name: 'Voltar à lista', exact: true }).click();
   else await page.getByRole('combobox', { name: 'Escritório', exact: true }).selectOption(otherOffice);
-  release(); await complete;
   await expect(page.getByRole('list', { name: 'Clientes do escritório' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Ficha do cliente', exact: true })).toHaveCount(0);
   await expect(page.getByText('Cadastro cancelado', { exact: true })).toHaveCount(0);

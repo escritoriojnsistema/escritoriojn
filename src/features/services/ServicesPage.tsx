@@ -1,6 +1,6 @@
 import {ServicePortalPanel33} from '../portalIntake/ServicePortalPanel33';
 import { useEffect, useRef, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Eye, LogIn, Plus, RefreshCw, Search } from 'lucide-react';
 import type { AccessContext } from '../../../shared/access';
 import { serviceMoney, type ServiceDetail as Detail, type ServiceInput, type ServicePage, type ServiceQuote } from '../../../shared/services';
@@ -19,7 +19,7 @@ import '../customers/customers.css';
 import './services.css';
 
 export default function ServicesPage(){
- const auth=useAuth();const [selected,setSelected]=useState('');
+ const auth=useAuth(),location=useLocation();const [selected,setSelected]=useState(typeof location.state?.office_id==='string'?location.state.office_id:'');
  const contexts=auth.contexts.filter(c=>c.role_code!=='client'&&c.permissions.includes('services.read'));
  const context=contexts.find(c=>c.office_id===selected)??contexts[0];
  if(auth.status==='loading')return <OperationalFeedback status="loading"/>;
@@ -66,7 +66,7 @@ function ServicesWorkspace({context,contexts,onOffice}:{context:AccessContext;co
  const data=resource.data,listError=resource.error;
  const fatal=[error,listError].find(e=>e?.status===401||e?.status===403);
  const initial=detail?.versions.find(v=>v.number===detail.latest_version);
- return <OperationLayout busy={busy||removalPending||portalPending}><div className="services-main">
+ return <OperationLayout office={office} busy={busy||removalPending||portalPending}><div className="services-main">
   <OperationHeading context={context} showRole={false} title={view==='list'?'Serviços':view==='create'?'Novo serviço':view==='edit'?'Editar serviço':detail?.current?.name??name} description={view==='list'?'Catálogo, preços e regras do escritório.':'Preços e políticas preservados por versão.'}/>
   {contexts.length>1&&<label className="team-field customer-office">Escritório<select value={office} disabled={busy||removalPending||portalPending} onChange={e=>onOffice(e.target.value)}>{contexts.map(c=><option key={c.office_id} value={c.office_id}>{c.office_name}</option>)}</select></label>}
   {fatal?<div className="team-empty"><p role="alert" className="form-feedback error">{fatal.message}</p>{fatal.status===401?<Link className="primary-button" to={paths.team}><LogIn size={18} aria-hidden="true"/>Entrar novamente</Link>:<button className="team-text-button" onClick={()=>{auth.refresh();setBlocked(false);setResource({key:''});back();}}>Verificar acesso novamente</button>}</div>:<>

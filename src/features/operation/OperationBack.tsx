@@ -9,7 +9,11 @@ export function operationParent(pathname:string,contexts:AccessContext[],client:
  const path=normalizePathname(pathname),home=client?paths.clientPanel:paths.panel;
  if(path===home)return undefined;
  const staff=contexts.filter(c=>c.role_code!=='client');
- if(!client&&(path.startsWith(`${paths.settings}/`)||[paths.teamManagement,paths.audit,paths.archives].some(route=>route===path))&&staff.some(c=>c.permissions.includes('settings.access')))return {path:paths.settings,label:'Voltar às configurações'};
+ if(client&&path===paths.clientAccount)return {path:paths.clientSettings,label:'Voltar às configurações'};
+ if(!client&&(path.startsWith(`${paths.settings}/`)||[paths.teamManagement,paths.audit,paths.archives,paths.account].some(route=>route===path))&&staff.length>0)return {path:paths.settings,label:'Voltar às configurações'};
+ if(path===(client?paths.clientAttachments:paths.attachments)&&(client||staff.some(c=>c.permissions.includes('requests.read'))))return {path:client?paths.clientRequests:paths.requests,label:'Voltar às solicitações'};
+ if(!client&&path===paths.rural&&staff.some(c=>c.permissions.includes('customers.read')))return {path:paths.customers,label:'Voltar aos clientes'};
+ if(!client&&path===paths.checklists&&staff.some(c=>c.permissions.includes('services.read')))return {path:paths.services,label:'Voltar aos serviços'};
  if(!client&&[paths.charges,paths.expenses,paths.financialReports,paths.quick].some(route=>route===path)&&staff.some(c=>c.permissions.includes('cash.read')||['requests.read','charges.read'].every(p=>c.permissions.includes(p))))return {path:paths.cash,label:'Voltar ao caixa'};
  if(!client&&path===paths.templates&&staff.some(c=>c.permissions.includes('templates.read')))return {path:paths.documents,label:'Voltar aos documentos'};
  if(path===(client?paths.clientDocumentCatalog:paths.documentCatalog)&& (client||staff.some(c=>c.permissions.includes('requests.read'))))return {path:client?paths.clientRequests:paths.requests,label:'Voltar às solicitações'};

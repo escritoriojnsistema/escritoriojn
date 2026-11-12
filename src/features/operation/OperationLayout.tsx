@@ -1,23 +1,26 @@
 import {PresenceControl} from '../documentCommercial/DocumentPresenceProvider';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { FileText, House, UserRoundSearch, UsersRound, CircleUserRound, History, Archive, LogOut, Menu, X, ClipboardList, MessagesSquare, Paperclip, ClipboardCheck, Bell, Wallet, Banknote, Zap, ChartColumn, Settings } from 'lucide-react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { FileText, House, UsersRound, CircleUserRound, History, Archive, LogOut, Menu, X, ClipboardList, Paperclip, ClipboardCheck, Bell, Wallet, Banknote, Zap, ChartColumn, Settings, BriefcaseBusiness, LandPlot } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { paths, normalizePathname } from '../../app/routes';
 import type { AccessContext } from '../../../shared/access';
 import {NotificationBell} from '../notifications/NotificationBell';
 import { Brand } from '../../ui/Brand';
 import { useAuth } from '../auth/AuthProvider';
-import { operationNavigation, mobileOperationNavigation, operationRoleNames } from './navigation';
+import { operationNavigation, mobileOperationNavigation, operationRoleNames, operationSectionKey, operationSectionNavigation } from './navigation';
 import {OperationBack,splitOperationReturn} from './OperationBack';
 import './operation.css';
 
-const icons = {categories:ClipboardList,access:Settings,privacy:CircleUserRound,rural:House,settings:Settings,catalog:FileText,portalDocuments:FileText, documents:FileText, templates:FileText, quick:Zap,reports:ChartColumn, expenses: Banknote, payments: Wallet, cash: Banknote, charges: Wallet, home: House, checklists: ClipboardCheck, notifications: Bell, requests: MessagesSquare, attachments: Paperclip, customers: UserRoundSearch, services: ClipboardList, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
-export function OperationLayout({ client = false, busy = false, contextActions, children }: { client?: boolean; busy?: boolean; contextActions?: ReactNode; children: ReactNode }) {
+const icons = {categories:ClipboardList,access:Settings,privacy:CircleUserRound,rural:LandPlot,settings:Settings,catalog:FileText,portalDocuments:FileText, documents:FileText, templates:FileText, quick:Zap,reports:ChartColumn, expenses: Banknote, payments: Wallet, cash: Banknote, charges: Wallet, home: House, checklists: ClipboardCheck, notifications: Bell, requests: ClipboardList, attachments: Paperclip, customers: UsersRound, services: BriefcaseBusiness, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
+export function OperationLayout({ client = false, busy = false, contextActions, office, children }: { client?: boolean; busy?: boolean; contextActions?: ReactNode; office?: string; children: ReactNode }) {
   const auth = useAuth();
   const items = operationNavigation(auth.contexts, client);
   const contextual = splitOperationReturn(contextActions);
   const home = items[0].path;
-  const account = items.at(-1)!.path;
+  const account = client ? paths.clientAccount : paths.account;
   const { pathname } = useLocation();
+  const sectionKey = operationSectionKey(pathname);
+  const sectionItems = operationSectionNavigation(auth.contexts, client, pathname);
   const drawer = useRef<HTMLDialogElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -50,7 +53,7 @@ export function OperationLayout({ client = false, busy = false, contextActions, 
   function navigation(label: string, mobile = false) {
     return <nav aria-label={label} className={mobile ? 'operation-mobile-nav' : 'operation-navigation'}>{(mobile ? mobileOperationNavigation(items) : items).map(item => {
       const Icon = icons[item.key];
-      return <NavLink key={item.key} to={item.path} end onClick={closeMenu}><Icon size={21} aria-hidden="true" /><span>{mobile && item.key === 'team' ? 'Equipe' : mobile && client && item.key === 'requests' ? 'Solicitações' : item.label}</span></NavLink>;
+      return <Link key={item.key} to={item.path} aria-current={(sectionKey === item.key || normalizePathname(pathname) === item.path) ? 'page' : undefined} aria-disabled={busy||undefined} onClick={event=>{if(busy){event.preventDefault();return;}closeMenu();}}><Icon size={21} aria-hidden="true" /><span>{mobile && item.key === 'settings' ? 'Ajustes' : mobile && client && item.key === 'requests' ? 'Solicitações' : item.label}</span></Link>;
     })}</nav>;
   }
   function exit() {
@@ -60,7 +63,7 @@ export function OperationLayout({ client = false, busy = false, contextActions, 
     <aside className="operation-sidebar" aria-label="Navegação principal"><Brand light to={home} /><p className="operation-area">{client ? 'Área do cliente' : 'Área da equipe'}</p>{navigation('Navegação da operação')}{contextActions&&<div className="operation-context-actions">{contextual.actions}</div>}{!client&&<PresenceControl/>}<div className="operation-sidebar-end">{exit()}<p>Acesso individual e protegido.</p></div></aside>
     <div className="operation-body">
       <header className="operation-mobile-bar" aria-label="Barra da conta"><button ref={menuButton} className="operation-icon-button" aria-label="Abrir menu" aria-expanded={open} aria-controls="operation-menu" onClick={() => setOpen(true)}><Menu size={24} aria-hidden="true" /></button><Brand to={home} /><div className="operation-header-actions"><NotificationBell client={client}/><Link to={account} className="operation-icon-button" aria-label="Abrir conta" title="Conta"><CircleUserRound size={25} aria-hidden="true" /></Link></div></header>
-      <main id="conteudo" className="operation-main"><OperationBack pathname={pathname} contexts={auth.contexts} client={client} busy={busy} contextual={contextual.back}/>{error && !open && <p role="alert" className="form-feedback error">{error}</p>}{children}</main>
+      <main id="conteudo" className="operation-main"><OperationBack pathname={pathname} contexts={auth.contexts} client={client} busy={busy} contextual={contextual.back}/>{error && !open && <p role="alert" className="form-feedback error">{error}</p>}{sectionItems.length>1&&<nav className="operation-section-navigation" aria-label={`Áreas de ${sectionKey==='requests'?'solicitações':sectionKey==='customers'?'clientes':'serviços'}`}>{sectionItems.map(item=>{const Icon=icons[item.key];return <Link key={item.key} to={item.path} state={office?{office_id:office}:undefined} aria-current={normalizePathname(pathname)===item.path?'page':undefined} aria-disabled={busy||undefined} onClick={event=>{if(busy)event.preventDefault();}}><Icon size={19} aria-hidden="true"/><span>{item.label}</span></Link>;})}</nav>}{children}</main>
     </div>
     {navigation('Atalhos do aplicativo', true)}
     <dialog id="operation-menu" ref={drawer} className="operation-drawer" aria-label="Menu de navegação" onClose={() => { setOpen(false); menuButton.current?.focus(); }} onClick={event => {
