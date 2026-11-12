@@ -1,0 +1,97 @@
+{
+  "date_utc": "2026-11-12",
+  "runtime_commit": "576e60d84e3e9513c16e44b09e5a51dba96d991c",
+  "runtime_tree": "e46a792353a706bf7e29cd2efdf61904ec1d3f8f",
+  "pr": 124,
+  "pr_url": "https://github.com/escritoriojnsistema/escritoriojn/pull/124",
+  "base_branch": "feat/etapa-34",
+  "branch": "fix/portal-categorias-aceites",
+  "deployment": {
+    "id": "dpl_8dDLCGjTKHAK6k3YLmNEmptBqvFb",
+    "url": "https://escritoriojn-927nspma7-escritorio-jn.vercel.app",
+    "state": "READY",
+    "source": "git",
+    "target": null,
+    "github_status": "success"
+  },
+  "compatibility": {
+    "commit": "79524ccf3bb278469128901e4ad7da1f1b0ef984",
+    "pr": 123,
+    "deployment": "dpl_Hc2obGJ5wXsqCYF2a4q9RdbfzxT3",
+    "url": "https://escritoriojn-7xl82p8gn-escritorio-jn.vercel.app",
+    "state": "READY",
+    "html_status": 200,
+    "health_status": 200
+  },
+  "checks": [
+    {
+      "path": "/cadastro",
+      "status": 200,
+      "cache": "private, no-store",
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/api/health",
+      "status": 200,
+      "cache": "no-store",
+      "type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/api/category-intake/form",
+      "status": 401
+    },
+    {
+      "path": "/api/portal-intake/services",
+      "status": 401
+    },
+    {
+      "path": "/api/requests/search",
+      "status": 401
+    }
+  ],
+  "compiled_markers": {
+    "signup_metadata": true,
+    "registration_acceptance": true,
+    "privacy_footer": true,
+    "optional_cookies_false": true,
+    "request_category_form": true,
+    "admin_category_settings": true
+  },
+  "asset_checks": [
+    {
+      "asset": "RequestsPage-CZcw4cg3.js",
+      "status": 200,
+      "markers": {
+        "Conferir pedido e anexos": true
+      }
+    },
+    {
+      "asset": "SettingsPage-CAAM-t3H.js",
+      "status": 200,
+      "markers": {
+        "Formulário e anexos": true,
+        "categories.manage": true
+      }
+    }
+  ],
+  "hosted_private_flow_tested": false,
+  "hosted_migrations": {
+    "count": 76,
+    "latest": "20261111190203",
+    "new_applied": false
+  },
+  "production_authorized": false,
+  "production_published": false,
+  "github_actions_used": false,
+  "direct_deployment_used": false,
+  "rollout": [
+    "Integrate PR123 only after authorization and confirm compatible signup code in production",
+    "Retarget PR124 to main; integrate only after compatible frontend ready",
+    "Read hosted schema_migrations before any manual migration operation; do not reapply automatic Git migrations"
+  ],
+  "limits": [
+    "Protected preview checked through Vercel connector; protection unchanged",
+    "New schema absent hosted, authenticated category/sign-up enforcement verified in disposable real local lab",
+    "No hosted account, grant, form, price or upload fixture created"
+  ]
+}

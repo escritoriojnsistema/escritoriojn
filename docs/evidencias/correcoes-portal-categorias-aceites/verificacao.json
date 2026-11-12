@@ -53,7 +53,7 @@
       "footer above two-row mobile shortcuts at reflow"
     ]
   },
-  "build": "PASS including TypeScript frontend/backend",
+  "build": "PASS: final full tree build exit0, frontend and backend TypeScript",
   "production_dependency_audit": {
     "vulnerabilities": 0
   },
@@ -82,12 +82,14 @@
     "category-tail.log": "301e4613c6f228864d1eed8131ce61d12557510633223ade88041eea7a260f93",
     "category-client-confirm.log": "ae6920552bbc5255297f74d0e0b056e48a49abdd21b7c39182cbc11d3806a6e3",
     "category-footer-admin-confirm.log": "6261ef3bd057930c39a43e7bcd8aa52cc0a10e1a2e683db43c25453d43685624",
-    "category-compat-build.log": "5a5e96f18cd494adac36cc23921cbb45b889817a11de7971ddeec162056398b2"
+    "category-compat-build.log": "5a5e96f18cd494adac36cc23921cbb45b889817a11de7971ddeec162056398b2",
+    "category-build-release.log": "31c8262ea41bcb82891aebb3988cdd7d2a89908f91a47452971089a44a8413f4"
   },
   "compatibility": {
     "commit": "79524ccf3bb278469128901e4ad7da1f1b0ef984",
     "tree": "75040a4644a2b007f076f71c8b3356fcf40b9bfd",
     "isolated_build": "PASS exit0",
     "pr": 123
-  }
+  },
+  "runtime_commit": "576e60d84e3e9513c16e44b09e5a51dba96d991c"
 }
