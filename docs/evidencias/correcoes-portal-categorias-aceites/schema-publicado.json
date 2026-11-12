@@ -1,0 +1,431 @@
+{
+  "date_utc": "2026-11-12",
+  "project": "mcsuoxnubpqenyvbefee",
+  "applied_by": "Git integration",
+  "manual_apply": false,
+  "do_not_reapply": true,
+  "migrations": [
+    {
+      "version": "20261112143114",
+      "name": "category_intake",
+      "statements": 58
+    },
+    {
+      "version": "20261112143334",
+      "name": "registration_acceptances",
+      "statements": 12
+    }
+  ],
+  "canonical_functions_verified": 28,
+  "canonical_functions_equal": true,
+  "tables": [
+    {
+      "name": "category_intake_commands",
+      "rls": true,
+      "anon_access": false,
+      "authenticated_access": false,
+      "service_role_access": false
+    },
+    {
+      "name": "category_intake_files",
+      "rls": true,
+      "anon_access": false,
+      "authenticated_access": false,
+      "service_role_access": false
+    },
+    {
+      "name": "category_intake_forms",
+      "rls": true,
+      "anon_access": false,
+      "authenticated_access": false,
+      "service_role_access": false
+    },
+    {
+      "name": "category_intake_revisions",
+      "rls": true,
+      "anon_access": false,
+      "authenticated_access": false,
+      "service_role_access": false
+    },
+    {
+      "name": "category_intakes",
+      "rls": true,
+      "anon_access": false,
+      "authenticated_access": false,
+      "service_role_access": false
+    },
+    {
+      "name": "client_registration_acceptances",
+      "rls": true,
+      "anon_access": false,
+      "authenticated_access": false,
+      "service_role_access": false
+    }
+  ],
+  "functions": [
+    {
+      "name": "private.categorized_request_create",
+      "signature": "private.categorized_request_create(uuid,jsonb,uuid)",
+      "body_md5": "5b806f90bae7dee52357d354b9147562",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_answers",
+      "signature": "private.category_intake_answers(jsonb,jsonb,boolean)",
+      "body_md5": "16394f277bf9146ac2254d4e30d2f5d7",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_capture",
+      "signature": "private.category_intake_capture()",
+      "body_md5": "de10f757ba3ff5ca125dca854523202c",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_capture_booking",
+      "signature": "private.category_intake_capture_booking()",
+      "body_md5": "03677c28cc091c6702b1336352da7f8f",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_command",
+      "signature": "private.category_intake_command(uuid,uuid,integer,jsonb,uuid)",
+      "body_md5": "525c6701f28d3e0d751357f725f7e70c",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_current",
+      "signature": "private.category_intake_current(private.category_intakes)",
+      "body_md5": "aaa0f871d3a1a943daef3143fc3dc243",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_effective",
+      "signature": "private.category_intake_effective(private.category_intakes)",
+      "body_md5": "540b2cb900f80d61f8e4059fffa3a325",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_form",
+      "signature": "private.category_intake_form(uuid,uuid,boolean)",
+      "body_md5": "fe1521141f77c5c850ead79b6b5224fc",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_open",
+      "signature": "private.category_intake_open(uuid,uuid,integer,jsonb,text,uuid)",
+      "body_md5": "d1a29e34c7c8f781b29541abd961e6a9",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_preparation_guard",
+      "signature": "private.category_intake_preparation_guard()",
+      "body_md5": "e1bc6a8daab935f7d6a0f7d57179f797",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_publish",
+      "signature": "private.category_intake_publish(uuid,uuid,jsonb,uuid)",
+      "body_md5": "c82b6ec44b2c06dfd2253b72fb694746",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_snapshot_guard",
+      "signature": "private.category_intake_snapshot_guard()",
+      "body_md5": "be68fe75f2056b4144ef983264157ebb",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_state",
+      "signature": "private.category_intake_state(uuid,uuid)",
+      "body_md5": "a50d22ab32947c494ffdac95d1620c29",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_state_record",
+      "signature": "private.category_intake_state_record(requests,memberships)",
+      "body_md5": "a43dc90126bbda6f0d380e377cdd8157",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.category_intake_validate",
+      "signature": "private.category_intake_validate(jsonb,jsonb)",
+      "body_md5": "a45724c0843e934a00c2334cdaf3cdad",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.guard_client_registration_acceptance",
+      "signature": "private.guard_client_registration_acceptance()",
+      "body_md5": "8b71109d7e3dd9de3b6f3aaa7d085ec2",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.portal_booking_result33",
+      "signature": "private.portal_booking_result33(requests)",
+      "body_md5": "bb74a281f15d45f88d2e004ef023186b",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.portal_draft33",
+      "signature": "private.portal_draft33(requests)",
+      "body_md5": "ec9298a81f6af961d500453e6efc2243",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.portal_request_command",
+      "signature": "private.portal_request_command(uuid,uuid,integer,jsonb,uuid)",
+      "body_md5": "0cc79d88f76dcbc1776b2de0921e72bb",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.portal_request_state_record",
+      "signature": "private.portal_request_state_record(requests)",
+      "body_md5": "8b213d6d085e560cdd202eeedca19381",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.register_new_client",
+      "signature": "private.register_new_client()",
+      "body_md5": "75e0a51a1be6e6dcb50b8be01f16f782",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.request_can_work",
+      "signature": "private.request_can_work(requests,memberships)",
+      "body_md5": "2f8cffd83dc1abd468d478ea6861e456",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "private.request_detail_record",
+      "signature": "private.request_detail_record(requests,memberships,integer)",
+      "body_md5": "cb211ae7bf17679d5f793fce3581063a",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false,
+      "service_role_execute": false
+    },
+    {
+      "name": "public.category_intake_command",
+      "signature": "category_intake_command(uuid,uuid,integer,jsonb,uuid)",
+      "body_md5": "ba4b7e7f5e9d21896dec5be804485fff",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false
+    },
+    {
+      "name": "public.category_intake_form",
+      "signature": "category_intake_form(uuid,uuid,boolean)",
+      "body_md5": "66f94a1566143a6cc4ba3de6b5764fc5",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false
+    },
+    {
+      "name": "public.category_intake_open",
+      "signature": "category_intake_open(uuid,uuid,integer,jsonb,text,uuid)",
+      "body_md5": "c8db2b3251354ba946073b75fb4f52b1",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false
+    },
+    {
+      "name": "public.category_intake_publish",
+      "signature": "category_intake_publish(uuid,uuid,jsonb,uuid)",
+      "body_md5": "cf9f154a00f3120ec171d0272b444ff9",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false
+    },
+    {
+      "name": "public.category_intake_state",
+      "signature": "category_intake_state(uuid,uuid)",
+      "body_md5": "8378af6efaf9ebd34895e84e610861ca",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false
+    }
+  ],
+  "dynamic_guards": [
+    {
+      "signature": "private.files_begin_upload(uuid,jsonb,uuid)",
+      "category_guard_present": true
+    },
+    {
+      "signature": "private.portal_request_command_before33(uuid,uuid,integer,jsonb,uuid)",
+      "category_guard_present": true
+    },
+    {
+      "signature": "private.requests_page_before32(uuid,text,text,text,integer,integer)",
+      "category_guard_present": true
+    }
+  ],
+  "statement_comparison": [
+    {
+      "version": "20261112143114",
+      "expected": 58,
+      "actual": 58,
+      "normalized_equal": true
+    },
+    {
+      "version": "20261112143334",
+      "expected": 12,
+      "actual": 12,
+      "normalized_equal": true
+    }
+  ]
+}

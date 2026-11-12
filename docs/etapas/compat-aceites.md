@@ -1,7 +1,7 @@
-# Compatibilidade de cadastro — antes das migrations de aceites
+# Compatibilidade de cadastro — publicada antes das migrations
 
 Complemento da Etapa34, sem iniciar35. Rodapé compartilhado ao fim das telas; cadastro cliente exige três declarações separadas antes da senha e envia metadata versionada `jn_client_acceptance`, mantendo cookies opcionais desativados. Não cria permissões nem altera contas existentes.
 
-Este incremento não contém migrations. Após autorização, integrar este código pelo GitHub→Vercel e confirmar que o cadastro publicado envia a declaração antes de integrar a correção `fix/portal-categorias-aceites`, que adiciona a exigência no triggerAuth e os formulários/anexos por categoria. Isso evita bloquear o cadastro antigo durante a atualização. Nenhum GitHub Actions ou deploy direto.
+O incremento de compatibilidade não contém migrations. Foi publicado primeiro pelo GitHub→Vercel e o cadastro publicado foi conferido antes de integrar a exigência no triggerAuth e os formulários/anexos por categoria. Isso preservou o cadastro durante a atualização. Nenhum GitHub Actions ou deploy direto.
 
-A Etapa34 e a publicação de produção continuam pendentes de autorização. A correção posterior tem fecho próprio em `docs/etapas/correcoes-portal-categorias-aceites.md`; consultar somente quando esse arquivo existir na branch correspondente.
+Publicação concluída12/11/2026: PR123/merge7783522/produçãoCdJdicHRREADY; depoisPR124/mergeb449b54/produção43hrmZbeREADY e duas migrations automáticas. HistóricoSupabase78/última20261112143334. Ver o [fecho das correções](correcoes-portal-categorias-aceites.md) e [registro](../evidencias/correcoes-portal-categorias-aceites/publicacao.json). Não repetir rollout nem reaplicar migrations.

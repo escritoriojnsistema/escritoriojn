@@ -1,0 +1,157 @@
+{
+  "date_utc": "2026-11-12",
+  "security": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 174,
+      "new_findings": [
+        {
+          "detail": "Table \\`private.category_intake_commands\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "category_intake_commands",
+            "type": "table",
+            "schema": "private"
+          }
+        },
+        {
+          "detail": "Table \\`private.category_intake_files\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "category_intake_files",
+            "type": "table",
+            "schema": "private"
+          }
+        },
+        {
+          "detail": "Table \\`private.category_intake_forms\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "category_intake_forms",
+            "type": "table",
+            "schema": "private"
+          }
+        },
+        {
+          "detail": "Table \\`private.category_intake_revisions\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "category_intake_revisions",
+            "type": "table",
+            "schema": "private"
+          }
+        },
+        {
+          "detail": "Table \\`private.category_intakes\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "category_intakes",
+            "type": "table",
+            "schema": "private"
+          }
+        },
+        {
+          "detail": "Table \\`private.client_registration_acceptances\\` has RLS enabled, but no policies exist",
+          "metadata": {
+            "name": "client_registration_acceptances",
+            "type": "table",
+            "schema": "private"
+          }
+        }
+      ]
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1,
+      "new_findings": []
+    }
+  ],
+  "performance": [
+    {
+      "name": "unindexed_foreign_keys",
+      "level": "INFO",
+      "count": 29,
+      "new_findings": []
+    },
+    {
+      "name": "unused_index",
+      "level": "INFO",
+      "count": 289,
+      "new_findings": [
+        {
+          "detail": "Index \\`category_intake_forms_actor_idx\\` on table \\`private.category_intake_forms\\` has not been used",
+          "metadata": {
+            "name": "category_intake_forms",
+            "type": "table",
+            "schema": "private"
+          }
+        },
+        {
+          "detail": "Index \\`category_intakes_category_idx\\` on table \\`private.category_intakes\\` has not been used",
+          "metadata": {
+            "name": "category_intakes",
+            "type": "table",
+            "schema": "private"
+          }
+        },
+        {
+          "detail": "Index \\`category_intake_revisions_actor_idx\\` on table \\`private.category_intake_revisions\\` has not been used",
+          "metadata": {
+            "name": "category_intake_revisions",
+            "type": "table",
+            "schema": "private"
+          }
+        },
+        {
+          "detail": "Index \\`category_intake_files_file_idx\\` on table \\`private.category_intake_files\\` has not been used",
+          "metadata": {
+            "name": "category_intake_files",
+            "type": "table",
+            "schema": "private"
+          }
+        },
+        {
+          "detail": "Index \\`category_intake_commands_actor_idx\\` on table \\`private.category_intake_commands\\` has not been used",
+          "metadata": {
+            "name": "category_intake_commands",
+            "type": "table",
+            "schema": "private"
+          }
+        },
+        {
+          "detail": "Index \\`category_intake_commands_category_idx\\` on table \\`private.category_intake_commands\\` has not been used",
+          "metadata": {
+            "name": "category_intake_commands",
+            "type": "table",
+            "schema": "private"
+          }
+        },
+        {
+          "detail": "Index \\`category_intake_commands_request_idx\\` on table \\`private.category_intake_commands\\` has not been used",
+          "metadata": {
+            "name": "category_intake_commands",
+            "type": "table",
+            "schema": "private"
+          }
+        },
+        {
+          "detail": "Index \\`client_registration_acceptances_office_idx\\` on table \\`private.client_registration_acceptances\\` has not been used",
+          "metadata": {
+            "name": "client_registration_acceptances",
+            "type": "table",
+            "schema": "private"
+          }
+        }
+      ]
+    }
+  ],
+  "assessment": {
+    "new_security_warnings": 0,
+    "new_unindexed_foreign_keys": 0,
+    "private_rls_no_policy": "Intentional closed ACL tables reached through checked RPC only; direct access denied to anon/authenticated/service_role",
+    "unused_new_indexes": "Expected before operational use; retained for FK coverage and query paths",
+    "existing_warning": "Leaked-password protection setting unchanged"
+  },
+  "remediation_links": {
+    "closed_rls": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy",
+    "unindexed_foreign_keys": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+    "password_protection": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+  }
+}
