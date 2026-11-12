@@ -4,7 +4,7 @@
 
 Pedido12/11/2026 sobre maine6a14ff; última etapa publicada33 e correções pós33/navegação agrupada conferidas antes de modificar. Leitura voluntária com português local do dispositivo, prioridadept-BR, pausa/retomada/parada e fallback textual. Editor usa prévia resolvida; cliente usa texto extraído localmente dos mesmos bytesPDF liberados25/26/32, com reconferência após download. Mudança de texto/revisão/aba/visibilidade/autoridade interrompe; sem voz remota, IA contratada ou persistência. PDF.js/worker próprios carregam apenas sob demanda. Foco/teclado/zoom200 e reflow compartilhados,4atalhos e nenhuma interface de carregamento.
 
-Backend/Supabase preservados: sem endpoint/migration/RLS/grant/fixture/Auth novo;76migrations,última20261111190203. RelatóriosPDF antigos conservados; dependênciaPDF.js não altera o grafoPDFKit. GitHub→Vercel/semActions; produção34 ainda não publicada. [Fecho34](docs/etapas/fecho-34.md) · [Plano34](docs/etapas/plano-34.md) · [Cartão34](docs/etapas/etapa-34.md). 401Node, tipos/build/auditprodução0 e120cenáriosUI distintos aprovados; três achados de revisão corrigidos com RED→GREEN. Evidências e limites em docs/evidencias/etapa-34/verificacao.json; linksGit/preview serão registrados após criação. Próxima35 não iniciada.
+Backend/Supabase preservados: sem endpoint/migration/RLS/grant/fixture/Auth novo;76migrations,última20261111190203. RelatóriosPDF antigos conservados; dependênciaPDF.js não altera o grafoPDFKit. GitHub→Vercel/semActions; produção34 ainda não publicada. [Fecho34](docs/etapas/fecho-34.md) · [Plano34](docs/etapas/plano-34.md) · [Cartão34](docs/etapas/etapa-34.md). 401Node, tipos/build/auditprodução0 e120cenáriosUI distintos aprovados; três achados de revisão corrigidos com RED→GREEN. Evidências e limites em docs/evidencias/etapa-34/verificacao.json; [PR123](https://github.com/escritoriojnsistema/escritoriojn/pull/123), runtimeaa330490, [préviaGit](https://escritoriojn-5kx8jsz5w-escritorio-jn.vercel.app) ANTT4cSu READY/statusVercel success. HTML/saúde/parser200 e APIs privadas401 conferidos via conector; navegador exige loginVercel, sem alterar proteção. [Checkpoint do preview](docs/evidencias/etapa-34/preview.json). Próxima35 não iniciada.
 
 ## Ajuste atual: navegação agrupada — publicada e verificada
 
@@ -51,4 +51,4 @@ Migration20261111131744 aplicada automaticamente:54instruções correspondentes,
 - Preservar identidade, escopo e autoridade atuais. Cache ou vínculo cadastral não concede acesso. Troca de sessão/autoridade limpa dados;503 conserva a tentativa,409 exige reconferência e401/403 bloqueia.
 - O histórico integral das etapas anteriores permanece no Git e nos cartões/fechos existentes. Esta consolidação evita republicar os detalhes antigos de auditoria no checkpoint público.
 
-Próxima etapa:34, somente por novo pedido. Nenhuma implementação de34 foi iniciada.
+Próxima etapa:35, somente após aceite/publicação34 e novo pedido.35 não iniciada.

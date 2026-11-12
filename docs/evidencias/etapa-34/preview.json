@@ -1,0 +1,55 @@
+{
+  "stage": 34,
+  "status": "PREVIEW_READY — produção não publicada",
+  "date_utc": "2026-11-12",
+  "repository": "escritoriojnsistema/escritoriojn",
+  "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/123",
+  "branch": "feat/etapa-34",
+  "runtime_commit": "aa3304909661f8e01cf82dd9117339110bba25f7",
+  "runtime_tree": "110935a6740817efb726bc1405ad42532bb5b8b8",
+  "deployment_id": "dpl_ANTT4cSuJotoCqdvCPcAbYXFQP6d",
+  "preview_url": "https://escritoriojn-5kx8jsz5w-escritorio-jn.vercel.app",
+  "state": "READY",
+  "source": "git",
+  "target": null,
+  "github_vercel_status": "success",
+  "checks_authenticated_through_vercel_connector": [
+    {
+      "path": "/login-cliente",
+      "status": 200,
+      "kind": "HTML de SPA"
+    },
+    {
+      "path": "/api/health",
+      "status": 200,
+      "cache_control": "no-store"
+    },
+    {
+      "path": "/api/portal-documents/state",
+      "status": 401,
+      "kind": "barreira da aplicação sem Bearer"
+    },
+    {
+      "path": "/api/document-workflow/artifact",
+      "status": 401,
+      "kind": "barreira da aplicação sem Bearer"
+    },
+    {
+      "path": "/assets/pdfText-DNbCCOLj.js",
+      "status": 200,
+      "kind": "parser real publicado, marcador GlobalWorkerOptions conferido"
+    }
+  ],
+  "browser_direct": "Redireciona ao login da Vercel por Deployment Protection; nenhuma proteção alterada para testar",
+  "hosted_interactive_private_login": "não realizado;120cenários locais de navegador e verificações hospedadas acima são evidências distintas",
+  "github_actions_used": false,
+  "direct_vercel_deploy": false,
+  "production_published": false,
+  "merge_requires_explicit_approval": true,
+  "supabase_migrations_before_after": {
+    "count": 76,
+    "last": "20261111190203",
+    "writes_by_stage34": false
+  },
+  "followup_documentation": "Este registro e os vínculos no Livro/AGENTS são continuidade documental; não alteram o runtime homologado."
+}
