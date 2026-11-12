@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Eye, LogIn, Pencil, Plus, RefreshCw, Search } from 'lucide-react';
 import type { CustomerDetail, CustomerInput, CustomerPage } from '../../../shared/customers';
 import { formatCnpj, formatCpf } from '../../../shared/identifiers';
@@ -16,9 +16,9 @@ import { RelationsPanel } from '../customer-relations/RelationsPanel';
 const compactMedia = '(max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px)';
 type View = { kind: 'relations'; id: string } | { kind: 'list' } | { kind: 'create' } | { kind: 'detail'; id: string; data?: CustomerDetail } | { kind: 'edit'; data: CustomerDetail };
 export default function CustomersPage() {
-  const auth = useAuth();
+  const auth = useAuth(), location = useLocation();
   const contexts = auth.contexts.filter(context => context.role_code !== 'client' && context.permissions.includes('customers.read'));
-  const [selectedOffice, setSelectedOffice] = useState('');
+  const [selectedOffice, setSelectedOffice] = useState(typeof location.state?.office_id==='string'?location.state.office_id:'');
   const context = contexts.find(item => item.office_id === selectedOffice) ?? contexts[0];
   const office = context?.office_id ?? '';
   const canCreate = context?.permissions.includes('customers.create') ?? false;
@@ -84,7 +84,7 @@ export default function CustomersPage() {
   if (auth.status !== 'authorized' || !context) return <OperationalFeedback status={auth.status === 'unavailable' ? 'unavailable' : 'denied'} />;
   const selected = view.kind === 'detail' ? view.data : undefined;
   const title = view.kind === 'relations' ? 'Vínculos do cliente' : view.kind === 'list' ? 'Clientes' : view.kind === 'create' ? 'Novo cliente' : view.kind === 'edit' ? 'Editar cliente' : 'Ficha do cliente';
-  return <OperationLayout busy={busy}><div className="customers-main">
+  return <OperationLayout office={office} busy={busy}><div className="customers-main">
     <OperationHeading context={context} title={title} description={view.kind === 'list' ? 'Cadastre e consulte as fichas do escritório.' : 'Ficha de atendimento, independente da conta de acesso.'} showRole={false} />
     {contexts.length > 1 && <label className="team-field team-office customer-office" htmlFor="customers-office">Escritório<select id="customers-office" disabled={busy} value={office} onChange={event => changeOffice(event.target.value)}>{contexts.map(item => <option key={item.office_id} value={item.office_id}>{item.office_name}</option>)}</select></label>}
     {fatal ? <div className="team-empty"><p role="alert" className="form-feedback error">{fatal.message}</p>{fatal.status === 401 ? <Link className="primary-button" to={paths.team}><LogIn size={18} aria-hidden="true" />Entrar novamente</Link> : <button className="primary-button" onClick={() => { reload(); auth.refresh(); }}><RefreshCw size={18} aria-hidden="true" />Verificar acesso novamente</button>}</div> : <>

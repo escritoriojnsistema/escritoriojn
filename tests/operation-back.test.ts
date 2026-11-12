@@ -8,11 +8,11 @@ const context=(role:string,permissions:string[])=>[{role_code:role,permissions}]
 test('retornos diretos têm pais internos seguros sem depender de histórico ou state',()=>{
  for(const path of ['/configuracoes/categorias','/configuracoes/acessos','/configuracoes/privacidade','/configuracoes/arquivados','/equipe','/auditoria','/arquivados']){
   assert.deepEqual(operationParent(path,context('owner',['settings.access']),false),{path:'/configuracoes',label:'Voltar às configurações'});
-  assert.deepEqual(operationParent(path,context('employee',['audit.read']),false),{path:'/painel',label:'Voltar ao início'});
+  assert.deepEqual(operationParent(path,context('employee',['audit.read']),false),{path:'/configuracoes',label:'Voltar às configurações'});
  }
  assert.equal(operationParent('/painel',context('owner',[]),false),undefined);
  assert.equal(operationParent('/area-cliente',context('client',[]),true),undefined);
- assert.deepEqual(operationParent('/MINHA-CONTA/',context('client',[]),true),{path:'/area-cliente',label:'Voltar ao início'});
+ assert.deepEqual(operationParent('/MINHA-CONTA/',context('client',[]),true),{path:'/minhas-configuracoes',label:'Voltar às configurações'});
  assert.deepEqual(operationParent('//external.example',context('owner',[]),false),{path:'/painel',label:'Voltar ao início'});
 });
 test('atalhos financeiros só retornam ao caixa quando o pai é autorizado',()=>{

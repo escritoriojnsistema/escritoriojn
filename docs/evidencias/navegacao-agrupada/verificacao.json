@@ -1,0 +1,71 @@
+{
+  "checked_at_utc": "2026-11-12T00:06:15.729836+00:00",
+  "base_commit": "30fa60c935261e748f352202ea3ab2894961ab31",
+  "scope": "Navegação desktop/mobile da equipe e cliente; sem mudança de API/Auth/banco/migration/grants.",
+  "checks": {
+    "typecheck": "passed",
+    "build": "passed",
+    "node_tests": {
+      "command": "npm test",
+      "passed": 393,
+      "failed": 0
+    },
+    "diff_check": "passed"
+  },
+  "browser": {
+    "provider": "Chromium / Playwright; fixtures locais explícitas, sem autenticação hospedada",
+    "widths": [
+      320,
+      375,
+      768,
+      1440
+    ],
+    "roles": [
+      "owner",
+      "admin",
+      "employee",
+      "client"
+    ],
+    "initial_navigation_run": {
+      "total": 77,
+      "passed": 66,
+      "failed": 11
+    },
+    "initial_regression_run": {
+      "total": 137,
+      "passed": 130,
+      "failed": 7
+    },
+    "final_targeted_run": {
+      "total": 25,
+      "passed": 24,
+      "failed": 1
+    },
+    "isolated_recheck": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0
+    },
+    "final_distinct_verified_scenarios": 27,
+    "resolution": [
+      "Menus/retornos/Conta adequados ao agrupamento solicitado.",
+      "Seletores do contrato móvel corrigidos para não procurar a sidebar oculta.",
+      "Descrição/espaços do Checklist compactados e navegação interna omitida quando existe só uma opção autorizada.",
+      "Teste de Anexos separado em sessões independentes de equipe e cliente.",
+      "Contratos legados de Clientes/Serviços agora comprovam o bloqueio de saída durante cadastro, já presente no código base, e a troca de escritório após a resposta.",
+      "Uma espera inicial de leitura de Conta excedeu5s durante a rodada concorrente; passou na reexecução isolada sem alteração de runtime."
+    ],
+    "remaining_failures": [],
+    "commands": [
+      "TEAM_UI_CONTRACT=1 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npx playwright test tests/browser/grouped-navigation-contract.spec.ts tests/browser/back-navigation-contract.spec.ts tests/browser/settings-catalog-contract.spec.ts tests/browser/portal-isolation-contract.spec.ts",
+      "TEAM_UI_CONTRACT=1 E2E_BASE_URL=http://127.0.0.1:3000 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npx playwright test tests/browser/attachments-contract.spec.ts tests/browser/customers-contract.spec.ts tests/browser/requests-contract.spec.ts tests/browser/services-contract.spec.ts tests/browser/checklists-contract.spec.ts tests/browser/cash-contract.spec.ts tests/browser/reachable-features-contract.spec.ts tests/browser/portal33-contract.spec.ts --workers=3",
+      "Rodada final25 e reexecução3 nos mesmos arquivos, usando --grep dos cenários registrados e frontend local em3016."
+    ]
+  },
+  "review": "Revisão independente somente leitura: nenhum bug concreto no diff.",
+  "production": "Não publicada. Branch/PR para revisão; sem merge/deploy/Actions.",
+  "limitations": [
+    "Dados de negócio hospedados e logins pessoais não foram acessados.",
+    "Sem alterações backend; validação API→banco real não se aplica ao diff."
+  ]
+}

@@ -34,8 +34,8 @@ for(const width of [320,360,1440])for(const route of ['/configuracoes','/configu
 }
 for(const role of ['owner','admin','employee','client'])test(`retorno direto da conta respeita portal ${role}`,async({page})=>{
  await setup(page,role,['foundation.access']);await page.goto(role==='client'?'/minha-conta':'/conta');
- const back=page.getByRole('main').getByRole('link',{name:'Voltar ao início',exact:true});await expect(back).toBeVisible();await back.click();await expect(page).toHaveURL(new RegExp(`${role==='client'?'/area-cliente':'/painel'}$`));
- await expect(page.getByRole('main').getByRole('link',{name:/^Voltar/})).toHaveCount(0);
+ const back=page.getByRole('main').getByRole('link',{name:'Voltar às configurações',exact:true});await expect(back).toBeVisible();await back.click();await expect(page).toHaveURL(new RegExp(`${role==='client'?'/minhas-configuracoes':'/configuracoes'}$`));
+ await expect(page.getByRole('heading',{name:'Configurações',exact:true})).toBeVisible();
 });
 test('convite mantém Fechar local e o rascunho protegido sem retorno duplicado',async({page})=>{
  await setup(page);await page.goto('/equipe');await page.getByRole('button',{name:'Novo convite',exact:true}).click();await page.getByLabel('Nome completo',{exact:true}).fill('Rascunho fictício');
@@ -75,7 +75,7 @@ test('conta conserva Cancelar local e bloqueia retorno enquanto salva',async({pa
  await page.setViewportSize({width:360,height:640});await setup(page);let release!:()=>void;const gate=new Promise<void>(resolve=>release=resolve);
  await page.route('**/api/account/save',async r=>{await gate;return r.fulfill({json:{data:{name:'Nome alterado',cpf:null,email:'fixture@example.test',version:'b'.repeat(64),pending_email:null,can_edit:true}}});});
  await page.goto('/conta');await expect(page.getByLabel('E-mail de acesso',{exact:true})).toHaveValue('fixture@example.test');await page.screenshot({path:'/workspace/scratch/retornos-after-360-conta.png',fullPage:true});await page.getByLabel('Nome completo',{exact:true}).fill('Nome alterado');
- await expect(page.getByRole('main').getByRole('link',{name:'Voltar ao início',exact:true})).toBeHidden();
+ await expect(page.getByRole('main').getByRole('link',{name:'Voltar às configurações',exact:true})).toBeHidden();
  await page.getByRole('button',{name:'Salvar alterações',exact:true}).click();const back=page.locator('.operation-back-control');
  try{await expect(back).toHaveAttribute('aria-disabled','true');await back.dispatchEvent('click');await expect(page).toHaveURL(/\/conta$/);}finally{release();}
  await expect(page.getByRole('status')).toContainText('Dados pessoais atualizados');await expect(back).not.toHaveAttribute('aria-disabled','true');
@@ -97,7 +97,7 @@ test('conta mantém retorno bloqueado durante confirmação do e-mail após salv
  await page.route('**/api/account/save',r=>r.fulfill({json:{data:{name:'Pessoa fictícia',cpf:null,email:'fixture@example.test',version:'b'.repeat(64),pending_email:email,can_edit:true}}}));
  await page.route('https://team-ui.supabase.co/auth/v1/user*',async r=>{if(r.request().method()!=='PUT')return r.fulfill({json:{id:user,aud:'authenticated'}});await gate;return r.fulfill({json:{id:user,aud:'authenticated',email:'fixture@example.test'}});});
  await page.goto('/conta');await expect(page.getByLabel('E-mail de acesso',{exact:true})).toHaveValue('fixture@example.test');await page.getByLabel('E-mail de acesso',{exact:true}).fill(email);await page.getByRole('button',{name:'Salvar alterações',exact:true}).click();
- const back=page.getByRole('main').getByRole('link',{name:'Voltar ao início',exact:true});
+ const back=page.getByRole('main').getByRole('link',{name:'Voltar às configurações',exact:true});
  try{await expect(back).toBeVisible();await expect(back).toHaveAttribute('aria-disabled','true');await back.dispatchEvent('click');await expect(page).toHaveURL(/\/conta$/);}finally{release();}
  await expect(back).not.toHaveAttribute('aria-disabled','true');await expect(page.getByRole('status')).toContainText('Confira as instruções de confirmação');
 });

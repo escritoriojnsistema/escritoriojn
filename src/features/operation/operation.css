@@ -171,3 +171,9 @@
  .operation-main:has(> .team-main > .team-header) > .operation-back { position: absolute; top: 8px; right: clamp(20px,3vw,44px); max-width: 140px; margin: 0; }
  .operation-main > .team-main > .team-header > div { padding-right: 140px; }
 }
+
+.operation-section-navigation { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 6px; border-bottom: 1px solid #d8e2e8; padding-bottom: 6px; }
+.operation-section-navigation a { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 8px; font-size: 14px; color: #526d7e; }
+.operation-section-navigation a[aria-current=page] { color: #103248; background: #edf3f5; font-weight: 600; }
+.operation-section-navigation a[aria-disabled=true] { opacity: .65; cursor: default; }
+.operation-section-navigation svg { flex-shrink: 0; }
