@@ -23,3 +23,9 @@ Conexões mantidas: anexos de categoria e complementações33; detalhe de atendi
 Exclusão de arquivo livre remove bytes viaStorage e registros de anexo/intent/lease no banco. Arquivos protegidos, sob retenção ou já vinculados permanecem bloqueados com explicação; não apagar evidência histórica por cascata. A reserva de exclusão abandonada pode ser retomada após15min mediante autorização vigente. Retry guarda a mesma versão/chave, inclusive ao usarVoltar ou tentar sair da conta durante503.
 
 Publicação autorizada:GitHub→Vercel, semActions e semdeploydireto. Histórico hospedado anterior78/20261112143334 conferido; a única migration nova é20261113140739. Registrofinal em docs/evidencias/anexos-rodape-pos34/publicacao.json. Última etapa continua34;35não iniciada.
+
+## Publicação concluída
+
+[PR126](https://github.com/escritoriojnsistema/escritoriojn/pull/126), mergee3815f5; produçãoVercel3W7C8qniREADY porGit. https://escritoriojn.vercel.app:25cenários públicos aprovados,82assets iguais ao build, HTMLno-store ehealth200. Supabase aplicou automaticamente20261113140739:79migrations,19funções/ACL/RLS comparadas ao replay; Edgeprivate-attachments112ACTIVE/JWT/handlerigual. Nenhuma reaplicação manual.
+
+181/182fingerprints anteriores idênticos; alteração somente no dispatcher de manutenção (configuração continua06/11). Nova tabela de comandos de exclusão vazia.7contas/7vínculos/92role_permissions preservados. Registro completo em publicacao.json e consultas/fingerprints correspondentes. Trabalho solicitado encerrado;35não iniciada.
