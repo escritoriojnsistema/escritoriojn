@@ -1,0 +1,48 @@
+{
+  "verified_at": "2026-11-13T20:14:00Z",
+  "site": "https://escritoriojn.vercel.app",
+  "pull_request": 126,
+  "feature_sha": "2e6feee6f6dc4614c7f6e3d49be2312433f007d8",
+  "merge_sha": "e3815f5caf5635b35f45b24a9de82c1a8dea7c3c",
+  "pipeline": "GitHub→Vercel; no Actions or direct deployment",
+  "preview": {
+    "id": "dpl_HefaUBgNmy1nRUCMG8aQ6ERFCPoW",
+    "state": "READY",
+    "sha": "2e6feee6f6dc4614c7f6e3d49be2312433f007d8"
+  },
+  "production": {
+    "id": "dpl_3W7C8qniafYbCjEqdWEg1XHw6He9",
+    "state": "READY",
+    "sha": "e3815f5caf5635b35f45b24a9de82c1a8dea7c3c",
+    "url": "escritoriojn-nut71kcti-escritorio-jn.vercel.app"
+  },
+  "supabase": {
+    "migrations": 79,
+    "last_version": "20261113140739",
+    "applied_by": "Git integration automatically; no manual reapplication",
+    "functions_equal": 19,
+    "private_table_rls_acl": "verified",
+    "public_wrappers_invoker": 3,
+    "edge": {
+      "version": 112,
+      "status": "ACTIVE",
+      "verify_jwt": true,
+      "handler_matches_git": true
+    }
+  },
+  "hosted_verification": {
+    "public_browser_passed": 25,
+    "assets_equal": 82,
+    "html_no_store": true,
+    "health_status": 200,
+    "accounts": 7,
+    "memberships": 7,
+    "role_permissions": 92,
+    "existing_table_fingerprints_equal": 181,
+    "existing_tables_total": 182,
+    "runtime_only_change": "maintenance_schedule_settings: dispatcher advanced; config updated_at remains2026-11-06",
+    "new_table": "private.file_deletions empty",
+    "hosted_fixtures_or_auth_grants_created": false
+  },
+  "test_limit": "Expired reservation reclaim has SQL/concurrency verification; extra real Storage retry was blocked before starting by local Docker disk capacity. Existing 11 real Auth/Storage groups passed."
+}

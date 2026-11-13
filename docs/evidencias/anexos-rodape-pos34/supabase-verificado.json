@@ -1,0 +1,281 @@
+{
+  "functions": [
+    {
+      "name": "private.files_cleanup_eligible",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "f files",
+      "anon_execute": false,
+      "prosrc_sha256": "c8445c61f29bd9e097b34b61b3199a8b097ed0512554e3b5acfeca8139f62339",
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.files_delete_authority",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "f files",
+      "anon_execute": false,
+      "prosrc_sha256": "7ab8b67e508cee8b706a53df48b2256562608d2c8404c8036e7b6d376794afbd",
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.files_delete_begin",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "p_office_id uuid, p_file_id uuid, p_expected_updated_at timestamp with time zone, p_key uuid, p_event_id uuid",
+      "anon_execute": false,
+      "prosrc_sha256": "b81332535ef00755f9e88b26ef9188f9f3360252249339160c93eda676106d85",
+      "public_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.files_delete_check",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "f files",
+      "anon_execute": false,
+      "prosrc_sha256": "fa3a2f07e5b36f5cbe8aae770775bba9016da37fdbbee6bfe84ca58a72c993af",
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.files_delete_complete",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "p_office_id uuid, p_command_id uuid, p_key uuid, p_event_id uuid",
+      "anon_execute": false,
+      "prosrc_sha256": "69f57e9eb8951f7e378df8d535ddf1fb5d912b3f39a409776a3d5bf33f4ab745",
+      "public_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.files_delete_storage_allowed",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "p_bucket text, p_path text",
+      "anon_execute": false,
+      "prosrc_sha256": "93a0481f43f6936767d06166863ddfa628c9d3fb992412eaa2d7666f5113092c",
+      "public_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.files_delete_unreferenced",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "f files",
+      "anon_execute": false,
+      "prosrc_sha256": "68e15b209d419de38a2cb8c0345767b07104e389ed62d391f92a1a1edbf63429",
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.files_deletion_lease_guard",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "",
+      "anon_execute": false,
+      "prosrc_sha256": "a72db5b71fce9a79164fae172c4aef64f17647968bf4b53e6e186d1a9cade205",
+      "public_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.files_deletion_reference_guard",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "",
+      "anon_execute": false,
+      "prosrc_sha256": "26abca372dcd90d99ef5fbf182594b4911cfac5e63bdf91853a600e1fa4b9273",
+      "public_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.files_file_json",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "f files, m memberships",
+      "anon_execute": false,
+      "prosrc_sha256": "9496d145687c23445c53509834a873169ad00ce246a76b215f3400dfcfe4ebe4",
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.files_own_portal",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "r requests, m memberships",
+      "anon_execute": false,
+      "prosrc_sha256": "3757190a5657fa85bbee9c1f356f321779acd52c51b6848a946db695170da5a2",
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.files_preview",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "p_office_id uuid, p_file_id uuid, p_event_id uuid",
+      "anon_execute": false,
+      "prosrc_sha256": "8a9a6c455250cd13d5343fb55aa8f3ea900cce862853a6720772240761924d9d",
+      "public_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.files_preview_ready",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "f files",
+      "anon_execute": false,
+      "prosrc_sha256": "1c135a3cb00d054b4804849a9b01d205287c964c320e96bad685c55dbf774bf0",
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.files_request",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "p_office_id uuid, p_request_id uuid, m memberships, p_write boolean",
+      "anon_execute": false,
+      "prosrc_sha256": "95cae7a3927699eb9ca3cbef6a770103203e0d8bb4599f0ec94c0a3eb3cb9089",
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.files_requests_page",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "p_office_id uuid, p_query text, p_page integer, p_size integer",
+      "anon_execute": false,
+      "prosrc_sha256": "6059ac82679c855a09c2f6d3d3960593c2e49570d9f28a9f4a33809907da428f",
+      "public_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.files_storage_allowed",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "p_bucket text, p_path text, p_operation text, p_metadata jsonb",
+      "anon_execute": false,
+      "prosrc_sha256": "95b67e20ba1e05da24962dd5fd68c144436f5b530231a5077ca2450d0e2ffbf2",
+      "public_execute": false,
+      "security_definer": true,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.files_delete_begin",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "p_office_id uuid, p_file_id uuid, p_expected_updated_at timestamp with time zone, p_key uuid, p_event_id uuid",
+      "anon_execute": false,
+      "prosrc_sha256": "bc66cbe28ee9cdcfffca525a24af961b4f1b32ebaf6febdcfa00c1052c1f07e6",
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.files_delete_complete",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "p_office_id uuid, p_command_id uuid, p_key uuid, p_event_id uuid",
+      "anon_execute": false,
+      "prosrc_sha256": "751613cf1ded841c9f2dc863a56f7b1eaafb568ff00af13e252193d9c1a637e8",
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.files_preview",
+      "config": [
+        "search_path=\"\""
+      ],
+      "present": true,
+      "arguments": "p_office_id uuid, p_file_id uuid, p_event_id uuid",
+      "anon_execute": false,
+      "prosrc_sha256": "8a1c6ccb6d409d0b08e2b82a13284628ec7868813526990cc5a4f61a848a4252",
+      "public_execute": false,
+      "security_definer": false,
+      "service_role_execute": false,
+      "authenticated_execute": true
+    }
+  ],
+  "migration": "20261113140739_attachments_private_preview_delete.sql",
+  "private.file_deletions": {
+    "present": true,
+    "policies": 0,
+    "rls_forced": false,
+    "rls_enabled": true,
+    "anon_any_dml": false,
+    "public_any_acl": false,
+    "service_role_any_dml": false,
+    "authenticated_any_dml": false
+  }
+}
