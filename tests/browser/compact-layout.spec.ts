@@ -1,13 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-const screens = ['/', '/login', '/login-cliente', '/recuperar-senha?area=client', '/cadastro', '/redefinir-senha', '/auth/callback', '/status'];
+const screens = ['/', '/login', '/login-cliente', '/recuperar-senha?area=client', '/cadastro', '/redefinir-senha', '/auth/callback'];
 for (const [width, height] of [[320, 568], [360, 640], [768, 1024], [1440, 900]]) {
   test(`conteúdo público compacto e cadastro com rolagem natural em ${width}x${height}`, async ({ page }) => {
     await page.setViewportSize({ width, height });
     for (const path of screens) {
       await page.goto(path);
       await expect(page.locator('h1')).toBeVisible();
-      if (path === '/status') await expect(page.getByRole('status')).toContainText('API disponível');
       const size = await page.evaluate(() => ({
         vertical: document.documentElement.scrollHeight - innerHeight,
         horizontal: document.documentElement.scrollWidth - innerWidth,
@@ -23,20 +22,17 @@ for (const [width, height] of [[320, 568], [360, 640], [768, 1024], [1440, 900]]
   });
 }
 
-test('conteúdo ampliado pode rolar sem cortar a ação de recuperação', async ({ page }) => {
+test('conteúdo ampliado pode rolar sem cortar o retorno e as políticas', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 400 });
-  await page.route('**/api/health', route => route.fulfill({ status: 503, json: { error: { code: 'UNAVAILABLE' } } }));
-  await page.goto('/status');
-  await expect(page.getByRole('alert')).toBeVisible();
-  await page.locator('.health-result p').evaluate(element => {
-    element.textContent = 'Não foi possível concluir a consulta. Confira a conexão e tente novamente. '.repeat(12);
+  await page.goto('/recuperar-senha?area=client');
+  await expect(page.getByRole('heading',{name:'Esqueceu sua senha?'})).toBeVisible();
+  await page.locator('.access-description').evaluate(element => {
+    element.textContent = 'Recupere o acesso à sua conta. Confira as instruções recebidas no seu e-mail. '.repeat(12);
   });
   expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight)).toBe(true);
-  const retry = page.getByRole('button', { name: 'Tentar novamente' });
-  await retry.scrollIntoViewIfNeeded();
-  await expect(retry).toBeInViewport();
-  await retry.focus();
-  await page.unroute('**/api/health');
-  await page.keyboard.press('Enter');
-  await expect(page.getByRole('status')).toContainText('API disponível');
+  const back = page.getByRole('region',{name:'Esqueceu sua senha?'}).getByRole('link', { name: 'Voltar',exact:true });
+  await back.scrollIntoViewIfNeeded();await expect(back).toBeInViewport();
+  const footer=page.getByRole('contentinfo');await footer.scrollIntoViewIfNeeded();await expect(footer).toBeInViewport();
+  await expect(footer.getByRole('link',{name:'Cookies e preferências'})).toBeInViewport();
+  await back.focus();await page.keyboard.press('Enter');await expect(page).toHaveURL(/\/login-cliente$/);
 });

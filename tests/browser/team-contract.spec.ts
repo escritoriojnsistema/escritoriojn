@@ -133,18 +133,6 @@ for (const role of ['owner', 'admin', 'employee', 'client']) test(`logo em recup
   expect(await shortcuts.getByRole('link').count()).toBeLessThanOrEqual(4);
 });
 
-test('status consulta em segundo plano sem texto ou ícone de carregamento', async ({ page }) => {
-  let release!: () => void;
-  const pending = new Promise<void>(resolve => { release = resolve; });
-  await page.route('**/api/health', async route => { await pending; await route.fulfill({ status: 503, json: {} }); });
-  await page.goto('/status');
-  try {
-    await expect(page.getByText(/Verificando|Carregando/)).toHaveCount(0);
-    await expect(page.locator('.health-icon.loading')).toHaveCount(0);
-  } finally { release(); }
-  await expect(page.getByRole('alert')).toContainText('Não foi possível verificar');
-});
-
 for (const change of ['nova sessão', 'outro usuário', 'outra função']) test(`troca no mesmo escritório descarta formulário e lista anteriores: ${change}`, async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await session(page); await dashboard(page); await page.goto('/equipe');

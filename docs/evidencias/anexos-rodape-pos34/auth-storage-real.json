@@ -1,0 +1,30 @@
+{
+  "proof": "attachments-lifecycle-real-local",
+  "date_utc": "2026-11-13",
+  "hosted_writes": false,
+  "scanner_configured": false,
+  "reservation_reclaim_real_verified": false,
+  "reservation_reclaim_attempt_blocked_by_local_disk": true,
+  "checks": {
+    "own_submitted_portal_pdf_png_real_upload_validation_private_preview": true,
+    "cross_client_office_request_and_storage_isolation": true,
+    "quarantine_no_release_copy_sign_or_bucket_listing": true,
+    "protection_legal_hold_retention_reference_and_stale_version_block_delete": true,
+    "reserved_delete_real_storage_purge_idempotency_and_exact_actor_session": true,
+    "png_physically_deleted_without_false_archiving": true,
+    "owner_admin_employee_current_grants_responsibility_preview_and_purge": true,
+    "live_capability_loss_blocks_storage_delete_and_post_removal_completion_recovers": true,
+    "second_preview_and_storage_recheck_live_request_capability": true,
+    "sensitive30_medical_bytes_preview_and_deletion_do_not_expand_grants": true,
+    "revoked_gotrue_session_denies_preview_and_storage_with_old_jwt": true
+  },
+  "providers": {
+    "gotrue": true,
+    "postgrest": true,
+    "express": true,
+    "storage": true,
+    "worker_real_handler": true
+  },
+  "check_count": 11,
+  "all_passed": true
+}

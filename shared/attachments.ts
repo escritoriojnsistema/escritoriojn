@@ -12,6 +12,7 @@ export type AttachmentFile = {
  sha256:string;classification:AttachmentClassification;status:AttachmentStatus;
  scanner_status:'not_configured'|'pending'|'clean'|'infected';validation_reason:string|null;intent_id:string|null;
  created_at:string;updated_at:string;can_validate:boolean;can_download:boolean;can_copy:boolean;
+ can_preview?:boolean;can_delete?:boolean;delete_pending?:boolean;
 };
 export type AttachmentPage = {items:AttachmentFile[];total:number;page:number;page_size:number;portal:boolean};
 export type AttachmentRequestOption = {id:string;label:string;closed:boolean;can_work?:boolean;items:{id:string;service_id:string;name:string;policy:AttachmentPolicy}[]};
@@ -22,6 +23,9 @@ export type AttachmentUploadInput = {
 };
 export type AttachmentIntent = {file:AttachmentFile;intent_id:string;bucket:typeof attachmentBucket;object_path:string;expires_at:string;can_upload:boolean};
 export type AttachmentDownload = {bucket:typeof attachmentBucket;object_path:string;name:string;mime_type:AttachmentMime};
+export type AttachmentPreview = AttachmentDownload & {size_bytes:number;sha256:string};
+export type AttachmentDeletion = {id:string;file_id:string}&({bucket:typeof attachmentBucket;object_path:string;completed:false}|{bucket:null;object_path:null;completed:true});
+export type AttachmentDeleted = {deleted:true;file_id:string};
 export type AttachmentCleanupPlan = {id:string;expires_at:string;count:number;orphan_count:number;items:{id:string;name:string;status:'rejeitado'|'aguardando_upload'}[]};
 export type AttachmentProcessInput =
  | {action:'validate';args:{intent_id:string}}

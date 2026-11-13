@@ -1,0 +1,32 @@
+{
+  "verified_at": "2026-11-13T20:09:45.965128+00:00",
+  "status": "passed",
+  "migration": "20261113140739_attachments_private_preview_delete.sql",
+  "migration_sha256": "f5f0eaa897513b9dd301333510d2e461dcdd5562a43d897ef89aa9c783e325ff",
+  "function_bodies_matching_final_migration": 19,
+  "environment": "Disposable local PostgreSQL 17; limited migrator without superuser/BYPASSRLS; provider-shaped Storage stub",
+  "hosted_writes": false,
+  "full_replay": {
+    "checks": 2333,
+    "status": "passed",
+    "log_sha256": "b3c85ffa3a1e2f2f70971511508e9152d91cb7a1976b55076a0b5a78680bc80c"
+  },
+  "focused_final_sql": {
+    "checks": 63,
+    "status": "passed",
+    "includes": "delete_pending projection, expired reservation reclaim, current authority, original UID/session invalidation, Storage present/absent, metadata purge and idempotency",
+    "log_sha256": "d874038fbb95c3ee16121a9f05c7c95b7e2efecbab3326f1cbef40a3536196a8"
+  },
+  "concurrency": {
+    "checks": 4,
+    "status": "passed",
+    "cases": [
+      "reserved delete defeats concurrent reference",
+      "reserved delete defeats concurrent protection",
+      "concurrent existing reference defeats delete reservation",
+      "Storage request waiting before reclaim cannot use stale session snapshot"
+    ],
+    "log_sha256": "f543267937ed27f855a920bb9fe9e59261fb9d642cce51067a65b861b78bad65"
+  },
+  "storage_scope": "SQL models provider metadata only. Real Auth/Storage/Express evidence is recorded separately in auth-storage-real.json."
+}
