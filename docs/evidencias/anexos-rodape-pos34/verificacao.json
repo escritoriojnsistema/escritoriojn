@@ -1,0 +1,20 @@
+{
+  "date_utc": "2026-11-13T20:11:01.601361+00:00",
+  "node_passed": 407,
+  "typecheck": "passed",
+  "production_build": "passed",
+  "browser_regression": {
+    "passed": 129,
+    "initial_failed": 1,
+    "fixed": "POP guard must register before BrowserRouter; exact key/version/logout preserved",
+    "focused_final_passed": 5
+  },
+  "independent_review": "no blockers after reclaim, PDF canvas and POP fixes",
+  "production_credentials_in_tests": false,
+  "logs_sha256": {
+    "jn-nov13-node-verified.log": "f402b1307feb763f90fdbafd5917f4eed3bd5c433f9b91c2e9526c4f138c6116",
+    "jn-nov13-production-build.log": "caa3e33569d0418d5096119466445cd22b920a7cac48ed54a3be86ff71656b45",
+    "jn-nov13-browser-final.log": "7e696bccd934f031b0fbfac389f011fe2f288d8891942eec6c00cf141efe044c",
+    "jn-nov13-pop-final.log": "611560d65c6fa06fa25a0cb3e0bf644d5479afccf9856390b92610f3d116072f"
+  }
+}

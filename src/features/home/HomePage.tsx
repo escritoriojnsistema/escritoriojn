@@ -1,14 +1,8 @@
-import { ArrowRight, Building2, ClipboardList, HeartHandshake, LockKeyhole, ShieldCheck, UserRound } from 'lucide-react';
+import { ArrowRight, LockKeyhole, UserRound } from 'lucide-react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAccountHome } from '../auth/useAccountHome';
 import { paths } from '../../app/routes';
 import { SiteFooter, SiteHeader } from '../../app/SiteLayout';
-const benefits = [
-  { icon: ClipboardList, title: 'Organização', text: 'Cuidado com cada detalhe.' },
-  { icon: HeartHandshake, title: 'Atendimento', text: 'Atenção em cada processo.' },
-  { icon: Building2, title: 'Praticidade', text: 'Soluções para sua rotina.' },
-  { icon: ShieldCheck, title: 'Segurança', text: 'Proteção das informações.' },
-];
 export default function HomePage() {
   const accountHome = useAccountHome();
   if (accountHome) return <Navigate replace to={accountHome} />;
@@ -27,6 +21,5 @@ export default function HomePage() {
         </section>
       </div>
     </section>
-    <section className="benefits" aria-label="Nosso compromisso">{benefits.map(({ icon: Icon, title, text }) => <div className="benefit" key={title}><span><Icon size={20} strokeWidth={1.5} aria-hidden="true" /></span><div><h2>{title}</h2><p>{text}</p></div></div>)}</section>
   </main><SiteFooter /></div>;
 }

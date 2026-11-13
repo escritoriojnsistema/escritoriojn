@@ -1,4 +1,4 @@
-import {PrivacyLinks} from '../features/privacy/PrivacyLinks';
+import {PrivacyFooter} from '../features/privacy/PrivacyLinks';
 import { UsersRound } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Brand } from '../ui/Brand';
@@ -9,5 +9,5 @@ export function SiteHeader() {
   </div></header>;
 }
 export function SiteFooter() {
-  return <footer className="site-footer"><span>Escritório JN</span><span aria-hidden="true">·</span><span>Tecnologia a serviço da sua tranquilidade.</span><Link to={paths.status}>Status do sistema</Link><PrivacyLinks/></footer>;
+  return <PrivacyFooter className="site-footer"/>;
 }

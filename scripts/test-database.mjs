@@ -1,3 +1,4 @@
+import {raceAttachmentDeletion} from './database-attachments-private-delete.mjs';
 import {racePortalIdentity31} from './database-portal-identity31.mjs';
 import {raceRelease25} from './database-documents25.mjs';
 import {raceSignatures24} from './database-documents24.mjs';
@@ -746,6 +747,9 @@ try {
     if(allMigrations.some(n=>n.includes('_portal_intake33')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/portal33.sql`,'utf8'));
     if(allMigrations.some(n=>n.includes('_category_intake')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/category-intake.sql`,'utf8'));
     if(allMigrations.some(n=>n.includes('_registration_acceptances')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/registration-acceptance.sql`,'utf8'));
+    if(allMigrations.some(n=>n.includes('_attachments_private_preview_delete')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/attachments-private-preview-delete.sql`,'utf8'));
+    if(allMigrations.some(n=>n.includes('_attachments_private_preview_delete')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/attachments-sensitive-preview.sql`,'utf8'));
+    if(allMigrations.some(n=>n.includes('_attachments_private_preview_delete')))result+=await raceAttachmentDeletion({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceRelease25({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceSignatures24({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     if(correctionMigrations.length)for(const suite of ['request-levels','portal-request-returns','account-closure','catalog-sync','request-level-scope','request-routing','retention','privacy-settings','maintenance','portal-documents-access','portal-documents-published','staff-category-opening']){try{result+=sql(database,'postgres',readFileSync(`${root}tests/database/${suite}.sql`,'utf8'));}catch(error){console.error(`Final-schema suite failed: ${database}/${suite}`);throw error;}}

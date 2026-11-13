@@ -1,12 +1,14 @@
 import { createClient, type Session } from '@supabase/supabase-js';
-import { attachmentBucket, attachmentMaxBytes, attachmentMimeTypes, type AttachmentCleanupPlan, type AttachmentDownload, type AttachmentIntent, type AttachmentPage, type AttachmentPolicy, type AttachmentProcessInput, type AttachmentProcessResult, type AttachmentRequestPage, type AttachmentUploadInput } from '../../../shared/attachments';
+import { attachmentBucket, attachmentMaxBytes, attachmentMimeTypes, type AttachmentCleanupPlan, type AttachmentDownload, type AttachmentIntent, type AttachmentPage, type AttachmentPolicy, type AttachmentProcessInput, type AttachmentProcessResult, type AttachmentRequestPage, type AttachmentUploadInput, type AttachmentFile, type AttachmentPreview, type AttachmentDeletion, type AttachmentDeleted } from '../../../shared/attachments';
 import { supabase } from '../auth/browser';
 import { authenticatedFetch } from '../auth/authenticatedFetch';
 import { sessionScope } from '../auth/sessionScope';
 
 export class AttachmentsError extends Error {
  constructor(public status:number,public code?:string){
+  const lifecycle:Record<string,string>={FILE_IN_USE:'O arquivo está vinculado a um registro. O vínculo precisa ser tratado antes da exclusão.',FILE_PROTECTED:'O arquivo está protegido ou sujeito à retenção e não pode ser excluído.',FILE_DELETE_PENDING:'Há uma exclusão pendente. Repita a mesma tentativa para confirmar o resultado.',FILE_VERSION_CONFLICT:'O arquivo mudou. Atualize a lista antes de excluir.',FILE_CONTENT_CHANGED:'O conteúdo do arquivo não corresponde ao registro autorizado.'};
   super(status===401?'Sua sessão expirou ou foi encerrada. Entre novamente para continuar.':status===403?'Seu acesso não permite esta operação. Verifique com o proprietário.':status===404?'Este arquivo ou atendimento não está disponível no seu escopo.':code==='FILE_NOT_READY'?'O arquivo ainda não está disponível para esta ação.':code==='FILE_POLICY_CONFLICT'?'A política mudou. Consulte a versão atual antes de publicar novamente.':code==='FILE_IDEMPOTENCY_CONFLICT'?'Esta tentativa já foi registrada com outros dados. Confira os arquivos antes de repetir.':status===409?'O arquivo mudou ou já possui uma operação em andamento. Confira os arquivos e tente novamente.':status===422?'Confira o arquivo, seu formato, tamanho, classificação e item do atendimento.':'Anexos indisponíveis no momento. Confira sua conexão e tente novamente.');
+  if(code&&lifecycle[code])this.message=lifecycle[code];
  }
 }
 export const attachmentsError=(cause:unknown)=>cause instanceof AttachmentsError?cause:new AttachmentsError(503);
@@ -52,11 +54,39 @@ export const attachmentsApi={
  requests:(office_id:string,query:string,page:number,size:number,signal?:AbortSignal)=>request<AttachmentRequestPage>('/requests',{office_id,query,page,size},signal),
  intent:(office_id:string,input:AttachmentUploadInput,signal?:AbortSignal)=>request<AttachmentIntent>('/intents',{office_id,input},signal),
  download:(office_id:string,id:string,signal?:AbortSignal)=>request<AttachmentDownload>(`/${id}/download`,{office_id},signal),
+ preview:(office_id:string,id:string,signal?:AbortSignal)=>request<AttachmentPreview>(`/${id}/preview`,{office_id},signal),
+ deleteBegin:(office_id:string,file:Pick<AttachmentFile,'id'|'updated_at'>,key:string,signal?:AbortSignal)=>request<AttachmentDeletion>(`/${file.id}/delete`,{office_id,expected_updated_at:file.updated_at,key},signal),
+ deleteComplete:(office_id:string,command_id:string,key:string,signal?:AbortSignal)=>request<AttachmentDeleted>('/delete/complete',{office_id,command_id,key},signal),
  policy:(office_id:string,service_id:string,signal?:AbortSignal)=>request<AttachmentPolicy>('/policy',{office_id,service_id},signal),
  updatePolicy:(office_id:string,service_id:string,policy:AttachmentPolicy,reason:string,signal?:AbortSignal)=>request<AttachmentPolicy>('/policy/update',{office_id,service_id,expected_version:policy.version,max_bytes:policy.max_bytes,mime_types:policy.mime_types,reason},signal),
  cleanupPlan:(office_id:string,signal?:AbortSignal)=>request<AttachmentCleanupPlan>('/cleanup-plan',{office_id},signal),
  process:(office_id:string,input:AttachmentProcessInput,signal?:AbortSignal)=>request<AttachmentProcessResult>('/process',{office_id,...input},signal),
 };
+export async function previewAttachment(office:string,id:string,signal:AbortSignal):Promise<{bytes:Blob;metadata:AttachmentPreview}>{
+ return guarded(async(session,operationSignal,check)=>{
+  const metadata=await attachmentsApi.preview(office,id,operationSignal);await check();
+  if(metadata.bucket!==attachmentBucket||!metadata.object_path||metadata.size_bytes>attachmentMaxBytes)throw new AttachmentsError(503);
+  const result=await privateStorage(session,operationSignal).from(metadata.bucket).download(metadata.object_path,{}, {signal:operationSignal,cache:'no-store'});await check();
+  if(result.error||!result.data)throw new AttachmentsError(503);
+  const buffer=await result.data.arrayBuffer();await check();const digest=await crypto.subtle.digest('SHA-256',buffer);await check();
+  const hash=Array.from(new Uint8Array(digest),byte=>byte.toString(16).padStart(2,'0')).join('');
+  if(buffer.byteLength!==metadata.size_bytes||hash!==metadata.sha256)throw new AttachmentsError(409,'FILE_CONTENT_CHANGED');
+  const current=await attachmentsApi.preview(office,id,operationSignal);await check();
+  if(JSON.stringify(current)!==JSON.stringify(metadata))throw new AttachmentsError(409,'FILE_CONTENT_CHANGED');
+  return{bytes:new Blob([buffer],{type:metadata.mime_type}),metadata};
+ },signal);
+}
+export async function deleteAttachment(office:string,file:Pick<AttachmentFile,'id'|'updated_at'>,key:string,signal:AbortSignal):Promise<AttachmentDeleted>{
+ return guarded(async(session,operationSignal,check)=>{
+  const command=await attachmentsApi.deleteBegin(office,file,key,operationSignal);await check();
+  if(command.file_id!==file.id)throw new AttachmentsError(503);
+  if(command.completed)return{deleted:true,file_id:file.id};
+  const removed=await privateStorage(session,operationSignal).from(command.bucket).remove([command.object_path]);await check();
+  if(removed.error)throw new AttachmentsError(503);
+  const result=await attachmentsApi.deleteComplete(office,command.id,key,operationSignal);await check();
+  if(result.deleted!==true||result.file_id!==file.id)throw new AttachmentsError(503);return result;
+ },signal);
+}
 export async function uploadAttachment(office:string,file:File,input:Omit<AttachmentUploadInput,'name'|'mime_type'|'size_bytes'|'sha256'>,policy:AttachmentPolicy,signal:AbortSignal):Promise<AttachmentProcessResult>{
  const extension=file.name.split('.').at(-1)?.toLowerCase(),mime=file.type;
  const allowed=extension==='pdf'?'application/pdf':extension==='png'?'image/png':extension==='jpg'||extension==='jpeg'?'image/jpeg':'';

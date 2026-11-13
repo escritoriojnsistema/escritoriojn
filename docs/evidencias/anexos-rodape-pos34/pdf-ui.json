@@ -1,0 +1,24 @@
+{
+  "suite": "tests/browser/attachments-pdf-contract.spec.ts",
+  "command": "TEAM_UI_CONTRACT=1 E2E_BASE_URL=http://127.0.0.1:3017 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium node node_modules/@playwright/test/cli.js test tests/browser/attachments-pdf-contract.spec.ts --output /tmp/jn-ui-pdf-results-final",
+  "result": "4 passed (21.6s)",
+  "typecheck": "npm run typecheck: exit0",
+  "coverage": [
+    "PDFKit PDF fictício real de2páginas em320/1440px",
+    "canvas com pixels pintados e <=8000000pixels",
+    "Anterior/Próxima e texto extraído dos mesmos bytes",
+    "nenhum iframe, execuçãoJavaScript ou request à URL externa no PDF",
+    "worker próprio sob demanda",
+    "121páginas recusado",
+    "fechar durante worker pendente e reabrir com sucesso"
+  ],
+  "fixtures": "Somente local; SDK/Auth/Storage interceptados; nenhuma conta/dado real.",
+  "screenshots": [
+    "conta-client-1440.png",
+    "conta-client-320.png",
+    "conta-owner-1440.png",
+    "conta-owner-320.png",
+    "home-1440.png",
+    "home-320.png"
+  ]
+}

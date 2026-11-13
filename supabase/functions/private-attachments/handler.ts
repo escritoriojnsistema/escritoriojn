@@ -27,6 +27,8 @@ function projectResult(v:unknown){
  if(v.file!==null){
   if(!object(v.file)||!id(v.file.id)||!id(v.file.request_id)||!['aguardando_upload','quarentena','disponivel','rejeitado','removido'].includes(String(v.file.status))||(v.file.can_download||v.file.can_copy)&&(v.file.status!=='disponivel'||v.file.scanner_status!=='clean'))throw Error('Invalid file completion');
   file={};for(const key of ['id','request_id','request_item_id','name','mime_type','size_bytes','sha256','classification','status','scanner_status','validation_reason','intent_id','created_at','updated_at','can_validate','can_download','can_copy'])file[key]=v.file[key];
+  for(const key of ['can_preview','can_delete','delete_pending'])if(v.file[key]!==undefined){if(typeof v.file[key]!=='boolean')throw Error('Invalid file capability');file[key]=v.file[key];}
+  if(file.can_preview&&(!['quarentena','disponivel'].includes(String(file.status))||file.scanner_status==='infected'))throw Error('Invalid preview capability');
  }
  return {file,removed:v.removed,pending:v.pending};
 }

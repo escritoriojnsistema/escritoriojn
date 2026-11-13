@@ -1,0 +1,8 @@
+.private-pdf-preview,.private-pdf-canvas-view{min-width:0;max-width:100%}
+.private-pdf-display{width:fit-content;max-width:100%;margin:8px 0!important}
+.private-pdf-display select{min-height:44px;max-width:100%;font-size:16px}
+.private-pdf-pagination{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 12px;margin:4px 0}
+.private-pdf-pagination button{min-height:44px}
+.private-pdf-pagination span{font-size:13px;overflow-wrap:anywhere}
+.private-pdf-canvas-view canvas{display:block;max-width:100%;width:auto;height:auto;max-height:62svh;object-fit:contain;margin:0 auto;background:#fff}
+.private-pdf-canvas-view canvas[hidden]{display:none}

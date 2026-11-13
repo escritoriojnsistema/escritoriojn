@@ -1,3 +1,11 @@
+# Correções de anexos e rodapé após34 — implementação13/11/2026
+
+Basefe4362d/PR121–125 conferida antes de alterar. Preservar navegação agrupada, seleção exata de portal, formulários por categoria e leitura34; não iniciar35. Contrato/evidências em docs/etapas/correcoes-anexos-rodape-pos34.md e docs/evidencias/anexos-rodape-pos34. Conta usa somente rodapé compartilhado; faixa de benefícios e UI/rota de status removidas, health técnico preservado. Escritório JN junto das políticas.
+
+Anexos11: cliente pode enviar em próprio pedidoportal aberto; contexto porUUID continua submetido ao escopo atual. Visualização privada de bytes com tamanho/SHA256 e autorização reconferidos; PDF rasterizado porPDF.js próprio, semiframe/scripts/linksativos. Quarentena não vira clean nem libera cópia/entrega25/26/32. Exclusão explícita reserva sessão/chave/versão, apaga viaStorage APIJWT e somente depois purga metadados/intent/lease; nunca DELETEstorage.objects na produção. Referência em uso/proteção/retenção bloqueia. Tombstone mínimo semnome/path/bytes permite retry idempotente; reserva abandonada pode ser retomada após15min por ator atualmente autorizado, invalidando comando anterior.503 preserva comando e bloqueia saída/logout/POP até reconciliação; não persistir File/payload/token. Consumidores originais e gates sensíveis30 conservados.
+
+Nova migration20261113140739: conferir histórico hospedado antes de qualquer aplicação; esperado79/última20261113140739 apósGit, anterior78/20261112143334. Não reaplicar as78anteriores. Publicação exclusivamenteGitHub→Vercel, semActions/deploydireto; testes destrutivos somente em laboratório descartável, nenhuma fixture/grant/Auth hospedada. Registro final de publicação é a fonte do SHA/READY e conferência da migration.
+
 # Livro Raiz — Escritório JN
 
 ## Correções atuais — rodapé, aceites e categorias (publicadas e verificadas)

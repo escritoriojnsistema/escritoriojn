@@ -9,7 +9,6 @@ import { AuthProvider, useAuth } from './features/auth/AuthProvider';
 import {PortalBoundary} from './features/auth/PortalBoundary';
 import HomePage from './features/home/HomePage';
 import AccessPage from './features/access/AccessPage';
-import StatusPage from './features/home/StatusPage';
 import CallbackPage from './features/auth/CallbackPage';
 import ResetPage from './features/auth/ResetPage';
 const OperationalRoutes = lazy(loadOperations);
@@ -32,7 +31,6 @@ function AppRoutes() {
     <Route path="/privacidade" element={<PrivacyPage section="privacy" />} />
     <Route path="/termos" element={<PrivacyPage section="terms" />} />
     <Route path="/cookies" element={<PrivacyPage section="cookies" />} />
-    <Route path={paths.status} element={<StatusPage />} />
     <Route path="*" element={<PortalBoundary><Suspense fallback={null}><OperationalRoutes operationKey={operationKey} /></Suspense></PortalBoundary>} />
 
   </Routes></>;

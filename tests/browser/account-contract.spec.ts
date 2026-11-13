@@ -43,3 +43,18 @@ test('pós13: cliente cancela proposta e ações ficam fora da conta',async({pag
 test('pós13: resumo inicial atrasado conserva rascunho e consulta única da Conta',async({page})=>{
  await setup(page);let reads=0,release!:()=>void;const held=new Promise<void>(r=>release=r);await page.route('**/api/account/read',r=>{reads++;return r.fulfill({json:{data:{...values,version,pending_email:null,can_edit:true}}});});await page.route('**/api/notifications/summary',async r=>{await held;await r.fulfill({json:{data:{unread:1}}});});await page.goto('/conta');await expect(page.getByLabel('Nome completo',{exact:true})).toHaveValue(values.name);release();await expect(page.getByRole('button',{name:/1 não lidas/})).toBeVisible();expect(reads).toBe(1);await page.getByLabel('Nome completo',{exact:true}).fill('Rascunho preservado');await expect(page.getByLabel('Nome completo',{exact:true})).toHaveValue('Rascunho preservado');expect(reads).toBe(1);
 });
+
+for(const role of ['owner','admin','employee','client'])for(const width of [320,1440])test(`conta: políticas somente no rodapé compartilhado ${role} ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:900});await setup(page,role);await page.goto(role==='client'?'/minha-conta':'/conta');
+ await expect(page.getByRole('heading',{name:'Conta',exact:true})).toBeVisible();
+ const footer=page.getByRole('contentinfo');await expect(footer).toHaveCount(1);
+ await expect(page.locator('main .privacy-links')).toHaveCount(0);
+ await expect(page.getByRole('navigation',{name:'Privacidade e uso',exact:true})).toHaveCount(1);
+ await expect(footer.locator('.privacy-footer-row')).toContainText('Escritório JN');
+ for(const name of ['Privacidade','Termos de uso','Cookies e preferências']){
+  const link=page.getByRole('link',{name,exact:true});await expect(link).toHaveCount(1);await expect(footer.getByRole('link',{name,exact:true})).toHaveCount(1);
+  await link.scrollIntoViewIfNeeded();await expect(link).toBeInViewport();expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+ }
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ if(width===320)expect(await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link').count()).toBeLessThanOrEqual(4);
+});
