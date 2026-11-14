@@ -22,4 +22,4 @@ Não há dispositivoAndroid/iPhone físico neste ambiente. Instruções e manife
 
 ## Publicação
 
-Checkpoint: implementação local verificada; branchfeat/etapa-35 criada pelo conectorGitHub. Publicação/READY e verificaçõesHTTPS/MIME/401 serão registrados após retorno real da integraçãoGitHub→Vercel. Não iniciar36 automaticamente.
+Checkpoint: PR128/feature2c51a79 criado pelo conectorGitHub. Primeira prévia rejeitada antes do build: padrão agrupado do cabeçalho público incompatível com parserVercel. Corrigido para quatro sources literais, mantendo a allowlist; produção anterior preservada. Publicação/READY e verificaçõesHTTPS/MIME/401 serão registrados após retorno real da integraçãoGitHub→Vercel. Não iniciar36 automaticamente.
