@@ -199,6 +199,7 @@
  .operation-main .document-tabs-versions { flex-wrap:wrap; }
  .operation-main .document-tabs-versions button { flex:1 1 60px; min-width:0; overflow-wrap:anywhere; }
 }
+.pwa-menu-link{display:flex;align-items:center;gap:10px;min-height:44px;color:inherit;padding:10px 0;font-size:13px}.pwa-menu-link[aria-disabled=true]{opacity:.6}
 .operation-body{display:flex;flex-direction:column;min-height:100svh}
 .operation-main{flex:1}
 .operation-footer{padding-inline:clamp(20px,3vw,44px)}

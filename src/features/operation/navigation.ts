@@ -85,5 +85,13 @@ export function operationSectionNavigation(contexts: AccessContext[], client: bo
 // Reserve the last shortcut for the section containing Account.
 export function mobileOperationNavigation(items: OperationItem[]): OperationItem[] {
   const settings = items.filter(item => item.key === 'settings');
+  // The staff contract is Caixa / Solicitações / Clientes, only when granted.
+  // Client paths are distinct and retain their own existing shortcuts.
+  if(items.some(item=>item.path===paths.panel)){
+    const keys:OperationItem['key'][]=['cash','requests','customers'];
+    const primary=keys.flatMap(key=>items.filter(item=>item.key===key));
+    const fallback=items.filter(item=>item.key!=='settings'&&!keys.includes(item.key));
+    return [...primary,...fallback].slice(0,4-settings.length).concat(settings);
+  }
   return [...items.filter(item => item.key !== 'settings').slice(0, 4 - settings.length), ...settings];
 }

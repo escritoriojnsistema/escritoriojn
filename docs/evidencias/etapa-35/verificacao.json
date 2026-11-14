@@ -1,0 +1,67 @@
+{
+  "date": "2026-11-14",
+  "base": "e71b47725875cb489077fda32c43cff1da2e0ec7",
+  "manual": "https://drive.google.com/file/d/1fPB2HYtzUP4ksOL01-i3bjXSe4anfEo0/view",
+  "node": {
+    "command": "npm test",
+    "passed": 412,
+    "failed": 0
+  },
+  "browser_regressions": {
+    "passed": 106,
+    "failed": 0,
+    "coverage": [
+      "four roles",
+      "320–1440",
+      "attachments",
+      "PDF",
+      "503/POP/navigation",
+      "portal isolation",
+      "reading34"
+    ]
+  },
+  "pwa": {
+    "command": "E2E_BASE_URL=http://127.0.0.1:4173 PWA35_BUILD_TEST=1 npx playwright test tests/browser/pwa35-public.spec.ts",
+    "passed": 7,
+    "failed": 0,
+    "cache_paths": [
+      "/offline.html",
+      "/icons/app-192.png",
+      "/icons/app-512.png",
+      "/icons/apple-touch-icon.png"
+    ],
+    "installability_chromium_errors": [],
+    "update_waits_for_two_tabs": true,
+    "memory_command_and_file_preserved": true
+  },
+  "build": "passed (TypeScript frontend+backend and Vite)",
+  "production_audit_vulnerabilities": 0,
+  "schema": {
+    "migrations": 79,
+    "latest": "20261113140739",
+    "writes": 0,
+    "readback_before_publication": {
+      "migrations": 79,
+      "latest": "20261113140739"
+    }
+  },
+  "review": {
+    "independent": true,
+    "blocking_findings": 0,
+    "minor": "Optional prompt can be missed before /instalar mounts; browser-menu instructions remain available."
+  },
+  "limits": [
+    "No physical Android/iPhone installation observed",
+    "WebKit cannot execute: Linux browser dependencies unavailable",
+    "Private hosted login not simulated"
+  ],
+  "publication": "pending GitHub→Vercel",
+  "supplementary_ui": {
+    "passed_initial": 37,
+    "skipped": 2,
+    "initial_touch_target_failures": 3,
+    "fixed_footer_suite_passed": 9,
+    "fixed_footer_suite_failed": 0,
+    "unique_ui_passed_including_pwa": 135
+  }
+}

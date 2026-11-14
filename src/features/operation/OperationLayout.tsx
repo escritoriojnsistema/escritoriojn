@@ -1,6 +1,6 @@
 import {PresenceControl} from '../documentCommercial/DocumentPresenceProvider';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { FileText, House, UsersRound, CircleUserRound, History, Archive, LogOut, Menu, X, ClipboardList, Paperclip, ClipboardCheck, Bell, Wallet, Banknote, Zap, ChartColumn, Settings, BriefcaseBusiness, LandPlot } from 'lucide-react';
+import { Download, FileText, House, UsersRound, CircleUserRound, History, Archive, LogOut, Menu, X, ClipboardList, Paperclip, ClipboardCheck, Bell, Wallet, Banknote, Zap, ChartColumn, Settings, BriefcaseBusiness, LandPlot } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { paths, normalizePathname } from '../../app/routes';
 import type { AccessContext } from '../../../shared/access';
@@ -60,8 +60,9 @@ export function OperationLayout({ client = false, busy = false, contextActions, 
   function exit() {
     return <button className="operation-exit" disabled={leaving || busy} onClick={() => void logout()}><LogOut size={20} aria-hidden="true" /><span>Sair da conta</span></button>;
   }
+  function installation(){return <Link className="pwa-menu-link" to="/instalar" aria-disabled={busy||undefined} onClick={event=>{if(busy){event.preventDefault();return;}closeMenu();}}><Download size={20} aria-hidden="true"/><span>Instalar aplicativo</span></Link>;}
   return <div className="operation-layout">
-    <aside className="operation-sidebar" aria-label="Navegação principal"><Brand light to={home} /><p className="operation-area">{client ? 'Área do cliente' : 'Área da equipe'}</p>{navigation('Navegação da operação')}{contextActions&&<div className="operation-context-actions">{contextual.actions}</div>}{!client&&<PresenceControl/>}<div className="operation-sidebar-end">{exit()}<p>Acesso individual e protegido.</p></div></aside>
+    <aside className="operation-sidebar" aria-label="Navegação principal"><Brand light to={home} /><p className="operation-area">{client ? 'Área do cliente' : 'Área da equipe'}</p>{navigation('Navegação da operação')}{contextActions&&<div className="operation-context-actions">{contextual.actions}</div>}{!client&&<PresenceControl/>}<div className="operation-sidebar-end">{installation()}{exit()}<p>Acesso individual e protegido.</p></div></aside>
     <div className="operation-body">
       <header className="operation-mobile-bar" aria-label="Barra da conta"><button ref={menuButton} className="operation-icon-button" aria-label="Abrir menu" aria-expanded={open} aria-controls="operation-menu" onClick={() => setOpen(true)}><Menu size={24} aria-hidden="true" /></button><Brand to={home} /><div className="operation-header-actions"><NotificationBell client={client}/><Link to={account} className="operation-icon-button" aria-label="Abrir conta" title="Conta"><CircleUserRound size={25} aria-hidden="true" /></Link></div></header>
       <main id="conteudo" className="operation-main"><OperationBack pathname={pathname} contexts={auth.contexts} client={client} busy={busy} contextual={contextual.back}/>{error && !open && <p role="alert" className="form-feedback error">{error}</p>}{sectionItems.length>1&&<nav className="operation-section-navigation" aria-label={`Áreas de ${sectionKey==='requests'?'solicitações':sectionKey==='customers'?'clientes':'serviços'}`}>{sectionItems.map(item=>{const Icon=icons[item.key];return <Link key={item.key} to={item.path} state={office?{office_id:office}:undefined} aria-current={normalizePathname(pathname)===item.path?'page':undefined} aria-disabled={busy||undefined} onClick={event=>{if(busy)event.preventDefault();}}><Icon size={19} aria-hidden="true"/><span>{item.label}</span></Link>;})}</nav>}{children}</main>
@@ -72,7 +73,7 @@ export function OperationLayout({ client = false, busy = false, contextActions, 
       if (event.target !== event.currentTarget) return;
       const bounds = event.currentTarget.getBoundingClientRect();
       if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeMenu();
-    }}><div className="operation-drawer-header"><Brand light to={home} /><button className="operation-icon-button" aria-label="Fechar menu" onClick={closeMenu}><X size={23} aria-hidden="true" /></button></div><p className="operation-area">{client ? 'Área do cliente' : 'Área da equipe'}</p>{navigation('Menu da operação')}{contextActions&&<div className="operation-context-actions" onClick={closeMenu}>{contextual.actions}</div>}{error && open && <p role="alert" className="form-feedback error">{error}</p>}{!client&&<PresenceControl/>}<div className="operation-sidebar-end">{exit()}<p>Acesso individual e protegido.</p></div></dialog>
+    }}><div className="operation-drawer-header"><Brand light to={home} /><button className="operation-icon-button" aria-label="Fechar menu" onClick={closeMenu}><X size={23} aria-hidden="true" /></button></div><p className="operation-area">{client ? 'Área do cliente' : 'Área da equipe'}</p>{navigation('Menu da operação')}{contextActions&&<div className="operation-context-actions" onClick={closeMenu}>{contextual.actions}</div>}{error && open && <p role="alert" className="form-feedback error">{error}</p>}{!client&&<PresenceControl/>}<div className="operation-sidebar-end">{installation()}{exit()}<p>Acesso individual e protegido.</p></div></dialog>
   </div>;
 }
 

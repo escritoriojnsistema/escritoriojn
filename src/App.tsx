@@ -11,6 +11,7 @@ import HomePage from './features/home/HomePage';
 import AccessPage from './features/access/AccessPage';
 import CallbackPage from './features/auth/CallbackPage';
 import ResetPage from './features/auth/ResetPage';
+const InstallPage = lazy(()=>import('./features/pwa/InstallPage'));
 const OperationalRoutes = lazy(loadOperations);
 function AppRoutes() {
   const { pathname } = useLocation();
@@ -31,6 +32,7 @@ function AppRoutes() {
     <Route path="/privacidade" element={<PrivacyPage section="privacy" />} />
     <Route path="/termos" element={<PrivacyPage section="terms" />} />
     <Route path="/cookies" element={<PrivacyPage section="cookies" />} />
+    <Route path="/instalar" element={<Suspense fallback={null}><InstallPage/></Suspense>} />
     <Route path="*" element={<PortalBoundary><Suspense fallback={null}><OperationalRoutes operationKey={operationKey} /></Suspense></PortalBoundary>} />
 
   </Routes></>;

@@ -11,13 +11,13 @@
       "destination": "/api"
     },
     {
-      "source": "/((?!api(?:/|$)|assets(?:/|$)).*)",
+      "source": "/((?!api(?:/|$)|assets(?:/|$)|icons(?:/|$)|sw\\.js$|offline\\.html$|manifest\\.webmanifest$).*)",
       "destination": "/index.html"
     }
   ],
   "headers": [
     {
-      "source": "/((?!assets(?:/|$)|images(?:/|$)).*)",
+      "source": "/((?!assets(?:/|$)|images(?:/|$)|icons(?:/|$)|offline\\.html$).*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -31,6 +31,38 @@
           "key": "Referrer-Policy",
           "value": "no-referrer"
         }
+      ]
+    },
+    {
+      "source": "/offline.html",
+      "headers": [
+        {"key":"Cache-Control","value":"public, max-age=0, must-revalidate"},
+        {"key":"Referrer-Policy","value":"no-referrer"},
+        {"key":"X-Content-Type-Options","value":"nosniff"}
+      ]
+    },
+    {
+      "source": "/icons/app-192.png",
+      "headers": [
+        {"key":"Cache-Control","value":"public, max-age=0, must-revalidate"},
+        {"key":"Referrer-Policy","value":"no-referrer"},
+        {"key":"X-Content-Type-Options","value":"nosniff"}
+      ]
+    },
+    {
+      "source": "/icons/app-512.png",
+      "headers": [
+        {"key":"Cache-Control","value":"public, max-age=0, must-revalidate"},
+        {"key":"Referrer-Policy","value":"no-referrer"},
+        {"key":"X-Content-Type-Options","value":"nosniff"}
+      ]
+    },
+    {
+      "source": "/icons/apple-touch-icon.png",
+      "headers": [
+        {"key":"Cache-Control","value":"public, max-age=0, must-revalidate"},
+        {"key":"Referrer-Policy","value":"no-referrer"},
+        {"key":"X-Content-Type-Options","value":"nosniff"}
       ]
     }
   ]

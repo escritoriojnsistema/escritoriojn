@@ -9,6 +9,7 @@ export function portalForPath(pathname: string): Portal | undefined {
  return clientPaths.includes(path) ? 'client' : teamPaths.includes(path) ? 'team' : undefined;
 }
 export const pageTitles: Record<string, string> = {
+ '/instalar':'Instalar aplicativo',
  [paths.rural]:'Imóveis rurais','/privacidade':'Privacidade','/termos':'Termos de uso','/cookies':'Cookies e preferências',
  [paths.clientSettings]:'Configurações',[paths.settings]:'Configurações',[paths.settingsCategories]:'Categorias',[paths.settingsAccess]:'Acessos',[paths.settingsPrivacy]:'Privacidade',[paths.settingsArchives]:'Arquivados',
   [paths.documentCatalog]:'Documentos',[paths.clientDocumentCatalog]:'Documentos',[paths.clientDocuments]:'Documentos',
