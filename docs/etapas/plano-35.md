@@ -12,7 +12,7 @@ Abordagem: service worker próprio, allowlist exata somente da página pública 
 - [x] 2. Instruções públicas em `/instalar` (`src/features/pwa/InstallPage.tsx`), atalho no menu compartilhado e registro silencioso em produção (`src/features/pwa/register.ts`, `src/main.tsx`). Usar estilo/padrão público atual, sem banner/loader. Instruções explicam fechar abas somente após concluir operações; sem botão que recarregue operações.
 - [x] 3. Barra inferior: equipe autorizada Caixa/Solicitações/Clientes + Ajustes; fallback sem ampliar acesso. Portal conserva atalhos próprios. Testar perfis, permissões por escritório e largura320–1440. Preservar busy, seleção exata de portal, anexos e leitura34.
 - [x] 4. Browser real contra build de produção: manifesto/registro, instalação simulada e orientações iOS, offline/reabertura/retorno, cache sem bytes privados, atualização aguardando abas. Rodar Node completo, tipos/build, regressões de navegação/portal/loading/34/anexos e revisar diff. Screenshots Desktop/Mobile.
-- [ ] 5. GitHub PR→Vercel preview/produção, conferir HTTPS/MIME/no-store/rotas e APIs401; nenhuma alteração direta Vercel. Supabase readback79/última preservados. Atualizar AGENTS/LIVRO/fecho com evidências e limites, sem declarar instalação física que não foi observada.
+- [x] 5. GitHub PR→Vercel preview/produção, conferir HTTPS/MIME/no-store/rotas e APIs401; nenhuma alteração direta Vercel. Supabase readback79/última preservados. Atualizar AGENTS/LIVRO/fecho com evidências e limites, sem declarar instalação física que não foi observada.
 
 ## Pontos de revisão
 

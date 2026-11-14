@@ -55,7 +55,7 @@
     "WebKit cannot execute: Linux browser dependencies unavailable",
     "Private hosted login not simulated"
   ],
-  "publication": "pending GitHub→Vercel",
+  "publication": "READY, PR128 / merge5dbae2e, GitHub→Vercel",
   "supplementary_ui": {
     "passed_initial": 37,
     "skipped": 2,
@@ -63,5 +63,10 @@
     "fixed_footer_suite_passed": 9,
     "fixed_footer_suite_failed": 0,
     "unique_ui_passed_including_pwa": 135
+  },
+  "hosted_pwa": {
+    "passed": 6,
+    "failed": 0,
+    "origin": "https://escritoriojn.vercel.app"
   }
 }

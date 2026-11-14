@@ -1,0 +1,93 @@
+{
+  "origin": "https://escritoriojn.vercel.app",
+  "files": [
+    {
+      "path": "/",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "cache_control": "private, no-store",
+      "sha256": "36d91ccbfad6568e362941d53575ffdb1e22890ec46982b59d28e551920b5fd4"
+    },
+    {
+      "path": "/instalar",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "cache_control": "private, no-store",
+      "sha256": "36d91ccbfad6568e362941d53575ffdb1e22890ec46982b59d28e551920b5fd4"
+    },
+    {
+      "path": "/manifest.webmanifest",
+      "status": 200,
+      "content_type": "application/manifest+json; charset=utf-8",
+      "cache_control": "private, no-store",
+      "sha256": "12d61db569246dba66c77880e3e4572c7bf300afad32398aba18599e32c470d6"
+    },
+    {
+      "path": "/sw.js",
+      "status": 200,
+      "content_type": "application/javascript; charset=utf-8",
+      "cache_control": "private, no-store",
+      "sha256": "c5317323205cafbb88a5431c963e401e5aac817507fde24c763361717a8307d8"
+    },
+    {
+      "path": "/offline.html",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "cache_control": "public, max-age=0, must-revalidate",
+      "sha256": "87d6a3ef904ef9d2d0d3a12df5c7c71408314b5d63f72de1b8792e830bc9680e"
+    },
+    {
+      "path": "/icons/app-192.png",
+      "status": 200,
+      "content_type": "image/png",
+      "cache_control": "public, max-age=0, must-revalidate",
+      "sha256": "eb740f5c303c52aa9d0fb629a7f896bc9dec15181dc42df8b5e4b1660a67cf35"
+    },
+    {
+      "path": "/icons/app-512.png",
+      "status": 200,
+      "content_type": "image/png",
+      "cache_control": "public, max-age=0, must-revalidate",
+      "sha256": "1aa40f1d215c6f44fdb4ebc3d9f5c52c5773bc855047d7cefd164bd816ad4cf8"
+    },
+    {
+      "path": "/icons/apple-touch-icon.png",
+      "status": 200,
+      "content_type": "image/png",
+      "cache_control": "public, max-age=0, must-revalidate",
+      "sha256": "b2e723f96c254fddc9d541969e1d79302943a9e2ad79795b7770416bac0a380b"
+    },
+    {
+      "path": "/api/health",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "cache_control": "no-store",
+      "sha256": "205647414e1b8ec527365671dea82491379357de02c5c7ec25c3b048b5586035"
+    }
+  ],
+  "private_api": [
+    {
+      "path": "/api/auth/context",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/account/read",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/requests/search",
+      "status": 401,
+      "cache_control": "private, no-store"
+    }
+  ],
+  "health_network_samples_ms": [
+    242.0,
+    272.7,
+    105.9,
+    246.1,
+    259.3
+  ],
+  "health_network_median_ms": 246.1
+}

@@ -22,4 +22,9 @@ Não há dispositivoAndroid/iPhone físico neste ambiente. Instruções e manife
 
 ## Publicação
 
-Checkpoint: PR128/feature2c51a79 criado pelo conectorGitHub. Primeira prévia rejeitada antes do build: padrão agrupado do cabeçalho público incompatível com parserVercel. Corrigido para quatro sources literais, mantendo a allowlist; produção anterior preservada. Publicação/READY e verificaçõesHTTPS/MIME/401 serão registrados após retorno real da integraçãoGitHub→Vercel. Não iniciar36 automaticamente.
+PR128 criado pelo conectorGitHub. Primeira prévia rejeitada antes do build: padrão agrupado do cabeçalho público incompatível com parserVercel. Corrigido para quatro sources literais, mantendo a allowlist; produção anterior preservada até concluir a prévia. O registro confirmado de publicação está abaixo. Não iniciar36 automaticamente.
+
+
+Publicação confirmada14/11/2026: [PR128](https://github.com/escritoriojnsistema/escritoriojn/pull/128), featurec76f3e5/merge5dbae2e, prévia7G2CKsUPREADY e produçãoB1TsDobwREADY/origemGit: https://escritoriojn.vercel.app. Seis testesPWA públicos aprovados no domínio, incluindo offline e installabilityChrome. HTTPS/arquivosPWA exatos, MIME/header corretos, HTML/health200, trêsAPIsprivadas401/no-store. Página pública + ícones somam12.258bytes; nenhum novo roundtrip de banco. Cinco amostrashealth de rede mediana246,1ms neste ambiente, sem representar consulta de negócio/SLA. Consulta agregada da implantação sem erros/fatais. Supabase79migrations/última20261113140739 reconferidos após publicar. Nenhuma escrita hospedada de teste.
+
+[Publicação](../evidencias/etapa-35/publicacao.json) e [HTTP/arquivos](../evidencias/etapa-35/https-publicado.json). Fecho documental posterior conserva o runtime homologado. Etapa36 fora do escopo. Instalação físicaAndroid/iPhone e Safari real continuam sem observação; instruções disponíveis, sem alegar testes nesses dispositivos.
