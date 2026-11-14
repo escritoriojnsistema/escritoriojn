@@ -27,6 +27,8 @@ import { teamRouter } from './modules/team/router.js';
 import { customersRouter } from './modules/customers/router.js';
 import { customerRelationsRouter } from './modules/customer-relations/router.js';
 import { servicesRouter } from './modules/services/router.js';
+import {requestTelemetry36} from './telemetry36.js';
+import {operations36Router} from './modules/operations36/router.js';
 import { requestsRouter } from './modules/requests/router.js';
 import { attachmentsRouter } from './modules/attachments/router.js';
 import { notificationsRouter } from './modules/notifications/router.js';
@@ -45,6 +47,7 @@ app.use((req, res, next) => {
   next();
 });
 const api = express.Router();
+api.use(requestTelemetry36);
 api.use((_req, res, next) => {
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -54,6 +57,7 @@ api.get('/health', (_req, res) => {
   res.json({ data: { status: 'ok', service: 'escritorio-jn-api' } } satisfies HealthResponse);
 });
 api.use('/categories',categoriesRouter);
+api.use('/operations',operations36Router);
 api.use('/access-settings',accessSettingsRouter);
 api.use('/request-archives',requestArchivesRouter);
 api.use('/auth',authRouter);

@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-14",
+  "base": "aec9e8630e193f8459ec2e1ce68f03d1342c7ab6",
+  "manual": "https://drive.google.com/file/d/134-bqj8u8fJKggkxpJpi33homRPomwQf/view",
+  "node_passed": 421,
+  "ui_passed_distinct": 87,
+  "build": "passed",
+  "production_audit_vulnerabilities": 0,
+  "laboratory_report": "restauracao-laboratorio.json",
+  "production_backup_verified": false,
+  "user_authorized_pending": [
+    "recipient public key",
+    "external Drive folder",
+    "responsible operator",
+    "monthly cost ceiling"
+  ],
+  "other_execution_dependencies_pending": [
+    "secure production dump/Storage bindings",
+    "durable external copy/readback",
+    "schedule",
+    "provider usage integration",
+    "external alert delivery",
+    "production RPO/RTO exercise"
+  ],
+  "schema_before": {
+    "migrations": 79,
+    "latest": "20261113140739",
+    "auth_users": 7,
+    "memberships": 7,
+    "role_permissions": 92,
+    "customers": 2,
+    "requests": 3,
+    "files": 0,
+    "storage_objects": 0
+  },
+  "independent_review": {
+    "blocking_findings_fixed": 2,
+    "fixes": [
+      "Storage restore preserves normal/fallback mode",
+      "RPC RSA key and length validation aligned"
+    ]
+  },
+  "publication": "pending GitHub→Vercel",
+  "stage": "checkpoint36; do not advance37"
+}

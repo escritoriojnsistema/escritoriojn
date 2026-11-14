@@ -1,0 +1,49 @@
+{
+  "mode": "laboratory",
+  "production_backup_validated": false,
+  "performance": {
+    "scope": "Local real API, one owner session,10 concurrent requests,10001 synthetic customers",
+    "samples": 20,
+    "p50_ms": 181.06,
+    "p95_ms": 238.95,
+    "target_p95_ms": 2000,
+    "met": true
+  },
+  "backup_ms": 494,
+  "old_token_status": 403,
+  "restore_ms": 5825,
+  "snapshot_age_at_restore_ms": 6319,
+  "counts": {
+    "files": 1,
+    "requests": 1,
+    "customers": 10001,
+    "auth_users": 5,
+    "rls_tables": 185,
+    "memberships": 5,
+    "foreign_keys": 499,
+    "storage_objects": 1,
+    "obligation_cents": 12345
+  },
+  "restored_auth_login": true,
+  "old_token_rejected": true,
+  "acl_rls_fingerprint_preserved": true,
+  "cross_role_denied": true,
+  "storage_sha256_verified": true,
+  "receipt": {
+    "format": "jn-backup36-v1",
+    "sha256": "54ed098425fec859828b0fcf9a5ac93f327f77f12bb15b54353673002472644d",
+    "files": 4,
+    "objects": 1,
+    "plaintext_bytes": 3107306,
+    "encrypted_bytes": 990633,
+    "source": "laboratory",
+    "completed_at": "2026-11-14T16:06:23.517Z"
+  },
+  "external_copy": "Local independent directory; durable external destination pending user configuration",
+  "targets": {
+    "rpo_hours": 24,
+    "rto_hours": 8
+  },
+  "target_met_in_laboratory": true,
+  "production_rpo_rto": "unmeasured"
+}
