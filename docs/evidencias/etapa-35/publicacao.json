@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-14",
+  "runtime_pr": "https://github.com/escritoriojnsistema/escritoriojn/pull/128",
+  "runtime_feature_sha": "c76f3e5b73cafd338a56327ae46aec38a00b80ec",
+  "runtime_merge_sha": "5dbae2e35e1929c495127eac27a71fa7ddb3f0fb",
+  "preview": {
+    "id": "dpl_7G2CKsUPSrP1d8faD6MtoYQJrZPt",
+    "url": "https://escritoriojn-aij3voafy-escritorio-jn.vercel.app",
+    "state": "READY",
+    "source": "git",
+    "manifest_http": 200,
+    "worker_http": 200,
+    "offline_http": 200,
+    "health_http": 200
+  },
+  "production": {
+    "id": "dpl_B1TsDobwnkAP2g4dFP5qx4K68xKt",
+    "url": "https://escritoriojn.vercel.app",
+    "deployment_url": "https://escritoriojn-flmuycb52-escritorio-jn.vercel.app",
+    "state": "READY",
+    "source": "git",
+    "sha": "5dbae2e35e1929c495127eac27a71fa7ddb3f0fb",
+    "hosted_pwa_tests_passed": 6,
+    "hosted_pwa_tests_failed": 0,
+    "http_evidence": "https-publicado.json",
+    "error_fatal_log_groups": 0
+  },
+  "method": "GitHub→Vercel",
+  "github_actions_used": false,
+  "direct_deploy_used": false,
+  "schema_after_publication": {
+    "migrations": 79,
+    "latest": "20261113140739",
+    "writes_by_task": 0
+  },
+  "initial_preview_rejection": "Vercel source parser rejected nested group in public header. Replaced with four literal sources before production merge."
+}
