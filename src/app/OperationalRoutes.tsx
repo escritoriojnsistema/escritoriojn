@@ -54,6 +54,7 @@ export default function OperationalRoutes({operationKey}:{operationKey:string}){
     <Route path={paths.clientAttachments} element={<AttachmentsPage key={`client-attachments:${operationKey}`} client />} />
     <Route path={paths.clientSettings} element={<SettingsPage key={`client-settings:${operationKey}`} client/>} />
     <Route path={paths.settings} element={<SettingsPage key={`settings:${operationKey}`}/>} />
+    <Route path={paths.settingsOperations} element={<SettingsPage key={`operations:${operationKey}`} section="operations"/>} />
     <Route path={paths.settingsCategories} element={<SettingsPage key={`categories:${operationKey}`} section="categories"/>} />
     <Route path={paths.settingsPrivacy} element={<SettingsPage key={`privacy-settings:${operationKey}`} section="privacy"/>} />
     <Route path={paths.settingsAccess} element={<SettingsPage key={`access-settings:${operationKey}`} section="access"/>} />

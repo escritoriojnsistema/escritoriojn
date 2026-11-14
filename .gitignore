@@ -10,6 +10,8 @@ supabase/.temp/
 .superpowers/
 docs/evidencias/referencia/
 coverage/
+.backups36/
+*.jnbackup
 .DS_Store
 *.log
 .env*

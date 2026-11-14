@@ -1,0 +1,10 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {mkdtemp,writeFile,rm} from 'node:fs/promises';import {tmpdir} from 'node:os';import {join} from 'node:path';import {spawnSync} from 'node:child_process';import {defaultOperationsPolicy} from '../shared/operations36.ts';
+test('36: operator monitor reports thresholds, zero budget and stale periods without claiming upgrade',async t=>{
+ const root=await mkdtemp(join(tmpdir(),'jn36-monitor-'));t.after(()=>rm(root,{recursive:true,force:true}));const config=join(root,'policy.json'),input=join(root,'usage.json');await writeFile(config,JSON.stringify({...defaultOperationsPolicy,budget_cents:0,storage_quota_bytes:100}));
+ const run=()=>spawnSync(process.execPath,['--import','tsx','scripts/continuity36.mjs','monitor',config,input],{encoding:'utf8'});
+ const values={observed_at:new Date().toISOString(),period:new Date().toISOString().slice(0,7),currency:'USD',storage_bytes:85,cost_cents:1};await writeFile(input,JSON.stringify(values));let result=run();assert.equal(result.status,2);let body=JSON.parse(result.stdout);assert.equal(body.upgrade_requested,false);assert.equal(body.checks.find((c:{metric:string})=>c.metric==='cost_cents').level,'exceeded');assert.equal(body.checks.find((c:{metric:string})=>c.metric==='storage_bytes').level,'critical');
+ await writeFile(input,JSON.stringify({...values,period:'2000-01'}));result=run();assert.equal(result.status,3);body=JSON.parse(result.stdout);assert.ok(body.checks.every((c:{level:string})=>c.level==='unknown'));
+});
+test('36: pending recovery key cannot produce an apparently successful backup',async t=>{
+ const root=await mkdtemp(join(tmpdir(),'jn36-pending-'));t.after(()=>rm(root,{recursive:true,force:true}));const config=join(root,'policy.json');await writeFile(config,JSON.stringify(defaultOperationsPolicy));const result=spawnSync(process.execPath,['--import','tsx','scripts/continuity36.mjs','pack',root,root+'.jnbackup',config],{encoding:'utf8'});assert.equal(result.status,1);assert.match(result.stderr,/chave pública/);
+});

@@ -168,10 +168,10 @@ export async function createAuthLab({storage=true,artifacts=false,storageRootfs,
     const name = names[kind];
     // The optional rootfs launcher executes the verified pinned upstream Storage
     // filesystem in chroot; only its bytes and /tmp use writable local tmpfs.
+    containers.add(name);
     const result = await docker(['run', '--detach', '--pull=missing', '--name', name,
       '--label', `jn.auth-lab=${id}`, '--network', network, '--network-alias', kind,
       ...Object.keys(env).flatMap(key => ['--env', key]), ...extra, ...(kind==='storage'&&storageRootfs?['--mount',`type=bind,source=${storageRootfs},target=/provider,readonly`,'--mount','type=bind,source=/dev/shm/jn-storage24-resolv.conf,target=/provider/etc/resolv.conf,readonly','--tmpfs','/provider/tmp:rw,nosuid,noexec,size=32m,mode=1777','--entrypoint','/bin/busybox','alpine:3.23.6@sha256:85fe1e81d6758c208f3e1eed4338a1997e19d4be002d4dd32d3100c9a8c010a0','chroot','/provider','/bin/sh','-c','cd /app && exec docker-entrypoint.sh node dist/start/server.js']:[images[kind]])], { env, timeout:kind==='storage'?180000:60000 });
-    containers.add(name);
     return result;
   };
   const portFor = async (kind, port) => {

@@ -1,3 +1,13 @@
+# Etapa36 — implementação com pendências configuráveis
+
+Pedido14/11/2026 sobre aec9e86/35 publicada. ManualDrive e regras/operacao conferidos antes de modificar. Usuário autorizou deixar chave pública, pasta externa, responsável e teto de custos pendentes e editáveis depois. Configurações→Continuidade usa owner+settings.access/sessão atual, política privada por escritório/revisão/chave idempotente; nenhuma nova concessão/conta.503 preserva tentativa e bloqueia saída/logout;401/403limpa. Semloaders/até4ações, atalhos35 e demais fluxos preservados.
+
+Logs mínimos porAPI com request_id do servidor em sucesso/erro, grupo/método/status/duração, semPII/query/token/corpo; sucessos amostrados1/20, falhas/lentidão registradas. Monitor70/85% não contrata upgrade; falta de medição/cota nunca vira zero/verde. Valores de configuração não representam faturamento nem backup executado.
+
+Kit externo: packRSA-OAEP/AES256GCM+manifestoSHA256, uploadDrive/rclone com readback, verifysemSQL. Chave privada/credenciais/dump/objetos foraGit e cachePWA;128MiB por staging. Exercício descartável real restaurou banco/bytes/Auth/RLS/ACL/FKs/totais em5,825s,10.001clientes sintéticos/5Auth/1objeto/obrigação12.345centavos. API10concurrentes/20amostras:p95≈239ms. Node421/UI87/build/tipos/auditprodução0, revisão independente com dois achados corrigidos. Detalhes/limites em docs/etapas/fecho-36.md e continuidade-36.md; evidência em docs/evidencias/etapa-36.
+
+Produção ainda não tem backup/destino/custódia/agenda/alerta externo/métricas oficiais homologados; configuração não executa nem valida cópia. Cópia do exercício foi outro diretório local e alvo outro banco do mesmo cluster descartável, não outro projeto. RPO/RTO de produção não medidos. Manter checkpoint36, sem avançar37 por aparência. Rollout somenteGitHub→Vercel/semActions. Antes de aplicar migration20261114153947, conferir histórico apósGit para não duplicar. Basehospedada79/última20261113140739;7Auth/7vínculos/92role_permissions/2clientes/3solicitações/0files/0Storage preservados antes de publicar. Aguardar retorno real para registrarREADY.
+
 # Etapa 35 — publicada e verificada14/11/2026
 
 Pedido14/11/2026 sobre main e71b477 autoriza35 conforme manualDrive. Última34 e correções de anexos/rodapé conferidas antes de modificar. PWA com manifesto/ícones192/512/Apple180/standalone, instruçõesAndroidChrome/iPhoneSafari em /instalar e acesso secundário no menu. Equipe mobile prioriza Caixa/Solicitações/Clientes/Ajustes somente conforme permissões vigentes; portal conserva navegação própria. Sem loaders/reload de atualização.

@@ -18,7 +18,9 @@ test('API comum inicia sem carregar motores PDF antes de uma exportação',()=>{
   server.closeAllConnections();server.close();
   console.log(JSON.stringify({health:health.status,context:context.status,pdfModules}));
  `],{encoding:'utf8',timeout:20000});
- const data=JSON.parse(result.trim());
+ // API diagnostics now emit bounded JSON records as well as this probe result.
+ const data=result.trim().split('\n').map(line=>JSON.parse(line)).find(value=>Array.isArray(value.pdfModules));
+ assert.ok(data,'O processo novo deve produzir o resultado do diagnóstico PDF.');
  assert.equal(data.health,200);assert.equal(data.context,401);
  assert.deepEqual(data.pdfModules,[],'Auth/health não devem carregar PDFKit/fontkit antes de uma exportação');
 });
