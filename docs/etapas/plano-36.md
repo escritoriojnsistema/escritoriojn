@@ -16,7 +16,7 @@ Kit operacional fora do frontend: empacotamento autenticado/encriptadoRSA-OAEP+A
 - [x] 2. Migration privada de política, comandos idempotentes e RPCs de state/save com gateowner+settings.access após lock; ACL/RLS fechadas. API e tela Configurações→Continuidade, seletor de escritório elegível, dados reais do aplicativo e pendências. Testar quatro perfis, revogação, sessão, conflito/retry503 e campos opcionais.
 - [x] 3. Kit scripts/continuity36: manifest/encriptação/verificação e laboratório com banco+objetos. Exercício cronometrado; Auth/ACL/RLS/FKs/hash/totais e alteração de arquivo devem ser conferidos. Registrar RPO/RTO medidos separadamente das metas24h/8h; produção sem dump/externo/chave permanece pendente.
 - [x] 4. Verificação Node, SQL/lab, browserDesktop/Mobile, regressões35/34/anexos, tipos/build/audit. Plano de contingência e execução diária7diárias/4semanais, manutenção/monitoramento/crescimento e limites. Revisão independente antes de merge.
-- [ ] 5. GitHub→Vercel compatível com migração; conferir histórico remoto antes de eventual aplicação (não duplicar), APIs401/HTTPS/UIpública/PWA e integridade existente. Atualizar AGENTS/LIVRO/fecho/evidências. Se backup real/rotina externa indisponível, registrar checkpoint36 sem avançar37.
+- [x] 5. GitHub→Vercel compatível com migração; conferir histórico remoto antes de eventual aplicação (não duplicar), APIs401/HTTPS/UIpública/PWA e integridade existente. Atualizar AGENTS/LIVRO/fecho/evidências. Se backup real/rotina externa indisponível, registrar checkpoint36 sem avançar37.
 
 ## Pontos de revisão
 

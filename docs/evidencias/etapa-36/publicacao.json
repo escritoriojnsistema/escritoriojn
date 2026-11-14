@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-14",
+  "runtime_pr": "https://github.com/escritoriojnsistema/escritoriojn/pull/130",
+  "feature_sha": "41fa779e8edb20c6456e0615a82619f035281d1f",
+  "merge_sha": "1a89e000bba42064144ef8d60ccfb6b66ffd2662",
+  "preview": {
+    "id": "dpl_71f2XBZEs1XnNMx4CAm9W9ZUQzbf",
+    "url": "https://escritoriojn-ieuodyxg8-escritorio-jn.vercel.app",
+    "state": "READY",
+    "source": "git",
+    "health": 200,
+    "server_request_id_present": true
+  },
+  "production": {
+    "id": "dpl_4kRQdjotsP1YqN6cDnTzrf9cYvMd",
+    "url": "https://escritoriojn.vercel.app",
+    "deployment_url": "https://escritoriojn-4ci4znmv9-escritorio-jn.vercel.app",
+    "state": "READY",
+    "source": "git",
+    "sha": "1a89e000bba42064144ef8d60ccfb6b66ffd2662",
+    "pwa_public_tests_passed": 6,
+    "private_api_401_checks": 5,
+    "server_request_ids_verified": true,
+    "error_fatal_log_groups": 0
+  },
+  "method": "GitHub→Vercel",
+  "actions_used": false,
+  "direct_deploy_used": false,
+  "production_backup_validated": false,
+  "next_stage": "36 checkpoint;37 not started",
+  "schema_after": {
+    "migrations": 80,
+    "latest": "20261114153947",
+    "applied_automatically": true,
+    "reapplied": false,
+    "function_bodies_matching_source": 7,
+    "private_tables_closed": 2,
+    "policies": 0,
+    "commands": 0,
+    "existing_auth_memberships_permissions_customers_requests_preserved": true
+  }
+}

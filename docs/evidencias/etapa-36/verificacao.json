@@ -40,6 +40,12 @@
       "RPC RSA key and length validation aligned"
     ]
   },
-  "publication": "pending GitHub→Vercel",
-  "stage": "checkpoint36; do not advance37"
+  "publication": "READY; PR130/merge1a89e00/GitHub→Vercel",
+  "stage": "checkpoint36; do not advance37",
+  "hosted_pwa_passed": 6,
+  "schema_after": {
+    "migrations": 80,
+    "latest": "20261114153947",
+    "reapplied": false
+  }
 }

@@ -1,0 +1,133 @@
+{
+  "migrations": 80,
+  "latest": "20261114153947",
+  "applied_automatically_after_git": true,
+  "reapplied": false,
+  "function_bodies_match_source": true,
+  "functions": [
+    {
+      "schema": "private",
+      "name": "operations36_der",
+      "body_md5": "6638e42e64937fdd4b2f6ec3128bc0b7",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "operations36_rsa",
+      "body_md5": "28ae07428841c15d086352da5b410508",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "operations36_save",
+      "body_md5": "3d2b6672af1b2477c50a107b39ba7642",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "schema": "private",
+      "name": "operations36_state",
+      "body_md5": "a73a4f685ce236b11cc2b62a168beea7",
+      "security_definer": true,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "schema": "private",
+      "name": "operations36_valid",
+      "body_md5": "605e6d5e02f3f587513e9f426f092eb1",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "schema": "public",
+      "name": "operations36_save",
+      "body_md5": "d52e6db800f3dd1c19ba4bf8c8e2c74b",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "schema": "public",
+      "name": "operations36_state",
+      "body_md5": "1bf2ce5a51aab01f396ca3cf5e040312",
+      "security_definer": false,
+      "settings": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    }
+  ],
+  "tables": [
+    {
+      "relname": "operations36_commands",
+      "rls": true,
+      "anon_select": false,
+      "authenticated_select": false,
+      "service_select": false
+    },
+    {
+      "relname": "operations36_policies",
+      "rls": true,
+      "anon_select": false,
+      "authenticated_select": false,
+      "service_select": false
+    }
+  ],
+  "counts": [
+    {
+      "policies": 0,
+      "commands": 0,
+      "auth_users": 7,
+      "memberships": 7,
+      "role_permissions": 92,
+      "customers": 2,
+      "requests": 3,
+      "files": 0,
+      "storage_objects": 0
+    }
+  ],
+  "advisors": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 177,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1,
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"
+    }
+  ],
+  "notes": [
+    "Private tables intentionally have no direct RLS policy and all API table privileges revoked.",
+    "Leaked-password-protection warning is pre-existing; no Auth configuration changed."
+  ]
+}
