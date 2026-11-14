@@ -11,7 +11,7 @@ for(const role of ['owner','admin','employee'] as const)test(`menu agrupado sem 
  assert.deepEqual(items.map(i=>i.key),['home','requests','customers','services','cash','notifications','settings']);
  assert.ok(items.every(i=>!removed.includes(i.key)));
  assert.equal(new Set(items.map(i=>i.path)).size,items.length);
- const mobile=mobileOperationNavigation(items);assert.equal(mobile.length,4);assert.equal(mobile[0].key,'home');assert.equal(mobile.at(-1)?.key,'settings');
+ const mobile=mobileOperationNavigation(items);assert.deepEqual(mobile.map(i=>i.key),['cash','requests','customers','settings']);
 });
 test('cliente: Anexos fica em Solicitações e Conta em Configurações',()=>{
  const contexts=[context([],undefined,'client')],items=operationNavigation(contexts,true);

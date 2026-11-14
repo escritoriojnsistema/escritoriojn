@@ -37,7 +37,8 @@ import { checklistsRouter } from './modules/checklists/router.js';
 export const app = express();
 app.disable('x-powered-by');
 app.use((req, res, next) => {
-  if (req.method === 'GET' && req.accepts('html') && !/^\/(assets|images|src|node_modules|@)/.test(req.path)) {
+  const publicPwa = /^\/(offline\.html|icons\/(app-192|app-512|apple-touch-icon)\.png)$/.test(req.path);
+  if (req.method === 'GET' && req.accepts('html') && !publicPwa && !/^\/(assets|images|src|node_modules|@)/.test(req.path)) {
     res.setHeader('Cache-Control', 'private, no-store');
     res.setHeader('Referrer-Policy', 'no-referrer');
   }

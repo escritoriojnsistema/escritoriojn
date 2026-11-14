@@ -21,6 +21,7 @@ async function setup(page:Page,role='owner',permissions=caps){
 async function geometry(page:Page,width:number){
  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
  const shortcuts=page.getByRole('navigation',{name:'Atalhos do aplicativo'});expect(await shortcuts.getByRole('link').count()).toBeLessThanOrEqual(4);
+ if(await shortcuts.locator('a[href="/caixa"]').count())expect(await shortcuts.getByRole('link').evaluateAll(links=>links.map(link=>link.getAttribute('href')))).toEqual(['/caixa','/solicitacoes','/clientes','/configuracoes']);
 }
 for(const width of [320,375,768,1440])for(const role of ['owner','admin','employee','client'])test(`grupos e ícones ${role} ${width}`,async({page})=>{
  test.setTimeout(60000); // Complete section journey visits seven workspaces.

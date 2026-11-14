@@ -1,3 +1,11 @@
+# Etapa 35 — implementação verificada, publicação em andamento
+
+Pedido14/11/2026 sobre main e71b477 autoriza35 conforme manualDrive. Última34 e correções de anexos/rodapé conferidas antes de modificar. PWA com manifesto/ícones192/512/Apple180/standalone, instruçõesAndroidChrome/iPhoneSafari em /instalar e acesso secundário no menu. Equipe mobile prioriza Caixa/Solicitações/Clientes/Ajustes somente conforme permissões vigentes; portal conserva navegação própria. Sem loaders/reload de atualização.
+
+Worker registra após load em produção segura e armazena somente offline.html + três ícones públicos. Nenhum bundle/index/rota privada/API/Auth/Storage/token/PDF/relatório/caixa offline. Navegação usa rede; falha de transporte mostra orientação pública. Versão por hash do build, sem skipWaiting/claim/reload; nova versão aguarda todas as abas, preservando operações/Files. Backend/Vercel abrem cache revalidável apenas para os arquivos públicos exatos; privado continua no-store. Supabase sem impacto de schema/Auth/Storage/Edge/grants:79migrations/última20261113140739 confirmadas, NÃO reaplicar.
+
+Node412 e135cenáriosUI distintos/build/tipos/auditprodução0 aprovados; revisão independente sem achado de segurança/correção. Instruções por dispositivo compactadas e foco/zoom200 conferidos. Instalação físicaAndroid/iPhone não observada; WebKit indisponível por libsLinux. Ver docs/etapas/fecho-35.md, plano-35.md e docs/evidencias/etapa-35. Publicação exclusivamenteGitHub→Vercel, semActions/deploydireto; aguardando retorno real antes de registrar READY.36 fora do escopo.
+
 # Correções de anexos e rodapé após34 — publicadas13/11/2026
 
 Basefe4362d/PR121–125 conferida antes de alterar. Preservar navegação agrupada, seleção exata de portal, formulários por categoria e leitura34; não iniciar35. Contrato/evidências em docs/etapas/correcoes-anexos-rodape-pos34.md e docs/evidencias/anexos-rodape-pos34. Conta usa somente rodapé compartilhado; faixa de benefícios e UI/rota de status removidas, health técnico preservado. Escritório JN junto das políticas.
