@@ -1,0 +1,103 @@
+{
+  "date": "2026-11-15",
+  "base": "47e51700d7e123cc39663d020f598b200d056a53",
+  "manual": "https://drive.google.com/file/d/1fQ4X5XyRjraIAYJIx3T78haiDMkFmdDT/view",
+  "status": "checkpoint38; automated validation passed; human operational acceptance pending",
+  "node": {
+    "passed": 426,
+    "failed": 0,
+    "skipped": 0
+  },
+  "sql": {
+    "final_schema_migrations": 82,
+    "replay_a_checks": 2334,
+    "replay_b_checks": 2340,
+    "empty_replays": 2,
+    "non_superuser_migrator": true,
+    "no_bypassrls": true,
+    "real_races": true
+  },
+  "ui": {
+    "initial_executed": 225,
+    "initial_passed": 210,
+    "initial_failed": 15,
+    "corrected_file_rerun": 90,
+    "rerun_passed": 90,
+    "rerun_failed": 0,
+    "unaffected_prior_passes": 135,
+    "current_distinct_scenarios_passed": 225,
+    "viewports": [
+      320,
+      360,
+      375,
+      390,
+      768,
+      1440
+    ],
+    "profiles": [
+      "owner",
+      "admin",
+      "employee",
+      "client"
+    ],
+    "presentation_providers": "intercepted; not evidence of real provider authority",
+    "max_primary_shortcuts": 4,
+    "visible_loaders": false,
+    "keyboard_focus_44px_zoom200_reflow": "passed",
+    "all_states_contrast_WCAG_audit": "not executed"
+  },
+  "build": "passed",
+  "typecheck": "passed",
+  "production_dependency_vulnerabilities": 0,
+  "pwa": {
+    "local_real_build_passed": 7,
+    "local_skipped": 0,
+    "hosted_public_passed": 4,
+    "hosted_runtime_skipped": 3,
+    "hosted_skips_covered_in_local_build": true,
+    "physical_android_iphone": "not executed"
+  },
+  "real_local_laboratories": [
+    "permissions",
+    "portal32 and shared PDF/hash",
+    "signatures24 external/physical fictional and browser revocation",
+    "delivery26",
+    "imports37",
+    "customers38 scope/expiry/pending registration",
+    "continuity36 restore with migration38"
+  ],
+  "performance": {
+    "date": "2026-11-15T15:46:28.865Z",
+    "passed": true,
+    "hosted_load": false,
+    "hosted_fixtures": false,
+    "environment": "Disposable local GoTrue/PostgREST/Express/PostgreSQL17",
+    "distinct_users": 10,
+    "distinct_sessions": 10,
+    "concurrent_requests": 10,
+    "synthetic_customers": 10000,
+    "cold_samples": 10,
+    "cold_p95_ms": 656.32,
+    "samples": 50,
+    "p50_ms": 412.37,
+    "p95_ms": 483.76,
+    "max_ms": 490.1,
+    "target_p95_ms": 2000,
+    "limits": "Local search/list only; ten authorized owner sessions in the same synthetic office. No hosted SLA, mobile network, write/PDF throughput or zero physical latency claim."
+  },
+  "restoration_ms": 7903,
+  "production_recovery36_verified": false,
+  "human_acceptance_by_flow": "not executed; see homologacao-38.md",
+  "private_hosted_login": "not executed",
+  "official_signature_real_scanner_physical_delivery": "not executed; laboratory fixtures only",
+  "hosted_writes_or_fixtures_by_tests": false,
+  "new_auth_grants_or_tables": false,
+  "frontend_components_changed": false,
+  "backend_API_contract_changed": false,
+  "existing_database_function_optimized": "private.customers_page",
+  "migration": "20261115152258",
+  "published": false,
+  "publication_method": "GitHub→Vercel; no Actions/direct deployment",
+  "historical_evidence_preserved": true,
+  "next_stage39_started": false
+}

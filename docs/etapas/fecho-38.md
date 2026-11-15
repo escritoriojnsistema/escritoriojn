@@ -1,0 +1,33 @@
+# Etapa 38 — checkpoint de homologação
+
+A Etapa38 executa o [manual do Drive](https://drive.google.com/file/d/1fQ4X5XyRjraIAYJIx3T78haiDMkFmdDT/view) sobre main47e51700, após conferir a Etapa37 publicada, Livro/AGENTS, operacao e prevenção de erros. [Plano](plano-38.md) · [Matriz/aceite](homologacao-38.md) · [Defeitos](../evidencias/etapa-38/defeitos.md). Não inicia39. **O aceite operacional do proprietário continua não executado.**
+
+## Correção observada
+
+A carga real com dez usuários/dez sessões sobre10.000clientes encontrou503 em≈8,4s. A listagem07/08 calculava `read_all`, mas repetia a avaliação completa por cadastro e materializavaJSON antes de paginar. Migration20261115152258 otimiza somente `private.customers_page`: autoridade atual por chamada, filtros de escritório/mesclagem/bloqueio/conta encerrada, candidatos restritos reconferidos pelo escopo canônico e resumo somente dos3/5registros da página. Mantém pendências de cadastro, máscara, ordenação, wrapperINVOKER, ownership/ACL e todos os consumidores existentes. Nenhum índice, grant ou pipeline paralelo.
+
+A revisão independente identificou que locks não congelam a validade da delegação/sessão. A função revalida ator e a capacidade capturada antes de retornar; delegação vencida durante materialização devolve403, sem página. A regressão real reproduziu o rascunho inseguro e passou depois do ajuste, com espera artificial apenas no resumo do laboratório descartável. Também verificou atribuição/revogação canônica, perda de `read_all` na mesma sessão, exclusão de bloqueados/mesclados/outro escritório e cadastro pendente sem dados internos.
+
+Carga final isolada:60consultas,10concurrentes,10usuários/10sessões/10.000cadastros. Primeira onda10:p95=656,32ms;50amostras seguintes:p50=412,37ms/p95=483,76ms/máximo=490,10ms. Meta proposta≤2s atendida neste laboratório; não éSLA hospedado nem promessa de latência física zero. [Medição](../evidencias/etapa-38/carga-local.json) · [Reprovação anterior](../evidencias/etapa-38/carga-antes-correcao.json) · [Escopo](../evidencias/etapa-38/escopo-clientes.json).
+
+## Resultados observados
+
+- Dois replaysSQL completos do schema final,2.334/2.340verificações, migrador semsuperusuário/BYPASSRLS e corridas reais. Balcão/serviço rápido/documentos/aprovação/parcial/exceção/estorno/nova versão/entrega conservam seus gates.
+- 225cenários visuais distintos exercitados. A primeira rodada teve210aprovados/15falhas; ajustes de fixtures/expectativas anteriores à navegação agrupada/rodapé foram seguidos por90/90aprovados nos três arquivos afetados. Os135cenários dos demais arquivos já haviam passado. Sem remover casos ou alterar UI para satisfazer teste antigo.
+- Quatro perfis,320–1440px, zoom200%, teclado/foco/alvos44px, até4atalhos, ações extras no menu, recuperação de503 e ausência de spinners. Conteúdo operacional cabe no fluxo existente; rodapé legal continua acessível por rolagem natural. Não é auditoriaWCAG completa de todos os estados/contrastes, nem aparelho físico.
+- Auth/REST/Express/Storage/worker reais locais: permissões e autorrevogação, documento com partes/portal32 comPDF/SHA256 idênticos e revogação durante leituraStorage, assinatura24 externa/física fictícia e revogação pelo navegador, entrega26 com confirmação separada e revogação. Nenhuma assinatura oficial, scanner, impressão ou WhatsApp real foi alegado.
+- Importação37: prévia/rejeições/concorrência/resposta perdida apósCOMMIT, quarentena preservada e pagamento posterior3.000centavos conservado. p95=1.160,27ms/100linhas/10.004cadastros, cinco amostras isoladas. [Laboratório](../evidencias/etapa-38/importacao-laboratorio.json).
+- Restauração repetida com a migration38 presente: banco+bytes/Auth/ACL/RLS/FKs/totais,10.001clientes/5Auth/1objeto/obrigação12.345centavos.7.903ms, hashStorage/login restaurado e token antigo403. Alvo é outro banco do mesmo cluster descartável e cópia outro diretório local; recuperação externa/RPO/RTO de produção continuam não medidos. [Evidência](../evidencias/etapa-38/restauracao-laboratorio.json).
+- 22recursosHTTPS/barreiras401/no-store/request_id e quatro cenáriosPWA públicos passaram no domínio. Três testes de runtimePWA foram explicitamente não executados nessa rodada remota; os sete casos, incluindo esses três, passaram no build local real. Nenhum login privado hospedado.
+
+426testesNode/tipos/build e7PWA em build real passaram. Comandos e resultados estão em [verificacao.json](../evidencias/etapa-38/verificacao.json) e [execucoes.json](../evidencias/etapa-38/execucoes.json). Logs integrais ficam no laboratório; os registros públicos contêm resumos, hashes, parâmetros, ambientes e limites, sem tokens, dumps, nomes reais ou objetos privados. Evidências históricas regeneradas pelos runners foram copiadas para38 e restauradas em suas etapas originais.
+
+## Camadas e publicação
+
+Frontend/APIExpress: contratos e padrões preservados; correção é na consulta Supabase já consumida pelo frontend. Supabase: uma migration de função existente, sem nova tabela/permissão/Auth/Storage/Edge. Conferir o histórico apósGit antes de qualquer ação manual; as81anteriores já estavam aplicadas. GitHub/Vercel: publicação exclusivamente pela integraçãoGit, semActions/deploydireto. Registro de publicação será acrescentado após confirmação de origemGit/commit/READY e conferência do corpo da função/ACL/contagens.
+
+Antes da publicação, hospedado81migrations/última20261115025828,189tabelasRLS e nenhuma tabela privada com acesso diretoanon/authenticated.7Auth/7vínculos/92role_permissions/2clientes/3solicitações/0files/0Storage/0lotes37. Healthadvisors sem alerta; INFO deRLSsem política nas tabelas privadas fechadas é intencional. Proteção contra senha vazada desativada é aviso preexistente, sem mudança deAuth/plano.
+
+## Aceite que continua pendente
+
+O proprietário precisa repetir os fluxos diários e validar serviços, modelos, permissões e caixa de teste, com responsável/data/resultado por fluxo na matriz. Login privado hospedado, instalaçãoAndroid/iPhone real, assinatura/scanner/entrega física reais e recuperação36 externa não foram observados. Não transformar esses itens em aprovação automática. Manter checkpoint38 até os aceites aplicáveis;39 depende de novo pedido.

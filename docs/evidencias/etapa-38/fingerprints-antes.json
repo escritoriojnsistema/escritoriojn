@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-15T15:34:33Z",
+  "scope": "Read-only digests before publication; no row contents or individual user IDs exported",
+  "fingerprints": {
+    "files": "d751713988987e9331980363e24189ce",
+    "profiles": "8b637f20ab1e2e3814e86effca819930",
+    "requests": "e3aa573014d257ed0c0d0d1c00abaa65",
+    "customers": "5d9a5654be48b749634466f50a87648b",
+    "memberships": "bb1fbb728b05bba957ba955da81005e5",
+    "auth_user_ids": "a3c344d37ed55f85e108f795802cc185",
+    "role_permissions": "c320d7afcefebc973ec8251e33a5ac4a"
+  }
+}

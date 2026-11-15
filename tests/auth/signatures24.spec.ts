@@ -24,10 +24,13 @@ test('formalização24 real: Auth/API/Storage/worker, saída separada, original 
  async function post(path:string,body:Record<string,unknown>,status=200){const r=await request.post('/api/'+path,{headers,data:{office_id:office,...body}});expect(r.status(),path+' '+await r.text()).toBe(status);return r.ok()?(await r.json()).data:undefined;}
  async function artifact(publication_id:string,action:string,status=200){const r=await request.post('/api/document-workflow/artifact',{headers,data:{office_id:office,publication_id,action}});expect(r.status(),action+' '+(r.ok()?'':await r.text())).toBe(status);return r;}
  try{
- const suffix=randomUUID().slice(0,8).toUpperCase(),title='Formalização local24 '+suffix;
+ const suffix=randomUUID().slice(0,8).toUpperCase(),title='Formalização local24 '+suffix,category='Assinaturas FICTÍCIAS38 '+suffix;
+ // The current category-level contract denies an unclassified legacy category to
+ // employees even with read_all. Configure this synthetic fixture through the API.
+ await post('categories/command',{command:{kind:'create',name:category,execution_level:3,reason:'Categoria sintética exclusiva do laboratório de assinatura'},idempotency_key:randomUUID()});
  const template=await post('templates/save',{template_id:null,definition:{...emptyTemplate,code:'SIG24-'+suffix,name:title,content:'Declaração de laboratório24 sem dados reais.',demonstration:false,review_required:false,signature_policy:'external'},expected_version:0,reason:'Modelo sintético exclusivamente local',idempotency_key:randomUUID()});
  const templateVersion=template.versions[0].id;await post('templates/approve',{template_id:template.id,version_id:templateVersion,expected_version:1,reason:'Aprovação local do modelo',idempotency_key:randomUUID()});
- const service=await post('services',{service:{...emptyService,code:'SIG24-'+suffix,name:title,category:'Rural',price_cents:2000},reason:'Serviço sintético local24'},201);
+ const service=await post('services',{service:{...emptyService,code:'SIG24-'+suffix,name:title,category,price_cents:2000},reason:'Serviço sintético local24'},201);
  const attendance=await post('requests',{idempotency_key:randomUUID(),request:{origin:'presencial',title,customer_id:null,assignee_id:null,priority:'normal',priority_reason:'',internal_note:'',items:[{service_id:service.id,quantity:1,adjustment:{kind:'none',value:0,reason:''},fields:{},participant_ids:[],checklist:[]}]}},201);
  let document=await post('documents/create',{request_id:attendance.id,request_item_id:attendance.items[0].id,template_version_id:templateVersion,participants:[],idempotency_key:randomUUID()});
  const operate=async(operation:unknown)=>{document=await post('documents/operate',{document_id:document.id,operation});};
