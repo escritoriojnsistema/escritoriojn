@@ -1,3 +1,4 @@
+import {imports37Router} from './modules/imports37/router.js';
 import {categoryIntakeRouter} from './modules/category-intake/router.js';
 import {portalIntakeRouter} from './modules/portal-intake/router.js';
 import {portalDocumentsRouter} from './modules/portal-documents/router.js';
@@ -58,6 +59,7 @@ api.get('/health', (_req, res) => {
 });
 api.use('/categories',categoriesRouter);
 api.use('/operations',operations36Router);
+api.use('/imports',imports37Router);
 api.use('/access-settings',accessSettingsRouter);
 api.use('/request-archives',requestArchivesRouter);
 api.use('/auth',authRouter);
