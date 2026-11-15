@@ -1,3 +1,13 @@
+# Etapa 39 — preparação técnica; piloto comercial bloqueado (15/11/2026)
+
+Novo pedido39 sobre main711beb9 após conferir38/fecho/matriz/Livro/AGENTS/regras e manualDrive39. [Contrato](docs/etapas/etapa-39.md), [prontidão/custos](docs/etapas/publicacao-controlada-39.md), [treinamento/piloto](docs/etapas/treinamento-piloto-39.md), [retorno/suporte](docs/etapas/rollback-suporte-39.md), [fecho](docs/etapas/fecho-39.md). Aceite humano38/recuperação36externa preservados; este pedido autoriza preparar39, não aprova pendências nem inicia40.
+
+Defeito observado: duas envpúblicasSupabase têm targets preview/production. `shared/deployment39.ts` + Vite/3clientesExpress desconectam Supabase comVERCEL_ENV=preview antes de tráfegoAuth/RPC, inclusive privacidadepública. Buildpreview recebeURL/chavevazias; Auth/Storagecliente não recebem conexão herdada. Produção/local conservam contrato. Sem tela/loader/atalho/tabela/grant/Auth/Storage/Edge/migration; nenhum roundtripextra ou cache de autoridade. Todo preview desta versão fica desconectado até projeto separado + revisão/PR; não criar override para aceitar conexão de produção. Artefatos antigos imutáveis não são apagados; SSO preservado.
+
+427Node/75UI/build/tipos/auditprodução0; API/buildpreview RED→GREEN, oito navegações320/1440semURL/chave/preconnect/tráfegoexterno/loader/overflow. PadrõesEquipeConvites/4papéis/até4atalhos/menu preservados. Capturas locais foraGit, UIcontratoscomAPIinterceptada e endpointslocaiscomprovedorfictício identificados; não são loginprivado hospedado, aparelho físico ou treinamento humano. Supabase somenteleitura82/última20261115152258/189RLS/ACLprivadasfechadas/7Auth/7vínculos/92role_permissions/2clientes/3solicitações/0files/Storage. Função38/ACL/wrapperpreservados. NÃO reaplicar82.22HTTPS/barreiras401 no domínio existente; sem alegar39publicada. Nenhuma fixture/e-mail/grant/movimento hospedado.
+
+Usuário confirmou planoVercelgratuito; contextoGit confirmouHobby. TermosVercel§4 restringem a pessoal/nãocomercial; hospedagem comercial/orçamento/teto/ambienteisolado pendentes. Custos404 não sãozero. Sem contratação/upgrade/deploydireto/Actions; somenteGitHub→Vercel. Privacidadepública configuredfalse/0controladores,0políticas36salvas,64modelossemaceite; SMTP/callback/loginprivado/scanner/assinatura/entrega reais e aceites38/serviços/checklists/permissões/caixa não observados. Kitde treinamento/conciliação/suporte/rollback preparado, nenhum funcionário treinado ou piloto reconciliado alegado. Preparação revisável não libera operação; manter checkpoint39 até condições e autorização aplicável sobre mudança/custos/retorno preparados. Histórico abaixo é datado.
+
 # Etapa 38 — checkpoint técnico validado; aceite operacional pendente (15/11/2026)
 
 Pedido sobre main47e51700 após conferir Etapa37 publicada, AGENTS/Livro, manualDrive38, operacao e prevenção. [Fecho](docs/etapas/fecho-38.md) · [Matriz/aceites](docs/etapas/homologacao-38.md) · [Provas](docs/evidencias/etapa-38/verificacao.json). Não iniciar39 nem alegar aprovação operacional pelo proprietário.
@@ -111,4 +121,4 @@ Migration20261111131744 aplicada automaticamente:54instruções correspondentes,
 - Preservar identidade, escopo e autoridade atuais. Cache ou vínculo cadastral não concede acesso. Troca de sessão/autoridade limpa dados;503 conserva a tentativa,409 exige reconferência e401/403 bloqueia.
 - O histórico integral das etapas anteriores permanece no Git e nos cartões/fechos existentes. Esta consolidação evita republicar os detalhes antigos de auditoria no checkpoint público.
 
-Etapa atual:38, checkpoint técnico validado com aceite operacional pendente. Etapa37 publicada e recuperação36 externa pendente preservadas.39 não iniciada; conferir o checkpoint no topo.
+Etapa atual:39, preparação técnica em checkpoint; piloto comercial bloqueado. Aceites humanos38 e recuperação36 externa pendentes.40 não iniciada; conferir o checkpoint no topo.

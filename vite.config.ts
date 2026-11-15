@@ -7,6 +7,7 @@ import {createHash} from 'node:crypto';
 import {readFileSync,writeFileSync,readdirSync} from 'node:fs';
 import { app } from './server/app.ts';
 import { drainBackgroundTasks } from './server/background.ts';
+import {deploymentConnection} from './shared/deployment39.ts';
 
 function pwaVersion():Plugin {
   let directory='';
@@ -47,7 +48,14 @@ export default defineConfig(({ mode }) => {
   for (const key of ['VITE_SUPABASE_URL', 'VITE_SUPABASE_PUBLISHABLE_KEY']) {
     if (!process.env[key] && local[key]) process.env[key] = local[key];
   }
+  const connection=deploymentConnection(process.env.VITE_SUPABASE_URL,process.env.VITE_SUPABASE_PUBLISHABLE_KEY,process.env.VERCEL_ENV);
   return {
+    // Explicit defines override inherited Vercel variables AND .env files.
+    // A preview must never send auth, recovery or signup to production directly.
+    define:{
+      'import.meta.env.VITE_SUPABASE_URL':JSON.stringify(connection?.url??''),
+      'import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY':JSON.stringify(connection?.key??''),
+    },
     plugins: [localApi(), react(), tailwindcss(), pwaVersion()],
     // Shared runtime remains stable. The access form warms the small panel
     // router; business screens are fetched only when their route is opened.
