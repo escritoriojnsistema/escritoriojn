@@ -19,8 +19,8 @@ Especificação: etapa-37.md e regras/operacao.md; base5f62751,80migrations/últ
 - [x]1. ContratoJSON/normalização/limites e relatório tipado: testesNode RED→GREEN, semPII em URL/log/cache.
 - [x]2. Migration: tabelasprivadasRLS/ACLfechadas, wrappersINVOKER, prévia/aplicação/replay/reversão; exercício Auth/REST/Express real local com5linhas, concorrência, revogação e arquivo11.
 - [x]3. API e interface Configurações→Importação: modelo,prévia,confirmação,histórico,relatório e reversão; testes320/390/768/1440/quatroperfis/503.
-- [ ]4. Revisão independente única, corrigir achados materiais com testes; suíteNode/build/tipos/audit e regressões pertinentes.
-- [ ]5. Publicar porGitHub→Vercel, conferir históricoSupabase apósGit antes de qualquerapply; verificar domínio/barreiras/cache/PWA e atualizar Livro/AGENTS/fecho/evidências.
+- [x]4. Revisão independente única, corrigir achados materiais com testes; suíteNode/build/tipos/audit e regressões pertinentes.
+- [x]5. Publicar porGitHub→Vercel, conferir históricoSupabase apósGit antes de qualquerapply; verificar domínio/barreiras/cache/PWA e atualizar Livro/AGENTS/fecho/evidências.
 
 ## Foco de revisão
 
@@ -31,3 +31,5 @@ Fonte renomeada/reordenada, identificador/contato duplicados semCPF, centavos ne
 15/11: histórico/fecho36/manual37 conferidos antes de modificar. Usuário autorizou implementação/publicação neste pedido. Implementação na branchfeat/etapa-37, checkout exclusivo limpo; testesbase em execução. Recuperação36 continua pendente, não bloqueia o contrato mínimo37 segundo o manual. FormatoJSON escolhido para preservar tipos e vínculos explícitos sem nova dependênciaCSV. Não importar dados reais nem criar fixtures hospedadas.
 
 Revisão independente: umP2 de contagemJSONB corrigido com contador de bytesJSONcompacto/limite de profundidade16 e loteUnicode261.892bytes RED→GREEN; helpers privados semexecuteapp. TesteSQLintegral detectou FKdearquivo37 semguarddinâmico11; adicionado triggercanônico de exclusão, semalterar funções anteriores. Cobertura ampliada para perda de resposta apósCOMMITreal, chaves diferentes concorrentes, identidade08revogada apósprévia e paginação3/5. Benchmark realAPI100linhas/10.004cadastros,5amostras sequenciais:p50≈722ms/p95≈769ms; não representa10usuários distintos nem SLA hospedado.
+
+Publicação15/11 confirmada: PR132/mergee59cb71/Vercel7qXxkVJZ READY, origemGit. Supabase81/última20261115025828 aplicada automaticamente,15corpos iguais,4tabelasRLS/ACLfechadas,5wrappersINVOKER e guard11ativo. Não reaplicar. Dois replaysSQL2.334/2.340 aprovados;425Node/88UIoperacionais/7PWA build/5públicos hospedados/build/tipos/audit0. Fecho/publicação/schema/HTTPS são o checkpoint;36externa continua pendente e38não iniciada.

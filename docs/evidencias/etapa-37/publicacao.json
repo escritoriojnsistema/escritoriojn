@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-15",
+  "method": "GitHub→Vercel",
+  "github_actions": false,
+  "direct_deploy": false,
+  "repository": "escritoriojnsistema/escritoriojn",
+  "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/132",
+  "feature_commit": "7cdabaf3ac4d38664593acd4f02ed5a56a5d9549",
+  "source_tree": "df74518e70133dc59b1bf9811f958d4b6c097527",
+  "merge_commit": "e59cb719ccfae92cd2e1b9c02203a004df627339",
+  "preview": {
+    "id": "dpl_7PfSQ3KCKso77N8Zn6b7jDE5kyHy",
+    "url": "https://escritoriojn-9hbjms5ou-escritorio-jn.vercel.app",
+    "state": "READY",
+    "source": "git",
+    "health": 200
+  },
+  "production": {
+    "id": "dpl_7qXxkVJZGd8Gf329u2vASjhdE2Qx",
+    "url": "https://escritoriojn-f95wsewlv-escritorio-jn.vercel.app",
+    "alias": "https://escritoriojn.vercel.app",
+    "state": "READY",
+    "source": "git"
+  },
+  "supabase": {
+    "project": "mcsuoxnubpqenyvbefee",
+    "migration": "20261115025828",
+    "applied_automatically": true,
+    "manual_apply": false,
+    "migration_count": 81,
+    "statements": 32,
+    "function_bodies_match": 15,
+    "private_tables_rls_closed": 4,
+    "public_wrappers_invoker": 5
+  },
+  "observability": {
+    "deployment_error_fatal_groups": [],
+    "scope": "Runtime log query for this production deployment,15m window; no complete production SLA implied"
+  },
+  "security_advisors": [
+    {
+      "name": "rls_enabled_no_policy",
+      "level": "INFO",
+      "count": 181,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy",
+      "stage37_findings": [
+        "import_batches37",
+        "import_commands37",
+        "import_reversals37",
+        "import_rows37"
+      ]
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "level": "WARN",
+      "count": 1,
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection",
+      "stage37_findings": []
+    }
+  ],
+  "validation": {
+    "node": 425,
+    "sql_replay_checks": [
+      2334,
+      2340
+    ],
+    "ui_operational_distinct": 88,
+    "pwa_build": 7,
+    "pwa_hosted_public": 5,
+    "public_https_files": 11,
+    "anonymous_private_barriers_401": 9
+  },
+  "hosted_private_login_tested": false,
+  "hosted_legacy_data_imported": false,
+  "pending36_preserved": true,
+  "notes": "Documentation closure following this runtime release does not change the application or schema. Production recovery36 remains pending by user choice."
+}
