@@ -17,7 +17,8 @@
     "test:session-auth": "node --import tsx scripts/test-session-auth.mjs",
     "test:homologation:ui": "node scripts/test-ui38.mjs",
     "test:homologation:load": "node --import tsx scripts/test-load38.mjs",
-    "test:homologation:public": "node scripts/test-public38.mjs"
+    "test:homologation:public": "node scripts/test-public38.mjs",
+    "test:release:preview": "node --import tsx scripts/test-preview39.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.118.0",

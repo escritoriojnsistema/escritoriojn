@@ -1,7 +1,7 @@
 import { Router, json } from 'express';
 import { createClient } from '@supabase/supabase-js';
 import { projectAccessContexts, uuidPattern, type AccessResponse } from '../../../shared/access.js';
-import { validPublicConnection } from '../../../shared/connection.js';
+import { deploymentConnection } from '../../../shared/deployment39.js';
 import { errorResponse } from '../../errors.js';
 import { authenticatedClient } from './client.js';
 import { activitySnapshot } from '../../../shared/sessionActivity.js';
@@ -22,11 +22,11 @@ authRouter.get('/context',async(req,res)=>{
     || (office!==undefined && (typeof office!=='string' || !uuidPattern.test(office)))) {
     errorResponse(res,422,'VALIDATION_ERROR','Solicitação de acesso inválida.');return;
   }
-  const url=process.env.VITE_SUPABASE_URL;
-  const key=process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  if (!validPublicConnection(url,key)) {
+  const connection=deploymentConnection(process.env.VITE_SUPABASE_URL,process.env.VITE_SUPABASE_PUBLISHABLE_KEY,process.env.VERCEL_ENV);
+  if (!connection) {
     errorResponse(res,503,'AUTH_NOT_CONFIGURED','O serviço de acesso está indisponível.');return;
   }
+  const {url,key}=connection;
   try {
     const client=createClient(url!,key!,{
       auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false},

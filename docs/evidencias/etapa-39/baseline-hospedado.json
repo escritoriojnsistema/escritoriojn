@@ -1,0 +1,95 @@
+{
+  "date": "2026-11-15T22:59:21.343Z",
+  "base": "711beb958a8d9b74a1ed2fa1ab6c5ef8bd358a0b",
+  "manual": "https://drive.google.com/file/d/1PpfJM1FPkVOrmDgfVLxirLWVlKNB0mbZ/view",
+  "supabase": {
+    "project": "mcsuoxnubpqenyvbefee",
+    "migrations": 82,
+    "latest": "20261115152258",
+    "auth_users": 7,
+    "memberships": 7,
+    "role_permissions": 92,
+    "customers": 2,
+    "requests": 3,
+    "files": 0,
+    "objects": 0,
+    "continuity_policies": 0,
+    "rls_disabled": 0,
+    "confirmed_accounts": 5,
+    "currently_banned": 0,
+    "tables": 189,
+    "private_tables_direct_access": 0,
+    "role_counts": [
+      {
+        "role_code": "admin",
+        "active": true,
+        "count": 1
+      },
+      {
+        "role_code": "client",
+        "active": true,
+        "count": 4
+      },
+      {
+        "role_code": "employee",
+        "active": true,
+        "count": 1
+      },
+      {
+        "role_code": "owner",
+        "active": true,
+        "count": 1
+      }
+    ],
+    "templates": 64,
+    "privacy_controller_settings": 0,
+    "customers_function_md5": "19b0245a28043d8c4219731848b1f5a2",
+    "wrapper_invoker": true,
+    "acl_preserved": true,
+    "hosted_writes": false,
+    "migrations_applied": 0
+  },
+  "vercel": {
+    "project": "prj_PSltYIXuu3V50lKKVKhFwINMODBq",
+    "team": "team_gmeeDy2WbZ8C33d3aqwwRnTx",
+    "plan": "hobby",
+    "user_confirmed_free_plan": true,
+    "git_link": "escritoriojnsistema/escritoriojn",
+    "baseline_deployment": "dpl_CtzG8ygPDk7q85kqvmppYAuSU5qK",
+    "baseline_state": "READY",
+    "baseline_source": "git",
+    "canonical": "https://escritoriojn.vercel.app",
+    "domain_verified": true,
+    "protected_previews": true,
+    "public_connection_targets": [
+      "preview",
+      "production"
+    ],
+    "privileged_variables_sensitive_production_only": true,
+    "secret_values_read": false,
+    "cost_query": {
+      "status": 404,
+      "code": "costs_not_found",
+      "cost": null
+    },
+    "plan_changed": false,
+    "direct_platform_mutations": false
+  },
+  "auth": {
+    "settings_status": 200,
+    "signup_enabled": true,
+    "email_enabled": true,
+    "mailer_autoconfirm": false,
+    "smtp_delivery_tested": false,
+    "callback_allowlist_verified": false,
+    "hosted_private_login": false
+  },
+  "operational": {
+    "commercial_eligible": false,
+    "budget_authorized": null,
+    "separate_homologation_project_observed": false,
+    "human_training_completed": false,
+    "pilot_executed": false,
+    "production_external_recovery_proved": false
+  }
+}

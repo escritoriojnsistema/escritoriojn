@@ -94,3 +94,9 @@ Etapa14: `/caixa` integra abertura individual em espécie, unidades financeiras,
 ### Retomada integrada de modelos e documentos
 
 A implementação de01/11 adiciona pastas e gestão de modelos, associação ao serviço/preço vigente, catálogo do cliente (`/modelos-disponiveis`), abertura de documento (`/solicitar-documento`), presença/fila por nível e documentos do portal (`/meus-documentos`). Editor, cobrança e caixa usam os registros e snapshots existentes. Liberação exige arquivo/conferências/vínculo e quitação integral; estorno bloqueia novos acessos. Status de testes, limitações e publicação em [checkpoint integrado](docs/etapas/fluxo-integrado-20261101.md) e [Livro Raiz](LIVRO_RAIZ.md).
+
+## Publicação controlada — Etapa 39
+
+Previews desta versão ficam sem conexão Supabase no build e na API, pois as variáveis públicas existentes têm targets compartilhados com produção. O estado de acesso indisponível é intencional. Produção e laboratório local conservam seus contratos; um projeto isolado de homologação e a futura habilitação exigem revisão própria. `npm run test:release:preview` verifica build real, ausência da conexão herdada e oito navegações locais Desktop/Mobile sem tráfego externo. Capturas locais ficam em `test-results/release39/`, foraGit.
+
+[Prontidão/custos](docs/etapas/publicacao-controlada-39.md), [treinamento/piloto](docs/etapas/treinamento-piloto-39.md) e [retorno/suporte](docs/etapas/rollback-suporte-39.md). PlanoHobby confirmado não atende publicação comercial; piloto e aceites humanos permanecem pendentes. SomenteGitHub→Vercel, semActions/deploydireto ou contratação automática.

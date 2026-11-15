@@ -1,0 +1,114 @@
+{
+  "date": "2026-11-15",
+  "base": "711beb958a8d9b74a1ed2fa1ab6c5ef8bd358a0b",
+  "stage_status": "checkpoint_prepared_not_commercial_release",
+  "runs": [
+    {
+      "command": "node --import tsx --test tests/deployment39.test.ts",
+      "result": "failed_expected",
+      "count": 1,
+      "log_sha256": "5c790aabfde54bf8a9b1dd5381eb393cb39f2ff113a56b126ed63efbcd743233",
+      "log_local": "/tmp/jn39-red.log"
+    },
+    {
+      "command": "node --import tsx scripts/test-preview39.mjs",
+      "result": "failed_expected",
+      "count": 1,
+      "log_sha256": "edd36bf11bc08ba89edb917b4aefd4d71f6597c39002d3184456944a8ba9fe8f",
+      "log_local": "/tmp/jn39-build-red.log"
+    },
+    {
+      "command": "node --import tsx --test tests/deployment39.test.ts",
+      "result": "passed",
+      "count": 1,
+      "log_sha256": "c73027d16e91460c8131d37e5620f7797720ed27ab5e61ca4bf40daf75a4c034",
+      "log_local": "/tmp/jn39-green.log"
+    },
+    {
+      "command": "npm test",
+      "result": "passed",
+      "count": 427,
+      "log_sha256": "1990ccc8c2c98060e0d72bc0d0d117d915df0fac5601165089cdc3e24b363331",
+      "log_local": "/tmp/jn39-node.log"
+    },
+    {
+      "command": "npm run build",
+      "result": "passed",
+      "count": null,
+      "log_sha256": "5da0476a3ce623e87fba62329c8778135a505761741bfb06211ad0ec188a04cb",
+      "log_local": "/tmp/jn39-build.log"
+    },
+    {
+      "command": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:homologation:ui -- --grep 'team-contract|grouped-navigation|portal-isolation|loading-contract'",
+      "result": "passed",
+      "count": 75,
+      "log_sha256": "31a7d4715c956d267b52bca2a8a3ce7d05cf70d46e43bc89f7c13bc571c49796",
+      "log_local": "/tmp/jn39-ui.log"
+    },
+    {
+      "command": "NODE_USE_ENV_PROXY=1 node scripts/test-public38.mjs",
+      "result": "passed",
+      "count": 22,
+      "log_sha256": "506e29ecf00cd8633f14bb22aa915f6ccf9324ca48f1052e71d853d08d1eaa34",
+      "log_local": "/tmp/jn39-public.log"
+    },
+    {
+      "command": "npm run test:release:preview",
+      "result": "passed",
+      "count": 8,
+      "log_sha256": "a54372a676385889ec738825f990cae5e811fc6dfb4ddaf8303e74089a4844e6",
+      "log_local": "/tmp/jn39-preview-final.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "passed",
+      "count": null,
+      "log_sha256": "6edcab00e060367a8d9bf29a33ddaff4fed687e9a668fdcc3a1c9e3f4814a03a",
+      "log_local": "/tmp/jn39-typecheck.log"
+    },
+    {
+      "command": "node --import tsx --test tests/deployment39.test.ts",
+      "result": "passed",
+      "count": 1,
+      "log_sha256": "8d81cef932e42ef541cfec45fb6fba7eec0c33bef7c1de0b49f0e70f82487ff5",
+      "log_local": "/tmp/jn39-api-final.log"
+    }
+  ],
+  "ui_profiles": [
+    "owner",
+    "admin",
+    "employee",
+    "client"
+  ],
+  "ui_intercepted_provider": true,
+  "api_local_fake_provider": true,
+  "real_preview_build": true,
+  "production_dependency_audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "new_sql": false,
+  "sql_replay_load_restore_not_repeated": true,
+  "historical_stage38_evidence_preserved": true,
+  "preview_remote_private_flow": false,
+  "physical_device": false,
+  "training_human": false,
+  "pilot_executed": false,
+  "external_production_recovery": false,
+  "actions_used": false,
+  "direct_vercel_mutations": false,
+  "limits": [
+    "75UI com SDK/API interceptados; endpointsHTTP locais usam provedor fictício",
+    "8 navegações de buildpreview real são locais; não fluxo privado remoto",
+    "Nenhuma execução humana, piloto, contratação ou recuperação externa de produção",
+    "427Node final antes de anotação de tipo RequestInit (sem mudança de execução); typecheck/build confirmados depois"
+  ],
+  "independent_review": "no findings; targeted test1 independently passed",
+  "github_pr": 136,
+  "git_preview_ready": true,
+  "production_stage39_installed": false
+}

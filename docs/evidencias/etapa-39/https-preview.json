@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-15T23:03:10.999Z",
+  "checks": [
+    {
+      "url": "https://escritoriojn-iys7kio1n-escritorio-jn.vercel.app/",
+      "method": "HEAD",
+      "status": 302,
+      "content_type": "text/plain",
+      "cache_control": "no-store, max-age=0",
+      "provider_protection": true,
+      "private_flow_tested": false
+    },
+    {
+      "url": "https://escritoriojn-iys7kio1n-escritorio-jn.vercel.app/api/auth/context",
+      "method": "GET",
+      "status": 302,
+      "content_type": "text/plain",
+      "cache_control": "no-store, max-age=0",
+      "provider_protection": true,
+      "private_flow_tested": false
+    },
+    {
+      "url": "https://escritoriojn.vercel.app/api/health",
+      "method": "GET",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "cache_control": "no-store",
+      "provider_protection": true,
+      "private_flow_tested": false
+    },
+    {
+      "url": "https://escritoriojn.vercel.app/api/auth/context",
+      "method": "GET",
+      "status": 401,
+      "content_type": "application/json; charset=utf-8",
+      "cache_control": "private, no-store",
+      "provider_protection": true,
+      "private_flow_tested": false
+    }
+  ],
+  "protection_bypassed": false,
+  "remote_private_flow_verified": false
+}

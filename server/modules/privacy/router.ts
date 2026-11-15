@@ -1,6 +1,6 @@
 import {Router,json} from 'express';
 import {createClient} from '@supabase/supabase-js';
-import {validPublicConnection} from '../../../shared/connection.js';
+import {deploymentConnection} from '../../../shared/deployment39.js';
 import {privacySettings,validPrivacyController} from '../../../shared/privacySettings.js';
 import {authenticatedClient} from '../auth/client.js';
 import {fields,uuid} from '../team/validation.js';
@@ -9,8 +9,9 @@ export const privacyRouter=Router();
 privacyRouter.use((_req,res,next)=>{res.setHeader('Cache-Control','no-store');res.setHeader('CDN-Cache-Control','no-store');next();});
 privacyRouter.get('/public',async(req,res)=>{
  if(Object.keys(req.query).length){errorResponse(res,422,'PRIVACY_VALIDATION','Consulta inválida.');return;}
- const url=process.env.VITE_SUPABASE_URL,key=process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
- if(!validPublicConnection(url,key)){errorResponse(res,503,'PRIVACY_UNAVAILABLE','Aviso indisponível.');return;}
+ const connection=deploymentConnection(process.env.VITE_SUPABASE_URL,process.env.VITE_SUPABASE_PUBLISHABLE_KEY,process.env.VERCEL_ENV);
+ if(!connection){errorResponse(res,503,'PRIVACY_UNAVAILABLE','Aviso indisponível.');return;}
+ const {url,key}=connection;
  try{const client=createClient(url!,key!,{auth:{persistSession:false,autoRefreshToken:false},global:{fetch:(input,init)=>fetch(input,{...init,signal:AbortSignal.timeout(8000)})}});const{data,error}=await client.rpc('privacy_controller_public');if(error)throw error;res.json({data:privacySettings(data)});}catch{errorResponse(res,503,'PRIVACY_UNAVAILABLE','Aviso indisponível.');}
 });
 privacyRouter.use(async(req,res,next)=>{const auth=await authenticatedClient(req,res);if(auth){res.locals.privacyAuth=auth;next();}});

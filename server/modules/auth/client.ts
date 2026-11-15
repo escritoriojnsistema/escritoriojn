@@ -1,14 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Request, Response } from 'express';
-import { validPublicConnection } from '../../../shared/connection.js';
+import { deploymentConnection } from '../../../shared/deployment39.js';
 import { errorResponse } from '../../errors.js';
 
 /** A verified provider identity, never a role inferred from user metadata. */
 export async function authenticatedClient(req: Request, res: Response) {
   const token=/^Bearer ([A-Za-z0-9_.-]{1,8192})$/i.exec(req.get('Authorization')??'')?.[1];
   if (!token) {errorResponse(res,401,'AUTH_REQUIRED','Entre novamente para continuar.');return null;}
-  const url=process.env.VITE_SUPABASE_URL,key=process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  if (!validPublicConnection(url,key)) {errorResponse(res,503,'AUTH_NOT_CONFIGURED','O serviço de acesso está indisponível.');return null;}
+  const connection=deploymentConnection(process.env.VITE_SUPABASE_URL,process.env.VITE_SUPABASE_PUBLISHABLE_KEY,process.env.VERCEL_ENV);
+  if (!connection) {errorResponse(res,503,'AUTH_NOT_CONFIGURED','O serviço de acesso está indisponível.');return null;}
+  const {url,key}=connection;
   try {
     const client=createClient(url!,key!,{
       auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false},
