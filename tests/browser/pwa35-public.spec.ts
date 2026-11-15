@@ -1,6 +1,7 @@
 import {test,expect,type Page} from '@playwright/test';
 import {createServer} from 'node:http';
-import {readFile} from 'node:fs/promises';
+import {readFile,mkdtemp,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 async function controlled(page:Page){
  await page.goto('/instalar');
@@ -40,11 +41,16 @@ test('35: manifesto, worker e reabertura offline usam somente arquivos públicos
  await page.reload();await expect(page.getByRole('heading',{name:'Você está sem conexão'})).toBeVisible();
  await context.setOffline(false);await page.getByRole('link',{name:'Voltar ao início'}).click();await expect(page.getByRole('heading',{level:1})).toBeVisible();await expect(page.getByRole('heading',{name:'Você está sem conexão'})).toHaveCount(0);
 });
-test('35: navegador reconhece manifesto instalável e ícone em viewport Android',async({page,context,browserName})=>{
+test('35: navegador reconhece manifesto instalável e ícone em viewport Android',async({playwright,browserName},testInfo)=>{
  test.skip(!process.env.PWA35_BUILD_TEST||browserName!=='chromium','Inspeção Chromium do build; não comprova instalação física.');
- await page.setViewportSize({width:390,height:844});await controlled(page);
+ // Installation is forbidden in incognito. Use a disposable normal profile rather
+ // than treating Chromium156's in-incognito diagnostic as an application failure.
+ const directory=await mkdtemp(resolve(tmpdir(),'jn-pwa-install-'));
+ const context=await playwright.chromium.launchPersistentContext(directory,{headless:true,baseURL:testInfo.project.use.baseURL,viewport:{width:390,height:844},executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH});
+ try{const page=context.pages()[0]??await context.newPage();await controlled(page);
  const cdp=await context.newCDPSession(page);const result=await cdp.send('Page.getAppManifest');expect(result.errors).toEqual([]);expect(result.data).toContain('standalone');
  const installability=await cdp.send('Page.getInstallabilityErrors');expect(installability.installabilityErrors).toEqual([]);
+ }finally{await context.close();await rm(directory,{recursive:true,force:true});}
 });
 test('35: atualização aguarda todas as abas sem perder comando ou File em memória',async({browser})=>{
  test.skip(!process.env.PWA35_BUILD_TEST,'Usa build real em origem local isolada.');

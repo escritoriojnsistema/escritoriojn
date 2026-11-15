@@ -12,7 +12,7 @@ import {OperationBack,splitOperationReturn} from './OperationBack';
 import './operation.css';
 import {PrivacyFooter} from '../privacy/PrivacyLinks';
 
-const icons = {operations:ShieldCheck,categories:ClipboardList,access:Settings,privacy:CircleUserRound,rural:LandPlot,settings:Settings,catalog:FileText,portalDocuments:FileText, documents:FileText, templates:FileText, quick:Zap,reports:ChartColumn, expenses: Banknote, payments: Wallet, cash: Banknote, charges: Wallet, home: House, checklists: ClipboardCheck, notifications: Bell, requests: ClipboardList, attachments: Paperclip, customers: UsersRound, services: BriefcaseBusiness, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
+const icons = {imports:Archive,operations:ShieldCheck,categories:ClipboardList,access:Settings,privacy:CircleUserRound,rural:LandPlot,settings:Settings,catalog:FileText,portalDocuments:FileText, documents:FileText, templates:FileText, quick:Zap,reports:ChartColumn, expenses: Banknote, payments: Wallet, cash: Banknote, charges: Wallet, home: House, checklists: ClipboardCheck, notifications: Bell, requests: ClipboardList, attachments: Paperclip, customers: UsersRound, services: BriefcaseBusiness, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
 export function OperationLayout({ client = false, busy = false, contextActions, office, children }: { client?: boolean; busy?: boolean; contextActions?: ReactNode; office?: string; children: ReactNode }) {
   const auth = useAuth();
   const items = operationNavigation(auth.contexts, client);

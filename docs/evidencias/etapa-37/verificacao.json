@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-15",
+  "base": "5f627515140c69c37bf17f262d0fcdf28872b023",
+  "manual": "https://drive.google.com/file/d/1axmPU6B0Jq6sAX_jN4wsdqGGR96vUFRk/view",
+  "node_passed": 425,
+  "ui_operational_distinct_passed": 88,
+  "ui_stage37_distinct_passed": 11,
+  "pwa_production_build_passed": 7,
+  "build": "passed",
+  "production_audit_vulnerabilities": 0,
+  "independent_review": {
+    "material_findings": 1,
+    "fixed": "Compact JSON bytes differed from JSONB rendering; Unicode261892byte regression RED→GREEN",
+    "deferred_material_findings": 0
+  },
+  "database_regression": {
+    "initial_failure": "New file FK missing canonical deletion reference guard",
+    "fix": "Attach existing private.files_deletion_reference_guard trigger",
+    "full_replay_status": "running; production merge gated"
+  },
+  "laboratory_report": "laboratorio.json",
+  "hosted_fixtures": false,
+  "old_finance_pdf_engines_changed": false,
+  "new_auth_permissions_or_grants": false,
+  "production_backup36_verified": false,
+  "pending36_preserved": true,
+  "deployment_method": "GitHub→Vercel; no GitHub Actions; no direct deploy",
+  "limits": [
+    "No hosted private login or real legacy corpus import",
+    "No physical Android/iPhone installation observation",
+    "Initial opening values are recorded and reconciled; collection/credit spending not enabled",
+    "Production recovery36 and external monitoring remain pending"
+  ]
+}

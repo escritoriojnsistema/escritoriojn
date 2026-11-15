@@ -1,10 +1,11 @@
+import {importPermissions37} from '../../../shared/imports37';
 import type { AccessContext } from '../../../shared/access';
 import { normalizePathname, paths } from '../../app/routes';
 
 export const operationRoleNames = {
   owner: 'Super administrador', admin: 'Administrador', employee: 'Funcionário', client: 'Cliente',
 };
-export type OperationItem = { key: 'operations' | 'categories' | 'access' | 'privacy' | 'rural' | 'settings' | 'catalog' | 'portalDocuments' | 'documents' | 'templates' | 'quick' | 'reports' | 'expenses' | 'payments' | 'cash' | 'charges' | 'home' | 'checklists' | 'notifications' | 'requests' | 'attachments' | 'customers' | 'services' | 'team' | 'audit' | 'archives' | 'account'; label: string; path: string };
+export type OperationItem = { key: 'imports' | 'operations' | 'categories' | 'access' | 'privacy' | 'rural' | 'settings' | 'catalog' | 'portalDocuments' | 'documents' | 'templates' | 'quick' | 'reports' | 'expenses' | 'payments' | 'cash' | 'charges' | 'home' | 'checklists' | 'notifications' | 'requests' | 'attachments' | 'customers' | 'services' | 'team' | 'audit' | 'archives' | 'account'; label: string; path: string };
 const staff = (contexts: AccessContext[], permissions: string[]) => contexts.some(context => context.role_code !== 'client' && permissions.every(permission => context.permissions.includes(permission)));
 
 /** Only the parent sections belong to the sidebar, for both screen sizes. */
@@ -36,6 +37,7 @@ export function settingsNavigation(context: AccessContext, client: boolean): Ope
   const has = (...permissions: string[]) => permissions.every(p => context.permissions.includes(p));
   const admin = ['owner','admin'].includes(context.role_code);
   const items: OperationItem[] = [];
+  if(context.role_code==='owner'&&has(...importPermissions37))items.push({key:'imports',label:'Importação',path:paths.settingsImports});
   if(context.role_code==='owner'&&has('settings.access'))items.push({key:'operations',label:'Continuidade',path:paths.settingsOperations});
   if (context.role_code === 'owner' && has('settings.access')) items.push({ key:'privacy', label:'Privacidade', path:paths.settingsPrivacy });
   if (has('audit.read')) items.push({ key:'audit', label:'Auditoria', path:paths.audit });
@@ -55,7 +57,7 @@ export function operationSectionKey(pathname: string): OperationItem['key'] | un
     ['customers', [paths.customers, paths.rural]],
     ['services', [paths.services, paths.checklists]],
     ['cash', [paths.cash, paths.charges, paths.expenses, paths.financialReports, paths.quick]],
-    ['settings', [paths.settingsOperations, paths.settings, paths.clientSettings, paths.settingsCategories, paths.settingsAccess, paths.settingsPrivacy, paths.settingsArchives, paths.teamManagement, paths.audit, paths.archives, paths.account, paths.clientAccount]],
+    ['settings', [paths.settingsImports,paths.settingsOperations, paths.settings, paths.clientSettings, paths.settingsCategories, paths.settingsAccess, paths.settingsPrivacy, paths.settingsArchives, paths.teamManagement, paths.audit, paths.archives, paths.account, paths.clientAccount]],
   ];
   return groups.find(([, routes]) => routes.includes(path))?.[0];
 }

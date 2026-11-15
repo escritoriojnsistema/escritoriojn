@@ -1,0 +1,64 @@
+{
+  "mode": "disposable laboratory",
+  "hosted_fixtures": false,
+  "boundary_261892_bytes_accepted": true,
+  "response_lost_after_commit_reconciled": true,
+  "performance": {
+    "scope": "local real API,100 preview rows,10004 registry customers,one owner session,sequential samples",
+    "samples": 5,
+    "p50_ms": 721.73,
+    "p95_ms": 768.58,
+    "proposed_p95_ms": 2000
+  },
+  "distinct_key_source_race": true,
+  "revoked_identity_rejects_old_preview": true,
+  "preview": [
+    {
+      "row": 1,
+      "outcome": "create",
+      "reason": "NEW"
+    },
+    {
+      "row": 2,
+      "outcome": "create",
+      "reason": "NEW"
+    },
+    {
+      "row": 3,
+      "outcome": "create",
+      "reason": "NEW"
+    },
+    {
+      "row": 4,
+      "outcome": "rejected",
+      "reason": "DUPLICATE_LINE"
+    },
+    {
+      "row": 5,
+      "outcome": "rejected",
+      "reason": "INVALID_ROW"
+    }
+  ],
+  "real_storage_upload_and_validation": true,
+  "quarantine_not_released": true,
+  "file_hash_validation_required": true,
+  "later_payment_cents_preserved": 3000,
+  "created_customers": 3,
+  "initial_debit_cents": 12345,
+  "initial_credit_cents": 500,
+  "new_payments": 0,
+  "new_cash_entries": 0,
+  "new_service_charges": 0,
+  "concurrent_retry": true,
+  "source_reference_deduplication": true,
+  "reversed_keeps_later_snapshot": true,
+  "reversed_does_not_resurrect": true,
+  "owner_revocation_denies_replay": true,
+  "scope_denied": [
+    "anonymous",
+    "admin",
+    "employee",
+    "client",
+    "other office"
+  ]
+}
