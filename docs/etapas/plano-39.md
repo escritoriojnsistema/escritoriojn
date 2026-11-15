@@ -23,8 +23,10 @@
 - [x] Verificar build real com envpreview apontando a produção: bundle sem host/chave, navegador sem preconnect/requisição externa e botões de acesso indisponíveis. Produção/local devem continuar conectando pelo contrato existente.
 - [x] Registrar revisão de autenticação/e-mail/contas/permissões/jurídico/modelos/scanner e segredos; criar kit de treinamento por papel, piloto com conciliação e suporte/incidentes/rollback, sem marcar execução humana.
 - [x] Rodar testesNode/tipos/build e verificações de navegador pertinentes; schema/contagens/RLS/ACL e HTTPS públicos hospedados somente leitura. Não repetir replaySQL/carga38 para mudança semSQL.
-- [ ] Revisão independente, corrigir achados, atualizar Livro/AGENTS/fecho/evidências; preparar PRGitHub e observar previewGit. Publicação comercial/piloto seguem bloqueados até condições aplicáveis, sem avançar40.
+- [x] Revisão independente, corrigir achados, atualizar Livro/AGENTS/fecho/evidências; preparar PRGitHub e observar previewGit. Publicação comercial/piloto seguem bloqueados até condições aplicáveis, sem avançar40.
 
 ## Entregas
 
 `docs/etapas/etapa-39.md` (contrato/decisão), `publicacao-controlada-39.md` (matriz de prontidão/custos/autorização), `treinamento-piloto-39.md` (roteiros e registros vazios), `rollback-suporte-39.md`, `fecho-39.md`, evidências mínimas39. Não fabricar alteração em Supabase ou nova interface onde o manual exige operação humana.
+
+Resultado: revisão independente sem achados; PR136emrascunho/feature2bd3898/previewJBbHeZoR READY, origemGit/statussuccess. SSO302preservado, sem prova privada remota. Produção711beb9não alterada; sem merge/piloto comercial ou contratação. Autorizações e condições operacionais continuam pendentes conforme matriz.

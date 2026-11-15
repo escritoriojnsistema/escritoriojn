@@ -1,0 +1,47 @@
+{
+  "date": "2026-11-15T23:03:54.650Z",
+  "stage": 39,
+  "status": "prepared_checkpoint_not_commercial_release",
+  "pull_request": {
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/pull/136",
+    "number": 136,
+    "draft": true,
+    "merged": false,
+    "base": "711beb958a8d9b74a1ed2fa1ab6c5ef8bd358a0b",
+    "implementation_commit": "2bd38986637e51c92edeee1bbb631b766f70e306",
+    "tree": "6c5c27e03f90f9f13143bb21a328c80438aa1901"
+  },
+  "preview": {
+    "id": "dpl_JBbHeZoRcnm6nMFgmCbKCBKuQfgW",
+    "url": "https://escritoriojn-iys7kio1n-escritorio-jn.vercel.app",
+    "state": "READY",
+    "source": "git",
+    "commit": "2bd38986637e51c92edeee1bbb631b766f70e306",
+    "branch": "feat/etapa-39",
+    "alias": "escritoriojn-git-feat-etapa-39-escritorio-jn.vercel.app",
+    "github_status": "success",
+    "http_status": 302,
+    "protection_preserved": true,
+    "protection_bypassed": false,
+    "remote_private_flow_verified": false
+  },
+  "production": {
+    "deployment": "dpl_CtzG8ygPDk7q85kqvmppYAuSU5qK",
+    "commit": "711beb958a8d9b74a1ed2fa1ab6c5ef8bd358a0b",
+    "stage39_merged": false,
+    "stage39_installed": false,
+    "health_status": 200,
+    "anonymous_auth_context": 401
+  },
+  "supabase": {
+    "migrations": 82,
+    "latest": "20261115152258",
+    "writes": false
+  },
+  "commercial_pilot": false,
+  "training_human": false,
+  "procurement": false,
+  "direct_vercel_mutations": false,
+  "github_actions_invoked": false,
+  "documentary_followup_preserves_runtime": true
+}
