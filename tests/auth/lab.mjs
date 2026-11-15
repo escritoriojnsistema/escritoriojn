@@ -345,7 +345,10 @@ export async function createAuthLab({storage=true,artifacts=false,storageRootfs,
       // The permission-scoped OpenAPI document can take over a second to render
       // on the local provider. Retry transient fetch/body timeouts within one
       // overall cache deadline; every expected executable RPC must still appear.
-      const deadline = Date.now() + 20000;
+      // This is provider bootstrap, not an application latency allowance. Two
+      // complete permission-scoped OpenAPI documents for230RPCs can take over5s
+      // while the two-CPU lab replays SQL/UI; aborting every5s restarted that work.
+      const deadline = Date.now() + 45000;
       let missing = expected;
       let lastFailure;
       while (Date.now() < deadline) {
@@ -353,7 +356,7 @@ export async function createAuthLab({storage=true,artifacts=false,storageRootfs,
         // invisible to authenticated users and visible only to service_role.
         const schemas=await Promise.all([schemaKey,serviceRoleKey].map(async token=>{
           try {
-            const response=await fetch(`${url}/rest/v1/`,{headers:{Authorization:`Bearer ${token}`},signal:AbortSignal.timeout(Math.max(1,Math.min(5000,deadline-Date.now())))});
+            const response=await fetch(`${url}/rest/v1/`,{headers:{Authorization:`Bearer ${token}`},signal:AbortSignal.timeout(Math.max(1,Math.min(15000,deadline-Date.now())))});
             if(!response.ok){lastFailure=`HTTP ${response.status}`;return {};}
             return await response.json();
           } catch(error) {lastFailure=error.name;return {};}
@@ -362,7 +365,7 @@ export async function createAuthLab({storage=true,artifacts=false,storageRootfs,
         if(!missing.length)return;
         await delay(100);
       }
-      throw new Error(`Application migrations committed, but PostgREST schema cache did not refresh in 20 seconds. Missing RPCs: ${missing.join(', ')}.${lastFailure?` Last OpenAPI failure: ${lastFailure}.`:''}`);
+      throw new Error(`Application migrations committed, but PostgREST schema cache did not refresh in 45 seconds. Missing RPCs: ${missing.join(', ')}.${lastFailure?` Last OpenAPI failure: ${lastFailure}.`:''}`);
     };
     return { url, anonKey, serviceRoleKey, mailUrl, databaseContainer: names.postgres, sql, migrate, close };
   } catch (error) {

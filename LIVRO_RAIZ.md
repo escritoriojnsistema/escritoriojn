@@ -1,3 +1,17 @@
+# Etapa 38 — checkpoint técnico validado; aceite operacional pendente (15/11/2026)
+
+Pedido sobre main47e51700 após conferir Etapa37 publicada, AGENTS/Livro, manualDrive38, operacao e prevenção. [Fecho](docs/etapas/fecho-38.md) · [Matriz/aceites](docs/etapas/homologacao-38.md) · [Provas](docs/evidencias/etapa-38/verificacao.json). Não iniciar39 nem alegar aprovação operacional pelo proprietário.
+
+Carga real10usuários/10sessões/10.000clientes reproduziu503 em≈8,4s. Migration20261115152258 otimiza somente a função existente `private.customers_page`: guarda escritório/mesclagem/bloqueio/conta encerrada, captura read_all por chamada, usa pré-filtro restrito com escopo canônico e monta resumo só dos3/5registros da página. Cadastros pendentes/máscaras/ordenação/wrapperINVOKER/ACL preservados. Revalida ator/capacidade no retorno; delegação vencida durante materialização nega403 (RED→GREEN). Nenhuma nova tabela/capacidade/grant/conta/Edge/Storage ou tela. A correção atende a APIExpress/React existentes, sem alterar seus contratos.
+
+Validação final:426Node, dois replaysSQL2.334/2.340 com migrador semsuperusuário/BYPASSRLS e corridas reais;225cenáriosUI distintos(135dos arquivos intactos+90/90após corrigir fixtures),7PWA em build real,4públicos hospedados, tipos/build/auditprodução0. Três casosruntimePWA explicitamente não executados no domínio passaram no build local. Quatro perfis/320–1440px/zoom200/teclado/alvos44px/até4atalhos/semloaders, padrõesEquipeConvites e rodapé/rolagem natural preservados. Sem mudança de componente/CSS para satisfazer teste antigo. Carga isolada60consultas:fria p95=656,32ms;50seguintes p95=483,76ms. Não éSLA hospedado.
+
+Laboratórios reaisAuth/REST/Express/Storage/worker: permissões/portal32/PDF-SHA/revogação duranteStorage, assinatura24 e entrega26, importação37 com pagamento posterior3.000centavos preservado. Fixture24 agora usa categoria fictícia classificada viaAPI; não remover o gate de categoria sem nível. Restauração do schema82 em7903ms verificou banco/bytes/Auth/RLS/ACL/totais, outro banco no mesmo cluster descartável; produção36 externa continua pendente/editável. Revisão independente:2P2corrigidos RED→GREEN (relatório verde antigo e expiração da autoridade capturada). Provas históricas geradas pelos runners foram copiadas para38/restauradas nas etapas originais.
+
+Hospedado antes de publicar:81migrations/última20261115025828 já aplicadas,189tabelasRLS/ACLprivadasfechadas,7Auth/7vínculos/92role_permissions/2clientes/3solicitações/0files/0Storage/0lotes37. NÃO reaplicar as81anteriores; conferir82apósGit antes de ação manual. Vercel inicialGitREADY/mesmoSHA;22HTTPS/barreiras401. Publicação38 ainda aguardaGitHub→Vercel/readback, semActions/deploydireto. Nenhuma fixture/Auth/grant hospedada foi escrita pelos testes.
+
+Aceite humano por fluxo/serviços/modelos/permissões/caixa não executado. Login privado hospedado, aparelho físicoAndroid/iPhone, scanner/assinatura/entrega física reais, contrastes/WCAG completos e recuperação36 externa não observados. Manter checkpoint38; histórico abaixo conserva sua data.
+
 # Etapa 37 — publicada e verificada (15/11/2026)
 
 Pedido executado sobre main5f62751, depois de conferir a Etapa36, correções anteriores, históricoGit, Livro/AGENTS e manual37 no Drive. O contrato mínimo36 permite esta etapa; a recuperação externa de produção da36 continua pendente e editável por decisão do usuário. Nenhum acervo real ou fixture foi importado no ambiente hospedado.
@@ -97,4 +111,4 @@ Migration20261111131744 aplicada automaticamente:54instruções correspondentes,
 - Preservar identidade, escopo e autoridade atuais. Cache ou vínculo cadastral não concede acesso. Troca de sessão/autoridade limpa dados;503 conserva a tentativa,409 exige reconferência e401/403 bloqueia.
 - O histórico integral das etapas anteriores permanece no Git e nos cartões/fechos existentes. Esta consolidação evita republicar os detalhes antigos de auditoria no checkpoint público.
 
-Etapa atual:37, publicada e verificada. A recuperação de produção da36 continua pendente e configurável. Etapa38 não iniciada. O limite de instalação físicaAndroid/iPhone de35 permanece no seu fecho.
+Etapa atual:38, checkpoint técnico validado com aceite operacional pendente. Etapa37 publicada e recuperação36 externa pendente preservadas.39 não iniciada; conferir o checkpoint no topo.

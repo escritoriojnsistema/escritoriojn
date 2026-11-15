@@ -25,6 +25,9 @@ async function setup(page:Page,options:{payments?:Payment[];closed?:boolean;own?
  await page.route('https://team-ui.supabase.co/**',r=>r.fulfill({json:{id:user,aud:'authenticated'}}));
  await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,office_name:'Escritório teste',display_name:'Operador teste',role_code:'owner',permissions:state.permissions}]}}}));
  await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
+ // Presence is a separate current sidebar module; isolate its fixture so its
+ // missing provider does not create a second unrelated payment error alert.
+ await page.route('**/api/document-commercial/presence',r=>r.fulfill({json:{data:{status:'offline',capacity:1,last_seen:null,session_current:false}}}));
  await page.route('**/api/cash/configuration',r=>r.fulfill({json:{data:configuration}}));
  await page.route('**/api/cash/dashboard',r=>r.fulfill({json:{data:{sessions:[{...state.value.session,account_name:'Espécie de teste',numerario_cents:state.value.session.cash_cents}],total:1,page:1,page_size:5,scope:'own',can_open:state.permissions.includes('cash.open'),can_manage:true,can_read_all:true}}}));
  await page.route('**/api/cash/statement',r=>r.fulfill({json:{data:snapshot()}}));

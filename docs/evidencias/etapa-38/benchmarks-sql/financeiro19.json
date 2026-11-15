@@ -1,0 +1,71 @@
+{
+  "environment": "Disposable PostgreSQL17; includes Docker/psql process; no hosted SLA",
+  "views": {
+    "obligations": {
+      "samples": 12,
+      "median_ms": 203.31964899995364,
+      "p95_ms": 246.45970200002193
+    },
+    "movements": {
+      "samples": 12,
+      "median_ms": 170.75182200002018,
+      "p95_ms": 236.73952100006863
+    },
+    "cash": {
+      "samples": 12,
+      "median_ms": 152.61196300003212,
+      "p95_ms": 214.4889190000249
+    }
+  },
+  "projection": {
+    "total": 1150,
+    "captured": 5,
+    "payload_bytes": 3182
+  },
+  "explain": [
+    {
+      "Plan": {
+        "Node Type": "Seq Scan",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Relation Name": "cash_entries",
+        "Alias": "cash_entries",
+        "Startup Cost": 0,
+        "Total Cost": 20.8,
+        "Plan Rows": 352,
+        "Plan Width": 301,
+        "Actual Startup Time": 0.014,
+        "Actual Total Time": 0.154,
+        "Actual Rows": 335,
+        "Actual Loops": 1,
+        "Filter": "((office_id = '00000000-0000-4000-e000-000000000151'::uuid) AND (created_at >= CURRENT_DATE) AND (created_at < (CURRENT_DATE + 1)))",
+        "Rows Removed by Filter": 0,
+        "Shared Hit Blocks": 12,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning": {
+        "Shared Hit Blocks": 384,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning Time": 1.184,
+      "Triggers": [],
+      "Execution Time": 0.192
+    }
+  ]
+}

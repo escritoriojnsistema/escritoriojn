@@ -1,0 +1,178 @@
+{
+  "base": "47e51700d7e123cc39663d020f598b200d056a53",
+  "final_schema_migrations": 82,
+  "runs": [
+    {
+      "id": "node426",
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "426 passed,0 failed,0 skipped; final suite",
+      "log_sha256": "138087400c1c3c5ba019ba17fbd41dc22f69d02190c409f800094e19e8e18395",
+      "log_bytes": 118199,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "types",
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "result": "passed",
+      "log_sha256": "6edcab00e060367a8d9bf29a33ddaff4fed687e9a668fdcc3a1c9e3f4814a03a",
+      "log_bytes": 49,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "build",
+      "command": "VITE_SUPABASE_URL=https://team-ui.supabase.co VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_ui_contract_fixture npm run build",
+      "exit_code": 0,
+      "result": "passed; local production-mode PWA build with fictional public SDK settings",
+      "log_sha256": "4c2fc1611ef90b64aebe9b1a19fd842b680c378a8f916c3dd6c6b2b23170c822",
+      "log_bytes": 7292,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "database",
+      "command": "npm run test:db",
+      "exit_code": 0,
+      "result": "final82-migration schema;2334/2340 checks; two empty replays and real races",
+      "log_sha256": "af95ed63f84a9c38b90b158ede078858f9a7f05ead557947e91d8f4a1032633d",
+      "log_bytes": 1538614,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "ui-initial",
+      "command": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:homologation:ui",
+      "exit_code": 1,
+      "result": "225 executed,210 passed,15 failed; superseded only in the three corrected test files",
+      "log_sha256": "98ec208c90c1b8caded6ee375b89a852e17daa84af6e8d3169ae907f84ed8493",
+      "log_bytes": 80198,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "ui-rerun",
+      "command": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:homologation:ui -- --grep 'payments-contract|team-contract|portal32-contract'",
+      "exit_code": 0,
+      "result": "90 passed in three corrected files;135 unaffected scenarios already passed;225 current distinct scenarios",
+      "log_sha256": "b3c2637015568a4c3fd47fde3109f3949ef50957ea0ad5b1cbbd2cd8a878696d",
+      "log_bytes": 12327,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "permissions",
+      "command": "node --import tsx scripts/test-permissions-real.mjs",
+      "exit_code": 0,
+      "result": "Auth/REST/Express real; no hosted fixtures",
+      "log_sha256": "dca0e8163b7adcb497ae6d383d9e41eac64ec747c01b25ea09d628563444a7a0",
+      "log_bytes": 1090,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "portal32",
+      "command": "AUTH_LAB_STORAGE_ROOTFS=/dev/shm/jn-storage24-root node --import tsx scripts/test-portal32-real.mjs",
+      "exit_code": 0,
+      "result": "Auth/REST/Express/Storage/worker real; PDF/SHA; revocation during Storage and identity loss",
+      "log_sha256": "9f31d0dbe6a325decdd1c5c04f83008657f5508d87a21b03b0a64d1d7086648f",
+      "log_bytes": 2736,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "signatures24",
+      "command": "AUTH_LAB_STORAGE_ROOTFS=/dev/shm/jn-storage24-root PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium node scripts/test-signatures24.mjs",
+      "exit_code": 0,
+      "result": "API/Storage/browser journey passed; fictional signature/scanner fixture only",
+      "log_sha256": "fe82d4d282544a8f94790182b5bceab491afeb15d0853839627c7a16c7fd210f",
+      "log_bytes": 1557,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "delivery26",
+      "command": "AUTH_LAB_STORAGE_ROOTFS=/dev/shm/jn-storage24-root node --import tsx scripts/test-deliveries26-real.mjs",
+      "exit_code": 0,
+      "result": "real providers; fictional print/confirmation; no WhatsApp",
+      "log_sha256": "ddfe0a3916df7bdadded77dc56669649013783b84f7f985efbcc16b3f4a6a91a",
+      "log_bytes": 995,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "imports37",
+      "command": "AUTH_LAB_STORAGE_ROOTFS=/dev/shm/jn-storage24-root node --import tsx scripts/test-imports37.mjs",
+      "exit_code": 0,
+      "result": "run before customer-list correction; import/helper contracts preserved; p95=1160.27ms",
+      "log_sha256": "30cd7a267068818ab21ff40e692722d46f1403b46321df7e6b103c6318726d02",
+      "log_bytes": 3041,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "scope38",
+      "command": "node --import tsx scripts/test-customers38.mjs",
+      "exit_code": 0,
+      "result": "final migration; delegated expiry RED→GREEN; assignment/revocation and pending registration",
+      "log_sha256": "af499a9ee909bfdb7f1c927e68a56f3eeca7f706ad46c6c691def3454712d7b3",
+      "log_bytes": 319,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "load38",
+      "command": "npm run test:homologation:load",
+      "exit_code": 0,
+      "result": "10 users/10 sessions/10k customers;60 requests; cold p95=656.32ms,warm p95=483.76ms",
+      "log_sha256": "67b2e329e8380d7bff858b83141018d8acee2d19b4385b291324d49c3488c5d1",
+      "log_bytes": 999,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "restore36",
+      "command": "AUTH_LAB_STORAGE_ROOTFS=/dev/shm/jn-storage24-root node --import tsx scripts/test-continuity36.mjs",
+      "exit_code": 0,
+      "result": "final migration included;7903ms; source/target different DBs in same disposable cluster",
+      "log_sha256": "efe5da7ca025449e3153d059c5b596e9e938ea988e27baf2966580fe82dbf535",
+      "log_bytes": 2957,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    },
+    {
+      "id": "https",
+      "command": "NODE_USE_ENV_PROXY=1 npm run test:homologation:public",
+      "exit_code": 0,
+      "result": "22 fixed canonical public resources/anonymous barriers before publication; repeated after release",
+      "log_sha256": "506e29ecf00cd8633f14bb22aa915f6ccf9324ca48f1052e71d853d08d1eaa34",
+      "log_bytes": 73,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "hosted public, no private login"
+    },
+    {
+      "id": "pwa-public",
+      "command": "E2E_BASE_URL=https://escritoriojn.vercel.app PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npx playwright test tests/browser/pwa35-public.spec.ts",
+      "exit_code": 0,
+      "result": "4 passed,3 explicitly skipped runtime cases in remote run",
+      "log_sha256": "e2737c4e1b738bb131ada46606b8f4512c76aac4851969b5373f8c2ebee11dcd",
+      "log_bytes": 1067,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "hosted public, no private login"
+    },
+    {
+      "id": "pwa-build",
+      "command": "PWA35_BUILD_TEST=1 E2E_BASE_URL=http://127.0.0.1:4178 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npx playwright test tests/browser/pwa35-public.spec.ts",
+      "exit_code": 0,
+      "result": "7 passed,0 skipped; real build/worker/offline/update/persistent normal profile",
+      "log_sha256": "13576c62a104b8b57760a4d72375dd78351996f0c8f152c9fbd512225e23e503",
+      "log_bytes": 1082,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "disposable local"
+    }
+  ],
+  "final_function_body_md5": "19b0245a28043d8c4219731848b1f5a2",
+  "migration_sha256": "9c347a3b90f5d78ed55916363c871d94f4c7eb5fecef1dff417d630cc0284d26"
+}

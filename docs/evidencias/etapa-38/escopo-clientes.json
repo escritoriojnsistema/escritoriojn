@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-15T15:33:21.800Z",
+  "passed": true,
+  "hosted_fixtures": false,
+  "merged_blocked_and_other_office_excluded": true,
+  "canonical_assignment_grant_and_revoke": true,
+  "direct_read_all_revocation_same_session": true,
+  "delegation_expires_during_materialization_denied": true,
+  "pending_registration_preserved_and_masked": true
+}

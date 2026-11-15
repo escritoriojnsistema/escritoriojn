@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-15",
+  "base": "47e51700d7e123cc39663d020f598b200d056a53",
+  "method": "read-only connected providers",
+  "supabase": {
+    "migration_count": 81,
+    "latest": "20261115025828",
+    "tables": 189,
+    "rls_disabled": 0,
+    "private_tables_with_anon_or_authenticated_table_access": 0,
+    "auth_users": 7,
+    "memberships": 7,
+    "role_permissions": 92,
+    "customers": 2,
+    "requests": 3,
+    "files": 0,
+    "storage_objects": 0,
+    "import_batches37": 0,
+    "health_advisors": [],
+    "security_advisors": "181 INFO RLS without direct policies on private closed tables; leaked-password protection warning preexisting; no policy/Auth changes"
+  },
+  "vercel": {
+    "deployment": "dpl_8kdLtA6otbgjdxKjmyY1yQAWxtXa",
+    "state": "READY",
+    "source": "git",
+    "commit": "47e51700d7e123cc39663d020f598b200d056a53",
+    "alias": "https://escritoriojn.vercel.app"
+  },
+  "manual": "https://drive.google.com/file/d/1fQ4X5XyRjraIAYJIx3T78haiDMkFmdDT/view",
+  "hosted_writes": false,
+  "hosted_private_login": false
+}

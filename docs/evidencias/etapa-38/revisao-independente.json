@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-15",
+  "scope": "Read-only review of stage38 runners, fixture correction, package scripts and draft documentation; no services started by reviewer",
+  "material_findings": 2,
+  "finding": "P2: load runner could retain a previous successful report when a new bootstrap/request failed before report creation",
+  "fix": "Always persist current result in finally, including passed:false/LOAD38_FAILED on failure and any completed measurements",
+  "regression": "tests/homologation38-report.test.ts: seed green temporary report, execute real runner without Docker on PATH, require exit1 and fresh failed artifact",
+  "red": "Expected false, received true from the prior report",
+  "green": "1 passed,0 failed; real workspace report and services untouched by the regression",
+  "product_runtime_or_schema_findings": 1,
+  "credential_or_hosted_write_findings": 0,
+  "reviewer_did_not_execute": [
+    "full Node suite",
+    "real laboratories",
+    "UI suites",
+    "performance",
+    "production checks"
+  ],
+  "pending_executor_checks": [
+    "GitHub→Vercel publication and hosted readback"
+  ],
+  "human_acceptance": "not executed",
+  "new_runtime_scope_review": {
+    "finding": "P2: captured read_all could outlive a delegated/session clock deadline",
+    "fix": "Revalidate customers_actor and captured read_all after materialization before returning",
+    "red": "Real delegated capability expired during delayed local rendering; draft returned data instead of PT403",
+    "green": "Real Auth/REST final scope script passed: PT403/no page; direct/assigned revocation and pending registration preserved"
+  },
+  "all_material_findings_fixed": true
+}
