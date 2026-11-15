@@ -1,0 +1,137 @@
+{
+  "origin": "https://escritoriojn.vercel.app",
+  "files": [
+    {
+      "path": "/",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "cache_control": "private, no-store",
+      "sha256": "5085ed4112a4f6dd60ecf88ef21806b39b0e0751cd507a76e46a0ce9b1b0bbf7"
+    },
+    {
+      "path": "/instalar",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "cache_control": "private, no-store",
+      "sha256": "5085ed4112a4f6dd60ecf88ef21806b39b0e0751cd507a76e46a0ce9b1b0bbf7"
+    },
+    {
+      "path": "/configuracoes/continuidade",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "cache_control": "private, no-store",
+      "sha256": "5085ed4112a4f6dd60ecf88ef21806b39b0e0751cd507a76e46a0ce9b1b0bbf7"
+    },
+    {
+      "path": "/configuracoes/importacao",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "cache_control": "private, no-store",
+      "sha256": "5085ed4112a4f6dd60ecf88ef21806b39b0e0751cd507a76e46a0ce9b1b0bbf7"
+    },
+    {
+      "path": "/manifest.webmanifest",
+      "status": 200,
+      "content_type": "application/manifest+json; charset=utf-8",
+      "cache_control": "private, no-store",
+      "sha256": "12d61db569246dba66c77880e3e4572c7bf300afad32398aba18599e32c470d6"
+    },
+    {
+      "path": "/sw.js",
+      "status": 200,
+      "content_type": "application/javascript; charset=utf-8",
+      "cache_control": "private, no-store",
+      "sha256": "d3b2297b3a2c326308f4a3135f9a652ceb3b6026c26591d1b10deaf223b2c620"
+    },
+    {
+      "path": "/offline.html",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "cache_control": "public, max-age=0, must-revalidate",
+      "sha256": "87d6a3ef904ef9d2d0d3a12df5c7c71408314b5d63f72de1b8792e830bc9680e"
+    },
+    {
+      "path": "/icons/app-192.png",
+      "status": 200,
+      "content_type": "image/png",
+      "cache_control": "public, max-age=0, must-revalidate",
+      "sha256": "eb740f5c303c52aa9d0fb629a7f896bc9dec15181dc42df8b5e4b1660a67cf35"
+    },
+    {
+      "path": "/icons/app-512.png",
+      "status": 200,
+      "content_type": "image/png",
+      "cache_control": "public, max-age=0, must-revalidate",
+      "sha256": "1aa40f1d215c6f44fdb4ebc3d9f5c52c5773bc855047d7cefd164bd816ad4cf8"
+    },
+    {
+      "path": "/icons/apple-touch-icon.png",
+      "status": 200,
+      "content_type": "image/png",
+      "cache_control": "public, max-age=0, must-revalidate",
+      "sha256": "b2e723f96c254fddc9d541969e1d79302943a9e2ad79795b7770416bac0a380b"
+    },
+    {
+      "path": "/api/health",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "cache_control": "no-store",
+      "sha256": "205647414e1b8ec527365671dea82491379357de02c5c7ec25c3b048b5586035"
+    }
+  ],
+  "private_api": [
+    {
+      "path": "/api/auth/context",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/account/read",
+      "status": 401,
+      "cache_control": "private, no-store"
+    },
+    {
+      "path": "/api/operations/state",
+      "status": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "path": "/api/operations/save",
+      "status": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "path": "/api/imports/preview",
+      "status": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "path": "/api/imports/apply",
+      "status": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "path": "/api/imports/history",
+      "status": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "path": "/api/imports/reverse",
+      "status": 401,
+      "cache_control": "no-store"
+    },
+    {
+      "path": "/api/requests/search",
+      "status": 401,
+      "cache_control": "private, no-store"
+    }
+  ],
+  "health_network_samples_ms": [
+    241.9,
+    245.0,
+    103.0,
+    111.5,
+    277.8
+  ],
+  "health_network_median_ms": 241.9
+}

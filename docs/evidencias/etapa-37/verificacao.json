@@ -16,7 +16,11 @@
   "database_regression": {
     "initial_failure": "New file FK missing canonical deletion reference guard",
     "fix": "Attach existing private.files_deletion_reference_guard trigger",
-    "full_replay_status": "running; production merge gated"
+    "full_replay_status": "passed",
+    "replay_a_checks": 2334,
+    "replay_b_checks": 2340,
+    "migrator": "non-superuser, no BYPASSRLS",
+    "historical_benchmark_files": "Restored unchanged; new run does not overwrite prior stage evidence"
   },
   "laboratory_report": "laboratorio.json",
   "hosted_fixtures": false,
@@ -30,5 +34,12 @@
     "No physical Android/iPhone installation observation",
     "Initial opening values are recorded and reconciled; collection/credit spending not enabled",
     "Production recovery36 and external monitoring remain pending"
-  ]
+  ],
+  "published": true,
+  "hosted_public_pwa_passed": 5,
+  "hosted_https_resources": 11,
+  "hosted_anonymous_private_barriers": 9,
+  "schema_function_bodies_match": 15,
+  "migration_applied_automatically": "20261115025828",
+  "migration_count": 81
 }

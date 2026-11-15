@@ -1,0 +1,226 @@
+{
+  "date": "2026-11-15",
+  "migration": "20261115025828_legacy_imports37.sql",
+  "migration_sha256": "8b3a5c3274a8a9d14e395b74e4ccfbbe06bde9111f46cfbcfc091040b034f09d",
+  "applied_automatically_after_git": true,
+  "manual_apply": false,
+  "statements": 32,
+  "counts": {
+    "files": 0,
+    "rows37": 0,
+    "charges": 0,
+    "payments": 0,
+    "requests": 3,
+    "batches37": 0,
+    "customers": 2,
+    "auth_users": 7,
+    "commands37": 0,
+    "memberships": 7,
+    "reversals37": 0,
+    "storage_objects": 0,
+    "role_permissions": 92
+  },
+  "tables": [
+    {
+      "rls": true,
+      "name": "import_batches37",
+      "anon_dml": false,
+      "service_dml": false,
+      "authenticated_dml": false
+    },
+    {
+      "rls": true,
+      "name": "import_commands37",
+      "anon_dml": false,
+      "service_dml": false,
+      "authenticated_dml": false
+    },
+    {
+      "rls": true,
+      "name": "import_reversals37",
+      "anon_dml": false,
+      "service_dml": false,
+      "authenticated_dml": false
+    },
+    {
+      "rls": true,
+      "name": "import_rows37",
+      "anon_dml": false,
+      "service_dml": false,
+      "authenticated_dml": false
+    }
+  ],
+  "history": {
+    "count": 81,
+    "latest": "20261115025828"
+  },
+  "deletion_guard": 1,
+  "functions": [
+    {
+      "schema": "private",
+      "name": "imports37_actor",
+      "body_md5": "2ea19f25dcd8c6030749a47678126c91",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "imports37_apply",
+      "body_md5": "2af0ab747934135a79c39f66832d3244",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "schema": "private",
+      "name": "imports37_bytes",
+      "body_md5": "5993fcffbd48f6315800409b52b06502",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "imports37_detail",
+      "body_md5": "a4d99e9bfaf469ab6630e74bb0747058",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "schema": "private",
+      "name": "imports37_history",
+      "body_md5": "fc533ddacc18f4236ca3d1a184c3d166",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "schema": "private",
+      "name": "imports37_immutable",
+      "body_md5": "69b6504cd1452181abe40867914db972",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "imports37_input",
+      "body_md5": "89f56a5ce24d6c9e66d0413974ece765",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "imports37_plan",
+      "body_md5": "ff15cfcf01d31fd698da13b4b84bef36",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": false
+    },
+    {
+      "schema": "private",
+      "name": "imports37_preview",
+      "body_md5": "5ef7921ccb7b9156b90fafdabbf4c54f",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "schema": "private",
+      "name": "imports37_reverse",
+      "body_md5": "67d105f4d11ed2decf49f8e14bb35ca3",
+      "security_definer": true,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "schema": "public",
+      "name": "imports37_apply",
+      "body_md5": "9dbb84faeffbd025a33d9a73b482dae9",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "schema": "public",
+      "name": "imports37_detail",
+      "body_md5": "64e7f49875aa7c33be88e50b9ef0148d",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "schema": "public",
+      "name": "imports37_history",
+      "body_md5": "30dc788b40ad5c2d79cc3a16a8b3f5dc",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "schema": "public",
+      "name": "imports37_preview",
+      "body_md5": "c2669d88f3ddd725c649aab0dde6d7a2",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "schema": "public",
+      "name": "imports37_reverse",
+      "body_md5": "87693b8d97b9e00ef1a0f7c3059f6367",
+      "security_definer": false,
+      "config": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    }
+  ],
+  "function_bodies_match_source": true
+}
