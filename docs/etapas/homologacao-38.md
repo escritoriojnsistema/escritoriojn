@@ -17,7 +17,7 @@ Esta matriz separa teste técnico e aceite humano. **Homologação operacional p
 | Desktop/Mobile, até4atalhos, sem loader | Passou nos casos/ambiente indicados | suíteUI38: Equipe/Convites, navegação, financeiro/documentos, quatro perfis, teclado/reflow | Chromium em viewport emulado; API interceptada | Não executado |
 | Carga de busca/listagem | Passou nos casos/ambiente indicados | scriptload38,10usuários/10sessões/10.000cadastros, p95proposto≤2s | local; não é SLAhospedado | Não executado |
 | Restauração | Passou nos casos/ambiente indicados | scriptcontinuity36, banco+bytes+Auth+RLS+ACL+totais | outro banco no mesmo cluster descartável | Não executado |
-| Publicação e integridade | Não executado — publicação38 pendente | providersGitHub/Supabase/Vercel, HTTPS e contagens | hospedado somente leitura | Não executado |
+| Publicação e integridade | Passou — PR134/GitREADY/schema82/HTTPS22 | providersGitHub/Supabase/Vercel, HTTPS e contagens | hospedado somente leitura | Não executado |
 
 Resultados e defeitos desta rodada estão registrados em `../evidencias/etapa-38/verificacao.json` e no fecho. Uma linha com teste técnico aprovado continua sem aceite humano até manifestação do responsável.
 

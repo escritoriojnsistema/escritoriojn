@@ -171,6 +171,26 @@
       "log_bytes": 1082,
       "raw_log": "Local laboratory only; not published",
       "environment": "disposable local"
+    },
+    {
+      "id": "https-after-release",
+      "command": "NODE_USE_ENV_PROXY=1 npm run test:homologation:public",
+      "exit_code": 0,
+      "result": "22 passed after runtime publication; sourceGit c662913/schema82; no hosted private login",
+      "log_sha256": "1dc24bb18ffdef6a77fef207ffb4ba28e9bbcad190d0c6a668504d178e7be259",
+      "log_bytes": 155,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "hosted public, no private login"
+    },
+    {
+      "id": "pwa-after-release",
+      "command": "E2E_BASE_URL=https://escritoriojn.vercel.app PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npx playwright test tests/browser/pwa35-public.spec.ts",
+      "exit_code": 0,
+      "result": "4 passed after release;3 runtime cases explicitly skipped remotely and passed in local real build; no physical installation",
+      "log_sha256": "882a969b65cdba46fe89a63d6a97014cd5b6c1dc92e46483fb6c3189057739e4",
+      "log_bytes": 1066,
+      "raw_log": "Local laboratory only; not published",
+      "environment": "hosted public, no private login"
     }
   ],
   "final_function_body_md5": "19b0245a28043d8c4219731848b1f5a2",

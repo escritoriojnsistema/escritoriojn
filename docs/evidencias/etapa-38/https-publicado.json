@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-15T15:02:46.023Z",
+  "date": "2026-11-15T15:59:47.793Z",
   "origin": "https://escritoriojn.vercel.app",
   "passed": true,
   "checks": [
@@ -8,35 +8,35 @@
       "status": 200,
       "content_type": "text/html; charset=utf-8",
       "cache_control": "private, no-store",
-      "sha256": "5085ed4112a4f6dd60ecf88ef21806b39b0e0751cd507a76e46a0ce9b1b0bbf7"
+      "sha256": "7c383cd8c51c75dc217c9a11dac1e87cd5570bb1fe0b27a17f154573827df05d"
     },
     {
       "path": "/login",
       "status": 200,
       "content_type": "text/html; charset=utf-8",
       "cache_control": "private, no-store",
-      "sha256": "5085ed4112a4f6dd60ecf88ef21806b39b0e0751cd507a76e46a0ce9b1b0bbf7"
+      "sha256": "7c383cd8c51c75dc217c9a11dac1e87cd5570bb1fe0b27a17f154573827df05d"
     },
     {
       "path": "/area-cliente",
       "status": 200,
       "content_type": "text/html; charset=utf-8",
       "cache_control": "private, no-store",
-      "sha256": "5085ed4112a4f6dd60ecf88ef21806b39b0e0751cd507a76e46a0ce9b1b0bbf7"
+      "sha256": "7c383cd8c51c75dc217c9a11dac1e87cd5570bb1fe0b27a17f154573827df05d"
     },
     {
       "path": "/instalar",
       "status": 200,
       "content_type": "text/html; charset=utf-8",
       "cache_control": "private, no-store",
-      "sha256": "5085ed4112a4f6dd60ecf88ef21806b39b0e0751cd507a76e46a0ce9b1b0bbf7"
+      "sha256": "7c383cd8c51c75dc217c9a11dac1e87cd5570bb1fe0b27a17f154573827df05d"
     },
     {
       "path": "/configuracoes/importacao",
       "status": 200,
       "content_type": "text/html; charset=utf-8",
       "cache_control": "private, no-store",
-      "sha256": "5085ed4112a4f6dd60ecf88ef21806b39b0e0751cd507a76e46a0ce9b1b0bbf7"
+      "sha256": "7c383cd8c51c75dc217c9a11dac1e87cd5570bb1fe0b27a17f154573827df05d"
     },
     {
       "path": "/manifest.webmanifest",
@@ -50,7 +50,7 @@
       "status": 200,
       "content_type": "application/javascript; charset=utf-8",
       "cache_control": "private, no-store",
-      "sha256": "d3b2297b3a2c326308f4a3135f9a652ceb3b6026c26591d1b10deaf223b2c620"
+      "sha256": "e2c988859492b82984befe9f4e3f707b963411d892d3499cad0dad57b4a7badf"
     },
     {
       "path": "/offline.html",
