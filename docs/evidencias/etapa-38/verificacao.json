@@ -96,8 +96,13 @@
   "backend_API_contract_changed": false,
   "existing_database_function_optimized": "private.customers_page",
   "migration": "20261115152258",
-  "published": false,
+  "published": true,
   "publication_method": "GitHub→Vercel; no Actions/direct deployment",
   "historical_evidence_preserved": true,
-  "next_stage39_started": false
+  "next_stage39_started": false,
+  "production_migration_verified": true,
+  "production_commit": "c6629137a1b1eff4b9de65cf03a79e6752ac7cfc",
+  "production_ready": true,
+  "hosted_https_after_release": 22,
+  "data_fingerprints_preserved": 7
 }

@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-15",
+  "method": "GitHub→Vercel",
+  "github_actions": false,
+  "direct_deploy": false,
+  "repository": "escritoriojnsistema/escritoriojn",
+  "pull_request": "https://github.com/escritoriojnsistema/escritoriojn/pull/134",
+  "feature_commit": "722af4553fcee798474074e4141eb5c764bc4769",
+  "source_tree": "f089dbc59203d65583c464653dbacb31c569ea49",
+  "merge_commit": "c6629137a1b1eff4b9de65cf03a79e6752ac7cfc",
+  "preview": {
+    "id": "dpl_74j6h3ptCecLaufAh1AYU1o8xmUF",
+    "url": "https://escritoriojn-6nqyvg8hh-escritorio-jn.vercel.app",
+    "state": "READY",
+    "source": "git"
+  },
+  "production": {
+    "id": "dpl_7YSAt91L4vXxgznjNsFrfvj4DMmt",
+    "url": "https://escritoriojn-h58uk5v6l-escritorio-jn.vercel.app",
+    "alias": "https://escritoriojn.vercel.app",
+    "state": "READY",
+    "source": "git"
+  },
+  "supabase": {
+    "migration_count": 82,
+    "migration": "20261115152258",
+    "automatic": true,
+    "manual_apply": false,
+    "function_body_md5": "19b0245a28043d8c4219731848b1f5a2",
+    "wrapper_invoker": true,
+    "table_or_auth_or_grant_changes": false,
+    "fingerprints_preserved": 7
+  },
+  "https_resources_and_anonymous_barriers": 22,
+  "runtime_errors_fatals_in_deployment_aggregate": 0,
+  "private_hosted_login": false,
+  "hosted_fixtures": false,
+  "human_operational_acceptance": "not executed",
+  "production_external_recovery36": "pending",
+  "next_stage39_started": false,
+  "documentary_closure_runtime_unchanged": true,
+  "hosted_pwa_after_release": {
+    "passed": 4,
+    "runtime_skipped": 3,
+    "local_real_build_passed": 7,
+    "physical_installation_observed": false
+  }
+}

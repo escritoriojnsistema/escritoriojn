@@ -12,7 +12,7 @@ Objetivo: executar o sistema existente e registrar evidência atual de integraç
 - [x] Jornadas reais em Auth/PostgREST/Express/Storage/worker descartáveis: documento com partes/portal, assinatura/aprovação e entrega; permissões e importação37/regressões pertinentes.
 - [x] Carga de busca com dez sessões distintas e dez mil clientes fictícios, p95 proposto até2s, somente local. Restauração36 com banco/bytes/Auth/RLS/ACL/totais e duração; preservar pendência de recuperação externa real.
 - [x] Supabase hospedado somente leitura: histórico/contagens/RLS/ACL/advisories; Vercel origemGit/commit/READY e domínioHTTPS/APIs públicas. Sem fixture, login com senha do proprietário, grants ou DDL hospedados.
-- [ ] Matriz passou/falhou/não executado com comando, ambiente, evidência e limites; aceite humano separado por fluxo. Atualizar Livro/AGENTS/fecho e GitHub via PR; Vercel somente integraçãoGit, semActions/deploydireto.
+- [x] Matriz passou/falhou/não executado com comando, ambiente, evidência e limites; aceite humano separado por fluxo. Atualizar Livro/AGENTS/fecho e GitHub via PR; Vercel somente integraçãoGit, semActions/deploydireto.
 
 ## Critérios e limites
 
@@ -27,3 +27,5 @@ Frontend e backend de produção só mudam se houver correção necessária. Ond
 Teste de carga isolado encontrou defeito real: dez sessões distintas pesquisando10.000clientes retornaram503 em≈8,4s. A função07/08 de listagem recalculava permissões por linha e materializavaJSON antes de paginar. Ruling: corrigir somente essa leitura pela migration `20261115152258_customers_search38.sql`, criada peloCLI3.1.0, mantendo o wrapper/ACL/contrato e todos os gates canônicos; não criar índice especulativo nem alterar cadastro/caixa. Revalidar ator/delegação após materialização, pois locks não congelam vencimentos. ImpactoSupabase agora aplicável por defeito observado; frontend/arquitetura permanecem iguais. RepetirSQL/escopo/carga e conferir aplicação automática apósGit antes de qualquer ação manual.
 
 Validação final:426Node,2334/2340SQL,225cenáriosUI distintos(135anteriores+90/90após corrigir fixtures),7PWA build/4públicos e3skipsremotos cobertos localmente, tipos/build/audit0. Carga10usuários p95=483,76ms/fria656,32ms, escopo/delegação vencida RED→GREEN; restauração do schema82 em7903ms. Implementação/testes concluídos; publicaçãoGit e aceite humano continuam separados. O último item só fecha publicação após readback; aceite operacional segue não executado.
+
+Publicação confirmada: PR134/mergec662913, Vercel7YSAt91L READY/origemGit, schema82/migration20261115152258 automática/2instruções/corpo igual.7fingerprints/contagens preservados,22HTTPS/barreiras401 e agregado de logs sem erros/fatais. Não reaplicar. Aceite operacional humano segue não executado; fecho documental não muda runtime/schema.

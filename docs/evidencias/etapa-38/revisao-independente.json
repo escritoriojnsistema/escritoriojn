@@ -16,9 +16,7 @@
     "performance",
     "production checks"
   ],
-  "pending_executor_checks": [
-    "GitHub→Vercel publication and hosted readback"
-  ],
+  "pending_executor_checks": [],
   "human_acceptance": "not executed",
   "new_runtime_scope_review": {
     "finding": "P2: captured read_all could outlive a delegated/session clock deadline",
