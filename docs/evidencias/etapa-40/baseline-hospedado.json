@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-16T16:18:08.194Z",
+  "manual": "https://drive.google.com/file/d/1F10N6yECqW2H_c2B6t46pZ-FQHWNeDI_/view",
+  "base": "711beb958a8d9b74a1ed2fa1ab6c5ef8bd358a0b",
+  "stage39": {
+    "pr": 136,
+    "url": "https://github.com/escritoriojnsistema/escritoriojn/pull/136",
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "head": "ed6a3a1928cc6665b7e0e020e5193fb3cc381f16",
+    "preserved": true
+  },
+  "supabase": {
+    "project": "mcsuoxnubpqenyvbefee",
+    "migration_count": 82,
+    "latest": "20261115152258",
+    "stage40_writes": false
+  },
+  "vercel": {
+    "project": "prj_PSltYIXuu3V50lKKVKhFwINMODBq",
+    "production": "dpl_CtzG8ygPDk7q85kqvmppYAuSU5qK",
+    "state": "READY",
+    "source": "git",
+    "commit": "711beb958a8d9b74a1ed2fa1ab6c5ef8bd358a0b",
+    "canonical": "https://escritoriojn.vercel.app",
+    "direct_mutations": false
+  },
+  "providers_activated": [],
+  "supabase_configuration_changed": false,
+  "operational_pilot_approved": false,
+  "commercial_plan_changed": false
+}
