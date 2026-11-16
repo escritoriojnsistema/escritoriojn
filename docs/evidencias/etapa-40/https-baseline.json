@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-16T16:17:15.605Z",
+  "origin": "https://escritoriojn.vercel.app",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "no_store": true
+    },
+    {
+      "path": "/api/health",
+      "status": 200,
+      "no_store": true
+    },
+    {
+      "path": "/api/auth/context",
+      "status": 401,
+      "no_store": true
+    }
+  ],
+  "passed": true,
+  "hosted_private_login": false,
+  "hosted_writes": false
+}

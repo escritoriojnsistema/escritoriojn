@@ -1,3 +1,15 @@
+# Etapa 40 — evolução futura documentada, integrações desativadas (16/11/2026)
+
+Pedido40 sobre main711beb9 após conferir Livro/AGENTS, fecho39 na branch preservada, manualDrive40, operação/financeiro e prevenção. [Contrato40](docs/etapas/etapa-40.md) · [Backlog](docs/backlog/README.md) · [Fronteiras/eventos](docs/backlog/integracoes/contratos.md) · [Fecho](docs/etapas/fecho-40.md). PR136 da39 permanece aberto/rascunho/headed6a3a1, semmerge; não integrar seu código por esta etapa. O pedido autoriza o contrato documental independente40, sem aprovar piloto39, custos, treinamento, integrações ou recuperação externa36.
+
+Cinco fichas futuras/desativadas: IA, assinatura automática, banco/PIX, cartão/maquininha eWhatsApp. Flags em docs/backlog/integracoes/flags.example.json são exemplos documentais, todasfalse e sem import no runtime. Não criar SDK, adaptador, wrapper, fila, endpoint, webhook, credencial/env, grant, ator de serviço ou novo botão para reservar futuro. Nenhuma conexão real nova. Candidatos de pesquisa não foram selecionados/contratados; custo não cotado é desconhecido, nunca zero. Toda ativação futura exige pedido/escopo/fornecedor/custo/privacidade/homologação/autorização próprios.
+
+Contratos propostos exigem origem criptográfica, conta/ambiente/escritório/recurso vinculados, referência única por evento e por efeito de negócio, digest/replay/concorrência/ordem/reconciliação e estado incerto apósCOMMIT. Webhook não possui sessão humana: não usar service_role ou conta fictícia para contornar caixa/permissões/RLS; eventual identidade de automação precisa de desenho aprovado. Reusar financeiro15–19 e gatesdocumentais11/21–26/32; IA só sugere com escopo/orçamento/privacidade/revisão humana, assinatura remota não aprova/entrega, callbackWhatsApp não confirma recebimento humano.
+
+Etapa estritamente documental: semTSX/CSS/rotas/backend executável/SQL/dependências/configuração de deploy. UIEquipeConvites/quatro perfis/até4ações/menu/semloaders e performance preservados por ausência de mudança executável; sem novos roundtrips/cache/polling. Supabase somente leitura82migrations/última20261115152258, NÃO reaplicar. Não repetir banco/E2E/carga/build para fechamento só de texto; validar links/JSON/diff e revisão independente, com evidência40. GitHub→Vercel somente integração existente, semActions/deploydireto; registroGit/READY/alias separado de fluxo remoto e operação comercial.
+
+39continua emcheckpoint: planoHobby/orçamento/homologaçãoisolada/recuperação36externa/jurídico/aceites38/treinamento/piloto pendentes, sem novo aceite fabricado. A publicação documental40 não instala o guard39 nem conclui operação comercial. Próximo passo é backlog futuro por novo pedido, semEtapa41/ativação automática. Histórico abaixo é datado.
+
 # Etapa 38 — checkpoint técnico validado; aceite operacional pendente (15/11/2026)
 
 Pedido sobre main47e51700 após conferir Etapa37 publicada, AGENTS/Livro, manualDrive38, operacao e prevenção. [Fecho](docs/etapas/fecho-38.md) · [Matriz/aceites](docs/etapas/homologacao-38.md) · [Provas](docs/evidencias/etapa-38/verificacao.json). Não iniciar39 nem alegar aprovação operacional pelo proprietário.
@@ -111,4 +123,4 @@ Migration20261111131744 aplicada automaticamente:54instruções correspondentes,
 - Preservar identidade, escopo e autoridade atuais. Cache ou vínculo cadastral não concede acesso. Troca de sessão/autoridade limpa dados;503 conserva a tentativa,409 exige reconferência e401/403 bloqueia.
 - O histórico integral das etapas anteriores permanece no Git e nos cartões/fechos existentes. Esta consolidação evita republicar os detalhes antigos de auditoria no checkpoint público.
 
-Etapa atual:38, checkpoint técnico validado com aceite operacional pendente. Etapa37 publicada e recuperação36 externa pendente preservadas.39 não iniciada; conferir o checkpoint no topo.
+Etapa atual:40 documental, integrações futuras desativadas. PR39 em rascunho e operação/piloto39 pendentes; aceites38 e recuperação36 externa preservados. Próximo passo: backlog futuro, sem ativação automática; conferir o topo.

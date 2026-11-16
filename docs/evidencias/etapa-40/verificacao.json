@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-16T16:19:12.288620+00:00",
+  "base": "711beb958a8d9b74a1ed2fa1ab6c5ef8bd358a0b",
+  "documentation_only": true,
+  "changed_paths": 18,
+  "local_links_checked": 48,
+  "broken_links": [],
+  "json_parsed": 5,
+  "flags_false": 5,
+  "runtime_imports": 0,
+  "backlog_cards": 5,
+  "provider_selection": false,
+  "cost_authorization": false,
+  "credentials_added": false,
+  "new_executable_files": 0,
+  "new_routes_buttons": false,
+  "new_database_migrations": 0,
+  "behavioral_tests_not_repeated": true,
+  "github_actions_invoked": false,
+  "direct_vercel_mutations": false,
+  "pilot39_approved": false
+}

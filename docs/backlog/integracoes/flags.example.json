@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "purpose": "documentation_only_not_runtime_configuration",
+  "status": "future_disabled",
+  "flags": {
+    "ai_assistance": false,
+    "automatic_signatures": false,
+    "bank_pix": false,
+    "card_terminal": false,
+    "whatsapp_api": false
+  },
+  "activation_requires": "new_explicit_scope_provider_budget_privacy_review_isolated_tests_and_authorization"
+}

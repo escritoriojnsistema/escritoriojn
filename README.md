@@ -94,3 +94,7 @@ Etapa14: `/caixa` integra abertura individual em espécie, unidades financeiras,
 ### Retomada integrada de modelos e documentos
 
 A implementação de01/11 adiciona pastas e gestão de modelos, associação ao serviço/preço vigente, catálogo do cliente (`/modelos-disponiveis`), abertura de documento (`/solicitar-documento`), presença/fila por nível e documentos do portal (`/meus-documentos`). Editor, cobrança e caixa usam os registros e snapshots existentes. Liberação exige arquivo/conferências/vínculo e quitação integral; estorno bloqueia novos acessos. Status de testes, limitações e publicação em [checkpoint integrado](docs/etapas/fluxo-integrado-20261101.md) e [Livro Raiz](LIVRO_RAIZ.md).
+
+## Evolução futura — Etapa 40
+
+[Backlog de integrações](docs/backlog/README.md): IA, assinatura automática, banco/PIX, cartão/maquininha eWhatsApp, todos futuros/desativados. Contratos e flags são documentação, sem conexão, SDK, credencial, novo botão ou cobrança automática. Ativação depende de novo escopo e autorização; o piloto39 continua pendente no [PR136](https://github.com/escritoriojnsistema/escritoriojn/pull/136).

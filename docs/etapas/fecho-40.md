@@ -1,0 +1,15 @@
+# Etapa 40 — evolução futura documentada, sem ativação
+
+[Manual40](https://drive.google.com/file/d/1F10N6yECqW2H_c2B6t46pZ-FQHWNeDI_/view) aplicado sobre main `711beb958a8d9b74a1ed2fa1ab6c5ef8bd358a0b`, após conferir Livro/AGENTS, fecho39/PR136, operação, financeiro e prevenção. O pedido autoriza o contrato documental40; não equivale a aceite operacional39.
+
+Entregues [backlog](../backlog/README.md), cinco fichas separadas de IA/assinatura automática/bancoPIX/cartão/WhatsApp, [contratos de fronteira/eventos](../backlog/integracoes/contratos.md) e [flags documentaisfalse](../backlog/integracoes/flags.example.json), sem importação pelo app. Cada ficha registra fornecedor ainda não selecionado/candidatos de pesquisa, custo não cotado e campos para avaliação de privacidade/autenticação/reconciliação. Webhook futuro exige origem validada, vínculo conta/escritório/ambiente, referência única por evento e por efeito de negócio, replay seguro e tratamento de resultado incerto. IA exige escopo/custo/privacidade/revisão humana e não substitui regra existente.
+
+Nenhuma mudança funcional em frontend/backend/Supabase: não se aplica criar tela/adaptador/tabela/RPC/SDK/segredo/env/job/flag executável ou webhook. Nenhum botão sugere integração automática nova; padrões visuais/até4ações/menu/transições sem loader e performance preservados por diff sem código. Nenhum serviço pago ou conexão real nova ativado, nem dados reais enviados a candidatos. Livro/AGENTS/README atualizados.
+
+Validação documental:47links relativos sem quebra, JSON válido, cinco flagsfalse, sem importação no runtime e diff restrito a documentação. Readback somente leitura: Supabase82/última20261115152258; produção711beb9/GitREADY/aliascanônico, HTTPS200/health200/authanônimo401 comno-store. Resultados em [evidências40](../evidencias/etapa-40/verificacao.json). Sem comportamento novo, não repetir build/E2E/SQL/carga; os testes anteriores mantêm seus ambientes/datas/limites e não são apresentados como executados nesta etapa. SomenteGitHub→Vercel, semActions/deploydireto, deploy funcional solicitado ou alteração direta no projeto.
+
+**PR136/39 preservado em rascunho**, head `ed6a3a1928cc6665b7e0e020e5193fb3cc381f16`; não integrado pela40. Piloto comercial39, plano elegível/orçamento/homologação separada, recuperação36externa, jurídico, SMTP/scanner/assinatura/entrega reais, treinamento e aceites humanos38/39 continuam pendentes. Publicar texto não resolve esses bloqueios nem instala a correção39.
+
+O mapa inicial do manual termina com backlog desativado e sem novas conexões. Próximo passo é escolher futuramente um item em pedido específico, avaliar fornecedor/custo/privacidade/escopo e homologar antes de autorizar ativação; não existe avanço automático ouEtapa41.
+
+Revisão independente somente leitura sem achados críticos/importantes/menores; validou contratos e ausência de ativação/importação runtime. Limites comerciais/jurídicos e implementação de provedores continuam futuros, conforme fichas. [Revisão](../evidencias/etapa-40/revisao-independente.json).
