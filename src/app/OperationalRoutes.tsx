@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { Compass } from 'lucide-react';
 import {PrivacyFooter} from '../features/privacy/PrivacyLinks';
 import PanelPage from '../features/auth/PanelPage';
 import { Route, Routes, Navigate, Link } from 'react-router-dom';
@@ -67,6 +68,6 @@ export default function OperationalRoutes({operationKey}:{operationKey:string}){
     <Route path={paths.archives} element={<ArchivesHubPage key={`archives:${operationKey}`} />} />
     <Route path={paths.account} element={<AccountPage key={`team:${operationKey}`} />} />
     <Route path={paths.clientAccount} element={<AccountPage key={`client:${operationKey}`} />} />
-<Route path="*" element={<div className="privacy-screen"><main id="conteudo" className="not-found"><h1>Página não encontrada</h1><p>Confira o endereço ou volte ao início.</p><Link className="primary-button" to={paths.home}>Voltar ao início</Link></main><PrivacyFooter/></div>}/>
+<Route path="*" element={<div className="privacy-screen"><main id="conteudo" className="not-found"><div className="not-found-card"><div className="not-found-icon" aria-hidden="true"><Compass size={24} /></div><h1>Página não encontrada</h1><p>Confira o endereço ou volte ao início.</p><Link className="primary-button" to={paths.home}>Voltar ao início</Link></div></main><PrivacyFooter/></div>}/>
  </Routes>;
 }
