@@ -18,6 +18,7 @@ import {
 import { OperationalFeedback } from "../operation/OperationalAccess";
 import { ChargeRequestPicker } from "./ChargeRequestPicker";
 import { chargesApi, ChargesError, chargesError } from "./api";
+import { smartDocumentsApi } from "../smartDocuments/api";
 import "../team/team.css";
 import "../customers/customers.css";
 import "../services/services.css";
@@ -370,6 +371,23 @@ function Workspace({
                     </nav>
                   </details>
                 )}
+                {((!data.charge && data.can_create) ||
+                  (data.charge?.can_adjust &&
+                    data.charge.can_discount &&
+                    data.charge.balance_cents > 0)) && (
+                  <CourtesyForm
+                    office={context.office_id}
+                    requestId={data.request_id}
+                    chargeId={data.charge?.id ?? null}
+                    waiveCents={
+                      data.charge
+                        ? data.charge.balance_cents
+                        : data.items.reduce((sum, i) => sum + i.total_cents, 0)
+                    }
+                    busy={busy}
+                    command={command}
+                  />
+                )}
               </>
             )}
           </>
@@ -674,5 +692,83 @@ function ChargeDecisions({
         </details>
       )}
     </>
+  );
+}
+
+function CourtesyForm({
+  office,
+  requestId,
+  chargeId,
+  waiveCents,
+  busy,
+  command,
+}: {
+  office: string;
+  requestId: string;
+  chargeId: string | null;
+  waiveCents: number;
+  busy: boolean;
+  command: (work: (signal: AbortSignal) => Promise<ChargeView>) => Promise<void>;
+}) {
+  const [reason, setReason] = useState("");
+  const [err, setErr] = useState("");
+  const courtesyKey = useRef<string | null>(null);
+
+  return (
+    <details className="service-section">
+      <summary>Cortesia autorizada (isentar cobrança sem receita fictícia)</summary>
+      <p className="document-hint">
+        Autoriza isenção integral ({money(waiveCents)}) vinculada ao atendimento, com registro auditável e sem gerar lançamento fictício de entrada no caixa.
+      </p>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (reason.trim().length < 5) {
+            setErr("Informe o motivo da cortesia (mínimo 5 caracteres).");
+            return;
+          }
+          setErr("");
+          courtesyKey.current ??= crypto.randomUUID();
+          const key = courtesyKey.current;
+          void command(async (signal) => {
+            await smartDocumentsApi.authorizeCourtesy(
+              office,
+              {
+                request_id: requestId,
+                charge_id: chargeId,
+                reason: reason.trim(),
+                idempotency_key: key,
+              },
+              signal,
+            );
+            courtesyKey.current = null;
+            return chargesApi.view(office, requestId, 1, signal);
+          });
+        }}
+      >
+        <fieldset disabled={busy}>
+          <label className="team-field">
+            Motivo e autorização da cortesia
+            <input
+              maxLength={500}
+              value={reason}
+              placeholder="Ex.: Correção editorial ou cortesia autorizada pela gerência"
+              onChange={(e) => {
+                courtesyKey.current = null;
+                setReason(e.target.value);
+              }}
+            />
+          </label>
+          {err && (
+            <p role="alert" className="form-feedback error">
+              {err}
+            </p>
+          )}
+          <button className="secondary-button" disabled={busy}>
+            Autorizar cortesia integral
+          </button>
+        </fieldset>
+      </form>
+    </details>
   );
 }

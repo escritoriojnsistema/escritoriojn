@@ -18,6 +18,7 @@ import {commercialRouter} from './modules/document-commercial/router.js';
 import {financeRouter} from './modules/finance/router.js';
 import {templatesRouter} from './modules/templates/router.js';
 import {documentsRouter} from './modules/documents/router.js';
+import {smartDocumentsRouter} from './modules/smart-documents/router.js';
 import express, { type ErrorRequestHandler } from 'express';
 import { MAX_VALIDATION_MESSAGE_LENGTH, type HealthResponse, type ValidationResponse } from '../shared/api.js';
 import { errorResponse } from './errors.js';
@@ -90,6 +91,7 @@ api.use('/templates',templatesRouter);
 api.use('/document-commercial',commercialRouter);
 api.use('/document-workflow',workflowRouter);
 api.use('/documents',documentsRouter);
+api.use('/smart-documents',smartDocumentsRouter);
 api.use('/notifications',notificationsRouter);
 api.post('/validate', (req, res, next) => {
   if (!req.is('application/json')) {

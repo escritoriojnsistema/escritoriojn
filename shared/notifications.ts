@@ -1,4 +1,4 @@
-export const notificationKinds=['request_returned','request_cancelled','handoff','pending','assignee_changed','account_correction','account_updated','payment_received','payment_refunded','payment_reversed','charge_created','charge_adjusted','charge_cancelled','document_review_pending','document_approved','document_returned','document_rejected','document_withdrawn'] as const;
+export const notificationKinds=['request_returned','request_cancelled','handoff','pending','assignee_changed','account_correction','account_updated','payment_received','payment_refunded','payment_reversed','charge_created','charge_adjusted','charge_cancelled','document_review_pending','document_approved','document_returned','document_rejected','document_withdrawn','smart_submission','conference_done','charge_released','correction_requested','correction_resolved'] as const;
 export type NotificationKind=typeof notificationKinds[number];
 export type NotificationRead='all'|'unread'|'read';
 export type NotificationFilter=NotificationKind|'all';

@@ -1,6 +1,6 @@
 {
-  "name": "React Vite Base",
-  "description": "Base limpa e modular em React com Vite e TypeScript.",
+  "name": "Escritório JN",
+  "description": "Sistema inteligente de documentos, atendimentos, conferência documental e recebimentos do Escritório JN.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

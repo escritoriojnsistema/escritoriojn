@@ -1,0 +1,891 @@
+ESCRITÓRIO JN — IMPLEMENTAÇÃO DO SISTEMA INTELIGENTE DE DOCUMENTOS, ATENDIMENTOS, CONFERÊNCIA E PAGAMENTOS
+
+1. OBJETIVO PRINCIPAL
+
+Preciso que você analise, corrija, integre e aperfeiçoe o sistema ESCRITÓRIO JN, principalmente os módulos de documentos, modelos documentais, solicitações, atendimentos, portal do cliente, conferência, pagamentos e Caixa.
+
+Atualmente existem pendências de preenchimento que impedem o andamento das solicitações. Além disso, preciso transformar o preenchimento documental em uma experiência inteligente, dinâmica, profissional e adaptável a cada documento cadastrado.
+
+Referência de experiência de preenchimento:
+
+https://nextsigns.com.br/contrato-de-compra-e-venda/imovel
+
+Utilize essa plataforma como referência funcional para:
+
+- Perguntas iniciais inteligentes.
+- Preenchimento progressivo e organizado.
+- Formulários que se adaptam às respostas.
+- Visualização do documento durante o preenchimento.
+- Atualização automática do texto documental.
+- Conferência e alteração das informações.
+- Navegação simples entre etapas.
+- Experiência responsiva para celular e computador.
+
+Não copie o código, a identidade visual ou os elementos proprietários da plataforma. Desenvolva uma implementação própria, integrada ao ESCRITÓRIO JN.
+
+O objetivo não é criar apenas um formulário para contrato de compra e venda. É desenvolver um motor universal de documentos, capaz de atender todos os modelos atuais e futuros do sistema.
+
+---
+
+2. REGRAS OBRIGATÓRIAS DE IMPLEMENTAÇÃO
+
+Antes de modificar qualquer código:
+
+1. Analise o repositório atual do ESCRITÓRIO JN.
+2. Consulte o LIVRO_RAIZ.md e a documentação técnica existente.
+3. Identifique os módulos, tabelas, componentes e fluxos já implementados.
+4. Verifique as integrações com GitHub, Supabase e Vercel.
+5. Utilize as habilidades e ferramentas de desenvolvimento disponíveis e relevantes.
+6. Preserve funcionalidades, dados, permissões e integrações existentes.
+7. Corrija os problemas na arquitetura atual, evitando duplicar sistemas.
+8. Utilize React + Vite + TypeScript e mantenha o padrão tecnológico existente.
+9. Mantenha o frontend e o backend totalmente integrados.
+10. Implemente interfaces responsivas, mobile-first, adaptadas a PWA quando já suportado pelo projeto.
+
+Não exclua registros, tabelas, documentos, históricos ou funcionalidades sem autorização específica.
+
+Toda alteração deverá ser compatível com os fluxos atuais de atendimento, contratos, solicitações, clientes, notificações, pagamentos, Caixa e auditoria.
+
+3. CORREÇÃO DO BLOQUEIO CAUSADO POR PENDÊNCIAS
+
+Atualmente, determinadas pendências impedem que o usuário avance.
+
+Preciso alterar esse comportamento.
+
+Quando um campo estiver vazio e o usuário tentar prosseguir, apresente uma janela informando exatamente quais informações não foram preenchidas.
+
+Exemplo:
+
+"Existem informações pendentes nesta etapa:
+
+- CPF do comprador.
+- RG do vendedor.
+- Endereço completo do imóvel.
+
+Deseja continuar sem preencher essas informações?"
+
+A janela deve oferecer:
+
+- Voltar e preencher
+- Continuar com pendências
+
+Ao selecionar "Continuar com pendências", o sistema deverá:
+
+1. Permitir avançar para a próxima etapa.
+2. Salvar os dados já informados.
+3. Registrar quais campos permaneceram vazios.
+4. Identificar visualmente as pendências.
+5. Permitir retornar a qualquer momento para completá-las.
+6. Preservar o progresso e as informações já preenchidas.
+7. Evitar que uma pendência secundária bloqueie todo o atendimento.
+
+Regra fundamental: o usuário pode continuar o trabalho com informações incompletas, mas a emissão ou aprovação definitiva deverá validar os campos legalmente indispensáveis, as regras do documento e os requisitos de segurança.
+
+Campos que forem realmente obrigatórios para executar uma operação crítica deverão permanecer sujeitos à validação, com uma explicação clara do motivo.
+
+Não quero formulários que prendam o usuário desnecessariamente.
+
+---
+
+4. MOTOR UNIVERSAL E INTELIGENTE DE DOCUMENTOS
+
+Desenvolva um motor de preenchimento documental reutilizável para todos os modelos cadastrados no ESCRITÓRIO JN.
+
+Esse motor deverá ser utilizado tanto pelo cliente quanto pela equipe autorizada.
+
+Cada documento terá seu próprio:
+
+- Conjunto de perguntas iniciais.
+- Formulário de preenchimento.
+- Estrutura de campos.
+- Regras condicionais.
+- Informações obrigatórias e opcionais.
+- Documentos comprobatórios necessários.
+- Modelo textual.
+- Regras de concordância gramatical.
+- Fluxo de conferência.
+- Regras de aprovação e disponibilização.
+
+O sistema deverá identificar qual documento foi selecionado e carregar automaticamente a configuração correspondente.
+
+4.1. Funcionamento para documentos já existentes
+
+Analise os modelos atualmente cadastrados no banco de dados, incluindo:
+
+- Modelos aprovados.
+- Modelos em elaboração.
+- Modelos ainda não aprovados.
+- Modelos posteriormente editados.
+- Modelos duplicados.
+- Novas versões dos modelos.
+
+Todos deverão ser compatíveis com o novo motor de preenchimento.
+
+Entretanto, mantenha a regra de publicação: documentos ainda não aprovados poderão ser utilizados para elaboração, configuração e testes internos pelos profissionais autorizados, mas não deverão ficar disponíveis para contratação pública pelo cliente até sua aprovação.
+
+Não altere automaticamente o status de aprovação de modelos antigos.
+
+4.2. Funcionamento para novos documentos
+
+Sempre que o Super Administrador ou outro usuário autorizado criar um novo modelo documental, o sistema deverá disponibilizar uma configuração de preenchimento inteligente.
+
+Essa configuração deverá permitir:
+
+1. Identificar as informações necessárias ao documento.
+2. Sugerir perguntas iniciais conforme a estrutura do modelo.
+3. Sugerir campos de preenchimento.
+4. Definir quais respostas ativam campos adicionais.
+5. Definir quais documentos comprobatórios serão solicitados.
+6. Associar respostas a variáveis do documento.
+7. Configurar validações e condições.
+8. Configurar campos obrigatórios e opcionais.
+9. Apresentar uma prévia funcional.
+10. Publicar a configuração junto com a versão aprovada do modelo.
+
+Sempre que possível, identifique campos a partir das variáveis existentes no modelo.
+
+Se a identificação automática não for suficiente, disponibilize um editor visual para o administrador completar as configurações.
+
+Nenhuma sugestão automática deverá modificar cláusulas jurídicas sem revisão e confirmação do responsável autorizado.
+
+Resultado esperado: qualquer novo modelo poderá utilizar o mesmo motor de perguntas, preenchimento, edição e visualização, sem exigir a criação manual de uma página React exclusiva para cada documento.
+
+---
+
+5. PERGUNTAS INICIAIS E PREENCHIMENTO CONDICIONAL
+
+Antes de iniciar a edição detalhada de um documento, apresente perguntas específicas para definir o contexto da solicitação.
+
+Exemplo: contrato de compra e venda
+
+A primeira pergunta deverá ser:
+
+"Você está realizando esta solicitação como:"
+
+- Vendedor.
+- Comprador.
+- Representante autorizado de uma das partes.
+
+A partir da resposta, organize o preenchimento conforme o perfil selecionado.
+
+Outras perguntas poderão incluir:
+
+- O contrato envolve imóvel urbano ou rural?
+- O imóvel é casa, apartamento, terreno, sítio ou fazenda?
+- Existem um ou mais vendedores?
+- Existem um ou mais compradores?
+- O vendedor é solteiro, casado, divorciado, viúvo ou vive em união estável?
+- O comprador é casado ou vive em união estável?
+- Existe cônjuge ou companheiro que deva constar no contrato?
+- Qual é o regime de bens aplicável?
+- O pagamento será à vista ou parcelado?
+- Existe financiamento?
+- Existem representantes legais?
+- Existem condições especiais de negociação?
+- Há documentos comprobatórios pendentes?
+
+As perguntas deverão aparecer apenas quando relevantes.
+
+Exemplo de regra condicional:
+
+Se o vendedor informar que é casado, o sistema deverá abrir campos adicionais para identificação do cônjuge, regime de bens e demais informações pertinentes.
+
+Se o vendedor informar que não possui cônjuge, não deverão aparecer campos desnecessários.
+
+Se existirem dois vendedores, o formulário deverá permitir cadastrar os dois, incluindo suas respectivas informações.
+
+Se o imóvel for rural, deverão ser habilitados os campos documentais rurais definidos no modelo, como matrícula, CCIR, CAR e outros dados pertinentes, quando aplicáveis.
+
+Se for imóvel urbano, deverão aparecer os campos correspondentes.
+
+A mesma inteligência deverá existir para outros documentos cadastrados no sistema.
+
+Importante: não utilize um questionário único e fixo para todos os modelos. Cada documento deverá ter perguntas apropriadas à sua finalidade.
+
+---
+
+6. INTERFACE DE PREENCHIMENTO E VISUALIZAÇÃO
+
+Desenvolva uma interface profissional semelhante, em experiência funcional, à referência NextSigns.
+
+Estrutura desejada
+
+No computador:
+
+- Área de perguntas e preenchimento.
+- Área de visualização do documento.
+- Indicador das etapas.
+- Navegação entre etapas.
+- Controles de edição e salvamento.
+
+No celular:
+
+- Layout responsivo.
+- Navegação simplificada.
+- Campos apropriados para toque.
+- Botões facilmente acessíveis.
+- Alternância entre formulário e prévia do documento.
+- Visualização sem cortes, sobreposições ou rolagem horizontal desnecessária.
+
+Comportamento obrigatório
+
+Ao preencher o nome do vendedor, por exemplo, o nome deverá aparecer automaticamente no local correspondente do contrato.
+
+Ao modificar CPF, endereço, estado civil, valores ou outras informações, o texto deverá ser atualizado.
+
+As respostas deverão alimentar as variáveis corretas do documento.
+
+O usuário deverá conseguir:
+
+- Avançar e voltar entre perguntas.
+- Alterar respostas anteriores.
+- Salvar parcialmente.
+- Continuar depois.
+- Consultar pendências.
+- Conferir o documento completo.
+- Corrigir campos específicos.
+- Visualizar o resultado antes da conclusão.
+
+Utilize salvamento automático com tratamento de falhas e recuperação do progresso, sem sobrescrever alterações mais recentes.
+
+Não recrie todo o documento ou faça consultas desnecessárias ao banco a cada tecla digitada. Priorize atualizações locais eficientes e persistência controlada.
+
+---
+
+7. IDENTIFICAÇÃO DO CÔNJUGE E CONCORDÂNCIA GRAMATICAL
+
+Preciso de atenção especial aos contratos de compra e venda.
+
+Quando o vendedor ou comprador informar que é casado ou vive em união estável, o sistema deverá apresentar campos adicionais, quando aplicáveis:
+
+- Nome completo do cônjuge ou companheiro.
+- CPF.
+- RG ou documento de identificação equivalente.
+- Órgão emissor.
+- Nacionalidade.
+- Profissão.
+- Endereço.
+- Estado civil e regime de bens.
+- Outras informações exigidas pelo modelo.
+
+O documento deverá produzir automaticamente a concordância correta conforme as informações expressamente declaradas.
+
+Exemplos:
+
+- "O vendedor, casado..."
+- "A vendedora, casada..."
+- "O comprador, casado..."
+- "A compradora, casada..."
+- "Juntamente com sua esposa..."
+- "Juntamente com seu marido..."
+- "Juntamente com seu cônjuge..."
+
+Não utilize expressões incorretas ou repetitivas.
+
+A identificação gramatical deverá respeitar as informações declaradas pelo usuário, sem presumir gênero a partir do nome.
+
+Também deverá existir tratamento adequado para:
+
+- Vários vendedores ou compradores.
+- Pessoas físicas e jurídicas.
+- Representantes legais.
+- União estável.
+- Casamento com diferentes regimes de bens.
+- Situações que exigem participação ou anuência do cônjuge.
+
+A necessidade de outorga conjugal e as cláusulas jurídicas correspondentes deverão respeitar as regras legais aplicáveis e a configuração jurídica aprovada do modelo.
+
+O sistema não poderá inventar informações ausentes.
+
+---
+
+8. SOLICITAÇÃO DE DOCUMENTOS PELO PORTAL DO CLIENTE
+
+Quando o cliente acessar o portal e selecionar um documento disponível para contratação, o fluxo deverá funcionar assim:
+
+Etapa 1 — Seleção do documento
+
+O cliente escolhe o documento desejado e visualiza sua descrição, valor e condições.
+
+Etapa 2 — Perguntas iniciais
+
+O sistema apresenta perguntas específicas para aquele documento.
+
+Etapa 3 — Preenchimento inteligente
+
+O cliente fornece os dados por meio do formulário dinâmico e acompanha a visualização do documento.
+
+Etapa 4 — Envio de comprovantes
+
+O sistema solicita os documentos necessários, com possibilidade de anexar arquivos e imagens de forma segura.
+
+Etapa 5 — Revisão
+
+O cliente confere as informações, identifica pendências e confirma o envio da solicitação.
+
+Etapa 6 — Encaminhamento à equipe
+
+A solicitação entra automaticamente no módulo de atendimento do ESCRITÓRIO JN.
+
+O sistema deverá preservar:
+
+- Respostas fornecidas.
+- Documentos anexados.
+- Modelo e versão utilizados.
+- Valor contratado.
+- Identificação do cliente.
+- Data e hora.
+- Pendências.
+- Histórico da solicitação.
+
+A equipe autorizada deverá receber uma notificação e conseguir continuar o atendimento a partir das informações enviadas, sem reiniciar o preenchimento.
+
+---
+
+9. CONFERÊNCIA DO DOCUMENTO CONTRATADO
+
+Atualmente, no atendimento, dentro de "Itens e valores contratados", existe a ação "Criar documento contratado".
+
+Preciso corrigir esse comportamento conforme a origem da solicitação.
+
+Quando o cliente já tiver solicitado um documento pelo portal, preenchido as informações e enviado os arquivos, a ação deverá ser:
+
+"Conferir documento contratado"
+
+Isso porque o modelo já foi selecionado e a solicitação já possui um documento em elaboração.
+
+Não quero que a equipe precise criar novamente o mesmo documento.
+
+Ao clicar em "Conferir documento contratado"
+
+Abrir uma interface de conferência e edição usando o mesmo motor inteligente.
+
+O profissional deverá visualizar:
+
+1. Dados preenchidos pelo cliente.
+2. Documento gerado a partir desses dados.
+3. Arquivos comprobatórios enviados.
+4. Campos pendentes.
+5. Inconsistências identificadas.
+6. Histórico das alterações.
+7. Ferramentas de edição e correção.
+8. Opções de salvar, devolver para complementação ou concluir a conferência.
+
+O profissional deverá conseguir verificar as informações diretamente com base nos documentos anexados.
+
+Qualquer alteração relevante deverá ser registrada, identificando o usuário, data, motivo e valores anteriores e novos, conforme a política de auditoria.
+
+Estados da conferência
+
+Utilize estados claros, como:
+
+- Aguardando conferência.
+- Em conferência.
+- Aguardando documentos adicionais.
+- Aguardando correção do cliente.
+- Conferência concluída.
+- Liberado para pagamento.
+- Pagamento confirmado.
+- Documento liberado.
+- Solicitação concluída.
+
+Adapte esses estados à estrutura já existente, evitando duplicar enumerações e fluxos incompatíveis.
+
+A aprovação do modelo, a contratação do serviço, a conferência do documento e a conclusão da solicitação são operações diferentes. Não trate essas etapas como se fossem a mesma aprovação.
+
+---
+
+10. INTEGRAÇÃO DA CONFERÊNCIA COM O PAGAMENTO
+
+Após a conferência, o profissional autorizado deverá conseguir liberar a cobrança.
+
+O cliente receberá uma notificação informando que o documento está conferido e que o pagamento pode ser realizado.
+
+O sistema deverá identificar automaticamente:
+
+- Serviço contratado.
+- Valor devido.
+- Valor já pago.
+- Saldo pendente.
+- Descontos autorizados.
+- Cortesias.
+- Correções sem nova cobrança.
+
+O pagamento deverá ser integrado ao módulo Caixa e ao histórico financeiro do cliente.
+
+10.1. Pagamento normal
+
+Permitir:
+
+- PIX.
+- Dinheiro.
+- Cartão de crédito.
+- Cartão de débito.
+
+Utilize as integrações financeiras já disponíveis no sistema. Quando não houver integração com adquirente ou banco, permita o registro manual autorizado, sem simular confirmação bancária automática.
+
+10.2. PIX realizado por outro meio
+
+Se o cliente pagar em uma chave PIX externa ao fluxo de cobrança automática, permitir registrar:
+
+- Valor recebido.
+- Data.
+- Identificação da transação, quando disponível.
+- Comprovante.
+- Conta ou destino do recebimento.
+- Responsável pela conferência.
+
+O pagamento somente deverá ser confirmado após validação por usuário autorizado.
+
+10.3. Pagamento presencial
+
+Se o cliente enviar outra pessoa para efetuar o pagamento ou pagar diretamente no escritório, o operador deverá conseguir registrar o recebimento.
+
+A movimentação deverá aparecer no Caixa correto, com identificação do atendimento, cliente, serviço, operador e forma de pagamento.
+
+10.4. Cortesia
+
+Disponibilizar uma opção de cortesia, mediante permissão apropriada.
+
+A cortesia deverá registrar:
+
+- Motivo.
+- Responsável pela autorização.
+- Valor dispensado.
+- Atendimento correspondente.
+- Data e hora.
+
+A cortesia não deverá gerar entrada fictícia de dinheiro no Caixa.
+
+10.5. Correção sem cobrança
+
+Quando um documento já pago apresentar erro e precisar ser corrigido, deverá existir a opção:
+
+"Correção de documento — sem nova cobrança"
+
+O sistema deverá associar a correção à solicitação e ao pagamento originais, sem duplicar receita nem gerar uma nova cobrança automaticamente.
+
+Se houver contratação efetiva de um serviço adicional, isso deverá seguir um fluxo separado e expressamente autorizado.
+
+---
+
+11. LIBERAÇÃO DO DOCUMENTO AO CLIENTE
+
+Após a conclusão das verificações e a confirmação financeira, ou após a autorização de cortesia, o documento poderá ser liberado conforme as regras do serviço.
+
+O portal do cliente deverá exibir:
+
+- Documento contratado.
+- Status atualizado.
+- Histórico de pagamentos.
+- Comprovantes.
+- Versão atual do documento.
+- Possibilidade de visualização.
+- Download nos formatos efetivamente suportados.
+- Histórico de correções.
+- Solicitação de nova correção.
+
+Caso a documentação exija assinatura ou outra formalidade para conclusão, mantenha essa etapa identificada separadamente.
+
+Não apresente como juridicamente assinado um documento que ainda não passou pelo processo de assinatura aplicável.
+
+---
+
+12. CORREÇÕES SOLICITADAS PELO CLIENTE
+
+Preciso que o cliente possa solicitar correções mesmo quando a solicitação já estiver concluída.
+
+Esse direito de solicitar uma revisão não deverá desaparecer porque o documento foi liberado ou porque já houve uma correção anterior.
+
+Funcionamento
+
+Dentro do portal do cliente, em cada documento contratado, deverá existir:
+
+"Solicitar correção"
+
+Ao selecionar essa opção, o cliente deverá:
+
+1. Informar qual informação está incorreta.
+2. Identificar a seção ou campo correspondente.
+3. Descrever a correção desejada.
+4. Informar os dados corretos.
+5. Anexar documentos comprobatórios.
+6. Visualizar a solicitação de alteração.
+7. Confirmar o envio.
+
+A solicitação será encaminhada à equipe responsável.
+
+Conferência da correção
+
+A equipe deverá receber uma notificação e acessar uma tela com:
+
+- Documento original.
+- Última versão liberada.
+- Informações questionadas.
+- Alterações solicitadas.
+- Documentação comprobatória.
+- Ferramentas de edição.
+- Histórico das correções anteriores.
+
+A correção deverá utilizar o mesmo motor de preenchimento e visualização.
+
+Após verificar os dados, o profissional poderá:
+
+- Aprovar a correção.
+- Solicitar complementação.
+- Recusar justificadamente.
+- Editar a versão corrigida.
+- Liberar nova versão.
+
+Controle de versões
+
+Nunca substitua silenciosamente a versão anterior.
+
+Cada versão deverá preservar sua identificação, data, responsável e histórico.
+
+Se o documento já estiver assinado, o sistema deverá diferenciar correção de rascunho, nova emissão, retificação e eventual necessidade de nova assinatura.
+
+A correção do documento não deverá alterar indevidamente o pagamento já confirmado.
+
+---
+
+13. ATENDIMENTO PRESENCIAL E POR WHATSAPP
+
+O mesmo motor inteligente deverá funcionar quando o atendimento não for iniciado diretamente pelo portal do cliente.
+
+Isso inclui:
+
+- Atendimento presencial.
+- Atendimento por WhatsApp.
+- Atendimento iniciado por um funcionário.
+- Atendimento iniciado por administrador.
+- Atendimento iniciado pelo Super Administrador.
+
+O profissional selecionará o cliente, ou cadastrará um novo cliente, e escolherá o documento solicitado.
+
+Em seguida, deverão aparecer as perguntas iniciais correspondentes ao modelo.
+
+Depois das perguntas, o atendente será direcionado à interface inteligente de preenchimento e visualização.
+
+O funcionário deverá conseguir preencher os dados com o cliente, conferir informações, anexar comprovantes e preparar o documento.
+
+O sistema não deverá exigir que o cliente acesse o portal para permitir o atendimento presencial.
+
+Quando o atendimento começar pelo WhatsApp, registre o canal de origem e permita inserir as informações e os arquivos recebidos. Caso exista integração oficial de mensagens, aproveite-a; caso contrário, utilize o fluxo manual existente, sem simular recebimentos automáticos.
+
+---
+
+14. LEITURA EM VOZ ALTA E LEITURA MANUAL
+
+No atendimento presencial, após o preenchimento e a conferência do documento, apresente opções de leitura.
+
+Opção 1 — Ler em voz alta
+
+O sistema utiliza um mecanismo de síntese de voz para realizar a leitura do documento.
+
+Deverá permitir, conforme a tecnologia disponível:
+
+- Iniciar.
+- Pausar.
+- Continuar.
+- Parar.
+- Ajustar velocidade.
+- Reiniciar leitura.
+
+Opção 2 — Ler manualmente
+
+Quando o cliente estiver presente e o profissional desejar ler o documento pessoalmente, deverá existir:
+
+"Ler manualmente"
+
+Ao selecionar essa opção, o sistema deverá:
+
+1. Abrir uma visualização adequada para leitura.
+2. Permitir navegar entre cláusulas e seções.
+3. Facilitar a identificação das informações importantes.
+4. Disponibilizar a opção de registrar a leitura realizada.
+5. Permitir continuar para a próxima etapa.
+
+A leitura manual não deverá ativar a voz automática.
+
+O registro de leitura não poderá ser confundido com assinatura, aceite jurídico ou consentimento formal quando estes forem necessários.
+
+---
+
+15. ENCAMINHAMENTO AUTOMÁTICO AO CAIXA
+
+Após o atendimento presencial ou a conferência do documento, o sistema deverá encaminhar o serviço para o fluxo financeiro correspondente.
+
+O profissional autorizado deverá visualizar:
+
+- Cliente.
+- Atendimento.
+- Documento solicitado.
+- Valor contratado.
+- Descontos.
+- Valor pendente.
+- Forma de pagamento.
+- Situação da cobrança.
+
+Ações disponíveis conforme permissão:
+
+- Receber em dinheiro.
+- Registrar PIX.
+- Registrar pagamento no cartão de crédito.
+- Registrar pagamento no cartão de débito.
+- Confirmar pagamento realizado por outro meio.
+- Registrar cortesia.
+- Registrar correção sem cobrança.
+
+Evite lançamentos duplicados.
+
+Toda movimentação deverá aparecer corretamente no Caixa e no histórico financeiro do atendimento e do cliente.
+
+O sistema deverá respeitar a unidade de atendimento, o Caixa utilizado e as autorizações existentes.
+
+---
+
+16. PERMISSÕES DE ACESSO
+
+Respeite os perfis e permissões já cadastrados no ESCRITÓRIO JN.
+
+Super Administrador
+
+Deverá possuir acesso administrativo integral às configurações e operações autorizadas do sistema, respeitando os controles de segurança e auditoria.
+
+Administrador
+
+Deverá executar as ações permitidas pelas autorizações do seu perfil e da sua unidade.
+
+Funcionário
+
+Deverá receber, preencher, conferir, editar e encaminhar documentos conforme as permissões concedidas.
+
+Cliente
+
+Deverá acessar exclusivamente seus próprios dados, documentos, solicitações e informações financeiras autorizadas.
+
+As permissões não deverão depender apenas da interface.
+
+Implemente e revise a proteção no backend, nas políticas de acesso ao banco de dados e no armazenamento de arquivos.
+
+---
+
+17. INTEGRAÇÃO COMPLETA ENTRE OS MÓDULOS
+
+As implementações deverão integrar:
+
+Documentos e modelos: configuração, versões, perguntas, campos e aprovação.
+
+Solicitações: criação, acompanhamento, pendências, estados e conclusão.
+
+Atendimento: operação presencial, WhatsApp e solicitações online.
+
+Clientes: cadastro, informações, documentos, cobranças e histórico.
+
+Caixa: recebimentos, registros financeiros, confirmações, cortesias e correções.
+
+Notificações: avisos de novas solicitações, pendências, conferências, pagamentos e correções.
+
+Auditoria: identificação do responsável e rastreabilidade das alterações relevantes.
+
+Portal do cliente: solicitação, preenchimento, acompanhamento, pagamento, download e correções.
+
+Evite desenvolver funcionalidades isoladas que não se comuniquem com os demais módulos.
+
+As informações deverão manter consistência entre as interfaces.
+
+---
+
+18. REQUISITOS TÉCNICOS E DE SEGURANÇA
+
+Implemente respeitando a arquitetura atual:
+
+- React + Vite + TypeScript.
+- Backend já adotado no projeto.
+- Supabase como banco de dados e serviços já utilizados.
+- GitHub como repositório.
+- Vercel como ambiente de publicação.
+- Responsividade mobile-first.
+- Padrões de componentes e autenticação existentes.
+
+Banco de dados
+
+Primeiro analise o esquema atual.
+
+Crie migrações somente quando forem necessárias.
+
+Evite tabelas redundantes.
+
+Mantenha relacionamentos consistentes entre modelos, versões, solicitações, respostas, anexos, pagamentos, revisões e clientes.
+
+Preserve as políticas RLS e implemente as novas políticas necessárias.
+
+Não execute alterações destrutivas sem autorização.
+
+Segurança dos documentos
+
+Os arquivos enviados poderão conter dados pessoais sensíveis ou informações financeiras.
+
+Garanta:
+
+- Armazenamento privado.
+- Controle de acesso por usuário e permissão.
+- Validação de arquivos.
+- URLs temporárias de acesso, quando adequadas.
+- Registro de ações relevantes.
+- Histórico de versões.
+- Proteção contra acesso de outros clientes.
+- Tratamento compatível com a LGPD.
+
+Não exponha documentos por links públicos permanentes.
+
+Desempenho
+
+Preciso de um sistema rápido, leve e econômico.
+
+Evite:
+
+- Consultas repetitivas ao banco.
+- Recarregamento completo a cada alteração.
+- Requisições excessivas.
+- Componentes desnecessariamente pesados.
+- Duplicação de regras.
+- Processamento excessivo no frontend.
+- Dependências pagas quando existir alternativa gratuita adequada.
+- Reimplementar módulos que já funcionam.
+
+O motor documental deverá ser reutilizável, modular, testável e preparado para manutenção.
+
+---
+
+19. PLANO DE EXECUÇÃO OBRIGATÓRIO
+
+Não tente reconstruir o sistema inteiro sem analisar o que já existe.
+
+Execute o trabalho por etapas, mantendo a compatibilidade com a implementação atual.
+
+Etapa 1 — Diagnóstico
+
+Verificar os módulos existentes, identificar o bloqueio das pendências, analisar o banco de dados e localizar as funcionalidades reutilizáveis.
+
+Etapa 2 — Correção das pendências
+
+Implementar a continuação controlada com avisos e preservação dos dados.
+
+Etapa 3 — Motor universal de documentos
+
+Construir o sistema reutilizável de perguntas, campos, condições, variáveis e visualização.
+
+Etapa 4 — Modelos existentes e novos modelos
+
+Integrar os documentos cadastrados e permitir configurar novos modelos, incluindo os ainda em elaboração.
+
+Etapa 5 — Portal do cliente
+
+Implementar solicitação, preenchimento, anexos e encaminhamento.
+
+Etapa 6 — Conferência pela equipe
+
+Integrar a ação "Conferir documento contratado" e o editor de revisão.
+
+Etapa 7 — Atendimento presencial e WhatsApp
+
+Reutilizar o motor documental para os atendimentos realizados pela equipe.
+
+Etapa 8 — Leitura
+
+Implementar leitura em voz alta e leitura manual.
+
+Etapa 9 — Caixa e pagamentos
+
+Integrar cobranças, confirmações externas, dinheiro, PIX, cartões, cortesia e correção sem cobrança.
+
+Etapa 10 — Correções e versões
+
+Implementar solicitações de correção após a conclusão, histórico e nova liberação.
+
+Etapa 11 — Integração e validação
+
+Verificar notificações, permissões, auditoria, frontend, backend, banco de dados e implantação.
+
+Testes obrigatórios
+
+Teste, no mínimo, os seguintes cenários:
+
+1. Avançar com CPF pendente e retornar posteriormente para preencher.
+2. Cliente comprador solicitando contrato de imóvel.
+3. Cliente vendedor casado com campos adicionais de cônjuge.
+4. Contrato com duas pessoas vendedoras.
+5. Documento rural com campos específicos.
+6. Modelo novo recebendo perguntas configuradas.
+7. Modelo não aprovado disponível apenas para elaboração interna autorizada.
+8. Cliente enviando documentação pelo portal.
+9. Profissional conferindo e corrigindo os dados recebidos.
+10. Liberação de cobrança após conferência.
+11. Pagamento PIX confirmado por meio externo.
+12. Pagamento presencial em dinheiro.
+13. Cortesia autorizada sem receita fictícia.
+14. Correção gratuita após documento pago.
+15. Cliente solicitando nova correção em atendimento concluído.
+16. Funcionário com permissão limitada.
+17. Cliente tentando acessar documento de outra pessoa, com acesso negado.
+18. Acesso pelo celular com formulário e visualização funcionais.
+19. Recuperação de preenchimento interrompido.
+20. Prevenção de cobranças e lançamentos financeiros duplicados.
+
+Registre os resultados dos testes.
+
+---
+
+20. CRITÉRIOS DE CONCLUSÃO
+
+A implementação somente poderá ser considerada concluída quando:
+
+- O usuário conseguir avançar com pendências não bloqueantes.
+- Os documentos apresentarem perguntas específicas.
+- Os formulários se adaptarem às respostas.
+- O documento for atualizado conforme o preenchimento.
+- Os modelos atuais estiverem integrados.
+- Novos modelos puderem utilizar o mesmo motor sem criar telas individuais.
+- O cliente conseguir enviar solicitações e anexos.
+- A equipe conseguir conferir documentos já preenchidos.
+- Atendimentos presenciais e por WhatsApp utilizarem o mesmo recurso.
+- O sistema oferecer leitura automática e manual.
+- O Caixa receber corretamente as movimentações.
+- Pagamentos externos puderem ser confirmados com autorização.
+- Cortesias e correções não gerarem receitas fictícias.
+- O cliente conseguir solicitar correções mesmo após a conclusão.
+- O histórico de versões e pagamentos permanecer íntegro.
+- As permissões e políticas de acesso estiverem funcionando.
+- As interfaces forem responsivas e apresentarem desempenho adequado.
+- Os módulos anteriores continuarem operando sem regressões.
+
+21. INSTRUÇÃO FINAL PARA O CODEX
+
+Quero uma implementação real, completa e integrada, não apenas um planejamento ou a criação visual de formulários.
+
+Analise o código e a estrutura existentes antes de realizar alterações.
+
+Reaproveite os recursos já disponíveis e execute as etapas com o menor número possível de modificações desnecessárias.
+
+Trabalhe em alterações pequenas e verificáveis, preservando o histórico do GitHub e utilizando as migrações apropriadas quando houver mudanças no Supabase.
+
+Não faça alterações destrutivas, não desative controles de segurança e não substitua regras existentes sem verificar suas dependências.
+
+Não considere uma funcionalidade concluída apenas porque a interface foi criada: verifique também sua persistência, permissões, integração e comportamento real.
+
+Ao finalizar cada etapa, apresente um relatório objetivo informando:
+
+1. O que já existia e foi reaproveitado.
+2. O que foi efetivamente implementado.
+3. Os arquivos e componentes alterados.
+4. As alterações necessárias no Supabase.
+5. As integrações verificadas.
+6. Os testes executados e seus resultados.
+7. As pendências reais, caso existam.
+8. A próxima etapa da sequência.
+
+Se houver algum bloqueio técnico ou necessidade de autorização, informe exatamente o motivo, sem declarar como implementado aquilo que ainda não foi concluído.
+
+Objetivo final: transformar o ESCRITÓRIO JN em uma plataforma documental profissional, inteligente, rápida e integrada, capaz de gerenciar qualquer documento cadastrado, desde a solicitação inicial até a conferência, cobrança, entrega e correções posteriores, sem prejudicar as funcionalidades que já existem.
