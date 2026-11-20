@@ -23,14 +23,131 @@
 }
 .access-privacy p { margin: 0; }
 
+/* Editorial Privacy, Terms & Cookies Pages */
 .privacy-page {
-  width: min(100% - 40px, 850px);
-  margin: 24px auto 40px;
+  width: min(100% - 32px, 820px);
+  margin: 24px auto 48px;
   line-height: 1.7;
+  color: var(--jn-text, #142b3c);
 }
-.privacy-page h1 { font-size: 30px; color: var(--jn-navy, #103248); letter-spacing: -0.6px; }
-.privacy-page h2 { font-size: 20px; margin-top: 26px; color: var(--jn-navy, #103248); }
-.privacy-page > p a { text-decoration: underline; overflow-wrap: anywhere; }
+.privacy-doc-header {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--jn-border, #dbe3e8);
+  margin-bottom: 22px;
+}
+.privacy-doc-header h1 {
+  font-size: clamp(26px, 3.6vw, 34px);
+  line-height: 1.15;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+  letter-spacing: -0.7px;
+  margin: 8px 0 6px;
+  text-wrap: balance;
+}
+.privacy-doc-meta {
+  margin: 0;
+  font-size: 13px;
+  color: var(--jn-muted, #556b7a);
+  font-variant-numeric: tabular-nums;
+}
+.privacy-doc-body {
+  display: grid;
+  gap: 22px;
+}
+.privacy-section h2 {
+  font-size: 19px;
+  line-height: 1.3;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--jn-navy, #103248);
+  letter-spacing: -0.3px;
+}
+.privacy-section p {
+  margin: 0 0 12px;
+  max-width: 72ch;
+  font-size: 15px;
+  color: var(--jn-text, #142b3c);
+}
+.privacy-section p:last-child { margin-bottom: 0; }
+.privacy-section + .privacy-section {
+  padding-top: 20px;
+  border-top: 1px solid var(--jn-border, #dbe3e8);
+}
+
+.controller-notice {
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  padding: 20px 22px;
+  box-shadow: var(--jn-shadow-xs);
+}
+.controller-notice h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+  margin: 0 0 12px;
+}
+.controller-dl {
+  margin: 12px 0 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 24px;
+}
+.controller-dl > div { min-width: 0; }
+.controller-dl dt {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--jn-muted, #556b7a);
+  margin-bottom: 3px;
+}
+.controller-dl dd {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--jn-text, #142b3c);
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+.controller-dl dd a {
+  color: var(--jn-navy, #103248);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.controller-revision {
+  margin: 14px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--jn-border, #dbe3e8);
+  font-size: 12px;
+  color: var(--jn-muted, #556b7a);
+  font-variant-numeric: tabular-nums;
+}
+
+.privacy-cookie-actions {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  margin: 14px 0;
+}
+.privacy-save-button {
+  width: auto;
+  min-width: 240px;
+  margin-top: 0;
+}
+.privacy-references {
+  margin: 26px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--jn-border, #dbe3e8);
+  font-size: 13px;
+  color: var(--jn-muted, #556b7a);
+}
+.privacy-references a {
+  color: var(--jn-navy, #103248);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
 
 .site-header .team-link {
   display: inline-flex;
@@ -42,6 +159,12 @@
 
 .site-footer { flex-wrap: wrap; }
 .site-footer .privacy-links { justify-content: center; }
+
+@media (max-width: 640px) {
+  .controller-dl { grid-template-columns: 1fr; gap: 12px; }
+  .controller-notice { padding: 16px; }
+  .privacy-save-button { width: 100%; min-width: 0; }
+}
 
 @media (max-width: 380px) {
   .site-header { padding-inline: 12px; gap: 8px; }
@@ -98,14 +221,30 @@
 .privacy-screen { min-height: 100svh; display: flex; flex-direction: column; background: var(--jn-bg, #faf9f6); }
 .privacy-screen > .operation-feedback, .privacy-screen > .not-found { min-height: 0; flex: 1; }
 
-.registration-acceptance { margin-top: 12px; }
-.registration-acceptance legend { font-size: 12px; font-weight: 600; }
-.registration-acceptance > p { font-size: 12px; line-height: 1.5; margin: 4px 0; color: var(--jn-muted, #556b7a); }
-.access-content .registration-policy { display: flex; align-items: center; gap: 10px; min-height: 44px; margin: 0; font-weight: 400; line-height: 1.5; }
+.registration-acceptance {
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+}
+.registration-acceptance legend { font-size: 12px; font-weight: 600; color: var(--jn-navy, #103248); }
+.registration-acceptance > p { font-size: 12px; line-height: 1.45; margin: 2px 0 4px; color: var(--jn-muted, #556b7a); }
+.access-content .registration-policy { display: flex; align-items: center; gap: 10px; min-height: 44px; margin: 0; font-weight: 400; line-height: 1.4; color: var(--jn-text, #142b3c); }
 .registration-policy input { width: 20px; height: 20px; flex-shrink: 0; margin: 0; accent-color: var(--jn-navy, #103248); }
-.registration-policy a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: 3px; }
+.registration-policy a { display: inline-flex; align-items: center; min-height: 44px; color: var(--jn-navy, #103248); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .input-wrap:has(input:disabled) { background: var(--jn-surface-subtle, #f2f6f8); color: var(--jn-muted, #556b7a); }
 .access-pane:has(.registration-acceptance) .access-symbol, .access-pane:has(.registration-acceptance) .access-content > .eyebrow { display: none; }
+.access-pane:has(.registration-acceptance) > .access-main { padding-block: 14px 8px; }
+.access-pane:has(.registration-acceptance) .access-content { padding-block: 4px; }
+.access-pane:has(.registration-acceptance) .access-content h1 { font-size: 25px; margin-bottom: 4px; }
+.access-pane:has(.registration-acceptance) .access-description { margin-bottom: 8px; }
+.access-pane:has(.registration-acceptance) .form-field { margin-bottom: 6px; }
+.access-pane:has(.registration-acceptance) .access-content label { margin-bottom: 5px; }
+.access-pane:has(.registration-acceptance) .preparation-note { padding: 7px 12px; margin-bottom: 8px; }
+.access-pane:has(.registration-acceptance) .return-login { margin-top: 4px; }
+.access-pane:has(.registration-acceptance) .access-security { margin-top: 6px; }
+.access-pane:has(.registration-acceptance) > .access-privacy { padding-block: 4px; }
 
 @media (max-width: 600px) {
   .privacy-footer { padding-inline: 16px; }

@@ -55,5 +55,27 @@ export default function CallbackPage() {
     }).catch(error => { listener.subscription.unsubscribe(); if (active) setFailure(callbackFailure(error)); });
     return () => { active = false; listener.subscription.unsubscribe(); };
   }, [navigate, area, explicitArea, selectPortal]);
-  return <AccessShell title={failure ? 'Confira seu link' : 'Acesso ao escritório'}>{failure ? <><p className="form-feedback error" role="alert">{failure}</p><Link className="primary-button" to={invite?`${paths.invitation}?id=${encodeURIComponent(invite)}`:`${paths.recovery}?area=${area}`}><ArrowRight size={18} aria-hidden="true" />{invite?'Voltar ao convite':'Solicitar novo link'}</Link></> : null}</AccessShell>;
+  return (
+    <AccessShell
+      title={failure ? 'Confira seu link' : 'Acesso ao escritório'}
+      description={failure ? undefined : 'Validando sua solicitação de acesso com segurança.'}
+    >
+      {failure ? (
+        <>
+          <p className="form-feedback error" role="alert">{failure}</p>
+          <Link
+            className="primary-button"
+            to={invite ? `${paths.invitation}?id=${encodeURIComponent(invite)}` : `${paths.recovery}?area=${area}`}
+          >
+            <ArrowRight size={18} aria-hidden="true" />
+            {invite ? 'Voltar ao convite' : 'Solicitar novo link'}
+          </Link>
+        </>
+      ) : (
+        <p role="status" className="form-feedback">
+          Confirmando seu acesso neste navegador.
+        </p>
+      )}
+    </AccessShell>
+  );
 }

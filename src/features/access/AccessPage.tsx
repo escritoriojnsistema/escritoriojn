@@ -2,7 +2,7 @@ import {loadOperations} from '../../app/loadOperations';
 import {useAuth} from '../auth/AuthProvider';
 import {recoveryReturn} from '../auth/recoveryReturn';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { ArrowLeft, UserPlus, ArrowRight, Mail, UserRound } from 'lucide-react';
+import { ArrowLeft, UserPlus, ArrowRight, Mail, UserRound, Info } from 'lucide-react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { paths, normalizePathname } from '../../app/routes';
 import { supabase, callbackUrl, authError } from '../auth/browser';
@@ -54,7 +54,7 @@ export default function AccessPage() {
     finally { setBusy(false); }
   }
   return <AccessShell title={title} description={signup ? 'Cadastre seu acesso de cliente.' : recovery ? 'Recupere o acesso à sua conta.' : 'Acesse seu ambiente no Escritório JN.'}>
-    {!supabase && <div className="preparation-note" role="status"><strong>Acesso indisponível</strong><p>Configuração pendente pelo escritório.</p></div>}
+    {!supabase && <div className="preparation-note" role="status"><div className="preparation-note-head"><Info size={15} aria-hidden="true" /><strong>Acesso indisponível</strong></div><p>Configuração pendente pelo escritório.</p></div>}
     {location.state?.sessionExpired && !feedback && <p className="form-feedback error" role="alert">Sua sessão expirou. Entre novamente para continuar.</p>}
     {location.state?.passwordUpdated && !feedback && <p className="form-feedback" role="status">Senha atualizada. Entre com sua nova senha.</p>}
     {feedback && <p className={`form-feedback ${feedback.error ? 'error' : ''}`} role={feedback.error ? 'alert' : 'status'}>{feedback.text}</p>}
