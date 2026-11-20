@@ -11,6 +11,7 @@ import {notificationsApi,NotificationsError,noticesChanged} from './api';
 import '../team/team.css';
 import '../customers/customers.css';
 import '../checklists/checklists.css';
+import './notifications.css';
 
 export default function NotificationsPage({client=false}:{client?:boolean}){
  return <OperationalAccess client={client}>{contexts=><OfficeInbox contexts={contexts} client={client}/>}</OperationalAccess>;
@@ -54,7 +55,7 @@ function Inbox({office,client}:{office:string;client:boolean}){
    <label className="team-field">Tipo<select value={kind} disabled={saving} onChange={e=>{setKind(e.target.value as NotificationFilter);setPage(1);}}><option value="all">Todos</option>{client?<><option value="request_returned">Solicitação devolvida</option><option value="request_cancelled">Solicitação cancelada</option><option value="assignee_changed">Atendente</option><option value="account_updated">Dados da conta</option><option value="conference_done">Conferência concluída</option><option value="charge_released">Cobrança liberada</option><option value="charge_created">Nova cobrança</option><option value="charge_adjusted">Ajuste de cobrança</option><option value="charge_cancelled">Cancelamento de cobrança</option><option value="payment_received">Pagamento</option><option value="payment_refunded">Reembolso</option><option value="payment_reversed">Estorno</option><option value="correction_resolved">Correção resolvida</option></>:<><option value="smart_submission">Envio inteligente</option><option value="correction_requested">Pedido de correção</option><option value="handoff">Encaminhamentos</option><option value="pending">Pendências</option><option value="account_correction">Correções cadastrais</option><option value="document_review_pending">Revisão editorial pendente</option></>}<option value="document_approved">Documento aprovado</option><option value="document_returned">Documento devolvido</option><option value="document_rejected">Documento rejeitado</option><option value="document_withdrawn">Revisão retirada</option></select></label>
    <button className="secondary-button" disabled={saving}><Search size={18} aria-hidden="true"/>Buscar</button>
   </form>
-  {data&&<><p className="customer-note">{data.unread} não lidas</p>{!data.items.length?<p className="team-empty">Nenhuma notificação neste filtro.</p>:<ul className="checklist-notices" aria-label={client?'Notificações do atendimento':'Notificações internas'}>{data.items.map(n=><li key={n.id}>
+  {data&&<><p className="customer-note">{data.unread} não lidas</p>{!data.items.length?<p className="team-empty">Nenhuma notificação neste filtro.</p>:<ul className="checklist-notices" aria-label={client?'Notificações do atendimento':'Notificações internas'}>{data.items.map(n=><li key={n.id} className={n.read_at?undefined:'notice-unread'}>
    <strong>{noticeText(n)}</strong>
    <small>{new Date(n.created_at).toLocaleString('pt-BR')} · {n.read_at?'Lida':'Não lida'}</small><div>
     {n.can_open&&<Link className="team-text-button" to={noticeDestination(n.kind,client)} state={{office_id:office,request_id:n.request_id}} onClick={()=>{if(!n.read_at)markOnOpen(office,n.id);}}>Abrir {n.protocol}</Link>}

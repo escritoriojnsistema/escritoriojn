@@ -1,9 +1,72 @@
-.categories-settings { min-width: 0; }
-.categories-settings fieldset { border: 0; padding: 0; margin: 0; min-width: 0; display: grid; gap: 8px; }
-.categories-settings h2 { font-size: 18px; margin: 12px 0; }
-.categories-settings .team-field { min-width: 0; }
-.categories-settings .team-field input, .categories-settings .team-field select { min-height: 44px; font-size: 16px; }
-.categories-settings .customer-list li > div:first-child { min-width: 0; overflow-wrap: anywhere; }
-.categories-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
-.categories-settings .customer-list .categories-actions { flex: 0 0 auto; margin: 0; }
-.categories-settings .customer-list .categories-actions button { min-width: 44px; min-height: 44px; }
+.categories-settings {
+  min-width: 0;
+}
+
+.categories-settings form {
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  padding: 20px;
+  background: var(--jn-surface, #ffffff);
+  box-shadow: var(--jn-shadow-xs);
+  max-width: 720px;
+}
+
+.categories-settings fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.categories-settings h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+  margin: 0 0 12px;
+}
+
+.categories-settings .team-field {
+  min-width: 0;
+}
+
+.categories-settings .team-field input,
+.categories-settings .team-field select {
+  min-height: 44px;
+  font-size: 16px;
+}
+
+.categories-settings .customer-list li > div:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.categories-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.categories-actions .primary-button {
+  width: auto;
+  margin: 0;
+}
+
+.categories-settings .customer-list .categories-actions {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.categories-settings .customer-list .categories-actions button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+@media (max-width: 600px) {
+  .categories-settings form {
+    padding: 14px;
+  }
+}

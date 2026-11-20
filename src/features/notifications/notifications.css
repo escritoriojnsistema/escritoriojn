@@ -153,3 +153,46 @@
   .notification-drawer-actions { gap: 4px; }
   .notification-drawer-actions .team-text-button { min-height: 44px; }
 }
+
+/* Full Notifications Page */
+.notifications-main {
+  min-width: 0;
+}
+
+.notifications-main .checklist-notices {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.notifications-main .checklist-notices li {
+  padding: 14px 16px;
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  background: var(--jn-surface, #ffffff);
+  box-shadow: var(--jn-shadow-xs);
+  gap: 6px;
+  transition: border-color 150ms var(--jn-ease, ease), background-color 150ms var(--jn-ease, ease);
+}
+
+.notifications-main .checklist-notices li.notice-unread {
+  border-color: var(--jn-border-strong, #bccad3);
+  background: var(--jn-surface-subtle, #f2f6f8);
+}
+
+.notifications-main .checklist-notices strong {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--jn-navy, #103248);
+}
+
+.notifications-main .checklist-notices small {
+  color: var(--jn-muted, #556b7a);
+  font-variant-numeric: tabular-nums;
+}
+
+.notifications-main .checklist-notices li.notice-unread small {
+  color: var(--jn-gold-text, #855e29);
+  font-weight: 500;
+}
+

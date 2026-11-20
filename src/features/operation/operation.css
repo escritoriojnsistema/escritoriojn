@@ -332,6 +332,7 @@
   margin: 0;
   line-height: 1.5;
   color: var(--jn-text, #142b3c);
+  font-variant-numeric: tabular-nums;
 }
 
 .operation-security {
@@ -340,7 +341,9 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
-  padding-top: 22px;
+  margin-top: 14px;
+  padding-top: 18px;
+  border-top: 1px solid var(--jn-border, #dbe3e8);
 }
 
 .operation-security h2 {
@@ -349,11 +352,18 @@
   gap: 10px;
 }
 
+.operation-security h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--jn-navy, #103248);
+  margin: 4px 0 0;
+}
+
 .operation-security p {
   font-size: 12px;
   line-height: 1.5;
   color: var(--jn-muted, #556b7a);
-  margin: 8px 0 0;
+  margin: 6px 0 0;
 }
 
 .operation-security .secondary-button {
@@ -364,6 +374,58 @@
   gap: 10px;
   margin: 0;
   padding-inline: 16px;
+}
+
+.operation-security.account-closure {
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  padding: 18px 20px;
+  background: var(--jn-surface, #ffffff);
+  box-shadow: var(--jn-shadow-xs);
+  margin-top: 14px;
+}
+
+.account-closure > div {
+  width: 100%;
+  display: grid;
+  gap: 10px;
+}
+
+.account-closure > div > p {
+  margin: 0;
+}
+
+.account-closure > div > .secondary-button {
+  width: fit-content;
+}
+
+.account-closure-steps {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--jn-gold-text, #855e29);
+  font-variant-numeric: tabular-nums;
+}
+
+.account-closure-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--jn-text, #142b3c);
+  cursor: pointer;
+}
+
+.account-closure-check input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: var(--jn-navy, #103248);
 }
 
 /* Top Utility Bar (Desktop & Mobile Shared) */
@@ -670,7 +732,8 @@
 
 @media (max-width: 900px) {
   .operation-main:has(.operation-account) .operation-account { padding: 14px; }
-  .operation-main:has(.operation-account) .operation-security { flex-wrap: nowrap; gap: 8px; padding-top: 14px; }
+  .operation-main:has(.operation-account) .operation-security { flex-wrap: nowrap; gap: 8px; margin-top: 8px; padding-top: 14px; }
+  .operation-main:has(.operation-account) .operation-security.account-closure { flex-wrap: wrap; padding: 14px; margin-top: 12px; }
   .operation-main:has(.operation-account) .operation-security h2 { font-size: 16px; }
   .operation-main:has(.operation-account) .operation-security:not(.account-closure) p { display: none; }
   .operation-main:has(.operation-account) .operation-security .secondary-button { flex-shrink: 0; font-size: 14px; padding-inline: 10px; gap: 8px; }

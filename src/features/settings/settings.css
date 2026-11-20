@@ -1,2 +1,172 @@
-.settings-main{width:100%;min-width:0}.settings-destinations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px}.settings-destinations>a{display:flex;align-items:center;gap:14px;min-height:76px;padding:14px 0;border-bottom:1px solid #dce4e8;color:#103248;text-decoration:none}.settings-destinations strong{display:block;font-size:15px}.settings-destinations small{display:block;margin-top:4px;color:#617887;font-size:12px;line-height:1.5}.settings-destinations svg{flex-shrink:0}.settings-tabs{display:flex;gap:6px;border-bottom:1px solid #dce4e8;margin-bottom:12px}.settings-tabs button{min-height:44px;padding:8px 14px;border:0;border-bottom:2px solid transparent;background:transparent;color:#617887}.settings-tabs button[aria-selected=true]{border-color:#bb8b43;color:#103248;font-weight:600}.settings-main input,.settings-main select{min-height:44px}.settings-main .team-field{min-width:0}
-@media(max-width:600px){.settings-destinations{grid-template-columns:1fr}.settings-destinations>a{min-height:72px;padding:10px 0}.settings-main input,.settings-main select{font-size:16px}.settings-tabs button{flex:1;padding:8px;font-size:13px}}
+.settings-main {
+  width: 100%;
+  min-width: 0;
+}
+
+.settings-destinations {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.settings-destinations > a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 78px;
+  padding: 16px 18px;
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  background: var(--jn-surface, #ffffff);
+  box-shadow: var(--jn-shadow-xs);
+  color: var(--jn-navy, #103248);
+  text-decoration: none;
+  transition: border-color 160ms var(--jn-ease, ease), box-shadow 160ms var(--jn-ease, ease), transform 140ms var(--jn-ease, ease);
+}
+
+.settings-destinations > a:hover {
+  border-color: var(--jn-border-strong, #bccad3);
+  box-shadow: var(--jn-shadow-sm);
+  transform: translateY(-1px);
+}
+
+.settings-destinations strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--jn-navy, #103248);
+}
+
+.settings-destinations small {
+  display: block;
+  margin-top: 4px;
+  color: var(--jn-muted, #556b7a);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.settings-destinations svg {
+  flex-shrink: 0;
+}
+
+.settings-destinations .settings-chevron {
+  margin-left: auto;
+  color: var(--jn-muted, #556b7a);
+  transition: transform 150ms var(--jn-ease, ease), color 150ms var(--jn-ease, ease);
+}
+
+.settings-destinations > a:hover .settings-chevron {
+  transform: translateX(2px);
+  color: var(--jn-navy, #103248);
+}
+
+.settings-tabs {
+  display: flex;
+  gap: 6px;
+  border-bottom: 1px solid var(--jn-border, #dbe3e8);
+  margin-bottom: 14px;
+}
+
+.settings-tabs button {
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--jn-muted, #556b7a);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--jn-radius-xs, 6px) var(--jn-radius-xs, 6px) 0 0;
+  transition: color 150ms var(--jn-ease, ease), background-color 150ms var(--jn-ease, ease), border-color 150ms var(--jn-ease, ease);
+}
+
+.settings-tabs button:hover:not(:disabled) {
+  color: var(--jn-navy, #103248);
+  background: var(--jn-surface-subtle, #f2f6f8);
+}
+
+.settings-tabs button[aria-selected=true] {
+  border-color: var(--jn-gold, #aa7d36);
+  color: var(--jn-navy, #103248);
+  font-weight: 700;
+}
+
+.settings-main input,
+.settings-main select {
+  min-height: 44px;
+}
+
+.settings-main .team-field {
+  min-width: 0;
+}
+
+/* Privacy Settings Card & Grid */
+.privacy-settings-section {
+  max-width: 820px;
+}
+
+.privacy-settings-form {
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  padding: 20px;
+  background: var(--jn-surface, #ffffff);
+  box-shadow: var(--jn-shadow-xs);
+  margin-bottom: 12px;
+}
+
+.privacy-settings-form fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.privacy-settings-form .request-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
+  margin-bottom: 14px;
+}
+
+.privacy-settings-form .request-wide {
+  grid-column: 1 / -1;
+}
+
+.privacy-settings-form .team-field {
+  margin: 0;
+}
+
+.privacy-settings-form .primary-button {
+  width: fit-content;
+  min-width: 210px;
+}
+
+@media (max-width: 600px) {
+  .settings-destinations {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .settings-destinations > a {
+    min-height: 68px;
+    padding: 12px 14px;
+  }
+  .settings-main input,
+  .settings-main select {
+    font-size: 16px;
+  }
+  .settings-tabs button {
+    flex: 1;
+    padding: 8px;
+    font-size: 13px;
+  }
+  .privacy-settings-form {
+    padding: 14px;
+  }
+  .privacy-settings-form .request-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .privacy-settings-form .primary-button {
+    width: 100%;
+  }
+}
