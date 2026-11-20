@@ -22,7 +22,13 @@
 
 .imports37-actions .primary-button {
   width: auto;
-  min-width: 180px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.imports37 > .team-text-button {
+  justify-self: start;
+  margin-left: -10px;
 }
 
 .imports37-check {

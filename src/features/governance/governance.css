@@ -234,12 +234,15 @@
 }
 
 @media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
-  .operation-main:has(.governance-main) { padding-top: 12px; }
-  .governance-main .operation-heading { margin-bottom: 8px; }
-  .governance-main .operation-heading h1 { margin-bottom: 3px; }
-  .governance-main .operation-heading p:not(.eyebrow) { font-size: 12px; }
-  .governance-list li { min-height: 64px; padding: 6px 4px; }
+  .operation-main:has(.governance-main) { padding-top: 6px; padding-bottom: 12px; }
+  .governance-main .operation-heading { margin-bottom: 4px; gap: 2px; }
+  .governance-main .operation-heading .eyebrow { margin-bottom: 1px; }
+  .governance-main .operation-heading h1 { font-size: 21px; margin-bottom: 2px; }
+  .governance-main .operation-heading p:not(.eyebrow) { font-size: 11px; line-height: 1.3; }
+  .governance-toolbar { padding-bottom: 4px; margin-bottom: 2px; }
+  .governance-list li { min-height: 54px; padding: 4px; }
   .governance-list strong { font-size: 13px; }
+  .governance-note { margin-top: 4px; font-size: 11px; }
   .governance-filters { grid-template-columns: 1fr 1fr; padding: 12px; }
   .governance-filters input, .governance-filters select { font-size: 16px; }
   .governance-main:has(.governance-filters) .governance-results { display: none; }

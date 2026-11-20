@@ -216,25 +216,39 @@
 }
 
 @media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
-  .operation-main:has(.customers-main) { padding-top: 12px; padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
-  .customers-main .operation-heading { margin-bottom: 4px; }
-  .customers-main .operation-heading h1 { margin-bottom: 3px; }
-  .customers-main .operation-heading p:not(.eyebrow) { font-size: 12px; }
-  .customer-list li { min-height: 64px; padding: 6px 4px; }
+  .operation-main:has(.customers-main) { padding-top: 6px; padding-bottom: 12px; }
+  .operation-main:has(.customer-form) { padding-top: 4px; padding-bottom: 8px; }
+  .operation-main:has(.customers-main) .operation-section-navigation { margin-bottom: 6px; padding-bottom: 6px; gap: 4px; }
+  .operation-main:has(.customers-main) .operation-section-navigation a { padding: 6px 10px; font-size: 12px; }
+  .customers-main .operation-heading { margin-bottom: 2px; gap: 2px; }
+  .customers-main .operation-heading .eyebrow { margin-bottom: 1px; }
+  .customers-main .operation-heading h1 { font-size: 20px; margin-bottom: 1px; }
+  .customers-main .operation-heading p:not(.eyebrow) { font-size: 11px; line-height: 1.25; }
+  .customers-main:has(.customer-form) .operation-heading { margin-bottom: 0; gap: 0; }
+  .customers-main:has(.customer-form) .operation-heading .eyebrow,
+  .customers-main:has(.customer-form) .operation-heading p:not(.eyebrow) { display: none; }
+  .customers-main:has(.customer-form) .operation-heading h1 { font-size: 19px; line-height: 1.2; margin: 0; }
+  .customer-list li { min-height: 58px; padding: 4px; }
   .customer-list strong { font-size: 13px; }
   .customer-list small { font-size: 11px; }
-  .customer-search .team-field { font-size: 11px; gap: 4px; }
+  .customer-search .team-field { font-size: 11px; gap: 3px; }
+  .customer-toolbar { padding-bottom: 6px; }
   .customer-toolbar .customer-new { width: 44px; padding: 0; gap: 0; flex-shrink: 0; }
   .customer-new span { display: none; }
-  .customer-form { padding: 12px 14px; }
-  .customer-form-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .customer-form { padding: 0; border: 0; background: transparent; box-shadow: none; }
+  .customer-form .form-feedback { padding: 5px 8px; margin: 0 0 4px; font-size: 11px; line-height: 1.2; }
+  .customer-form-grid { grid-template-columns: 1fr 1fr; gap: 4px 6px; }
+  .customer-form .team-field { gap: 2px; font-size: 11px; }
   .customer-name { grid-column: 1 / -1; grid-row: 1; }
-  .customer-contact { grid-template-columns: minmax(94px, 0.7fr) minmax(0, 1.3fr) 44px; gap: 6px; }
-  .customer-contact .team-field { gap: 4px; font-size: 11px; }
+  .customer-contact-heading h2 { font-size: 14px; }
+  .customer-contact { grid-template-columns: minmax(94px, 0.7fr) minmax(0, 1.3fr) 44px; gap: 6px; margin-bottom: 4px; }
+  .customer-contact .team-field { gap: 2px; font-size: 11px; }
   .customer-contact input, .customer-contact select { padding-inline: 8px; }
-  .customer-note { font-size: 11px; margin-block: 2px; }
-  .customer-view-toolbar { margin-bottom: 6px; padding-bottom: 0; }
-  .customer-submit { width: 100%; margin-top: 4px; }
-  .customer-detail { padding: 14px; }
-  .customer-detail dl { grid-template-columns: 1fr; gap: 12px; margin-top: 8px; }
+  .customer-note { font-size: 10.5px; line-height: 1.2; margin-block: 2px; }
+  .customer-view-toolbar { margin-bottom: 2px; padding-bottom: 0; border-bottom: 0; }
+  .customer-submit { width: 100%; margin-top: 2px; }
+  .customer-detail { padding: 10px 12px; }
+  .customer-detail dl { grid-template-columns: 1fr; gap: 6px; margin-top: 4px; }
+  .customer-detail dt { margin-bottom: 2px; font-size: 11px; }
+  .customer-detail dd { font-size: 13px; line-height: 1.3; }
 }

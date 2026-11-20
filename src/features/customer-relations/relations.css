@@ -1,43 +1,237 @@
-.relations-panel { }
-.relation-heading { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin:8px 0; }
-.relation-heading h2 { font-size:19px; margin:0; font-weight:600; }
-.relation-heading span { font-size:13px; color:#617887; overflow-wrap:anywhere; }
-.relation-overview { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
-.relation-overview-button { padding:14px; text-align:left; border:1px solid #dce5e9; border-radius:8px; background:#fff; color:#183e50; min-height:80px; cursor:pointer; }
-.relation-overview-button strong { display:block; font-size:14px; font-weight:600; }
-.relation-overview-button span { display:flex; justify-content:space-between; gap:8px; margin-top:8px; font-size:12px; color:#617887; }
-.relation-toolbar,.relation-actions { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin:8px 0; }
-.relation-toolbar .primary-button,.relation-actions .primary-button { width:auto; }
-.relation-list { list-style:none; padding:0; margin:8px 0; }
-.relation-list li { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0; border-bottom:1px solid #e5ecef; min-height:64px; }
-.relation-list li > div { min-width:0; overflow-wrap:anywhere; }
-.relation-list strong { font-size:14px; font-weight:600; }
-.relation-list small { display:block; font-size:12px; color:#617887; margin-top:3px; }
-.relation-editor { }
-.relation-editor .team-field { margin-bottom:10px; }
-.relation-editor .customer-search { align-items:end; margin-bottom:10px; }
-.relation-editor .customer-search .team-field { margin:0; }
-.relation-dates { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px; }
-.relation-editor input,.relation-editor select { width:100%; min-width:0; }
-.relation-confirm { overflow-wrap:anywhere; }
-.relation-confirm h3 { font-size:16px; }
-.relation-confirm p { font-size:13px; }
-.merge-preview { margin:8px 0; }
-.merge-preview > div { margin-bottom:10px; overflow-wrap:anywhere; }
-.merge-preview dt { font-size:12px; color:#617887; }
-.merge-preview dd { margin:4px 0 0; font-size:14px; }
-@media(max-width:900px) {
- .relation-overview { gap:8px; margin-top:10px; }
- .relation-overview-button { padding:10px; min-height:76px; }
- .relation-overview-button strong { font-size:13px; }
- .relation-heading { gap:6px; margin:4px 0; }
- .relation-heading span { font-size:12px; }
- .relation-list li { padding-block:7px; }
- .relation-list strong { font-size:13px; }
- .relation-list small { font-size:11px; }
- .relation-dates { grid-template-columns:1fr; gap:0; }
- .relation-toolbar .primary-button { padding-inline:12px; }
- .relation-editor .team-field { font-size:12px; }
+.relations-panel {
+  min-width: 0;
 }
-.relation-decision summary { min-height:44px; display:flex; align-items:center; cursor:pointer; font-size:12px; color:#183e50; }
-.relation-decision summary:focus-visible { outline:2px solid #b4965f; outline-offset:2px; }
+
+.relation-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.relation-heading h2 {
+  font-size: 19px;
+  margin: 0;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+}
+
+.relation-heading span {
+  font-size: 13px;
+  color: var(--jn-muted, #556b7a);
+  overflow-wrap: anywhere;
+}
+
+.relation-overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.relation-overview-button {
+  padding: 16px;
+  text-align: left;
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  background: var(--jn-surface, #ffffff);
+  color: var(--jn-navy, #103248);
+  min-height: 82px;
+  cursor: pointer;
+  box-shadow: var(--jn-shadow-xs);
+  transition: border-color 160ms var(--jn-ease, ease), box-shadow 160ms var(--jn-ease, ease), transform 140ms var(--jn-ease, ease);
+}
+
+.relation-overview-button:hover {
+  border-color: var(--jn-border-strong, #bccad3);
+  box-shadow: var(--jn-shadow-sm);
+  transform: translateY(-1px);
+}
+
+.relation-overview-button strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--jn-navy, #103248);
+}
+
+.relation-overview-button span {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--jn-muted, #556b7a);
+  font-variant-numeric: tabular-nums;
+}
+
+.relation-toolbar,
+.relation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.relation-toolbar .primary-button,
+.relation-actions .primary-button,
+.relation-toolbar .secondary-button {
+  width: auto;
+  margin: 0;
+}
+
+.relation-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+
+.relation-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-sm, 9px);
+  min-height: 64px;
+  transition: background-color 150ms var(--jn-ease, ease);
+}
+
+.relation-list li:hover {
+  background: var(--jn-surface, #ffffff);
+}
+
+.relation-list li > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.relation-list strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--jn-navy, #103248);
+}
+
+.relation-list small {
+  display: block;
+  font-size: 12px;
+  color: var(--jn-muted, #556b7a);
+  margin-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+
+.relation-editor {
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  padding: 18px 20px;
+  background: var(--jn-surface, #ffffff);
+  box-shadow: var(--jn-shadow-xs);
+}
+
+.relation-editor .team-field {
+  margin-bottom: 10px;
+}
+
+.relation-editor .customer-search {
+  align-items: end;
+  margin-bottom: 10px;
+}
+
+.relation-editor .customer-search .team-field {
+  margin: 0;
+}
+
+.relation-dates {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+.relation-editor input,
+.relation-editor select {
+  width: 100%;
+  min-width: 0;
+}
+
+.relation-confirm {
+  overflow-wrap: anywhere;
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  padding: 18px 20px;
+  background: var(--jn-surface, #ffffff);
+  box-shadow: var(--jn-shadow-xs);
+}
+
+.relation-confirm h3 {
+  font-size: 16px;
+  color: var(--jn-navy, #103248);
+  margin: 0 0 8px;
+}
+
+.relation-confirm p {
+  font-size: 13px;
+  color: var(--jn-muted, #556b7a);
+}
+
+.merge-preview {
+  margin: 8px 0;
+}
+
+.merge-preview > div {
+  margin-bottom: 10px;
+  overflow-wrap: anywhere;
+}
+
+.merge-preview dt {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--jn-muted, #556b7a);
+}
+
+.merge-preview dd {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--jn-text, #142b3c);
+  font-variant-numeric: tabular-nums;
+}
+
+.relation-decision summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--jn-navy, #103248);
+}
+
+.relation-decision summary:focus-visible {
+  outline: 2px solid var(--jn-gold, #aa7d36);
+  outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+  .operation-main:has(.relations-panel) { padding-top: 4px; padding-bottom: 10px; }
+  .operation-main:has(.relations-panel) .operation-section-navigation { margin-bottom: 4px; padding-bottom: 4px; gap: 4px; }
+  .customers-main:has(.relations-panel) .operation-heading { margin-bottom: 0; }
+  .customers-main:has(.relations-panel) .operation-heading p:not(.eyebrow) { font-size: 10.5px; line-height: 1.2; }
+  .relation-overview { gap: 6px; margin-top: 4px; }
+  .relation-overview-button { padding: 6px 8px; min-height: 50px; }
+  .relation-overview-button strong { font-size: 12px; line-height: 1.2; }
+  .relation-overview-button span { margin-top: 3px; font-size: 11px; }
+  .relation-heading { gap: 4px 8px; margin: 2px 0; }
+  .relation-heading h2 { font-size: 15px; line-height: 1.2; }
+  .relation-heading span { font-size: 11px; line-height: 1.2; }
+  .relation-list li { padding: 7px 4px; }
+  .relation-list strong { font-size: 13px; }
+  .relation-list small { font-size: 11px; }
+  .relation-editor, .relation-confirm { padding: 12px; }
+  .relation-dates { grid-template-columns: 1fr; gap: 0; }
+  .relation-toolbar .primary-button { padding-inline: 12px; }
+  .relation-editor .team-field { font-size: 12px; }
+}

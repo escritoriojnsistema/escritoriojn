@@ -113,25 +113,55 @@
   outline: none;
 }
 
+.operations36 > .team-field {
+  max-width: 380px;
+}
+
 .operations36-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px 16px;
   margin-top: 14px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.operations36-actions .team-text-button {
+  padding: 8px 10px 8px 0;
+  justify-content: flex-start;
+  text-align: left;
+  white-space: normal;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .operations36-actions .primary-button {
   width: auto;
-  min-width: 180px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.operations36 h2,
+.operations36-callout,
+.operations36 button,
+.operations36 select,
+.operations36 input {
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 700px) {
+  .operations36 > .team-field {
+    max-width: none;
+  }
   .operations36-grid {
     grid-template-columns: 1fr;
   }
   .operations36-grid > section,
   .operations36 form {
-    padding: 14px;
+    padding: 12px;
   }
   .operations36 .request-grid {
     grid-template-columns: 1fr;
@@ -142,5 +172,27 @@
   .operations36 .team-tabs {
     display: flex;
     flex-wrap: wrap;
+  }
+  .operations36 .team-tabs button {
+    white-space: normal;
+    max-width: 100%;
+    padding: 8px 10px;
+  }
+  .operations36-actions .primary-button {
+    width: 100%;
+  }
+}
+
+@container (max-width: 240px) {
+  .operations36-callout,
+  .operations36-grid > section,
+  .operations36 form {
+    padding: 8px;
+  }
+  .operations36-actions {
+    gap: 4px;
+  }
+  .operations36-actions .team-text-button {
+    padding: 6px 4px 6px 0;
   }
 }
