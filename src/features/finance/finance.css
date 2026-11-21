@@ -119,10 +119,17 @@
   min-height: 44px;
   display: flex;
   align-items: center;
+  padding-inline: 6px;
+  border-radius: var(--jn-radius-xs, 6px);
   font-size: 13px;
   font-weight: 600;
   color: var(--jn-navy, #103248);
   cursor: pointer;
+  transition: background-color 150ms var(--jn-ease, ease);
+}
+
+.finance19-details summary:hover {
+  background: var(--jn-surface-subtle, #f2f6f8);
 }
 
 .finance19-details summary::after {

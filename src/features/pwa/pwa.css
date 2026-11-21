@@ -87,8 +87,8 @@
   border-radius: var(--jn-radius-sm, 9px);
   color: var(--jn-text, #142b3c);
   background: var(--jn-surface, #ffffff);
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 500;
   transition: border-color 150ms var(--jn-ease, ease);
 }
 .pwa-device select:focus {
@@ -135,16 +135,30 @@
 }
 
 .pwa-checklist {
-  padding-left: 18px;
+  list-style: none;
+  padding-left: 0;
   margin: 0;
   display: grid;
-  gap: 12px;
+  gap: 0;
 }
 .pwa-checklist li {
   font-size: 14px;
   line-height: 1.6;
   color: var(--jn-text, #142b3c);
   overflow-wrap: anywhere;
+  padding: 12px 0;
+  border-top: 1px solid var(--jn-border, #dbe3e8);
+}
+.pwa-checklist li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+.pwa-checklist li:last-child {
+  padding-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .pwa-device select { font-size: 16px; }
 }
 
 @media (max-width: 720px) {

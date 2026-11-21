@@ -67,6 +67,7 @@ button, input, textarea, select { font: inherit; }
 a { color: inherit; text-decoration: none; }
 a:focus-visible, button:focus-visible { outline: 3px solid var(--jn-gold); outline-offset: 3px; }
 summary:focus-visible, [tabindex="0"]:focus-visible { outline: 3px solid var(--jn-gold-text); outline-offset: 3px; }
+input[type=checkbox]:focus-visible, input[type=radio]:focus-visible { outline: 3px solid var(--jn-gold); outline-offset: 2px; }
 
 /* Form fields share one border focus; no inner frame or decorative shadow. */
 input, textarea, select { box-shadow: none; }

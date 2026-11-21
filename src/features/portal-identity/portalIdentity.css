@@ -42,19 +42,35 @@
 }
 
 .portal-token {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .portal-token textarea {
-  font: 14px ui-monospace, SFMono-Regular, Menlo, monospace;
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--jn-surface-subtle, #f2f6f8);
+  border: 1px solid var(--jn-border-strong, #bccad3);
+  border-radius: var(--jn-radius-sm, 9px);
+  color: var(--jn-navy, #103248);
+  font: 13.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
   overflow-wrap: anywhere;
   word-break: break-all;
   resize: vertical;
   font-variant-numeric: tabular-nums;
+  transition: border-color 150ms var(--jn-ease, ease);
+}
+
+.portal-token textarea:focus {
+  border-color: var(--jn-navy, #103248);
+  outline: none;
 }
 
 .portal-identity small {
   display: block;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--jn-muted, #556b7a);
+  font-variant-numeric: tabular-nums;
 }
 
 .portal-identity .relation-list {

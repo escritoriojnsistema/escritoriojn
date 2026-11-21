@@ -5,13 +5,15 @@
 .rural-workspace h2 {
   font-size: 20px;
   font-weight: 700;
+  letter-spacing: -0.35px;
   color: var(--jn-navy, #103248);
-  margin: 12px 0 8px;
+  margin: 14px 0 8px;
 }
 
 .rural-workspace h3 {
   font-size: 16px;
   font-weight: 700;
+  letter-spacing: -0.2px;
   color: var(--jn-navy, #103248);
   margin: 12px 0 6px;
 }
@@ -19,22 +21,31 @@
 .rural-workspace p {
   margin: 6px 0;
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--jn-text, #142b3c);
   overflow-wrap: anywhere;
 }
 
 .rural-workspace button {
   min-height: 44px;
+  max-width: 100%;
   padding: 8px 12px;
   border-radius: var(--jn-radius-xs, 6px);
+  transition: background-color 150ms var(--jn-ease, ease), border-color 150ms var(--jn-ease, ease), color 150ms var(--jn-ease, ease);
 }
 
 .rural-workspace fieldset {
   border: 0;
-  margin: 10px 0;
+  margin: 12px 0;
   padding: 0;
   min-width: 0;
+}
+
+.rural-workspace fieldset > legend {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+  margin-bottom: 8px;
 }
 
 .rural-workspace .team-field {
@@ -53,12 +64,20 @@
   justify-content: space-between;
   gap: 12px;
   align-items: center;
+  padding: 8px 6px;
+  border-radius: var(--jn-radius-xs, 6px);
   font-variant-numeric: tabular-nums;
+  transition: background-color 150ms var(--jn-ease, ease);
+}
+
+.rural-workspace .team-row:hover {
+  background: var(--jn-surface-subtle, #f2f6f8);
 }
 
 .rural-workspace input,
 .rural-workspace select {
   max-width: 100%;
+  min-width: 0;
 }
 
 .ditr-panel {
@@ -149,8 +168,14 @@
 
 .ditr-evidence {
   border-bottom: 1px solid var(--jn-border, #dbe3e8);
-  padding: 6px 0;
+  padding: 8px 6px;
+  border-radius: var(--jn-radius-xs, 6px);
   font-variant-numeric: tabular-nums;
+  transition: background-color 150ms var(--jn-ease, ease);
+}
+
+.ditr-evidence:hover {
+  background: var(--jn-surface-subtle, #f2f6f8);
 }
 
 .ditr-case-row button {

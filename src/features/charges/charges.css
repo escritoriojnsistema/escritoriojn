@@ -60,6 +60,7 @@
 
 .charges-items strong {
   white-space: nowrap;
+  flex-shrink: 0;
   color: var(--jn-navy, #103248);
   font-variant-numeric: tabular-nums;
 }
@@ -128,10 +129,16 @@
 
 .charges-main summary {
   min-height: 44px;
-  padding-block: 12px;
+  padding: 12px 6px;
+  border-radius: var(--jn-radius-xs, 6px);
   cursor: pointer;
   font-weight: 600;
   color: var(--jn-navy, #103248);
+  transition: background-color 150ms var(--jn-ease, ease);
+}
+
+.charges-main summary:hover {
+  background: var(--jn-surface-subtle, #f2f6f8);
 }
 
 .charges-main .service-section {
@@ -159,7 +166,7 @@
   }
   .charges-toolbar {
     gap: 4px;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
   }
   .charges-toolbar > strong {
     font-size: 14px;

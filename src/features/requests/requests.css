@@ -84,6 +84,7 @@
 
 .request-toolbar .secondary-button {
   width: auto;
+  max-width: 100%;
   flex: 0 0 auto;
   margin: 0;
   min-height: 44px;
@@ -227,6 +228,11 @@
   line-height: 1.5;
   margin: 4px 0;
   font-variant-numeric: tabular-nums;
+}
+
+.request-message ul {
+  list-style: disc;
+  padding-left: 20px;
 }
 
 .request-actions {

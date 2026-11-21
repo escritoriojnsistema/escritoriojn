@@ -49,14 +49,21 @@
 .specialized-panel button,
 .specialized-panel summary {
   min-height: 44px;
+  max-width: 100%;
 }
 
 .specialized-panel summary {
-  padding: 12px 0;
+  padding: 12px 6px;
+  border-radius: var(--jn-radius-xs, 6px);
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
   color: var(--jn-navy, #103248);
+  transition: background-color 150ms var(--jn-ease, ease);
+}
+
+.specialized-panel summary:hover {
+  background: var(--jn-surface-subtle, #f2f6f8);
 }
 
 .specialized-save {
@@ -69,9 +76,15 @@
 }
 
 .specialized-deadline {
-  padding: 8px 0;
+  padding: 10px 8px;
   border-bottom: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-xs, 6px);
   font-variant-numeric: tabular-nums;
+  transition: background-color 150ms var(--jn-ease, ease);
+}
+
+.specialized-deadline:hover {
+  background: var(--jn-surface-subtle, #f2f6f8);
 }
 
 .specialized-panel .team-pagination {

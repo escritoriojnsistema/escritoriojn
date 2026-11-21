@@ -63,7 +63,8 @@
 }
 
 .team-text-button:disabled {
-  color: #8294a0;
+  color: var(--jn-muted, #556b7a);
+  opacity: 0.6;
 }
 
 .team-danger {
@@ -87,11 +88,14 @@
 
 .team-tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+  min-width: 0;
 }
 
 .team-tabs button {
   white-space: nowrap;
+  max-width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;

@@ -4,16 +4,28 @@
   max-width: 100%;
 }
 
-.private-pdf-display {
+.private-pdf-preview .private-pdf-display {
   width: fit-content;
   max-width: 100%;
-  margin: 8px 0 !important;
+  margin: 8px 0;
 }
 
 .private-pdf-display select {
   min-height: 44px;
   max-width: 100%;
-  font-size: 16px;
+  padding: 6px 12px;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border-strong, #bccad3);
+  border-radius: var(--jn-radius-sm, 9px);
+  color: var(--jn-navy, #103248);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  transition: border-color 150ms var(--jn-ease, ease);
+}
+
+.private-pdf-display select:focus {
+  border-color: var(--jn-navy, #103248);
+  outline: none;
 }
 
 .private-pdf-pagination {
@@ -22,7 +34,11 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 6px 12px;
-  margin: 8px 0;
+  margin: 10px 0;
+  padding: 6px 10px;
+  background: var(--jn-surface-subtle, #f2f6f8);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-sm, 9px);
 }
 
 .private-pdf-pagination button {
@@ -31,17 +47,17 @@
 
 .private-pdf-pagination span {
   font-size: 13px;
-  font-weight: 500;
-  color: var(--jn-text-secondary, #365264);
+  font-weight: 600;
+  color: var(--jn-navy, #103248);
   overflow-wrap: anywhere;
   font-variant-numeric: tabular-nums;
 }
 
 .private-pdf-canvas-view {
-  padding: 10px;
+  padding: 12px;
   background: var(--jn-surface-subtle, #f2f6f8);
   border: 1px solid var(--jn-border, #dbe3e8);
-  border-radius: var(--jn-radius-sm, 9px);
+  border-radius: var(--jn-radius-md, 12px);
 }
 
 .private-pdf-canvas-view canvas {
@@ -52,11 +68,17 @@
   max-height: 62svh;
   object-fit: contain;
   margin: 0 auto;
-  background: #ffffff;
+  background: var(--jn-surface, #ffffff);
   border-radius: var(--jn-radius-xs, 6px);
-  box-shadow: var(--jn-shadow-xs);
+  box-shadow: var(--jn-shadow-sm);
 }
 
 .private-pdf-canvas-view canvas[hidden] {
   display: none;
+}
+
+@media (max-width: 900px) {
+  .private-pdf-display select {
+    font-size: 16px;
+  }
 }

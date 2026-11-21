@@ -47,6 +47,7 @@
 .rural-workflow a,
 .rural-workflow summary {
   min-height: 44px;
+  max-width: 100%;
 }
 
 .rural-workflow a {
@@ -55,6 +56,8 @@
   color: var(--jn-navy-hover, #1b445e);
   font-size: 13px;
   font-weight: 500;
+  border-radius: var(--jn-radius-xs, 6px);
+  transition: color 150ms var(--jn-ease, ease);
 }
 
 .rural-workflow a:hover {
@@ -65,10 +68,16 @@
 
 .rural-workflow summary {
   cursor: pointer;
-  padding: 12px 0;
+  padding: 12px 6px;
+  border-radius: var(--jn-radius-xs, 6px);
   font-size: 13px;
   font-weight: 600;
   color: var(--jn-navy, #103248);
+  transition: background-color 150ms var(--jn-ease, ease);
+}
+
+.rural-workflow summary:hover {
+  background: var(--jn-surface-subtle, #f2f6f8);
 }
 
 .rural-workflow-save {

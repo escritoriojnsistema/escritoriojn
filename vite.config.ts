@@ -49,6 +49,12 @@ export default defineConfig(({ mode }) => {
   }
   return {
     plugins: [localApi(), react(), tailwindcss(), pwaVersion()],
+    server: {
+      allowedHosts: true,
+    },
+    preview: {
+      allowedHosts: true,
+    },
     // Shared runtime remains stable. The access form warms the small panel
     // router; business screens are fetched only when their route is opened.
     build: { rolldownOptions: { output: { codeSplitting: { groups: [

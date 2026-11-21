@@ -128,9 +128,16 @@
   font-weight: 600;
   color: var(--jn-navy, #103248);
   min-height: 44px;
+  padding-inline: 6px;
+  border-radius: var(--jn-radius-xs, 6px);
   display: flex;
   align-items: center;
   gap: 8px;
+  transition: background-color 150ms var(--jn-ease, ease);
+}
+
+.cash-configuration summary:hover {
+  background: var(--jn-surface-subtle, #f2f6f8);
 }
 
 .cash-config-row {
@@ -226,6 +233,7 @@
   flex-wrap: wrap;
   gap: 8px 28px;
   font-size: 13px;
+  list-style: decimal;
   padding-left: 20px;
   color: var(--jn-text-secondary, #365264);
 }

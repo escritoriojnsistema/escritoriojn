@@ -153,11 +153,18 @@
 
 .attachment-file-actions summary {
   min-height: 44px;
-  padding: 12px 0;
+  padding: 12px 6px;
   font-size: 12px;
   font-weight: 600;
   color: var(--jn-text-secondary, #365264);
+  border-radius: var(--jn-radius-xs, 6px);
   cursor: pointer;
+  transition: color 150ms var(--jn-ease, ease), background-color 150ms var(--jn-ease, ease);
+}
+
+.attachment-file-actions summary:hover {
+  color: var(--jn-navy, #103248);
+  background: var(--jn-surface-subtle, #f2f6f8);
 }
 
 .attachment-hash {
@@ -175,11 +182,17 @@
 
 .attachment-plan summary {
   min-height: 44px;
-  padding-block: 12px;
+  padding: 12px 6px;
   font-size: 12.5px;
   font-weight: 600;
   color: var(--jn-navy, #103248);
+  border-radius: var(--jn-radius-xs, 6px);
   cursor: pointer;
+  transition: background-color 150ms var(--jn-ease, ease);
+}
+
+.attachment-plan summary:hover {
+  background: var(--jn-surface-subtle, #f2f6f8);
 }
 
 .attachment-plan ul {

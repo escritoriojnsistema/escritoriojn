@@ -200,6 +200,7 @@
 }
 .privacy-footer-name {
   white-space: nowrap;
+  max-width: 100%;
   font-weight: 600;
   color: var(--jn-text-secondary, #365264);
 }
@@ -211,7 +212,9 @@
   font-weight: 500;
   text-decoration: underline;
   text-underline-offset: 3px;
+  transition: opacity 150ms var(--jn-ease, ease);
 }
+.privacy-install:hover { opacity: 0.82; }
 .privacy-footer p { max-width: 580px; margin: 0 auto 4px; text-align: center; }
 .public-site > .site-footer { margin-top: auto; }
 
