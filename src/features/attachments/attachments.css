@@ -1,54 +1,349 @@
-.attachments-main { min-width:0; }
-.attachments-main .operation-heading { margin-bottom:10px; }
-.attachments-main .team-field { margin:0; gap:4px; }
-.attachment-scanner-note { margin:8px 0; padding:8px 0; border-block:1px solid #e1d6bd; color:#725724; font-size:12px; line-height:1.45; }
-.attachment-grid { display:grid; grid-template-columns:minmax(120px,.7fr) minmax(0,1.3fr); gap:8px 12px; }
-.attachment-upload { padding:4px 0 10px; border-bottom:1px solid #dce4e8; }
-.attachment-submit { width:fit-content; min-width:180px; margin-top:8px; }
-.attachment-next-upload { display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:12px; }
-.attachment-next-upload span { min-width:0; overflow-wrap:anywhere; }
-.attachment-list-heading { display:flex; align-items:center; gap:8px; margin-top:8px; }
-.attachment-list-heading h2 { font-size:16px; margin:0 auto 0 0; }
-.attachment-list { list-style:none; margin:0; padding:0; }
-.attachment-list li { border-bottom:1px solid #e1e8ec; padding:10px 0 4px; min-width:0; }
-.attachment-file-heading { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px 12px; }
-.attachment-file-heading strong { font-size:13px; overflow-wrap:anywhere; min-width:0; }
-.attachment-status { font-size:11px; color:#617887; }
-.attachment-quarentena,.attachment-aguardando_upload { color:#855e29; }
-.attachment-rejeitado { color:#843c25; }
-.attachment-disponivel { color:#235d43; }
-.attachment-list p,.attachment-empty { font-size:12px; line-height:1.45; color:#617887; margin:5px 0; overflow-wrap:anywhere; }
-.attachment-empty { padding:12px 0; }
-.attachment-file-actions { display:flex; flex-wrap:wrap; gap:4px; align-items:flex-start; }
-.attachment-file-actions details { flex:1; min-width:0; }
-.attachment-file-actions summary { min-height:44px; padding:12px 0; font-size:12px; cursor:pointer; }
-.attachment-hash { word-break:break-all; }
-.attachment-management { }
-.attachment-plan summary { min-height:44px; padding-block:12px; font-size:12px; cursor:pointer; }
-.attachment-plan ul { list-style:none; margin:0 0 8px; padding:0; }
-.attachment-plan li { display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px 12px; border-bottom:1px solid #e1e8ec; padding-block:8px; font-size:12px; overflow-wrap:anywhere; }
-.attachment-plan li strong { min-width:0; }
-.attachment-plan li span { color:#617887; }
-.attachment-management h2,.attachment-copy h2 { font-size:15px; margin:10px 0 4px; }
-.attachment-mimes { display:flex; flex-wrap:wrap; gap:0 16px; border:0; margin:8px 0; padding:0; }
-.attachment-mimes legend { font-size:12px; color:#617887; }
-.attachment-copy { margin-top:12px; border-block:1px solid #dce4e8; padding-bottom:10px; }
-.attachments-main input[type=file] { padding:8px; font-size:12px; }
-.attachments-main input[type=file]::file-selector-button { border:0; background:#edf3f5; color:#24475c; border-radius:4px; margin-right:8px; padding:5px 7px; font:inherit; }
-@media (max-width:900px), (hover:none) and (pointer:coarse) and (max-width:1200px) {
- .operation-main:has(.attachments-main) { padding-top:10px; padding-bottom:calc(64px + env(safe-area-inset-bottom)); }
- .attachments-main .operation-heading { margin-bottom:4px; }
- .attachments-main .operation-heading p:not(.eyebrow) { font-size:12px; }
- .attachments-main .team-field { font-size:11px; }
- .attachments-main .team-field input,.attachments-main .team-field select { font-size:16px; padding-inline:8px; }
- .attachment-scanner-note { font-size:11px; margin:6px 0; }
- .attachment-grid { grid-template-columns:1fr; gap:6px; }
- .attachment-submit { width:100%; }
- .attachment-request-picker .request-picker-current { font-size:11px; }
- .attachment-list-heading { flex-wrap:wrap; }
+.attachments-main {
+  min-width: 0;
 }
 
-.attachment-preview h2,.attachment-delete h2{font-size:18px;overflow-wrap:anywhere;margin:8px 0;}
-.attachment-preview img{display:block;max-width:100%;max-height:62svh;object-fit:contain;margin:8px auto;}
-.attachment-preview iframe{display:block;width:100%;height:58svh;border:1px solid #dce4e8;border-radius:6px;margin-top:8px;}
-.attachment-delete p{overflow-wrap:anywhere;}
+.attachments-main .operation-heading {
+  margin-bottom: 12px;
+}
+
+.attachments-main .team-field {
+  margin: 0;
+  gap: 5px;
+}
+
+.attachment-scanner-note {
+  margin: 10px 0;
+  padding: 10px 14px;
+  border: 1px solid var(--jn-warn-border, #e5cfa7);
+  border-radius: var(--jn-radius-sm, 9px);
+  background: var(--jn-warn-bg, #fbf6ed);
+  color: var(--jn-warn, #7d5318);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.attachment-grid {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.7fr) minmax(0, 1.3fr);
+  gap: 10px 14px;
+}
+
+.attachment-upload {
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  box-shadow: var(--jn-shadow-xs);
+}
+
+.attachment-submit {
+  width: fit-content;
+  min-width: 180px;
+  margin-top: 10px;
+}
+
+.attachment-next-upload {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12.5px;
+  color: var(--jn-text-secondary, #365264);
+}
+
+.attachment-next-upload span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.attachment-list-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+
+.attachment-list-heading h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+  margin: 0 auto 0 0;
+}
+
+.attachment-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.attachment-list li {
+  border-bottom: 1px solid var(--jn-border, #dbe3e8);
+  padding: 12px 8px 6px;
+  min-width: 0;
+  border-radius: var(--jn-radius-sm, 9px);
+  transition: background-color 150ms var(--jn-ease, ease);
+}
+
+.attachment-list li:hover {
+  background: var(--jn-surface, #ffffff);
+}
+
+.attachment-file-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
+.attachment-file-heading strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--jn-navy, #103248);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.attachment-status {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--jn-muted, #556b7a);
+}
+
+.attachment-quarentena,
+.attachment-aguardando_upload {
+  color: var(--jn-gold-text, #855e29);
+}
+
+.attachment-rejeitado {
+  color: var(--jn-danger, #8e351c);
+}
+
+.attachment-disponivel {
+  color: var(--jn-success, #235d43);
+}
+
+.attachment-list p,
+.attachment-empty {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--jn-muted, #556b7a);
+  margin: 5px 0;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.attachment-empty {
+  padding: 14px 0;
+}
+
+.attachment-file-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.attachment-file-actions details {
+  flex: 1;
+  min-width: 0;
+}
+
+.attachment-file-actions summary {
+  min-height: 44px;
+  padding: 12px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--jn-text-secondary, #365264);
+  cursor: pointer;
+}
+
+.attachment-hash {
+  word-break: break-all;
+  font-variant-numeric: tabular-nums;
+}
+
+.attachment-management {
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  padding: 18px 20px;
+  box-shadow: var(--jn-shadow-xs);
+}
+
+.attachment-plan summary {
+  min-height: 44px;
+  padding-block: 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--jn-navy, #103248);
+  cursor: pointer;
+}
+
+.attachment-plan ul {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+}
+
+.attachment-plan li {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  border-bottom: 1px solid var(--jn-border, #dbe3e8);
+  padding-block: 8px;
+  font-size: 12.5px;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.attachment-plan li strong {
+  min-width: 0;
+  color: var(--jn-navy, #103248);
+}
+
+.attachment-plan li span {
+  color: var(--jn-muted, #556b7a);
+}
+
+.attachment-management h2,
+.attachment-copy h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+  margin: 10px 0 6px;
+}
+
+.attachment-mimes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  border: 0;
+  margin: 8px 0;
+  padding: 0;
+}
+
+.attachment-mimes legend {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--jn-muted, #556b7a);
+}
+
+.attachment-copy {
+  margin-top: 14px;
+  padding: 16px 18px;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  box-shadow: var(--jn-shadow-xs);
+}
+
+.attachments-main input[type=file] {
+  padding: 8px;
+  font-size: 13px;
+}
+
+.attachments-main input[type=file]::file-selector-button {
+  border: 1px solid var(--jn-border, #dbe3e8);
+  background: var(--jn-surface-subtle, #f2f6f8);
+  color: var(--jn-navy, #103248);
+  border-radius: var(--jn-radius-xs, 6px);
+  margin-right: 10px;
+  padding: 6px 10px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.attachment-preview,
+.attachment-delete {
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  padding: 18px 20px;
+  box-shadow: var(--jn-shadow-xs);
+}
+
+.attachment-preview h2,
+.attachment-delete h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+  overflow-wrap: anywhere;
+  margin: 0 0 10px;
+}
+
+.attachment-preview img {
+  display: block;
+  max-width: 100%;
+  max-height: 62svh;
+  object-fit: contain;
+  margin: 10px auto;
+  border-radius: var(--jn-radius-sm, 9px);
+  border: 1px solid var(--jn-border, #dbe3e8);
+}
+
+.attachment-preview iframe {
+  display: block;
+  width: 100%;
+  height: 58svh;
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-sm, 9px);
+  margin-top: 8px;
+}
+
+.attachment-delete p {
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--jn-text, #142b3c);
+}
+
+@media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
+  .operation-main:has(.attachments-main) {
+    padding-top: 8px;
+    padding-bottom: 12px;
+  }
+  .attachments-main .operation-heading {
+    margin-bottom: 4px;
+  }
+  .attachments-main .operation-heading p:not(.eyebrow) {
+    font-size: 12px;
+  }
+  .attachments-main .team-field {
+    font-size: 11px;
+  }
+  .attachments-main .team-field input,
+  .attachments-main .team-field select {
+    font-size: 16px;
+    padding-inline: 8px;
+  }
+  .attachment-scanner-note {
+    font-size: 11.5px;
+    margin: 6px 0;
+    padding: 8px 10px;
+  }
+  .attachment-upload,
+  .attachment-management,
+  .attachment-copy,
+  .attachment-preview,
+  .attachment-delete {
+    padding: 12px;
+  }
+  .attachment-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .attachment-submit {
+    width: 100%;
+  }
+  .attachment-request-picker .request-picker-current {
+    font-size: 11px;
+  }
+  .attachment-list-heading {
+    flex-wrap: wrap;
+  }
+}

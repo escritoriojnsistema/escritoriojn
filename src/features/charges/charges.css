@@ -1,7 +1,9 @@
 .charges-main {
   width: 100%;
   margin-inline: auto;
+  min-width: 0;
 }
+
 .charges-main fieldset {
   border: 0;
   padding: 0;
@@ -10,97 +12,138 @@
   display: grid;
   gap: 10px;
 }
+
 .charges-main .team-field {
   min-width: 0;
 }
+
 .charges-main input,
 .charges-main select {
   width: 100%;
   min-width: 0;
 }
+
 .charges-toolbar {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
+
+.charges-toolbar > strong {
+  color: var(--jn-navy, #103248);
+  font-variant-numeric: tabular-nums;
+}
+
 .charges-items {
   list-style: none;
   padding: 0;
   margin: 12px 0;
 }
+
 .charges-items li {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid #ddd;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-xs, 6px);
   overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+  transition: background-color 150ms var(--jn-ease, ease);
 }
+
+.charges-items li:hover {
+  background: var(--jn-surface, #ffffff);
+}
+
 .charges-items strong {
   white-space: nowrap;
+  color: var(--jn-navy, #103248);
+  font-variant-numeric: tabular-nums;
 }
+
 .charges-totals {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-  margin: 16px 0;
+  margin: 14px 0;
 }
+
+.charges-totals > div {
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-sm, 9px);
+  padding: 12px 14px;
+  box-shadow: var(--jn-shadow-xs);
+  min-width: 0;
+}
+
 .charges-totals dt {
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--jn-muted, #556b7a);
 }
+
 .charges-totals dd {
-  margin: 6px 0;
+  margin: 6px 0 0;
   font-weight: 700;
   font-size: 20px;
+  color: var(--jn-navy, #103248);
+  font-variant-numeric: tabular-nums;
 }
+
 .charges-plan {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
+
 .charges-confirm {
   display: flex;
   align-items: center;
   gap: 10px;
   min-height: 44px;
+  font-size: 13px;
+  color: var(--jn-text, #142b3c);
+  cursor: pointer;
 }
+
 .charges-confirm input {
   width: 20px;
   min-width: 20px;
   height: 20px;
+  accent-color: var(--jn-navy, #103248);
 }
+
 .charges-main .charge-editor {
   max-width: 760px;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  padding: 18px 20px;
+  box-shadow: var(--jn-shadow-xs);
 }
+
 .charges-main summary {
   min-height: 44px;
   padding-block: 12px;
   cursor: pointer;
+  font-weight: 600;
+  color: var(--jn-navy, #103248);
 }
+
 .charges-main .service-section {
   margin-top: 12px;
-}
-@media (max-width: 420px) {
-  .charges-totals {
-    gap: 5px;
-  }
-  .charges-totals dd {
-    font-size: 16px;
-  }
-  .charges-items li {
-    font-size: 14px;
-  }
-  .charges-plan {
-    grid-template-columns: 1fr 1fr;
-  }
 }
 
 .charges-snapshot-adjustment {
   display: block;
   font-size: 12px;
-  color: #555;
+  color: var(--jn-muted, #556b7a);
   margin-top: 4px;
+  font-variant-numeric: tabular-nums;
 }
 
 @media (max-width: 900px) {
@@ -109,7 +152,10 @@
   }
   .charges-main > .form-feedback {
     margin: 4px 0;
-    padding: 4px 8px;
+    padding: 6px 10px;
+  }
+  .charges-main .charge-editor {
+    padding: 12px;
   }
   .charges-toolbar {
     gap: 4px;
@@ -128,12 +174,34 @@
     margin-block: 4px;
   }
   .charges-items li {
-    padding-block: 5px;
+    padding: 6px 4px;
   }
   .charges-totals {
-    margin-block: 4px;
+    margin-block: 6px;
+    gap: 8px;
+  }
+  .charges-totals > div {
+    padding: 8px 10px;
   }
   .charges-main .service-section {
     margin-top: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .charges-totals {
+    gap: 5px;
+  }
+  .charges-totals > div {
+    padding: 7px 8px;
+  }
+  .charges-totals dd {
+    font-size: 15px;
+  }
+  .charges-items li {
+    font-size: 13.5px;
+  }
+  .charges-plan {
+    grid-template-columns: 1fr 1fr;
   }
 }
