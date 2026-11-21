@@ -1104,10 +1104,50 @@
   .expense-editor .team-field select {
     font-size: 16px;
   }
+  .operation-main:has(.expense-editor) {
+    padding-top: 2px;
+    padding-bottom: 4px;
+  }
+  .expense-main:has(.expense-editor) > .operation-heading {
+    margin-bottom: 2px;
+    gap: 0;
+  }
+  .expense-main:has(.expense-editor) > .operation-heading .eyebrow {
+    display: none;
+  }
+  .expense-main:has(.expense-editor) > .operation-heading h1 {
+    font-size: 16px;
+    line-height: 1.2;
+    margin: 0;
+  }
+  .expense-editor {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .expense-editor h2 {
+    font-size: 15px;
+    line-height: 1.2;
+    margin: 0 0 4px;
+  }
+  .expense-editor .expense-fields {
+    gap: 4px 8px;
+  }
+  .expense-editor .team-field {
+    gap: 1px;
+    font-size: 11px;
+  }
+  .expense-editor .team-field textarea {
+    min-height: 44px;
+    height: 44px;
+    padding: 6px 8px;
+  }
   .expense-editor .account-actions {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    margin-block: 6px 0;
   }
   .expense-editor .account-actions button {
     flex: 1 1 130px;

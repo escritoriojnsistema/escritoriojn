@@ -126,7 +126,7 @@ export function ClientCorrectionModal({
 
           {error && <p role="alert" className="form-feedback error">{error}</p>}
 
-          <div className="smart-modal-actions" style={{ marginTop: 12 }}>
+          <div className="smart-modal-actions">
             <button type="button" className="secondary-button" disabled={busy} onClick={onClose}>
               Cancelar
             </button>
@@ -205,7 +205,7 @@ export function StaffCorrectionsPanel({
       {feedback && <p role="status" className="form-feedback">{feedback}</p>}
       <ul className="customer-list">
         {items.map((item) => (
-          <li key={item.id} style={{ display: 'block' }}>
+          <li key={item.id} className="smart-correction-item">
             <div className="cash-session-heading">
               <strong>{item.section_key}</strong>
               <span>{correctionStatusLabels[item.status]}</span>
@@ -223,7 +223,7 @@ export function StaffCorrectionsPanel({
               </p>
             )}
             {canEdit && ['aguardando_conferencia', 'em_conferencia', 'aguardando_complementacao', 'aprovada'].includes(item.status) && (
-              <div style={{ marginTop: 8 }}>
+              <div className="smart-correction-decision">
                 <label className="team-field">
                   Parecer da conferência
                   <input

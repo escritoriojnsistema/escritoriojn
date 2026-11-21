@@ -197,9 +197,11 @@ button:disabled { cursor: not-allowed; }
   justify-content: center;
   align-items: center;
   gap: 10px;
+  max-width: 100%;
   font-size: 13px;
   font-weight: 600;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
   box-shadow: var(--jn-shadow-xs);
   transition: background-color 160ms var(--jn-ease), border-color 160ms var(--jn-ease), transform 140ms var(--jn-ease), box-shadow 160ms var(--jn-ease);
 }

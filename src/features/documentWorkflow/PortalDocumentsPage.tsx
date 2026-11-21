@@ -1,6 +1,6 @@
 import {useState} from 'react';import {Navigate} from 'react-router-dom';
 import {useAuth} from '../auth/AuthProvider';import {OperationHeading,OperationLayout} from '../operation/OperationLayout';import {OperationalFeedback} from '../operation/OperationalAccess';import {paths} from '../../app/routes';import {PortalLibrary} from '../portalDocuments/PortalLibrary';
-import '../team/team.css';import '../customers/customers.css';
+import '../team/team.css';import '../customers/customers.css';import '../documents/documents.css';
 export default function PortalDocumentsPage({embedded=false,fixedOffice,onPendingChange}:{embedded?:boolean;fixedOffice?:string;onPendingChange?:(v:boolean)=>void}={}){
  const auth=useAuth(),[selected,setSelected]=useState(''),[busy,setBusy]=useState(false),contexts=auth.contexts.filter(c=>c.role_code==='client'),context=contexts.find(c=>c.office_id===(fixedOffice??selected))??(!fixedOffice?contexts[0]:undefined);
  if(auth.status==='loading')return <OperationalFeedback status="loading"/>;if(auth.status==='signedOut'||auth.status==='expired')return <Navigate replace to={paths.client}/>;if(auth.status!=='authorized'||!context)return <OperationalFeedback status={auth.status==='unavailable'?'unavailable':'denied'}/>;

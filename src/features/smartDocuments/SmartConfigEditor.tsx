@@ -103,7 +103,7 @@ export function SmartConfigEditor({
         </button>
       </div>
 
-      <fieldset disabled={busy || !canManage} style={{ marginTop: 12 }}>
+      <fieldset className="smart-config-fieldset" disabled={busy || !canManage}>
         <legend>Comportamento do motor</legend>
         <div className="smart-fields-grid">
           <label className="team-field">
@@ -155,7 +155,7 @@ export function SmartConfigEditor({
 
         <h3>Perguntas iniciais ({config.initial_questions.length})</h3>
         {config.initial_questions.map((q, idx) => (
-          <div key={q.key} className="smart-party-row" style={{ marginBottom: 8 }}>
+          <div key={q.key} className="smart-party-row smart-config-item">
             <div className="smart-fields-grid">
               <label className="team-field">
                 Pergunta #{idx + 1}
@@ -196,7 +196,7 @@ export function SmartConfigEditor({
 
         <h3>Campos dinâmicos configurados ({config.fields.length})</h3>
         {config.fields.map((f, idx) => (
-          <div key={f.key} className="smart-fields-grid" style={{ marginBottom: 6 }}>
+          <div key={f.key} className="smart-fields-grid smart-config-field-row">
             <label className="team-field">
               Campo {f.key}
               <input
@@ -248,7 +248,7 @@ export function SmartConfigEditor({
       </fieldset>
 
       {testOpen && (
-        <div style={{ marginTop: 16 }}>
+        <div className="smart-config-test-wrap">
           <SmartWizard
             office={office}
             templateId={templateId}

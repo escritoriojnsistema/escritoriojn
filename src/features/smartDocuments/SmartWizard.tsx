@@ -321,13 +321,13 @@ export function SmartWizard({
         <div className="smart-wizard-status" role="status">
           {allEval.emptyPendencies.length > 0 ? (
             <span className="smart-pendency-count">
-              <AlertCircle size={15} aria-hidden="true" style={{ verticalAlign: 'text-bottom', marginRight: 4 }} />
+              <AlertCircle size={15} aria-hidden="true" className="smart-inline-icon" />
               {allEval.emptyPendencies.length}{' '}
               {allEval.emptyPendencies.length === 1 ? 'campo pendente' : 'campos pendentes'}
             </span>
           ) : (
             <span className="document-ready">
-              <CheckCircle2 size={15} aria-hidden="true" style={{ verticalAlign: 'text-bottom', marginRight: 4 }} />
+              <CheckCircle2 size={15} aria-hidden="true" className="smart-inline-icon" />
               Todos os campos visíveis preenchidos
             </span>
           )}
@@ -547,7 +547,7 @@ export function SmartWizard({
                   <li key={doc.id}>
                     <strong>{doc.label}</strong>
                     {doc.required ? ' (necessário na conferência)' : ' (se aplicável)'}
-                    {doc.description && <small style={{ display: 'block' }}>{doc.description}</small>}
+                    {doc.description && <small className="smart-doc-desc">{doc.description}</small>}
                   </li>
                 ))}
               </ul>
@@ -619,7 +619,7 @@ export function SmartWizard({
         >
           <div className="smart-preview-header">
             <h3>
-              <FileText size={16} aria-hidden="true" style={{ verticalAlign: 'text-bottom', marginRight: 6 }} />
+              <FileText size={16} aria-hidden="true" className="smart-inline-icon" />
               Prévia ao vivo
             </h3>
             <small>{definition.demonstration ? 'RASCUNHO INTERNO' : 'Documento dinâmico'}</small>

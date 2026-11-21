@@ -18,12 +18,18 @@
 
 .reading-controls button {
   min-height: 44px;
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
 }
 
 .reading-rate-field {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
+  max-width: 100%;
+  min-width: 0;
   font-size: 12px;
   font-weight: 600;
   color: var(--jn-navy, #103248);
@@ -32,6 +38,8 @@
 
 .reading-rate-field select {
   min-height: 44px;
+  max-width: 100%;
+  min-width: 0;
   border: 1px solid var(--jn-border-strong, #bccad3);
   border-radius: var(--jn-radius-xs, 6px);
   background: var(--jn-surface, #ffffff);
@@ -93,7 +101,12 @@
   .reading-status {
     font-size: 12px;
   }
+  .reading-rate-field {
+    width: 100%;
+  }
   .reading-rate-field select {
+    width: 100%;
+    padding-inline: 6px;
     font-size: 16px;
   }
 }

@@ -16,11 +16,9 @@ export function ReadAloud({text,scope,disabled=false}:{text:string;scope:string;
  const active=state==='speaking'||state==='paused';
  return <section className="document-reading" aria-label="Leitura em voz alta">
   <div className="reading-controls">
-   {active?<>
-    <button type="button" className="team-text-button" onClick={()=>reader.current?.stop()}>Parar leitura</button>
-    {pause&&<button type="button" className="team-text-button" onClick={()=>state==='paused'?reader.current?.resume():reader.current?.pause()}>{state==='paused'?'Retomar leitura':'Pausar leitura'}</button>}
-    <button type="button" className="team-text-button" onClick={()=>reader.current?.start(text,rate)}>Reiniciar leitura</button>
-   </>:<button type="button" className="team-text-button" disabled={disabled||!supported||!voice||!text.trim()} onClick={()=>reader.current?.start(text,rate)}>Ler em voz alta</button>}
+   <button type="button" className="team-text-button" disabled={!active&&(disabled||!supported||!voice||!text.trim())} onClick={()=>active?reader.current?.stop():reader.current?.start(text,rate)}>{active?'Parar leitura':'Ler em voz alta'}</button>
+   {active&&pause&&<button type="button" className="team-text-button" onClick={()=>state==='paused'?reader.current?.resume():reader.current?.pause()}>{state==='paused'?'Retomar leitura':'Pausar leitura'}</button>}
+   {active&&<button type="button" className="team-text-button" onClick={()=>reader.current?.start(text,rate)}>Reiniciar leitura</button>}
    <label className="reading-rate-field">Velocidade<select aria-label="Velocidade da leitura em voz alta" value={String(rate)} disabled={disabled||!supported} onChange={e=>{const nextRate=Number(e.target.value);setRate(nextRate);reader.current?.setRate(nextRate);if(active)reader.current?.start(text,nextRate);}}><option value="0.75">0,75x</option><option value="1">1x (normal)</option><option value="1.25">1,25x</option><option value="1.5">1,5x</option></select></label>
   </div>
   <p className="reading-note">{!supported?'Este navegador não oferece leitura em voz alta. Use o texto na tela ou solicite uma versão acessível ao escritório.':!voice?'Nenhuma voz local em português foi identificada. Instale uma voz no dispositivo ou use o texto na tela. Vozes remotas não são acionadas.':`Voz local indicada pelo navegador: ${voice.lang}. Confira as configurações de voz do dispositivo antes de ler dados sensíveis e use um local reservado. A leitura não substitui a revisão.`}</p>

@@ -534,6 +534,210 @@
   margin-block: 5px;
 }
 
+.document-editor-section {
+  margin-bottom: 14px;
+}
+
+.document-hash {
+  overflow-wrap: anywhere;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+}
+
+/* Lote 5: Documents Hub, Portal Library, Catalog & Intake Surfaces */
+.documents-hub > .team-field,
+.documents-hub > .customer-office {
+  max-width: 340px;
+  margin-bottom: 12px;
+}
+
+.documents-hub > .team-tabs {
+  margin-bottom: 16px;
+}
+
+.portal-library {
+  min-width: 0;
+}
+
+.portal-doc-card {
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  padding: 20px 22px;
+  box-shadow: var(--jn-shadow-xs);
+  display: grid;
+  gap: 10px;
+}
+
+.portal-doc-card h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+  line-height: 1.3;
+}
+
+.portal-doc-card .operation-details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px 16px;
+  padding: 14px 16px;
+  margin: 4px 0;
+  background: var(--jn-surface-subtle, #f2f6f8);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-sm, 9px);
+  font-variant-numeric: tabular-nums;
+}
+
+.portal-doc-card .operation-details dt {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--jn-muted, #556b7a);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.portal-doc-card .operation-details dd {
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+}
+
+.portal-correction-meta {
+  display: block;
+  margin-top: 2px;
+  color: var(--jn-muted, #556b7a);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.catalog-offer,
+.catalog-result,
+.portal-intake-card,
+.portal-service-section {
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  padding: 20px 22px;
+  box-shadow: var(--jn-shadow-xs);
+  min-width: 0;
+}
+
+.catalog-offer h2,
+.portal-service-section h2 {
+  margin: 10px 0 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+  line-height: 1.3;
+}
+
+.catalog-result {
+  display: grid;
+  gap: 12px;
+}
+
+.catalog-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.catalog-checklist {
+  background: var(--jn-surface-subtle, #f2f6f8);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-sm, 9px);
+  padding: 12px 14px;
+  margin: 10px 0;
+}
+
+.catalog-checklist strong {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+  margin-bottom: 4px;
+}
+
+.catalog-checklist ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  line-height: 1.6;
+}
+
+.catalog-mode-bar {
+  margin: 12px 0;
+}
+
+.catalog-smart-wrap {
+  margin-bottom: 16px;
+}
+
+.catalog-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0 0 14px;
+  min-width: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.catalog-fieldset legend {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+  margin-bottom: 8px;
+  padding: 0;
+}
+
+.portal-intake-card {
+  display: grid;
+  gap: 10px;
+}
+
+.portal-intake-card .service-section {
+  border-bottom: 0;
+  margin-top: 0;
+}
+
+.portal-intake-card fieldset,
+.portal-service-section fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0 0 12px;
+  min-width: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.portal-intake-card legend,
+.portal-service-section legend {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+  margin-bottom: 6px;
+  padding: 0;
+}
+
+.portal-service-section details > summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--jn-navy, #103248);
+}
+
+.portal-service-section details ul {
+  margin: 4px 0 10px;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
 @media (min-width: 1000px) {
   .signature-panel {
     display: grid;
@@ -607,8 +811,32 @@
   .document-text,
   .document-data,
   .document-review,
-  .document-workflow {
+  .document-workflow,
+  .portal-doc-card,
+  .catalog-offer,
+  .catalog-result,
+  .portal-intake-card,
+  .portal-service-section {
+    padding: 14px;
+  }
+  .portal-doc-card .operation-details {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
     padding: 12px;
+  }
+  .portal-library input,
+  .portal-library select,
+  .portal-library textarea,
+  .catalog-offer input,
+  .catalog-offer select,
+  .catalog-offer textarea,
+  .portal-intake-card input,
+  .portal-intake-card select,
+  .portal-intake-card textarea,
+  .portal-service-section input,
+  .portal-service-section select,
+  .portal-service-section textarea {
+    font-size: 16px;
   }
   .document-panel:not(.selected) {
     display: none;

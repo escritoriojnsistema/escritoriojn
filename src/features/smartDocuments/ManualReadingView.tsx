@@ -77,19 +77,19 @@ export function ManualReadingView({
             }
           }}
         >
-          <BookOpenCheck size={16} aria-hidden="true" style={{ marginRight: 6 }} />
+          <BookOpenCheck size={16} aria-hidden="true" className="smart-inline-icon" />
           {open ? 'Ocultar leitura manual' : 'Ler manualmente'}
         </button>
       </div>
 
       {open && (
-        <div style={{ marginTop: 10 }}>
+        <div className="smart-manual-body">
           <p className="document-hint">
             Modo silencioso para conferência presencial ou acompanhamento cláusula por cláusula. Nunca aciona síntese de voz automaticamente.
           </p>
 
           {highlightedTokens.length > 0 && (
-            <details style={{ marginBottom: 10 }}>
+            <details className="smart-manual-tokens">
               <summary>Dados principais destacados ({highlightedTokens.length})</summary>
               <dl className="operation-details">
                 {highlightedTokens.map((t) => (
@@ -144,7 +144,7 @@ export function ManualReadingView({
           </div>
 
           {canLog && (
-            <div style={{ marginTop: 12 }}>
+            <div className="smart-manual-log">
               <label className="template-check">
                 <input
                   type="checkbox"
