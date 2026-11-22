@@ -93,6 +93,7 @@ Object.assign(auditActionNames,{
  'payment_providers.configured':'Configuração de bancos e pagamentos atualizada',
  'payment_providers.validated':'Conexão de provedor de pagamento validada',
  'payment_terminals.configured':'Maquininha de cartão configurada',
+ 'payment_terminals.deactivated':'Maquininha de cartão desativada',
 });
 Object.assign(auditTargetNames,{
  financial_approval:'Autorização financeira',

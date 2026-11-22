@@ -1,8 +1,10 @@
-import { Router, json, type Response } from 'express';
+import { createClient } from '@supabase/supabase-js';
+import { Router, json, type Request, type Response } from 'express';
 import { authenticatedClient } from '../auth/client.js';
 import { errorResponse } from '../../errors.js';
 import { fields, uuid } from '../team/validation.js';
 import { positive } from '../requests/validation.js';
+import { validPublicConnection } from '../../../shared/connection.js';
 import {
   checkoutMethods,
   clientPaymentStates,
@@ -17,6 +19,11 @@ import {
   type TerminalOperationState,
 } from '../../../shared/paymentCheckout.js';
 import { isValidIdempotencyKey } from '../../../shared/requestDeletion.js';
+import {
+  resolveProviderWebhookSecret,
+  verifyCronBearer,
+  verifyWebhookHmac,
+} from './webhookSecurity.js';
 
 export const paymentCheckoutRouter = Router();
 
@@ -181,10 +188,35 @@ function projectClientSummary(raw: unknown): ClientCheckoutSummary {
   };
 }
 
+function createServiceRoleClient() {
+  const url = process.env.VITE_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const publishable = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  if (!url || !serviceKey || serviceKey.length < 20) return null;
+  // Validate URL format via canonical public connection check when publishable key is present,
+  // or require strict https/loopback http URL directly for server-only worker runs.
+  const urlAllowed = publishable
+    ? validPublicConnection(url, publishable)
+    : /^https:\/\/|^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?(\/|$)/i.test(url);
+  if (!urlAllowed) return null;
+  return createClient(url, serviceKey, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    global: {
+      fetch: (input, init) =>
+        fetch(input, {
+          ...init,
+          signal: AbortSignal.any([AbortSignal.timeout(8000), ...(init?.signal ? [init.signal] : [])]),
+        }),
+    },
+  });
+}
+
+type RawBodyRequest = Request & { rawBody?: Buffer };
+
 /**
  * Webhook intake contract (server-side only, NO browser session).
- * Validates provider signature header presence, JSON envelope schema, and rejects
- * unverified/unconfigured webhooks until IA 2 wires cryptographic verification & persistence.
+ * Enforces strict HMAC-SHA256 verification over exact rawBody bytes, optional timestamp
+ * anti-replay check, envelope validation, and idempotent service_role persistence.
  */
 paymentCheckoutRouter.post(
   '/webhooks/:provider',
@@ -195,8 +227,13 @@ paymentCheckoutRouter.post(
     }
     next();
   },
-  json({ limit: '64kb' }),
-  (req, res) => {
+  json({
+    limit: '64kb',
+    verify: (req, _res, buf) => {
+      (req as RawBodyRequest).rawBody = Buffer.from(buf);
+    },
+  }),
+  async (req, res) => {
     const provider = String(req.params.provider ?? '').trim();
     if (!/^[a-z0-9_-]{2,48}$/i.test(provider)) {
       errorResponse(res, 404, 'WEBHOOK_PROVIDER_INVALID', 'Provedor de webhook inválido.');
@@ -211,15 +248,135 @@ paymentCheckoutRouter.post(
       errorResponse(res, 422, 'WEBHOOK_ENVELOPE_INVALID', 'Envelope de evento de pagamento inválido.');
       return;
     }
-    // Fail-closed until IA 2 configures provider secret verification + persistent idempotency table.
-    errorResponse(
-      res,
-      503,
-      'WEBHOOK_PERSISTENCE_PENDING',
-      'Recepção de webhooks aguardando validação de credenciais e persistência do provedor.',
-    );
+
+    const secret = resolveProviderWebhookSecret(provider);
+    if (!secret) {
+      errorResponse(
+        res,
+        503,
+        'WEBHOOK_PERSISTENCE_PENDING',
+        'Recepção de webhooks aguardando validação de credenciais e persistência do provedor.',
+      );
+      return;
+    }
+
+    const rawBody = (req as RawBodyRequest).rawBody ?? Buffer.from(JSON.stringify(req.body), 'utf8');
+    const timestampHeader = req.get('x-jn-webhook-timestamp') ?? req.get('x-webhook-timestamp') ?? null;
+    const verification = verifyWebhookHmac({
+      rawBody,
+      signatureHeader: signature,
+      timestampHeader,
+      secret,
+    });
+    if (!verification.ok) {
+      errorResponse(
+        res,
+        401,
+        verification.code,
+        verification.code === 'WEBHOOK_TIMESTAMP_EXPIRED'
+          ? 'Carimbo de data/hora do webhook fora da janela de segurança.'
+          : 'Assinatura criptográfica do webhook inválida.',
+      );
+      return;
+    }
+
+    const serviceClient = createServiceRoleClient();
+    if (!serviceClient) {
+      errorResponse(
+        res,
+        503,
+        'WEBHOOK_PERSISTENCE_PENDING',
+        'Serviço de persistência de webhooks indisponível no momento.',
+      );
+      return;
+    }
+
+    const envelope = req.body as Record<string, unknown>;
+    const amountCents =
+      typeof envelope.amount_cents === 'number' && Number.isSafeInteger(envelope.amount_cents) && envelope.amount_cents > 0
+        ? envelope.amount_cents
+        : null;
+    const authCode =
+      typeof envelope.authorization_code === 'string' && envelope.authorization_code.trim().length > 0
+        ? envelope.authorization_code.trim().slice(0, 64)
+        : null;
+
+    try {
+      const { data, error } = await serviceClient.rpc('payment_webhook_ingest', {
+        p_provider_code: provider,
+        p_event_id: String(envelope.event_id),
+        p_provider_reference: String(envelope.resource_ref),
+        p_event_type: String(envelope.event_type),
+        p_payload_sha256: verification.payloadSha256,
+        p_amount_cents: amountCents,
+        p_authorization_code: authCode,
+      });
+      if (error) {
+        errorResponse(res, 503, 'WEBHOOK_INGEST_UNAVAILABLE', 'Não foi possível registrar o evento de pagamento.');
+        return;
+      }
+      const d = (data && typeof data === 'object' ? data : {}) as Record<string, unknown>;
+      res.json({
+        data: {
+          status: typeof d.status === 'string' ? d.status : 'processed',
+          event_id: typeof d.event_id === 'string' ? d.event_id : String(envelope.event_id),
+          intent_id: typeof d.intent_id === 'string' ? d.intent_id : null,
+          state: typeof d.state === 'string' ? d.state : null,
+          settlement_stage: typeof d.settlement_stage === 'string' ? d.settlement_stage : null,
+        },
+      });
+    } catch {
+      errorResponse(res, 503, 'WEBHOOK_INGEST_UNAVAILABLE', 'Não foi possível registrar o evento de pagamento.');
+    }
   },
 );
+
+/**
+ * Scheduled maintenance endpoint (Vercel Cron GET or authenticated worker POST).
+ * Protected via constant-time Bearer secret; expires stale payment intents and financial approvals.
+ */
+async function handleCronReconcile(req: Request, res: Response) {
+  const expectedSecret = process.env.PAYMENT_RECONCILIATION_CRON_SECRET ?? process.env.CRON_SECRET;
+  const authCheck = verifyCronBearer(req.get('Authorization'), expectedSecret);
+  if (!authCheck.ok) {
+    errorResponse(
+      res,
+      authCheck.status,
+      authCheck.code,
+      authCheck.status === 503
+        ? 'Rotina de conciliação não configurada neste ambiente.'
+        : 'Autorização de conciliação inválida.',
+    );
+    return;
+  }
+
+  const serviceClient = createServiceRoleClient();
+  if (!serviceClient) {
+    errorResponse(res, 503, 'RECONCILIATION_UNAVAILABLE', 'Conexão de manutenção indisponível.');
+    return;
+  }
+
+  try {
+    const { data, error } = await serviceClient.rpc('payment_maintenance_sweep');
+    if (error) {
+      errorResponse(res, 503, 'RECONCILIATION_UNAVAILABLE', 'Não foi possível concluir a rotina de manutenção.');
+      return;
+    }
+    const d = (data && typeof data === 'object' ? data : {}) as Record<string, unknown>;
+    res.json({
+      data: {
+        expired_intents: Number.isSafeInteger(d.expired_intents) ? Number(d.expired_intents) : 0,
+        expired_approvals: Number.isSafeInteger(d.expired_approvals) ? Number(d.expired_approvals) : 0,
+        ran_at: typeof d.ran_at === 'string' ? d.ran_at : new Date().toISOString(),
+      },
+    });
+  } catch {
+    errorResponse(res, 503, 'RECONCILIATION_UNAVAILABLE', 'Não foi possível concluir a rotina de manutenção.');
+  }
+}
+
+paymentCheckoutRouter.get('/cron/reconcile', handleCronReconcile);
+paymentCheckoutRouter.post('/cron/reconcile', handleCronReconcile);
 
 // Authenticated routes below
 paymentCheckoutRouter.use(async (req, res, next) => {

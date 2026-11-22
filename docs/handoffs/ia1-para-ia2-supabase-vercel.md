@@ -2,7 +2,15 @@
 
 **Projeto**: Escritório JN  
 **Escopo entregue pela IA 1**: Evolução completa de Frontend (React + TypeScript), Backend Express (TypeScript), contratos compartilhados (`shared/`), regras de domínio puras, validações de entrada/saída, gates fail-closed e testes automatizados das Etapas 1 a 6.  
-**Escopo exclusivo reservado para a IA 2**: Migrations SQL no Supabase, tabelas/colunas/índices/constraints, políticas RLS, funções RPC e triggers transacionais, limpeza coordenada no Supabase Storage, variáveis de ambiente/segredos, integração real com provedores bancários/PSP/maquininhas, webhooks assinados, jobs/cron e configuração de infraestrutura na Vercel.
+**Escopo IA 2 já implementado no repositório (pronto para publicação)**:
+- 4 migrations SQL aditivas (`20261122120000` a `20261122121500`) com RBAC, notificações estendidas, 9 tabelas privadas com RLS + `REVOKE ALL`, 22 RPCs autenticadas (`public.* SECURITY INVOKER`), 4 RPCs exclusivas `service_role` e triggers de invalidação automática.
+- Edge Function `supabase/functions/request-deletion-cleanup/` para limpeza física coordenada no Storage via API oficial (nunca `DELETE FROM storage.objects`).
+- Verificação criptográfica HMAC-SHA256 sobre `rawBody` + anti-replay por timestamp + ingestão `service_role` em `POST /api/payment-checkout/webhooks/:provider`, além da rotina agendada `/api/payment-checkout/cron/reconcile` configurada em `vercel.json` e placeholders server-side em `.env.example`.
+
+**Pendências exclusivas de ambiente hospedado (execução externa no Supabase/Vercel)**:
+- Aplicar as 4 novas migrations no projeto Supabase hospedado (`supabase db push`) e executar `npm run test:db` em ambiente com Docker/PostgreSQL.
+- Publicar a Edge Function `request-deletion-cleanup` (`supabase functions deploy request-deletion-cleanup`).
+- Cadastrar os segredos server-side (`SUPABASE_SERVICE_ROLE_KEY`, `PAYMENT_WEBHOOK_HMAC_SECRET_*`, `PAYMENT_RECONCILIATION_CRON_SECRET` e credenciais do provedor bancário/PSP contratado) no painel da Vercel e do Supabase.
 
 ---
 
