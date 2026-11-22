@@ -7,6 +7,7 @@ import { isValidIdempotencyKey } from '../../../shared/requestDeletion.js';
 import {
   financialApprovalKinds,
   financialApprovalStatuses,
+  isValidIsoDate,
   type EligibleApprover,
   type FinancialApprovalItem,
   type FinancialApprovalKind,
@@ -134,6 +135,11 @@ function projectApprovalItem(raw: unknown): FinancialApprovalItem {
     payment_method_name: typeof d.payment_method_name === 'string' ? d.payment_method_name : null,
     session_id: typeof d.session_id === 'string' ? d.session_id : null,
     unit_id: typeof d.unit_id === 'string' ? d.unit_id : null,
+    unit_name: typeof d.unit_name === 'string' ? d.unit_name : null,
+    destination_account_id: typeof d.destination_account_id === 'string' ? d.destination_account_id : null,
+    destination_account_name: typeof d.destination_account_name === 'string' ? d.destination_account_name : null,
+    operation_date: typeof d.operation_date === 'string' ? d.operation_date : null,
+    external_reference: typeof d.external_reference === 'string' ? d.external_reference : null,
     justification: String(d.justification ?? ''),
     decision_note: typeof d.decision_note === 'string' ? d.decision_note : null,
     created_at: String(d.created_at ?? ''),
@@ -245,9 +251,12 @@ financialApprovalsRouter.post('/manual-payment/request', async (req, res) => {
       'request_id',
       'session_id',
       'unit_id',
+      'destination_account_id',
       'payment_method_id',
       'approver_user_id',
       'amount_cents',
+      'operation_date',
+      'external_reference',
       'justification',
       'idempotency_key',
     ]) ||
@@ -257,13 +266,27 @@ financialApprovalsRouter.post('/manual-payment/request', async (req, res) => {
     !uuid(b.request_id) ||
     !uuid(b.session_id) ||
     !uuid(b.unit_id) ||
+    !(b.destination_account_id === null || uuid(b.destination_account_id)) ||
     !uuid(b.payment_method_id) ||
     !uuid(b.approver_user_id) ||
     !positive(b.amount_cents, 1000000000) ||
+    !isValidIsoDate(b.operation_date) ||
+    !(
+      b.external_reference === null ||
+      b.external_reference === '' ||
+      (typeof b.external_reference === 'string' &&
+        b.external_reference.trim().length <= 120 &&
+        !/[\r\n\0]/.test(b.external_reference))
+    ) ||
     !requestText(b.justification, 300) ||
     !isValidIdempotencyKey(b.idempotency_key)
   ) {
-    errorResponse(res, 422, 'APPROVAL_VALIDATION', 'Preencha o valor, a forma de pagamento, o aprovador e a justificativa.');
+    errorResponse(
+      res,
+      422,
+      'APPROVAL_VALIDATION',
+      'Preencha o valor, a forma de pagamento, a data da operação, o aprovador e a justificativa.',
+    );
     return;
   }
 
@@ -276,9 +299,15 @@ financialApprovalsRouter.post('/manual-payment/request', async (req, res) => {
       p_request_id: b.request_id,
       p_session_id: b.session_id,
       p_unit_id: b.unit_id,
+      p_destination_account_id: b.destination_account_id,
       p_payment_method_id: b.payment_method_id,
       p_approver_user_id: b.approver_user_id,
       p_amount_cents: b.amount_cents,
+      p_operation_date: String(b.operation_date).trim(),
+      p_external_reference:
+        typeof b.external_reference === 'string' && b.external_reference.trim()
+          ? b.external_reference.trim()
+          : null,
       p_justification: String(b.justification).trim(),
       p_idempotency_key: b.idempotency_key,
     });

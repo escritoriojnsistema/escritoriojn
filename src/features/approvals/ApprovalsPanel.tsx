@@ -7,6 +7,7 @@ import {
 } from '../../../shared/financialApprovals';
 import { cashMoney } from '../cash/CashSessions';
 import { financialApprovalsApi, FinancialApprovalsError } from './api';
+import '../settings/paymentProviders.css';
 
 type Props = {
   office: string;
@@ -143,7 +144,7 @@ export function ApprovalsPanel({
         </p>
       )}
 
-      <div className="request-grid request-filters">
+      <div className="jn-approvals-filters">
         <label className="team-field">
           Visão
           <select
@@ -232,6 +233,24 @@ export function ApprovalsPanel({
                         <dt>Forma de pagamento</dt>
                         <dd>{item.payment_method_name ?? 'Não informada'}</dd>
                       </div>
+                      {item.operation_date && (
+                        <div>
+                          <dt>Data da operação</dt>
+                          <dd>{item.operation_date.split('-').reverse().join('/')}</dd>
+                        </div>
+                      )}
+                      {(item.destination_account_name || item.unit_name) && (
+                        <div>
+                          <dt>Conta / unidade de destino</dt>
+                          <dd>{[item.destination_account_name, item.unit_name].filter(Boolean).join(' · ')}</dd>
+                        </div>
+                      )}
+                      {item.external_reference && (
+                        <div>
+                          <dt>Referência externa</dt>
+                          <dd>{item.external_reference}</dd>
+                        </div>
+                      )}
                     </>
                   )}
                 </dl>

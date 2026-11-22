@@ -4,6 +4,7 @@ import { createServer } from 'node:http';
 import { app } from '../server/app.js';
 import {
   calculateCommercialDiscount,
+  isValidIsoDate,
   validateApprovalExecutionOrDecision,
 } from '../shared/financialApprovals.js';
 
@@ -177,6 +178,9 @@ test('Etapas 4 e 5 (Cenários 15, 16, 17, 18): cálculo de desconto R$/%, expira
     }).code,
     'CASH_SESSION_CLOSED',
   );
+  assert.equal(isValidIsoDate('2026-11-21'), true);
+  assert.equal(isValidIsoDate('2026-02-30'), false);
+  assert.equal(isValidIsoDate('21/11/2026'), false);
 });
 
 test('Etapas 4 e 5 (Cenários 15-18): API /api/financial-approvals contrato, fail-closed, aprovação, recusa, revogação e execução única', async () => {
@@ -207,6 +211,11 @@ test('Etapas 4 e 5 (Cenários 15-18): API /api/financial-approvals contrato, fai
     payment_method_name: 'Dinheiro',
     session_id: SESSION_ID,
     unit_id: UNIT_ID,
+    unit_name: 'Unidade Sede',
+    destination_account_id: METHOD_ID,
+    destination_account_name: 'Caixa Balcão 01',
+    operation_date: '2026-11-21',
+    external_reference: 'E2E-123456789',
     justification: 'Pagamento em espécie no balcão',
     decision_note: null,
     created_at: '2026-11-21T10:00:00Z',
@@ -326,6 +335,25 @@ test('Etapas 4 e 5 (Cenários 15-18): API /api/financial-approvals contrato, fai
     assert.equal(approvers.data.items.length, 1);
     assert.equal(approvers.data.items[0].role_label, 'Administrador');
 
+    // Data inválida -> 422
+    const invalidDateReq = await send('/manual-payment/request', {
+      office_id: OFFICE_ID,
+      charge_id: CHARGE_ID,
+      charge_version: 2,
+      request_id: REQUEST_ID,
+      session_id: SESSION_ID,
+      unit_id: UNIT_ID,
+      destination_account_id: METHOD_ID,
+      payment_method_id: METHOD_ID,
+      approver_user_id: APPROVER_ID,
+      amount_cents: 10000,
+      operation_date: '2026-02-30',
+      external_reference: null,
+      justification: 'Recebimento presencial em espécie',
+      idempotency_key: 'man-req-bad-date',
+    });
+    assert.equal(invalidDateReq.status, 422);
+
     const manualReq = await send('/manual-payment/request', {
       office_id: OFFICE_ID,
       charge_id: CHARGE_ID,
@@ -333,13 +361,20 @@ test('Etapas 4 e 5 (Cenários 15-18): API /api/financial-approvals contrato, fai
       request_id: REQUEST_ID,
       session_id: SESSION_ID,
       unit_id: UNIT_ID,
+      destination_account_id: METHOD_ID,
       payment_method_id: METHOD_ID,
       approver_user_id: APPROVER_ID,
       amount_cents: 10000,
+      operation_date: '2026-11-21',
+      external_reference: 'E2E-123456789',
       justification: 'Recebimento presencial em espécie',
       idempotency_key: 'man-req-0001',
     });
     assert.equal(manualReq.status, 201);
+    const manualJson = await manualReq.json();
+    assert.equal(manualJson.data.operation_date, '2026-11-21');
+    assert.equal(manualJson.data.external_reference, 'E2E-123456789');
+    assert.equal(manualJson.data.destination_account_name, 'Caixa Balcão 01');
 
     const discountReq = await send('/discount/request', {
       office_id: OFFICE_ID,

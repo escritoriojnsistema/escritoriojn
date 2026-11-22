@@ -7,6 +7,7 @@ import {
 import { chargeAmountToCents } from '../../../shared/charges';
 import { cashMoney } from '../cash/CashSessions';
 import { financialApprovalsApi, FinancialApprovalsError } from './api';
+import '../settings/paymentProviders.css';
 
 type Props = {
   office: string;
@@ -14,6 +15,8 @@ type Props = {
   chargeVersion: number;
   requestId: string;
   protocol: string;
+  customerName?: string;
+  serviceSummary?: string;
   originalCents: number;
   balanceCents: number;
   disabled?: boolean;
@@ -26,6 +29,8 @@ export function DiscountApprovalForm({
   chargeVersion,
   requestId,
   protocol,
+  customerName,
+  serviceSummary,
   originalCents,
   balanceCents,
   disabled = false,
@@ -179,6 +184,14 @@ export function DiscountApprovalForm({
               </label>
             )}
           </div>
+
+          {(customerName || serviceSummary) && (
+            <p className="customer-note">
+              {customerName ? `Cliente: ${customerName}` : ''}
+              {customerName && serviceSummary ? ' · ' : ''}
+              {serviceSummary ? `Serviços: ${serviceSummary}` : ''}
+            </p>
+          )}
 
           <dl className="jn-breakdown-grid" aria-label="Prévia do desconto solicitado">
             <div>

@@ -37,9 +37,12 @@ export type ManualPaymentApprovalRequestInput = {
   request_id: string;
   session_id: string;
   unit_id: string;
+  destination_account_id: string | null;
   payment_method_id: string;
   approver_user_id: string;
   amount_cents: number;
+  operation_date: string;
+  external_reference: string | null;
   justification: string;
   idempotency_key: string;
 };
@@ -97,6 +100,11 @@ export type FinancialApprovalItem = {
   payment_method_name: string | null;
   session_id: string | null;
   unit_id: string | null;
+  unit_name: string | null;
+  destination_account_id: string | null;
+  destination_account_name: string | null;
+  operation_date: string | null;
+  external_reference: string | null;
   justification: string;
   decision_note: string | null;
   created_at: string;
@@ -107,6 +115,26 @@ export type FinancialApprovalItem = {
   can_execute: boolean;
   invalidation_reason: string | null;
 };
+
+const ISO_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+export function isValidIsoDate(value: unknown): value is string {
+  if (typeof value !== 'string') return false;
+  const match = ISO_DATE_PATTERN.exec(value.trim());
+  if (!match) return false;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  if (year < 2000 || year > 2100 || month < 1 || month > 12 || day < 1 || day > 31) {
+    return false;
+  }
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return (
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  );
+}
 
 export type DiscountCalculation = {
   valid: boolean;

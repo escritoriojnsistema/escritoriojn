@@ -8,6 +8,12 @@ const USER_ID = '22222222-2222-4222-8222-222222222222';
 const REQUEST_ID = '33333333-3333-4333-8333-333333333333';
 const CHARGE_ID = '44444444-4444-4444-8444-444444444444';
 const APPROVAL_ID = '55555555-5555-4555-8555-555555555555';
+const APPROVAL_ID_2 = '66666666-6666-4666-8666-666666666666';
+const SESSION_ID = '77777777-7777-4777-8777-777777777777';
+const UNIT_ID = '88888888-8888-4888-8888-888888888888';
+const ACCOUNT_ID = '99999999-9999-4999-8999-999999999999';
+const METHOD_ID = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+const APPROVER_ID = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
 
 const allPermissions = [
   'foundation.access',
@@ -24,7 +30,7 @@ const allPermissions = [
   'cash.read_all',
 ];
 
-async function mockAuth(page: Page, role: 'owner' | 'client', permissions = allPermissions) {
+async function mockAuth(page: Page, role: 'owner' | 'employee' | 'client', permissions = allPermissions) {
   const token = `e30.${Buffer.from(
     JSON.stringify({
       sub: USER_ID,
@@ -62,7 +68,7 @@ async function mockAuth(page: Page, role: 'owner' | 'client', permissions = allP
               office_id: OFFICE_ID,
               user_id: USER_ID,
               office_name: 'Escritório JN',
-              display_name: role === 'client' ? 'Cliente Teste' : 'Gestor Teste',
+              display_name: role === 'client' ? 'Cliente Teste' : role === 'employee' ? 'Operador Caixa' : 'Gestor Teste',
               role_code: role,
               permissions: role === 'client' ? [] : permissions,
             },
@@ -81,7 +87,7 @@ for (const viewport of [
   { name: 'desktop', width: 1440, height: 900 },
   { name: 'mobile', width: 390, height: 844 },
 ]) {
-  test(`Cenário 21 (${viewport.name}): Bancos e Pagamentos renderiza 5 abas, sem overflow e respeita <= 4 atalhos mobile`, async ({
+  test(`Cenário 21 (${viewport.name}): Bancos e Pagamentos renderiza 5 abas, contas/unidades, sem overflow e <= 4 atalhos mobile`, async ({
     page,
   }) => {
     const errors: string[] = [];
@@ -89,6 +95,25 @@ for (const viewport of [
 
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await mockAuth(page, 'owner');
+    await page.route('**/api/cash/configuration', (r) =>
+      r.fulfill({
+        json: {
+          data: {
+            units: [{ id: UNIT_ID, name: 'Unidade Sede', active: true, version: 1 }],
+            accounts: [
+              { id: ACCOUNT_ID, unit_id: UNIT_ID, name: 'Conta Bancária PJ', type: 'bank', active: true, version: 1 },
+            ],
+            payment_methods: [],
+            units_total: 1,
+            accounts_total: 1,
+            payment_methods_total: 0,
+            page: 1,
+            page_size: 50,
+            unit_id: null,
+          },
+        },
+      }),
+    );
     await page.route('**/api/payment-providers/state', (r) =>
       r.fulfill({
         json: {
@@ -163,6 +188,8 @@ for (const viewport of [
     await expect(page.getByRole('heading', { name: /Bancos e Pagamentos/i })).toBeVisible();
     await expect(page.getByRole('tab', { name: /Bancos e provedores/i })).toBeVisible();
     await expect(page.getByRole('tab', { name: /Maquininhas/i })).toBeVisible();
+    await expect(page.getByLabel(/Conta recebedora vinculada/i)).toBeVisible();
+    await expect(page.getByLabel(/Unidade \/ destino financeiro/i)).toBeVisible();
 
     if (process.env.CAPTURE_VERIFY_SCREENSHOTS) {
       await page.screenshot({ path: `${ART}/verify-providers-${viewport.name}.png`, fullPage: true });
@@ -175,7 +202,7 @@ for (const viewport of [
     expect(errors).toEqual([]);
   });
 
-  test(`Cenário 21 (${viewport.name}): Caixa -> aba Autorizações exibe pedidos pendentes sem overflow`, async ({
+  test(`Cenário 21 (${viewport.name}): Caixa -> aba Autorizações exibe pagamento manual completo e desconto sem overflow`, async ({
     page,
   }) => {
     const errors: string[] = [];
@@ -224,6 +251,46 @@ for (const viewport of [
               {
                 id: APPROVAL_ID,
                 office_id: OFFICE_ID,
+                kind: 'manual_payment',
+                status: 'pending',
+                charge_id: CHARGE_ID,
+                charge_version_snapshot: 2,
+                request_id: REQUEST_ID,
+                protocol: 'JN-2026-000110',
+                customer_name: 'José Produtor Rural',
+                service_summary: 'Georreferenciamento',
+                requester_user_id: USER_ID,
+                requester_name: 'Operador Caixa',
+                approver_user_id: USER_ID,
+                approver_name: 'Gestor Teste',
+                original_cents: 35000,
+                requested_amount_cents: 35000,
+                discount_cents: null,
+                discount_percent: null,
+                final_cents: 35000,
+                card_fee_cents: 0,
+                payment_method_id: METHOD_ID,
+                payment_method_name: 'Pix Manual Conferido',
+                session_id: SESSION_ID,
+                unit_id: UNIT_ID,
+                unit_name: 'Unidade Sede',
+                destination_account_id: ACCOUNT_ID,
+                destination_account_name: 'Conta Bancária PJ',
+                operation_date: '2026-11-21',
+                external_reference: 'E2E-9988776655',
+                justification: 'Crédito conferido no extrato bancário oficial',
+                decision_note: null,
+                created_at: '2026-11-21T10:00:00Z',
+                expires_at: '2026-11-22T10:00:00Z',
+                decided_at: null,
+                executed_at: null,
+                can_decide: true,
+                can_execute: false,
+                invalidation_reason: null,
+              },
+              {
+                id: APPROVAL_ID_2,
+                office_id: OFFICE_ID,
                 kind: 'discount',
                 status: 'pending',
                 charge_id: CHARGE_ID,
@@ -246,6 +313,11 @@ for (const viewport of [
                 payment_method_name: null,
                 session_id: null,
                 unit_id: null,
+                unit_name: null,
+                destination_account_id: null,
+                destination_account_name: null,
+                operation_date: null,
+                external_reference: null,
                 justification: 'Desconto comercial aprovado pela gerência',
                 decision_note: null,
                 created_at: '2026-11-21T10:00:00Z',
@@ -257,7 +329,7 @@ for (const viewport of [
                 invalidation_reason: null,
               },
             ],
-            total: 1,
+            total: 2,
             page: 1,
             page_size: 5,
             backend_ready: true,
@@ -268,8 +340,12 @@ for (const viewport of [
 
     await page.goto('/caixa');
     await page.getByRole('tab', { name: /Autorizações/i }).click();
+    await expect(page.getByText('JN-2026-000110')).toBeVisible();
+    await expect(page.getByText('21/11/2026', { exact: true })).toBeVisible();
+    await expect(page.getByText('E2E-9988776655')).toBeVisible();
+    await expect(page.getByText('Conta Bancária PJ · Unidade Sede')).toBeVisible();
     await expect(page.getByText('JN-2026-000111')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Aprovar', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Aprovar', exact: true }).first()).toBeVisible();
 
     if (process.env.CAPTURE_VERIFY_SCREENSHOTS) {
       await page.screenshot({ path: `${ART}/verify-approvals-${viewport.name}.png`, fullPage: true });
@@ -280,7 +356,7 @@ for (const viewport of [
     expect(errors).toEqual([]);
   });
 
-  test(`Cenário 21 (${viewport.name}): Portal do Cliente -> Meus Pagamentos exibe checkout e estado real sem overflow`, async ({
+  test(`Cenário 21 (${viewport.name}): Portal do Cliente -> Meus Pagamentos exibe parcelas, detalhamento e checkout sem overflow`, async ({
     page,
   }) => {
     const errors: string[] = [];
@@ -336,7 +412,7 @@ for (const viewport of [
               balance_cents: 45000,
               charge_status: 'aberta',
               charge_version: 2,
-              installments: [],
+              installments: [{ number: 1, due_date: '2026-12-01', amount_cents: 45000 }],
               receipt: null,
             },
             payment_state: 'available',
@@ -356,6 +432,8 @@ for (const viewport of [
     await expect(page.getByText('JN-2026-000500').first()).toBeVisible();
     await page.getByRole('button', { name: 'Pagar ou ver detalhamento', exact: true }).click();
     await expect(page.getByText(/Disponível para pagamento/i)).toBeVisible();
+    await expect(page.getByText(/Parcelas e vencimentos/i)).toBeVisible();
+    await expect(page.getByText('Parcela 1 · Vencimento 01/12/2026')).toBeVisible();
 
     if (process.env.CAPTURE_VERIFY_SCREENSHOTS) {
       await page.screenshot({ path: `${ART}/verify-client-payments-${viewport.name}.png`, fullPage: true });
@@ -366,3 +444,338 @@ for (const viewport of [
     expect(errors).toEqual([]);
   });
 }
+
+test('Etapa 1 UI (Cenários 1, 2, 5, 6): Modal de exclusão definitiva usa copy exato, separa anexos preservados, trata storage_cleanup_failed sem falso sucesso e notificação do cliente oferece Nova Solicitação sem link quebrado', async ({
+  page,
+  browser,
+}) => {
+  const errors: string[] = [];
+  page.on('pageerror', (err) => errors.push(err.message));
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await mockAuth(page, 'owner');
+  await page.route('**/api/requests/search', (r) =>
+    r.fulfill({
+      json: {
+        data: {
+          items: [
+            {
+              id: REQUEST_ID,
+              protocol: 'JN-2026-000888',
+              title: 'Atualização de CCIR',
+              status: 'aberto',
+              public_status: 'em_andamento',
+              priority: 'normal',
+              origin: 'portal',
+              customer_name: 'Maria Produtora',
+              assignee_name: 'Gestor Teste',
+              category_name: 'Imóvel Rural',
+              updated_at: '2026-11-21T10:00:00Z',
+              created_at: '2026-11-21T09:00:00Z',
+            },
+          ],
+          total: 1,
+          page: 1,
+          page_size: 5,
+          portal: false,
+          can_create: true,
+        },
+      },
+    }),
+  );
+  await page.route(`**/api/requests/${REQUEST_ID}/detail`, (r) =>
+    r.fulfill({
+      json: {
+        data: {
+          id: REQUEST_ID,
+          office_id: OFFICE_ID,
+          protocol: 'JN-2026-000888',
+          title: 'Atualização de CCIR',
+          status: 'aberto',
+          public_status: 'em_andamento',
+          version: 1,
+          origin: 'portal',
+          priority: 'normal',
+          priority_reason: null,
+          portal: false,
+          category_name: 'Imóvel Rural',
+          customer_id: ACCOUNT_ID,
+          customer_name: 'Maria Produtora',
+          assignee_id: USER_ID,
+          assignee_name: 'Gestor Teste',
+          created_by_name: 'Maria Produtora',
+          following_only: false,
+          message: 'Solicito atualização de CCIR.',
+          items: [],
+          history: [],
+          history_page: 1,
+          history_total: 0,
+          can_update: true,
+          can_cancel: true,
+          can_transfer: false,
+          can_reclaim: false,
+          created_at: '2026-11-21T09:00:00Z',
+          updated_at: '2026-11-21T10:00:00Z',
+        },
+      },
+    }),
+  );
+  await page.route(`**/api/request-deletion/${REQUEST_ID}/eligibility`, (r) =>
+    r.fulfill({
+      json: {
+        data: {
+          request_id: REQUEST_ID,
+          protocol: 'JN-2026-000888',
+          title: 'Atualização de CCIR',
+          version: 1,
+          status: 'aberto',
+          actor_kind: 'team',
+          can_show_action: true,
+          eligible: true,
+          backend_ready: true,
+          block_code: null,
+          block_message: null,
+          recommended_alternatives: [],
+          attachments: {
+            exclusive_count: 2,
+            shared_preserved_count: 1,
+            retained_preserved_count: 1,
+            total_count: 4,
+          },
+          notify_client_on_delete: true,
+        },
+      },
+    }),
+  );
+  await page.route(`**/api/request-deletion/${REQUEST_ID}/execute`, (r) =>
+    r.fulfill({
+      status: 202,
+      json: {
+        data: {
+          operation_id: APPROVAL_ID,
+          request_id: REQUEST_ID,
+          protocol: 'JN-2026-000888',
+          status: 'storage_cleanup_failed',
+          db_deleted: true,
+          storage_cleanup_completed: false,
+          attachments_removed: 1,
+          attachments_preserved: 2,
+          client_notified: false,
+          audit_recorded: true,
+          message: 'A limpeza física dos anexos exclusivos ainda não foi concluída. Revalide ou tente novamente.',
+        },
+      },
+    }),
+  );
+
+  await page.goto('/solicitacoes');
+  await page.getByRole('button', { name: /Ver solicitação JN-2026-000888/i }).click();
+  await expect(page.getByRole('button', { name: 'Excluir solicitação', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Excluir solicitação', exact: true }).click();
+
+  await expect(page.getByText(/Você está prestes a excluir esta solicitação/i)).toBeVisible();
+  await expect(page.getByText(/O cliente será notificado sobre a exclusão da solicitação/i)).toBeVisible();
+  await expect(page.getByText(/1 compartilhados com outros atendimentos/i)).toBeVisible();
+  await expect(page.getByText(/1 sob retenção obrigatória/i)).toBeVisible();
+
+  if (process.env.CAPTURE_VERIFY_SCREENSHOTS) {
+    await page.screenshot({ path: `${ART}/verify-delete-modal-desktop.png`, fullPage: true });
+  }
+
+  // Confirm -> storage_cleanup_failed must NOT close dialog or show false success
+  await page.getByRole('button', { name: 'Excluir permanentemente', exact: true }).click();
+  await expect(page.getByText(/não foi marcada como concluída porque ainda há limpeza de arquivos pendente/i)).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Verificar situação da exclusão', exact: true })).toBeVisible();
+
+  // Now verify client notification rendering for request_deleted (no broken link, offers Iniciar nova solicitação)
+  const clientContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const clientPage = await clientContext.newPage();
+  clientPage.on('pageerror', (err) => errors.push(err.message));
+  await mockAuth(clientPage, 'client', []);
+  await clientPage.route('**/api/notifications/search', (r) =>
+    r.fulfill({
+      json: {
+        data: {
+          items: [
+            {
+              id: APPROVAL_ID,
+              kind: 'request_deleted',
+              created_at: '2026-11-21T11:00:00Z',
+              read_at: null,
+              request_id: null,
+              protocol: 'JN-2026-000888',
+              deleted_protocol: 'JN-2026-000888',
+              approval_id: null,
+              approval_summary: null,
+              status: null,
+              reason: null,
+              office_id: OFFICE_ID,
+              office_name: 'Escritório JN',
+              can_open: false,
+            },
+          ],
+          total: 1,
+          page: 1,
+          page_size: 5,
+          unread: 1,
+        },
+      },
+    }),
+  );
+
+  await clientPage.goto('/minhas-notificacoes');
+  await expect(
+    clientPage.getByText(/A solicitação JN-2026-000888 foi excluída pela equipe do Escritório JN/i),
+  ).toBeVisible();
+  await expect(clientPage.getByRole('link', { name: /Iniciar nova solicitação/i })).toBeVisible();
+  await clientContext.close();
+  expect(errors).toEqual([]);
+});
+
+test('Etapas 3 e 5 UI (Cenários 12, 13, 16): Tela de Cobranças gera Pix dinâmico com WhatsApp manual e exibe formulário de autorização de desconto', async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on('pageerror', (err) => errors.push(err.message));
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await mockAuth(page, 'employee', ['foundation.access', 'requests.read', 'charges.read', 'cash.read']);
+
+  await page.route('**/api/requests/search', (r) =>
+    r.fulfill({
+      json: {
+        data: {
+          items: [
+            {
+              id: REQUEST_ID,
+              protocol: 'JN-2026-000912',
+              title: 'Certidão Rural',
+              status: 'em_atendimento',
+              public_status: 'em_andamento',
+              priority: 'normal',
+              origin: 'presencial',
+              customer_name: 'José Produtor',
+              assignee_name: 'Operador Caixa',
+              category_name: 'Imóvel Rural',
+              updated_at: '2026-11-21T10:00:00Z',
+              created_at: '2026-11-21T09:00:00Z',
+            },
+          ],
+          total: 1,
+          page: 1,
+          page_size: 5,
+          portal: false,
+          can_create: false,
+        },
+      },
+    }),
+  );
+  await page.route('**/api/charges/view', (r) =>
+    r.fulfill({
+      json: {
+        data: {
+          request_id: REQUEST_ID,
+          protocol: 'JN-2026-000912',
+          following_only: false,
+          can_create: false,
+          items: [
+            {
+              request_item_id: METHOD_ID,
+              name: 'Certidão Rural',
+              quantity: 1,
+              unit_price_cents: 25000,
+              total_cents: 25000,
+              adjustment: { kind: 'none', reason: '' },
+            },
+          ],
+          charge: {
+            id: CHARGE_ID,
+            version: 1,
+            status: 'aberta',
+            due_cents: 25000,
+            allocated_cents: 0,
+            balance_cents: 25000,
+            can_adjust: false,
+            can_discount: false,
+            can_cancel: false,
+            installments: [{ number: 1, due_date: '2026-12-10', amount_cents: 25000 }],
+            history: [],
+            history_total: 0,
+          },
+        },
+      },
+    }),
+  );
+  await page.route('**/api/payment-providers/state', (r) =>
+    r.fulfill({ status: 403, json: { error: { code: 'FORBIDDEN', message: 'Sem permissão' } } }),
+  );
+  await page.route('**/api/payment-checkout/staff/pix', (r) =>
+    r.fulfill({
+      status: 201,
+      json: {
+        data: {
+          id: APPROVAL_ID,
+          office_id: OFFICE_ID,
+          charge_id: CHARGE_ID,
+          method: 'pix_qr',
+          channel: 'presencial',
+          state: 'awaiting_payment',
+          terminal_state: null,
+          settlement_stage: 'none',
+          amount_cents: 25000,
+          installments_count: 1,
+          installment_amount_cents: null,
+          pix_qr_payload: '00020126580014br.gov.bcb.pix0136123e4567-e12b-12d1-a456-4266554400005204000053039865802BR5913ESCRITORIO JN6008BRASILIA62070503***6304ABCD',
+          pix_copy_paste: '00020126580014br.gov.bcb.pix0136123e4567-e12b-12d1-a456-4266554400005204000053039865802BR5913ESCRITORIO JN6008BRASILIA62070503***6304ABCD',
+          checkout_url: null,
+          provider_label: 'Banco Cooperativo',
+          provider_reference: 'TX-PIX-912',
+          authorization_code: null,
+          expires_at: '2026-11-22T12:00:00Z',
+          created_at: '2026-11-21T11:30:00Z',
+          updated_at: '2026-11-21T11:30:00Z',
+          safe_message: null,
+        },
+      },
+    }),
+  );
+  await page.route('**/api/financial-approvals/approvers', (r) =>
+    r.fulfill({
+      json: {
+        data: {
+          items: [
+            {
+              membership_id: UNIT_ID,
+              user_id: APPROVER_ID,
+              name: 'Gestor Financeiro',
+              role_code: 'owner',
+              role_label: 'Super administrador',
+            },
+          ],
+          backend_ready: true,
+        },
+      },
+    }),
+  );
+
+  await page.goto('/cobrancas');
+  await page.getByRole('button', { name: /JN-2026-000912|Selecionar/i }).first().click();
+  await expect(page.getByText(/Cobrar presencialmente ou via WhatsApp/i)).toBeVisible();
+
+  // Open Team Collection (Etapa 3) and generate Pix
+  await page.getByText(/Cobrar presencialmente ou via WhatsApp/i).click();
+  await page.getByRole('button', { name: /Gerar cobrança Pix dinâmica/i }).click();
+  await expect(page.getByText(/Cobrança Pix dinâmica ativa/i)).toBeVisible();
+  await expect(page.getByRole('button', { name: /Copiar mensagem para WhatsApp/i })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Abrir WhatsApp \(envio manual\)/i })).toBeVisible();
+
+  // Open Discount Approval Form (Etapa 5)
+  await page.locator('summary', { hasText: /Solicitar autorização de desconto/i }).click();
+  await expect(page.getByText(/Serviços: Certidão Rural/i)).toBeVisible();
+  await expect(page.getByLabel(/Aprovador autorizado do escritório/i)).toBeVisible();
+
+  if (process.env.CAPTURE_VERIFY_SCREENSHOTS) {
+    await page.screenshot({ path: `${ART}/verify-charges-collection-desktop.png`, fullPage: true });
+  }
+  expect(errors).toEqual([]);
+});

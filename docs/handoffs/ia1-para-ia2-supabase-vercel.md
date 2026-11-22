@@ -38,6 +38,7 @@ A IA 1 implementou todas as camadas de aplicação (UI, API Express, tipos/valid
   - `src/features/requests/RequestDeleteModal.tsx`
   - `src/features/payments/checkoutApi.ts`
   - `src/features/payments/ClientCheckoutPanel.tsx`
+  - `src/features/payments/PixQrVisual.tsx`
   - `src/features/payments/payments.css`
   - `src/features/approvals/api.ts`
   - `src/features/approvals/ManualPaymentApprovalForm.tsx`
@@ -253,6 +254,9 @@ Inserir (idempotente com `ON CONFLICT DO NOTHING`) nas tabelas de permissões/pa
    - `payment_method_id uuid null`
    - `session_id uuid null`
    - `unit_id uuid null`
+   - `destination_account_id uuid null`
+   - `operation_date date null`
+   - `external_reference text null`
    - `justification text not null`
    - `decision_note text null`
    - `invalidation_reason text null`
@@ -312,7 +316,7 @@ As rotas Express criadas pela IA 1 já chamam exatamente estas funções RPC (as
 ### 6.3 Autorizações Financeiras (`/api/financial-approvals`)
 9. `financial_approval_eligible_approvers(p_office_id uuid, p_kind text) -> jsonb` → array de `EligibleApprover`.
 10. `financial_approvals_page(p_office_id uuid, p_scope text, p_kind text, p_page int) -> jsonb` → `{ items, total, page, page_size }`.
-11. `financial_approval_request_manual_payment(p_office_id uuid, p_charge_id uuid, p_charge_version int, p_request_id uuid, p_session_id uuid, p_unit_id uuid, p_payment_method_id uuid, p_approver_user_id uuid, p_amount_cents bigint, p_justification text, p_idempotency_key text) -> jsonb`.
+11. `financial_approval_request_manual_payment(p_office_id uuid, p_charge_id uuid, p_charge_version int, p_request_id uuid, p_session_id uuid, p_unit_id uuid, p_destination_account_id uuid, p_payment_method_id uuid, p_approver_user_id uuid, p_amount_cents bigint, p_operation_date date, p_external_reference text, p_justification text, p_idempotency_key text) -> jsonb`.
 12. `financial_approval_request_discount(p_office_id uuid, p_charge_id uuid, p_charge_version int, p_request_id uuid, p_approver_user_id uuid, p_mode text, p_discount_cents bigint, p_discount_percent numeric, p_justification text, p_idempotency_key text) -> jsonb`.
 13. `financial_approval_decide(p_office_id uuid, p_approval_id uuid, p_decision text, p_expected_charge_version int, p_note text, p_idempotency_key text) -> jsonb`
     - Para `kind = 'discount'` com `decision = 'approve'`: aplica o desconto comercial diretamente na cobrança oficial dentro da mesma transação (incrementando `charge.version`), marca status `executed` (ou `approved` + aplicado), notifica solicitante e grava auditoria `charges.discount_approval_decided`.
@@ -362,6 +366,7 @@ As rotas Express criadas pela IA 1 já chamam exatamente estas funções RPC (as
      - `captured`: captura confirmada pelo adquirente/PSP;
      - `settled`: liquidação financeira efetiva na conta bancária de recebimento;
      - `refunded` / `disputed`: estorno ou chargeback conciliado.
+- **Pix QR Code (`pix_qr_payload`)**: quando o provedor retornar imagem raster oficial (`data:image/png;base64,...`, `jpeg` ou `webp`), o componente `PixQrVisual` renderiza o QR Code escaneável diretamente na tela; caso retorne apenas o payload EMVCo em texto, o componente exibe fallback honesto orientando o uso do Pix Copia e Cola sem fabricar matriz visual inválida.
 - **Manual WhatsApp Pix Share**: já funciona 100% no cliente/equipe sem API oficial do WhatsApp (`buildManualWhatsAppPixShare`), bastando o `pix_copy_paste` real devolvido pelo provedor.
 
 ---

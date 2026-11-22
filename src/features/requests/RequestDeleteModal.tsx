@@ -139,7 +139,9 @@ export function RequestDeleteSection({
     }
   }
 
-  if (!eligibility || !eligibility.can_show_action) return null;
+  if (!eligibility || !eligibility.can_show_action || (!eligibility.backend_ready && eligibility.eligible)) {
+    return null;
+  }
 
   const isTeam = eligibility.actor_kind === 'team' && !portal;
 
@@ -208,8 +210,9 @@ export function RequestDeleteSection({
 
         <div id="delete-request-modal-desc" className="jn-dialog-body">
           <p>
-            Esta ação não pode ser desfeita. A solicitação e os arquivos vinculados exclusivamente a ela serão
-            excluídos definitivamente.
+            Você está prestes a excluir esta solicitação. Os dados da solicitação e todos os anexos exclusivos
+            vinculados a ela também serão excluídos permanentemente. Esta ação não poderá ser desfeita. Deseja
+            realmente continuar?
           </p>
           {isTeam && eligibility.notify_client_on_delete && (
             <p className="jn-dialog-emphasis">
@@ -227,22 +230,34 @@ export function RequestDeleteSection({
               <dd>{eligibility.title || title}</dd>
             </div>
             <div>
-              <dt>Anexos vinculados</dt>
-              <dd>
-                {eligibility.attachments.exclusive_count} exclusivos serão removidos
-                {eligibility.attachments.shared_preserved_count + eligibility.attachments.retained_preserved_count > 0
-                  ? ` · ${
-                      eligibility.attachments.shared_preserved_count + eligibility.attachments.retained_preserved_count
-                    } preservados por vínculo ou guarda`
-                  : ''}
-              </dd>
+              <dt>Anexos exclusivos a excluir</dt>
+              <dd>{eligibility.attachments.exclusive_count}</dd>
             </div>
+            {(eligibility.attachments.shared_preserved_count > 0 ||
+              eligibility.attachments.retained_preserved_count > 0) && (
+              <div>
+                <dt>Anexos preservados</dt>
+                <dd>
+                  {[
+                    eligibility.attachments.shared_preserved_count > 0
+                      ? `${eligibility.attachments.shared_preserved_count} compartilhados com outros atendimentos`
+                      : null,
+                    eligibility.attachments.retained_preserved_count > 0
+                      ? `${eligibility.attachments.retained_preserved_count} sob retenção obrigatória`
+                      : null,
+                  ]
+                    .filter(Boolean)
+                    .join(' · ')}
+                </dd>
+              </div>
+            )}
           </dl>
 
-          {eligibility.attachments.shared_preserved_count + eligibility.attachments.retained_preserved_count > 0 && (
+          {(eligibility.attachments.shared_preserved_count > 0 ||
+            eligibility.attachments.retained_preserved_count > 0) && (
             <p className="customer-note">
-              Arquivos compartilhados com outros atendimentos ou sob guarda documental terão apenas o vínculo com
-              esta solicitação removido, sem exclusão física do arquivo.
+              Arquivos compartilhados com outros registros ou sob retenção obrigatória terão apenas o vínculo com esta
+              solicitação removido, sem exclusão física do arquivo.
             </p>
           )}
 

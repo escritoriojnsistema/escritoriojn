@@ -352,6 +352,7 @@ function Workspace({
                       chargeVersion={data.charge.version}
                       requestId={data.request_id}
                       protocol={data.protocol}
+                      serviceSummary={data.items.map((i) => i.name).join(" · ")}
                       originalCents={data.charge.due_cents}
                       balanceCents={data.charge.balance_cents}
                       disabled={busy}

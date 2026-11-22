@@ -12,6 +12,7 @@ import {
 } from '../../../shared/paymentCheckout';
 import { cashMoney } from '../cash/CashSessions';
 import { paymentCheckoutApi, PaymentCheckoutError } from './checkoutApi';
+import { PixQrVisual } from './PixQrVisual';
 
 type Props = {
   office: string;
@@ -193,6 +194,23 @@ export function ClientCheckoutPanel({
         </div>
       </dl>
 
+      {summary?.charge.installments && summary.charge.installments.length > 0 && (
+        <div className="jn-installments-block" aria-label="Parcelas e vencimentos da cobrança">
+          <h4 className="jn-installments-title">Parcelas e vencimentos</h4>
+          <ul className="jn-installments-list">
+            {summary.charge.installments.map((inst) => (
+              <li key={inst.number}>
+                <span>
+                  Parcela {inst.number} · Vencimento{' '}
+                  {inst.due_date ? inst.due_date.split('-').reverse().join('/') : 'A definir'}
+                </span>
+                <strong>{cashMoney(inst.amount_cents)}</strong>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {summary?.charge.receipt && (
         <div className="jn-receipt-banner" role="status">
           <strong>Comprovante / Recibo #{summary.charge.receipt.number}</strong>
@@ -316,20 +334,29 @@ export function ClientCheckoutPanel({
                 : ''}
             </p>
           )}
-          {activeIntent.pix_copy_paste && (
+          {(activeIntent.pix_qr_payload || activeIntent.pix_copy_paste) && (
             <div className="jn-pix-box">
-              <label className="team-field">
-                Pix Copia e Cola
-                <textarea readOnly rows={2} value={activeIntent.pix_copy_paste} />
-              </label>
-              <button
-                type="button"
-                className="secondary-button"
-                onClick={() => void copyPixCode(activeIntent.pix_copy_paste!)}
-              >
-                {copied ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
-                <span>{copied ? 'Código copiado' : 'Copiar código Pix'}</span>
-              </button>
+              <PixQrVisual
+                qrPayload={activeIntent.pix_qr_payload ?? activeIntent.pix_copy_paste}
+                expiresAt={activeIntent.expires_at}
+                protocol={protocol}
+              />
+              {activeIntent.pix_copy_paste && (
+                <>
+                  <label className="team-field">
+                    Pix Copia e Cola
+                    <textarea readOnly rows={2} value={activeIntent.pix_copy_paste} />
+                  </label>
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() => void copyPixCode(activeIntent.pix_copy_paste!)}
+                  >
+                    {copied ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
+                    <span>{copied ? 'Código copiado' : 'Copiar código Pix'}</span>
+                  </button>
+                </>
+              )}
             </div>
           )}
           {activeIntent.safe_message && <p className="customer-note">{activeIntent.safe_message}</p>}

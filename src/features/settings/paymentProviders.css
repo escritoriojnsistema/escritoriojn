@@ -15,8 +15,8 @@
   color: var(--jn-navy, #103248);
 }
 
-.jn-providers-banner svg {
-  flex-shrink: 0;
+.jn-providers-banner .jn-banner-icon {
+  flex: 0 0 20px;
   width: 20px;
   height: 20px;
   min-width: 20px;
@@ -30,7 +30,7 @@
 
 .jn-providers-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
   align-items: start;
 }
@@ -104,23 +104,24 @@
   margin-bottom: 0.45rem;
 }
 
-.jn-provider-card label.service-check,
-.jn-method-checks label.service-check {
+.jn-check-row {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.65rem;
+  min-height: 36px;
   font-size: 0.92rem;
   line-height: 1.35;
+  color: var(--jn-ink, #17232c);
   cursor: pointer;
 }
 
-.jn-provider-card label.service-check input[type='checkbox'],
-.jn-method-checks label.service-check input[type='checkbox'] {
-  flex-shrink: 0;
+.jn-check-row input[type='checkbox'] {
+  flex: 0 0 18px;
   width: 18px;
   height: 18px;
   margin: 0;
+  accent-color: var(--jn-navy, #103248);
 }
 
 .jn-approval-box {
@@ -142,8 +143,14 @@
   gap: 1rem;
 }
 
-@media (max-width: 560px) {
-  .jn-approvals-panel .request-filters {
+.jn-approvals-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+@media (max-width: 600px) {
+  .jn-approvals-filters {
     grid-template-columns: 1fr;
   }
 }

@@ -12,6 +12,7 @@ import {
 } from '../../../shared/paymentCheckout';
 import { cashMoney } from './CashSessions';
 import { paymentCheckoutApi, PaymentCheckoutError } from '../payments/checkoutApi';
+import { PixQrVisual } from '../payments/PixQrVisual';
 import { paymentProvidersApi } from '../settings/paymentProvidersApi';
 
 type Props = {
@@ -39,6 +40,7 @@ export function TeamCollectionPanel({
 }: Props) {
   const [mode, setMode] = useState<'pix' | 'terminal'>('pix');
   const [terminals, setTerminals] = useState<PaymentTerminal[]>([]);
+  const [pixAvailable, setPixAvailable] = useState<boolean | null>(null);
   const [terminalId, setTerminalId] = useState('');
   const [saleMode, setSaleMode] = useState<TerminalSaleMode>('credit_cash');
   const [installments, setInstallments] = useState(1);
@@ -58,11 +60,15 @@ export function TeamCollectionPanel({
         if (controller.signal.aborted) return;
         const active = res.terminals.filter((t) => t.status === 'active');
         setTerminals(active);
+        setPixAvailable(Boolean(res.backend_ready && res.pix.enabled && res.pix.provider_id));
         if (active.length === 1) setTerminalId(active[0].id);
       })
       .catch(() => {
-        // Non-admin staff might not have provider settings read access; keep empty list safely
-        if (!controller.signal.aborted) setTerminals([]);
+        // Non-admin staff might not have provider settings read access; backend enforces fail-closed
+        if (!controller.signal.aborted) {
+          setTerminals([]);
+          setPixAvailable(null);
+        }
       });
     return () => controller.abort();
   }, [office]);
@@ -238,11 +244,17 @@ export function TeamCollectionPanel({
                 onChange={(e) => setClientPhone(e.target.value)}
               />
             </label>
+            {pixAvailable === false && (
+              <p role="note" className="customer-note">
+                Provedor Pix não configurado ou inativo em Configurações → Bancos e Pagamentos. Ative um provedor
+                homologado para gerar cobranças Pix dinâmicas.
+              </p>
+            )}
             <div className="account-actions">
               <button
                 type="button"
                 className="primary-button"
-                disabled={busy || disabled || balanceCents <= 0}
+                disabled={busy || disabled || balanceCents <= 0 || pixAvailable === false}
                 onClick={() => void generatePix()}
               >
                 <QrCode size={18} aria-hidden="true" />
@@ -345,43 +357,52 @@ export function TeamCollectionPanel({
                 {intent.authorization_code ? ` · Autorização ${intent.authorization_code}` : ''}
               </p>
             )}
-            {intent.pix_copy_paste && (
+            {(intent.pix_qr_payload || intent.pix_copy_paste) && (
               <>
-                <label className="team-field">
-                  Pix Copia e Cola
-                  <textarea readOnly rows={2} value={intent.pix_copy_paste} />
-                </label>
-                <div className="account-actions">
-                  <button
-                    type="button"
-                    className="secondary-button"
-                    onClick={() => void copyText('pix', intent.pix_copy_paste!)}
-                  >
-                    {copied === 'pix' ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
-                    <span>{copied === 'pix' ? 'Pix copiado' : 'Copiar código Pix'}</span>
-                  </button>
-                  {share && (
-                    <>
+                <PixQrVisual
+                  qrPayload={intent.pix_qr_payload ?? intent.pix_copy_paste}
+                  expiresAt={intent.expires_at}
+                  protocol={protocol}
+                />
+                {intent.pix_copy_paste && (
+                  <>
+                    <label className="team-field">
+                      Pix Copia e Cola
+                      <textarea readOnly rows={2} value={intent.pix_copy_paste} />
+                    </label>
+                    <div className="account-actions">
                       <button
                         type="button"
                         className="secondary-button"
-                        onClick={() => void copyText('wa', share.text)}
+                        onClick={() => void copyText('pix', intent.pix_copy_paste!)}
                       >
-                        {copied === 'wa' ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
-                        <span>{copied === 'wa' ? 'Mensagem copiada' : 'Copiar mensagem para WhatsApp'}</span>
+                        {copied === 'pix' ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
+                        <span>{copied === 'pix' ? 'Pix copiado' : 'Copiar código Pix'}</span>
                       </button>
-                      <a
-                        className="team-text-button"
-                        href={share.waUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <ExternalLink size={16} aria-hidden="true" />
-                        <span>Abrir WhatsApp (envio manual)</span>
-                      </a>
-                    </>
-                  )}
-                </div>
+                      {share && (
+                        <>
+                          <button
+                            type="button"
+                            className="secondary-button"
+                            onClick={() => void copyText('wa', share.text)}
+                          >
+                            {copied === 'wa' ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
+                            <span>{copied === 'wa' ? 'Mensagem copiada' : 'Copiar mensagem para WhatsApp'}</span>
+                          </button>
+                          <a
+                            className="team-text-button"
+                            href={share.waUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <ExternalLink size={16} aria-hidden="true" />
+                            <span>Abrir WhatsApp (envio manual)</span>
+                          </a>
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
               </>
             )}
             <div className="account-actions">

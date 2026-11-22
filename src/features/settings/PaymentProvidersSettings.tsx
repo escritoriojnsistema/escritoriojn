@@ -20,6 +20,8 @@ import {
   type ProviderCapabilityKey,
   type ProviderEnvironment,
 } from '../../../shared/paymentCheckout';
+import type { CashConfiguration } from '../../../shared/cash';
+import { cashApi } from '../cash/api';
 import { paymentProvidersApi, PaymentProvidersError } from './paymentProvidersApi';
 import './paymentProviders.css';
 
@@ -61,11 +63,15 @@ export function PaymentProvidersSettings({
   const [error, setError] = useState('');
   const [feedback, setFeedback] = useState('');
 
+  const [cashConfig, setCashConfig] = useState<CashConfiguration | null>(null);
+
   // Tab A — Provider form
   const [providerCode, setProviderCode] = useState(providerCatalog[0].provider_code);
   const [institutionLabel, setInstitutionLabel] = useState('');
   const [environment, setEnvironment] = useState<ProviderEnvironment>('sandbox');
   const [credentialRef, setCredentialRef] = useState('');
+  const [receivingAccountId, setReceivingAccountId] = useState('');
+  const [financialUnitId, setFinancialUnitId] = useState('');
   const [enabledMethods, setEnabledMethods] = useState<CheckoutMethod[]>(['pix_qr', 'pix_copy_paste']);
 
   // Tab B — Pix form
@@ -89,11 +95,25 @@ export function PaymentProvidersSettings({
 
   // Tab D — Terminals form
   const [termProviderId, setTermProviderId] = useState('');
+  const [termUnitId, setTermUnitId] = useState('');
   const [termLabel, setTermLabel] = useState('');
   const [termManufacturer, setTermManufacturer] = useState('');
   const [termModel, setTermModel] = useState('');
   const [termProviderName, setTermProviderName] = useState('');
   const [termConnectionMode, setTermConnectionMode] = useState<'cloud_api' | 'local_agent_connector'>('cloud_api');
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void cashApi
+      .configuration(office, 1, null, controller.signal)
+      .then((cfg) => {
+        if (!controller.signal.aborted) setCashConfig(cfg);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setCashConfig(null);
+      });
+    return () => controller.abort();
+  }, [office]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -174,8 +194,8 @@ export function PaymentProvidersSettings({
           institution_label: institutionLabel.trim(),
           environment,
           enabled_methods: enabledMethods,
-          receiving_account_id: null,
-          financial_unit_id: null,
+          receiving_account_id: receivingAccountId || null,
+          financial_unit_id: financialUnitId || null,
           credential_ref: credentialRef.trim() || null,
           idempotency_key: `prov-${crypto.randomUUID()}`,
         }),
@@ -240,7 +260,7 @@ export function PaymentProvidersSettings({
           model: termModel.trim(),
           provider_name: termProviderName.trim(),
           connection_mode: termConnectionMode,
-          unit_id: null,
+          unit_id: termUnitId || null,
           idempotency_key: `termcfg-${crypto.randomUUID()}`,
         }),
       'Maquininha registrada. Execute o teste de comunicação antes de usar no caixa.',
@@ -250,7 +270,7 @@ export function PaymentProvidersSettings({
   return (
     <section className="jn-providers-shell" aria-label="Configuração de Bancos e Pagamentos">
       <div className="jn-providers-banner" role="note">
-        <ShieldAlert size={18} aria-hidden="true" />
+        <ShieldAlert size={20} className="jn-banner-icon" aria-hidden="true" />
         <div>
           <strong>Segurança de credenciais bancárias</strong>
           <p>
@@ -415,6 +435,36 @@ export function PaymentProvidersSettings({
                 </label>
               </div>
 
+              <div className="request-grid">
+                <label className="team-field">
+                  Unidade / destino financeiro
+                  <select value={financialUnitId} onChange={(e) => setFinancialUnitId(e.target.value)}>
+                    <option value="">Geral do escritório</option>
+                    {(cashConfig?.units ?? [])
+                      .filter((u) => u.active)
+                      .map((u) => (
+                        <option key={u.id} value={u.id}>
+                          {u.name}
+                        </option>
+                      ))}
+                  </select>
+                </label>
+
+                <label className="team-field">
+                  Conta recebedora vinculada
+                  <select value={receivingAccountId} onChange={(e) => setReceivingAccountId(e.target.value)}>
+                    <option value="">Definir na conciliação / padrão do caixa</option>
+                    {(cashConfig?.accounts ?? [])
+                      .filter((a) => a.active && a.type !== 'cash' && (!financialUnitId || a.unit_id === financialUnitId))
+                      .map((a) => (
+                        <option key={a.id} value={a.id}>
+                          {a.name}
+                        </option>
+                      ))}
+                  </select>
+                </label>
+              </div>
+
               <div className="jn-capability-matrix">
                 <h4>Recursos suportados por este adaptador</h4>
                 <ul>
@@ -446,7 +496,7 @@ export function PaymentProvidersSettings({
                               : 'card_debit_online';
                     const supported = isCapabilitySupported(selectedCatalog.supported_capabilities, capKey);
                     return (
-                      <label key={m} className="service-check">
+                      <label key={m} className="jn-check-row">
                         <input
                           type="checkbox"
                           disabled={!supported}
@@ -495,11 +545,11 @@ export function PaymentProvidersSettings({
               <p className="customer-note">Chave Pix vinculada no servidor: {state.pix.pix_key_masked}</p>
             )}
 
-            <label className="service-check">
+            <label className="jn-check-row">
               <input type="checkbox" checked={pixEnabled} onChange={(e) => setPixEnabled(e.target.checked)} />
               <span>Habilitar cobrança Pix eletrônica para este escritório</span>
             </label>
-            <label className="service-check">
+            <label className="jn-check-row">
               <input
                 type="checkbox"
                 checked={pixDynamicQr}
@@ -513,7 +563,7 @@ export function PaymentProvidersSettings({
                   : ''}
               </span>
             </label>
-            <label className="service-check">
+            <label className="jn-check-row">
               <input
                 type="checkbox"
                 checked={pixCopyPaste}
@@ -522,7 +572,7 @@ export function PaymentProvidersSettings({
               />
               <span>Código Pix Copia e Cola</span>
             </label>
-            <label className="service-check">
+            <label className="jn-check-row">
               <input
                 type="checkbox"
                 checked={pixReconcile}
@@ -531,7 +581,7 @@ export function PaymentProvidersSettings({
               />
               <span>Conciliação e consulta automática de liquidação Pix</span>
             </label>
-            <label className="service-check">
+            <label className="jn-check-row">
               <input
                 type="checkbox"
                 checked={pixRefund}
@@ -584,11 +634,11 @@ export function PaymentProvidersSettings({
               </select>
             </label>
 
-            <label className="service-check">
+            <label className="jn-check-row">
               <input type="checkbox" checked={cardsEnabled} onChange={(e) => setCardsEnabled(e.target.checked)} />
               <span>Habilitar pagamento com cartão online no Portal do Cliente</span>
             </label>
-            <label className="service-check">
+            <label className="jn-check-row">
               <input
                 type="checkbox"
                 checked={creditEnabled}
@@ -602,7 +652,7 @@ export function PaymentProvidersSettings({
                   : ''}
               </span>
             </label>
-            <label className="service-check">
+            <label className="jn-check-row">
               <input
                 type="checkbox"
                 checked={installmentsEnabled}
@@ -616,7 +666,7 @@ export function PaymentProvidersSettings({
                   : ''}
               </span>
             </label>
-            <label className="service-check">
+            <label className="jn-check-row">
               <input
                 type="checkbox"
                 checked={debitEnabled}
@@ -792,17 +842,36 @@ export function PaymentProvidersSettings({
                   </select>
                 </label>
               </div>
-              <label className="team-field">
-                Vincular a provedor configurado (opcional)
-                <select value={termProviderId} onChange={(e) => setTermProviderId(e.target.value)}>
-                  <option value="">Sem vínculo direto</option>
-                  {(state?.providers ?? []).map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.institution_label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <div className="request-grid">
+                <label className="team-field">
+                  Vincular a provedor configurado (opcional)
+                  <select value={termProviderId} onChange={(e) => setTermProviderId(e.target.value)}>
+                    <option value="">Sem vínculo direto</option>
+                    {(state?.providers ?? []).map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.institution_label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="team-field">
+                  Unidade financeira / caixa
+                  <select value={termUnitId} onChange={(e) => setTermUnitId(e.target.value)}>
+                    <option value="">Geral do escritório</option>
+                    {(cashConfig?.units ?? [])
+                      .filter((u) => u.active)
+                      .map((u) => (
+                        <option key={u.id} value={u.id}>
+                          {u.name}
+                        </option>
+                      ))}
+                  </select>
+                </label>
+              </div>
+              <p className="customer-note">
+                Protocolos suportados: API em nuvem do adquirente (webhook assinado) ou conector/agente local
+                autorizado (TEF/SDK homologado).
+              </p>
             </fieldset>
             <button type="submit" className="primary-button" disabled={busy || !backendReady}>
               Registrar maquininha

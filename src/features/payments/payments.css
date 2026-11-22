@@ -71,7 +71,10 @@
 }
 
 .jn-confirm-dialog {
+  margin: auto;
   width: min(560px, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  overflow: auto;
   padding: 0;
   border: 1px solid var(--jn-border, #d8dfe6);
   border-radius: 12px;
@@ -117,11 +120,29 @@
 .jn-dialog-actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: flex-end;
   gap: 0.75rem;
   padding: 0.95rem 1.25rem;
   border-top: 1px solid var(--jn-border, #d8dfe6);
   background: var(--jn-bg, #faf9f6);
+}
+
+.jn-dialog-actions .secondary-button,
+.jn-dialog-actions .danger-button,
+.jn-dialog-actions .team-text-button {
+  width: auto;
+  margin: 0;
+  padding-inline: 1.1rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .jn-dialog-actions .secondary-button,
+  .jn-dialog-actions .danger-button,
+  .jn-dialog-actions .team-text-button {
+    width: 100%;
+  }
 }
 
 /* Client checkout & breakdown */
@@ -217,9 +238,91 @@
   color: var(--jn-navy, #103248);
 }
 
+.jn-provider-unconfigured svg {
+  flex-shrink: 0;
+  min-width: 18px;
+  margin-top: 0.1rem;
+}
+
 .jn-provider-unconfigured p {
   margin: 0.25rem 0 0;
   font-size: 0.9rem;
+}
+
+.jn-installments-block {
+  padding: 0.75rem 0.9rem;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #d8dfe6);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.jn-installments-title {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--jn-navy, #103248);
+}
+
+.jn-installments-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.jn-installments-list li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid rgba(16, 50, 72, 0.08);
+}
+
+.jn-installments-list li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.jn-qr-frame {
+  display: grid;
+  justify-items: start;
+  gap: 0.45rem;
+  padding: 0.75rem;
+  background: var(--jn-bg, #faf9f6);
+  border: 1px solid var(--jn-border, #d8dfe6);
+  border-radius: 8px;
+}
+
+.jn-qr-image {
+  display: block;
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  background: #ffffff;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--jn-border, #d8dfe6);
+}
+
+.jn-qr-fallback {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: var(--jn-navy, #103248);
+}
+
+.jn-qr-fallback-icon {
+  flex-shrink: 0;
+  color: var(--jn-navy, #103248);
+}
+
+.jn-qr-expiry {
+  margin: 0;
 }
 
 .jn-method-selector fieldset {
