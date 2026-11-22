@@ -73,15 +73,16 @@ test('smart-documents API: autentica, configura sem alterar texto jurídico, sal
       );
       return;
     }
-    if (req.url?.endsWith('smart_request_context')) {
-      res.end(
-        JSON.stringify({
+    if (req.url?.endsWith('smart_request_context') || req.url?.endsWith('document_intake_open_from_request')) {
+      const context = {
           request_id: request21,
           request_item_id: item21,
           request_protocol: 'AT-2026-0001',
           request_status: 'in_progress',
           origin: 'portal',
           has_intake: true,
+          can_start: false,
+          needs_review: true,
           intake: {
             model_name: 'Compra e Venda',
             template_id: templateId,
@@ -96,12 +97,8 @@ test('smart-documents API: autentica, configura sem alterar texto jurídico, sal
           smart_config: null,
           financial: { charge_id: doc21, due_cents: 50000, allocated_cents: 50000, balance_cents: 0, cancelled: false },
           courtesies: [],
-        }),
-      );
-      return;
-    }
-    if (req.url?.endsWith('document_detail')) {
-      res.end(JSON.stringify(detail));
+        };
+      res.end(JSON.stringify(req.url.endsWith('smart_request_context') ? context : { context, document: detail }));
       return;
     }
     if (req.url?.endsWith('smart_conference_operate')) {
@@ -228,6 +225,9 @@ test('smart-documents API: autentica, configura sem alterar texto jurídico, sal
       idempotency_key: idempKey,
     });
     assert.equal(confStartRes.status, 200);
+    const entry = (await confStartRes.json()).data;
+    assert.equal(entry.document.id, doc21);
+    assert.equal(entry.context.needs_review, true);
 
     const confOpRes = await post('/conference/operate', {
       office_id: office,

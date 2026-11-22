@@ -708,15 +708,23 @@ BEGIN
   PERFORM set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-a000-0000000ee004","session_id":"00000000-0000-4000-c000-0000000ee004"}', true);
   PERFORM set_config('role','authenticated',true);
   v := public.notifications_page('00000000-0000-4000-e000-0000000ee001', '', 'all', 'request_deleted', 1, 5);
-  PERFORM set_config('role', v_admin, true);
   IF coalesce((v->>'total')::integer, 0) < 1 THEN
     RAISE EXCEPTION 'EVOLUTION FAIL EVO-12: notificação de exclusão não listada';
   END IF;
   FOR v_item IN SELECT * FROM jsonb_array_elements(coalesce(v->'items','[]'::jsonb)) LOOP
+    IF public.notifications_read('00000000-0000-4000-e000-0000000ee001', (v_item->>'id')::uuid)->>'ok' IS DISTINCT FROM 'true'
+      OR public.notifications_read('00000000-0000-4000-e000-0000000ee001', (v_item->>'id')::uuid)->>'ok' IS DISTINCT FROM 'true' THEN
+      RAISE EXCEPTION 'EVOLUTION FAIL EVO-12: confirmação idempotente da leitura';
+    END IF;
     IF (v_item->>'can_open')::boolean IS TRUE THEN
       RAISE EXCEPTION 'EVOLUTION FAIL EVO-12: notificação de exclusão oferece detalhe inexistente';
     END IF;
   END LOOP;
+  v := public.notifications_page('00000000-0000-4000-e000-0000000ee001', '', 'unread', 'request_deleted', 1, 5);
+  IF (v->>'total')::integer IS DISTINCT FROM 0 THEN
+    RAISE EXCEPTION 'EVOLUTION FAIL EVO-12: leitura não persistida';
+  END IF;
+  PERFORM set_config('role', v_admin, true);
 END $$;
 
 

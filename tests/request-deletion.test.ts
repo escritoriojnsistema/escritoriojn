@@ -182,12 +182,34 @@ test('Etapa 1 (Cenários 5, 6, 7, 8, 9, 11): API /api/request-deletion auth, 403
     | 'conflict_status_changed'
     | 'storage_failed'
     | 'false_completed_without_storage'
+    | 'awaiting_worker'
     | 'client_self_deleted' = 'missing_rpc';
+  let workerCalls = 0;
 
   const provider = createServer((req, res) => {
     res.setHeader('Content-Type', 'application/json');
     if (req.url === '/auth/v1/user') {
       res.end(JSON.stringify({ id: OFFICE_ID, aud: 'authenticated' }));
+      return;
+    }
+    if (mode === 'awaiting_worker' && req.url === '/functions/v1/request-deletion-cleanup') {
+      assert.equal(req.headers.authorization, 'Bearer fixture');
+      assert.equal(req.headers.apikey, 'sb_publishable_fixture');
+      req.setEncoding('utf8');
+      let body = '';
+      req.on('data', chunk => { body += chunk; });
+      req.on('end', () => {
+        assert.deepEqual(JSON.parse(body), { office_id: OFFICE_ID, operation_id: OP_ID });
+        workerCalls++;
+        res.end(JSON.stringify({ status: 'processing' }));
+      });
+      return;
+    }
+    if (mode === 'awaiting_worker' && !workerCalls) {
+      res.end(JSON.stringify({
+        operation_id: OP_ID, request_id: REQUEST_ID, protocol: 'JN-2026-000999',
+        status: 'processing', db_deleted: false, storage_cleanup_completed: false,
+      }));
       return;
     }
     if (mode === 'missing_rpc') {
@@ -361,6 +383,12 @@ test('Etapa 1 (Cenários 5, 6, 7, 8, 9, 11): API /api/request-deletion auth, 403
     assert.equal(downgraded.status, 202);
     const downgradedJson = await downgraded.json();
     assert.equal(downgradedJson.data.status, 'processing');
+
+    mode = 'awaiting_worker';
+    const confirmed = await send(`/${REQUEST_ID}/execute`, execPayload);
+    assert.equal(confirmed.status, 200);
+    assert.equal((await confirmed.json()).data.storage_cleanup_completed, true);
+    assert.equal(workerCalls, 1);
 
     // Cenário 11: autoexclusão do cliente concluída com audit_recorded=false e consulta de status
     mode = 'client_self_deleted';

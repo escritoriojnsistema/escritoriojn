@@ -58,6 +58,7 @@ const messages: Record<string, [number, string]> = {
   TEMPLATES_FORBIDDEN: [403, 'Seu acesso não permite configurar modelos.'],
   DOCUMENTS_FORBIDDEN: [403, 'Seu acesso não permite esta operação documental.'],
   TEMPLATE_NOT_FOUND: [404, 'Modelo não encontrado.'],
+  DOCUMENT_CONTEXT_UNAVAILABLE: [422, 'Este item não possui um documento disponível para o seu acesso.'],
   DOCUMENT_NOT_FOUND: [404, 'Documento ou atendimento não encontrado.'],
   TEMPLATE_CONFLICT: [409, 'A configuração do modelo mudou. Atualize e confira.'],
   DOCUMENT_CONFLICT: [409, 'Os dados do documento mudaram. Reabra para preservar sua edição.'],
@@ -65,7 +66,7 @@ const messages: Record<string, [number, string]> = {
   TEMPLATES_VALIDATION: [422, 'Confira a configuração inteligente do modelo.'],
 };
 
-async function callRpc(res: Response, name: string, args: Record<string, unknown>) {
+async function callRpc(res: Response, name: string, args: Record<string, unknown>, project: (value: unknown) => unknown = value => value) {
   try {
     const { client } = res.locals.smartAuth as NonNullable<Awaited<ReturnType<typeof authenticatedClient>>>;
     const { data, error } = await client.rpc(name, args);
@@ -78,7 +79,7 @@ async function callRpc(res: Response, name: string, args: Record<string, unknown
       }
       return;
     }
-    res.json({ data });
+    res.json({ data: project(data) });
   } catch {
     errorResponse(res, 503, 'SMART_DOCUMENT_UNAVAILABLE', 'Serviço documental temporariamente indisponível. Preserve seus dados e tente novamente.');
   }
@@ -261,68 +262,16 @@ smartDocumentsRouter.post('/conference/start', async (req, res) => {
     return;
   }
 
-  try {
-    const { client } = res.locals.smartAuth as NonNullable<Awaited<ReturnType<typeof authenticatedClient>>>;
-    const ctxRes = await client.rpc('smart_request_context', {
-      p_office_id: b.office_id,
-      p_request_id: b.request_id,
-      p_request_item_id: b.request_item_id,
-    });
-    if (ctxRes.error) {
-      const m = messages[ctxRes.error.message];
-      if (m && ctxRes.error.code === `PT${m[0]}`) errorResponse(res, m[0], ctxRes.error.message, m[1]);
-      else errorResponse(res, 503, 'SMART_DOCUMENT_UNAVAILABLE', 'Não foi possível consultar o contexto do atendimento.');
-      return;
-    }
-
-    const ctx = ctxRes.data as { document_id: string | null };
-    let docRaw: unknown;
-    if (ctx.document_id) {
-      const det = await client.rpc('document_detail', {
-        p_office_id: b.office_id,
-        p_document_id: ctx.document_id,
-        p_revision: null,
-        p_history_page: 1,
-      });
-      if (det.error) {
-        const m = messages[det.error.message];
-        if (m && det.error.code === `PT${m[0]}`) errorResponse(res, m[0], det.error.message, m[1]);
-        else errorResponse(res, 503, 'SMART_DOCUMENT_UNAVAILABLE', 'Não foi possível abrir o documento contratado.');
-        return;
-      }
-      docRaw = det.data;
-    } else {
-      const start = await client.rpc('document_intake_start', {
-        p_office_id: b.office_id,
-        p_request_id: b.request_id,
-        p_request_item_id: b.request_item_id,
-        p_participants: b.participants as ParticipantInput[],
-        p_idempotency_key: b.idempotency_key,
-      });
-      if (start.error) {
-        const m = messages[start.error.message];
-        if (m && start.error.code === `PT${m[0]}`) errorResponse(res, m[0], start.error.message, m[1]);
-        else errorResponse(res, 503, 'SMART_DOCUMENT_UNAVAILABLE', 'Não foi possível iniciar a conferência do documento.');
-        return;
-      }
-      docRaw = start.data;
-    }
-
-    const doc = documentDetail(docRaw);
-    await client.rpc('smart_conference_operate', {
-      p_office_id: b.office_id,
-      p_payload: {
-        request_id: b.request_id,
-        document_id: doc.id,
-        conference_status: 'em_conferencia',
-        conference_notes: '',
-        notify_client: false,
-      },
-    });
-    res.json({ data: { context: ctx, document: doc } });
-  } catch {
-    errorResponse(res, 503, 'SMART_DOCUMENT_UNAVAILABLE', 'Não foi possível iniciar a conferência do documento.');
-  }
+  await callRpc(res, 'document_intake_open_from_request', {
+    p_office_id: b.office_id,
+    p_request_id: b.request_id,
+    p_request_item_id: b.request_item_id,
+    p_participants: b.participants as ParticipantInput[],
+    p_idempotency_key: b.idempotency_key,
+  }, value => {
+    if (!object(value)) throw new Error('Invalid document entry');
+    return { context: value.context, document: documentDetail(value.document) };
+  });
 });
 
 smartDocumentsRouter.post('/conference/operate', async (req, res) => {

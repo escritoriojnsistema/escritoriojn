@@ -111,7 +111,18 @@ SELECT request_item_id AS assigned_item FROM private.document_intakes WHERE requ
 SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000201","session_id":"00000000-0000-4000-c000-000000000201"}';
 SELECT test.assert_true(public.document_intake_view('00000000-0000-4000-e000-000000000201',(:'assigned_booking'::jsonb->>'request_id')::uuid,:'assigned_item')->>'template_version_id'=:'level1form'::jsonb->>'template_version_id','commercial: staff sees contracted intake');
+SELECT to_regprocedure('public.document_intake_open_from_request(uuid,uuid,uuid,jsonb,uuid)') IS NOT NULL AS has_request_document_entry \gset
+\if :has_request_document_entry
+SELECT test.assert_true(public.smart_request_context('00000000-0000-4000-e000-000000000201',(:'assigned_booking'::jsonb->>'request_id')::uuid,gen_random_uuid()) IS NULL,'commercial: unrelated item has no document action');
+SELECT test.assert_true(public.smart_request_context('00000000-0000-4000-e000-000000000201',(:'assigned_booking'::jsonb->>'request_id')::uuid,:'assigned_item')->>'can_start'='true','commercial: contracted item can start');
+SELECT test.assert_true(public.request_detail('00000000-0000-4000-e000-000000000201',(:'assigned_booking'::jsonb->>'request_id')::uuid,1) @> '{"rural_workflow":false,"specialized_workflow":false}','commercial: generic document request excludes category workflows');
+SELECT public.document_intake_open_from_request('00000000-0000-4000-e000-000000000201',(:'assigned_booking'::jsonb->>'request_id')::uuid,:'assigned_item','[]'::jsonb,gen_random_uuid()) AS entry \gset
+SELECT :'entry'::jsonb->'document' AS started_document \gset
+SELECT test.assert_true(:'entry'::jsonb#>>'{context,needs_review}'='true','commercial: new draft enters review');
+SELECT test.assert_true(public.document_intake_open_from_request('00000000-0000-4000-e000-000000000201',(:'assigned_booking'::jsonb->>'request_id')::uuid,:'assigned_item','[]'::jsonb,gen_random_uuid())#>>'{document,id}'=:'started_document'::jsonb->>'id','commercial: repeat opens same draft');
+\else
 SELECT public.document_intake_start('00000000-0000-4000-e000-000000000201',(:'assigned_booking'::jsonb->>'request_id')::uuid,:'assigned_item','[]'::jsonb,gen_random_uuid()) AS started_document \gset
+\endif
 SELECT gen_random_uuid() AS apply_key \gset
 SELECT public.document_intake_apply('00000000-0000-4000-e000-000000000201',(:'started_document'::jsonb->>'id')::uuid,1,:'apply_key') AS applied_document \gset
 SELECT test.assert_true(:'applied_document'::jsonb->>'id'=:'started_document'::jsonb->>'id','commercial: intake applies explicitly to existing editor');

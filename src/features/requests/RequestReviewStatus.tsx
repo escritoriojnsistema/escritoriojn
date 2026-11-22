@@ -15,9 +15,11 @@ function ReviewSummary({office,requestId,onFailure}:{office:string;requestId:str
   if(blocked)return;const c=new AbortController();setPending(true);
   void commercialRequest<PublicReviewPage>('/request-reviews',{office_id:office,request_id:requestId,page,size},c.signal,'/api/document-workflow').then(value=>{if(c.signal.aborted)return;setData(value);setError(undefined);}).catch(cause=>{
    if(c.signal.aborted)return;const failure=cause instanceof CommercialError?cause:new CommercialError(503);setError(failure);
-   if([401,403,404].includes(failure.status)){setData(undefined);onFailure(new RequestsError(failure.status));}
+   if([401,403,404].includes(failure.status))setData(undefined);
+   if(failure.status===401)onFailure(new RequestsError(401));
   }).finally(()=>{if(!c.signal.aborted)setPending(false);});return()=>c.abort();
  },[office,requestId,page,size,revision,blocked]);
+ if(error?.status===403||error?.status===404)return null;
  return <section className="service-section" aria-labelledby="request-review-title"><h2 id="request-review-title">Revisão dos documentos</h2>
   {error&&<p className="form-feedback error" role="alert">{error.message}</p>}
   {!blocked&&<>{error&&<button type="button" className="team-text-button" disabled={pending} onClick={()=>setRevision(n=>n+1)}>Tentar novamente</button>}

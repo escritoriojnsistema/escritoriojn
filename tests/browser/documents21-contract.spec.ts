@@ -65,3 +65,50 @@ test('retorno principal de criação mantém tentativa503 até confirmar o mesmo
  const back=page.getByRole('main').getByRole('button',{name:'Voltar à lista',exact:true});await expect(back).toBeVisible();await expect(back).toBeDisabled();
  await page.getByRole('button',{name:'Criar rascunho',exact:true}).click();await expect(page.getByLabel('Texto em edição',{exact:true})).toBeVisible();expect(attempts).toHaveLength(2);expect(attempts[0]).toEqual(attempts[1]);await expect(back).toBeEnabled();
 });
+
+test('a solicitação abre a revisão do documento vinculado e retorna ao texto após aprovação',async({page})=>{
+ const state=await setup(page,'owner',[
+  'foundation.access','documents.read','documents.review','requests.read','customers.read','templates.read',
+  'rural.read','specialized.read','checklists.read',
+ ]);
+ state.value.status='prepared';
+ const publication='00000000-0000-4000-8000-000000000901';
+ const tracked={id:request21,title:'Solicitação documental de teste',protocol:'AT-000901',public_status:'em_andamento',status:'aberto',
+  version:1,origin:'portal',priority:'normal',updated_at:detail.updated_at,created_at:detail.created_at};
+ const item={id:item21,fields:{},participant_ids:[],checklist:[],snapshot:{definition:{name:'Contrato vinculado',unit:'unidade',fields:[]},
+  version:1,quantity:1,unit_price_cents:0,total_cents:0,adjustment:{kind:'none'}}};
+ await page.route('**/api/requests/search',r=>r.fulfill({json:{data:{portal:false,items:[tracked],total:1,page:1,page_size:5}}}));
+ await page.route(`**/api/requests/${request21}/detail`,r=>r.fulfill({json:{data:{...tracked,portal:false,
+  message:'',priority_reason:'',customer_id:null,items:[item],history:[],history_page:1,history_total:1,
+  rural_workflow:false,specialized_workflow:false,
+ }}}));
+ await page.route('**/api/smart-documents/request-context',r=>r.fulfill({json:{data:{
+  document_id:doc21,can_start:false,needs_review:true,intake:{model_name:detail.title},
+ }}}));
+ await page.route('**/api/documents/detail',r=>{
+  expect(r.request().postDataJSON().document_id).toBe(doc21);
+  return r.fulfill({json:{data:state.value}});
+ });
+ const workflow={document_id:doc21,current_revision:1,can_work:false,can_review:true,publications:[{
+  id:publication,revision:1,title:detail.title,review_required:true,approved:false,ready:false,blockers:[],
+  review:{status:'in_review',can_decide:true,prepared_by_name:'Equipe fictícia',last_event_id:null},
+ }]};
+ await page.route('**/api/document-workflow/state',r=>r.fulfill({json:{data:workflow}}));
+ await page.route('**/api/document-workflow/review-history',r=>r.fulfill({json:{data:{items:[],total:0,page:1,page_size:5}}}));
+ await page.route('**/api/document-workflow/command',r=>{
+  expect(r.request().postDataJSON()).toMatchObject({document_id:doc21,command:{kind:'approve',publication_id:publication}});
+  return r.fulfill({json:{data:{...workflow,publications:[{...workflow.publications[0],approved:true}]}}});
+ });
+
+ await page.goto('/solicitacoes');
+ await page.getByRole('button',{name:'Ver solicitação AT-000901'}).click();
+ await expect(page.getByText(/CCIR\/CAR · Organizar e encaminhar|Previdenciário e jurídico · Organizar caso e prazos/)).toHaveCount(0);
+ await page.getByRole('link',{name:'Revisar documento'}).click();
+ await expect(page).toHaveURL(/\/documentos\?aba=issued$/);
+ await expect(page.getByRole('tab',{name:'Revisão',exact:true})).toHaveAttribute('aria-selected','true');
+ await expect(page.getByLabel('Ação documental')).toHaveValue('approve');
+ await page.getByLabel('Motivo ou evidência da etapa').fill('Conferência editorial realizada');
+ await page.getByRole('button',{name:'Registrar ação'}).click();
+ await expect(page.getByRole('tab',{name:'Texto',exact:true})).toHaveAttribute('aria-selected','true');
+ await expect(page.getByLabel('Texto em edição')).toHaveValue(detail.input.content);
+});
