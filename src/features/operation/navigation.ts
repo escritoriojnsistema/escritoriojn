@@ -5,7 +5,7 @@ import { normalizePathname, paths } from '../../app/routes';
 export const operationRoleNames = {
   owner: 'Super administrador', admin: 'Administrador', employee: 'Funcionário', client: 'Cliente',
 };
-export type OperationItem = { key: 'imports' | 'operations' | 'categories' | 'access' | 'privacy' | 'rural' | 'settings' | 'catalog' | 'portalDocuments' | 'documents' | 'templates' | 'quick' | 'reports' | 'expenses' | 'payments' | 'cash' | 'charges' | 'home' | 'checklists' | 'notifications' | 'requests' | 'attachments' | 'customers' | 'services' | 'team' | 'audit' | 'archives' | 'account'; label: string; path: string };
+export type OperationItem = { key: 'paymentsConfig' | 'imports' | 'operations' | 'categories' | 'access' | 'privacy' | 'rural' | 'settings' | 'catalog' | 'portalDocuments' | 'documents' | 'templates' | 'quick' | 'reports' | 'expenses' | 'payments' | 'cash' | 'charges' | 'home' | 'checklists' | 'notifications' | 'requests' | 'attachments' | 'customers' | 'services' | 'team' | 'audit' | 'archives' | 'account'; label: string; path: string };
 const staff = (contexts: AccessContext[], permissions: string[]) => contexts.some(context => context.role_code !== 'client' && permissions.every(permission => context.permissions.includes(permission)));
 
 /** Only the parent sections belong to the sidebar, for both screen sizes. */
@@ -45,6 +45,7 @@ export function settingsNavigation(context: AccessContext, client: boolean): Ope
   if (has('users.manage')) items.push({ key:'team', label:'Equipe e convites', path:paths.teamManagement });
   if (admin && has('settings.access','categories.manage')) items.push({ key:'categories', label:'Categorias', path:paths.settingsCategories });
   if (admin && has('settings.access','access.manage')) items.push({ key:'access', label:'Acessos', path:paths.settingsAccess });
+  if (admin && has('settings.access','payments.providers.manage')) items.push({ key:'paymentsConfig', label:'Bancos e Pagamentos', path:paths.settingsPayments });
   items.push({ key:'account', label:'Conta', path:paths.account });
   return items;
 }
@@ -57,7 +58,7 @@ export function operationSectionKey(pathname: string): OperationItem['key'] | un
     ['customers', [paths.customers, paths.rural]],
     ['services', [paths.services, paths.checklists]],
     ['cash', [paths.cash, paths.charges, paths.expenses, paths.financialReports, paths.quick]],
-    ['settings', [paths.settingsImports,paths.settingsOperations, paths.settings, paths.clientSettings, paths.settingsCategories, paths.settingsAccess, paths.settingsPrivacy, paths.settingsArchives, paths.teamManagement, paths.audit, paths.archives, paths.account, paths.clientAccount]],
+    ['settings', [paths.settingsPayments,paths.settingsImports,paths.settingsOperations, paths.settings, paths.clientSettings, paths.settingsCategories, paths.settingsAccess, paths.settingsPrivacy, paths.settingsArchives, paths.teamManagement, paths.audit, paths.archives, paths.account, paths.clientAccount]],
   ];
   return groups.find(([, routes]) => routes.includes(path))?.[0];
 }

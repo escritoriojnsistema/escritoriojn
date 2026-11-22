@@ -1,0 +1,305 @@
+/* Shared styles for Etapa 1 (Deletion modal), Etapa 2 (Client Checkout), Etapa 3 (Team Collection) */
+.request-client-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.request-delete-zone {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--jn-border, #d8dfe6);
+}
+
+.request-delete-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.125rem;
+  background: #fff8f7;
+  border: 1px solid #e6c5c0;
+  border-radius: 10px;
+}
+
+.request-delete-row h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  color: #7c1f1a;
+}
+
+.request-delete-blocked {
+  padding: 1rem 1.125rem;
+  background: var(--jn-bg, #faf9f6);
+  border: 1px solid var(--jn-border, #d8dfe6);
+  border-radius: 10px;
+}
+
+.request-delete-blocked-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--jn-navy, #103248);
+  margin-bottom: 0.35rem;
+}
+
+.danger-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.65rem 1.1rem;
+  border-radius: 8px;
+  border: 1px solid #9e2620;
+  background: #9e2620;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+.danger-button:hover:not(:disabled) {
+  background: #7f1d18;
+}
+
+.danger-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.jn-confirm-dialog {
+  width: min(560px, calc(100vw - 2rem));
+  padding: 0;
+  border: 1px solid var(--jn-border, #d8dfe6);
+  border-radius: 12px;
+  background: var(--jn-surface, #ffffff);
+  color: var(--jn-ink, #17232c);
+  box-shadow: 0 24px 48px rgba(16, 50, 72, 0.22);
+}
+
+.jn-confirm-dialog::backdrop {
+  background: rgba(16, 50, 72, 0.48);
+}
+
+.jn-dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--jn-border, #d8dfe6);
+}
+
+.jn-dialog-head h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  color: var(--jn-navy, #103248);
+}
+
+.jn-dialog-body {
+  padding: 1.15rem 1.25rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.jn-dialog-emphasis {
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  background: #f5efe3;
+  border-left: 3px solid var(--jn-gold, #aa7d36);
+  color: var(--jn-navy, #103248);
+  font-weight: 500;
+}
+
+.jn-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 0.95rem 1.25rem;
+  border-top: 1px solid var(--jn-border, #d8dfe6);
+  background: var(--jn-bg, #faf9f6);
+}
+
+/* Client checkout & breakdown */
+.jn-checkout-card {
+  margin-top: 1rem;
+  padding: 1rem 1.125rem;
+  border: 1px solid var(--jn-border, #d8dfe6);
+  border-radius: 10px;
+  background: var(--jn-bg, #faf9f6);
+  display: grid;
+  gap: 0.95rem;
+}
+
+.jn-checkout-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.jn-checkout-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--jn-navy, #103248);
+}
+
+.jn-payment-state {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid var(--jn-border, #d8dfe6);
+  background: var(--jn-surface, #ffffff);
+  color: var(--jn-navy, #103248);
+}
+
+.jn-state-confirmed {
+  border-color: #2f6f4e;
+  color: #1f5238;
+  background: #edf7f1;
+}
+
+.jn-state-refused,
+.jn-state-communication_error,
+.jn-state-expired,
+.jn-state-cancelled {
+  border-color: #c2554e;
+  color: #7c1f1a;
+  background: #fdf2f1;
+}
+
+.jn-state-pending_reconciliation,
+.jn-state-awaiting_payment,
+.jn-state-processing,
+.jn-state-partially_received {
+  border-color: var(--jn-gold, #aa7d36);
+  color: #6b4c1c;
+  background: #fbf6ec;
+}
+
+.jn-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0.75rem;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #d8dfe6);
+  border-radius: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.jn-breakdown-grid dt {
+  font-size: 0.78rem;
+  color: var(--jn-muted, #526270);
+}
+
+.jn-breakdown-grid dd {
+  margin: 0.2rem 0 0;
+  font-size: 0.96rem;
+  color: var(--jn-ink, #17232c);
+}
+
+.jn-provider-unconfigured {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-gold, #aa7d36);
+  border-radius: 8px;
+  color: var(--jn-navy, #103248);
+}
+
+.jn-provider-unconfigured p {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+}
+
+.jn-method-selector fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.jn-method-selector legend {
+  font-weight: 600;
+  color: var(--jn-navy, #103248);
+  margin-bottom: 0.45rem;
+}
+
+.jn-method-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.65rem;
+}
+
+.jn-method-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  min-height: 44px;
+  padding: 0.75rem;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #d8dfe6);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.jn-method-option.is-selected {
+  border-color: var(--jn-navy, #103248);
+  box-shadow: inset 0 0 0 1px var(--jn-navy, #103248);
+}
+
+.jn-method-option.is-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.jn-method-option small {
+  display: block;
+  color: var(--jn-muted, #526270);
+  margin-top: 0.2rem;
+}
+
+.jn-active-intent {
+  padding: 0.9rem 1rem;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #d8dfe6);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.jn-intent-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.jn-pix-box {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.jn-receipt-banner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 0.9rem;
+  background: #edf7f1;
+  border: 1px solid #2f6f4e;
+  border-radius: 8px;
+  color: #1f5238;
+}

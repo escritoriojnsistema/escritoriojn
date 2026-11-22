@@ -5,7 +5,7 @@ import type {AccessContext} from '../../../shared/access';
 import type {AccountNotices} from '../../../shared/notifications';
 import {paths} from '../../app/routes';
 import {notificationsApi,NotificationsError,noticesChanged} from './api';
-import {noticeText,noticeDestination} from './presentation';
+import {noticeText,noticeDestination,isApprovalNotice} from './presentation';
 import {useNotificationRead} from './NotificationReadProvider';
 export function NotificationDrawer({client,contexts,initialOffice,onClose}:{client:boolean;contexts:AccessContext[];initialOffice?:string;onClose:()=>void}){
  const dialog=useRef<HTMLDialogElement>(null),location=useLocation(),initialLocation=useRef(location.key),markOnOpen=useNotificationRead();
@@ -26,7 +26,7 @@ export function NotificationDrawer({client,contexts,initialOffice,onClose}:{clie
   <div className="notification-drawer-body" aria-busy={pending}>
    {error&&<p role="alert" className="form-feedback error">{error.message}</p>}
    {!blocked&&data&&!data.items.length&&<p className="team-empty">Você não tem notificações neste escritório.</p>}
-   {!blocked&&data&&<ul className="notification-drawer-list">{data.items.map(n=><li key={n.id} className={n.read_at?'':'notice-unread'}><strong>{noticeText(n)}</strong><small>{new Date(n.created_at).toLocaleString('pt-BR')} · {n.read_at?'Lida':'Não lida'}</small><div className="notification-drawer-actions">{n.can_open&&<Link className="team-text-button" to={noticeDestination(n.kind,client)} state={{office_id:office,request_id:n.request_id}} onClick={()=>{if(!n.read_at)markOnOpen(office,n.id);close();}}>Abrir {n.protocol}</Link>}{!n.read_at&&<button type="button" className="team-text-button" disabled={saving} onClick={()=>void read(n.id)}>Marcar como lida</button>}</div></li>)}</ul>}
+   {!blocked&&data&&<ul className="notification-drawer-list">{data.items.map(n=><li key={n.id} className={n.read_at?'':'notice-unread'}><strong>{noticeText(n)}</strong><small>{new Date(n.created_at).toLocaleString('pt-BR')} · {n.read_at?'Lida':'Não lida'}</small><div className="notification-drawer-actions">{n.kind==='request_deleted'&&client&&<Link className="team-text-button" to={paths.clientRequests} state={{office_id:office,start_new:true}} onClick={()=>{if(!n.read_at)markOnOpen(office,n.id);close();}}>Iniciar nova solicitação</Link>}{isApprovalNotice(n.kind)&&!client&&<Link className="team-text-button" to={paths.cash} state={{office_id:office,tab:'approvals',approval_id:n.approval_id??undefined}} onClick={()=>{if(!n.read_at)markOnOpen(office,n.id);close();}}>Analisar autorização</Link>}{n.can_open&&n.kind!=='request_deleted'&&<Link className="team-text-button" to={noticeDestination(n.kind,client)} state={{office_id:office,request_id:n.request_id}} onClick={()=>{if(!n.read_at)markOnOpen(office,n.id);close();}}>Abrir {n.protocol}</Link>}{!n.read_at&&<button type="button" className="team-text-button" disabled={saving} onClick={()=>void read(n.id)}>Marcar como lida</button>}</div></li>)}</ul>}
   </div><div className="notification-drawer-footer">{!blocked&&<Link className="primary-button" to={client?paths.clientNotifications:paths.notifications} state={{office_id:office}} onClick={close}>Ver mais</Link>}<button type="button" className="operation-icon-button" aria-label="Atualizar notificações" disabled={pending||saving||blocked} onClick={()=>setRevision(n=>n+1)}><RefreshCw size={19} aria-hidden="true"/></button></div>
  </dialog>;
 }

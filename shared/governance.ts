@@ -79,3 +79,39 @@ Object.assign(auditActionNames,{'documents.created':'Rascunho documental criado'
 Object.assign(auditTargetNames,{document:'Documento em preenchimento'});
 
 Object.assign(auditActionNames,{'documents.review_submitted':'Documento encaminhado para revisão','documents.review_approved':'Conteúdo documental aprovado','documents.review_rejected':'Documento rejeitado','documents.review_returned':'Documento devolvido para correção','documents.review_withdrawn':'Pedido de revisão retirado'});
+
+Object.assign(auditActionNames,{
+ 'requests.deleted':'Solicitação excluída definitivamente',
+ 'payments.checkout_initiated':'Cobrança eletrônica iniciada',
+ 'payments.manual_approval_requested':'Autorização de pagamento manual solicitada',
+ 'payments.manual_approval_approved':'Autorização de pagamento manual aprovada',
+ 'payments.manual_approval_rejected':'Autorização de pagamento manual rejeitada',
+ 'payments.manual_approval_executed':'Pagamento manual autorizado executado',
+ 'charges.discount_approval_requested':'Autorização de desconto solicitada',
+ 'charges.discount_approval_approved':'Autorização de desconto aprovada',
+ 'charges.discount_approval_rejected':'Autorização de desconto rejeitada',
+ 'payment_providers.configured':'Configuração de bancos e pagamentos atualizada',
+ 'payment_providers.validated':'Conexão de provedor de pagamento validada',
+ 'payment_terminals.configured':'Maquininha de cartão configurada',
+});
+Object.assign(auditTargetNames,{
+ financial_approval:'Autorização financeira',
+ payment_provider:'Provedor de pagamento',
+ payment_terminal:'Maquininha de cartão',
+ payment_checkout:'Cobrança eletrônica',
+});
+Object.assign(auditFieldNames,{
+ protocol:'Protocolo',
+ deleted_status:'Situação antes da exclusão',
+ attachments_removed:'Anexos removidos',
+ attachments_preserved:'Anexos preservados por vínculo',
+ approval_id:'Referência da autorização',
+ approver_id:'Aprovador selecionado',
+ discount_cents:'Desconto em reais',
+ discount_percent:'Desconto percentual',
+ final_cents:'Valor final em reais',
+ provider_code:'Provedor',
+ terminal_id:'Referência da maquininha',
+ environment:'Ambiente',
+});
+

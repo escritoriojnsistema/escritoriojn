@@ -19,10 +19,14 @@ import { OperationalFeedback } from "../operation/OperationalAccess";
 import { ChargeRequestPicker } from "./ChargeRequestPicker";
 import { chargesApi, ChargesError, chargesError } from "./api";
 import { smartDocumentsApi } from "../smartDocuments/api";
+import { TeamCollectionPanel } from "../cash/TeamCollectionPanel";
+import { DiscountApprovalForm } from "../approvals/DiscountApprovalForm";
 import "../team/team.css";
 import "../customers/customers.css";
 import "../services/services.css";
 import "../requests/requests.css";
+import "../payments/payments.css";
+import "../settings/paymentProviders.css";
 import "./charges.css";
 const money = (cents: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
@@ -323,6 +327,37 @@ function Workspace({
                   office={context.office_id}
                   command={command}
                 />
+                {data.charge &&
+                  data.charge.status === "aberta" &&
+                  data.charge.balance_cents > 0 && (
+                    <TeamCollectionPanel
+                      office={context.office_id}
+                      officeName={context.office_name}
+                      chargeId={data.charge.id}
+                      chargeVersion={data.charge.version}
+                      protocol={data.protocol}
+                      serviceSummary={data.items.map((i) => i.name).join(" · ")}
+                      balanceCents={data.charge.balance_cents}
+                      disabled={busy}
+                      onPaymentConfirmed={() => setRevision((n) => n + 1)}
+                    />
+                  )}
+                {data.charge &&
+                  data.charge.status === "aberta" &&
+                  data.charge.balance_cents > 0 &&
+                  !data.charge.can_discount && (
+                    <DiscountApprovalForm
+                      office={context.office_id}
+                      chargeId={data.charge.id}
+                      chargeVersion={data.charge.version}
+                      requestId={data.request_id}
+                      protocol={data.protocol}
+                      originalCents={data.charge.due_cents}
+                      balanceCents={data.charge.balance_cents}
+                      disabled={busy}
+                      onSubmitted={(msg) => setFeedback(msg)}
+                    />
+                  )}
                 {data.charge && (
                   <details className="service-section">
                     <summary>Histórico da cobrança</summary>

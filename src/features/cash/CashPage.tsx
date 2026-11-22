@@ -8,7 +8,7 @@ import {cashMoney} from './CashSessions';
 import type {CashFilters} from '../../../shared/cash';
 import {quickRequiredPermissions} from '../../../shared/finance19';
 import {useCallback,useEffect,useRef,useState} from 'react';
-import {Link,Navigate} from 'react-router-dom';
+import {Link,Navigate,useLocation} from 'react-router-dom';
 import {RefreshCw} from 'lucide-react';
 import type {AccessContext} from '../../../shared/access';
 import type {CashConfiguration,CashDashboard,CashOpen,CashConfigure} from '../../../shared/cash';
@@ -20,13 +20,16 @@ import {cashApi,cashError,CashError} from './api';
 import {CashOpeningForm} from './CashOpeningForm';
 import {CashConfigurationPanel} from './CashConfigurationPanel';
 import {CashSessions} from './CashSessions';
+import {ApprovalsPanel} from '../approvals/ApprovalsPanel';
 import '../team/team.css';
 import '../customers/customers.css';
+import '../payments/payments.css';
+import '../settings/paymentProviders.css';
 import './cash.css';
-type Tab='own'|'all'|'configuration'|'charges'|'expenses'|'reports';
+type Tab='own'|'all'|'configuration'|'charges'|'expenses'|'reports'|'approvals';
 type Issue={source:'dashboard'|'configuration'|'command';error:CashError};
 export default function CashPage(){
- const auth=useAuth(),[office,setOffice]=useState('');
+ const auth=useAuth(),location=useLocation(),navState=location.state as {office_id?:string;tab?:Tab;approval_id?:string}|null,[office,setOffice]=useState(navState?.office_id??'');
  const contexts=auth.contexts.filter(c=>c.role_code!=='client'&&(c.permissions.includes('cash.read')||(c.permissions.includes('requests.read')&&c.permissions.includes('charges.read'))));
  const context=contexts.find(c=>c.office_id===office)??contexts[0];
  if(auth.status==='loading')return <OperationalFeedback status="loading"/>;
@@ -35,12 +38,14 @@ export default function CashPage(){
  return <CashWorkspace key={context.office_id} context={context} contexts={contexts} onOffice={setOffice}/>;
 }
 function CashWorkspace({context,contexts,onOffice}:{context:AccessContext;contexts:AccessContext[];onOffice:(id:string)=>void}){
+ const location=useLocation(),navState=location.state as {office_id?:string;tab?:Tab;approval_id?:string}|null;
  const office=context.office_id;
  const [closureTools,setClosureTools]=useState<{sessionId:string;canAdjust:boolean}>(),[closureIntent,setClosureIntent]=useState<{mode:ClosureMode;nonce:number}>();
  const closureAction=(mode:ClosureMode)=>setClosureIntent(v=>({mode,nonce:(v?.nonce??0)+1}));
  const [statement,setStatement]=useState<string>(),[statementBusy,setStatementBusy]=useState(false),[filterDraft,setFilterDraft]=useState<CashFilters>({unit_id:null,status:'all',query:''}),[filters,setFilters]=useState<CashFilters>({unit_id:null,status:'all',query:''});
  const mayCash=context.permissions.includes('cash.read');
- const [tab,setTab]=useState<Tab>(()=>mayCash?'own':'charges'),[scope,setScope]=useState<'own'|'all'>('own'),[page,setPage]=useState(1),[configPage,setConfigPage]=useState(1),[unitFilter,setUnitFilter]=useState<string|null>(null),[revision,setRevision]=useState(0),[financialRevision,setFinancialRevision]=useState(0);
+ const [tab,setTab]=useState<Tab>(()=>navState?.tab==='approvals'?'approvals':mayCash?'own':'charges'),[scope,setScope]=useState<'own'|'all'>('own'),[page,setPage]=useState(1),[configPage,setConfigPage]=useState(1),[unitFilter,setUnitFilter]=useState<string|null>(null),[revision,setRevision]=useState(0),[financialRevision,setFinancialRevision]=useState(0);
+ useEffect(()=>{if(navState?.tab==='approvals')setTab('approvals');},[location.key,navState?.tab]);
  const [size,setSize]=useState<3|5>(()=>matchMedia('(max-width:900px)').matches?3:5);
  const [data,setData]=useState<CashDashboard>(),[configuration,setConfiguration]=useState<CashConfiguration>(),[openingOptions,setOpeningOptions]=useState<CashConfiguration>(),[issues,setIssues]=useState<Partial<Record<Issue['source'],CashError>>>({}),[feedback,setFeedback]=useState(''),[blocked,setBlocked]=useState(false),[busy,setBusy]=useState(false),[reading,setReading]=useState(false),[configReading,setConfigReading]=useState(false);
  const alive=useRef(true),mutation=useRef<AbortController|null>(null),dashboardRead=useRef<AbortController|null>(null),configRead=useRef<AbortController|null>(null);
@@ -83,10 +88,11 @@ function CashWorkspace({context,contexts,onOffice}:{context:AccessContext;contex
     {canAll&&mayCash&&<button role="tab" aria-selected={tab==='all'} disabled={controlsBusy} onClick={()=>changeTab('all')}>Consolidação</button>}
     {canManage&&mayCash&&<button role="tab" aria-selected={tab==='configuration'} disabled={controlsBusy} onClick={()=>changeTab('configuration')}>Configuração</button>}
     {canCharges&&<button role="tab" aria-selected={tab==='charges'} disabled={controlsBusy} onClick={()=>changeTab('charges')}>Cobranças</button>}
+    <button role="tab" aria-selected={tab==='approvals'} disabled={controlsBusy} onClick={()=>changeTab('approvals')}>Autorizações</button>
     {canExpenses&&<button role="tab" aria-selected={tab==='expenses'} disabled={controlsBusy} onClick={()=>changeTab('expenses')}>Despesas e movimentações</button>}
     {canReports&&<button role="tab" aria-selected={tab==='reports'} disabled={controlsBusy} onClick={()=>changeTab('reports')}>Relatórios financeiros</button>}
    </div><button className="operation-icon-button" disabled={controlsBusy||reading||configReading} aria-label="Atualizar caixa" title="Atualizar caixa" onClick={()=>{setIssues({});setRevision(n=>n+1);}}><RefreshCw size={19} aria-hidden="true"/></button></div>
-   {['charges','expenses','reports'].includes(tab)?(tab==='charges'&&canCharges?<ChargesPage embedded office={office}/>:tab==='expenses'&&canExpenses?<ExpensesPage embedded office={office}/>:tab==='reports'&&canReports?<ReportsPage embedded office={office}/>:null):statement?<CashStatement closureIntent={closureIntent} onClosureTools={setClosureTools} office={office} sessionId={statement} configuration={openingOptions} onBack={()=>setStatement(undefined)} onBusy={setStatementBusy} onChanged={()=>setFinancialRevision(n=>n+1)}/>:tab==='configuration'&&canManage&&configuration?<CashConfigurationPanel key={office} data={configuration} references={openingOptions??configuration} busy={busy} size={size} onSave={configure} onClear={()=>{setIssues({});setFeedback('');}} onPage={setConfigPage} onUnit={id=>{setUnitFilter(id);setConfigPage(1);}} pending={configReading}/>:tab!=='configuration'&&<>
+   {tab==='approvals'?<ApprovalsPanel office={office} activeSessionId={data?.sessions.find(s=>s.is_self&&s.status==='open')?.id??null} highlightApprovalId={navState?.approval_id} onChanged={()=>setFinancialRevision(x=>x+1)}/>:['charges','expenses','reports'].includes(tab)?(tab==='charges'&&canCharges?<ChargesPage embedded office={office}/>:tab==='expenses'&&canExpenses?<ExpensesPage embedded office={office}/>:tab==='reports'&&canReports?<ReportsPage embedded office={office}/>:null):statement?<CashStatement closureIntent={closureIntent} onClosureTools={setClosureTools} office={office} sessionId={statement} configuration={openingOptions} onBack={()=>setStatement(undefined)} onBusy={setStatementBusy} onChanged={()=>setFinancialRevision(n=>n+1)}/>:tab==='configuration'&&canManage&&configuration?<CashConfigurationPanel key={office} data={configuration} references={openingOptions??configuration} busy={busy} size={size} onSave={configure} onClear={()=>{setIssues({});setFeedback('');}} onPage={setConfigPage} onUnit={id=>{setUnitFilter(id);setConfigPage(1);}} pending={configReading}/>:tab!=='configuration'&&<>
     {tab==='own'&&shown&&openingOptions&&shown.can_open&&<CashOpeningForm canManage={canManage} onConfigure={()=>changeTab('configuration')} configuration={openingOptions} sessions={shown.sessions} busy={busy} onOpen={open} onClear={()=>{setIssues({});setFeedback('');}}/>}
     {tab==='own'&&shown&&!shown.can_open&&<p className="customer-note">Você pode consultar seu caixa. A abertura exige autorização do escritório.</p>}
     <form className="cash-list-filters" onSubmit={e=>{e.preventDefault();setFilters({...filterDraft,query:filterDraft.query.trim()});setPage(1);}}><label className="team-field">Unidade dos caixas<select value={filterDraft.unit_id??''} disabled={controlsBusy} onChange={e=>setFilterDraft(v=>({...v,unit_id:e.target.value||null}))}><option value="">Todas as unidades</option>{openingOptions?.units.map(u=><option key={u.id} value={u.id}>{u.name}</option>)}</select></label><label className="team-field">Situação<select value={filterDraft.status} disabled={controlsBusy} onChange={e=>setFilterDraft(v=>({...v,status:e.target.value as CashFilters['status']}))}><option value="all">Todos</option><option value="open">Abertos</option><option value="closed">Fechados</option></select></label><label className="team-field">Operador ou conta<input value={filterDraft.query} maxLength={120} onChange={e=>setFilterDraft(v=>({...v,query:e.target.value}))}/></label><button className="secondary-button" disabled={busy||reading}>Filtrar caixas</button></form>

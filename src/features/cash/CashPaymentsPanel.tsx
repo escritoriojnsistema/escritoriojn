@@ -8,6 +8,7 @@ import {validPaymentOperation} from '../../../shared/payments';
 import {useAuth} from '../auth/AuthProvider';
 import {cashApi,cashError,type CashError} from './api';
 import {cashMoney} from './CashSessions';
+import {ManualPaymentApprovalForm} from '../approvals/ManualPaymentApprovalForm';
 
 type Props={
  office:string;statement:FinanceStatement;configuration?:CashConfiguration;disabled:boolean;
@@ -36,7 +37,9 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
  const amountFocus=useRef<HTMLInputElement>(null),pickerFocus=useRef<HTMLInputElement>(null);
  const openButton=useRef<HTMLButtonElement>(null),editorHeading=useRef<HTMLHeadingElement>(null),panelHeading=useRef<HTMLHeadingElement>(null);
  const correctButton=useRef<HTMLButtonElement>(null),wasHidden=useRef(false);
+ const [requestingApproval,setRequestingApproval]=useState(false);
  const hasAuthority=s.is_self&&['cash.open','charges.read','requests.read'].every(p=>context?.permissions.includes(p));
+ const canDirectManualPayment=context?.role_code==='owner'||Boolean(context?.permissions.includes('payments.manual.approve'));
  const canRecord=hasAuthority&&s.status==='open'&&s.can_operate&&statement.can_receive;
  const locked=disabled||busy;
  const methods=configuration?.units.some(u=>u.id===s.unit_id&&u.active)?configuration.payment_methods.filter(m=>m.active&&m.unit_id===s.unit_id&&configuration.accounts.some(a=>a.id===m.destination_account_id&&a.unit_id===s.unit_id&&a.active&&(m.type==='cash'?a.type==='cash'&&a.id===s.cash_account_id:a.type!=='cash'))):[];
@@ -62,7 +65,7 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
  },[office,editor?.kind,search,chargePage,searchRevision]);
 
  function clearEditor(focus=false){
-  setEditor(undefined);onEditing(false);setPickerOpen(true);setAllocations([]);setMethodId('');setStatus('confirmed');setPresented('');setFee('');setSettlement('pending');setSettledOn('');setReference('');setEvidence('');setQuery('');setSearch('');setChargePage(1);setCandidates(undefined);setChargeError(undefined);setValidation('');attempt.current=undefined;
+  setEditor(undefined);setRequestingApproval(false);onEditing(false);setPickerOpen(true);setAllocations([]);setMethodId('');setStatus('confirmed');setPresented('');setFee('');setSettlement('pending');setSettledOn('');setReference('');setEvidence('');setQuery('');setSearch('');setChargePage(1);setCandidates(undefined);setChargeError(undefined);setValidation('');attempt.current=undefined;
   restoreFocus.current=focus;
  }
  function start(next:Editor){if(locked||mutation.current)return;clearEditor();setError(undefined);setFeedback('');setEditor(next);onEditing(true);}
@@ -134,8 +137,14 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
     <label className="team-field cash-evidence">Evidência da operação<textarea value={evidence} minLength={5} maxLength={500} rows={2} placeholder="Descreva a conferência realizada" onChange={e=>setEvidence(e.target.value)}/></label>
    </fieldset>
    {validation&&<p className="form-feedback error" role="alert">{validation}</p>}
-   <div className="account-actions"><button className="primary-button" disabled={locked||editor.kind==='record'&&chargeReading}>{editor.kind==='record'?(status==='pending'?'Registrar pendência':'Confirmar recebimento'):actionTitle}</button><button type="button" className="secondary-button" disabled={locked} onClick={()=>{clearEditor(true);setError(undefined);}}>Cancelar</button></div>
+   <div className="account-actions">
+    {(editor.kind!=='record'||status==='pending'||canDirectManualPayment)&&<button className="primary-button" disabled={locked||editor.kind==='record'&&chargeReading}>{editor.kind==='record'?(status==='pending'?'Registrar pendência':'Confirmar recebimento'):actionTitle}</button>}
+    {editor.kind==='record'&&status==='confirmed'&&!canDirectManualPayment&&allocations.length===1&&method&&totalValid&&<button type="button" className="primary-button" disabled={locked||chargeReading} onClick={()=>setRequestingApproval(true)}>Solicitar autorização</button>}
+    <button type="button" className="secondary-button" disabled={locked} onClick={()=>{clearEditor(true);setError(undefined);}}>Cancelar</button>
+   </div>
+   {editor.kind==='record'&&status==='confirmed'&&!canDirectManualPayment&&<p className="customer-note">Seu perfil exige autorização de um administrador ou super administrador do escritório para confirmar pagamentos manuais. Selecione uma cobrança e clique em Solicitar autorização.</p>}
   </form>}
+  {editor?.kind==='record'&&requestingApproval&&allocations.length===1&&method&&totalValid&&<ManualPaymentApprovalForm office={office} chargeId={allocations[0].charge.id} chargeVersion={allocations[0].charge.version} requestId={allocations[0].charge.request_id} protocol={allocations[0].charge.protocol} sessionId={s.id} unitId={s.unit_id} paymentMethodId={method.id} paymentMethodName={method.name} amountCents={cashAmountToCents(allocations[0].amount)!} disabled={locked} onSubmitted={()=>{clearEditor(true);setFeedback('Solicitação de autorização de pagamento manual enviada ao aprovador selecionado.');}} onCancel={()=>setRequestingApproval(false)}/>}
   {!editor&&s.status==='closed'&&hasAuthority&&<p className="customer-note">Caixa fechado: novos recebimentos e confirmações estão bloqueados. Pendências podem ser rejeitadas e cartões confirmados podem ter sua liquidação registrada.</p>}
   {!editor&&historyError&&<p className="form-feedback error" role="alert">{historyError.message}</p>}
   {!editor&&!!history.destinations?.length&&<section className="cash-payment-destinations" aria-label="Totais por destino"><h4>Totais por destino</h4><p className="customer-note">Toda a sessão · recebimentos confirmados e devoluções.</p><ul>{history.destinations.map((destination,index)=><li key={`${destination.account_name}:${destination.payment_type}:${index}`}><strong>{destination.account_name} · {methodNames[destination.payment_type]}</strong><dl className="cash-totals cash-destination-totals"><div><dt>Recebido bruto</dt><dd>{cashMoney(destination.received_cents)}</dd></div><div><dt>Devolvido</dt><dd>{cashMoney(destination.returned_cents)}</dd></div><div><dt>Taxas</dt><dd>{knownMoney(destination.fee_cents)}</dd></div><div><dt>Após taxas e devoluções</dt><dd>{knownMoney(destination.net_cents)}</dd></div>{destination.payment_type==='card'&&<div><dt>Liquidado</dt><dd>{knownMoney(destination.settled_cents)}</dd></div>}</dl></li>)}</ul></section>}

@@ -1,0 +1,732 @@
+PROMPT 1 — ESCRITÓRIO JN
+
+Implementação de Frontend, Backend, Figma e contratos de integração
+
+Você é uma inteligência artificial sênior especializada em engenharia de software, React, TypeScript, Express, segurança, UX/UI, arquitetura de sistemas empresariais e integração de APIs.
+
+Sua missão é implementar uma evolução completa no sistema ESCRITÓRIO JN, preservando todas as funcionalidades que já existem.
+
+Repositório oficial: "escritoriojnsistema/escritoriojn"
+
+Tecnologias identificadas:
+
+- React, Vite e TypeScript no frontend.
+- Express e TypeScript no backend.
+- Supabase como banco de dados, autenticação e armazenamento.
+- Vercel como infraestrutura de hospedagem.
+- Figma como ferramenta de design.
+
+IMPORTANTE: este projeto será desenvolvido por duas IAs.
+
+Você é a IA 1, responsável exclusivamente por:
+
+1. Frontend e interfaces.
+2. Backend e endpoints Express.
+3. Lógica de aplicação e validações.
+4. Contratos TypeScript compartilhados.
+5. Integrações de interface com os serviços existentes.
+6. Telas e componentes no Figma.
+7. Testes de frontend, backend e contratos.
+8. Documentação de integração para a IA 2.
+
+A IA 2 será responsável pelo Supabase, migrations SQL, políticas de acesso no banco, Supabase Storage, funções e persistência, infraestrutura e configurações da Vercel.
+
+NÃO altere diretamente schemas, tabelas, RLS, migrations já aplicadas, dados de produção nem infraestrutura da Vercel. Não recrie o sistema. Não substitua sua arquitetura.
+
+ETAPA 0 — INSPEÇÃO OBRIGATÓRIA
+
+Antes de escrever qualquer código:
+
+1. Leia integralmente "AGENTS.md", "LIVRO_RAIZ.md" e a documentação do projeto relevante.
+2. Examine as rotas, os componentes e os endpoints existentes.
+3. Consulte "src/app/routes.ts", "src/app/OperationalRoutes.tsx" e "src/features/operation/navigation.ts".
+4. Inspecione "src/features/requests", "src/features/charges", "src/features/payments", "src/features/cash", "src/features/notifications", "src/features/settings", "src/features/team", "src/features/governance" e seus módulos equivalentes no servidor.
+5. Consulte "shared/requests.ts", "shared/charges.ts", "shared/payments.ts", "shared/team.ts" e "shared/permissionModules.ts".
+6. Examine as regras existentes em "docs/regras/financeiro.md" e os contratos em "docs/backlog/integracoes/".
+7. Verifique os diferentes níveis de atendimento, classificações, estados, permissões, vínculos e responsáveis.
+8. Verifique as funções de cancelamento, arquivamento, transferência, exclusão de arquivos e auditoria já implementadas.
+9. Identifique todos os fluxos pelos quais um cliente pode criar uma solicitação.
+10. Inspecione o arquivo real do Figma que representa o Escritório JN, quando acessível, identificando as telas existentes em desktop e mobile.
+
+Crie uma matriz com:
+
+- Funcionalidades existentes.
+- Funcionalidades incompletas.
+- Bugs encontrados e reproduzidos.
+- Novas funcionalidades necessárias.
+- Arquivos que precisam de alteração.
+- Telas do Figma afetadas.
+- Alterações do Supabase que dependerão da IA 2.
+
+Não trate uma funcionalidade como inexistente antes de verificar sua implementação real.
+
+---
+
+ETAPA 1 — EXCLUSÃO DEFINITIVA DE SOLICITAÇÕES
+
+1.1. Criar uma operação de exclusão definitiva
+
+O sistema já possui cancelamento de solicitações. A nova exclusão deverá ser uma operação diferente, que remove os dados operacionais elegíveis da solicitação, incluindo anexos exclusivos.
+
+Não reutilize o cancelamento existente como se fosse exclusão definitiva.
+
+Implemente a ação Excluir solicitação nas telas apropriadas da equipe e do portal do cliente.
+
+1.2. Permissões para exclusão
+
+Obedeça à seguinte matriz de autorização:
+
+Situação A — Cliente abriu a solicitação e ninguém da equipe iniciou o atendimento
+
+- O cliente autenticado e vinculado à solicitação poderá excluí-la.
+- A ação estará disponível em "Minhas solicitações".
+- Depois da exclusão confirmada, a solicitação deverá desaparecer das listas e detalhes de ambos os portais.
+- Os anexos exclusivos deverão ser definitivamente removidos do armazenamento, mediante confirmação do backend.
+- A operação não deverá produzir evento na auditoria empresarial de exclusões.
+- O cliente não poderá excluir solicitações de outro usuário, mesmo conhecendo o identificador.
+
+Situação B — Solicitação aguardando o cliente
+
+- Somente o cliente legitimamente vinculado poderá solicitar a exclusão.
+- A equipe não poderá utilizar um botão de exclusão enquanto o controle estiver com o cliente.
+- O backend deverá confirmar a identidade e a situação atual, sem confiar apenas no estado exibido no navegador.
+- Se a solicitação foi aberta presencialmente ou pelo WhatsApp e o cliente não possui acesso autenticado, prever mecanismo seguro de identificação/verificação antes de permitir exclusão. Não aceitar uma mensagem de WhatsApp não autenticada como prova suficiente.
+
+Situação C — Solicitação em atendimento com a equipe
+
+- O cliente não poderá excluir.
+- A exclusão poderá ser iniciada pelo integrante responsável que possuir a permissão necessária, respeitando o nível e o escopo do atendimento.
+- Super administrador e administradores poderão realizar a operação somente dentro das regras de autoridade definidas para essa ação.
+- Uma permissão genérica de consulta ou cancelamento não deverá automaticamente autorizar exclusão.
+- Depois da exclusão definitiva, o cliente receberá uma notificação informativa.
+
+Situação D — Aguardando responsável ou aprovação interna
+
+- A solicitação permanece sob controle da equipe, não do cliente.
+- Respeitar a responsabilidade, a classificação do atendimento e as permissões vigentes.
+- Não permitir que um usuário sem autoridade exclua apenas porque consegue visualizar a solicitação.
+
+Situação E — Solicitação concluída, cancelada, paga ou com documentos vinculados
+
+- Verificar dependências antes de disponibilizar a exclusão.
+- Quando houver pagamento confirmado, reembolso, recibo, documento formalizado, entrega ou obrigação legal de retenção, bloquear a exclusão destrutiva incompatível.
+- Apresentar a causa do bloqueio e as ações adequadas: cancelamento, estorno, devolução, encerramento ou tratamento de retenção.
+- Não apagar comprovantes financeiros obrigatórios, registros fiscais nem o histórico financeiro imutável.
+- Não permitir que uma exclusão provoque inconsistência no Caixa.
+
+Regra central: somente a parte que detém o controle do atendimento, com identidade e autorização válidas, poderá excluir quando a solicitação for elegível. Nunca permitir exclusão simultânea por cliente e equipe.
+
+1.3. Confirmação visual obrigatória
+
+Antes de qualquer exclusão, apresentar um modal acessível e responsivo.
+
+Texto sugerido:
+
+Excluir solicitação permanentemente?
+
+"Você está prestes a excluir esta solicitação. Os dados da solicitação e todos os anexos exclusivos vinculados a ela também serão excluídos permanentemente.
+
+Esta ação não poderá ser desfeita.
+
+Deseja realmente continuar?"
+
+Botões:
+
+- Cancelar
+- Excluir permanentemente
+
+Para operações da equipe, acrescentar:
+
+"O cliente será notificado sobre a exclusão da solicitação."
+
+Exibir protocolo, título resumido e quantidade de anexos afetados quando disponíveis. Nunca exibir nomes ou documentos sigilosos desnecessários.
+
+Desativar a confirmação enquanto a operação estiver sendo executada, impedindo cliques repetidos.
+
+O modal deverá informar quando houver retenção obrigatória ou arquivo compartilhado que não poderá ser destruído.
+
+1.4. Exclusão de anexos
+
+A exclusão deverá contemplar:
+
+- Referências aos anexos.
+- Arquivos físicos privados no Supabase Storage.
+- Versões e metadados exclusivos.
+- Arquivos temporários associados.
+- Documentos não formalizados exclusivos da solicitação, quando elegíveis.
+
+Não excluir arquivos utilizados por outras solicitações, documentos compartilhados, modelos de documentos ou registros com retenção obrigatória.
+
+O backend deverá acompanhar a exclusão coordenada com a IA 2.
+
+Nunca comunicar "excluído permanentemente" quando o banco ou o Storage ainda não confirmou a conclusão.
+
+Se a operação estiver processando a limpeza, apresentar um estado intermediário adequado, sem simular sucesso.
+
+1.5. APIs e contratos
+
+Defina endpoints coerentes com as rotas Express existentes para:
+
+- Consultar elegibilidade de exclusão.
+- Consultar motivo de bloqueio.
+- Solicitar exclusão definitiva.
+- Consultar resultado de uma exclusão em processamento.
+- Recuperar um resultado já concluído após perda da resposta.
+
+Use:
+
+- Autenticação obrigatória.
+- Autorização atual por escritório.
+- Controle de versão.
+- Idempotência.
+- Verificação de status atual.
+- Tratamento de concorrência.
+- Respostas HTTP coerentes, inclusive 401, 403, 404, 409 e 503.
+- Proteção contra exclusão por troca de identificadores de solicitações.
+- Prevenção contra reutilização de permissões revogadas.
+
+Não implemente operações críticas baseadas exclusivamente em verificações feitas no frontend.
+
+1.6. Auditoria
+
+A exclusão realizada pela equipe deverá produzir um evento empresarial de auditoria, contendo somente os metadados necessários:
+
+- Identificador da operação.
+- Protocolo da solicitação.
+- Título resumido e categoria, quando apropriado.
+- Identificação do integrante da equipe.
+- Data e hora.
+- Escritório.
+- Status anterior.
+- Tipo de operação.
+- Resultado confirmado.
+
+A auditoria não deverá guardar anexos, conteúdo dos documentos, cópias da solicitação, mensagens privadas ou dados sensíveis desnecessários.
+
+Somente o Super administrador e os administradores com permissões efetivas de auditoria poderão consultar esse evento, preservando as regras atuais.
+
+Exclusões feitas pelo cliente não deverão gerar eventos de exclusão na auditoria empresarial.
+
+A necessidade de registros técnicos mínimos de funcionamento, segurança e retenção legal deverá permanecer separada da auditoria empresarial.
+
+1.7. Notificação ao cliente
+
+Quando a equipe concluir a exclusão, o cliente receberá na área de notificações:
+
+Sua solicitação foi excluída
+
+"A solicitação [protocolo] foi excluída pela equipe do Escritório JN. Caso ainda precise deste serviço, você pode iniciar uma nova solicitação."
+
+Botão:
+Iniciar nova solicitação
+
+Esse botão deverá levar ao fluxo oficial de abertura de solicitações.
+
+Não abrir automaticamente uma nova cobrança e não criar uma solicitação sem que o cliente confirme.
+
+A notificação poderá conservar apenas os metadados mínimos independentes do registro excluído. Não deverá conter anexos nem oferecer acesso ao detalhe que já foi removido.
+
+Se o cliente excluir sua própria solicitação, não gerar notificação empresarial nem auditoria de exclusão.
+
+---
+
+ETAPA 2 — CORRIGIR O PAGAMENTO NO PORTAL DO CLIENTE
+
+Existe um problema relatado no Escritório JN:
+
+Uma solicitação pode possuir cobrança, mas o cliente não consegue avançar adequadamente para realizar o pagamento.
+
+Investigue o fluxo completo antes de modificar.
+
+Verifique:
+
+1. Criação da solicitação.
+2. Classificação e triagem.
+3. Vinculação ao cliente.
+4. Serviços solicitados.
+5. Geração da cobrança oficial.
+6. Cálculo do saldo.
+7. Navegação para "/meus-pagamentos".
+8. Apresentação das cobranças disponíveis.
+9. Seleção dos meios de pagamento.
+10. Confirmação e atualização do estado financeiro.
+
+A área atual do cliente apresenta cobranças e histórico. Amplie-a para permitir checkout real somente quando um provedor de pagamento estiver efetivamente configurado e homologado.
+
+2.1. Fluxo esperado
+
+Cliente solicita serviço → equipe realiza triagem quando necessária → cobrança é disponibilizada → cliente recebe a indicação do valor devido → acessa "Meus pagamentos" → escolhe uma forma habilitada → realiza o pagamento → backend recebe confirmação confiável → financeiro registra o recebimento sem duplicação → cliente visualiza o resultado.
+
+Para solicitações que já possuem uma cobrança, disponibilizar o acesso ao pagamento sem criar uma segunda obrigação.
+
+2.2. Formas de pagamento
+
+Preparar interfaces para:
+
+- Pix por QR Code dinâmico.
+- Pix Copia e Cola.
+- Cartão de crédito.
+- Cartão de débito online, quando suportado pelo provedor.
+- Parcelamento, quando autorizado e suportado.
+
+Exibir:
+
+- Valor original.
+- Desconto aprovado.
+- Acréscimos autorizados.
+- Valor final.
+- Parcelas e respectivos vencimentos.
+- Saldo restante.
+- Status do pagamento.
+- Identificação resumida do serviço.
+- Comprovante ou recibo quando existir confirmação válida.
+
+Nunca considerar o pagamento confirmado por retorno visual do navegador, captura de tela ou comprovante fornecido unilateralmente pelo usuário.
+
+2.3. Estados obrigatórios
+
+Implementar visualmente:
+
+- Pagamento disponível.
+- Escolhendo forma de pagamento.
+- Aguardando pagamento.
+- Pagamento em processamento.
+- Pagamento confirmado.
+- Pagamento recusado.
+- Pagamento expirado.
+- Pagamento cancelado.
+- Pagamento parcialmente recebido.
+- Pagamento pendente de conciliação.
+- Erro de comunicação.
+- Provedor não configurado.
+
+Não exibir botão funcional de pagamento real enquanto a integração ainda não existir.
+
+Preservar os fluxos de entrega documental que dependem de quitação, conferência, aprovação e demais requisitos independentes.
+
+---
+
+ETAPA 3 — COBRANÇA PRESENCIAL E PELO WHATSAPP
+
+A equipe deverá conseguir cobrar atendimentos originados:
+
+- No portal do cliente.
+- Presencialmente.
+- Pelo WhatsApp.
+
+Utilizar o mesmo registro oficial da cobrança, sem gerar obrigações duplicadas.
+
+3.1. Cobrança Pix
+
+Quando houver banco/PSP configurado, a equipe poderá:
+
+1. Selecionar a solicitação.
+2. Consultar o valor devido.
+3. Escolher Pix.
+4. Gerar QR Code dinâmico exclusivo.
+5. Exibir o QR Code na tela.
+6. Copiar o código Pix.
+7. Compartilhar o código pelo WhatsApp usando o fluxo de compartilhamento disponível.
+8. Acompanhar a confirmação real.
+9. Consultar divergências e situação de conciliação.
+
+Não presumir que a integração com a API oficial do WhatsApp já está ativa. O compartilhamento manual deve funcionar independentemente dela.
+
+3.2. Cobrança por cartão
+
+Disponibilizar seleção de:
+
+- Crédito à vista.
+- Crédito parcelado.
+- Débito.
+
+Quando houver terminal integrado, permitir selecionar o dispositivo e solicitar a operação ao provedor correspondente.
+
+Exibir estados:
+
+- Terminal disponível.
+- Terminal desconectado.
+- Aguardando cartão.
+- Operação em processamento.
+- Autorização recebida.
+- Captura confirmada.
+- Operação recusada.
+- Comunicação interrompida.
+- Transação pendente de conciliação.
+
+Não confundir autorização do cartão com captura, liquidação ou depósito bancário.
+
+3.3. Recebimento manual
+
+Criar ou adaptar a opção:
+
+Informar pagamento manualmente
+
+Permitir informar:
+
+- Solicitação/cobrança.
+- Valor efetivamente recebido.
+- Forma de pagamento.
+- Data da operação.
+- Conta ou unidade financeira de destino.
+- Referência externa verdadeira, quando houver.
+- Observação ou evidência necessária.
+- Responsável pela confirmação.
+
+A confirmação manual deverá respeitar as regras atuais de Caixa, sessão, unidade, saldo, alocação e autorização.
+
+Não aceitar comprovante isolado como evidência de pagamento confirmado.
+
+---
+
+ETAPA 4 — AUTORIZAÇÃO PARA REGISTRAR PAGAMENTO MANUAL
+
+Somente Super administrador ou administrador com a permissão específica poderão aprovar o registro manual.
+
+Um funcionário ou administrador sem essa permissão deverá ter o botão:
+
+Solicitar autorização
+
+Fluxo obrigatório
+
+1. Usuário informa os dados da operação.
+2. Backend identifica que falta permissão.
+3. O sistema apresenta os integrantes elegíveis para aprovar, dentro do mesmo escritório.
+4. O solicitante escolhe um destinatário.
+5. Confirma o envio.
+6. O destinatário recebe uma notificação.
+7. Ao abrir, visualiza os dados do pedido.
+8. Pode aprovar ou rejeitar.
+9. O solicitante é notificado.
+10. O registro financeiro somente poderá ser efetivado mediante confirmação autorizada e revalidação das condições da operação.
+
+A notificação ao aprovador deverá apresentar:
+
+- Protocolo.
+- Cliente identificado, conforme permissão.
+- Tipo de serviço.
+- Valor solicitado.
+- Forma de recebimento.
+- Valor declarado como recebido.
+- Integrante solicitante.
+- Data/hora.
+- Motivo e observações.
+- Botões "Aprovar" e "Rejeitar".
+
+Se o valor ou os dados financeiros forem alterados após a aprovação, a autorização anterior perderá a validade.
+
+Uma autorização não deverá permitir:
+
+- Alterar outras solicitações.
+- Aprovar valor diferente.
+- Utilizar a permissão indefinidamente.
+- Ignorar caixa encerrado.
+- Contornar o escopo do escritório.
+- Confirmar pagamento duas vezes.
+
+Criar estados de autorização pendente, aprovada, rejeitada, expirada, revogada e executada.
+
+---
+
+ETAPA 5 — AUTORIZAÇÃO PARA DESCONTOS
+
+A regra existente de desconto deverá ser preservada e ampliada.
+
+Somente Super administrador ou administrador com a permissão específica de desconto poderá concedê-lo diretamente.
+
+Quando outro integrante tentar aplicar desconto, disponibilizar:
+
+Solicitar autorização de desconto
+
+O solicitante deverá informar:
+
+- Solicitação.
+- Cliente.
+- Serviços envolvidos.
+- Valor original.
+- Desconto solicitado em reais e/ou porcentagem, conforme política existente.
+- Valor final calculado.
+- Justificativa.
+
+O destinatário elegível será escolhido em uma lista filtrada pelo backend.
+
+Na notificação do aprovador:
+
+- Visualizar valor original.
+- Visualizar desconto pretendido.
+- Visualizar resultado final.
+- Visualizar solicitante e justificativa.
+- Aprovar ou rejeitar.
+
+Se aprovado:
+
+- Revalidar saldo, versão, vínculo, permissão e limites.
+- Aplicar o desconto uma única vez ao mecanismo financeiro oficial.
+- Atualizar cobrança e pagamento.
+- Notificar o solicitante.
+
+Se rejeitado, não alterar a cobrança.
+
+Não permitir que uma autorização antiga aprove uma cobrança já alterada.
+
+Manter taxas de cartão separadas de descontos comerciais.
+
+---
+
+ETAPA 6 — CONFIGURAÇÕES DE BANCOS E MAQUININHAS
+
+Em Configurações, criar ou ampliar uma seção administrativa:
+
+Bancos e Pagamentos
+
+Somente Super administrador e administradores com permissão específica poderão acessar a configuração.
+
+Criar abas ou painéis organizados:
+
+A. Bancos e provedores
+
+- Adicionar integração.
+- Selecionar instituição ou provedor.
+- Verificar capacidades disponíveis.
+- Configurar ambiente de testes.
+- Solicitar validação da conexão.
+- Consultar status.
+- Habilitar e desabilitar métodos.
+- Verificar conta recebedora.
+- Definir destino financeiro.
+- Consultar erros e última sincronização.
+
+B. Pix
+
+- Configuração do provedor.
+- Cobrança dinâmica.
+- QR Code.
+- Código Copia e Cola.
+- Consulta de transação.
+- Confirmação.
+- Conciliação.
+- Expiração e reembolso, quando suportados.
+
+C. Cartões online
+
+- Provedor contratado.
+- Formas disponíveis.
+- Parcelamento.
+- Status das operações.
+- Taxas e liquidação.
+- Estornos e disputas.
+
+D. Maquininhas
+
+- Cadastrar terminal.
+- Identificar fabricante, modelo e provedor.
+- Exibir protocolos suportados.
+- Selecionar conexão autorizada.
+- Vincular terminal ao escritório/unidade.
+- Testar comunicação.
+- Consultar disponibilidade.
+- Desativar terminal.
+- Acompanhar operações.
+
+E. Histórico e diagnósticos
+
+- Integrações ativas.
+- Integrações indisponíveis.
+- Erros seguros.
+- Última verificação.
+- Situação de homologação.
+- Operações pendentes de conciliação.
+
+Requisito de arquitetura: não fixar o software em um único banco ou fabricante.
+
+Preparar interfaces baseadas nas capacidades retornadas pelo backend e contratos de adaptadores para novos fornecedores.
+
+Porém, não prometer conexão real com qualquer banco ou maquininha sem API, SDK, TEF, contrato ou protocolo compatível.
+
+Uma integração contratada deverá ser configurada centralmente para o escritório e disponibilizada aos integrantes autorizados, sem compartilhamento de senhas bancárias.
+
+Terminais que dependam de dispositivos físicos ou rede local deverão possuir vínculo e agente/conector compatível, quando necessário.
+
+Se um recurso não for suportado, mostrar "Não disponível para este provedor", em vez de simular funcionamento.
+
+---
+
+ETAPA 7 — FIGMA OBRIGATÓRIO
+
+As telas do sistema já possuem grande parte de seu design no Figma.
+
+Toda interface alterada no frontend deverá ter correspondente no Figma.
+
+Antes de criar uma tela:
+
+1. Localize a tela existente.
+2. Identifique os componentes reutilizáveis.
+3. Preserve identidade visual, cores, tipografia, ícones e espaçamentos.
+4. Adapte a tela existente quando possível.
+5. Crie telas novas somente quando necessário.
+6. Garanta correspondência visual e funcional com a implementação.
+
+Telas que devem ser revisadas
+
+Portal do cliente
+
+- Lista de solicitações.
+- Detalhe de solicitação.
+- Exclusão e confirmação.
+- Exclusão em processamento.
+- Exclusão concluída.
+- Exclusão bloqueada.
+- Minhas notificações.
+- Notificação de exclusão pela equipe.
+- Minhas cobranças.
+- Detalhe do pagamento.
+- Seleção da forma de pagamento.
+- Pix/QR Code.
+- Pix Copia e Cola.
+- Cartão e parcelamento.
+- Confirmação ou falha de pagamento.
+
+Área da equipe
+
+- Lista de solicitações.
+- Detalhe do atendimento.
+- Ações de exclusão.
+- Confirmação e advertências.
+- Registro de pagamento manual.
+- Seleção do aprovador.
+- Solicitação de desconto.
+- Notificações de autorização.
+- Detalhes da aprovação.
+- Histórico e status das autorizações.
+- Cobranças.
+- Caixa.
+- Auditoria de exclusões.
+
+Configurações
+
+- Bancos e Pagamentos.
+- Cadastro de provedor.
+- Configuração Pix.
+- Configuração de cartões.
+- Cadastro de maquininha.
+- Seleção de protocolo/conexão.
+- Diagnóstico de integração.
+- Permissões administrativas.
+
+Requisitos de design
+
+Cada fluxo afetado precisa de:
+
+- Versão desktop.
+- Versão mobile.
+- Responsividade e acessibilidade.
+- Estado sem dados.
+- Estado com dados.
+- Estado sem permissão.
+- Erro.
+- Sucesso.
+- Confirmação.
+- Processamento.
+- Conflito de versão.
+- Provedor indisponível.
+
+Respeitar a navegação já consolidada e o limite de quatro atalhos mobile quando aplicável.
+
+Evitar menus gigantes ou componentes redundantes. Reutilizar abas e estruturas expansíveis de permissões já existentes.
+
+Se o arquivo do Figma não estiver acessível, documentar exatamente quais telas precisam de atualização e suas especificações, sem afirmar que o Figma foi modificado.
+
+---
+
+ETAPA 8 — TESTES OBRIGATÓRIOS
+
+Implementar testes para:
+
+1. Cliente exclui antes do atendimento.
+2. Cliente tenta excluir solicitação em atendimento.
+3. Equipe tenta excluir solicitação aguardando cliente.
+4. Equipe autorizada exclui solicitação elegível.
+5. Usuário sem permissão tenta usar endpoint diretamente.
+6. Duas pessoas tentam excluir simultaneamente.
+7. Solicitação muda de status antes da confirmação.
+8. Anexo compartilhado não é destruído indevidamente.
+9. Falha na limpeza do Storage.
+10. Notificação após exclusão da equipe.
+11. Ausência de evento de auditoria empresarial para exclusão do cliente.
+12. Cobrança vinculada ao portal do cliente.
+13. Pagamento pendente e confirmado por evento confiável.
+14. Falha de integração bancária.
+15. Solicitação de aprovação manual.
+16. Aprovação, rejeição e expiração.
+17. Desconto concorrente.
+18. Permissão revogada enquanto aprovação está aberta.
+19. Reenvio de pagamento sem duplicação.
+20. Comportamento sem provedor contratado.
+21. Interface desktop e mobile.
+
+Preservar a suíte existente. Execute, quando aplicável:
+
+- "npm run typecheck"
+- "npm test"
+- "npm run build"
+- "npm run test:e2e"
+
+Não declarar como aprovados testes que dependem da IA 2 e ainda não podem ser executados.
+
+---
+
+ETAPA 9 — ENTREGA OBRIGATÓRIA PARA A IA 2
+
+Crie o documento:
+
+"docs/handoffs/ia1-para-ia2-supabase-vercel.md"
+
+O documento deverá especificar:
+
+1. Resumo das mudanças.
+2. Commit/branch de origem.
+3. Todos os arquivos alterados.
+4. Contratos compartilhados.
+5. Endpoints criados ou modificados.
+6. Formatos exatos de entrada/saída.
+7. Permissões novas e existentes.
+8. Regras de exclusão por status.
+9. Estrutura exigida para a exclusão coordenada de anexos.
+10. Requisitos de auditoria e notificação.
+11. Requisitos das tabelas de autorização.
+12. Requisitos de integração bancária.
+13. Contratos de eventos e webhooks.
+14. Regras de idempotência e conciliação.
+15. Funções/RPCs de banco necessárias.
+16. Variáveis de ambiente necessárias, apenas nomes e finalidades.
+17. Casos de teste de integração.
+18. Recursos que permanecerão desativados até a homologação.
+19. Pendências e limitações identificadas.
+
+Crie também uma matriz de propriedade dos arquivos, indicando o que a IA 2 poderá alterar sem conflitar com seu trabalho.
+
+Não crie SQL fictício nem altere migrations como substituto da IA 2.
+
+CONDIÇÃO FINAL
+
+Não encerre o trabalho apenas com sugestões, análises ou mockups.
+
+Implemente o que for tecnicamente possível dentro do seu escopo, com código funcional, testes e Figma atualizado quando houver acesso.
+
+As funções que dependem de tabelas ou serviços ainda não implementados deverão permanecer atrás de controles de disponibilidade seguros, acompanhadas de contratos tipados e testes com mocks.
+
+Não exponha botões de pagamento real ou exclusão definitiva enquanto o backend, o Supabase e as integrações correspondentes não tiverem sido validados.
+
+Preserve o sistema existente, seus níveis de atendimento, permissões, módulos rurais, documentos, Caixa, auditoria, autenticação, rotas e regras de segurança.
+
+Ao final, apresente:
+
+- Funcionalidades implementadas.
+- Arquivos modificados.
+- Telas do Figma atualizadas.
+- Testes executados e resultados.
+- O que permanece dependente da IA 2.
+- Documento completo de passagem.
+- Riscos e pendências.
+
+Aguarde a integração da IA 2 antes de considerar a funcionalidade completa e pronta para produção.

@@ -1,0 +1,183 @@
+/* Etapa 6 — Settings -> Bancos e Pagamentos & Etapas 4-5 Financial Approvals */
+.jn-providers-shell {
+  display: grid;
+  gap: 1.15rem;
+}
+
+.jn-providers-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.95rem 1.1rem;
+  background: #fbf6ec;
+  border: 1px solid var(--jn-gold, #aa7d36);
+  border-radius: 10px;
+  color: var(--jn-navy, #103248);
+}
+
+.jn-providers-banner svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  margin-top: 0.1rem;
+}
+
+.jn-providers-banner p {
+  margin: 0.25rem 0 0;
+  font-size: 0.92rem;
+}
+
+.jn-providers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.jn-provider-card {
+  padding: 1.1rem 1.2rem;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #d8dfe6);
+  border-radius: 10px;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.jn-provider-card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--jn-navy, #103248);
+}
+
+.jn-provider-card fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.jn-capability-matrix {
+  padding: 0.85rem;
+  background: var(--jn-bg, #faf9f6);
+  border: 1px solid var(--jn-border, #d8dfe6);
+  border-radius: 8px;
+}
+
+.jn-capability-matrix h4 {
+  margin: 0 0 0.6rem;
+  font-size: 0.92rem;
+  color: var(--jn-navy, #103248);
+}
+
+.jn-capability-matrix ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.jn-capability-matrix li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.86rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid rgba(16, 50, 72, 0.08);
+}
+
+.jn-capability-matrix li.cap-yes strong {
+  color: #1f5238;
+}
+
+.jn-capability-matrix li.cap-no strong {
+  color: var(--jn-muted, #526270);
+  font-weight: 500;
+}
+
+.jn-method-checks legend {
+  font-weight: 600;
+  color: var(--jn-navy, #103248);
+  margin-bottom: 0.45rem;
+}
+
+.jn-provider-card label.service-check,
+.jn-method-checks label.service-check {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.jn-provider-card label.service-check input[type='checkbox'],
+.jn-method-checks label.service-check input[type='checkbox'] {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+.jn-approval-box {
+  padding: 1rem 1.1rem;
+  background: var(--jn-bg, #faf9f6);
+  border: 1px solid var(--jn-border, #d8dfe6);
+  border-radius: 10px;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.jn-approval-box h4 {
+  margin: 0;
+  color: var(--jn-navy, #103248);
+}
+
+.jn-approvals-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (max-width: 560px) {
+  .jn-approvals-panel .request-filters {
+    grid-template-columns: 1fr;
+  }
+}
+
+.jn-approval-highlighted {
+  border-color: var(--jn-gold, #aa7d36) !important;
+  box-shadow: 0 0 0 2px rgba(170, 125, 54, 0.18);
+}
+
+.jn-approval-decision {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--jn-border, #d8dfe6);
+  display: grid;
+  gap: 0.65rem;
+}
+
+.jn-approval-approved,
+.jn-approval-executed {
+  border-color: #2f6f4e;
+  color: #1f5238;
+  background: #edf7f1;
+}
+
+.jn-approval-rejected,
+.jn-approval-expired,
+.jn-approval-revoked {
+  border-color: #c2554e;
+  color: #7c1f1a;
+  background: #fdf2f1;
+}
+
+.jn-approval-pending {
+  border-color: var(--jn-gold, #aa7d36);
+  color: #6b4c1c;
+  background: #fbf6ec;
+}

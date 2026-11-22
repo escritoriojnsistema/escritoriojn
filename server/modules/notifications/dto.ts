@@ -9,6 +9,17 @@ export function notices(v:unknown):AccountNotices{
  if(!record(v)||!Array.isArray(v.items)||!int(v.total)||!int(v.unread)||!positive(v.page)||typeof v.page_size!=='number'||![3,5].includes(v.page_size)||v.items.length>v.page_size)throw Error('Invalid inbox');
  return {total:v.total,unread:v.unread,page:v.page,page_size:v.page_size,items:v.items.map(n=>{
   if(!record(n)||!uuid(n.id)||!(notificationKinds as readonly string[]).includes(String(n.kind))||!time(n.created_at)||!(n.read_at===null||time(n.read_at))||typeof n.can_open!=='boolean'||!(n.request_id===null||uuid(n.request_id))||!(n.protocol===null||requestText(n.protocol,80))||!(n.attendant_name===null||requestText(n.attendant_name,120))||(n.can_open&&(!n.request_id||!n.protocol))||(n.kind==='assignee_changed'?!n.attendant_name:n.attendant_name!==null))throw Error('Invalid notice');
-  return {id:n.id,kind:n.kind as NotificationKind,created_at:n.created_at,read_at:n.read_at,can_open:n.can_open,request_id:n.can_open?n.request_id:null,protocol:n.can_open?n.protocol:null,attendant_name:n.kind==='assignee_changed'?n.attendant_name:null};
+  const base={id:n.id,kind:n.kind as NotificationKind,created_at:n.created_at,read_at:n.read_at,can_open:n.can_open,request_id:n.can_open?n.request_id:null,protocol:n.can_open?n.protocol:null,attendant_name:n.kind==='assignee_changed'?n.attendant_name:null};
+  if(n.kind==='request_deleted'){
+   const delProto=typeof n.deleted_protocol==='string'&&requestText(n.deleted_protocol,80)?n.deleted_protocol:(typeof n.protocol==='string'&&requestText(n.protocol,80)?n.protocol:null);
+   return {...base,can_open:false,request_id:null,protocol:null,deleted_protocol:delProto};
+  }
+  const approvalKinds=['payment_approval_requested','payment_approval_decided','discount_approval_requested','discount_approval_decided'];
+  if(approvalKinds.includes(String(n.kind))){
+   const approvalId=typeof n.approval_id==='string'&&uuid(n.approval_id)?n.approval_id:null;
+   const approvalSummary=typeof n.approval_summary==='string'&&requestText(n.approval_summary,240)?n.approval_summary:null;
+   return {...base,approval_id:approvalId,approval_summary:approvalSummary};
+  }
+  return base;
  })};
 }
