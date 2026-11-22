@@ -749,6 +749,7 @@ try {
     if(allMigrations.some(n=>n.includes('_registration_acceptances')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/registration-acceptance.sql`,'utf8'));
     if(allMigrations.some(n=>n.includes('_attachments_private_preview_delete')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/attachments-private-preview-delete.sql`,'utf8'));
     if(allMigrations.some(n=>n.includes('_attachments_private_preview_delete')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/attachments-sensitive-preview.sql`,'utf8'));
+    if(allMigrations.some(n=>n.includes('_request_deletion_permanent')))result+=sql(database,'postgres',readFileSync(`${root}tests/database/evolution.sql`,'utf8'));
     if(allMigrations.some(n=>n.includes('_attachments_private_preview_delete')))result+=await raceAttachmentDeletion({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceRelease25({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});
     result+=await raceSignatures24({sql:input=>sql(database,'postgres',input),openSql:()=>openSql(database),until});

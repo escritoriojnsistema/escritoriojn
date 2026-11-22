@@ -818,8 +818,11 @@ BEGIN
   SELECT * INTO r FROM public.requests WHERE office_id = p_office_id AND id = c.request_id;
   IF m.role_code = 'client' AND private.finance_client_request(r, m) IS NOT TRUE THEN
     RAISE EXCEPTION 'CHARGE_NOT_FOUND' USING ERRCODE = 'PT404';
-  ELSIF m.role_code <> 'client' AND NOT (private.current_permissions(p_office_id) @> ARRAY['charges.read']) THEN
-    RAISE EXCEPTION 'CHECKOUT_FORBIDDEN' USING ERRCODE = 'PT403';
+  ELSIF m.role_code <> 'client' AND (
+    NOT (private.current_permissions(p_office_id) @> ARRAY['charges.read'])
+    OR private.request_in_scope(r, m) IS NOT TRUE
+  ) THEN
+    RAISE EXCEPTION 'CHARGE_NOT_FOUND' USING ERRCODE = 'PT404';
   END IF;
 
   SELECT * INTO amounts FROM private.charges_amounts(p_office_id, p_charge_id);
@@ -891,7 +894,8 @@ BEGIN
   ELSIF amounts.allocated_cents > 0 THEN
     v_state := 'partially_received';
   ELSIF v_configured THEN
-    v_state := 'ready_to_pay';
+    -- shared/paymentCheckout.ts clientPaymentStates uses 'available' for "ready to pay".
+    v_state := 'available';
   ELSE
     v_state := 'provider_unconfigured';
   END IF;
@@ -1047,8 +1051,11 @@ BEGIN
   SELECT * INTO r FROM public.requests WHERE office_id = p_office_id AND id = c.request_id;
   IF m.role_code = 'client' AND private.finance_client_request(r, m) IS NOT TRUE THEN
     RAISE EXCEPTION 'INTENT_NOT_FOUND' USING ERRCODE = 'PT404';
-  ELSIF m.role_code <> 'client' AND NOT (private.current_permissions(p_office_id) && ARRAY['charges.read', 'cash.read']) THEN
-    RAISE EXCEPTION 'CHECKOUT_FORBIDDEN' USING ERRCODE = 'PT403';
+  ELSIF m.role_code <> 'client' AND (
+    NOT (private.current_permissions(p_office_id) && ARRAY['charges.read', 'cash.read'])
+    OR private.request_in_scope(r, m) IS NOT TRUE
+  ) THEN
+    RAISE EXCEPTION 'INTENT_NOT_FOUND' USING ERRCODE = 'PT404';
   END IF;
 
   RETURN private.payment_intent_json(i);
@@ -1068,6 +1075,7 @@ DECLARE
   caps text[];
   existing private.payment_checkout_intents;
   c private.charges;
+  r public.requests;
   amounts record;
   pix_cfg private.payment_pix_settings;
   prov private.payment_providers;
@@ -1090,6 +1098,8 @@ BEGIN
 
   SELECT * INTO c FROM private.charges WHERE office_id = p_office_id AND id = p_charge_id FOR UPDATE;
   IF c.id IS NULL THEN RAISE EXCEPTION 'CHARGE_NOT_FOUND' USING ERRCODE = 'PT404'; END IF;
+  SELECT * INTO r FROM public.requests WHERE office_id = p_office_id AND id = c.request_id;
+  IF private.request_in_scope(r, m) IS NOT TRUE THEN RAISE EXCEPTION 'CHARGE_NOT_FOUND' USING ERRCODE = 'PT404'; END IF;
   SELECT * INTO amounts FROM private.charges_amounts(p_office_id, p_charge_id);
   IF amounts.cancelled OR amounts.version <> p_expected_charge_version OR p_amount_cents > amounts.balance_cents THEN
     RAISE EXCEPTION 'CHARGE_CONFLICT' USING ERRCODE = 'PT409';
@@ -1136,6 +1146,7 @@ DECLARE
   caps text[];
   existing private.payment_checkout_intents;
   c private.charges;
+  r public.requests;
   t private.payment_terminals;
   prov private.payment_providers;
   amounts record;
@@ -1167,6 +1178,8 @@ BEGIN
 
   SELECT * INTO c FROM private.charges WHERE office_id = p_office_id AND id = p_charge_id FOR UPDATE;
   IF c.id IS NULL THEN RAISE EXCEPTION 'CHARGE_NOT_FOUND' USING ERRCODE = 'PT404'; END IF;
+  SELECT * INTO r FROM public.requests WHERE office_id = p_office_id AND id = c.request_id;
+  IF private.request_in_scope(r, m) IS NOT TRUE THEN RAISE EXCEPTION 'CHARGE_NOT_FOUND' USING ERRCODE = 'PT404'; END IF;
   SELECT * INTO amounts FROM private.charges_amounts(p_office_id, p_charge_id);
   IF amounts.cancelled OR amounts.version <> p_expected_charge_version OR p_amount_cents > amounts.balance_cents THEN
     RAISE EXCEPTION 'CHARGE_CONFLICT' USING ERRCODE = 'PT409';
@@ -1251,11 +1264,25 @@ BEGIN
     RETURN jsonb_build_object('status', 'unmatched_reference', 'event_id', p_event_id);
   END IF;
 
+  -- Never trust a declared amount that disagrees with the official intention/charge.
+  IF p_amount_cents IS NOT NULL AND p_amount_cents <> v_intent.amount_cents THEN
+    UPDATE private.payment_webhook_events
+       SET office_id = v_intent.office_id,
+           processing_status = 'failed',
+           processed_at = clock_timestamp()
+     WHERE id = v_event.id;
+    RETURN jsonb_build_object('status', 'amount_mismatch', 'event_id', p_event_id, 'intent_id', v_intent.id);
+  END IF;
+
+  -- The provider confirms that money exists, but the official financial ledger of the office only
+  -- recognises a payment through an authorized cash session (never a fictional one). A confirmed
+  -- provider event therefore parks the intent at pending_reconciliation, with the settlement stage
+  -- reported by the provider kept separate from the office ledger.
   v_new_state := CASE p_event_type
     WHEN 'payment.authorized' THEN 'processing'
-    WHEN 'payment.captured' THEN 'confirmed'
-    WHEN 'payment.settled' THEN 'confirmed'
-    WHEN 'payment.confirmed' THEN 'confirmed'
+    WHEN 'payment.captured' THEN 'pending_reconciliation'
+    WHEN 'payment.settled' THEN 'pending_reconciliation'
+    WHEN 'payment.confirmed' THEN 'pending_reconciliation'
     WHEN 'payment.refused' THEN 'refused'
     WHEN 'payment.cancelled' THEN 'cancelled'
     WHEN 'payment.expired' THEN 'expired'
@@ -1287,6 +1314,11 @@ BEGIN
          settlement_stage = v_new_stage,
          terminal_state = v_new_terminal,
          authorization_code = coalesce(nullif(btrim(coalesce(p_authorization_code, '')), ''), authorization_code),
+         safe_message = CASE
+           WHEN v_new_state = 'pending_reconciliation'
+             THEN 'Pagamento confirmado pelo provedor e pendente de conciliação com o financeiro oficial do escritório.'
+           ELSE safe_message
+         END,
          updated_at = clock_timestamp()
    WHERE id = v_intent.id;
 

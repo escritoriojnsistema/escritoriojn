@@ -365,6 +365,7 @@ DECLARE
   approver_mid uuid;
   row_out private.financial_approvals;
   v_protocol text;
+  v_request public.requests;
 BEGIN
   actor := private.team_require_identity();
   IF p_office_id IS NULL OR p_charge_id IS NULL OR p_request_id IS NULL
@@ -426,6 +427,15 @@ BEGIN
   WHERE office_id = p_office_id AND id = p_charge_id AND request_id = p_request_id
   FOR SHARE;
   IF c.id IS NULL THEN
+    RAISE EXCEPTION 'CHARGE_NOT_FOUND' USING ERRCODE = 'PT404';
+  END IF;
+
+  -- The requester must currently see this request under the office rules; a known charge UUID alone
+  -- never authorizes asking an approver to release money.
+  SELECT * INTO v_request
+  FROM public.requests
+  WHERE office_id = p_office_id AND id = p_request_id;
+  IF private.request_in_scope(v_request, m) IS NOT TRUE THEN
     RAISE EXCEPTION 'CHARGE_NOT_FOUND' USING ERRCODE = 'PT404';
   END IF;
 
@@ -496,6 +506,7 @@ DECLARE
   approver_mid uuid;
   row_out private.financial_approvals;
   v_protocol text;
+  v_request public.requests;
 BEGIN
   actor := private.team_require_identity();
   IF p_office_id IS NULL OR p_charge_id IS NULL OR p_request_id IS NULL
@@ -533,6 +544,13 @@ BEGIN
   WHERE office_id = p_office_id AND id = p_charge_id AND request_id = p_request_id
   FOR SHARE;
   IF c.id IS NULL THEN
+    RAISE EXCEPTION 'CHARGE_NOT_FOUND' USING ERRCODE = 'PT404';
+  END IF;
+
+  SELECT * INTO v_request
+  FROM public.requests
+  WHERE office_id = p_office_id AND id = p_request_id;
+  IF private.request_in_scope(v_request, m) IS NOT TRUE THEN
     RAISE EXCEPTION 'CHARGE_NOT_FOUND' USING ERRCODE = 'PT404';
   END IF;
 

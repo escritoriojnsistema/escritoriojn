@@ -20,6 +20,31 @@ WHERE code IN (
 )
 ON CONFLICT DO NOTHING;
 
+-- 1.b Rebuild the three permission allowlists from the official catalogue.
+-- Without this, private.team_member_permissions still rejects the new codes with SQLSTATE 23514
+-- and no admin/employee could ever receive requests.delete, payments.manual.approve,
+-- payments.providers.manage or charges.discount.approve through explicit management.
+-- The catalogue (public.permissions) is the single source of truth; every existing row already
+-- references it, so rebuilding only narrows the allowlist to catalogued codes.
+DO $perms$
+DECLARE
+  allowed text;
+BEGIN
+  SELECT string_agg(quote_literal(code), ',' ORDER BY code) INTO allowed FROM public.permissions;
+
+  ALTER TABLE private.team_member_permissions
+    DROP CONSTRAINT IF EXISTS team_member_permissions_permission_code_check;
+  EXECUTE 'ALTER TABLE private.team_member_permissions ADD CONSTRAINT team_member_permissions_permission_code_check CHECK (permission_code IN (' || allowed || '))';
+
+  ALTER TABLE private.team_delegations
+    DROP CONSTRAINT IF EXISTS team_delegations_allowed_permissions_check;
+  EXECUTE 'ALTER TABLE private.team_delegations ADD CONSTRAINT team_delegations_allowed_permissions_check CHECK (allowed_permissions @> ARRAY[''foundation.access''] AND allowed_permissions <@ ARRAY[' || allowed || '])';
+
+  ALTER TABLE private.team_invitations
+    DROP CONSTRAINT IF EXISTS team_invitations_permissions_check;
+  EXECUTE 'ALTER TABLE private.team_invitations ADD CONSTRAINT team_invitations_permissions_check CHECK (permissions @> ARRAY[''foundation.access''] AND permissions <@ ARRAY[' || allowed || '])';
+END $perms$;
+
 -- 2. Extend private.internal_notifications to support request_deleted (request_id NULL after hard delete)
 --    and financial approval notifications (with approval_id + approval_summary).
 ALTER TABLE private.internal_notifications ALTER COLUMN request_id DROP NOT NULL;
@@ -124,6 +149,8 @@ DECLARE
   ];
   legacy jsonb;
   legacy_items jsonb;
+  legacy_total integer;
+  v_legacy_page integer;
   evo_items jsonb;
   combined jsonb;
   total_count integer;
@@ -241,9 +268,17 @@ BEGIN
     RETURN jsonb_set(legacy, '{unread}', to_jsonb(unread_total));
   END IF;
 
-  -- Fetch enough legacy items to accurately page merged results
-  legacy := private.notifications_page_before_evolution(p_office_id, p_query, p_read, 'all', p_page, p_size);
-  legacy_items := coalesce(legacy->'items', '[]'::jsonb);
+  -- Merge pages must be ordered globally, so every legacy page before the requested offset is read.
+  -- Bounded at 40 pages (200 notifications) to keep a single request cheap; deeper pages keep the
+  -- legacy ordering and stay available through their specific p_kind filter.
+  legacy_items := '[]'::jsonb;
+  legacy_total := 0;
+  FOR v_legacy_page IN 1 .. LEAST(p_page, 40) LOOP
+    legacy := private.notifications_page_before_evolution(p_office_id, p_query, p_read, 'all', v_legacy_page, p_size);
+    legacy_total := coalesce((legacy->>'total')::integer, 0);
+    legacy_items := legacy_items || coalesce(legacy->'items', '[]'::jsonb);
+    EXIT WHEN jsonb_array_length(coalesce(legacy->'items', '[]'::jsonb)) < p_size;
+  END LOOP;
 
   SELECT count(*)::integer INTO total_count
   FROM private.internal_notifications n
@@ -263,10 +298,10 @@ BEGIN
     SELECT elem
     FROM merged
     ORDER BY (elem->>'created_at')::timestamptz DESC, (elem->>'id')::uuid DESC
-    LIMIT p_size
+    LIMIT p_size OFFSET (p_page - 1) * p_size
   )
   SELECT jsonb_build_object(
-    'total', coalesce((legacy->>'total')::integer, 0) + total_count,
+    'total', legacy_total + total_count,
     'unread', coalesce((legacy->>'unread')::integer, 0) + unread_evo,
     'page', p_page,
     'page_size', p_size,

@@ -100,6 +100,118 @@ BEGIN
   );
 END $$;
 
+-- Internal helper: map every preserved dependency that forbids physical removal.
+-- public.requests is referenced by 34 foreign keys (ON DELETE RESTRICT and plain NO ACTION).
+-- Only operational rows are removable; anything financial, documentary, archived, retained,
+-- specialized or account-related is preserved and blocks the deletion with an explicit reason.
+CREATE FUNCTION private.request_deletion_preserved_dependencies(
+  p_office_id uuid,
+  p_request_id uuid
+) RETURNS jsonb
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path = '' AS $$
+DECLARE
+  v_financial boolean;
+  v_refunds boolean;
+  v_documents boolean;
+  v_document_tasks boolean;
+  v_retention boolean;
+  v_archives boolean;
+  v_deliveries boolean;
+  v_specialized boolean;
+  v_account_records boolean;
+BEGIN
+  SELECT EXISTS (
+    SELECT 1 FROM private.payment_allocations pa
+    JOIN private.charges c ON c.office_id = pa.office_id AND c.id = pa.charge_id
+    WHERE c.office_id = p_office_id AND c.request_id = p_request_id
+    UNION ALL
+    SELECT 1 FROM private.cash_entries e
+    WHERE e.office_id = p_office_id AND e.request_id = p_request_id
+    UNION ALL
+    SELECT 1 FROM private.quick_operations q
+    WHERE q.office_id = p_office_id AND q.request_id = p_request_id
+  ) INTO v_financial;
+
+  SELECT EXISTS (
+    SELECT 1 FROM private.payment_reversals rv
+    JOIN private.payment_allocations pa ON pa.office_id = rv.office_id AND pa.id = rv.allocation_id
+    JOIN private.charges c ON c.office_id = pa.office_id AND c.id = pa.charge_id
+    WHERE c.office_id = p_office_id AND c.request_id = p_request_id
+    UNION ALL
+    SELECT 1 FROM private.payment_refunds rf
+    JOIN private.payment_reversals rv ON rv.office_id = rf.office_id AND rv.id = rf.reversal_id
+    JOIN private.payment_allocations pa ON pa.office_id = rv.office_id AND pa.id = rv.allocation_id
+    JOIN private.charges c ON c.office_id = pa.office_id AND c.id = pa.charge_id
+    WHERE c.office_id = p_office_id AND c.request_id = p_request_id
+  ) INTO v_refunds;
+
+  SELECT EXISTS (
+    SELECT 1 FROM public.documents d
+    WHERE d.office_id = p_office_id AND d.request_id = p_request_id
+  ) INTO v_documents;
+
+  SELECT EXISTS (
+    SELECT 1 FROM private.document_correction_requests x
+    WHERE x.office_id = p_office_id AND x.request_id = p_request_id
+    UNION ALL
+    SELECT 1 FROM private.document_courtesies y
+    WHERE y.office_id = p_office_id AND y.request_id = p_request_id
+    UNION ALL
+    SELECT 1 FROM private.document_cash_tasks z
+    WHERE z.office_id = p_office_id AND z.request_id = p_request_id
+  ) INTO v_document_tasks;
+
+  SELECT EXISTS (
+    SELECT 1 FROM private.retention_items ri
+    WHERE ri.office_id = p_office_id AND ri.request_id = p_request_id AND ri.purged_at IS NULL
+  ) INTO v_retention;
+
+  SELECT EXISTS (
+    SELECT 1 FROM private.request_archives ra
+    WHERE ra.office_id = p_office_id AND ra.request_id = p_request_id
+  ) INTO v_archives;
+
+  SELECT EXISTS (
+    SELECT 1 FROM private.deliveries dl
+    WHERE dl.office_id = p_office_id
+      AND dl.file_id IN (SELECT f.id FROM public.files f WHERE f.office_id = p_office_id AND f.request_id = p_request_id)
+  ) INTO v_deliveries;
+
+  SELECT EXISTS (
+    SELECT 1 FROM private.property_records27 pr
+    WHERE pr.office_id = p_office_id AND pr.request_id = p_request_id
+    UNION ALL
+    SELECT 1 FROM private.ditr_cases28 dc
+    WHERE dc.office_id = p_office_id AND dc.request_id = p_request_id
+    UNION ALL
+    SELECT 1 FROM private.rural_cases29 rc
+    WHERE rc.office_id = p_office_id AND rc.request_id = p_request_id
+    UNION ALL
+    SELECT 1 FROM private.specialized_cases sc
+    WHERE sc.office_id = p_office_id AND sc.request_id = p_request_id
+  ) INTO v_specialized;
+
+  SELECT EXISTS (
+    SELECT 1 FROM private.account_corrections ac
+    WHERE ac.office_id = p_office_id AND ac.request_id = p_request_id
+    UNION ALL
+    SELECT 1 FROM private.account_email_intents aei
+    WHERE aei.office_id = p_office_id AND aei.request_id = p_request_id
+  ) INTO v_account_records;
+
+  RETURN jsonb_build_object(
+    'financial', v_financial,
+    'refunds', v_refunds,
+    'documents', v_documents,
+    'document_tasks', v_document_tasks,
+    'retention', v_retention,
+    'archives', v_archives,
+    'deliveries', v_deliveries,
+    'specialized', v_specialized,
+    'account_records', v_account_records
+  );
+END $$;
+
 -- Internal helper: compute authoritative eligibility matrix (Situações A-E + absolute blocks)
 CREATE FUNCTION private.request_deletion_evaluate(
   p_office_id uuid,
@@ -116,12 +228,16 @@ DECLARE
   can_show boolean := false;
   eligible boolean := false;
   block_reason text := NULL;
+  block_message text := NULL;
   alternatives jsonb := '[]'::jsonb;
   att jsonb;
   has_charges boolean := false;
   has_payments boolean := false;
+  has_refunds boolean := false;
   has_documents boolean := false;
   has_active_delete boolean := false;
+  deps jsonb;
+  v_dep text;
   client_membership_id uuid := NULL;
   is_client_owner boolean := false;
 BEGIN
@@ -176,17 +292,10 @@ BEGIN
     WHERE c.office_id = p_office_id AND c.request_id = p_request_id
   ) INTO has_charges;
 
-  SELECT EXISTS(
-    SELECT 1
-    FROM private.payment_allocations pa
-    JOIN private.charges c ON c.office_id = pa.office_id AND c.id = pa.charge_id
-    WHERE c.office_id = p_office_id AND c.request_id = p_request_id
-  ) INTO has_payments;
-
-  SELECT EXISTS(
-    SELECT 1 FROM public.documents d
-    WHERE d.office_id = p_office_id AND d.request_id = p_request_id
-  ) INTO has_documents;
+  deps := private.request_deletion_preserved_dependencies(p_office_id, p_request_id);
+  has_payments := (deps->>'financial')::boolean;
+  has_refunds := (deps->>'refunds')::boolean;
+  has_documents := (deps->>'documents')::boolean;
 
   SELECT EXISTS(
     SELECT 1 FROM private.request_deletion_operations op
@@ -197,41 +306,81 @@ BEGIN
 
   IF NOT can_show THEN
     eligible := false;
-    block_reason := 'NO_PERMISSION';
+    block_reason := 'INSUFFICIENT_PERMISSION';
   ELSIF has_active_delete THEN
     eligible := false;
-    block_reason := 'CONCURRENT_DELETION';
+    block_reason := 'CONCURRENT_OPERATION';
+    alternatives := jsonb_build_array('Aguardar a confirmação da operação em andamento');
+  ELSIF has_refunds THEN
+    eligible := false;
+    block_reason := 'REFUND_LINKED';
+    alternatives := jsonb_build_array('Consultar histórico financeiro');
   ELSIF has_payments THEN
     eligible := false;
-    block_reason := 'FINANCIAL_LINKED';
-    alternatives := jsonb_build_array('Cancelar solicitação', 'Arquivar ou encerrar atendimento');
+    block_reason := 'PAYMENT_CONFIRMED';
+    alternatives := jsonb_build_array('Cancelar atendimento', 'Consultar financeiro e recibos');
   ELSIF has_charges THEN
+    -- An open obligation is a mandatory financial record even before any money is confirmed.
     eligible := false;
-    block_reason := 'FINANCIAL_LINKED';
+    block_reason := 'STATUS_NOT_ELIGIBLE';
+    block_message := 'Esta solicitação possui cobrança vinculada e precisa permanecer no histórico financeiro. Cancele a cobrança antes de excluir definitivamente.';
     alternatives := jsonb_build_array('Cancelar cobrança e solicitação', 'Arquivar atendimento');
-  ELSIF has_documents THEN
+  ELSIF has_documents OR (deps->>'document_tasks')::boolean OR (deps->>'deliveries')::boolean THEN
     eligible := false;
-    block_reason := 'DOCUMENT_FINALIZED';
-    alternatives := jsonb_build_array('Cancelar solicitação', 'Manter histórico documental');
-  ELSIF (att->>'has_protected')::boolean THEN
+    block_reason := 'FORMALIZED_DOCUMENT';
+    alternatives := jsonb_build_array('Arquivar atendimento após conclusão', 'Consultar documento formalizado');
+  ELSIF (deps->>'retention')::boolean OR (deps->>'archives')::boolean THEN
     eligible := false;
-    block_reason := 'LEGAL_HOLD_OR_RETENTION';
-    alternatives := jsonb_build_array('Cancelar solicitação', 'Preservar guarda legal');
-  ELSIF r.status = 'concluido' THEN
+    block_reason := 'LEGAL_RETENTION';
+    alternatives := jsonb_build_array('Manter sob guarda documental', 'Arquivar solicitação');
+  ELSIF (deps->>'specialized')::boolean THEN
     eligible := false;
-    block_reason := 'STATUS_COMPLETED';
-    alternatives := jsonb_build_array('Manter registro concluído', 'Arquivar');
-  ELSIF actor_kind = 'client' AND r.status NOT IN ('aberto', 'aguardando_cliente') THEN
+    block_reason := 'STATUS_NOT_ELIGIBLE';
+    block_message := 'Esta solicitação possui atendimento especializado (rural, ITR/DITR ou jurídico/previdenciário) com registro próprio e precisa ser preservada.';
+    alternatives := jsonb_build_array('Arquivar solicitação', 'Consultar o registro especializado');
+  ELSIF (deps->>'account_records')::boolean THEN
     eligible := false;
-    block_reason := 'CLIENT_IN_PROGRESS';
-    alternatives := jsonb_build_array('Solicitar cancelamento ao escritório');
-  ELSIF actor_kind = 'team' AND r.status = 'em_atendimento' AND m.role_code NOT IN ('owner', 'admin') THEN
+    block_reason := 'STATUS_NOT_ELIGIBLE';
+    block_message := 'Esta solicitação está vinculada a correção ou confirmação de dados da conta e precisa permanecer para auditoria.';
+    alternatives := jsonb_build_array('Consultar histórico da conta', 'Arquivar solicitação');
+  ELSIF ((att->>'shared_preserved_count')::integer > 0) THEN
+    -- public.files.request_id is NOT NULL: a shared/otherwise-referenced file cannot stay attached
+    -- to a request that no longer exists, so the deletion is refused instead of orphaning files.
     eligible := false;
-    block_reason := 'TEAM_IN_PROGRESS';
-    alternatives := jsonb_build_array('Cancelar solicitação', 'Solicitar exclusão a um administrador');
+    block_reason := 'STATUS_NOT_ELIGIBLE';
+    block_message := 'Esta solicitação possui anexos compartilhados ou usados por outro registro. Preserve os arquivos e resolva a referência antes de excluir.';
+    alternatives := jsonb_build_array('Consultar anexos compartilhados', 'Arquivar solicitação');
+  ELSIF (att->>'has_protected')::boolean OR ((att->>'retained_preserved_count')::integer > 0) THEN
+    eligible := false;
+    block_reason := 'LEGAL_RETENTION';
+    alternatives := jsonb_build_array('Manter sob guarda documental', 'Arquivar solicitação');
+  ELSIF actor_kind = 'client' THEN
+    -- Situação A/B (contrato shared/requestDeletion.ts): the client only deletes while the request is
+    -- still under their own preparation, before triage/handoff to the team.
+    IF (r.status = 'aberto' OR (r.status = 'aguardando_cliente' AND r.assignee_id IS NULL))
+       AND r.assignee_id IS NULL THEN
+      eligible := true;
+      block_reason := NULL;
+    ELSE
+      eligible := false;
+      block_reason := 'CONTROL_WITH_TEAM';
+      alternatives := jsonb_build_array('Acompanhar andamento da solicitação', 'Solicitar cancelamento junto à equipe');
+    END IF;
   ELSE
-    eligible := true;
-    block_reason := NULL;
+    -- Situação C/D: team deletion needs the current permission and never removes a request still
+    -- under the client's own preparation.
+    IF r.status = 'aguardando_cliente' AND r.assignee_id IS NULL THEN
+      eligible := false;
+      block_reason := 'CONTROL_WITH_CLIENT';
+      alternatives := jsonb_build_array('Aguardar envio pelo cliente');
+    ELSIF r.status IN ('aberto', 'em_atendimento', 'aguardando_cliente', 'aguardando_responsavel', 'cancelado') THEN
+      eligible := true;
+      block_reason := NULL;
+    ELSE
+      eligible := false;
+      block_reason := 'STATUS_NOT_ELIGIBLE';
+      alternatives := jsonb_build_array('Arquivar solicitação concluída', 'Consultar histórico');
+    END IF;
   END IF;
 
   -- Check if client portal account exists to notify on team deletion
@@ -256,7 +405,20 @@ BEGIN
     'eligible', eligible,
     'can_show_action', can_show,
     'block_reason', block_reason,
-    'block_message', NULL,
+    'block_message', CASE
+      -- a specific cause (e.g. shared attachment) keeps its own explanation
+      WHEN block_reason IS NOT NULL AND block_message IS NOT NULL THEN block_message
+      WHEN block_reason = 'INSUFFICIENT_PERMISSION' THEN 'Seu perfil não possui permissão para excluir solicitações definitivamente.'
+      WHEN block_reason = 'CONCURRENT_OPERATION' THEN 'Já existe uma operação de exclusão em andamento para esta solicitação. Aguarde a conclusão.'
+      WHEN block_reason = 'PAYMENT_CONFIRMED' THEN 'Esta solicitação possui pagamento confirmado e não pode ser excluída definitivamente.'
+      WHEN block_reason = 'REFUND_LINKED' THEN 'Esta solicitação possui reembolso ou estorno vinculado e precisa permanecer no histórico financeiro.'
+      WHEN block_reason = 'FORMALIZED_DOCUMENT' THEN 'Esta solicitação possui documento formalizado ou assinado e não pode ser excluída.'
+      WHEN block_reason = 'LEGAL_RETENTION' THEN 'Esta solicitação está protegida por obrigação legal, retenção ou guarda documental ativa.'
+      WHEN block_reason = 'CONTROL_WITH_CLIENT' THEN 'A solicitação ainda está sob controle do cliente antes do envio. Somente o titular pode excluí-la nesta etapa.'
+      WHEN block_reason = 'CONTROL_WITH_TEAM' THEN 'Esta solicitação já está em atendimento pela equipe do escritório e não pode mais ser excluída pelo cliente.'
+      WHEN block_reason = 'STATUS_NOT_ELIGIBLE' THEN 'A situação atual da solicitação não permite exclusão definitiva.'
+      ELSE 'A situação atual da solicitação não permite exclusão definitiva.'
+    END,
     'recommended_alternatives', alternatives,
     'notify_client_on_delete', (actor_kind = 'team' AND client_membership_id IS NOT NULL),
     'requires_audit', (actor_kind = 'team'),
@@ -395,6 +557,35 @@ BEGIN
   -- Set transaction-local deletion token so immutability guards authorize only this exact request
   PERFORM set_config('jn.request_deletion_id', p_request_id::text, true);
 
+  -- Defense in depth: the preserved-dependency map is re-evaluated inside the same transaction
+  -- that already holds FOR UPDATE on the request, so a concurrent payment/document/archive cannot
+  -- be created between the eligibility check and the physical removal.
+  IF EXISTS (
+    SELECT 1 FROM jsonb_each_text(private.request_deletion_preserved_dependencies(p_office_id, p_request_id)) d
+    WHERE d.value = 'true'
+  ) THEN
+    RAISE EXCEPTION 'DELETION_BLOCKED' USING ERRCODE = 'PT422';
+  END IF;
+
+  -- Operational rows scoped to the attachments being removed (checklist evidence, visibility,
+  -- pending file references and reservations). Shared/retained files never reach this point.
+  DELETE FROM private.checklist_history
+  WHERE office_id = p_office_id
+    AND file_id IN (SELECT f.id FROM public.files f WHERE f.office_id = p_office_id AND f.request_id = p_request_id);
+  DELETE FROM private.checklist_entries
+  WHERE office_id = p_office_id
+    AND file_id IN (SELECT f.id FROM public.files f WHERE f.office_id = p_office_id AND f.request_id = p_request_id);
+  DELETE FROM private.portal_hidden_files
+  WHERE file_id IN (SELECT f.id FROM public.files f WHERE f.office_id = p_office_id AND f.request_id = p_request_id);
+  DELETE FROM private.file_cleanup_reservations
+  WHERE office_id = p_office_id
+    AND file_id IN (SELECT f.id FROM public.files f WHERE f.office_id = p_office_id AND f.request_id = p_request_id);
+  DELETE FROM private.file_references
+  WHERE office_id = p_office_id
+    AND file_id IN (SELECT f.id FROM public.files f WHERE f.office_id = p_office_id AND f.request_id = p_request_id);
+  DELETE FROM private.category_intake_files
+  WHERE office_id = p_office_id AND request_id = p_request_id;
+
   -- Remove exclusive file DB metadata (never DELETE FROM storage.objects here!)
   FOR v_obj IN SELECT value FROM jsonb_array_elements(v_objects) LOOP
     DELETE FROM private.file_process_leases
@@ -409,12 +600,38 @@ BEGIN
     WHERE office_id = p_office_id AND id = (v_obj->>'file_id')::uuid;
   END LOOP;
 
-  -- Detach non-blocking operational rows linked to this request
+  -- Detach non-blocking operational rows linked to this request. Every financial, documentary,
+  -- retained, archived, specialized or account-related dependency was refused above; only the
+  -- operational link tables below are physically removed together with the request.
+  DELETE FROM private.category_intake_commands
+  WHERE office_id = p_office_id AND request_id = p_request_id;
+  DELETE FROM private.category_intakes
+  WHERE office_id = p_office_id AND request_id = p_request_id;
+  DELETE FROM private.request_preintake_events
+  WHERE office_id = p_office_id AND request_id = p_request_id;
+  DELETE FROM private.request_preintakes
+  WHERE office_id = p_office_id AND request_id = p_request_id;
+  DELETE FROM private.request_level_exceptions
+  WHERE office_id = p_office_id AND request_id = p_request_id;
+  DELETE FROM private.portal_request_commands
+  WHERE office_id = p_office_id AND request_id = p_request_id;
+  DELETE FROM private.portal_request_visibility
+  WHERE office_id = p_office_id AND request_id = p_request_id;
+  DELETE FROM private.portal_request_limits33
+  WHERE office_id = p_office_id AND request_id = p_request_id;
+  DELETE FROM private.portal_representations31
+  WHERE office_id = p_office_id AND request_id = p_request_id;
+  DELETE FROM private.service_intake_commands33
+  WHERE office_id = p_office_id AND request_id = p_request_id;
+  DELETE FROM private.staff_category_request_commands
+  WHERE office_id = p_office_id AND request_id = p_request_id;
   DELETE FROM private.internal_notifications
   WHERE office_id = p_office_id AND request_id = p_request_id;
   DELETE FROM private.request_assignments
   WHERE office_id = p_office_id AND request_id = p_request_id;
   DELETE FROM private.request_history
+  WHERE office_id = p_office_id AND request_id = p_request_id;
+  DELETE FROM private.request_categories
   WHERE office_id = p_office_id AND request_id = p_request_id;
   DELETE FROM public.request_items
   WHERE office_id = p_office_id AND request_id = p_request_id;
@@ -588,16 +805,60 @@ BEGIN
   RETURN private.request_deletion_result_json(op, false);
 END $$;
 
--- Preserve strict immutability across all tables; permit DELETE only for the exact request authorized in the current transaction
+-- Preserve strict immutability across all linked tables; permit DELETE only for rows that belong to
+-- the exact request authorized in the current transaction (token set by request_delete_permanently).
+-- Rows of any other request remain immutable, and a missing token keeps every historical behaviour.
 CREATE OR REPLACE FUNCTION private.request_immutable() RETURNS trigger
 LANGUAGE plpgsql SECURITY INVOKER SET search_path = '' AS $$
+DECLARE
+  token text := nullif(current_setting('jn.request_deletion_id', true), '');
+  row_data jsonb;
+  v_request uuid;
 BEGIN
-  IF TG_OP = 'DELETE'
-     AND TG_TABLE_NAME IN ('request_items', 'request_history')
-     AND nullif(current_setting('jn.request_deletion_id', true), '') = (to_jsonb(OLD)->>'request_id') THEN
-    RETURN OLD;
+  IF TG_OP = 'DELETE' AND token IS NOT NULL THEN
+    row_data := to_jsonb(OLD);
+    IF row_data->>'request_id' = token THEN
+      RETURN OLD;
+    END IF;
+    IF row_data ? 'file_id' AND nullif(row_data->>'file_id', '') IS NOT NULL THEN
+      SELECT f.request_id INTO v_request FROM public.files f WHERE f.id = (row_data->>'file_id')::uuid;
+      IF v_request IS NOT NULL AND v_request::text = token THEN
+        RETURN OLD;
+      END IF;
+    END IF;
   END IF;
   RAISE EXCEPTION 'REQUEST_HISTORY_IMMUTABLE' USING ERRCODE = 'PT403';
+END $$;
+
+-- Model/version/settings append-only guard (templates_immutable20) also protects request_categories,
+-- request_preintake_events and staff_category_request_commands. Keep it replace-in-place (same name and
+-- OID) so existing triggers use the version that understands the deletion token.
+CREATE OR REPLACE FUNCTION private.templates_immutable20() RETURNS trigger
+LANGUAGE plpgsql SET search_path = '' AS $$
+DECLARE
+  token text := nullif(current_setting('jn.request_deletion_id', true), '');
+BEGIN
+  IF TG_OP = 'DELETE' AND token IS NOT NULL AND (to_jsonb(OLD)->>'request_id') = token THEN
+    RETURN OLD;
+  END IF;
+  RAISE EXCEPTION 'TEMPLATE_CONFLICT' USING ERRCODE = 'PT409';
+END $$;
+
+-- Category intake snapshot keeps every answer once submitted, except when the whole request is being
+-- permanently deleted under the authorized token.
+CREATE OR REPLACE FUNCTION private.category_intake_snapshot_guard() RETURNS trigger
+LANGUAGE plpgsql SET search_path = '' AS $$
+DECLARE
+  token text := nullif(current_setting('jn.request_deletion_id', true), '');
+BEGIN
+  IF TG_OP = 'DELETE' AND token IS NOT NULL AND (to_jsonb(OLD)->>'request_id') = token THEN
+    RETURN OLD;
+  END IF;
+  IF TG_OP = 'DELETE' OR to_jsonb(NEW) - 'submitted_at' IS DISTINCT FROM to_jsonb(OLD) - 'submitted_at'
+     OR OLD.submitted_at IS NOT NULL OR NEW.submitted_at IS NULL THEN
+    RAISE EXCEPTION 'REQUEST_CONFLICT' USING ERRCODE = 'PT409';
+  END IF;
+  RETURN NEW;
 END $$;
 
 CREATE OR REPLACE FUNCTION private.request_record_guard() RETURNS trigger
@@ -687,6 +948,9 @@ $$;
 
 REVOKE ALL ON FUNCTION
   private.request_immutable(),
+  private.templates_immutable20(),
+  private.category_intake_snapshot_guard(),
+  private.request_deletion_preserved_dependencies(uuid, uuid),
   private.request_record_guard(),
   private.request_deletion_attachment_summary(uuid, uuid),
   private.request_deletion_evaluate(uuid, uuid, boolean),
