@@ -756,6 +756,9 @@ try {
     if (allMigrations.some(name => name.includes('_evolution_checkout_fail_closed'))) {
       result += sql(database, 'postgres', readFileSync(`${root}tests/database/evolution.sql`, 'utf8'));
     }
+    if (allMigrations.some(name => name.includes('_cash_receiving_scope_and_provider_options'))) {
+      result += sql(database, 'postgres', readFileSync(`${root}tests/database/cash-receiving-scope.sql`, 'utf8'));
+    }
     if(correctionMigrations.length){const raceDb='corrections_role_race_'+(database.endsWith('_a')?'a':'b');sql('postgres','postgres',`CREATE DATABASE ${raceDb} TEMPLATE ${database} OWNER migrator;`);result+=execFileSync(process.execPath,[`${root}scripts/test-account-closure-race.mjs`,name,raceDb],{encoding:'utf8'});result+=execFileSync(process.execPath,[`${root}scripts/test-account-closure-invitation-race.mjs`,name,raceDb],{encoding:'utf8'});}
     return result;
   };
