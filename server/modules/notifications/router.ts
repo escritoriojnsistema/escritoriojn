@@ -2,7 +2,7 @@ import {notificationKinds} from '../../../shared/notifications.js';
 import {Router,json,type Response} from 'express';
 import {authenticatedClient} from '../auth/client.js';
 import {errorResponse} from '../../errors.js';
-import {fields,uuid} from '../team/validation.js';
+import {fields,record,uuid} from '../team/validation.js';
 import {positive,requestText} from '../requests/validation.js';
 import {summary,notices} from './dto.js';
 import {acknowledged} from '../checklists/dto.js';
@@ -19,4 +19,7 @@ async function rpc(res:Response,name:string,args:Record<string,unknown>,parse:(v
 }
 notificationsRouter.post('/summary',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id'])||!uuid(b.office_id)){invalid(res);return;}await rpc(res,'notifications_summary',{p_office_id:b.office_id},summary);});
 notificationsRouter.post('/search',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','query','read','kind','page','size'])||!uuid(b.office_id)||!requestText(b.query,120,0)||!['all','unread','read'].includes(String(b.read))||!['all',...notificationKinds].includes(String(b.kind))||!positive(b.page)||typeof b.size!=='number'||![3,5].includes(b.size)){invalid(res);return;}await rpc(res,'notifications_page',{p_office_id:b.office_id,p_query:b.query.trim(),p_read:b.read,p_kind:b.kind,p_page:b.page,p_size:b.size},notices);});
-notificationsRouter.post('/read',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','id'])||!uuid(b.office_id)||!uuid(b.id)){invalid(res);return;}await rpc(res,'notifications_read',{p_office_id:b.office_id,p_id:b.id},acknowledged);});
+notificationsRouter.post('/read',async(req,res)=>{const b:unknown=req.body;if(Object.keys(req.query).length||!fields(b,['office_id','id'])||!uuid(b.office_id)||!uuid(b.id)){invalid(res);return;}await rpc(res,'notifications_read',{p_office_id:b.office_id,p_id:b.id},value=>{
+  if(record(value)&&value.id===b.id&&value.read===true)return {ok:true};
+  return acknowledged(value);
+ });});

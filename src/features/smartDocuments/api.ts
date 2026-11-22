@@ -31,6 +31,8 @@ export interface SmartRequestContext {
   request_protocol: string;
   request_status: string;
   origin: 'portal' | 'presencial' | 'whatsapp';
+  can_start: boolean;
+  needs_review: boolean;
   has_intake: boolean;
   intake: {
     model_name: string;
@@ -129,7 +131,7 @@ export const smartDocumentsApi = {
   ) => commercialRequest<SmartSessionState>('/session/save', payload, signal, BASE),
 
   requestContext: (office_id: string, request_id: string, request_item_id: string, signal?: AbortSignal) =>
-    commercialRequest<SmartRequestContext>(
+    commercialRequest<SmartRequestContext | null>(
       '/request-context',
       { office_id, request_id, request_item_id },
       signal,

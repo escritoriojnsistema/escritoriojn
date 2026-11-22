@@ -29,7 +29,7 @@ export function RequestDeleteSection({
 }: Props) {
   const [eligibility, setEligibility] = useState<RequestDeletionEligibility | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [phase, setPhase] = useState<'idle' | 'processing' | 'storage_cleanup_failed' | 'error'>('idle');
+  const [phase, setPhase] = useState<'idle' | 'processing' | 'pending' | 'storage_cleanup_failed' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [result, setResult] = useState<RequestDeletionResult | null>(null);
   const [retryKey, setRetryKey] = useState<string | null>(null);
@@ -100,8 +100,8 @@ export function RequestDeleteSection({
         setErrorMessage(response.message);
         onPendingChange?.(false);
       } else {
-        setPhase('processing');
-        onPendingChange?.(true);
+        setPhase('pending');
+        onPendingChange?.(false);
       }
     } catch (cause) {
       const err = cause instanceof RequestDeletionError ? cause : new RequestDeletionError(503);
@@ -129,7 +129,8 @@ export function RequestDeleteSection({
         setErrorMessage(response.message);
         onPendingChange?.(false);
       } else {
-        setPhase('processing');
+        setPhase('pending');
+        onPendingChange?.(false);
       }
     } catch (cause) {
       const err = cause instanceof RequestDeletionError ? cause : new RequestDeletionError(503);
@@ -162,7 +163,7 @@ export function RequestDeleteSection({
             disabled={disabled || !eligibility.backend_ready}
             onClick={() => {
               setErrorMessage('');
-              setPhase('idle');
+              setPhase(result?.status==='processing'?'pending':result?.status==='storage_cleanup_failed'?'storage_cleanup_failed':'idle');
               setModalOpen(true);
             }}
           >
@@ -261,6 +262,9 @@ export function RequestDeleteSection({
             </p>
           )}
 
+          {phase === 'pending' && (
+            <p role="status" className="form-feedback">A exclusão está em andamento. Verifique a situação para retomar a limpeza dos anexos.</p>
+          )}
           {phase === 'processing' && (
             <p role="status" className="form-feedback">
               Processando exclusão definitiva e limpeza coordenada de anexos. Não feche esta janela até a confirmação.
@@ -290,7 +294,7 @@ export function RequestDeleteSection({
           >
             Cancelar
           </button>
-          {retryKey && (phase === 'error' || phase === 'storage_cleanup_failed') && (
+          {retryKey && (phase === 'pending' || phase === 'error' || phase === 'storage_cleanup_failed') && (
             <button
               type="button"
               className="team-text-button"
@@ -302,7 +306,7 @@ export function RequestDeleteSection({
           <button
             type="button"
             className="danger-button"
-            disabled={phase === 'processing'}
+            disabled={phase === 'processing' || phase === 'pending' || phase === 'storage_cleanup_failed'}
             onClick={() => void confirmDelete()}
           >
             {phase === 'processing' ? 'Excluindo...' : 'Excluir permanentemente'}

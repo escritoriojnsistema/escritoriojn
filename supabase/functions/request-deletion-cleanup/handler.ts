@@ -27,6 +27,7 @@ export interface CleanupAdminClient {
 }
 
 export interface CleanupCallerClient {
+  rpc: CleanupAdminClient['rpc'];
   auth: {
     getUser: (token: string) => Promise<{ data: { user: { id: string } | null }; error: unknown }>;
   };
@@ -93,33 +94,16 @@ export function createRequestDeletionCleanupHandler(config: RequestDeletionClean
       return jsonResponse(401, { error: { code: 'AUTH_REQUIRED', message: 'Autenticação obrigatória.' } });
     }
 
-    const hasCronAuth = Boolean(
+    const hasWorkerAuth = Boolean(
       config.cronSecret && config.cronSecret.trim().length >= 16 && constantTimeEqual(bearer, config.cronSecret.trim()),
     );
-
-    if (!hasCronAuth) {
-      if (!config.url || !config.anonKey) {
-        return jsonResponse(503, { error: { code: 'CLEANUP_UNAVAILABLE', message: 'Serviço indisponível.' } });
-      }
-      const caller = config.createCallerClient
-        ? config.createCallerClient(bearer)
-        : (createClient(config.url, config.anonKey, {
-            auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
-            global: { headers: { Authorization: `Bearer ${bearer}` } },
-          }) as unknown as CleanupCallerClient);
-      const { data, error } = await caller.auth.getUser(bearer);
-      if (error || !data.user) {
-        return jsonResponse(401, { error: { code: 'AUTH_REQUIRED', message: 'Sessão inválida.' } });
-      }
-    }
-
-    if (!config.createAdminClient && (!config.url || !config.serviceRoleKey)) {
-      return jsonResponse(503, { error: { code: 'CLEANUP_UNAVAILABLE', message: 'Serviço indisponível.' } });
-    }
 
     let officeId: string | null = null;
     let operationId: string | null = null;
     const rawText = await req.text();
+    if (rawText.length > 2048) {
+      return jsonResponse(413, { error: { code: 'CLEANUP_VALIDATION', message: 'Corpo excede o limite.' } });
+    }
     if (rawText.trim().length > 0) {
       let parsed: unknown;
       try {
@@ -143,6 +127,36 @@ export function createRequestDeletionCleanupHandler(config: RequestDeletionClean
         }
         operationId = body.operation_id;
       }
+    }
+
+    if (!hasWorkerAuth) {
+      if (!officeId || !operationId) {
+        return jsonResponse(422, { error: { code: 'CLEANUP_VALIDATION', message: 'Informe o escritório e a operação.' } });
+      }
+      if (!config.url || !config.anonKey) {
+        return jsonResponse(503, { error: { code: 'CLEANUP_UNAVAILABLE', message: 'Serviço indisponível.' } });
+      }
+      const caller = config.createCallerClient
+        ? config.createCallerClient(bearer)
+        : (createClient(config.url, config.anonKey, {
+            auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+            global: { headers: { Authorization: `Bearer ${bearer}` } },
+          }) as unknown as CleanupCallerClient);
+      const { data, error } = await caller.auth.getUser(bearer);
+      if (error || !data.user) {
+        return jsonResponse(401, { error: { code: 'AUTH_REQUIRED', message: 'Sessão inválida.' } });
+      }
+      const authorization = await caller.rpc('request_deletion_cleanup_authorize', {
+        p_office_id: officeId,
+        p_operation_id: operationId,
+      });
+      if (authorization.error || authorization.data !== true) {
+        return jsonResponse(403, { error: { code: 'DELETION_FORBIDDEN', message: 'Operação indisponível nesta sessão.' } });
+      }
+    }
+
+    if (!config.createAdminClient && (!config.url || !config.serviceRoleKey)) {
+      return jsonResponse(503, { error: { code: 'CLEANUP_UNAVAILABLE', message: 'Serviço indisponível.' } });
     }
 
     const admin = config.createAdminClient
@@ -169,7 +183,7 @@ export function createRequestDeletionCleanupHandler(config: RequestDeletionClean
       let lastErrorCode: string | null = null;
 
       for (const obj of objects) {
-        if (!isSafeCleanupObject(obj)) {
+        if (!isSafeCleanupObject(obj) || !obj.object_path.startsWith(op.office_id + '/')) {
           failedCount += 1;
           lastErrorCode = 'INVALID_STORAGE_OBJECT_REF';
           continue;

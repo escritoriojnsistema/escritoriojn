@@ -39,6 +39,8 @@ requestDeletionRouter.use(
   json({ limit: '8kb' }),
 );
 
+type DeletionAuth = NonNullable<Awaited<ReturnType<typeof authenticatedClient>>>;
+
 const RPC_MISSING_CODES = new Set(['PGRST202', '42883']);
 
 const STATUS_MAP: Record<string, number> = {
@@ -49,6 +51,7 @@ const STATUS_MAP: Record<string, number> = {
   DELETION_OPERATION_NOT_FOUND: 404,
   DELETION_CONFLICT: 409,
   REQUEST_CONFLICT: 409,
+  REQUEST_DELETION_PENDING: 409,
   CONCURRENT_OPERATION: 409,
   DELETION_BLOCKED: 422,
   DELETION_VALIDATION: 422,
@@ -79,12 +82,16 @@ function mapSafeError(res: Response, error: { code?: string; message?: string })
     errorResponse(res, status, msg, safeMessages[status] ?? 'Não foi possível concluir a exclusão.');
     return;
   }
-  if (msg in deletionBlockMessages) {
+  if (error.code === 'PT422' && Object.hasOwn(deletionBlockMessages,msg)) {
     const reason = msg as DeletionBlockReason;
     errorResponse(res, 422, reason, deletionBlockMessages[reason]);
     return;
   }
-  errorResponse(res, 503, 'DELETION_UNAVAILABLE', 'Não foi possível verificar ou concluir a exclusão no momento.');
+  if (error.code === '23503' || error.code === '23001') {
+    errorResponse(res,422,'DELETION_BLOCKED','A solicitação possui um registro vinculado que precisa ser preservado.');
+    return;
+  }
+  errorResponse(res, 503, 'DELETION_UNAVAILABLE', 'O serviço de exclusão está temporariamente indisponível. Confira a situação antes de tentar novamente.');
 }
 
 function projectEligibility(raw: unknown): RequestDeletionEligibility {
@@ -107,7 +114,7 @@ function projectEligibility(raw: unknown): RequestDeletionEligibility {
   }
   const att = (d.attachments && typeof d.attachments === 'object' ? d.attachments : {}) as Record<string, unknown>;
   const blockReason =
-    typeof d.block_reason === 'string' && d.block_reason in deletionBlockMessages
+    typeof d.block_reason === 'string' && Object.hasOwn(deletionBlockMessages,d.block_reason)
       ? (d.block_reason as DeletionBlockReason)
       : null;
 
@@ -190,6 +197,35 @@ function projectDeletionResult(raw: unknown): RequestDeletionResult {
   };
 }
 
+async function resumeCleanup(auth: DeletionAuth, officeId: string, key: string, result: RequestDeletionResult) {
+  if (result.status === 'completed' || !uuid(result.operation_id)) return result;
+  try {
+    const response = await fetch(new URL('/functions/v1/request-deletion-cleanup', auth.url), {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${auth.token}`, apikey: auth.key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ office_id: officeId, operation_id: result.operation_id }),
+      redirect: 'error',
+      signal: AbortSignal.timeout(6000),
+    });
+    await response.body?.cancel();
+    if (!response.ok) return result;
+    const {data,error} = await auth.client.rpc('request_deletion_status', {
+      p_office_id: officeId,
+      p_request_id: result.request_id,
+      p_idempotency_key: key,
+    });
+    if (!error) {
+      const current = projectDeletionResult(data);
+      if (current.operation_id === result.operation_id && current.request_id === result.request_id) {
+        return { ...current, idempotent_replay: result.idempotent_replay };
+      }
+    }
+  } catch {
+    // The saved SQL operation can be checked and resumed after an unavailable worker.
+  }
+  return result;
+}
+
 /**
  * POST /api/request-deletion/:id/eligibility
  * Authoritative eligibility & block reason check before rendering/enabling delete action.
@@ -264,8 +300,8 @@ requestDeletionRouter.post('/:id/execute', async (req, res) => {
   }
 
   try {
-    const { client } = res.locals.deletionAuth as NonNullable<Awaited<ReturnType<typeof authenticatedClient>>>;
-    const { data, error } = await client.rpc('request_delete_permanently', {
+    const auth = res.locals.deletionAuth as DeletionAuth;
+    const { data, error } = await auth.client.rpc('request_delete_permanently', {
       p_office_id: b.office_id,
       p_request_id: requestId,
       p_expected_version: b.expected_version,
@@ -278,7 +314,7 @@ requestDeletionRouter.post('/:id/execute', async (req, res) => {
       mapSafeError(res, error);
       return;
     }
-    const result = projectDeletionResult(data);
+    const result = await resumeCleanup(auth,b.office_id,b.idempotency_key,projectDeletionResult(data));
     res.status(result.status === 'processing' ? 202 : 200).json({ data: result });
   } catch {
     errorResponse(res, 503, 'DELETION_UNAVAILABLE', 'Não foi possível concluir a exclusão definitiva. Verifique o estado antes de repetir.');
@@ -304,8 +340,8 @@ requestDeletionRouter.post('/:id/status', async (req, res) => {
   }
 
   try {
-    const { client } = res.locals.deletionAuth as NonNullable<Awaited<ReturnType<typeof authenticatedClient>>>;
-    const { data, error } = await client.rpc('request_deletion_status', {
+    const auth = res.locals.deletionAuth as DeletionAuth;
+    const { data, error } = await auth.client.rpc('request_deletion_status', {
       p_office_id: b.office_id,
       p_request_id: requestId,
       p_idempotency_key: b.idempotency_key,
@@ -314,7 +350,7 @@ requestDeletionRouter.post('/:id/status', async (req, res) => {
       mapSafeError(res, error);
       return;
     }
-    res.json({ data: projectDeletionResult(data) });
+    res.json({ data: await resumeCleanup(auth,b.office_id,b.idempotency_key,projectDeletionResult(data)) });
   } catch {
     errorResponse(res, 503, 'DELETION_UNAVAILABLE', 'Não foi possível consultar o resultado da exclusão.');
   }

@@ -587,11 +587,25 @@ test('Etapa 1 UI (Cenários 1, 2, 5, 6): Modal de exclusão definitiva usa copy 
   await expect(page.getByText(/não foi marcada como concluída porque ainda há limpeza de arquivos pendente/i)).toBeVisible();
   await expect(page.getByRole('button', { name: 'Verificar situação da exclusão', exact: true })).toBeVisible();
 
+  await page.route(`**/api/request-deletion/${REQUEST_ID}/status`, r=>r.fulfill({json:{data:{
+    operation_id:APPROVAL_ID,request_id:REQUEST_ID,status:'completed',db_deleted:true,storage_cleanup_completed:true,
+    message:'Solicitação excluída definitivamente.',
+  }}}));
+  await page.getByRole('button', { name: 'Verificar situação da exclusão', exact: true }).click();
+  await expect(page.getByText('Solicitação excluída definitivamente.', { exact: true })).toBeVisible();
+  await expect(page.getByRole('dialog')).toBeHidden();
+
   // Now verify client notification rendering for request_deleted (no broken link, offers Iniciar nova solicitação)
   const clientContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const clientPage = await clientContext.newPage();
   clientPage.on('pageerror', (err) => errors.push(err.message));
   await mockAuth(clientPage, 'client', []);
+  let marked = false;
+  await clientPage.route('**/api/notifications/read', (r) => {
+    expect(r.request().postDataJSON()).toEqual({ office_id: OFFICE_ID, id: APPROVAL_ID });
+    marked = true;
+    return r.fulfill({ json: { data: { ok: true } } });
+  });
   await clientPage.route('**/api/notifications/search', (r) =>
     r.fulfill({
       json: {
@@ -601,7 +615,7 @@ test('Etapa 1 UI (Cenários 1, 2, 5, 6): Modal de exclusão definitiva usa copy 
               id: APPROVAL_ID,
               kind: 'request_deleted',
               created_at: '2026-11-21T11:00:00Z',
-              read_at: null,
+              read_at: marked ? '2026-11-21T11:01:00Z' : null,
               request_id: null,
               protocol: 'JN-2026-000888',
               deleted_protocol: 'JN-2026-000888',
@@ -617,7 +631,7 @@ test('Etapa 1 UI (Cenários 1, 2, 5, 6): Modal de exclusão definitiva usa copy 
           total: 1,
           page: 1,
           page_size: 5,
-          unread: 1,
+          unread: marked ? 0 : 1,
         },
       },
     }),
@@ -628,6 +642,9 @@ test('Etapa 1 UI (Cenários 1, 2, 5, 6): Modal de exclusão definitiva usa copy 
     clientPage.getByText(/A solicitação JN-2026-000888 foi excluída pela equipe do Escritório JN/i),
   ).toBeVisible();
   await expect(clientPage.getByRole('link', { name: /Iniciar nova solicitação/i })).toBeVisible();
+  await clientPage.getByRole('button', { name: 'Marcar como lida', exact: true }).click();
+  await expect(clientPage.getByText('Notificação lida.', { exact: true })).toBeVisible();
+  await expect(clientPage.getByRole('button', { name: 'Marcar como lida', exact: true })).toHaveCount(0);
   await clientContext.close();
   expect(errors).toEqual([]);
 });
@@ -778,4 +795,26 @@ test('Etapas 3 e 5 UI (Cenários 12, 13, 16): Tela de Cobranças gera Pix dinâm
     await page.screenshot({ path: `${ART}/verify-charges-collection-desktop.png`, fullPage: true });
   }
   expect(errors).toEqual([]);
+});
+
+test('portal volta à lista quando uma solicitação aberta deixou de existir', async ({page})=>{
+  await mockAuth(page, 'client', []);
+  let exists=true;
+  const summary={id:REQUEST_ID,protocol:'AT-000901',title:'Atendimento de teste',public_status:'em_andamento',
+    created_at:'2026-11-21T09:00:00Z',updated_at:'2026-11-21T10:00:00Z'};
+  await page.route('**/api/requests/search', r=>r.fulfill({json:{data:{
+    portal:true,items:exists?[summary]:[],total:exists?1:0,page:1,page_size:5,
+  }}}));
+  await page.route(`**/api/requests/${REQUEST_ID}/detail`, r=>exists
+    ? r.fulfill({json:{data:{...summary,portal:true,message:'Dados da solicitação',services:[],linked_view:true}}})
+    : r.fulfill({status:404,json:{error:{code:'REQUEST_NOT_FOUND'}}}));
+  await page.route(`**/api/request-deletion/${REQUEST_ID}/eligibility`,r=>r.fulfill({json:{data:{can_show_action:false}}}));
+  await page.goto('/minhas-solicitacoes');
+  await page.getByRole('button',{name:'Ver solicitação AT-000901'}).click();
+  await expect(page.getByText('Dados da solicitação')).toBeVisible();
+  exists=false;
+  await page.evaluate(()=>window.dispatchEvent(new Event('jn:inbox-update')));
+  await expect(page.getByText('Esta solicitação não está mais disponível.')).toBeVisible();
+  await expect(page.getByText('Registro não encontrado.')).toHaveCount(0);
+  await expect(page.getByRole('heading',{name:'Minhas solicitações'})).toBeVisible();
 });

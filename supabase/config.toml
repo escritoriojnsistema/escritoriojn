@@ -22,3 +22,9 @@ entrypoint = "./functions/account-closure/index.ts"
 [functions.retention]
 verify_jwt = true
 entrypoint = "./functions/retention/index.ts"
+
+[functions.request-deletion-cleanup]
+# The handler verifies a current Auth user or its dedicated technical credential.
+verify_jwt = false
+entrypoint = "./functions/request-deletion-cleanup/index.ts"
+import_map = "./functions/request-deletion-cleanup/deno.json"

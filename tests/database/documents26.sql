@@ -17,10 +17,29 @@ SELECT public.charges_mutate(:'o25',:'charge25',:'cv25'::int,jsonb_build_object(
 RESET ROLE;
 SELECT cs.id AS cash25,cs.version AS cashv25,pm.id AS method25 FROM private.cash_sessions cs JOIN private.payment_methods pm ON pm.office_id=cs.office_id AND pm.unit_id=cs.unit_id AND pm.destination_account_id=cs.cash_account_id WHERE cs.office_id=:'o25' AND cs.operator_id='00000000-0000-4000-a000-000000000206' AND cs.status='open' ORDER BY cs.opened_at DESC LIMIT 1 \gset
 SELECT a.version AS cv25 FROM private.charges_amounts(:'o25',:'charge25')a \gset
+SELECT to_regprocedure('private.payment_operate_authorized(uuid,jsonb)') IS NOT NULL AS use_payment_approval26 \gset
 SET ROLE authenticated;
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000206","session_id":"00000000-0000-4000-c000-000000000206"}';
 SELECT public.document_cash_claim(:'o25',:'p25',gen_random_uuid());
+-- The cash operator uses a one-time approval after the evolution migration.
+\if :use_payment_approval26
+RESET ROLE;
+SELECT unit_id AS payment_unit26 FROM private.cash_sessions WHERE id=:'cash25' \gset
+SET ROLE authenticated;
+SELECT public.financial_approval_request_manual_payment(
+  :'o25',:'charge25',:'cv25'::int,:'q25',:'cash25',:'payment_unit26',NULL,:'method25',
+  '00000000-0000-4000-a000-000000000201',6000-:'paid25'::bigint,current_date,NULL,
+  'Recebimento parcial de sessenta reais',gen_random_uuid()::text
+)->>'id' AS payment_approval26 \gset
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000201","session_id":"00000000-0000-4000-c000-000000000201"}';
+SELECT public.financial_approval_decide(:'o25',:'payment_approval26','approve',:'cv25'::int,NULL,gen_random_uuid()::text);
+SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000206","session_id":"00000000-0000-4000-c000-000000000206"}';
+SELECT public.financial_approval_execute_manual_payment(
+  :'o25',:'payment_approval26',:'cash25',:'cv25'::int,gen_random_uuid()::text
+);
+\else
 SELECT public.payment_operate(:'o25',jsonb_build_object('kind','record','session_id',:'cash25','expected_version',:'cashv25'::int,'idempotency_key',gen_random_uuid(),'evidence','Recebimento parcial de sessenta reais','payment_method_id',:'method25','status','confirmed','allocations',jsonb_build_array(jsonb_build_object('charge_id',:'charge25','expected_charge_version',:'cv25'::int,'amount_cents',6000-:'paid25'::bigint)),'presented_cents',6000-:'paid25'::bigint,'fee_cents',0,'settlement','not_applicable','settled_on',NULL,'external_reference',NULL));
+\endif
 SELECT test.expect_error(format('SELECT test.release25(%L,%L,''request'')',:'o25',:'p25'),'PT403','25: cash authority alone cannot request financial exceptions');
 SET request.jwt.claims='{"sub":"00000000-0000-4000-a000-000000000201","session_id":"00000000-0000-4000-c000-000000000201"}';
 SELECT public.document_release_state(:'o25',:'p25',1) AS s25 \gset
