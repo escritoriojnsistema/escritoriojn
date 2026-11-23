@@ -87,3 +87,11 @@
     padding: 14px;
   }
 }
+
+.category-folder-disclosure > summary {
+  cursor: pointer;
+  min-height: 44px;
+  align-content: center;
+  color: var(--jn-navy, #103248);
+  width: fit-content;
+}

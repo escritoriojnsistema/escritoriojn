@@ -2,6 +2,7 @@ import {DocumentPresenceProvider} from './features/documentCommercial/DocumentPr
 import {NotificationReadProvider} from './features/notifications/NotificationReadProvider';
 import {loadOperations} from './app/loadOperations';
 import { lazy, Suspense, useEffect } from 'react';
+import {InfoDialogProvider} from './features/privacy/InfoDialogProvider';
 import PrivacyPage from './features/privacy/PrivacyPage';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { paths, pageTitles, normalizePathname } from './app/routes';
@@ -11,7 +12,7 @@ import HomePage from './features/home/HomePage';
 import AccessPage from './features/access/AccessPage';
 import CallbackPage from './features/auth/CallbackPage';
 import ResetPage from './features/auth/ResetPage';
-const InstallPage = lazy(()=>import('./features/pwa/InstallPage'));
+import InstallPage from './features/pwa/InstallPage';
 const OperationalRoutes = lazy(loadOperations);
 function AppRoutes() {
   const { pathname } = useLocation();
@@ -32,9 +33,9 @@ function AppRoutes() {
     <Route path="/privacidade" element={<PrivacyPage section="privacy" />} />
     <Route path="/termos" element={<PrivacyPage section="terms" />} />
     <Route path="/cookies" element={<PrivacyPage section="cookies" />} />
-    <Route path="/instalar" element={<Suspense fallback={null}><InstallPage/></Suspense>} />
+    <Route path="/instalar" element={<InstallPage/>} />
     <Route path="*" element={<PortalBoundary><Suspense fallback={null}><OperationalRoutes operationKey={operationKey} /></Suspense></PortalBoundary>} />
 
   </Routes></>;
 }
-export default function App() { return <BrowserRouter><AuthProvider><NotificationReadProvider><DocumentPresenceProvider><AppRoutes /></DocumentPresenceProvider></NotificationReadProvider></AuthProvider></BrowserRouter>; }
+export default function App() { return <BrowserRouter><AuthProvider><NotificationReadProvider><DocumentPresenceProvider><InfoDialogProvider><AppRoutes /></InfoDialogProvider></DocumentPresenceProvider></NotificationReadProvider></AuthProvider></BrowserRouter>; }

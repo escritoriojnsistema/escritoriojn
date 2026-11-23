@@ -139,6 +139,10 @@
 }
 
 .pwa-menu-link {
+  background: transparent;
+  border: 0;
+  width: 100%;
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -156,7 +160,7 @@
   color: #ffffff;
 }
 
-.pwa-menu-link[aria-disabled=true] {
+.pwa-menu-link:disabled {
   opacity: .6;
 }
 

@@ -11,6 +11,7 @@ import { operationNavigation, mobileOperationNavigation, operationRoleNames, ope
 import {OperationBack,splitOperationReturn} from './OperationBack';
 import './operation.css';
 import {PrivacyFooter} from '../privacy/PrivacyLinks';
+import {InfoTrigger} from '../privacy/InfoTrigger';
 
 const icons = {paymentsConfig:Landmark,imports:Archive,operations:ShieldCheck,categories:ClipboardList,access:Settings,privacy:CircleUserRound,rural:LandPlot,settings:Settings,catalog:FileText,portalDocuments:FileText, documents:FileText, templates:FileText, quick:Zap,reports:ChartColumn, expenses: Banknote, payments: Wallet, cash: Banknote, charges: Wallet, home: House, checklists: ClipboardCheck, notifications: Bell, requests: ClipboardList, attachments: Paperclip, customers: UsersRound, services: BriefcaseBusiness, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
 export function OperationLayout({ client = false, busy = false, contextActions, office, children }: { client?: boolean; busy?: boolean; contextActions?: ReactNode; office?: string; children: ReactNode }) {
@@ -60,7 +61,7 @@ export function OperationLayout({ client = false, busy = false, contextActions, 
   function exit() {
     return <button className="operation-exit" disabled={leaving || busy} onClick={() => void logout()}><LogOut size={20} aria-hidden="true" /><span>Sair da conta</span></button>;
   }
-  function installation(){return <Link className="pwa-menu-link" to="/instalar" aria-disabled={busy||undefined} onClick={event=>{if(busy){event.preventDefault();return;}closeMenu();}}><Download size={20} aria-hidden="true"/><span>Instalar aplicativo</span></Link>;}
+  function installation(){return <InfoTrigger className="pwa-menu-link" section="install" disabled={busy} onOpen={closeMenu}><Download size={20} aria-hidden="true"/><span>Instalar aplicativo</span></InfoTrigger>;}
   return <div className="operation-layout">
     <aside className="operation-sidebar" aria-label="Navegação principal"><Brand light to={home} /><p className="operation-area">{client ? 'Área do cliente' : 'Área da equipe'}</p>{navigation('Navegação da operação')}{contextActions&&<div className="operation-context-actions">{contextual.actions}</div>}{!client&&<PresenceControl/>}<div className="operation-sidebar-end">{installation()}{exit()}<p>Acesso individual e protegido.</p></div></aside>
     <div className="operation-body">

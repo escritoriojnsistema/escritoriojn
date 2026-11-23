@@ -4,7 +4,7 @@
   gap: 2px 18px;
   font-size: 12px;
 }
-.privacy-links a {
+.privacy-links button {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -13,7 +13,7 @@
   text-decoration-thickness: 1px;
   transition: opacity 150ms var(--jn-ease, ease);
 }
-.privacy-links a:hover { opacity: 0.82; }
+.privacy-links button:hover { opacity: 0.82; }
 
 .access-privacy {
   font-size: 12px;
@@ -235,7 +235,7 @@
 .registration-acceptance > p { font-size: 12px; line-height: 1.45; margin: 2px 0 4px; color: var(--jn-muted, #556b7a); }
 .access-content .registration-policy { display: flex; align-items: center; gap: 10px; min-height: 44px; margin: 0; font-weight: 400; line-height: 1.4; color: var(--jn-text, #142b3c); }
 .registration-policy input { width: 20px; height: 20px; flex-shrink: 0; margin: 0; accent-color: var(--jn-navy, #103248); }
-.registration-policy a { display: inline-flex; align-items: center; min-height: 44px; color: var(--jn-navy, #103248); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.registration-policy button { display: inline-flex; align-items: center; min-height: 44px; color: var(--jn-navy, #103248); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .input-wrap:has(input:disabled) { background: var(--jn-surface-subtle, #f2f6f8); color: var(--jn-muted, #556b7a); }
 .access-pane:has(.registration-acceptance) .access-symbol, .access-pane:has(.registration-acceptance) .access-content > .eyebrow { display: none; }
 .access-pane:has(.registration-acceptance) > .access-main { padding-block: 14px 8px; }
@@ -259,3 +259,41 @@
   .access-privacy p { margin-bottom: 2px; }
   .access-privacy .privacy-links { font-size: 11px; gap: 0 8px; }
 }
+
+
+.privacy-links button, .privacy-install, .registration-policy button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.registration-policy button {
+  color: var(--jn-navy, #103248);
+  font-weight: 600;
+}
+.quick-info-dialog {
+  width: min(760px, calc(100% - 24px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  color: var(--jn-text, #142b3c);
+  background: var(--jn-surface, white);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.quick-info-dialog::backdrop { background: rgba(16, 50, 72, .52); }
+.quick-info-actions {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  padding: 4px 12px;
+  background: var(--jn-surface, white);
+}
+.quick-info-actions button { min-height: 44px; }
+.quick-info-dialog .privacy-page, .quick-info-dialog .pwa-main { padding: 0 18px 20px; }
+.quick-info-dialog .privacy-doc-header h2, .quick-info-dialog .pwa-hero h2 { font-size: clamp(22px, 4vw, 32px); }

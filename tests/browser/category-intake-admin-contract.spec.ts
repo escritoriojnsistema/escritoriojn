@@ -93,6 +93,7 @@ test('cria subpasta e salva campos, anexos e publicação no escopo selecionado'
   await page.getByLabel('Nível de execução').selectOption('2');
   await page.getByLabel('Motivo',{exact:true}).fill('Organizar atendimento rural');
   await page.getByRole('button',{name:'Salvar subpasta'}).click();
+  await page.locator('summary[aria-label="Subpastas de Rural"]').click();
   await expect(page.getByRole('list',{name:'Subpastas de Rural'})).toContainText('Cadastro rural · Nível 2');
   await page.getByRole('button',{name:'Formulário e anexos de Rural',exact:true}).click();
   await page.getByLabel('Subpasta',{exact:true}).selectOption(child);
@@ -138,7 +139,13 @@ for (const width of [375, 1440]) test(`categorias agrupam subpastas e trocam o e
   const list=page.getByRole('list',{name:'Categorias configuradas'});
   const cards=list.locator(':scope > li');
   await expect(cards).toHaveCount(1,{timeout:2500});
-  await expect(cards.first()).toContainText('CAR (Edição)');
+  const disclosure=cards.first().locator('summary');
+  await expect(cards.first().getByText('CAR (Edição) · Nível 2')).not.toBeVisible();
+  await disclosure.click();
+  await expect(cards.first().getByText('CAR (Edição) · Nível 2')).toBeVisible();
+  await disclosure.click();
+  await expect(cards.first().getByText('CAR (Edição) · Nível 2')).not.toBeVisible();
+  await disclosure.click();
   await expect(cards.first()).toContainText('CCIR');
   await expect(cards.first()).not.toContainText('Categoria geral');
   await expect(page.getByRole('navigation',{name:'Paginação de categorias'})).toContainText('1 categoria');
@@ -169,4 +176,30 @@ for (const width of [375, 1440]) test(`categorias agrupam subpastas e trocam o e
   await expect(cards.first()).toContainText('CAR atualizado');
   expect(commands).toEqual([{kind:'rename',category_id:child,expected_revision:4,name:'CAR atualizado',execution_level:3,reason:'Atualizar descrição da subpasta'}]);
   expect(stateReads).toBe(1);
+});
+
+test('configura tipos e modelos separadamente e salva a máscara do campo',async({page})=>{
+ const fixture=await setup(page,{form:{...empty,revision:1,fields:[{key:'registro',label:'Escritura',type:'text',required:false,options:[]}]}});
+ await open(page);
+ await page.getByRole('button',{name:'Criar tipo de resposta',exact:true}).click();
+ await page.getByLabel('Nome do tipo').fill('Registro de imóvel');
+ await page.getByRole('button',{name:'Aplicar ao campo'}).click();
+ await page.getByRole('button',{name:'Editar tipo de resposta',exact:true}).click();
+ await expect(page.getByLabel('Nome do tipo')).toHaveValue('Registro de imóvel');
+ await page.getByLabel('Nome do tipo').fill('Registro da escritura');
+ await page.getByRole('button',{name:'Aplicar ao campo'}).click();
+ await page.getByRole('button',{name:'Criar modelo',exact:true}).click();
+ await page.getByLabel('Nome do modelo').fill('Número da escritura');
+ await page.getByLabel('Máscara').fill('000/AA');
+ await page.getByRole('button',{name:'Aplicar ao campo'}).click();
+ await page.getByRole('button',{name:'Editar modelo',exact:true}).click();
+ await expect(page.getByLabel('Máscara')).toHaveValue('000/AA');
+ await page.getByLabel('Máscara').fill('00000/AA');
+ await page.getByRole('button',{name:'Aplicar ao campo'}).click();
+ await page.getByLabel('Motivo da alteração').fill('Ajustar formato da escritura');
+ await page.getByRole('button',{name:'Salvar configuração'}).click();
+ await expect(page.getByRole('status')).toContainText('Configuração salva');
+ expect(fixture.writes[0].command.fields[0]).toMatchObject({
+  response_name:'Registro da escritura',type:'text',model:{name:'Número da escritura',mask:'00000/AA'},
+ });
 });

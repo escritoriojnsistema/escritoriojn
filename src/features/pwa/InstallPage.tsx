@@ -1,20 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useId, useState } from 'react';
 import { Download, ShieldCheck, Smartphone } from 'lucide-react';
 import { SiteFooter, SiteHeader } from '../../app/SiteLayout';
+import {useInstallPrompt} from './useInstallPrompt';
 import './pwa.css';
 
-interface InstallPrompt extends Event {
-  prompt(): Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
-}
-
-export default function InstallPage() {
-  const [prompt, setPrompt] = useState<InstallPrompt | null>(null);
-  const [installed, setInstalled] = useState(
-    () =>
-      window.matchMedia('(display-mode: standalone)').matches ||
-      (navigator as Navigator & { standalone?: boolean }).standalone === true,
-  );
+export default function InstallPage({embedded=false}:{embedded?:boolean}){
+  const {installed,available,install:requestInstall}=useInstallPrompt();
+  const deviceId=useId(),safetyId=useId(),selectId=useId();
   const [error, setError] = useState('');
   const [device, setDevice] = useState(() =>
     /iPhone|iPad|iPod/i.test(navigator.userAgent)
@@ -24,56 +16,34 @@ export default function InstallPage() {
         : 'desktop',
   );
 
-  useEffect(() => {
-    const available = (event: Event) => {
-      event.preventDefault();
-      setPrompt(event as InstallPrompt);
-    };
-    const complete = () => {
-      setInstalled(true);
-      setPrompt(null);
-    };
-    window.addEventListener('beforeinstallprompt', available);
-    window.addEventListener('appinstalled', complete);
-    return () => {
-      window.removeEventListener('beforeinstallprompt', available);
-      window.removeEventListener('appinstalled', complete);
-    };
-  }, []);
-
   async function install() {
-    const current = prompt;
-    if (!current) return;
-    setPrompt(null);
     setError('');
     try {
-      await current.prompt();
-      await current.userChoice;
+      await requestInstall();
     } catch {
       setError('Use o menu do navegador e siga as instruções abaixo.');
     }
   }
 
-  return (
-    <div className="public-site pwa-shell">
-      <SiteHeader />
-      <main id="conteudo" className="pwa-main">
+  const Page=embedded?'section':'main';
+  const content=(
+      <Page id={embedded?undefined:'conteudo'} className="pwa-main">
         <header className="pwa-hero">
           <p className="eyebrow">Escritório JN</p>
-          <h1>Instalar aplicativo</h1>
+          {embedded?<h2>Instalar aplicativo</h2>:<h1>Instalar aplicativo</h1>}
           <p>Acesse pelo ícone na sua tela inicial, com a mesma conta e proteção.</p>
         </header>
 
         <div className="pwa-sections">
-          <section className="pwa-card" aria-labelledby="pwa-device">
-            <h2 id="pwa-device">
+          <section className="pwa-card" aria-labelledby={deviceId}>
+            <h2 id={deviceId}>
               <Smartphone size={19} aria-hidden="true" />
               No seu dispositivo
             </h2>
             <div className="pwa-device">
-              <label htmlFor="pwa-device-select">Dispositivo</label>
+              <label htmlFor={selectId}>Dispositivo</label>
               <select
-                id="pwa-device-select"
+                id={selectId}
                 value={device}
                 onChange={event => setDevice(event.target.value)}
               >
@@ -88,7 +58,7 @@ export default function InstallPage() {
                 O aplicativo já está aberto no modo instalado.
               </p>
             ) : (
-              prompt && (
+              available && (
                 <button
                   type="button"
                   className="primary-button button button-primary"
@@ -139,8 +109,8 @@ export default function InstallPage() {
             <p className="pwa-note">Com internet e endereço seguro (HTTPS), instale e depois feche e reabra pelo ícone.</p>
           </section>
 
-          <section className="pwa-card" aria-labelledby="pwa-safety">
-            <h2 id="pwa-safety">
+          <section className="pwa-card" aria-labelledby={safetyId}>
+            <h2 id={safetyId}>
               <ShieldCheck size={19} aria-hidden="true" />
               Conexão e atualizações
             </h2>
@@ -152,8 +122,7 @@ export default function InstallPage() {
             </ul>
           </section>
         </div>
-      </main>
-      <SiteFooter />
-    </div>
+      </Page>
   );
+  return embedded?content:<div className="public-site pwa-shell"><SiteHeader/>{content}<SiteFooter/></div>;
 }
