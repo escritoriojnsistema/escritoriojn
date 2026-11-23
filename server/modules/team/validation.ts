@@ -1,6 +1,6 @@
 import { uuidPattern } from '../../../shared/access.js';
 import { validCpf } from '../../../shared/identifiers.js';
-import { assignablePermissions, teamRoles } from '../../../shared/team.js';
+import { assignablePermissions, categoryAccessModes, teamRoles } from '../../../shared/team.js';
 
 export const uuid=(value:unknown):value is string=>typeof value==='string' && uuidPattern.test(value);
 export const record=(value:unknown):value is Record<string,unknown>=>!!value && typeof value==='object' && !Array.isArray(value);
@@ -13,6 +13,8 @@ export function list(value:unknown,allowed:readonly string[]) {
     && value.every(item=>typeof item==='string' && allowed.includes(item));
 }
 export const permissions=(value:unknown)=>list(value,assignablePermissions) && (value as string[]).includes('foundation.access');
+export const categoryAccess=(value:unknown)=>record(value)&&Object.keys(value).length<=500&&
+  Object.entries(value).every(([id,mode])=>uuid(id)&&id===id.toLowerCase()&&categoryAccessModes.some(option=>option===mode));
 export function fullName(value:unknown) {
   return typeof value==='string' && value.trim().length<=120
     && /^[\p{L}][\p{L}\p{M}'’-]+(?:\s+[\p{L}][\p{L}\p{M}'’-]*)+$/u.test(value.trim());

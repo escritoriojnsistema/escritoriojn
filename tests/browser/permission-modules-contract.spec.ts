@@ -68,3 +68,39 @@ test('roster filters and pagination confirm before discarding access draft',asyn
 test('legacy administrative grant can be removed from employee without enabling new grants',async({page})=>{
  await page.setViewportSize({width:1440,height:900});await session(page);const data=roster();if(data.kind!=='members')throw Error();data.scope={...scope,allowed_permissions:[...assignablePermissions]};const member=data.items[2];member.permissions=['foundation.access','categories.manage'];member.direct_permissions=[...member.permissions];await dashboard(page,data);await page.goto('/equipe');await page.getByRole('button',{name:`Editar acesso de ${member.name}`,exact:true}).click();await page.getByLabel('Pesquisar módulo ou permissão').fill('categorias');const check=page.locator('[id="member-categories.manage"]');await expect(check).toBeChecked();await check.uncheck();await expect(check).toBeDisabled();await expect(check).not.toBeChecked();
 });
+
+test('editar acesso por categoria salva escopo e mostra superadministrador habilitado',async({page})=>{
+ const data=roster();
+ if(data.kind!=='members')throw Error();
+ const root='66666666-6666-4666-8666-666666666661',folder='66666666-6666-4666-8666-666666666662';
+ data.scope={...scope,allowed_permissions:[...assignablePermissions]};
+ data.category_catalog=[
+  {id:root,name:'Rural',parent_name:null,execution_level:1},
+  {id:folder,name:'CAR',parent_name:'Rural',execution_level:1},
+ ];
+ data.items[0].category_access={};
+ const employee=data.items[2];
+ employee.category_access={[folder]:'read'};
+ await session(page);await dashboard(page,data);
+ let saved:unknown;
+ await page.route(`**/api/team/members/${employee.id}`,r=>{
+   saved=r.request().postDataJSON();return r.fulfill({json:{data:{ok:true}}});
+ });
+ await page.goto('/equipe');
+ await page.getByRole('button',{name:'Editar acesso de Pessoa da Equipe 1',exact:true}).click();
+ await expect(page.getByLabel('Acesso a Rural',{exact:true})).toHaveValue('edit');
+ await expect(page.getByLabel('Acesso a Rural',{exact:true})).toBeDisabled();
+ await page.getByRole('button',{name:/^Categorias e formulários/}).click();
+ await expect(page.getByRole('checkbox',{name:/^Gerenciar categorias/})).toBeChecked();
+ await expect(page.getByRole('checkbox',{name:/^Gerenciar categorias/})).toBeDisabled();
+ await page.getByRole('button',{name:'Fechar',exact:true}).click();
+ await page.getByRole('button',{name:`Editar acesso de ${employee.name}`,exact:true}).click();
+ await expect(page.getByLabel('Acesso a Rural › CAR',{exact:true})).toHaveValue('read');
+ await page.getByLabel('Acesso a Rural',{exact:true}).selectOption('denied');
+ await page.getByLabel('Acesso a Rural › CAR',{exact:true}).selectOption('edit');
+ await page.getByLabel('Pesquisar módulo ou permissão').fill('previdenciário');
+ await expect(page.getByRole('checkbox',{name:/^Conduzir análise/})).toHaveCount(0);
+ await page.getByRole('button',{name:'Salvar acesso',exact:true}).click();
+ await expect.poll(()=>saved).toMatchObject({permissions_source:'direct-v2',permissions:['foundation.access'],
+   category_access:{[root]:'denied',[folder]:'edit'},expected_category_access:{[folder]:'read'}});
+});

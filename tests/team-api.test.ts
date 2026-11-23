@@ -85,6 +85,23 @@ test('API de equipe conserva autorização e resultado real do envio', async t =
       assert.equal(failed.status,503);assert.ok(!JSON.stringify(await failed.json()).includes('private SQL'));
       mode='valid';
     });
+    await t.test('salva autorização por categoria pela RPC autenticada e valida o escopo antes dela',async()=>{
+      const member={office_id:office,role_code:'employee',active:true,permissions:['foundation.access'],
+        permissions_source:'direct-v2',category_access:{[id]:'read'},expected_category_access:{}};
+      calls.length=0;
+      for(const category_access of [{[id]:'owner'},{'invalid':'edit'},[{id,mode:'read'}]]){
+        const invalid=await send(`/members/${id}`,{...member,category_access},'PATCH');
+        assert.equal(invalid.status,422);
+      }
+      assert.ok(calls.every(call=>call.path==='/auth/v1/user'));
+      const saved=await send(`/members/${id}`,member,'PATCH');
+      assert.equal(saved.status,200);
+      const call=calls.at(-1)!;
+      assert.equal(call.path,'/rest/v1/rpc/team_set_member_category_access');
+      assert.deepEqual(call.body.p_category_access,{[id]:'read'});
+      assert.deepEqual(call.body.p_expected_category_access,{});
+      assert.equal(call.authorization,headers.Authorization);
+    });
     await t.test('envio incerto preserva convite sem prometer e-mail enviado',async()=>{
       mode='mail-failed';const response=await send('/invitations',invitation);
       assert.equal(response.status,201);const result=await response.json();assert.equal(result.data.id,id);assert.equal(result.data.delivery,'pending');

@@ -5,6 +5,7 @@ export type ServiceCategory = {
   name: string;
   parent_id?: string;
   parent_name?: string;
+  access_mode?: import('./team.js').CategoryAccessMode;
   revision: number;
   execution_level?: 1 | 2 | 3 | null;
   is_documents: boolean;
