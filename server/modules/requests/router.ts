@@ -2,7 +2,7 @@ import {Router,json,type Response} from 'express';
 import {randomUUID} from 'node:crypto';
 import {authenticatedClient} from '../auth/client.js';
 import {errorResponse} from '../../errors.js';
-import {fields,uuid} from '../team/validation.js';
+import {fields,record,uuid} from '../team/validation.js';
 import {positive,requestStatus,requestText,validCreateRequest,validRequestMutation} from './validation.js';
 import {requestPage,requestDetail,requestOptions,requestMutationResult} from './dto.js';
 import {publicRequestStatusLabels} from '../../../shared/requests.js';
@@ -32,7 +32,12 @@ requestsRouter.post('/search',async(req,res)=>{
 });
 requestsRouter.post('/options',async(req,res)=>{
  const b:unknown=req.body;
- if(Object.keys(req.query).length||!fields(b,['office_id','kind','query','page','size'])||!uuid(b.office_id)||!['services','customers','assignees'].includes(String(b.kind))||!requestText(b.query,120,0)||!positive(b.page)||![3,5].includes(Number(b.size))||typeof b.size!=='number'){invalid(res);return;}
+ if(Object.keys(req.query).length||!fields(b,record(b)&&Object.hasOwn(b,'category_id')?['office_id','kind','query','page','size','category_id']:['office_id','kind','query','page','size'])||!uuid(b.office_id)||!['services','customers','assignees'].includes(String(b.kind))||!requestText(b.query,120,0)||!positive(b.page)||![3,5].includes(Number(b.size))||typeof b.size!=='number'){invalid(res);return;}
+ if(Object.hasOwn(b,'category_id')){
+  if(b.kind!=='services'||!uuid(b.category_id)){invalid(res);return;}
+  await rpc(res,'request_service_options_by_category',{p_office_id:b.office_id,p_category_id:b.category_id,p_query:b.query.trim(),p_page:b.page,p_size:b.size},'options');
+  return;
+ }
  await rpc(res,'request_options',{p_office_id:b.office_id,p_kind:b.kind,p_query:b.query.trim(),p_page:b.page,p_size:b.size},'options');
 });
 requestsRouter.post('/',async(req,res)=>{

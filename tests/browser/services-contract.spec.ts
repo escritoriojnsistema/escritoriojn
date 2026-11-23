@@ -142,3 +142,22 @@ for(const width of [360,1440])test(`vínculo paginado: sexto modelo, busca e ret
  expect(attempts[2].idempotency_key).not.toBe(attempts[0].idempotency_key);expect(attempts[2].template_id).toBe(models[4].id);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
+
+test('serviço salva o ID da subpasta escolhida depois da categoria',async({page})=>{
+  await setup(page);
+  const root='44444444-4444-4444-8444-444444444444',child='55555555-5555-4555-8555-555555555555';
+  await page.route('**/api/categories/state',r=>r.fulfill({json:{data:{can_manage:true,items:[
+    {id:root,name:'Rural',revision:1,is_documents:false},
+    {id:child,parent_id:root,parent_name:'Rural',name:'CCIR',revision:1,is_documents:false},
+  ]}}}));
+  await page.goto('/servicos');
+  await page.getByRole('button',{name:'Novo serviço',exact:true}).click();
+  await page.getByLabel('Nome do serviço',{exact:true}).fill('Assistência com CCIR');
+  await page.getByLabel('Código',{exact:true}).fill('CCIR-TESTE');
+  await page.getByLabel('Categoria do serviço',{exact:true}).selectOption(root);
+  await expect(page.getByRole('button',{name:'Cadastrar serviço',exact:true})).toBeDisabled();
+  await page.getByLabel('Subpasta',{exact:true}).selectOption(child);
+  const sent=page.waitForRequest(r=>r.url().endsWith('/api/services')&&r.method()==='POST');
+  await page.getByRole('button',{name:'Cadastrar serviço',exact:true}).click();
+  expect((await sent).postDataJSON().service).toMatchObject({category_id:child,category:'CCIR'});
+});
