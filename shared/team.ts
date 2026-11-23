@@ -40,6 +40,10 @@ export type TeamScope = {
   role_code: TeamRole; allowed_roles: TeamRole[]; allowed_permissions: TeamPermission[];
   can_create_owner: boolean; can_delegate: boolean;
 };
+export const categoryAccessModes = ['read','edit','denied'] as const;
+export type CategoryAccessMode = typeof categoryAccessModes[number];
+export type CategoryAccessGrants = Record<string,CategoryAccessMode>;
+export type CategoryAccessEntry = {id:string;name:string;parent_name:string|null;execution_level:1|2|3|null};
 export type TeamDelegation = {
   id: string; allowed_roles: TeamRole[]; allowed_permissions: TeamPermission[];
   can_create_owner: boolean; expires_at: string; revoked_at: string | null; active: boolean;
@@ -48,6 +52,7 @@ export type TeamMember = {
   id: string; user_id: string; name: string | null; email: string; role_code: TeamRole;
   active: boolean; access_active: boolean; permissions: string[]; direct_permissions?:string[]; cpf_masked: string | null;
   can_edit: boolean; archived?: boolean; protected_owner: boolean; delegation: TeamDelegation | null;
+  category_access?: CategoryAccessGrants | null;
 };
 export type DeliveryStatus = 'pending' | 'sending' | 'sent' | 'failed';
 export type TeamInvitation = {
@@ -55,7 +60,7 @@ export type TeamInvitation = {
   status: 'pending' | 'accepted' | 'revoked' | 'expired' | 'blocked';
   delivery_status: DeliveryStatus; expires_at: string; created_at: string; cpf_masked: string;
 };
-type DashboardBase = { scope: TeamScope; total: number; page: number; page_size: number; counts: { members: number; invitations: number } };
+type DashboardBase = { scope: TeamScope; total: number; page: number; page_size: number; counts: { members: number; invitations: number }; category_catalog?:CategoryAccessEntry[] | null };
 export type TeamDashboard = DashboardBase & (
   { kind: 'members'; items: TeamMember[] } | { kind: 'invitations'; items: TeamInvitation[] }
 );
@@ -70,6 +75,7 @@ export type CreateInvitation = {
 };
 export type SetMember = {
   office_id: string; role_code: TeamRole; active: boolean; permissions: TeamPermission[];
+  category_access?: CategoryAccessGrants; expected_category_access?: CategoryAccessGrants;
 };
 export type SetDelegation = {
   office_id: string; allowed_roles: TeamRole[]; allowed_permissions: TeamPermission[];

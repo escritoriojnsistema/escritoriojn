@@ -17,8 +17,10 @@ export function RequestForm({office,client,permissions,roleCode,busy,onSave,onFa
    if(controller.signal.aborted)return;const failure=categoriesError(cause);setError(failure.message);if(failure.status===401||failure.status===403)failureRef.current(new RequestsError(failure.status));
   });return()=>controller.abort();
  },[office,client,retry]);
- const selected=categories.find(item=>item.id===category);
- const enabled=!!selected&&(roleCode==='owner'||selected.execution_level===3||selected.execution_level===1&&permissions.includes('requests.level1')||selected.execution_level===2&&permissions.includes('requests.level2'));
+ const generalOpening=permissions.includes('requests.create');
+ const allowed=new Set(categories.filter(item=>item.access_mode!=='denied'&&(generalOpening||item.access_mode==='read'||item.access_mode==='edit')).map(item=>item.id));
+ const selected=categories.find(item=>item.id===category&&allowed.has(item.id));
+ const enabled=!!selected&&(selected.access_mode==='edit'||selected.access_mode!=='read'&&(roleCode==='owner'||selected.execution_level===3||selected.execution_level===1&&permissions.includes('requests.level1')||selected.execution_level===2&&permissions.includes('requests.level2')));
  const collect=!!selected&&!enabled;
  function submit(event:FormEvent){
   event.preventDefault();if(busy)return;setError('');
@@ -33,7 +35,7 @@ export function RequestForm({office,client,permissions,roleCode,busy,onSave,onFa
  return <form className="request-form" onSubmit={submit} noValidate>
   {error&&<p role="alert" className="form-feedback error">{error}</p>}
   <fieldset disabled={busy}>
-   <CategorySelection categories={categories} value={category} rootId={root} label="Categoria da solicitação" showLevel
+   <CategorySelection categories={categories} value={category} rootId={root} label="Categoria da solicitação" showLevel allowedIds={allowed}
     onChange={(id,parent)=>{setRoot(parent);setCategory(id);setItems([]);setAssignee(undefined);}}/>
    {!categories.length&&<button type="button" className="team-text-button" onClick={()=>setRetry(n=>n+1)}>Atualizar categorias</button>}
    {selected&&<p className="customer-note">{collect?'Pré-atendimento: colete os dados, notas e anexos e encaminhe à equipe habilitada. A execução depende da habilitação vigente.':'Atendimento: sua habilitação permite executar esta categoria. A autorização será conferida na abertura.'}</p>}
@@ -45,7 +47,7 @@ export function RequestForm({office,client,permissions,roleCode,busy,onSave,onFa
    {enabled&&<details className="service-section"><summary>Serviços e dados do atendimento</summary><p className="customer-note">Serviços opcionais nesta abertura. Selecione somente serviços da categoria escolhida; o banco confere a correspondência.</p><RequestItems key={selected?.id} categoryId={selected?.id} office={office} items={items} permissions={permissions} busy={busy} onChange={setItems} onFailure={onFailure}/></details>}
    <details className="service-section"><summary>Pessoa do atendimento</summary><RequestPicker office={office} kind="customers" label="pessoa" value={customer} busy={busy} onSelect={setCustomer} onFailure={onFailure}/>{customer&&<button type="button" className="team-text-button" onClick={()=>setCustomer(undefined)}>Remover pessoa</button>}<p className="customer-note">Obrigatória conforme a política dos serviços selecionados.</p></details>
    <details className="service-section"><summary>Responsável, prioridade e nota interna</summary>
-    {enabled&&<><p className="customer-note">Sem outro responsável selecionado, o atendimento fica atribuído a você.</p><RequestPicker office={office} kind="assignees" label="responsável" defaultSelf value={assignee} busy={busy} onSelect={setAssignee} onFailure={onFailure}/>{assignee&&!assignee.is_self&&<button type="button" className="team-text-button" onClick={()=>setAssignee(undefined)}>Atribuir a mim</button>}</>}
+    {enabled&&generalOpening&&<><p className="customer-note">Sem outro responsável selecionado, o atendimento fica atribuído a você.</p><RequestPicker office={office} kind="assignees" label="responsável" defaultSelf value={assignee} busy={busy} onSelect={setAssignee} onFailure={onFailure}/>{assignee&&!assignee.is_self&&<button type="button" className="team-text-button" onClick={()=>setAssignee(undefined)}>Atribuir a mim</button>}</>}
     <div className="request-grid"><label className="team-field">Prioridade<select value={priority} onChange={event=>setPriority(event.target.value as typeof priority)}><option value="normal">Normal</option><option value="urgent">Urgente</option></select></label>{priority==='urgent'&&<label className="team-field">Motivo da urgência<input maxLength={500} value={reason} onChange={event=>setReason(event.target.value)}/></label>}<label className="team-field request-wide">Nota interna<textarea rows={2} maxLength={2000} value={note} onChange={event=>setNote(event.target.value)}/></label></div>
    </details>
   </fieldset>

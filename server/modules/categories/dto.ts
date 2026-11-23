@@ -1,6 +1,7 @@
 import type { CategoriesState, ServiceCategory } from '../../../shared/categories.js';
 import { validCategoryName } from '../../../shared/categories.js';
 import { record, uuid } from '../team/validation.js';
+import { categoryAccessModes, type CategoryAccessMode } from '../../../shared/team.js';
 
 export function categoriesState(value: unknown): CategoriesState {
   if (!record(value) || !Array.isArray(value.items) || typeof value.can_manage !== 'boolean') throw Error('Invalid categories state');
@@ -11,6 +12,10 @@ export function categoriesState(value: unknown): CategoriesState {
       || typeof item.is_documents !== 'boolean') throw Error('Invalid category');
     ids.add(item.id);
     const category: ServiceCategory = { id: item.id, name: item.name, revision: Number(item.revision), is_documents: item.is_documents };
+    if (item.access_mode!=null) {
+      if(!categoryAccessModes.some(mode=>mode===item.access_mode))throw Error('Invalid category access mode');
+      category.access_mode=item.access_mode as CategoryAccessMode;
+    }
     if (item.parent_id!=null) {
       if (!uuid(item.parent_id)||item.parent_id===item.id||!validCategoryName(item.parent_name)) throw Error('Invalid category parent');
       category.parent_id=item.parent_id;

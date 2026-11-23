@@ -19,7 +19,9 @@ teamRouter.use((req,res,next)=>{
     errorResponse(res,415,'UNSUPPORTED_MEDIA_TYPE','Envie um corpo JSON.');return;
   }
   next();
-},json({limit:'4kb'}));
+},(req,res,next)=>(req.method==='PATCH'&&/^\/members\//.test(req.path)?memberJson:teamJson)(req,res,next));
+const teamJson=json({limit:'4kb'});
+const memberJson=json({limit:'64kb'});
 type Identity=NonNullable<Awaited<ReturnType<typeof authenticatedClient>>>;
 const identity=(res:Response)=>res.locals.teamAuth as Identity;
 const invalid=(res:Response)=>errorResponse(res,422,'TEAM_VALIDATION','Confira os dados da solicitação.');
@@ -98,9 +100,15 @@ teamRouter.post('/invitations/:id/revoke',async(req,res)=>{
 teamRouter.patch('/members/:id',async(req,res)=>{
   const b:unknown=req.body;
   if(emptyQuery(req)&&v.uuid(req.params.id)&&v.fields(b,['office_id','role_code','active','permissions'])&&v.uuid(b.office_id)&&v.role(b.role_code)&&typeof b.active==='boolean'&&v.permissions(b.permissions)){errorResponse(res,409,'TEAM_STALE_FORM','Atualize a equipe antes de salvar permissões. O formulário antigo não distingue direitos permanentes e delegados.');return;}
-  if(!emptyQuery(req) || !v.uuid(req.params.id) || !v.fields(b,['office_id','role_code','active','permissions','permissions_source']) || b.permissions_source!=='direct-v1' || !v.uuid(b.office_id)
+  const scoped=v.record(b)&&b.permissions_source==='direct-v2';
+  const keys=['office_id','role_code','active','permissions','permissions_source'];
+  if(!emptyQuery(req) || !v.uuid(req.params.id) || !v.fields(b,scoped?[...keys,'category_access','expected_category_access']:keys) || (b.permissions_source!=='direct-v1'&&!scoped) || !v.uuid(b.office_id)
     || !v.role(b.role_code) || typeof b.active!=='boolean' || !v.permissions(b.permissions)) {invalid(res);return;}
-  const data=await rpc(res,'team_set_member',{p_office_id:b.office_id,p_membership_id:req.params.id,p_role_code:b.role_code,p_active:b.active,p_permissions:b.permissions,p_request_id:randomUUID()});
+  if(scoped&&(!v.categoryAccess(b.category_access)||!v.categoryAccess(b.expected_category_access))){invalid(res);return;}
+  const data=await rpc(res,scoped?'team_set_member_category_access':'team_set_member',{
+    p_office_id:b.office_id,p_membership_id:req.params.id,p_role_code:b.role_code,p_active:b.active,p_permissions:b.permissions,p_request_id:randomUUID(),
+    ...(scoped?{p_category_access:b.category_access,p_expected_category_access:b.expected_category_access}:{}),
+  });
   if(data)res.json({data});
 });
 teamRouter.put('/delegations/:id',async(req,res)=>{

@@ -17,7 +17,7 @@ export const auditActionNames: Record<string, string> = {
  'services.archived':'Serviço excluído do catálogo', 'services.created':'Serviço cadastrado', 'services.version_published':'Versão de serviço publicada',
  'foundation.owner_provisioned': 'Proprietário provisionado', 'auth.client_registered': 'Cliente cadastrado', 'auth.registration_configured': 'Cadastro público configurado',
  'auth.customer_registration_received': 'Cadastro público recebido',
- 'team.member_updated': 'Acesso atualizado', 'team.invitation_created': 'Convite criado', 'team.invitation_sent': 'Convite enviado',
+ 'team.member_updated': 'Acesso atualizado', 'team.member_category_access_updated': 'Acesso por categoria atualizado', 'team.invitation_created': 'Convite criado', 'team.invitation_sent': 'Convite enviado',
  'team.invitation_delivery_claimed': 'Envio de convite iniciado', 'team.invitation_delivery_failed': 'Falha no envio do convite',
  'team.invitation_revoked': 'Convite revogado', 'team.invitation_verified': 'Identidade do convite conferida', 'team.invitation_accepted': 'Convite aceito',
  'team.delegation_granted': 'Gestão delegada', 'team.delegation_revoked': 'Delegação revogada',

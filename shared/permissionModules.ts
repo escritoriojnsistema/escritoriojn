@@ -2,7 +2,7 @@ import {assignablePermissions,type TeamPermission} from './team.js';
 const definitions=[
  ['general','Acesso geral e configurações',['foundation.','settings.','access.']],
  ['customers','Clientes',['customers.']],['services','Serviços',['services.']],
- ['requests','Solicitações e atendimentos',['requests.','categories.','quick.']],
+ ['requests','Solicitações e atendimentos',['requests.','quick.']],['categories','Categorias e formulários',['categories.']],
  ['attachments','Anexos dos atendimentos',['files.']],['checklists','Checklists e pendências',['checklists.']],
  ['corrections','Correções cadastrais',['accounts.corrections.']],['documents','Documentos',['documents.']],
  ['templates','Modelos documentais',['templates.']],['charges','Cobranças',['charges.']],
@@ -12,8 +12,10 @@ const definitions=[
 ] as const;
 export function permissionAction(p:TeamPermission){if(/\.read(_all)?$/.test(p))return 'Consulta';if(/\.(create|open|issue)$/.test(p))return 'Cadastro e emissão';if(/\.(update|apply|adjust)$/.test(p)||p.startsWith('rural.')&&p.endsWith('.manage'))return 'Edição e vínculos';if(/\.(approve|validate|review|decide|verify)$/.test(p))return 'Conferência e aprovação';if(p.endsWith('.manage'))return 'Configuração e gestão';return 'Ações especiais';}
 export const permissionModules=definitions.map(([id,label,prefixes])=>({id,label,permissions:assignablePermissions.filter(p=>prefixes.some(prefix=>p.startsWith(prefix))).sort((a,b)=>permissionAction(a).localeCompare(permissionAction(b),'pt-BR')||a.localeCompare(b))}));
+export const legacyCategoryPermissions = new Set<TeamPermission>(['specialized.read','specialized.manage','specialized.conduct']);
 export const administrativePermissions=new Set<TeamPermission>(['access.manage','categories.manage','requests.archives.manage','requests.reclaim','requests.delete','customers.merge','templates.approve','documents.deliveries.revoke','finance.reports.manage','cash.closure.approve','cash.closure.adjust','payments.manual.approve','payments.providers.manage','charges.discount.approve','audit.archives','audit.manage']);
 export const permissionDependencies:Partial<Record<TeamPermission,TeamPermission[]>>={
+ 'categories.manage':['settings.access'],
  'specialized.read':['requests.read','customers.read','checklists.read'],'specialized.manage':['specialized.read'],'specialized.conduct':['specialized.read','specialized.manage'],'specialized.sensitive':['specialized.read','files.read'],
  'rural.read':['customers.read'],'rural.read_all':['rural.read','customers.read_all'],'rural.create':['rural.read','customers.create'],'rural.parties.manage':['rural.read','customers.update'],'rural.records.manage':['rural.read','customers.update','requests.read','files.read'],
  'requests.create':['requests.read'],'requests.update':['requests.read'],'requests.transfer':['requests.read'],'requests.cancel':['requests.read'],'requests.delete':['requests.read'],'requests.read_all':['requests.read'],'requests.reclaim':['requests.read'],
