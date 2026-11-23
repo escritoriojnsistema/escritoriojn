@@ -39,3 +39,28 @@ test('category: existing service attachment checklist and upload remain accessib
 test('category: withdrawal during file binding reconciles terminal state without navigation deadlock',async({page})=>{const s=await setup(page);await prepare(page);await page.getByLabel('Área do pedido').selectOption('files');await page.getByLabel('Anexar Documento de identidade',{exact:true}).setInputFiles({name:'identidade.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.4\nfixture\n%%EOF')});s.statuses.push(409);s.onCommandFailure=()=>{s.state.can_edit=false;s.state.can_submit=false;};await page.getByRole('button',{name:'Enviar Documento de identidade',exact:true}).click();await expect(page.getByRole('button',{name:'Ocultar preparação antiga',exact:true})).toBeEnabled();await expect(page.getByRole('button',{name:'Repetir a mesma tentativa',exact:true})).toHaveCount(0);});
 test('category: lost opening followed by publication conflict resumes existing protocol',async({page})=>{const s=await setup(page);s.statuses.push(503,409);await choose(page);await page.getByLabel('Área do imóvel *',{exact:true}).fill('12.5');await page.getByRole('button',{name:'Conferir pedido e anexos',exact:true}).click();await expect(page.getByText(/Resultado não confirmado/).first()).toBeVisible();s.state.can_edit=false;s.state.can_submit=false;await page.getByRole('button',{name:'Conferir pedido e anexos',exact:true}).click();await expect(page.getByText('AT-FICTICIO · Rural fictício',{exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'Ocultar preparação antiga',exact:true})).toBeEnabled();expect(s.opens[0]).toEqual(s.opens[1]);});
 test('category: service chooser return leads back to category selection',async({page})=>{const s=await setup(page);s.forms[0]={...s.forms[0],enabled:false,has_services:true,fields:[],documents:[]};await page.getByLabel('Categoria da solicitação',{exact:true}).selectOption(cid);await page.getByRole('button',{name:'Voltar às categorias',exact:true}).click();await expect(page.getByLabel('Categoria da solicitação',{exact:true})).toHaveValue('');await expect(page.getByLabel('Pedido por serviço')).toHaveCount(0);});
+
+test('cliente escolhe subpasta e vê somente seus campos e anexos',async({page})=>{
+ const s=await setup(page);
+ const root='88888888-8888-4888-8888-888888888888';
+ await page.route('**/api/categories/state',r=>r.fulfill({json:{data:{can_manage:false,items:[
+  {id:root,name:'Rural',revision:1,is_documents:false,execution_level:3},
+  {id:cid,parent_id:root,parent_name:'Rural',name:'Cadastro rural',revision:1,is_documents:false,execution_level:2},
+  {id:other,parent_id:root,parent_name:'Rural',name:'Regularização',revision:1,is_documents:false,execution_level:1},
+ ]}}}));
+ await page.reload();
+ await page.getByRole('button',{name:'Nova solicitação',exact:true}).click();
+ await page.getByLabel('Categoria da solicitação',{exact:true}).selectOption(root);
+ await expect(page.getByLabel('Área do imóvel *',{exact:true})).toHaveCount(0);
+ await page.getByLabel('Subpasta',{exact:true}).selectOption(other);
+ await expect(page.getByLabel('Finalidade jurídica *',{exact:true})).toBeVisible();
+ await expect(page.getByLabel(/^Documento de identidade \*/)).toHaveCount(0);
+ await page.getByLabel('Subpasta',{exact:true}).selectOption(cid);
+ await expect(page.getByLabel('Área do imóvel *',{exact:true})).toBeVisible();
+ await expect(page.getByLabel(/^Documento de identidade \*/)).toBeVisible();
+ await expect(page.getByLabel('Finalidade jurídica *',{exact:true})).toHaveCount(0);
+ await page.getByLabel('Área do imóvel *',{exact:true}).fill('12.5');
+ await page.getByRole('button',{name:'Conferir pedido e anexos',exact:true}).click();
+ await expect.poll(()=>s.opens.length).toBe(1);
+ expect(s.opens[0]).toMatchObject({category_id:cid,answers:{area:'12.5'}});
+});

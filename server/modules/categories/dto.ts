@@ -11,6 +11,11 @@ export function categoriesState(value: unknown): CategoriesState {
       || typeof item.is_documents !== 'boolean') throw Error('Invalid category');
     ids.add(item.id);
     const category: ServiceCategory = { id: item.id, name: item.name, revision: Number(item.revision), is_documents: item.is_documents };
+    if (item.parent_id!=null) {
+      if (!uuid(item.parent_id)||item.parent_id===item.id||!validCategoryName(item.parent_name)) throw Error('Invalid category parent');
+      category.parent_id=item.parent_id;
+      category.parent_name=item.parent_name;
+    }
     if (item.execution_level !== undefined) {
       if(item.execution_level !== null && ![1,2,3].includes(Number(item.execution_level))) throw Error('Invalid category level');
       category.execution_level=item.execution_level as 1|2|3|null;

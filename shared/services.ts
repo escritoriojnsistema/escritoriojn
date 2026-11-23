@@ -1,14 +1,16 @@
+import {uuidPattern} from './access.js';
+
 export const servicePermissions = ['services.read','services.manage','services.perform','services.approve','services.discount','services.surcharge','services.courtesy','services.price_override'] as const;
 export const executionCapabilities = ['services.perform','services.approve'] as const;
 export type ServiceField = { key: string; label: string; type: 'text' | 'number' | 'date'; required: boolean };
 export type ServiceInput = {
-  code: string; name: string; category: string; unit: string; price_cents: number; effective_from: string | null;
+  code: string; name: string; category: string; category_id?: string; unit: string; price_cents: number; effective_from: string | null;
   person_required: boolean; participants_min: number; approval_required: boolean; signature_required: boolean; settlement_required: boolean;
   required_capabilities: string[]; fields: ServiceField[]; checklist: string[]; quantity_min: number; quantity_max: number;
   max_discount_bps: number; max_surcharge_bps: number; allow_courtesy: boolean; allow_price_override: boolean;
 };
 export const serviceKeys = ['code','name','category','unit','price_cents','effective_from','person_required','participants_min','approval_required','signature_required','settlement_required','required_capabilities','fields','checklist','quantity_min','quantity_max','max_discount_bps','max_surcharge_bps','allow_courtesy','allow_price_override'] as const;
-export type ServiceCategoryMetadata = { category_id?: string; category_name?: string };
+export type ServiceCategoryMetadata = { category_id?: string; category_name?: string; category_parent_name?: string };
 export type ServiceVersion = ServiceInput & ServiceCategoryMetadata & { id: string; number: number; created_at: string; created_by: string; reason: string };
 export type ServiceSummary = ServiceCategoryMetadata & { id: string; code: string; name: string; category: string; unit: string; price_cents: number; version: number; effective_from: string };
 export type ServicePage = { items: ServiceSummary[]; total: number; page: number; page_size: number };
@@ -24,7 +26,9 @@ const exact=(v:unknown,keys:readonly string[]):v is Record<string,unknown>=>obje
 const text=(v:unknown,max:number)=>typeof v==='string' && v.trim().length>=1 && Array.from(v).length<=max && !/[\u0000-\u001f\u007f]/.test(v);
 const integer=(v:unknown,min:number,max:number)=>Number.isSafeInteger(v) && Number(v)>=min && Number(v)<=max;
 export function validService(value:unknown):value is ServiceInput {
-  if(!exact(value,serviceKeys) || typeof value.code!=='string' || !/^[A-Z0-9][A-Z0-9_-]{1,31}$/.test(value.code)
+  if(!object(value)||!exact(value,Object.hasOwn(value,'category_id')?[...serviceKeys,'category_id']:serviceKeys)
+    || (Object.hasOwn(value,'category_id')&&(typeof value.category_id!=='string'||!uuidPattern.test(value.category_id)))
+    || typeof value.code!=='string' || !/^[A-Z0-9][A-Z0-9_-]{1,31}$/.test(value.code)
     || !text(value.name,120) || !text(value.category,60) || !text(value.unit,30) || !integer(value.price_cents,0,100_000_000)
     || !(value.effective_from===null || (typeof value.effective_from==='string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(value.effective_from) && Number.isFinite(Date.parse(value.effective_from)) && new Date(value.effective_from).toISOString()===value.effective_from))
     || !['person_required','approval_required','signature_required','settlement_required','allow_courtesy','allow_price_override'].every(k=>typeof value[k]==='boolean')

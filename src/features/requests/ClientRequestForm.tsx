@@ -1,3 +1,4 @@
+import {CategorySelection} from '../settings/CategorySelection';
 import {CategoryRequestForm} from '../categoryIntake/CategoryRequestForm';
 import {IntakeCompletion33} from '../portalIntake/IntakeCompletion33';
 import {peekIntakeNonce33,clearIntakeNonce33} from '../portalIntake/nonce';
@@ -13,7 +14,7 @@ import {categoriesApi,CategoriesError} from '../settings/categoriesApi';
 import {RequestsError} from './api';
 export function ClientRequestForm({office,busy,onSave,onFailure,onPendingChange}:{office:string;busy:boolean;onSave:(v:CreateRequestInput)=>void;onFailure:(e:RequestsError)=>void;onPendingChange?:(pending:boolean)=>void}){
  const auth=useAuth(),[resume,setResume]=useState<DocumentBookingResult>(),[resumeError,setResumeError]=useState(false),[resumeTick,setResumeTick]=useState(0);
- const [categories,setCategories]=useState<ServiceCategory[]>([]),[category,setCategory]=useState(''),[error,setError]=useState(''),[tick,setTick]=useState(0),[nested,setNested]=useState(false);
+ const [categories,setCategories]=useState<ServiceCategory[]>([]),[category,setCategory]=useState(''),[root,setRoot]=useState(''),[error,setError]=useState(''),[tick,setTick]=useState(0),[nested,setNested]=useState(false);
  const onPending=useRef(onPendingChange);onPending.current=onPendingChange;
  useEffect(()=>{onPending.current?.(nested);},[nested]);
  useEffect(()=>()=>{onPending.current?.(false);},[]);
@@ -22,8 +23,9 @@ export function ClientRequestForm({office,busy,onSave,onFailure,onPendingChange}
  const selected=categories.find(c=>c.id===category),locked=busy||nested;
  void onSave;
  if(resume)return <IntakeCompletion33 office={office} result={resume} onFailure={onFailure} onPendingChange={setNested} onReset={()=>{setResume(undefined);setNested(false);}}/>;
- return <div className="request-form">{<label className="team-field">Categoria<select aria-label="Categoria da solicitação" value={category} disabled={locked} onChange={e=>{setCategory(e.target.value);setError('');}}><option value="">Selecione a categoria</option>{categories.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></label>}
+ return <div className="request-form"><CategorySelection categories={categories} value={category} rootId={root}
+   disabled={locked} label="Categoria da solicitação" onChange={(id,parent)=>{setRoot(parent);setCategory(id);setError('');}}/>
  {error&&<p role="alert" className="form-feedback error">{error} <button className="team-text-button" disabled={locked} onClick={()=>setTick(n=>n+1)}>Atualizar categorias</button></p>}
- {resumeError?<button className="team-text-button" onClick={()=>setResumeTick(n=>n+1)}>Conferir tentativa anterior</button>:selected&&<CategoryRequestForm key={category} office={office} category={selected} busy={busy} onBack={()=>setCategory('')} onFailure={onFailure} onPendingChange={setNested}/>}
+ {resumeError?<button className="team-text-button" onClick={()=>setResumeTick(n=>n+1)}>Conferir tentativa anterior</button>:selected&&<CategoryRequestForm key={category} office={office} category={selected} busy={busy} onBack={()=>{setCategory('');setRoot('');}} onFailure={onFailure} onPendingChange={setNested}/>}
  </div>;
 }

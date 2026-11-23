@@ -59,3 +59,59 @@ test('can_manage do formulário nega montagem de controles privados',async({page
 test('403 ao publicar descarta formulário privado e bloqueia a área',async({page})=>{
  await setup(page,{statuses:[403]});await open(page);await page.getByRole('button',{name:'Adicionar campo',exact:true}).click();await page.getByLabel('Nome do campo',{exact:true}).fill('Rascunho privado');await publishSection(page);await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Seu acesso');await expect(page.getByLabel('Motivo da alteração')).toHaveCount(0);await expect(page.getByText('Rascunho privado')).toHaveCount(0);await expect(page.getByRole('list',{name:'Categorias configuradas'})).toHaveCount(0);
 });
+
+test('cria subpasta e salva campos, anexos e publicação no escopo selecionado',async({page})=>{
+  await setup(page);
+  const root={id:category,name:'Rural',revision:1,execution_level:3,is_documents:false,services:0};
+  const child='44444444-4444-4444-8444-444444444444';
+  const categories=[root];
+  let saved:CategoryForm={...empty,category_id:child};
+  const requests:Published[]=[];
+  await page.route('**/api/categories/state',r=>r.fulfill({json:{data:{can_manage:true,items:categories}}}));
+  await page.route('**/api/categories/command',r=>{
+    expect(r.request().postDataJSON().command).toMatchObject({
+      kind:'create',parent_id:category,name:'Cadastro rural',execution_level:2,reason:'Organizar atendimento rural',
+    });
+    categories.push({...root,id:child,name:'Cadastro rural',execution_level:2,parent_id:category,parent_name:'Rural'} as typeof root);
+    return r.fulfill({json:{data:{can_manage:true,items:categories}}});
+  });
+  await page.route('**/api/category-intake/form',r=>{
+    expect(r.request().postDataJSON().category_id).toBe(child);
+    return r.fulfill({json:{data:saved}});
+  });
+  await page.route('**/api/category-intake/publish',r=>{
+    const body=r.request().postDataJSON() as Published;
+    expect(body.category_id).toBe(child);
+    requests.push(body);
+    saved={...saved,...body.command,revision:saved.revision+1};
+    return r.fulfill({json:{data:saved}});
+  });
+  await page.reload();
+  await page.getByRole('button',{name:'Editar Rural',exact:true}).click();
+  await page.getByRole('button',{name:'Criar subpasta',exact:true}).click();
+  await page.getByLabel('Nome da subpasta').fill('Cadastro rural');
+  await page.getByLabel('Nível de execução').selectOption('2');
+  await page.getByLabel('Motivo',{exact:true}).fill('Organizar atendimento rural');
+  await page.getByRole('button',{name:'Salvar subpasta'}).click();
+  await expect(page.getByText('Rural › Cadastro rural',{exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Formulário e anexos de Rural',exact:true}).click();
+  await page.getByLabel('Subpasta',{exact:true}).selectOption(child);
+  await page.getByRole('button',{name:'Adicionar campo'}).click();
+  await page.getByLabel('Nome do campo').fill('Nome do imóvel');
+  await page.getByLabel('Motivo da alteração').fill('Primeiro campo');
+  await expect(page.getByLabel('Subpasta',{exact:true})).toBeDisabled();
+  await page.getByRole('button',{name:'Salvar configuração'}).click();
+  await expect(page.getByRole('status')).toContainText('Configuração salva');
+  await page.getByLabel('Área da configuração').selectOption('documents');
+  await page.getByRole('button',{name:'Adicionar anexo'}).click();
+  await page.getByLabel('Nome do anexo').fill('Matrícula');
+  await page.getByLabel('Motivo da alteração').fill('Incluir anexo');
+  await page.getByRole('button',{name:'Salvar configuração'}).click();
+  await expect(page.getByRole('status')).toContainText('Configuração salva');
+  await publishSection(page);
+  await page.getByRole('checkbox',{name:'Disponibilizar formulário e anexos para novas solicitações'}).check();
+  await page.getByRole('button',{name:'Salvar configuração'}).click();
+  await expect(page.getByRole('status')).toContainText('publicados');
+  expect(requests.map(r=>r.command.expected_revision)).toEqual([0,1,2]);
+  expect(requests[2].command).toMatchObject({enabled:true,fields:[{label:'Nome do imóvel'}],documents:[{label:'Matrícula'}]});
+});

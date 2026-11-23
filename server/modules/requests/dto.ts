@@ -17,7 +17,7 @@ const nullableName=(v:unknown):v is string|null=>v===null||requestText(v,120);
 function summary(v:unknown):RequestSummary {
  if(!record(v)||!uuid(v.id)||!requestText(v.protocol,80)||!requestText(v.title,120)||typeof v.public_status!=='string'||!Object.hasOwn(publicRequestStatusLabels,v.public_status)||!time(v.created_at)||!time(v.updated_at))throw Error('Invalid request summary');
  if(v.category_id!==undefined&&v.category_id!==null&&(!uuid(v.category_id)||!requestText(v.category_name,60)))throw Error('Invalid category');
- return {...(v.specialized_progress==null?{}:{specialized_progress:specializedProgress(v.specialized_progress)}),...(v.rural_progress==null?{}:{rural_progress:ruralProgress(v.rural_progress)}),...(uuid(v.category_id)&&requestText(v.category_name,60)?{category_id:v.category_id,category_name:v.category_name}:{}),id:v.id,protocol:v.protocol,title:v.title,public_status:v.public_status as RequestSummary['public_status'],created_at:v.created_at,updated_at:v.updated_at};
+ return {...(v.specialized_progress==null?{}:{specialized_progress:specializedProgress(v.specialized_progress)}),...(v.rural_progress==null?{}:{rural_progress:ruralProgress(v.rural_progress)}),...(uuid(v.category_id)&&requestText(v.category_name,60)?{category_id:v.category_id,category_name:v.category_name,...(requestText(v.category_parent_name,60)?{category_parent_name:v.category_parent_name}:{})}:{}),id:v.id,protocol:v.protocol,title:v.title,public_status:v.public_status as RequestSummary['public_status'],created_at:v.created_at,updated_at:v.updated_at};
 }
 function staffSummary(v:unknown):StaffRequestSummary {
  const base=summary(v);

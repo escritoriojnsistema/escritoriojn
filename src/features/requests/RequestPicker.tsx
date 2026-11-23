@@ -7,7 +7,7 @@ import { ArrowLeft, ArrowRight, Search, X } from 'lucide-react';
 import type { RequestOption, RequestOptionKind, RequestOptions } from '../../../shared/requests';
 import { requestsApi, requestsError, type RequestsError } from './api';
 
-export function RequestPicker({office,kind,label,value,busy=false,correction=false,defaultSelf=false,onSelect,onFailure}:{office:string;kind:RequestOptionKind;label:string;value?:RequestOption;busy?:boolean;correction?:boolean;defaultSelf?:boolean;onSelect:(option:RequestOption)=>void;onFailure:(failure:RequestsError)=>void}){
+export function RequestPicker({office,kind,label,value,busy=false,correction=false,defaultSelf=false,categoryId,onSelect,onFailure}:{office:string;kind:RequestOptionKind;label:string;value?:RequestOption;busy?:boolean;correction?:boolean;defaultSelf?:boolean;categoryId?:string;onSelect:(option:RequestOption)=>void;onFailure:(failure:RequestsError)=>void}){
  const auth=useAuth(),canManage=auth.contexts.some(c=>c.office_id===office&&c.permissions.includes('users.manage'));
  const [open,setOpen]=useState(false),[input,setInput]=useState(''),[query,setQuery]=useState(''),[page,setPage]=useState(1);
  const [data,setData]=useState<RequestOptions>(),[error,setError]=useState<RequestsError>(),[revision,setRevision]=useState(0),[pending,setPending]=useState(false);
@@ -15,9 +15,9 @@ export function RequestPicker({office,kind,label,value,busy=false,correction=fal
  useEffect(()=>{const t=setTimeout(()=>{setQuery(input.trim());setPage(1);},300);return()=>clearTimeout(t);},[input]);
  useEffect(()=>{
   if(!open)return;const controller=new AbortController();setPending(true);setError(undefined);
-  void requestsApi.options(office,kind,query,page,size,controller.signal).then(result=>{if(!controller.signal.aborted)setData(result);}).catch(cause=>{if(!controller.signal.aborted){const failure=requestsError(cause);setError(failure);if(failure.status===401||failure.status===403)onFailure(failure);}}).finally(()=>{if(!controller.signal.aborted)setPending(false);});
+  void requestsApi.options(office,kind,query,page,size,controller.signal,categoryId).then(result=>{if(!controller.signal.aborted)setData(result);}).catch(cause=>{if(!controller.signal.aborted){const failure=requestsError(cause);setError(failure);if(failure.status===401||failure.status===403)onFailure(failure);}}).finally(()=>{if(!controller.signal.aborted)setPending(false);});
   return()=>controller.abort();
- },[open,office,kind,query,page,size,revision,onFailure]);
+ },[open,office,kind,query,page,size,revision,onFailure,categoryId]);
  return <div className="request-picker">
   <div className="request-picker-current"><span>{value?.is_self?'Atribuído a mim':value?.label??(defaultSelf?'Atribuído a mim':'Nenhum selecionado')}{value?.role_code&&!value.is_self&&` · ${teamRoleNames[value.role_code]}`}</span><button type="button" className="team-text-button" disabled={busy} onClick={()=>setOpen(v=>!v)} aria-expanded={open}>Selecionar {label}</button></div>
   {open&&<section className="request-options" aria-label={`Escolher ${label}`}>

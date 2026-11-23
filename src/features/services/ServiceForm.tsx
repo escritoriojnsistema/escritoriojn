@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { emptyService, serviceKeys, serviceAmountToUnits, validService, validServiceReason, type ServiceInput, type ServiceField } from '../../../shared/services';
+import {CategorySelection} from '../settings/CategorySelection';
 import type { CategoriesState } from '../../../shared/categories';
 import { categoriesApi, categoriesError, type CategoriesError } from '../settings/categoriesApi';
 
@@ -14,6 +15,7 @@ export function ServiceForm({office,initial,initialCategoryId,busy,onSave,onDeni
  const [categories,setCategories]=useState<CategoriesState>();
  const [categoryFailure,setCategoryFailure]=useState<CategoriesError>();
  const [categoryId,setCategoryId]=useState(initialCategoryId??'');
+ const [rootSelection,setRootSelection]=useState<string>();
  const [categoryRevision,setCategoryRevision]=useState(0);
  const onDeniedRef=useRef(onDenied);onDeniedRef.current=onDenied;
  useEffect(()=>{
@@ -21,7 +23,8 @@ export function ServiceForm({office,initial,initialCategoryId,busy,onSave,onDeni
   void categoriesApi.state(office,controller.signal).then(result=>{if(!controller.signal.aborted){setCategories(result);setCategoryFailure(undefined);}}).catch(cause=>{if(!controller.signal.aborted){const failure=categoriesError(cause);setCategoryFailure(failure);if(failure.status===401||failure.status===403){setCategories(undefined);setInput({...emptyService});setPrice('0,00');setReason('');setSchedule('');setChecklist('');setCategoryId('');onDeniedRef.current?.();}}});
   return()=>controller.abort();
  },[office,categoryRevision]);
- const selectedCategory=categories?.items.find(category=>category.id===categoryId)||(!categoryId?categories?.items.find(category=>category.name===input.category):undefined);
+ const selectedCategory=categories?.items.find(category=>category.id===categoryId)||(!categoryId&&rootSelection===undefined?categories?.items.find(category=>!category.parent_id&&category.name===input.category):undefined);
+ const rootId=rootSelection??selectedCategory?.parent_id??selectedCategory?.id??'';
  const set=<K extends keyof ServiceInput>(key:K,value:ServiceInput[K])=>setInput(old=>({...old,[key]:value}));
  function field(index:number,patch:Partial<ServiceField>){set('fields',input.fields.map((f,i)=>i===index?{...f,...patch}:f));}
  function addField(){setInput(old=>{let n=1;while(old.fields.some(f=>f.key===`campo_${n}`))n++;return {...old,fields:[...old.fields,{key:`campo_${n}`,label:'',type:'text',required:true}]};});}
@@ -32,7 +35,7 @@ export function ServiceForm({office,initial,initialCategoryId,busy,onSave,onDeni
   if(priceCents===null){setError('Informe o preço em reais, com até duas casas decimais.');return;}
   const date=schedule?new Date(schedule):null;
   if(date&&!Number.isFinite(date.getTime())){setError('Confira a data de início da vigência.');return;}
-  const normalized:ServiceInput={...input,name:input.name.trim(),category:selectedCategory.name,unit:input.unit.trim(),price_cents:priceCents,effective_from:date?.toISOString()??null,checklist:checklist.split('\n').map(x=>x.trim()).filter(Boolean)};
+  const normalized:ServiceInput={...input,name:input.name.trim(),category:selectedCategory.name,...(selectedCategory.parent_id?{category_id:selectedCategory.id}:{}),unit:input.unit.trim(),price_cents:priceCents,effective_from:date?.toISOString()??null,checklist:checklist.split('\n').map(x=>x.trim()).filter(Boolean)};
   if(!validService(normalized)||!validServiceReason(reason)){setError('Confira os campos, limites e motivo. Pessoa é obrigatória quando há participantes ou assinatura.');return;}
   setError('');onSave(normalized,reason.trim());
  }
@@ -47,7 +50,9 @@ export function ServiceForm({office,initial,initialCategoryId,busy,onSave,onDeni
     <label className="team-field service-name">Nome do serviço<input autoComplete="off" maxLength={120} value={input.name} onChange={e=>set('name',e.target.value)}/></label>
     <label className="team-field">Código<input autoComplete="off" maxLength={32} readOnly={!!initial} value={input.code} onChange={e=>set('code',e.target.value.toUpperCase())}/></label>
     <label className="team-field">Preço (R$)<input inputMode="decimal" autoComplete="off" maxLength={12} value={price} onChange={e=>setPrice(e.target.value)}/></label>
-    <label className="team-field">Categoria do serviço<select value={selectedCategory?.id??''} disabled={!categories||!!categoryFailure} onChange={e=>setCategoryId(e.target.value)}><option value="">Selecione a categoria</option>{categories?.items.map(category=><option key={category.id} value={category.id}>{category.name}</option>)}</select></label>
+    <CategorySelection categories={categories?.items??[]} value={selectedCategory?.id??''} rootId={rootId}
+      label="Categoria do serviço" disabled={!categories||!!categoryFailure}
+      onChange={(id,parent)=>{setRootSelection(parent);setCategoryId(id);setError('');}}/>
     <label className="team-field">Unidade<input autoComplete="off" maxLength={30} value={input.unit} onChange={e=>set('unit',e.target.value)}/></label>
     {initial&&<label className="team-field service-name">Motivo da versão<input maxLength={500} value={reason} onChange={e=>setReason(e.target.value)}/></label>}
    </div>

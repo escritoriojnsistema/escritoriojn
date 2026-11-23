@@ -5,7 +5,9 @@ const time=(v:unknown):v is string=>typeof v==='string' && v.length<=40 && Numbe
 function categoryMetadata(value:Record<string,unknown>){
   if(value.category_id===undefined&&value.category_name===undefined)return {};
   if(!uuid(value.category_id)||typeof value.category_name!=='string'||!value.category_name.trim()||Array.from(value.category_name).length>60||/[\u0000-\u001f\u007f]/.test(value.category_name))throw Error('Invalid service category metadata');
-  return {category_id:value.category_id,category_name:value.category_name};
+  const parent=value.category_parent_name;
+  if(parent!=null&&(typeof parent!=='string'||!parent.trim()||Array.from(parent).length>60||/[\u0000-\u001f\u007f]/.test(parent)))throw Error('Invalid service category parent');
+  return {category_id:value.category_id,category_name:value.category_name,...(typeof parent==='string'?{category_parent_name:parent}:{})};
 }
 function version(value:unknown):ServiceVersion {
   if(!record(value)||!uuid(value.id)||!uuid(value.created_by)||!int(value.number,1,2147483646)||!time(value.created_at)||!time(value.effective_from)||!validServiceReason(value.reason))throw Error('Invalid service version');

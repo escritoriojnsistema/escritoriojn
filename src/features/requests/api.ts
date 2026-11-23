@@ -58,7 +58,7 @@ async function request<T>(path: string, method: 'POST' | 'PATCH', body: unknown,
 }
 export const requestsApi = {
  search:(office_id:string,query:string,scope:'mine'|'queue',status:RequestFilterStatus,page:number,size:number,signal?:AbortSignal)=>request<RequestPage>('/search','POST',{office_id,query,scope,status,page,size},signal),
- options:(office_id:string,kind:RequestOptionKind,query:string,page:number,size:number,signal?:AbortSignal)=>request<RequestOptions>('/options','POST',{office_id,kind,query,page,size},signal),
+ options:(office_id:string,kind:RequestOptionKind,query:string,page:number,size:number,signal?:AbortSignal,category_id?:string)=>request<RequestOptions>('/options','POST',{office_id,kind,query,page,size,...(category_id?{category_id}:{})},signal),
  detail:(office_id:string,id:string,page=1,signal?:AbortSignal)=>request<RequestDetail>(`/${id}/detail`,'POST',{office_id,page},signal),
  create:(office_id:string,input:CreateRequestInput,idempotency_key:string,signal?:AbortSignal)=>'preintake' in input ? request<RequestDetail>('/preintake','POST',{office_id,value:((({preintake,...value})=>value)(input)),idempotency_key},signal,'/api/request-levels') : request<RequestDetail>('','POST',{office_id,request:input,idempotency_key},signal),
  mutate:(office_id:string,id:string,expected_version:number,mutation:RequestMutation,signal?:AbortSignal)=>request<RequestMutationResult>(`/${id}/actions`,'POST',{office_id,expected_version,mutation},signal),
