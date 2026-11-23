@@ -4,6 +4,8 @@ export type RequestOriginChannel = 'presencial' | 'whatsapp' | 'portal';
 export type DeletionActorKind = 'client' | 'team';
 
 export type DeletionBlockReason =
+  | 'CHARGE_OPEN'
+  | 'CHARGE_CANCELLED'
   | 'PAYMENT_CONFIRMED'
   | 'REFUND_LINKED'
   | 'RECEIPT_ISSUED'
@@ -42,6 +44,7 @@ export type RequestDeletionEligibility = {
   actor_kind: DeletionActorKind;
   eligible: boolean;
   can_show_action: boolean;
+  can_archive?: boolean;
   block_reason: DeletionBlockReason | null;
   block_message: string | null;
   recommended_alternatives: string[];
@@ -116,6 +119,8 @@ export const deletionBlockMessages: Record<DeletionBlockReason, string> = {
     'Seu perfil não possui permissão para excluir solicitações definitivamente.',
   CLIENT_UNVERIFIED_CHANNEL:
     'Para solicitações abertas por atendimento presencial ou WhatsApp sem conta autenticada, é necessária confirmação de identidade verificada.',
+  CHARGE_OPEN:'Existe uma cobrança ativa vinculada a este atendimento.',
+  CHARGE_CANCELLED:'A cobrança cancelada permanece no histórico financeiro. O atendimento pode ser arquivado após o encerramento.',
   STATUS_NOT_ELIGIBLE:
     'A situação atual da solicitação não permite exclusão definitiva.',
   CONCURRENT_OPERATION:

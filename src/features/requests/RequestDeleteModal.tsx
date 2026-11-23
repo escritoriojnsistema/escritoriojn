@@ -1,5 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { AlertTriangle, Trash2, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { paths } from '../../app/routes';
+import { requestArchivesApi, requestArchivesError } from './requestArchivesApi';
 import type {
   RequestDeletionEligibility,
   RequestDeletionResult,
@@ -9,23 +12,29 @@ import { requestDeletionApi, RequestDeletionError } from './deletionApi';
 type Props = {
   office: string;
   requestId: string;
+  requestVersion?: number;
+  canViewCharges?: boolean;
   protocol: string;
   title: string;
   portal: boolean;
   disabled?: boolean;
   onPendingChange?: (pending: boolean) => void;
   onDeleted: (result: RequestDeletionResult) => void;
+  onArchived?: () => void;
 };
 
 export function RequestDeleteSection({
   office,
   requestId,
+  requestVersion,
+  canViewCharges,
   protocol,
   title,
   portal,
   disabled = false,
   onPendingChange,
   onDeleted,
+  onArchived,
 }: Props) {
   const [eligibility, setEligibility] = useState<RequestDeletionEligibility | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -54,7 +63,7 @@ export function RequestDeleteSection({
         if (!controller.signal.aborted) setEligibility(null);
       });
     return () => controller.abort();
-  }, [office, requestId]);
+  }, [office, requestId, requestVersion]);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -178,6 +187,12 @@ export function RequestDeleteSection({
             <strong>Exclusão definitiva bloqueada</strong>
           </div>
           <p>{eligibility.block_message}</p>
+          {isTeam&&canViewCharges&&(eligibility.block_reason==='CHARGE_OPEN'||eligibility.block_reason==='CHARGE_CANCELLED')&&
+            <Link className="team-text-button" to={paths.charges} state={{office_id:office,request_id:requestId}}>Abrir cobrança</Link>}
+          {isTeam&&eligibility.can_archive&&onArchived&&
+            <ArchiveRequest office={office} requestId={requestId} version={eligibility.version} disabled={disabled}
+              onPendingChange={onPendingChange} onArchived={onArchived}/>}
+
           {eligibility.recommended_alternatives.length > 0 && (
             <p className="customer-note">
               Alternativas disponíveis: {eligibility.recommended_alternatives.join(' · ')}.
@@ -315,4 +330,40 @@ export function RequestDeleteSection({
       </dialog>
     </section>
   );
+}
+
+function ArchiveRequest({office,requestId,version,disabled,onPendingChange,onArchived}:{
+  office:string;requestId:string;version:number;disabled:boolean;
+  onPendingChange?:(pending:boolean)=>void;onArchived:()=>void;
+}) {
+  const [reason,setReason]=useState('');
+  const [error,setError]=useState('');
+  const active=useRef<AbortController|undefined>(undefined);
+  const retry=useRef<{reason:string;key:string}|undefined>(undefined);
+  useEffect(()=>()=>active.current?.abort(),[]);
+  async function submit(event:FormEvent) {
+    event.preventDefault();
+    if(disabled||active.current||reason.trim().length<3)return;
+    const cleanReason=reason.trim();
+    if(retry.current?.reason!==cleanReason)retry.current={reason:cleanReason,key:crypto.randomUUID()};
+    const controller=new AbortController();
+    active.current=controller;
+    onPendingChange?.(true);
+    setError('');
+    try {
+      await requestArchivesApi.archive(office,requestId,version,cleanReason,retry.current.key,controller.signal);
+      if(!controller.signal.aborted)onArchived();
+    } catch(cause) {
+      if(!controller.signal.aborted)setError(requestArchivesError(cause).message);
+    } finally {
+      if(!controller.signal.aborted){active.current=undefined;onPendingChange?.(false);}
+    }
+  }
+  return <details><summary>Arquivar solicitação</summary>
+    <form onSubmit={submit}>
+      <label className="team-field">Motivo do arquivamento<input value={reason} minLength={3} maxLength={500} required disabled={disabled} onChange={event=>setReason(event.target.value)}/></label>
+      {error&&<p role="alert" className="form-feedback error">{error}</p>}
+      <button className="secondary-button" disabled={disabled||reason.trim().length<3}>Confirmar arquivamento</button>
+    </form>
+  </details>;
 }

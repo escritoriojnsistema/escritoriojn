@@ -20,7 +20,7 @@ export const permissionDependencies:Partial<Record<TeamPermission,TeamPermission
  'checklists.read':['requests.read'],'checklists.manage':['requests.read','checklists.read'],'checklists.update':['requests.read','checklists.read'],'checklists.waive':['requests.read','checklists.read'],
  'charges.read':['requests.read'],'charges.create':['requests.read','charges.read'],'charges.adjust':['requests.read','charges.read'],'charges.discount.approve':['requests.read','charges.read','charges.adjust'],'charges.cancel':['requests.read','charges.read'],
  'templates.manage':['templates.read'],'templates.approve':['templates.read'],
- 'audit.export':['audit.read'],'cash.open':['cash.read'],'cash.read_all':['cash.read'],'payments.manual.approve':['cash.read'],'payments.providers.manage':['cash.read','settings.access'],
+ 'audit.export':['audit.read'],'cash.open':['cash.read'],'cash.read_all':['cash.read'],'payments.cash.receive':['cash.read','cash.open','requests.read','charges.read'],'payments.manual.approve':['cash.read'],'payments.providers.manage':['cash.read','settings.access'],
  'customers.create':['customers.read'],'customers.update':['customers.read'],'customers.relate':['customers.read'],'customers.verify':['customers.read'],'customers.merge':['customers.read'],
  'accounts.corrections.read':['requests.read'],'accounts.corrections.apply':['requests.read','accounts.corrections.read'],
  'files.read':['requests.read'],'files.upload':['requests.read','files.read'],'files.copy':['requests.read','files.read','files.upload'],'files.manage':['requests.read','files.read'],
