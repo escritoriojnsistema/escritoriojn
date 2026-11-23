@@ -274,7 +274,7 @@ test("adjust and cancel preserve explicit decision and versions", async ({
     .fill("Cancelamento autorizado");
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Confirmar cancelamento" }).click();
-  await expect(page.getByText(/Estado: Cancelada/)).toBeVisible();
+  await expect(page.locator("strong").filter({hasText:"Cobrança cancelada."})).toBeVisible();
   expect(body.expected_version).toBe(2);
   expect(body.mutation.kind).toBe("cancel");
 });

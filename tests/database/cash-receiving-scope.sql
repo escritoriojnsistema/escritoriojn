@@ -27,6 +27,10 @@ DECLARE
   foreign_charge uuid;
   result jsonb;
   configuration jsonb;
+  employee_session uuid;
+  pix_method uuid;
+  tested_request uuid;
+  has_cash_permission boolean := EXISTS(SELECT FROM public.permissions WHERE code='payments.cash.receive');
   replay_key uuid := gen_random_uuid();
   cash_command jsonb;
   payment_command jsonb;
@@ -84,8 +88,13 @@ BEGIN
   END;
   result := public.cash_configure(office_id,cash_command,gen_random_uuid());
   method_id := (result->'resource'->>'id')::uuid;
+  IF has_cash_permission THEN
+    result := public.cash_configure(office_id,cash_command||jsonb_build_object(
+      'name','PIX fictício','type','pix','destination_account_id',bank_account),gen_random_uuid());
+    pix_method := (result->'resource'->>'id')::uuid;
+  END IF;
   configuration := public.cash_configuration(office_id,unit_id,1,50);
-  IF NOT configuration @> '{"units_total":1,"accounts_total":2,"payment_methods_total":1}' THEN
+  IF NOT configuration @> '{"units_total":1,"accounts_total":2}' OR (configuration->>'payment_methods_total')::int IS DISTINCT FROM (CASE WHEN has_cash_permission THEN 2 ELSE 1 END) THEN
     RAISE EXCEPTION 'CASH_SCOPE: first unit, accounts and method missing';
   END IF;
 
@@ -132,7 +141,29 @@ BEGIN
     END IF;
   END LOOP;
 
+  IF has_cash_permission THEN
+    SELECT c.request_id INTO STRICT tested_request FROM private.charges c WHERE c.id=charge_ids[3];
+  END IF;
   PERFORM set_config('role','authenticated',true);
+  IF has_cash_permission THEN
+    BEGIN
+      result := public.charges_view(office_id,tested_request,1);
+      IF result#>>'{charge,can_cancel}' IS DISTINCT FROM 'true' THEN
+        RAISE EXCEPTION 'CASH_SCOPE: owner cannot cancel an unpaid charge assigned to another operator';
+      END IF;
+      result := public.charges_mutate(office_id,charge_ids[3],1,
+        '{"kind":"cancel","reason":"Cancelamento fictício para teste"}',gen_random_uuid());
+      IF result#>>'{charge,status}' IS DISTINCT FROM 'cancelada' THEN
+        RAISE EXCEPTION 'CASH_SCOPE: charge did not retain cancelled history';
+      END IF;
+      result := public.request_deletion_eligibility(office_id,tested_request);
+      IF result->>'block_reason' IS DISTINCT FROM 'CHARGE_CANCELLED' OR result->>'eligible' IS DISTINCT FROM 'false' THEN
+        RAISE EXCEPTION 'CASH_SCOPE: cancelled charge was mistaken for active debt or made erasable';
+      END IF;
+      RAISE EXCEPTION USING ERRCODE='PJT01',MESSAGE='Retain fixture for receiving tests';
+    EXCEPTION WHEN SQLSTATE 'PJT01' THEN NULL;
+    END;
+  END IF;
   result := public.cash_eligible_charges(office_id,'',1);
   IF (result->>'total')::int<>3 THEN RAISE EXCEPTION 'CASH_SCOPE: owner cannot list all three channels'; END IF;
   payment_command := jsonb_build_object('kind','record','session_id',owner_session,'expected_version',1,
@@ -183,6 +214,36 @@ BEGIN
   EXCEPTION WHEN SQLSTATE 'PT403' THEN NULL;
   END;
 
+  IF has_cash_permission THEN
+    PERFORM set_config('request.jwt.claims',jsonb_build_object('sub',owner_id,'session_id',owner_id)::text,true);
+    PERFORM public.team_set_member(office_id,membership_id,'employee',true,
+      ARRAY['foundation.access','cash.read','cash.open','charges.read','requests.read','payments.cash.receive'],gen_random_uuid());
+    PERFORM set_config('request.jwt.claims',jsonb_build_object('sub',employee_id,'session_id',employee_id)::text,true);
+    result := public.cash_open(office_id,unit_id,cash_account,0,gen_random_uuid());
+    employee_session := (result->'sessions'->0->>'id')::uuid;
+    payment_command := payment_command||jsonb_build_object(
+      'session_id',employee_session,'expected_version',1,'idempotency_key',gen_random_uuid(),'external_reference',NULL,
+      'allocations',jsonb_build_array(jsonb_build_object('charge_id',charge_ids[3],'expected_charge_version',1,'amount_cents',1000)));
+    BEGIN
+      PERFORM public.payment_operate(office_id,payment_command||jsonb_build_object('payment_method_id',pix_method,'presented_cents',NULL));
+      RAISE EXCEPTION 'CASH_SCOPE: cash-only permission accepted PIX';
+    EXCEPTION WHEN SQLSTATE 'PT403' THEN NULL;
+    END;
+    result := public.payment_operate(office_id,payment_command);
+    IF public.payment_operate(office_id,payment_command) IS DISTINCT FROM result THEN
+      RAISE EXCEPTION 'CASH_SCOPE: cash-only employee replay diverged';
+    END IF;
+    PERFORM set_config('request.jwt.claims',jsonb_build_object('sub',owner_id,'session_id',owner_id)::text,true);
+    PERFORM public.team_set_member(office_id,membership_id,'employee',true,
+      ARRAY['foundation.access','cash.read','cash.open','charges.read','requests.read'],gen_random_uuid());
+    PERFORM set_config('request.jwt.claims',jsonb_build_object('sub',employee_id,'session_id',employee_id)::text,true);
+    BEGIN
+      PERFORM public.payment_operate(office_id,payment_command);
+      RAISE EXCEPTION 'CASH_SCOPE: revoked cash permission accepted replay';
+    EXCEPTION WHEN SQLSTATE 'PT403' THEN NULL;
+    END;
+  END IF;
+
   PERFORM set_config('request.jwt.claims',jsonb_build_object('sub',customer_id,'session_id',customer_id)::text,true);
   result := public.cash_client_finance(office_id,1,1,NULL);
   IF (result->>'total')::integer<>1 OR (result->'items'->0->>'id')::uuid<>charge_ids[3] THEN
@@ -227,7 +288,7 @@ BEGIN
   END IF;
 
   PERFORM set_config('role',db_role,true);
-  IF (SELECT count(*) FROM private.payment_allocations a WHERE a.office_id=fixture.office_id)<>2
+  IF (SELECT count(*) FROM private.payment_allocations a WHERE a.office_id=fixture.office_id)<>(CASE WHEN has_cash_permission THEN 3 ELSE 2 END)
      OR (SELECT count(*) FROM private.charges c WHERE c.office_id=fixture.office_id)<>3 THEN
     RAISE EXCEPTION 'CASH_SCOPE: fixture payment or obligation duplicated';
   END IF;

@@ -161,7 +161,7 @@ function Workspace({
       ) {
         setData(result);
         setPage(1);
-        setFeedback("Cobrança registrada com histórico preservado.");
+        setFeedback(result.charge?.status==="cancelada"?"Cobrança cancelada. O histórico foi preservado.":"Cobrança registrada com histórico preservado.");
       }
     } catch (cause) {
       if (
@@ -271,7 +271,7 @@ function Workspace({
                     </li>
                   ))}
                 </ul>
-                {data.following_only && (
+                {data.following_only && !data.charge?.can_cancel && (
                   <p className="customer-note">
                     Acompanhamento: decisões exclusivas do responsável atual.
                   </p>
@@ -292,10 +292,11 @@ function Workspace({
                         <dd>{money(data.charge.balance_cents)}</dd>
                       </div>
                     </dl>
-                    <p className="customer-note">
-                      Estado: {data.charge.status==='cancelada'?'Cancelada':data.charge.due_cents===0?'Sem valor devido':data.charge.balance_cents===0?'Paga':'Em aberto'}. Saldo é obrigação, não
-                      entrada de dinheiro.
-                    </p>
+                    {data.charge.status==='cancelada'?(
+                      <p className="customer-note"><strong>Cobrança cancelada.</strong> O registro continua disponível para consulta no histórico financeiro.
+                        {' '}<Link to={paths.requests} state={{office_id:context.office_id,request_id:data.request_id}}>Abrir solicitação</Link>
+                      </p>
+                    ):<p className="customer-note">Estado: {data.charge.due_cents===0?'Sem valor devido':data.charge.balance_cents===0?'Paga':'Em aberto'}.</p>}
                     <ul
                       className="charges-items"
                       aria-label="Parcelas vigentes"

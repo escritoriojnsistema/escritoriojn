@@ -128,6 +128,7 @@ function projectEligibility(raw: unknown): RequestDeletionEligibility {
     actor_kind: d.actor_kind,
     eligible: d.eligible,
     can_show_action: d.can_show_action,
+    can_archive: d.can_archive === true,
     block_reason: blockReason,
     block_message:
       typeof d.block_message === 'string' && d.block_message.trim()

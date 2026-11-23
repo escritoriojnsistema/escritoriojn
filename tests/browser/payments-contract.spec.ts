@@ -14,7 +14,7 @@ function charge(n=1,balance=10000):FinanceCharge{return {id:id(n),request_id:id(
 function payment(patch:Partial<Payment>={}):Payment{return {id:id(500),reference:`JN-PAG-${id(500)}`,created_at:'2026-10-24T12:00:00Z',amount_cents:3000,presented_cents:5000,change_cents:2000,fee_cents:0,net_cents:3000,payment_type:'cash',method_name:'Dinheiro',account_name:'Espécie de teste',legacy:false,status:'pending',settlement:'not_applicable',settled_on:null,evidence:'Conferência inicial do operador',external_reference:null,allocations:[{charge_id:id(1),protocol:'JN-TESTE-1',amount_cents:3000}],...patch};}
 const statement=():FinanceStatement=>({session:{id:session,cash_account_id:cash,unit_id:unit,unit_name:'Unidade de teste',operator_name:'Operador teste',is_self:true,status:'open',version:1,opened_at:'2026-10-24T12:00:00Z',closed_at:null,opening_cents:10000,cash_cents:10000,received_cents:0,refunded_cents:0,digital_cents:0,can_operate:true,can_refund:true},entries:[],total:0,page:1,page_size:5,can_receive:true,payments:{items:[],total:0,page:1}});
 type Harness={value:FinanceStatement;bills:FinanceCharge[];payments:Payment[];posted:PaymentOperation[];failures:(number|'lost')[];applications:number;permissions:string[]};
-async function setup(page:Page,options:{payments?:Payment[];closed?:boolean;own?:boolean;permissions?:string[];count?:number}={}):Promise<Harness>{
+async function setup(page:Page,options:{payments?:Payment[];closed?:boolean;own?:boolean;role?:'owner'|'admin'|'employee';permissions?:string[];count?:number}={}):Promise<Harness>{
  const state:Harness={value:statement(),bills:Array.from({length:options.count??1},(_,i)=>charge(i+1)),payments:options.payments??[],posted:[],failures:[],applications:0,permissions:options.permissions??permissions};
  if(options.closed)state.value.session={...state.value.session,status:'closed',can_operate:false,can_refund:false,closed_at:'2026-10-24T13:00:00Z'};
  if(options.own===false)state.value.session={...state.value.session,is_self:false,can_operate:false,can_refund:false,operator_name:'Outro operador'};
@@ -23,7 +23,7 @@ async function setup(page:Page,options:{payments?:Payment[];closed?:boolean;own?
  const token=`e30.${Buffer.from(JSON.stringify({sub:user,exp:Math.floor(Date.now()/1000)+3600,role:'authenticated',session_id:office})).toString('base64url')}.fixture`;
  await page.addInitScript(({token,user})=>localStorage.setItem('sb-team-ui-auth-token',JSON.stringify({access_token:token,refresh_token:'fixture',token_type:'bearer',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:user,aud:'authenticated',email:'fixture@example.test',app_metadata:{},user_metadata:{}}})),{token,user});
  await page.route('https://team-ui.supabase.co/**',r=>r.fulfill({json:{id:user,aud:'authenticated'}}));
- await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,office_name:'Escritório teste',display_name:'Operador teste',role_code:'owner',permissions:state.permissions}]}}}));
+ await page.route('**/api/auth/context',r=>r.fulfill({json:{data:{user:{id:user},contexts:[{office_id:office,user_id:user,office_name:'Escritório teste',display_name:'Operador teste',role_code:options.role??'owner',permissions:state.permissions}]}}}));
  await page.route('**/api/notifications/summary',r=>r.fulfill({json:{data:{unread:0}}}));
  // Presence is a separate current sidebar module; isolate its fixture so its
  // missing provider does not create a second unrelated payment error alert.
@@ -175,4 +175,19 @@ for(const width of [320,360,1440])test(`payments15: formulário e histórico sem
  await page.setViewportSize({width,height:width<900?740:900});await setup(page,{payments:[payment({method_name:'Dinheiro com nome extenso para conferência do operador',account_name:'Conta de numerário da unidade com descrição extensa'})]});await openStatement(page);await record(page,cashMethod);await page.getByLabel('Valor apresentado (R$)',{exact:true}).fill('50,00');await expect(history(page)).toHaveCount(0);await expect(page.getByRole('heading',{name:'Extrato',exact:true})).toHaveCount(0);await expect(page.getByRole('combobox',{name:'Cobrança',exact:true})).toHaveCount(0);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(await page.locator('.operation-mobile-nav a').count()).toBeLessThanOrEqual(4);const input=page.getByLabel('Valor apresentado (R$)',{exact:true});expect((await input.boundingBox())!.height).toBeGreaterThanOrEqual(44);if(width<901){expect(await input.evaluate(e=>getComputedStyle(e).fontSize)).toBe('16px');expect(await page.getByRole('textbox',{name:'Evidência da operação',exact:true}).evaluate(e=>getComputedStyle(e).fontSize)).toBe('16px');}
  await mkdir('/workspace/shared/escritoriojn-etapa15-ui',{recursive:true});await page.evaluate(()=>window.scrollTo(0,0));const geometry=await page.getByRole('button',{name:'Confirmar recebimento',exact:true}).evaluate(e=>({width:innerWidth,viewport_height:innerHeight,confirmation_bottom:Math.round(e.getBoundingClientRect().bottom),document_height:document.documentElement.scrollHeight}));await writeFile(`/workspace/shared/escritoriojn-etapa15-ui/geometria-${width}.json`,JSON.stringify(geometry,null,2));if(width===1440)expect(geometry.confirmation_bottom).toBeLessThanOrEqual(900);await page.screenshot({path:`/workspace/shared/escritoriojn-etapa15-ui/pagamentos-${width}.png`,fullPage:true});await page.screenshot({path:`/workspace/shared/escritoriojn-etapa15-ui/pagamentos-${width}-viewport.png`});
  await page.evaluate(()=>{document.documentElement.style.zoom='1.25';});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);const confirmation=page.getByRole('button',{name:'Confirmar recebimento',exact:true});await confirmation.scrollIntoViewIfNeeded();await expect(confirmation).toBeInViewport();await confirmation.click();await expect(page.getByText('Pagamento confirmado e saldos atualizados.',{exact:true})).toBeVisible();await expect(history(page)).toContainText('Dinheiro com nome extenso para conferência do operador');expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
+
+
+test('funcionário autorizado confirma dinheiro e mantém aprovação para Pix',async({page})=>{
+ const state=await setup(page,{role:'employee',permissions:[...permissions,'payments.cash.receive']});
+ await openStatement(page);
+ await record(page,pixMethod);
+ await expect(page.getByRole('button',{name:'Confirmar recebimento',exact:true})).toHaveCount(0);
+ await expect(page.getByRole('button',{name:'Solicitar autorização',exact:true})).toBeVisible();
+ await page.getByRole('combobox',{name:'Forma de pagamento',exact:true}).selectOption(cashMethod);
+ await page.getByLabel('Valor apresentado (R$)',{exact:true}).fill('30,00');
+ await page.getByRole('button',{name:'Confirmar recebimento',exact:true}).click();
+ await expect(history(page)).toContainText('Confirmado');
+ expect(state.posted).toHaveLength(1);
+ expect(state.posted[0]).toMatchObject({kind:'record',payment_method_id:cashMethod,status:'confirmed',presented_cents:3000});
 });

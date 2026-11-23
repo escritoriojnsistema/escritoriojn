@@ -21,6 +21,9 @@ export function CashOpeningForm({configuration,sessions,busy,onOpen,onClear,canM
   </div></fieldset>
   <p className="customer-note">O fundo é dinheiro físico para iniciar seu caixa. Não é receita nem recebimento de serviços.</p>
   {!accounts.length&&<p className="customer-note">{canManage?'Cadastre uma conta em espécie para esta unidade em Configuração.':'O gestor autorizado deve cadastrar uma conta em espécie para esta unidade.'}</p>}
+  {canManage&&!accounts.length&&<button type="button" className="secondary-button" onClick={onConfigure} disabled={busy}>Configurar conta em espécie</button>}
+  {selectedAccount&&!configuration.payment_methods.some(m=>m.active&&m.type==='cash'&&m.unit_id===selected?.id&&m.destination_account_id===selectedAccount.id)&&
+   <p className="customer-note">Para receber dinheiro, vincule uma forma de pagamento em espécie ativa a esta conta na Configuração.</p>}
   {error&&<p role="alert" className="form-feedback error">{error}</p>}
   <div className="account-actions"><button className="primary-button" disabled={busy||!selected||!selectedAccount}><DoorOpen size={18} aria-hidden="true"/>Abrir meu caixa</button><button type="button" className="secondary-button" disabled={busy} onClick={()=>{setAmount('0,00');setUnit('');setAccount('');setError('');attempt.current=undefined;onClear();}}><X size={18} aria-hidden="true"/>Cancelar</button></div>
  </form>;

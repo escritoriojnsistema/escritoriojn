@@ -818,3 +818,35 @@ test('portal volta à lista quando uma solicitação aberta deixou de existir', 
   await expect(page.getByText('Registro não encontrado.')).toHaveCount(0);
   await expect(page.getByRole('heading',{name:'Minhas solicitações'})).toBeVisible();
 });
+
+test('cobrança cancelada permite arquivar a solicitação encerrada pelo detalhe', async ({page})=>{
+  await mockAuth(page,'owner',[...allPermissions,'requests.archives.manage']);
+  let archived=false;
+  const request={id:REQUEST_ID,title:'Manifestação de teste',protocol:'AT-121212',
+    public_status:'cancelado',status:'cancelado',version:3,origin:'presencial',priority:'normal',
+    created_at:'2026-11-21T09:00:00Z',updated_at:'2026-11-21T10:00:00Z'};
+  await page.route('**/api/requests/search',r=>r.fulfill({json:{data:{
+    portal:false,items:archived?[]:[request],total:archived?0:1,page:1,page_size:5,
+  }}}));
+  await page.route(`**/api/requests/${REQUEST_ID}/detail`,r=>r.fulfill({json:{data:{
+    ...request,portal:false,message:'',priority_reason:'',history:[],items:[],history_page:1,history_total:1,
+  }}}));
+  await page.route(`**/api/request-deletion/${REQUEST_ID}/eligibility`,r=>r.fulfill({json:{data:{
+    can_show_action:true,eligible:false,actor_kind:'team',can_archive:true,version:3,block_reason:'CHARGE_CANCELLED',
+    block_message:'A cobrança já está cancelada.',recommended_alternatives:[],
+    attachments:{total_count:0,exclusive_count:0,shared_preserved_count:0,retained_preserved_count:0},backend_ready:true,
+  }}}));
+  await page.route(`**/api/request-archives/${REQUEST_ID}/archive`,r=>{
+    expect(r.request().postDataJSON()).toMatchObject({office_id:OFFICE_ID,expected_version:3,reason:'Encerramento conferido'});
+    archived=true;
+    return r.fulfill({json:{data:{request_id:REQUEST_ID,archived:true}}});
+  });
+  await page.goto('/solicitacoes');
+  await page.getByRole('button',{name:'Ver solicitação AT-121212'}).click();
+  await expect(page.getByRole('link',{name:'Abrir cobrança'})).toBeVisible();
+  await page.getByText('Arquivar solicitação',{exact:true}).click();
+  await page.getByLabel('Motivo do arquivamento').fill('Encerramento conferido');
+  await page.getByRole('button',{name:'Confirmar arquivamento'}).click();
+  await expect(page.getByText('Solicitação arquivada. O histórico financeiro foi preservado.')).toBeVisible();
+  await expect(page.getByRole('button',{name:'Ver solicitação AT-121212'})).toHaveCount(0);
+});

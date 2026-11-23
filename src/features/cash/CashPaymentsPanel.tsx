@@ -39,11 +39,15 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
  const correctButton=useRef<HTMLButtonElement>(null),wasHidden=useRef(false);
  const [requestingApproval,setRequestingApproval]=useState(false);
  const hasAuthority=s.is_self&&['cash.open','charges.read','requests.read'].every(p=>context?.permissions.includes(p));
- const canDirectManualPayment=context?.role_code==='owner'||Boolean(context?.permissions.includes('payments.manual.approve'));
+ const canApproveManualPayment=context?.role_code==='owner'||Boolean(context?.permissions.includes('payments.manual.approve'));
  const canRecord=hasAuthority&&s.status==='open'&&s.can_operate&&statement.can_receive;
  const locked=disabled||busy;
  const methods=configuration?.units.some(u=>u.id===s.unit_id&&u.active)?configuration.payment_methods.filter(m=>m.active&&m.unit_id===s.unit_id&&configuration.accounts.some(a=>a.id===m.destination_account_id&&a.unit_id===s.unit_id&&a.active&&(m.type==='cash'?a.type==='cash'&&a.id===s.cash_account_id:a.type!=='cash'))):[];
  const method=methods.find(m=>m.id===methodId)||(methodId===''?methods[0]:undefined);
+ const canReceiveCash=Boolean(context?.permissions.includes('payments.cash.receive'));
+ const canDirectManualPayment=canApproveManualPayment||method?.type==='cash'&&canReceiveCash;
+ const canConfirmPayment=(payment:Payment)=>canApproveManualPayment||payment.payment_type==='cash'&&canReceiveCash;
+
  const total=allocations.reduce((sum,a)=>sum+(cashAmountToCents(a.amount)??0),0),totalValid=allocations.length>0&&cashInteger(total,1)&&allocations.every(a=>{const n=cashAmountToCents(a.amount);return n!==null&&cashInteger(n,1)&&n<=a.charge.balance_cents;});
  const presentedCents=cashAmountToCents(presented),feeCents=cashAmountToCents(fee);
 
@@ -79,12 +83,14 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
   event.preventDefault();if(locked||mutation.current||!editor||!hasAuthority)return;
   let details:Omit<Extract<PaymentOperation,{kind:'record'}>,'session_id'|'expected_version'|'idempotency_key'|'evidence'>|{kind:'confirm'|'reject';payment_id:string}|{kind:'settle';payment_id:string;settled_on:string};
   if(editor.kind==='record'){
-   if(!canRecord||!method||!totalValid||allocations.length>10){setValidation('Selecione de uma a dez cobranças e informe valores positivos até o saldo disponível.');return;}
+   if(!method){setValidation('Cadastre uma forma de pagamento ativa vinculada à conta desta unidade.');return;}
+   if(!canRecord||!totalValid||allocations.length>10){setValidation('Selecione de uma a dez cobranças e informe valores positivos até o saldo disponível.');return;}
+   if(status==='confirmed'&&!canDirectManualPayment){setValidation('Seu perfil precisa de autorização para confirmar este pagamento.');return;}
    if(method.type==='cash'&&(presentedCents===null||!cashInteger(presentedCents,1)||presentedCents<total)){setValidation('Informe o valor apresentado em dinheiro, igual ou maior que o valor aplicado.');return;}
    if(method.type==='card'&&(feeCents===null||!cashInteger(feeCents)||feeCents>total)){setValidation('Informe a taxa do cartão, de zero até o valor bruto.');return;}
    details={kind:'record',payment_method_id:method.id,status,allocations:allocations.map(a=>({charge_id:a.charge.id,expected_charge_version:a.charge.version,amount_cents:cashAmountToCents(a.amount)!})),presented_cents:method.type==='cash'?presentedCents:null,fee_cents:method.type==='card'?feeCents!:0,settlement:method.type==='card'?settlement:'not_applicable',settled_on:method.type==='card'&&settlement==='settled'?settledOn:null,external_reference:reference.trim()||null};
   }else{
-   if(editor.kind==='confirm'&&!canRecord)return;
+   if(editor.kind==='confirm'&&(!canRecord||!canConfirmPayment(editor.payment)))return;
    details=editor.kind==='settle'?{kind:'settle',payment_id:editor.payment.id,settled_on:settledOn}:{kind:editor.kind,payment_id:editor.payment.id};
   }
   const payload={...details,session_id:s.id,evidence:evidence.trim()};
@@ -142,7 +148,7 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
     {editor.kind==='record'&&status==='confirmed'&&!canDirectManualPayment&&allocations.length===1&&method&&totalValid&&<button type="button" className="primary-button" disabled={locked||chargeReading} onClick={()=>setRequestingApproval(true)}>Solicitar autorização</button>}
     <button type="button" className="secondary-button" disabled={locked} onClick={()=>{clearEditor(true);setError(undefined);}}>Cancelar</button>
    </div>
-   {editor.kind==='record'&&status==='confirmed'&&!canDirectManualPayment&&<p className="customer-note">Seu perfil exige autorização de um administrador ou super administrador do escritório para confirmar pagamentos manuais. Selecione uma cobrança e clique em Solicitar autorização.</p>}
+   {editor.kind==='record'&&status==='confirmed'&&!canDirectManualPayment&&<p className="customer-note">Seu perfil exige aprovação para confirmar este meio de pagamento. Em espécie, o gestor também pode conceder a permissão Registrar recebimentos em dinheiro.</p>}
   </form>}
   {editor?.kind==='record'&&requestingApproval&&allocations.length===1&&method&&totalValid&&<ManualPaymentApprovalForm office={office} chargeId={allocations[0].charge.id} chargeVersion={allocations[0].charge.version} requestId={allocations[0].charge.request_id} protocol={allocations[0].charge.protocol} sessionId={s.id} unitId={s.unit_id} unitName={configuration?.units.find(u=>u.id===s.unit_id)?.name} destinationAccountId={method.destination_account_id} destinationAccountName={configuration?.accounts.find(a=>a.id===method.destination_account_id)?.name} paymentMethodId={method.id} paymentMethodName={method.name} amountCents={cashAmountToCents(allocations[0].amount)!} initialExternalReference={reference} initialJustification={evidence} disabled={locked} onSubmitted={()=>{clearEditor(true);setFeedback('Solicitação de autorização de pagamento manual enviada ao aprovador selecionado.');}} onCancel={()=>setRequestingApproval(false)}/>}
   {!editor&&s.status==='closed'&&hasAuthority&&<p className="customer-note">Caixa fechado: novos recebimentos e confirmações estão bloqueados. Pendências podem ser rejeitadas e cartões confirmados podem ter sua liquidação registrada.</p>}
@@ -157,7 +163,7 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
    {payment.payment_type==='cash'&&<dl className="cash-totals cash-payment-totals"><div><dt>Aplicado no recebimento original</dt><dd>{cashMoney(payment.amount_cents)}</dd></div><div><dt>Apresentado</dt><dd>{knownMoney(payment.presented_cents)}</dd></div><div><dt>Troco</dt><dd>{knownMoney(payment.change_cents)}</dd></div></dl>}
    {payment.payment_type==='card'&&<><dl className="cash-totals cash-payment-totals"><div><dt>Bruto</dt><dd>{cashMoney(payment.amount_cents)}</dd></div><div><dt>Taxa</dt><dd>{knownMoney(payment.fee_cents)}</dd></div><div><dt>Líquido</dt><dd>{knownMoney(payment.net_cents)}</dd></div></dl><p className="customer-note">{payment.settlement==='settled'?`Liquidado em ${payment.settled_on?dateLabel(payment.settled_on):'data sem informação'}`:payment.settlement==='pending'?'Pendente de liquidação':'Liquidação: sem informação'}</p></>}
    <details className="cash-payment-reference"><summary>Detalhes do pagamento</summary><p>Referência lógica: {payment.reference}</p><p>Evidência: {payment.evidence??'Sem informação'}</p>{payment.external_reference&&<p>Referência externa: {payment.external_reference}</p>}<p>Registro de controle interno, sem emissão de nota fiscal.</p>{context?.permissions.includes('receipts.read')&&['confirmed','partially_reversed','reversed'].includes(payment.status)&&<button type="button" className="team-text-button" disabled={locked} onClick={()=>{setReceiptPayment(payment.id);onEditing(true);}}>Abrir recibo</button>}</details>
-   {!editor&&hasAuthority&&<div className="account-actions">{payment.status==='pending'&&<>{canRecord&&<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'confirm',payment})}>Confirmar pagamento</button>}<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'reject',payment})}>Rejeitar pagamento</button></>}{payment.payment_type==='card'&&payment.settlement==='pending'&&['confirmed','partially_reversed','reversed'].includes(payment.status)&&<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'settle',payment})}>Registrar liquidação</button>}</div>}
+   {!editor&&hasAuthority&&<div className="account-actions">{payment.status==='pending'&&<>{canRecord&&canConfirmPayment(payment)&&<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'confirm',payment})}>Confirmar pagamento</button>}<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'reject',payment})}>Rejeitar pagamento</button></>}{payment.payment_type==='card'&&payment.settlement==='pending'&&['confirmed','partially_reversed','reversed'].includes(payment.status)&&<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'settle',payment})}>Registrar liquidação</button>}</div>}
   </li>)}</ul>)}
   {!editor&&historyReady&&<nav className="team-pagination" aria-label="Paginação de pagamentos"><button type="button" className="team-text-button" disabled={locked||historyReading||history.page<=1} onClick={()=>loadHistory(history.page-1)}>Anterior</button><span>{history.total} pagamentos · {history.page}/{Math.max(1,Math.ceil(history.total/5))}</span><button type="button" className="team-text-button" disabled={locked||historyReading||history.page*5>=history.total} onClick={()=>loadHistory(history.page+1)}>Próxima</button></nav>}
  </section>;
