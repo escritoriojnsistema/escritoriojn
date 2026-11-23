@@ -93,7 +93,7 @@ test('cria subpasta e salva campos, anexos e publicação no escopo selecionado'
   await page.getByLabel('Nível de execução').selectOption('2');
   await page.getByLabel('Motivo',{exact:true}).fill('Organizar atendimento rural');
   await page.getByRole('button',{name:'Salvar subpasta'}).click();
-  await expect(page.getByText('Rural › Cadastro rural',{exact:true})).toBeVisible();
+  await expect(page.getByRole('list',{name:'Subpastas de Rural'})).toContainText('Cadastro rural · Nível 2');
   await page.getByRole('button',{name:'Formulário e anexos de Rural',exact:true}).click();
   await page.getByLabel('Subpasta',{exact:true}).selectOption(child);
   await page.getByRole('button',{name:'Adicionar campo'}).click();
@@ -114,4 +114,59 @@ test('cria subpasta e salva campos, anexos e publicação no escopo selecionado'
   await expect(page.getByRole('status')).toContainText('publicados');
   expect(requests.map(r=>r.command.expected_revision)).toEqual([0,1,2]);
   expect(requests[2].command).toMatchObject({enabled:true,fields:[{label:'Nome do imóvel'}],documents:[{label:'Matrícula'}]});
+});
+
+for (const width of [375, 1440]) test(`categorias agrupam subpastas e trocam o editor sem consulta adicional em ${width}px`, async ({page})=>{
+  await page.setViewportSize({width,height:900});
+  await setup(page);
+  const child='44444444-4444-4444-8444-444444444444';
+  const other='55555555-5555-4555-8555-555555555555';
+  let stateReads=0;
+  const root={id:category,name:'Rural',revision:2,execution_level:1,is_documents:false};
+  const folder={...root,id:child,name:'CAR (Edição)',revision:4,execution_level:2,parent_id:category,parent_name:'Rural'};
+  const items=[root,folder,{...root,id:other,name:'CCIR',parent_id:category,parent_name:'Rural',execution_level:3}];
+  await page.route('**/api/categories/state',r=>{
+    stateReads+=1;
+    return r.fulfill({json:{data:{can_manage:true,items}}});
+  });
+  const commands:unknown[]=[];
+  await page.route('**/api/categories/command',r=>{
+    commands.push(r.request().postDataJSON().command);
+    return r.fulfill({json:{data:{can_manage:true,items:[root,{...folder,name:'CAR atualizado',execution_level:3,revision:5},items[2]]}}});
+  });
+  await page.reload();
+  const list=page.getByRole('list',{name:'Categorias configuradas'});
+  const cards=list.locator(':scope > li');
+  await expect(cards).toHaveCount(1,{timeout:2500});
+  await expect(cards.first()).toContainText('CAR (Edição)');
+  await expect(cards.first()).toContainText('CCIR');
+  await expect(cards.first()).not.toContainText('Categoria geral');
+  await expect(page.getByRole('navigation',{name:'Paginação de categorias'})).toContainText('1 categoria');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+
+  await page.getByRole('button',{name:'Editar Rural',exact:true}).click();
+  const scope=page.getByLabel('Subpasta',{exact:true});
+  await expect(scope.locator('option:checked')).toHaveText('Categoria geral');
+  await expect(page.getByLabel('Nome da categoria')).toHaveValue('Rural');
+  await expect(page.getByRole('button',{name:'Criar subpasta',exact:true})).toBeVisible();
+  await scope.selectOption(child);
+  await expect(page.getByLabel('Nome da subpasta')).toHaveValue('CAR (Edição)');
+  await expect(page.getByLabel('Nível de execução')).toHaveValue('2');
+  await expect(page.getByRole('button',{name:'Criar subpasta',exact:true})).toHaveCount(0);
+  await scope.selectOption(other);
+  await expect(page.getByLabel('Nome da subpasta')).toHaveValue('CCIR');
+  await expect(page.getByLabel('Nível de execução')).toHaveValue('3');
+  await scope.selectOption(category);
+  await expect(page.getByLabel('Nome da categoria')).toHaveValue('Rural');
+  await expect(page.getByRole('button',{name:'Criar subpasta',exact:true})).toBeVisible();
+  await scope.selectOption(child);
+  expect(stateReads).toBe(1);
+  await page.getByLabel('Nome da subpasta').fill('CAR atualizado');
+  await page.getByLabel('Nível de execução').selectOption('3');
+  await page.getByLabel('Motivo',{exact:true}).fill('Atualizar descrição da subpasta');
+  await page.getByRole('button',{name:'Salvar subpasta',exact:true}).click();
+  await expect(cards).toHaveCount(1);
+  await expect(cards.first()).toContainText('CAR atualizado');
+  expect(commands).toEqual([{kind:'rename',category_id:child,expected_revision:4,name:'CAR atualizado',execution_level:3,reason:'Atualizar descrição da subpasta'}]);
+  expect(stateReads).toBe(1);
 });

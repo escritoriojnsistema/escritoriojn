@@ -42,6 +42,23 @@
   overflow-wrap: anywhere;
 }
 
+.categories-settings .category-folders {
+  display: grid;
+  gap: 4px;
+  list-style: none;
+  margin: 3px 0 0;
+  padding: 0 0 0 9px;
+  border-inline-start: 1px solid var(--jn-border, #dbe3e8);
+}
+
+.categories-settings .category-folders li {
+  display: block;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
 .categories-actions {
   display: flex;
   align-items: center;
