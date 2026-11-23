@@ -183,9 +183,12 @@ function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: st
                 <small>{levelLabel(general)}</small>
                 {data.can_manage&&<small>{general.services ?? 0} serviços com histórico · revisão {general.revision}</small>}
               </>}
-              {!!group.folders.length&&<ul className="category-folders" aria-label={`Subpastas de ${group.name}`}>
-                {group.folders.map(folder=><li key={folder.id}><small>{folder.name} · {levelLabel(folder)}</small></li>)}
-              </ul>}
+              {!!group.folders.length&&<details className="category-folder-disclosure">
+                <summary aria-label={`Subpastas de ${group.name}`}>{group.folders.length} {group.folders.length===1?'subpasta':'subpastas'}</summary>
+                <ul className="category-folders" aria-label={`Subpastas de ${group.name}`}>
+                  {group.folders.map(folder=><li key={folder.id}><small>{folder.name} · {levelLabel(folder)}</small></li>)}
+                </ul>
+              </details>}
             </div>
             {data.can_manage&&<div className="categories-actions">
               {activeGeneral&&<button type="button" className="operation-icon-button" aria-label={`Formulário e anexos de ${group.name}`} title="Formulário e anexos" onClick={()=>openIntake(activeGeneral)}><ClipboardList size={18} aria-hidden="true" /></button>}

@@ -18,3 +18,19 @@ test('category intake: public projection strips private metadata and malformed r
 test('category intake: commands cannot choose arbitrary request, permissions or cross-file payload',()=>{
  assert.equal(validCategoryRequestCommand({kind:'bind_file',slot_key:'identidade',file_id:id}),true);assert.equal(validCategoryRequestCommand({kind:'bind_file',slot_key:'identidade',file_id:id,request_id:id}),false);assert.equal(validCategoryRequestCommand({kind:'submit',price:0}),false);assert.equal(validCategoryRequestCommand({kind:'save',answers:{cadastro:'52998224725'},message:''}),true);
 });
+
+test('category intake: masks and custom types preserve one fiscal identifier and reject credentials',()=>{
+ const fiscal:CategoryField={...field,type:'cpf_cnpj'};
+ const rural:CategoryField={key:'rural',label:'Identificador do imóvel',type:'text',required:true,options:[],
+  response_name:'Identificador rural',model:{name:'CIB',mask:'*******-0'}};
+ assert.equal(validCategoryFormCommand({...command,fields:[fiscal,rural]}),true);
+ for(const doc of ['52998224725','11.222.333/0001-81','12.ABC.345/01DE-35','12ABC34501DE35']){
+  assert.equal(categoryAnswerError([fiscal,rural],{cadastro:doc,rural:'AB12CD3-0'}),undefined);
+ }
+ for(const doc of ['52998224725,11222333000181','12ABC34501DE36','11111111111']){
+  assert.match(categoryAnswerError([fiscal],{cadastro:doc})!,/válido/);
+ }
+ assert.match(categoryAnswerError([rural],{rural:'AB12CD3/0'})!,/formato/);
+ assert.equal(validCategoryFormCommand({...command,fields:[{...rural,label:'Senha gov.br'}]}),false);
+ assert.equal(validCategoryFormCommand({...command,fields:[{...rural,model:{name:'Formato livre',mask:'^(.*)+$'}}]}),false);
+});

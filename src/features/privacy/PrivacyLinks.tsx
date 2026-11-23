@@ -1,5 +1,6 @@
-import {Link} from 'react-router-dom';
+import {InfoTrigger} from './InfoTrigger';
 import './privacy.css';
-export function PrivacyLinks({newTab=false}:{newTab?:boolean}){const props=newTab?{target:'_blank',rel:'noreferrer'}:{};return <nav className="privacy-links" aria-label="Privacidade e uso"><Link to="/privacidade" {...props}>Privacidade</Link><Link to="/termos" {...props}>Termos de uso</Link><Link to="/cookies" {...props}>Cookies e preferências</Link></nav>;}
-export function PrivacyFooter({access=false,className=''}:{access?:boolean;className?:string}){return <footer className={`privacy-footer ${className}`} aria-label="Privacidade e uso">{access&&<p>Usamos armazenamento necessário para autenticação e segurança. Sem cookies opcionais, publicidade ou rastreamento de audiência.</p>}<div className="privacy-footer-row"><span className="privacy-footer-name">Escritório JN</span><PrivacyLinks newTab/>{!className.includes('operation-footer')&&<Link className="privacy-install" to="/instalar">Instalar aplicativo</Link>}</div></footer>;}
+
+export function PrivacyLinks(){return <nav className="privacy-links" aria-label="Privacidade e uso"><InfoTrigger section="privacy"/><InfoTrigger section="terms"/><InfoTrigger section="cookies"/></nav>;}
+export function PrivacyFooter({access=false,className=''}:{access?:boolean;className?:string}){return <footer className={`privacy-footer ${className}`} aria-label="Privacidade e uso">{access&&<p>Usamos armazenamento necessário para autenticação e segurança. Sem cookies opcionais, publicidade ou rastreamento de audiência.</p>}<div className="privacy-footer-row"><span className="privacy-footer-name">Escritório JN</span><PrivacyLinks/>{!className.includes('operation-footer')&&<InfoTrigger className="privacy-install" section="install"/>}</div></footer>;}
 export function AccessPrivacyNotice(){return <PrivacyFooter access className="access-privacy"/>;}

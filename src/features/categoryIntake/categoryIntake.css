@@ -119,3 +119,10 @@
     font-size: 15px;
   }
 }
+
+.category-intake-settings .category-intake-response-editor {
+  padding: 12px;
+  margin: 12px 0;
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+}

@@ -6,7 +6,7 @@ for (const width of [320, 375, 1440]) test(`rodapé de políticas acompanha o fi
     await page.goto(path);
     const footer=page.getByRole('contentinfo');
     await expect(footer).toHaveCount(1);
-    await expect(footer.getByRole('link', {name:'Cookies e preferências'})).toBeVisible();
+    await expect(footer.getByRole('button', {name:'Cookies e preferências'})).toBeVisible();
     await footer.scrollIntoViewIfNeeded();
     const geometry=await footer.evaluate(element => {
       const box=element.getBoundingClientRect(), main=document.querySelector('main')!.getBoundingClientRect();
@@ -15,7 +15,7 @@ for (const width of [320, 375, 1440]) test(`rodapé de políticas acompanha o fi
     expect(geometry.top, path).toBeGreaterThanOrEqual(geometry.mainBottom-1);
     expect(geometry.bottom, path).toBeGreaterThanOrEqual(geometry.documentBottom-30);
     expect(geometry.width, path).toBeLessThanOrEqual(geometry.viewport);
-    for (const link of await footer.getByRole('link').all()) expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    for (const link of await footer.getByRole('button').all()) expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   }
 });
 
@@ -39,13 +39,19 @@ test('três aceites separados liberam a senha e o cadastro; retirar um aceite bl
   await password.fill('Local-only-Password1!');
   await checks.nth(1).uncheck();await expect(password).toBeDisabled();await expect(submit).toBeDisabled();
   await checks.nth(1).check();await expect(password).toHaveValue('Local-only-Password1!');
-  for(const href of ['/termos','/cookies','/privacidade']) {
-    const link=page.locator(`.registration-acceptance a[href="${href}"]`);
-    await expect(link).toHaveAttribute('target','_blank');await expect(link).toHaveAttribute('rel',/noreferrer/);
-  }
   await fillIdentity(page);
-  const popup=page.waitForEvent('popup');await page.locator('.registration-acceptance a[href="/termos"]').click();
-  const policy=await popup;await expect(policy.getByRole('heading',{name:'Termos de uso',exact:true})).toBeVisible();await policy.close();
+  const original=page.url();
+  for(const name of ['Termos de uso','Cookies e preferências','Privacidade']){
+    const trigger=page.locator('.registration-acceptance').getByRole('button',{name,exact:true});
+    await trigger.click();
+    const policy=page.getByRole('dialog',{name,exact:true});
+    await expect(policy.getByRole('heading',{name,exact:true})).toBeVisible();
+    await expect(page).toHaveURL(original);
+    expect(page.context().pages()).toHaveLength(1);
+    await policy.getByRole('button',{name:'Fechar',exact:true}).click();
+    await expect(policy).not.toBeVisible();
+    await expect(trigger).toBeFocused();
+  }
   await expect(password).toHaveValue('Local-only-Password1!');await expect(page.getByLabel('Nome',{exact:true})).toHaveValue('Cliente de Teste');
   for(const checkbox of await checks.all())await expect(checkbox).toBeChecked();
   await expect(page.locator('.registration-acceptance')).toContainText('Sem cookies opcionais');
@@ -83,12 +89,50 @@ for(const width of [200,320,375,1440]) test(`rodapé da operação fica depois d
   await expect(page.getByRole('heading',{name:'Área de operação',exact:true})).toBeVisible();
   const footer=page.getByRole('contentinfo');await expect(footer).toHaveCount(1);
   await footer.scrollIntoViewIfNeeded();await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));
-  const positions=await page.evaluate(()=>({footer:document.querySelector('footer')!.getBoundingClientRect().toJSON(),main:document.querySelector('main')!.getBoundingClientRect().toJSON(),links:[...document.querySelectorAll('footer a')].map(e=>e.getBoundingClientRect().toJSON()),nav:document.querySelector('.operation-mobile-nav')!.getBoundingClientRect().toJSON(),overflow:document.documentElement.scrollWidth-innerWidth}));
+  const positions=await page.evaluate(()=>({footer:document.querySelector('footer')!.getBoundingClientRect().toJSON(),main:document.querySelector('main')!.getBoundingClientRect().toJSON(),links:[...document.querySelectorAll('footer button')].map(e=>e.getBoundingClientRect().toJSON()),nav:document.querySelector('.operation-mobile-nav')!.getBoundingClientRect().toJSON(),overflow:document.documentElement.scrollWidth-innerWidth}));
   expect(positions.footer.top).toBeGreaterThanOrEqual(positions.main.bottom-1);expect(positions.overflow).toBeLessThanOrEqual(0);
   if(width<900){for(const link of positions.links)expect(link.bottom).toBeLessThanOrEqual(positions.nav.top);expect(await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link').count()).toBeLessThanOrEqual(4);}
+  if(width===375){
+    const address=page.url();
+    const menuButton=page.getByRole('button',{name:'Abrir menu'});
+    await menuButton.click();
+    const menu=page.getByRole('dialog',{name:'Menu de navegação'});
+    await menu.getByRole('button',{name:'Instalar aplicativo',exact:true}).click();
+    const info=page.getByRole('dialog',{name:'Instalar aplicativo',exact:true});
+    await expect(info).toBeVisible();
+    await expect(menu).not.toBeVisible();
+    await info.getByRole('button',{name:'Fechar'}).click();
+    await expect(page).toHaveURL(address);
+    await expect(menuButton).toBeFocused();
+  }
   await page.route('**/api/auth/context',route=>route.fulfill({status:403,json:{error:{code:'ACCESS_DENIED'}}}));
   await page.evaluate(()=>window.dispatchEvent(new Event('focus')));
   await expect(page.getByRole('heading',{name:'Acesso não autorizado',exact:true})).toBeVisible();
   await expect(page.getByRole('contentinfo')).toHaveCount(1);
-  await expect(page.getByRole('contentinfo').getByRole('link',{name:'Privacidade',exact:true})).toBeVisible();
+  await expect(page.getByRole('contentinfo').getByRole('button',{name:'Privacidade',exact:true})).toBeVisible();
+});
+
+for(const width of [320,1440])test(`instalação abre na mesma tela e preserva inscrição em ${width}px`,async({page})=>{
+  await page.setViewportSize({width,height:750});
+  await page.goto('/cadastro');
+  await fillIdentity(page);
+  const address=page.url();
+  const launch=page.getByRole('contentinfo').getByRole('button',{name:'Instalar aplicativo',exact:true});
+  await page.evaluate(()=>{
+    const event=new Event('beforeinstallprompt',{cancelable:true});
+    Object.assign(event,{prompt:async()=>{},userChoice:Promise.resolve({outcome:'dismissed'})});
+    window.dispatchEvent(event);
+  });
+  await launch.click();
+  const dialog=page.getByRole('dialog',{name:'Instalar aplicativo',exact:true});
+  await expect(dialog.getByRole('heading',{name:'Instalar aplicativo',exact:true})).toBeVisible();
+  await expect(dialog.getByRole('button',{name:'Instalar neste dispositivo'})).toBeEnabled();
+  await dialog.getByLabel('Dispositivo',{exact:true}).selectOption('ios');
+  await expect(dialog.getByRole('heading',{name:'iPhone · Safari'})).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  await page.keyboard.press('Escape');
+  await expect(dialog).not.toBeVisible();
+  await expect(page).toHaveURL(address);
+  await expect(page.getByLabel('Nome',{exact:true})).toHaveValue('Cliente de Teste');
+  expect(page.context().pages()).toHaveLength(1);
 });

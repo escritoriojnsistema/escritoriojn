@@ -6,21 +6,20 @@ import { useAccountHome } from '../auth/useAccountHome';
 import { ControllerNotice } from './ControllerNotice';
 import { privacyPolicyVersion, rememberNecessaryPreference } from './policy';
 
-export default function PrivacyPage({ section }: { section: 'privacy' | 'terms' | 'cookies' }) {
+export default function PrivacyPage({ section, embedded=false }: { section: 'privacy' | 'terms' | 'cookies'; embedded?:boolean }) {
   const home = useAccountHome();
   const [message, setMessage] = useState('');
   const title = section === 'privacy' ? 'Privacidade' : section === 'terms' ? 'Termos de uso' : 'Cookies e preferências';
 
-  return (
-    <div className="public-site">
-      <SiteHeader />
-      <main id="conteudo" className="privacy-page">
+  const Page=embedded?'section':'main';
+  const content=(
+      <Page id={embedded?undefined:'conteudo'} className="privacy-page">
         <header className="privacy-doc-header">
-          <Link className="back-link" to={home ?? '/'}>
+          {!embedded&&<Link className="back-link" to={home ?? '/'}>
             <ArrowLeft size={16} aria-hidden="true" />
             Voltar
-          </Link>
-          <h1>{title}</h1>
+          </Link>}
+          {embedded?<h2>{title}</h2>:<h1>{title}</h1>}
           <p className="privacy-doc-meta">Informações do sistema · versão {privacyPolicyVersion}</p>
         </header>
 
@@ -148,21 +147,20 @@ export default function PrivacyPage({ section }: { section: 'privacy' | 'terms' 
 
         <p className="privacy-references">
           Referências:{' '}
-          <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" target="_blank" rel="noreferrer">
+          <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" target="_blank" rel="noopener noreferrer">
             LGPD, arts. 6º, 7º, 9º, 15, 16 e 18
           </a>{' '}
           e{' '}
           <a
             href="https://www.gov.br/anpd/pt-br/documentos-e-publicacoes/guia-orientativo-cookies-e-protecao-de-dados-pessoais.pdf"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             Guia de cookies da ANPD
           </a>
           .
         </p>
-      </main>
-      <SiteFooter />
-    </div>
+      </Page>
   );
+  return embedded?content:<div className="public-site"><SiteHeader/>{content}<SiteFooter/></div>;
 }

@@ -64,3 +64,26 @@ test('cliente escolhe subpasta e vê somente seus campos e anexos',async({page})
  await expect.poll(()=>s.opens.length).toBe(1);
  expect(s.opens[0]).toMatchObject({category_id:cid,answers:{area:'12.5'}});
 });
+
+test('CPF ou CNPJ troca a máscara e grava somente o documento escolhido',async({page})=>{
+ const s=await setup(page);
+ s.forms[0].fields=[{key:'documento',label:'Identificação fiscal',type:'cpf_cnpj',required:true,options:[]},
+  {key:'cib',label:'Imóvel',type:'text',required:true,options:[],model:{name:'CIB',mask:'*******-0'}}];
+ s.state.fields=s.forms[0].fields;s.state.documents=[];
+ await page.getByLabel('Categoria da solicitação',{exact:true}).selectOption(cid);
+ const identity=page.getByLabel('Identificação fiscal *',{exact:true});
+ const kind=page.getByLabel('Documento para Identificação fiscal',{exact:true});
+ await expect(identity).toBeDisabled();
+ await kind.selectOption('cpf');
+ await identity.fill('52998224725');
+ await expect(identity).toHaveValue('529.982.247-25');
+ await kind.selectOption('cnpj');
+ await expect(identity).toHaveValue('');
+ await identity.fill('12abc34501de35');
+ await expect(identity).toHaveValue('12.ABC.345/01DE-35');
+ await page.getByLabel('Imóvel *',{exact:true}).fill('AB12CD30');
+ await expect(page.getByLabel('Imóvel *',{exact:true})).toHaveValue('AB12CD3-0');
+ await page.getByRole('button',{name:'Conferir pedido e anexos',exact:true}).click();
+ await expect.poll(()=>s.opens.length).toBe(1);
+ expect(s.opens[0].answers).toEqual({documento:'12ABC34501DE35',cib:'AB12CD3-0'});
+});
