@@ -1,3 +1,4 @@
+import {isCashPaymentType} from '../../../shared/cash.js';
 import type {Expense,Finance17Page,FinancialTransfer,PaymentReceipt} from '../../../shared/expenses.js';
 import {storedFinancialText as expenseText} from './text.js';
 import {cashInteger} from '../../../shared/cash.js';
@@ -26,7 +27,7 @@ export function finance17Page(v:unknown):Finance17Page{
 }
 export function receipt(v:unknown):PaymentReceipt{
  if(!record(v)||!uuid(v.id)||!expenseText(v.number,1,100)||v.version!==1||!time(v.issued_at)||!uuid(v.payment_id)||!record(v.snapshot))return invalid();const s=v.snapshot;
- if(!expenseText(s.office_name,1,120)||!expenseText(s.operator_name,1,120)||!(s.payer_name===null||expenseText(s.payer_name,1,160))||!expenseText(s.description,1,500)||s.payment_reference!==`JN-PAG-${v.payment_id}`||!cashInteger(s.amount_cents,1)||!['cash','pix','card','transfer'].includes(String(s.payment_type))||!expenseText(s.method_name,1,120)||!time(s.confirmed_at)||!Array.isArray(s.allocations)||s.allocations.length<1||s.allocations.length>10)return invalid();
+ if(!expenseText(s.office_name,1,120)||!expenseText(s.operator_name,1,120)||!(s.payer_name===null||expenseText(s.payer_name,1,160))||!expenseText(s.description,1,500)||s.payment_reference!==`JN-PAG-${v.payment_id}`||!cashInteger(s.amount_cents,1)||!isCashPaymentType(s.payment_type)||!expenseText(s.method_name,1,120)||!time(s.confirmed_at)||!Array.isArray(s.allocations)||s.allocations.length<1||s.allocations.length>10)return invalid();
  const allocations=s.allocations.map(a=>{if(!record(a)||!expenseText(a.protocol,1,80)||!cashInteger(a.amount_cents,1))return invalid();return {protocol:a.protocol,amount_cents:a.amount_cents};});
  if(allocations.reduce((sum,a)=>sum+a.amount_cents,0)!==s.amount_cents)return invalid();
  return {id:v.id,number:v.number,version:1,issued_at:v.issued_at,payment_id:v.payment_id,snapshot:{office_name:s.office_name,operator_name:s.operator_name,payer_name:s.payer_name,description:s.description,payment_reference:s.payment_reference,amount_cents:s.amount_cents,payment_type:s.payment_type as PaymentReceipt['snapshot']['payment_type'],method_name:s.method_name,confirmed_at:s.confirmed_at,allocations}};

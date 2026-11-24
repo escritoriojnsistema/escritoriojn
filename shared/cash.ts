@@ -3,7 +3,16 @@ export const cashPermissions=['cash.read','cash.open','cash.read_all','cash.mana
 export const MAX_CASH_CENTS=MAX_CHARGE_CENTS;
 export const cashAmountToCents=chargeAmountToCents;
 export type CashAccountType='cash'|'bank'|'digital';
-export type CashPaymentType='cash'|'pix'|'card'|'transfer';
+export const cashPaymentTypes = ['cash', 'pix', 'card', 'transfer', 'boleto'] as const;
+export type CashPaymentType = (typeof cashPaymentTypes)[number];
+export function isCashPaymentType(value: unknown): value is CashPaymentType {
+ return cashPaymentTypes.some(type => type === value);
+}
+export function isCashPaymentDestination(type: CashPaymentType, account: CashAccountType): boolean {
+ if (type === 'cash') return account === 'cash';
+ if (type === 'boleto') return account === 'bank';
+ return account !== 'cash';
+}
 export type CashUnit={id:string;name:string;active:boolean;version:number};
 export type CashAccount=CashUnit&{unit_id:string;type:CashAccountType};
 export type CashPaymentMethod=CashUnit&{unit_id:string;type:CashPaymentType;destination_account_id:string};
@@ -17,7 +26,7 @@ const uuid=(v:unknown):v is string=>typeof v==='string'&&/^[0-9a-f]{8}-[0-9a-f]{
 const object=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);
 const exact=(v:Record<string,unknown>,keys:string[])=>Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
 export const cashInteger=chargeInteger;
-export function validCashConfigure(v:unknown):v is CashConfigure{if(!object(v)||typeof v.name!=='string'||v.name!==v.name.trim()||v.name.length<2||v.name.length>120||/[\u0000-\u001f\u007f]/.test(v.name)||typeof v.active!=='boolean'||!(v.id===null? v.expected_version===null:uuid(v.id)&&Number.isInteger(v.expected_version)&&Number(v.expected_version)>0&&Number(v.expected_version)<2147483646))return false;const keys=['kind','id','expected_version','name','active'];if(v.kind==='unit')return exact(v,keys);if(!uuid(v.unit_id))return false;if(v.kind==='account')return exact(v,[...keys,'unit_id','type'])&&['cash','bank','digital'].includes(String(v.type));return v.kind==='payment_method'&&exact(v,[...keys,'unit_id','type','destination_account_id'])&&['cash','pix','card','transfer'].includes(String(v.type))&&uuid(v.destination_account_id);}
+export function validCashConfigure(v:unknown):v is CashConfigure{if(!object(v)||typeof v.name!=='string'||v.name!==v.name.trim()||v.name.length<2||v.name.length>120||/[\u0000-\u001f\u007f]/.test(v.name)||typeof v.active!=='boolean'||!(v.id===null? v.expected_version===null:uuid(v.id)&&Number.isInteger(v.expected_version)&&Number(v.expected_version)>0&&Number(v.expected_version)<2147483646))return false;const keys=['kind','id','expected_version','name','active'];if(v.kind==='unit')return exact(v,keys);if(!uuid(v.unit_id))return false;if(v.kind==='account')return exact(v,[...keys,'unit_id','type'])&&['cash','bank','digital'].includes(String(v.type));return v.kind==='payment_method'&&exact(v,[...keys,'unit_id','type','destination_account_id'])&&isCashPaymentType(v.type)&&uuid(v.destination_account_id);}
 export function validCashOpen(v:unknown):v is CashOpen{return object(v)&&exact(v,['unit_id','cash_account_id','opening_cents','idempotency_key'])&&uuid(v.unit_id)&&uuid(v.cash_account_id)&&uuid(v.idempotency_key)&&cashInteger(v.opening_cents);}
 
 export type CashFilters={unit_id:string|null;status:'all'|'open'|'closed';query:string};

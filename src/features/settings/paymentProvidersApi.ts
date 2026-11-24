@@ -2,6 +2,7 @@ import type {
   CheckoutMethod,
   PaymentProvidersState,
   ProviderEnvironment,
+  ProviderReceivingOptions,
 } from '../../../shared/paymentCheckout';
 import { supabase } from '../auth/browser';
 import { authenticatedFetch } from '../auth/authenticatedFetch';
@@ -108,6 +109,18 @@ async function callProviders<T>(
 }
 
 export const paymentProvidersApi = {
+  async receivingOptions(office_id: string, signal?: AbortSignal): Promise<ProviderReceivingOptions> {
+    const first = await callProviders<ProviderReceivingOptions>('/receiving-options', {office_id, page: 1}, signal);
+    const units = new Map(first.units.map(unit => [unit.id, unit]));
+    const accounts = new Map(first.accounts.map(account => [account.id, account]));
+    const pageCount = Math.ceil(Math.max(first.units_total, first.accounts_total) / first.page_size);
+    for (let page = 2; page <= pageCount; page++) {
+      const next = await callProviders<ProviderReceivingOptions>('/receiving-options', {office_id, page}, signal);
+      for (const unit of next.units) units.set(unit.id, unit);
+      for (const account of next.accounts) accounts.set(account.id, account);
+    }
+    return {...first, units: [...units.values()], accounts: [...accounts.values()]};
+  },
   state: (office_id: string, signal?: AbortSignal) =>
     callProviders<PaymentProvidersState>('/state', { office_id }, signal),
   saveProvider: (

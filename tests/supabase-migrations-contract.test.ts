@@ -62,7 +62,8 @@ function extractRouterRpcCalls(source: string): Array<{ fn: string; params: stri
 }
 
 test('IA 2 SQL Migrations: todos os RPCs e parâmetros chamados pelos 4 routers Express existem em public.* com SECURITY INVOKER e search_path vazio', () => {
-  const sql = readAllEvolutionSql();
+  const sql = [readAllEvolutionSql(), readFileSync(resolve(ROOT,
+    'supabase/migrations/20261122193331_cash_receiving_scope_and_provider_options.sql'), 'utf8')].join('\n\n');
   const publicFns = parsePublicFunctions(sql);
 
   let totalVerifiedCalls = 0;
@@ -88,7 +89,7 @@ test('IA 2 SQL Migrations: todos os RPCs e parâmetros chamados pelos 4 routers 
   assert.ok(publicFns.has('request_deletion_claim_cleanup'));
   assert.ok(publicFns.has('request_deletion_complete_cleanup'));
 
-  // Every CREATE FUNCTION in the 4 migrations sets search_path = ''
+  // Every checked function sets search_path = ''.
   const allFnHeaders = [...sql.matchAll(/CREATE(?:\s+OR\s+REPLACE)?\s+FUNCTION\s+(public|private)\.([a-z0-9_]+)\([\s\S]*?AS\s+\$\$/gi)];
   assert.ok(allFnHeaders.length >= 40);
   for (const m of allFnHeaders) {

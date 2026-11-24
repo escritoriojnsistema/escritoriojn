@@ -1,3 +1,4 @@
+import {isCashPaymentDestination} from './cash.js';
 import type { AccessContext } from './access.js';
 import type {
   CashAccount,
@@ -46,6 +47,7 @@ export type ManualPaymentReturnTarget = {
 
 export type CashNavigationState = {
   office_id?: string;
+  configuration_unit_id?: string;
   tab?: 'own' | 'all' | 'configuration' | 'charges' | 'expenses' | 'reports' | 'approvals';
   approval_id?: string;
   open_manual_payment?: boolean;
@@ -167,7 +169,7 @@ export function filterCompatibleUnitMethods(
       if (method.type === 'cash') {
         return account.type === 'cash' && (!cashAccountId || account.id === cashAccountId);
       }
-      return account.type !== 'cash';
+      return isCashPaymentDestination(method.type, account.type);
     });
   });
 }
@@ -207,7 +209,7 @@ export function evaluateCashSetupReadiness(
       (a) =>
         a.id === m.destination_account_id &&
         a.unit_id === m.unit_id &&
-        (m.type === 'cash' ? a.type === 'cash' : a.type !== 'cash'),
+        isCashPaymentDestination(m.type, a.type),
     );
   });
 
@@ -362,8 +364,6 @@ export function mergeCashConfigurationPages(pages: CashConfiguration[]): CashCon
   };
 }
 
-const MAX_CONFIG_PAGES = 20;
-
 export async function loadAllCashConfigurationPagesWithFetcher(
   officeId: string,
   unitId: string | null,
@@ -382,7 +382,7 @@ export async function loadAllCashConfigurationPagesWithFetcher(
     first.accounts_total,
     first.payment_methods_total,
   );
-  const totalPages = Math.min(MAX_CONFIG_PAGES, Math.max(1, Math.ceil(maxTotal / pageSize)));
+  const totalPages = Math.max(1, Math.ceil(maxTotal / pageSize));
 
   if (totalPages <= 1) {
     return first;
@@ -415,6 +415,10 @@ export const MANUAL_METHOD_TYPE_GUIDANCE: Record<
     label: 'Cartão (maquininha avulsa / débito ou crédito)',
     description:
       'Registro manual de venda em maquininha avulsa. Taxas de cartão permanecem separadas de descontos comerciais.',
+  },
+  boleto: {
+    label: 'Boleto manual',
+    description: 'Registre após conferir o crédito do boleto na conta bancária vinculada.',
   },
   transfer: {
     label: 'Transferência bancária / depósito',

@@ -774,79 +774,22 @@ test('Cenários 8 e 11: Bancos e Pagamentos carrega múltiplas páginas de conta
     }),
   );
 
-  await page.route('**/api/cash/configuration', async (r) => {
-    const body = r.request().postDataJSON() as { page?: number };
+  await page.route('**/api/payment-providers/receiving-options', async (r) => {
+    const {page} = r.request().postDataJSON() as {page: number};
     if (mode === 'error503') {
-      await r.fulfill({
+      return r.fulfill({
         status: 503,
         json: { error: { code: 'UNAVAILABLE', message: 'Serviço financeiro temporariamente indisponível.' } },
       });
-      return;
     }
-    if (mode === 'empty') {
-      await r.fulfill({
-        json: {
-          data: {
-            units: [{ id: UNIT_ID, name: 'Unidade Sede', active: true, version: 1 }],
-            accounts: [
-              { id: CASH_ACCOUNT_ID, unit_id: UNIT_ID, name: 'Caixa Espécie 01', type: 'cash', active: true, version: 1 },
-            ],
-            payment_methods: [],
-            units_total: 1,
-            accounts_total: 1,
-            payment_methods_total: 0,
-            page: 1,
-            page_size: 50,
-            unit_id: null,
-          },
-        },
-      });
-      return;
-    }
-    if ((body.page ?? 1) === 1) {
-      const page1Accounts = Array.from({ length: 50 }, (_, idx) => ({
-        id: `00000000-0000-4000-8000-${String(idx + 1).padStart(12, '0')}`,
-        unit_id: UNIT_ID,
-        name: `Conta Ativa ${idx + 1}`,
-        type: 'bank',
-        active: true,
-        version: 1,
-      }));
-      await r.fulfill({
-        json: {
-          data: {
-            units: [{ id: UNIT_ID, name: 'Unidade Sede', active: true, version: 1 }],
-            accounts: page1Accounts,
-            payment_methods: [],
-            units_total: 1,
-            accounts_total: 52,
-            payment_methods_total: 0,
-            page: 1,
-            page_size: 50,
-            unit_id: null,
-          },
-        },
-      });
-      return;
-    }
-    await r.fulfill({
-      json: {
-        data: {
-          units: [],
-          accounts: [
-            { id: BANK_ACCOUNT_ID, unit_id: UNIT_ID, name: 'Conta Bancária Página 2', type: 'bank', active: true, version: 1 },
-            { id: INACTIVE_ACCOUNT_ID, unit_id: UNIT_ID, name: 'Conta Inativa Oculta', type: 'digital', active: false, version: 1 },
-          ],
-          payment_methods: [],
-          units_total: 1,
-          accounts_total: 52,
-          payment_methods_total: 0,
-          page: 2,
-          page_size: 50,
-          unit_id: null,
-        },
-      },
-    });
+    const units = page === 1 ? [{id: UNIT_ID, name: 'Unidade Sede'}] : [];
+    const accounts = mode === 'empty' ? [] : page === 1
+      ? Array.from({length: 50}, (_, index) => ({
+          id: `00000000-0000-4000-8000-${String(index + 1).padStart(12, '0')}`,
+          unit_id: UNIT_ID, name: `Conta Ativa ${index + 1}`, type: 'bank',
+        }))
+      : [{id: BANK_ACCOUNT_ID, unit_id: UNIT_ID, name: 'Conta Bancária Página 2', type: 'bank'}];
+    return r.fulfill({json: {data: {units, accounts, page_size: 50, units_total: 1, accounts_total: mode === 'empty' ? 0 : 51}}});
   });
 
   // 1. Erro 503 exibe alerta explícito com Tentar novamente (NUNCA lista vazia falsa)

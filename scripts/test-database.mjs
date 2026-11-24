@@ -768,6 +768,9 @@ try {
     if (allMigrations.some(name => name.includes('_category_response_models'))) {
       result += sql(database, 'postgres', readFileSync(`${root}tests/database/category-response-models.sql`, 'utf8'));
     }
+    if (allMigrations.some(name => name.includes('_cash_manual_boleto'))) {
+      result += sql(database, 'postgres', readFileSync(`${root}tests/database/cash-manual-boleto.sql`, 'utf8'));
+    }
     if (allMigrations.some(name => name.includes('_category_response_catalog'))) {
       result += sql(database, 'postgres', readFileSync(`${root}tests/database/category-response-catalog.sql`, 'utf8'));
     }

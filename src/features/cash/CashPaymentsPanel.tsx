@@ -21,7 +21,7 @@ type Props={
 type AllocationDraft={charge:FinanceCharge;amount:string};
 type Editor={kind:'record'}|{kind:'confirm'|'reject'|'settle';payment:Payment};
 const paymentNames:Record<Payment['status'],string>={pending:'Pendente de confirmação',confirmed:'Confirmado',rejected:'Rejeitado',partially_reversed:'Alocação estornada parcialmente',reversed:'Alocação estornada integralmente'};
-const methodNames:Record<Payment['payment_type'],string>={cash:'Dinheiro',pix:'PIX',card:'Cartão',transfer:'Transferência'};
+const methodNames:Record<Payment['payment_type'],string>={cash:'Dinheiro',pix:'PIX',card:'Cartão',transfer:'Transferência',boleto:'Boleto manual'};
 const moneyInput=(cents:number)=>`${Math.trunc(cents/100)},${String(cents%100).padStart(2,'0')}`;
 const knownMoney=(cents:number|null)=>cents===null?'Sem informação':cashMoney(cents);
 const dateLabel=(date:string)=>date.split('-').reverse().join('/');

@@ -236,6 +236,39 @@ paymentProvidersRouter.post('/state', async (req, res) => {
 /**
  * POST /api/payment-providers/provider/save
  */
+paymentProvidersRouter.post('/receiving-options', async (req, res) => {
+  const body: unknown = req.body;
+  if (Object.keys(req.query).length || !fields(body, ['office_id', 'page']) ||
+      !uuid(body.office_id) || !positive(body.page, 100000)) {
+    errorResponse(res, 422, 'PROVIDER_VALIDATION', 'Confira o escritório e a página.');
+    return;
+  }
+  try {
+    const { client } = res.locals.providersAuth as NonNullable<Awaited<ReturnType<typeof authenticatedClient>>>;
+    const { data, error } = await client.rpc('payment_provider_receiving_options', {
+      p_office_id: body.office_id, p_unit_id: null, p_page: body.page,
+    });
+    if (error) { mapSafeError(res, error); return; }
+    if (fields(data, ['units', 'accounts', 'units_total', 'accounts_total', 'unit_id', 'page', 'page_size']) &&
+        data.page === body.page && data.page_size === 50 && data.unit_id === null &&
+        Array.isArray(data.units) && data.units.length <= 50 &&
+        Array.isArray(data.accounts) && data.accounts.length <= 50 &&
+        Number.isSafeInteger(data.units_total) && Number(data.units_total) >= data.units.length &&
+        Number.isSafeInteger(data.accounts_total) && Number(data.accounts_total) >= data.accounts.length &&
+        data.units.every(unit => fields(unit, ['id', 'name']) && uuid(unit.id) && requestText(unit.name, 120)) &&
+        data.accounts.every(account => fields(account, ['id', 'unit_id', 'name', 'type']) &&
+          uuid(account.id) && uuid(account.unit_id) && requestText(account.name, 120) &&
+          (account.type === 'bank' || account.type === 'digital'))) {
+      const { units, accounts, units_total, accounts_total, page_size } = data;
+      res.json({ data: { units, accounts, units_total, accounts_total, page_size } });
+      return;
+    }
+  } catch {
+    // The browser receives the same safe error for failed and malformed RPC results.
+  }
+  errorResponse(res, 503, 'PROVIDERS_UNAVAILABLE', 'Não foi possível consultar as contas recebedoras.');
+});
+
 paymentProvidersRouter.post('/provider/save', async (req, res) => {
   const b: unknown = req.body;
   const envs: ProviderEnvironment[] = ['sandbox', 'homologation', 'production'];
