@@ -1,3 +1,4 @@
+import type {CashPaymentType} from './cash.js';
 import {cashInteger} from './cash.js';
 import {validChargeDate} from './charges.js';
 export const expensePermissions=['expenses.read','expenses.create','expenses.approve','expenses.pay','cash.transfer','receipts.read','receipts.issue'] as const;
@@ -7,7 +8,7 @@ export type ExpenseOperation=Command&({kind:'create';category:string;payee:strin
 export type TransferOperation=Command&{kind:'transfer'|'sangria'|'reforco';session_id:string;expected_session_version:number;source_account_id:string;destination_account_id:string;amount_cents:number;reason:string};
 export type FinancialTransfer={id:string;kind:TransferOperation['kind'];amount_cents:number;source_account_id:string;destination_account_id:string;source_account_name:string;destination_account_name:string;reason:string;evidence:string;created_at:string;session_id:string};
 export type Finance17Page={page:number;page_size:5;total:number;expenses:Expense[];transfers:FinancialTransfer[];transfers_total:number;accounts:{id:string;unit_id:string;name:string;type:'cash'|'bank'|'digital'}[];accounts_total:number;can_create:boolean;can_approve:boolean;can_pay:boolean;can_transfer:boolean;can_issue_receipt:boolean};
-export type PaymentReceipt={id:string;number:string;version:1;issued_at:string;payment_id:string;snapshot:{office_name:string;operator_name:string;payer_name:string|null;description:string;payment_reference:string;amount_cents:number;payment_type:'cash'|'pix'|'card'|'transfer';method_name:string;confirmed_at:string;allocations:{protocol:string;amount_cents:number}[]}};
+export type PaymentReceipt={id:string;number:string;version:1;issued_at:string;payment_id:string;snapshot:{office_name:string;operator_name:string;payer_name:string|null;description:string;payment_reference:string;amount_cents:number;payment_type:CashPaymentType;method_name:string;confirmed_at:string;allocations:{protocol:string;amount_cents:number}[]}};
 const object=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);
 const uuid=(v:unknown)=>typeof v==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(v);
 const version=(v:unknown)=>Number.isInteger(v)&&Number(v)>0&&Number(v)<2147483646;

@@ -21,13 +21,11 @@ import {
   type PaymentProvidersState,
   type ProviderCapabilityKey,
   type ProviderEnvironment,
+  type ProviderReceivingOptions,
 } from '../../../shared/paymentCheckout';
-import type { CashConfiguration } from '../../../shared/cash';
-import { selectProviderReceivingAccounts, type CashNavigationState } from '../../../shared/manualPaymentFlow';
+import type { CashNavigationState } from '../../../shared/manualPaymentFlow';
 import { paths } from '../../app/routes';
 import { useAuth } from '../auth/AuthProvider';
-import { cashError } from '../cash/api';
-import { loadAllCashConfigurationPages } from '../cash/cashConfigLoader';
 import { paymentProvidersApi, PaymentProvidersError } from './paymentProvidersApi';
 import './paymentProviders.css';
 
@@ -73,7 +71,7 @@ export function PaymentProvidersSettings({
   const officeContext = auth.contexts.find((c) => c.office_id === office && c.role_code !== 'client');
   const canManageCash = Boolean(officeContext?.permissions.includes('cash.manage'));
 
-  const [cashConfig, setCashConfig] = useState<CashConfiguration | null>(null);
+  const [cashConfig, setCashConfig] = useState<ProviderReceivingOptions | null>(null);
   const [cashConfigStatus, setCashConfigStatus] = useState<'loading' | 'ready' | 'forbidden' | 'error'>('loading');
   const [cashConfigError, setCashConfigError] = useState('');
   const [cashRevision, setCashRevision] = useState(0);
@@ -116,10 +114,18 @@ export function PaymentProvidersSettings({
   const [termConnectionMode, setTermConnectionMode] = useState<'cloud_api' | 'local_agent_connector'>('cloud_api');
 
   useEffect(() => {
+    const refreshAccounts = () => {
+      if (document.visibilityState === 'visible') setCashRevision(n => n + 1);
+    };
+    window.addEventListener('focus', refreshAccounts);
+    return () => window.removeEventListener('focus', refreshAccounts);
+  }, []);
+
+  useEffect(() => {
     const controller = new AbortController();
     setCashConfigStatus('loading');
     setCashConfigError('');
-    void loadAllCashConfigurationPages(office, null, controller.signal)
+    void paymentProvidersApi.receivingOptions(office, controller.signal)
       .then((cfg) => {
         if (controller.signal.aborted) return;
         setCashConfig(cfg);
@@ -127,7 +133,7 @@ export function PaymentProvidersSettings({
       })
       .catch((cause) => {
         if (controller.signal.aborted) return;
-        const err = cashError(cause);
+        const err = cause instanceof PaymentProvidersError ? cause : new PaymentProvidersError(503);
         setCashConfig(null);
         setCashConfigError(err.message);
         setCashConfigStatus(err.status === 401 || err.status === 403 ? 'forbidden' : 'error');
@@ -192,17 +198,18 @@ export function PaymentProvidersSettings({
   const selectedPixProvider = state?.providers.find((p) => p.id === pixProviderId) ?? null;
   const selectedCardProvider = state?.providers.find((p) => p.id === cardProviderId) ?? null;
   const backendReady = state?.backend_ready ?? false;
-  const accountSelection = selectProviderReceivingAccounts(cashConfig, financialUnitId);
+  const receivingAccounts = (cashConfig?.accounts ?? []).filter(account => !financialUnitId || account.unit_id === financialUnitId);
   const cashConfigLinkState: CashNavigationState = {
     office_id: office,
     tab: 'configuration',
+    configuration_unit_id: financialUnitId || undefined,
   };
 
   function handleUnitChange(nextUnitId: string) {
     setFinancialUnitId(nextUnitId);
     if (receivingAccountId && nextUnitId) {
       const stillValid = (cashConfig?.accounts ?? []).some(
-        (a) => a.id === receivingAccountId && a.active && a.type !== 'cash' && a.unit_id === nextUnitId,
+        (a) => a.id === receivingAccountId && a.unit_id === nextUnitId,
       );
       if (!stillValid) setReceivingAccountId('');
     }
@@ -479,7 +486,7 @@ export function PaymentProvidersSettings({
                     onChange={(e) => handleUnitChange(e.target.value)}
                   >
                     <option value="">Geral do escritório</option>
-                    {accountSelection.active_units.map((u) => (
+                    {(cashConfig?.units ?? []).map((u) => (
                       <option key={u.id} value={u.id}>
                         {u.name}
                       </option>
@@ -501,11 +508,11 @@ export function PaymentProvidersSettings({
                           ? 'Falha ao carregar contas financeiras'
                           : cashConfigStatus === 'forbidden'
                             ? 'Sem permissão para consultar contas'
-                            : accountSelection.has_any_active_receiving_account
+                            : receivingAccounts.length > 0
                               ? 'Definir na conciliação / padrão do caixa'
                               : 'Nenhuma conta bancária ou digital ativa disponível'}
                     </option>
-                    {accountSelection.active_receiving_accounts.map((a) => {
+                    {receivingAccounts.map((a) => {
                       const unitName = cashConfig?.units.find((u) => u.id === a.unit_id)?.name;
                       return (
                         <option key={a.id} value={a.id}>
@@ -538,25 +545,13 @@ export function PaymentProvidersSettings({
                 )}
                 {cashConfigStatus === 'forbidden' && (
                   <p className="form-feedback error">
-                    Seu acesso não permite consultar as contas financeiras do Caixa neste escritório.
+                    Seu acesso não permite consultar contas recebedoras neste escritório.
                   </p>
                 )}
-                {cashConfigStatus === 'ready' && !accountSelection.has_any_active_receiving_account && (
+                {cashConfigStatus === 'ready' && receivingAccounts.length === 0 && (
                   <p className="customer-note">
                     Nenhuma conta bancária ou digital ativa cadastrada
                     {financialUnitId ? ' para a unidade selecionada' : ' neste escritório'}.
-                    {accountSelection.inactive_receiving_accounts_count > 0
-                      ? ` Há ${accountSelection.inactive_receiving_accounts_count} conta(s) inativa(s) oculta(s) desta lista.`
-                      : ''}
-                    {accountSelection.cash_only_accounts_count > 0
-                      ? ' Contas em espécie não recebem liquidação eletrônica.'
-                      : ''}
-                  </p>
-                )}
-                {cashConfigStatus === 'ready' && accountSelection.inactive_receiving_accounts_count > 0 && accountSelection.has_any_active_receiving_account && (
-                  <p className="customer-note">
-                    {accountSelection.inactive_receiving_accounts_count} conta(s) bancária(s)/digital(is) inativa(s)
-                    foram excluídas da seleção.
                   </p>
                 )}
                 <div className="account-actions">
@@ -972,7 +967,6 @@ export function PaymentProvidersSettings({
                   <select value={termUnitId} onChange={(e) => setTermUnitId(e.target.value)}>
                     <option value="">Geral do escritório</option>
                     {(cashConfig?.units ?? [])
-                      .filter((u) => u.active)
                       .map((u) => (
                         <option key={u.id} value={u.id}>
                           {u.name}

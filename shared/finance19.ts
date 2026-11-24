@@ -1,3 +1,4 @@
+import {isCashPaymentType,type CashPaymentType} from './cash.js';
 import {cashInteger} from './cash.js';
 import {validChargeDate} from './charges.js';
 import {validAdjustment,type ServiceAdjustment,type ServiceSummary} from './services.js';
@@ -6,12 +7,12 @@ export const finance19Permissions=['quick.perform','finance.reports.read','finan
 export const quickRequiredPermissions=['quick.perform','services.read','services.perform','requests.read','requests.create','requests.update','charges.read','charges.create','cash.read','cash.open'] as const;
 export type QuickOperation={session_id:string;expected_session_version:number;service_id:string;expected_service_version:number;quantity:number;adjustment:ServiceAdjustment;quoted_total_cents:number;payment_method_id:string|null;presented_cents:number|null;fee_cents:number;settlement:'not_applicable'|'pending'|'settled';settled_on:string|null;external_reference:string|null;evidence:string;idempotency_key:string};
 export type QuickSession={id:string;unit_id:string;unit_name:string;version:number;cash_cents:number};
-export type QuickMethod={id:string;name:string;type:'cash'|'pix'|'card'|'transfer';account_name:string};
+export type QuickMethod={id:string;name:string;type:CashPaymentType;account_name:string};
 export type QuickContext={enabled:true;services:ServiceSummary[];services_total:number;page:number;page_size:5;sessions:QuickSession[];sessions_total:number;session_page:number;selected_session:QuickSession|null;methods:QuickMethod[];methods_total:number;method_page:number};
 export type QuickResult={id:string;request_id:string;protocol:string;charge_id:string;payment_id:string|null;total_cents:number;completed_at:string;statement:FinanceStatement};
 export const reportViews=['obligations','movements','cash'] as const;
 export type ReportView=typeof reportViews[number];
-export type ReportFilters={view:ReportView;scope:'own'|'all';from_date:string;until_date:string;unit_id:string|null;operator_id:string|null;service_id:string|null;payment_type:'all'|'cash'|'pix'|'card'|'transfer';account_id:string|null;status:string;customer_id:string|null};
+export type ReportFilters={view:ReportView;scope:'own'|'all';from_date:string;until_date:string;unit_id:string|null;operator_id:string|null;service_id:string|null;payment_type:'all'|CashPaymentType;account_id:string|null;status:string;customer_id:string|null};
 export type ReportSettings={timezone:string;version:number;configured:boolean;can_manage:boolean};
 export type ReportContext={enabled:true;settings:ReportSettings;can_read_all:boolean;can_export:boolean};
 export type ReportOptionKind='units'|'operators'|'accounts'|'services'|'customers';
@@ -34,7 +35,7 @@ export function validQuickOperation(v:unknown):v is QuickOperation{
  return uuid(v.payment_method_id)&&v.fee_cents<=v.quoted_total_cents&&(v.presented_cents===null||v.presented_cents>=v.quoted_total_cents)&&(v.settlement==='settled')===(v.settled_on!==null);
 }
 export function validReportFilters(v:unknown):v is ReportFilters{
- if(!object(v)||!exact(v,['view','scope','from_date','until_date','unit_id','operator_id','service_id','payment_type','account_id','status','customer_id'])||!(reportViews as readonly unknown[]).includes(v.view)||!['own','all'].includes(String(v.scope))||!validChargeDate(v.from_date)||!validChargeDate(v.until_date)||!['unit_id','operator_id','service_id','account_id','customer_id'].every(k=>v[k]===null||uuid(v[k]))||!['all','cash','pix','card','transfer'].includes(String(v.payment_type)))return false;
+ if(!object(v)||!exact(v,['view','scope','from_date','until_date','unit_id','operator_id','service_id','payment_type','account_id','status','customer_id'])||!(reportViews as readonly unknown[]).includes(v.view)||!['own','all'].includes(String(v.scope))||!validChargeDate(v.from_date)||!validChargeDate(v.until_date)||!['unit_id','operator_id','service_id','account_id','customer_id'].every(k=>v[k]===null||uuid(v[k]))||!(v.payment_type==='all'||isCashPaymentType(v.payment_type)))return false;
  const days=(Date.parse(v.until_date+'T00:00:00Z')-Date.parse(v.from_date+'T00:00:00Z'))/86400000;if(days<1||days>366)return false;
  if(v.view==='obligations')return v.unit_id===null&&v.account_id===null&&v.payment_type==='all'&&['all','open','paid','cancelled','zero'].includes(String(v.status));
  if(v.view==='cash')return v.service_id===null&&v.customer_id===null&&v.payment_type==='all'&&['all','open','closed'].includes(String(v.status));

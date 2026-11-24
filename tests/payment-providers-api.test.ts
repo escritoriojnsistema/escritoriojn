@@ -73,6 +73,14 @@ test('Etapa 6: API /api/payment-providers protege acesso, nunca vaza segredos e 
       res.end(JSON.stringify({ code: 'PT403', message: 'PROVIDERS_FORBIDDEN' }));
       return;
     }
+    if (req.url === '/rest/v1/rpc/payment_provider_receiving_options') {
+      res.end(JSON.stringify({
+        units: [{ id: OFFICE_ID, name: 'Matriz' }],
+        accounts: [{ id: PROVIDER_ID, unit_id: OFFICE_ID, name: 'Conta Principal', type: 'bank' }],
+        units_total: 1, accounts_total: 1, unit_id: null, page: 1, page_size: 50,
+      }));
+      return;
+    }
     res.end(
       JSON.stringify({
         providers: [
@@ -155,6 +163,7 @@ test('Etapa 6: API /api/payment-providers protege acesso, nunca vaza segredos e 
 
   try {
     assert.equal((await send('/state', { office_id: OFFICE_ID }, false)).status, 401);
+    assert.equal((await send('/receiving-options', { office_id: OFFICE_ID, page: 1 }, false)).status, 401);
 
     // Fail-closed antes da IA 2
     mode = 'missing_rpc';
@@ -165,9 +174,16 @@ test('Etapa 6: API /api/payment-providers protege acesso, nunca vaza segredos e 
     // 403 para usuário sem permissão
     mode = 'forbidden';
     assert.equal((await send('/state', { office_id: OFFICE_ID })).status, 403);
+    assert.equal((await send('/receiving-options', { office_id: OFFICE_ID, page: 1 })).status, 403);
 
     // Projeção limpa: remove raw_secret e bank_password
     mode = 'ready';
+    const options = await send('/receiving-options', { office_id: OFFICE_ID, page: 1 });
+    assert.equal(options.status, 200);
+    assert.deepEqual((await options.json()).data.accounts, [
+      { id: PROVIDER_ID, unit_id: OFFICE_ID, name: 'Conta Principal', type: 'bank' },
+    ]);
+    assert.equal((await send('/receiving-options', { office_id: OFFICE_ID, page: 0 })).status, 422);
     const readyRes = await send('/state', { office_id: OFFICE_ID });
     assert.equal(readyRes.status, 200);
     const readyText = await readyRes.text();

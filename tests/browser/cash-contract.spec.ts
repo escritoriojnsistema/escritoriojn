@@ -44,8 +44,8 @@ test('cash14: configuração conectada separa espécie e destino PIX, com versã
  await page.getByRole('listitem').filter({has:page.getByText('Unidade Fictícia',{exact:true})}).getByRole('button',{name:'Editar',exact:true}).click();await page.getByLabel('Nome',{exact:true}).fill('Unidade Renomeada');await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();expect(bodies[4].configuration).toMatchObject({id:unit,expected_version:1,name:'Unidade Renomeada'});
  await page.getByRole('button',{name:'Adicionar unidade',exact:true}).click();await page.getByLabel('Nome',{exact:true}).fill('Rascunho descartado');await page.getByRole('button',{name:'Cancelar',exact:true}).click();expect(bodies).toHaveLength(5);if(process.env.JN_CASH_CAPTURE){await page.getByRole('tab',{name:'Configuração',exact:true}).focus();await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:'docs/evidencias/etapa-14/configuracao-360.png',fullPage:true});}
 });
-test('cash14: opções paginadas conservam unidade e permitem escolher conta após50',async({page})=>{
- await setup(page);const late='88888888-8888-4888-8888-888888888888';await page.route('**/api/cash/configuration',r=>{const second=r.request().postDataJSON().page===2;return r.fulfill({json:{data:{...config,units:second?[]:config.units,accounts:second?[{id:late,unit_id:unit,name:'Conta da página seguinte',type:'cash',active:true,version:1}]:config.accounts,accounts_total:51,page:second?2:1}}});});let selected:string|undefined;await page.route('**/api/cash/open',r=>{selected=r.request().postDataJSON().cash_account_id;return r.fulfill({json:{data:{...empty,sessions:[session],total:1}}});});await page.goto('/caixa');await page.getByRole('button',{name:'Mais opções',exact:true}).click();await page.getByRole('combobox',{name:'Conta em espécie',exact:true}).selectOption(late);await page.getByRole('button',{name:'Abrir meu caixa',exact:true}).click();await expect(page.getByText('Dinheiro em espécie',{exact:true})).toBeVisible();expect(selected).toBe(late);
+test('caixa: a abertura carrega automaticamente contas após a primeira página',async({page})=>{
+ await setup(page);const late='88888888-8888-4888-8888-888888888888';await page.route('**/api/cash/configuration',r=>{const second=r.request().postDataJSON().page===2;return r.fulfill({json:{data:{...config,units:second?[]:config.units,accounts:second?[{id:late,unit_id:unit,name:'Conta da página seguinte',type:'cash',active:true,version:1}]:config.accounts,accounts_total:51,page:second?2:1}}});});let selected:string|undefined;await page.route('**/api/cash/open',r=>{selected=r.request().postDataJSON().cash_account_id;return r.fulfill({json:{data:{...empty,sessions:[session],total:1}}});});await page.goto('/caixa');await page.getByRole('combobox',{name:'Conta em espécie',exact:true}).selectOption(late);await page.getByRole('button',{name:'Abrir meu caixa',exact:true}).click();await expect(page.getByText('Dinheiro em espécie',{exact:true})).toBeVisible();expect(selected).toBe(late);
 });
 test('cash14: comando pendente mantém rótulo, bloqueia repetição e navegação não mostra loader',async({page})=>{
  await setup(page);let release!:()=>void,entered!:()=>void,calls=0;const held=new Promise<void>(r=>release=r),started=new Promise<void>(r=>entered=r);await page.route('**/api/cash/open',async r=>{calls++;entered();await held;await r.fulfill({json:{data:{...empty,sessions:[session],total:1}}});});await page.goto('/caixa');await page.getByLabel('Fundo inicial (R$)',{exact:true}).fill('100,00');const button=page.getByRole('button',{name:'Abrir meu caixa',exact:true});await button.click();await started;try{await expect(button).toBeDisabled();await expect(button).toHaveText('Abrir meu caixa');await expect(page.locator('[role="progressbar"],.spinner,.loading-overlay')).toHaveCount(0);await page.evaluate(()=>window.dispatchEvent(new Event('focus')));await expect(page.getByLabel('Fundo inicial (R$)',{exact:true})).toHaveValue('100,00');expect(calls).toBe(1);}finally{release();}await expect(page.getByText('Dinheiro em espécie',{exact:true})).toBeVisible();
@@ -64,4 +64,47 @@ test('retorno do caixa distingue reset da abertura e fechamento do editor de con
  await expect(back).toBeVisible();await page.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(back).toBeVisible();
  await page.getByRole('tab',{name:'Configuração',exact:true}).click();await page.getByText('Unidades · 1',{exact:true}).click();await page.getByRole('button',{name:'Adicionar unidade',exact:true}).click();
  await expect(page.getByRole('heading',{name:'Adicionar unidade',exact:true})).toBeVisible();await expect(back).toHaveCount(1);await expect(back).toBeHidden();await page.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(back).toBeVisible();
+});
+
+
+test('caixa: sugere unidade pronta e encaminha a unidade sem espécie para configuração',async({page})=>{
+ await setup(page);
+ const other='99999999-9999-4999-8999-999999999999';
+ await page.route('**/api/cash/configuration',route=>{
+  const filter=route.request().postDataJSON().unit_id;
+  const unitWithoutCash={id:other,name:'Unidade sem espécie',active:true,version:1};
+  return route.fulfill({json:{data:{...config,unit_id:filter,units:filter?[unitWithoutCash]:[unitWithoutCash,...config.units],accounts:filter?[]:config.accounts,units_total:filter?1:2}}});
+ });
+ await page.goto('/caixa');
+ await expect(page.getByLabel('Unidade',{exact:true})).toHaveValue(unit);
+ await page.getByLabel('Unidade',{exact:true}).selectOption(other);
+ await expect(page.getByLabel('Conta em espécie',{exact:true})).toHaveValue('');
+ await expect(page.getByRole('button',{name:'Abrir meu caixa',exact:true})).toBeDisabled();
+ await page.getByRole('button',{name:'Configurar financeiro',exact:true}).click();
+ await page.getByRole('button',{name:'Adicionar conta',exact:true}).click();
+ await expect(page.getByLabel('Unidade do cadastro',{exact:true})).toHaveValue(other);
+ await expect(page.getByLabel('Tipo',{exact:true})).toHaveValue('cash');
+});
+
+test('caixa: boleto manual lista exclusivamente contas bancárias da unidade',async({page})=>{
+ await setup(page);
+ const boletoBank='99999999-9999-4999-8999-999999999999';
+ await page.route('**/api/cash/configuration',route=>route.fulfill({json:{data:{...config,accounts_total:3,
+  accounts:[...config.accounts,{id:boletoBank,unit_id:unit,name:'Banco para boleto',active:true,version:1,type:'bank'}]}}}));
+ let body;
+ await page.route('**/api/cash/configure',route=>{
+  body=route.request().postDataJSON();
+  return route.fulfill({json:{data:{configuration:config}}});
+ });
+ await page.goto('/caixa');
+ await page.getByRole('tab',{name:'Configuração',exact:true}).click();
+ await page.getByRole('button',{name:'Adicionar forma',exact:true}).click();
+ await page.getByLabel('Nome',{exact:true}).fill('Boleto da unidade');
+ await page.getByLabel('Tipo',{exact:true}).selectOption({label:'Bancária (conta interna / manual) — Boleto'});
+ const destinations=page.getByLabel('Conta de destino',{exact:true});
+ await expect(destinations.locator('option')).toHaveCount(2);
+ await destinations.selectOption(boletoBank);
+ await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();
+ await expect(page.getByLabel('Nome',{exact:true})).toHaveCount(0);
+ expect(body).toMatchObject({configuration:{kind:'payment_method',type:'boleto',destination_account_id:boletoBank}});
 });

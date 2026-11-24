@@ -1,7 +1,8 @@
+import type {CashPaymentType} from './cash.js';
 import {cashInteger} from './cash.js';
 export type CorrectionKind='reverse'|'refund';
 export type CorrectionOperation=({kind:'reverse';allocation_id:string;refund_now:boolean}|{kind:'refund';reversal_id:string})&{session_id:string;expected_version:number;idempotency_key:string;amount_cents:number;reason:string;evidence:string};
-export type CorrectionSource={allocation_id:string;reversal_id:string|null;payment_id:string;reference:string;original_entry_id:string;request_id:string;protocol:string;created_at:string;payment_type:'cash'|'pix'|'card'|'transfer';method_name:string;account_name:string;original_cents:number;reversed_cents:number;refunded_cents:number;pending_refund_cents:number;available_cents:number;reversal_cents:number|null;legacy:boolean};
+export type CorrectionSource={allocation_id:string;reversal_id:string|null;payment_id:string;reference:string;original_entry_id:string;request_id:string;protocol:string;created_at:string;payment_type:CashPaymentType;method_name:string;account_name:string;original_cents:number;reversed_cents:number;refunded_cents:number;pending_refund_cents:number;available_cents:number;reversal_cents:number|null;legacy:boolean};
 export type CorrectionSources={items:CorrectionSource[];total:number;page:number;page_size:5;kind:CorrectionKind};
 export type FinancialCondition={settlement_required:boolean;blocked:boolean};
 const object=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);

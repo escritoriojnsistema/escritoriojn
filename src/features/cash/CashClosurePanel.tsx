@@ -6,7 +6,7 @@ import {cashAmountToCents} from '../../../shared/cash';
 import {cashApi,cashError,type CashError} from './api';
 import {cashMoney} from './CashSessions';
 export type ClosureMode='reconcile'|'close'|'view'|'adjust';
-const names={cash:'Espécie',pix:'PIX',card:'Cartão (bruto)',transfer:'Transferências e despesas'};
+const names={cash:'Espécie',pix:'PIX',card:'Cartão (bruto)',transfer:'Transferências e despesas',boleto:'Boleto manual'};
 const kinds={reconcile:'Conciliação',close:'Fechamento',adjust:'Ajuste de conferência'};
 const money=(v:number|null)=>v===null?'Não informado':cashMoney(v);
 function counted(value:string,g:ClosureGroup){const trimmed=value.trim(),negative=trimmed.startsWith('-'),n=cashAmountToCents(negative?trimmed.slice(1):trimmed);return n===null||negative&&g.payment_type==='cash'?null:negative?-n:n;}

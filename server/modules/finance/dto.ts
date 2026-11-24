@@ -1,3 +1,4 @@
+import {isCashPaymentType} from '../../../shared/cash.js';
 import type {QuickContext,QuickResult,QuickSession,ReportChunk,ReportContext,ReportOptions,ReportPage,ReportRow,ReportSettings,ReportSnapshot,ReportSummary} from '../../../shared/finance19.js';
 import {validReportFilters,validReportTimezone,reportSummaryKeys} from '../../../shared/finance19.js';
 import {cashInteger} from '../../../shared/cash.js';
@@ -14,7 +15,7 @@ export function quickContext(v:unknown):QuickContext{
  if(!record(v)||v.enabled!==true||!Array.isArray(v.sessions)||v.sessions.length>5||!integer(v.sessions_total)||!pageNumber(v.session_page)||!Array.isArray(v.methods)||v.methods.length>50||!integer(v.methods_total)||!pageNumber(v.method_page))return bad();
  const services=servicePage({items:v.services,total:v.services_total,page:v.page,page_size:v.page_size});if(v.page_size!==5)return bad();
  const sessions=v.sessions.map(quickSession),selected=v.selected_session===null?null:quickSession(v.selected_session);
- const methods=v.methods.map(m=>{if(!record(m)||!uuid(m.id)||!text(m.name,1,120)||!['cash','pix','card','transfer'].includes(String(m.type))||!text(m.account_name,1,120))return bad();return {id:m.id,name:m.name,type:m.type as 'cash'|'pix'|'card'|'transfer',account_name:m.account_name};});
+ const methods=v.methods.map(m=>{if(!record(m)||!uuid(m.id)||!text(m.name,1,120)||!isCashPaymentType(m.type)||!text(m.account_name,1,120))return bad();return {id:m.id,name:m.name,type:m.type,account_name:m.account_name};});
  return {enabled:true,services:services.items,services_total:services.total,page:services.page,page_size:5,sessions,sessions_total:v.sessions_total,session_page:v.session_page,selected_session:selected,methods,methods_total:v.methods_total,method_page:v.method_page};
 }
 export function quickResult(v:unknown):QuickResult{if(!record(v)||!uuid(v.id)||!uuid(v.request_id)||!uuid(v.charge_id)||!text(v.protocol,1,120)||!(v.payment_id===null||uuid(v.payment_id))||!cashInteger(v.total_cents)||!time(v.completed_at)||(v.total_cents===0)!==(v.payment_id===null))return bad();return {id:v.id,request_id:v.request_id,protocol:v.protocol,charge_id:v.charge_id,payment_id:v.payment_id as string|null,total_cents:v.total_cents,completed_at:v.completed_at,statement:statement(v.statement)};}

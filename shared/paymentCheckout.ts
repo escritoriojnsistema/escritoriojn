@@ -470,3 +470,12 @@ export function isValidWebhookEnvelope(value: unknown): value is WebhookEventEnv
     /^[a-f0-9]{64}$/i.test(v.payload_digest)
   );
 }
+
+
+export type ProviderReceivingOptions = {
+  units: { id: string; name: string }[];
+  accounts: { id: string; unit_id: string; name: string; type: 'bank' | 'digital' }[];
+  units_total: number;
+  accounts_total: number;
+  page_size: number;
+};
