@@ -1,20 +1,22 @@
 import {useEffect,useRef,useState,type FormEvent} from 'react';
 import {ArrowDown,ArrowLeft,ArrowUp,Plus,Trash2} from 'lucide-react';
-import {identifiesCredential,validCategoryFormCommand,type CategoryDocumentSlot,type CategoryField,type CategoryForm,type CategoryFormCommand} from '../../../shared/categoryIntake';
+import {identifiesCredential,validCategoryFormCommand,type CategoryDocumentSlot,type CategoryField,type CategoryForm,type CategoryFormCommand,type CategoryResponseOptionCommand} from '../../../shared/categoryIntake';
 import {CommercialError} from '../documentCommercial/api';
 import {usePendingNavigation33} from '../portalIntake/usePendingNavigation33';
 import {categoryIntakeApi} from './api';
 import {ResponseSettings,responseTypeLabels} from './ResponseSettings';
 import './categoryIntake.css';
 
-type Draft=Pick<CategoryFormCommand,'enabled'|'instructions'|'fields'|'documents'|'reason'>;
+type Draft=Pick<CategoryFormCommand,'instructions'|'fields'|'documents'|'reason'>;
+type SaveAttempt={kind:'form';command:CategoryFormCommand;key:string}
+ | {kind:'option';command:CategoryResponseOptionCommand;field:CategoryField;key:string};
 type Props={office:string;categoryId:string;categoryName:string;onBack:()=>void;onDenied?:()=>void;onPendingChange?:(pending:boolean)=>void;onDirtyChange?:(dirty:boolean)=>void};
-const draftOf=(form:CategoryForm):Draft=>({enabled:form.enabled,instructions:form.instructions,fields:structuredClone(form.fields),documents:structuredClone(form.documents),reason:''});
+const draftOf=(form:CategoryForm):Draft=>({instructions:form.instructions,fields:structuredClone(form.fields),documents:structuredClone(form.documents),reason:''});
 const mimeLabels={'application/pdf':'PDF','image/png':'PNG','image/jpeg':'JPEG'} as const;
 export function CategoryIntakeSettings(props:Props){return <CategoryIntakeWorkspace key={`${props.office}:${props.categoryId}`} {...props}/>;}
 function CategoryIntakeWorkspace({office,categoryId,categoryName,onBack,onDenied,onPendingChange,onDirtyChange}:Props){
  const [state,setState]=useState<CategoryForm>(),[draft,setDraft]=useState<Draft>(),[section,setSection]=useState('fields'),[fieldIndex,setFieldIndex]=useState(0),[documentIndex,setDocumentIndex]=useState(0),[busy,setBusy]=useState(false),[uncertain,setUncertain]=useState(false),[conflict,setConflict]=useState(false),[reconcile,setReconcile]=useState(false),[blocked,setBlocked]=useState(false),[error,setError]=useState(''),[feedback,setFeedback]=useState(''),[tick,setTick]=useState(0);
- const attempt=useRef<{command:CategoryFormCommand;key:string}|null>(null),controller=useRef<AbortController|null>(null),flight=useRef(false),alive=useRef(true),callback=useRef(onPendingChange),denied=useRef(onDenied),keepDraft=useRef(false);callback.current=onPendingChange;denied.current=onDenied;
+ const attempt=useRef<SaveAttempt|null>(null),controller=useRef<AbortController|null>(null),flight=useRef(false),alive=useRef(true),callback=useRef(onPendingChange),denied=useRef(onDenied),keepDraft=useRef(false);callback.current=onPendingChange;denied.current=onDenied;
  const locked=busy||uncertain;
  const dirty=!!state&&!!draft&&JSON.stringify(draft)!==JSON.stringify(draftOf(state));
  usePendingNavigation33(locked);
@@ -29,21 +31,62 @@ function CategoryIntakeWorkspace({office,categoryId,categoryName,onBack,onDenied
  function patchField(next:Partial<CategoryField>){if(!draft)return;update({fields:draft.fields.map((field,index)=>index===fieldIndex?{...field,...next}:field)});}
  function patchDocument(next:Partial<CategoryDocumentSlot>){if(!draft)return;update({documents:draft.documents.map((document,index)=>index===documentIndex?{...document,...next}:document)});}
  function move(kind:'fields'|'documents',index:number,direction:number){if(!draft)return;const items=[...draft[kind]];[items[index],items[index+direction]]=[items[index+direction],items[index]];update({[kind]:items});if(kind==='fields')setFieldIndex(index+direction);else setDocumentIndex(index+direction);}
- async function save(event:FormEvent){event.preventDefault();if(flight.current||!state?.can_manage||!draft||conflict)return;const command:CategoryFormCommand={...structuredClone(draft),expected_revision:state.revision,instructions:draft.instructions.trim(),reason:draft.reason.trim()};if(!attempt.current&&command.fields.some(field=>identifiesCredential(field.label))){setError('Use este formulário para protocolos e outras informações do atendimento. Senhas e códigos de autenticação devem ficar com o cliente.');return;}if(!attempt.current&&!validCategoryFormCommand(command)){setError('Confira os nomes, as opções (de 2 a 20, sem repetição), os limites dos anexos e o motivo. Para publicar, configure ao menos um campo ou anexo.');return;}attempt.current??={command,key:crypto.randomUUID()};const saved=attempt.current,c=new AbortController();controller.current=c;flight.current=true;setBusy(true);callback.current?.(true);setError('');setFeedback('');try{const result=await categoryIntakeApi.publish(office,categoryId,saved.command,saved.key,c.signal);if(c.signal.aborted||!alive.current)return;if(!result.can_manage){fail(new CommercialError(403));return;}attempt.current=null;setUncertain(false);setState(result);setDraft(draftOf(result));setFeedback(result.enabled?'Formulário e anexos publicados para esta categoria.':'Configuração salva sem disponibilizar novas solicitações.');}catch(cause){if(!c.signal.aborted&&alive.current&&fail(cause)===503)setUncertain(true);}finally{flight.current=false;if(alive.current){setBusy(false);callback.current?.(!!attempt.current);}}}
+ async function send(saved:SaveAttempt){
+  if(flight.current||!state?.can_manage||conflict)return;
+  attempt.current=saved;
+  const c=new AbortController();
+  controller.current=c;flight.current=true;setBusy(true);callback.current?.(true);setError('');setFeedback('');
+  try{
+   if(saved.kind==='option'){
+    const options=await categoryIntakeApi.saveOption(office,categoryId,saved.command,saved.key,c.signal);
+    if(c.signal.aborted||!alive.current)return;
+    setState(old=>old?{...old,response_options:options}:old);
+    setDraft(old=>old?{...old,fields:old.fields.map(item=>item.key===saved.field.key?saved.field:item)}:old);
+    setFeedback(saved.command.kind==='model'?'Modelo salvo na categoria.':'Tipo de resposta salvo na categoria.');
+   }else{
+    const result=await categoryIntakeApi.publish(office,categoryId,saved.command,saved.key,c.signal);
+    if(c.signal.aborted||!alive.current)return;
+    if(!result.can_manage){fail(new CommercialError(403));return;}
+    setState(result);setDraft(draftOf(result));
+    setFeedback(result.enabled?'Formulário publicado para novas solicitações nesta categoria.'
+     :state.enabled?'Formulário retirado do portal.':'Rascunho salvo. O cliente verá o formulário quando ele for publicado.');
+   }
+   attempt.current=null;setUncertain(false);
+  }catch(cause){if(!c.signal.aborted&&alive.current&&fail(cause)===503)setUncertain(true);}
+  finally{flight.current=false;if(alive.current){setBusy(false);callback.current?.(!!attempt.current);}}
+ }
+ function save(event:FormEvent<HTMLFormElement>){
+  event.preventDefault();
+  if(flight.current||!state?.can_manage||!draft||conflict)return;
+  if(attempt.current){void send(attempt.current);return;}
+  const submitter=(event.nativeEvent as SubmitEvent).submitter;
+  const enabled=!(submitter instanceof HTMLButtonElement&&submitter.value==='draft');
+  const command:CategoryFormCommand={...structuredClone(draft),enabled,expected_revision:state.revision,
+   instructions:draft.instructions.trim(),reason:draft.reason.trim()};
+  if(command.fields.some(field=>identifiesCredential(field.label))){
+   setError('Use este formulário para protocolos e outras informações do atendimento. Senhas e códigos de autenticação devem ficar com o cliente.');return;
+  }
+  if(!validCategoryFormCommand(command)){
+   setError('Confira os nomes, as opções (de 2 a 20, sem repetição), os limites dos anexos e o motivo. Para publicar, configure ao menos um campo ou anexo.');return;
+  }
+  void send({kind:'form',command,key:crypto.randomUUID()});
+ }
+
  const field=draft?.fields[fieldIndex],document=draft?.documents[documentIndex];
  return <section className="category-intake-settings" aria-label={`Formulário e anexos de ${categoryName}`}>
   <div className="category-intake-heading"><button type="button" data-operation-local-return className="team-text-button" disabled={locked} onClick={onBack}><ArrowLeft size={18} aria-hidden="true"/>Voltar às categorias</button><h2>Formulário e anexos de {categoryName}</h2></div>
   {error&&<p role="alert" className="form-feedback error">{error}</p>}{feedback&&<p role="status" className="form-feedback">{feedback}</p>}
   {!blocked&&<>{!state&&<button type="button" className="team-text-button" onClick={()=>setTick(n=>n+1)}>Consultar configuração</button>}{state&&draft&&<form onSubmit={save} noValidate>
-   <p className="customer-note">{state.enabled?`Publicado · revisão ${state.revision}`:'Ainda não publicado para novas solicitações.'} Configure o que o cliente deve preencher e anexar. A publicação é explícita.</p>
+   <p className="customer-note">{state.enabled?`Publicado · revisão ${state.revision}`:'Ainda não publicado para novas solicitações.'} Use Salvar e publicar para disponibilizar esta configuração ao cliente.</p>
    <label className="team-field">Área da configuração<select value={section} disabled={locked} onChange={e=>setSection(e.target.value)}><option value="fields">Campos do formulário ({draft.fields.length}/24)</option><option value="documents">Anexos solicitados ({draft.documents.length}/12)</option><option value="publish">Publicação</option></select></label>
    <fieldset disabled={locked||conflict}>
     {section==='fields'&&<section aria-label="Campos do formulário">
      <div className="category-intake-toolbar"><h3>Campos do formulário</h3><button type="button" className="team-text-button" disabled={draft.fields.length>=24} onClick={()=>{update({fields:[...draft.fields,{key:`campo_${crypto.randomUUID().slice(0,8)}`,label:'',type:'text',required:false,options:[]}]});setFieldIndex(draft.fields.length);}}><Plus size={18} aria-hidden="true"/>Adicionar campo</button></div>
      {!draft.fields.length?<p className="team-empty">Nenhum campo configurado.</p>:<><label className="team-field">Campo em edição<select value={Math.min(fieldIndex,draft.fields.length-1)} onChange={e=>setFieldIndex(Number(e.target.value))}>{draft.fields.map((item,index)=><option key={item.key} value={index}>{index+1}. {item.label||'Campo sem nome'}</option>)}</select></label>{field&&<>
       <label className="team-field">Nome do campo<input maxLength={80} value={field.label} onChange={e=>patchField({label:e.target.value})}/></label>
-      <ResponseSettings key={field.key} field={field} fields={draft.fields}
-       onChange={next=>update({fields:draft.fields.map(item=>item.key===field.key?next:item)})}/>
+      <ResponseSettings key={field.key} field={field} options={state.response_options}
+       onChange={next=>update({fields:draft.fields.map(item=>item.key===field.key?next:item)})}
+       onSave={(command,next)=>void send({kind:'option',command,field:next,key:crypto.randomUUID()})}/>
       {field.type==='select'&&<label className="team-field">Opções, uma por linha (2 a 20)<textarea rows={4} value={field.options.join('\n')} onChange={e=>patchField({options:e.target.value.split('\n')})}/></label>}
       <label className="category-intake-check"><input type="checkbox" checked={field.required} onChange={e=>patchField({required:e.target.checked})}/>Resposta obrigatória</label>
       <div className="category-intake-toolbar"><button type="button" className="team-text-button" disabled={fieldIndex===0} onClick={()=>move('fields',fieldIndex,-1)}><ArrowUp size={18} aria-hidden="true"/>Subir campo</button><button type="button" className="team-text-button" disabled={fieldIndex===draft.fields.length-1} onClick={()=>move('fields',fieldIndex,1)}><ArrowDown size={18} aria-hidden="true"/>Descer campo</button><button type="button" className="team-text-button" onClick={()=>{update({fields:draft.fields.filter((_,index)=>index!==fieldIndex)});setFieldIndex(Math.max(0,fieldIndex-1));}}><Trash2 size={18} aria-hidden="true"/>Remover campo</button></div>
@@ -57,12 +100,18 @@ function CategoryIntakeWorkspace({office,categoryId,categoryName,onBack,onDenied
       <label className="category-intake-check"><input type="checkbox" checked={document.required} onChange={e=>patchDocument({required:e.target.checked})}/>Anexo obrigatório</label><div className="category-intake-toolbar"><button type="button" className="team-text-button" disabled={documentIndex===0} onClick={()=>move('documents',documentIndex,-1)}><ArrowUp size={18} aria-hidden="true"/>Subir anexo</button><button type="button" className="team-text-button" disabled={documentIndex===draft.documents.length-1} onClick={()=>move('documents',documentIndex,1)}><ArrowDown size={18} aria-hidden="true"/>Descer anexo</button><button type="button" className="team-text-button" onClick={()=>{update({documents:draft.documents.filter((_,index)=>index!==documentIndex)});setDocumentIndex(Math.max(0,documentIndex-1));}}><Trash2 size={18} aria-hidden="true"/>Remover anexo</button></div>
      </>}</>}
     </section>}
-    {section==='publish'&&<section aria-label="Publicação da categoria"><h3>Publicação</h3><label className="team-field">Orientação para o cliente<input maxLength={1000} value={draft.instructions} onChange={e=>update({instructions:e.target.value})}/></label><label className="category-intake-check"><input type="checkbox" checked={draft.enabled} onChange={e=>update({enabled:e.target.checked})}/>Disponibilizar formulário e anexos para novas solicitações</label><p className="customer-note">{draft.fields.length} campos e {draft.documents.length} anexos. A configuração vazia permanece sem publicação. Serviços, preços e modelos documentais conservam suas regras próprias.</p></section>}
+    {section==='publish'&&<section aria-label="Publicação da categoria"><h3>Publicação</h3><label className="team-field">Orientação para o cliente<input maxLength={1000} value={draft.instructions} onChange={e=>update({instructions:e.target.value})}/></label><p className="customer-note">{draft.fields.length} campos e {draft.documents.length} anexos. A configuração vazia permanece sem publicação. Serviços, preços e modelos documentais conservam suas regras próprias.</p></section>}
     <label className="team-field">Motivo da alteração<input maxLength={500} value={draft.reason} onChange={e=>update({reason:e.target.value})}/></label>
    </fieldset>
    {conflict&&<div className="category-intake-conflict"><p role="alert" className="customer-note">A configuração mudou. Seu rascunho foi preservado; consulte a versão atual e confira antes de salvar.</p>{!reconcile?<button type="button" className="team-text-button" onClick={()=>{keepDraft.current=true;setTick(n=>n+1);}}>Conferir versão atual</button>:<><p className="customer-note">Versão atual: revisão {state.revision}, {state.enabled?'publicada':'sem publicação'}. Orientação: {state.instructions||'Nenhuma'}.</p><ul>{state.fields.map(item=><li key={item.key}>{item.label} · {item.response_name??responseTypeLabels[item.type]}{item.required?' · obrigatório':''}{item.options.length?` · ${item.options.join(', ')}`:''}</li>)}{state.documents.map(item=><li key={item.key}>{item.label} · {item.max_files} arquivo(s) · {item.max_bytes/1024} KiB · {item.mime_types.map(mime=>mimeLabels[mime]).join(', ')}{item.required?' · obrigatório':''}</li>)}</ul><button type="button" className="team-text-button" onClick={()=>{setConflict(false);setReconcile(false);setError('');}}>Conferi a versão atual e quero manter meu rascunho</button></>}</div>}
    {uncertain&&<p role="alert" className="customer-note">Resultado não confirmado. Repita a operação: os dados e a chave da tentativa foram preservados. A navegação fica bloqueada até a confirmação.</p>}
-   <div className="category-intake-toolbar">{<button className="primary-button" type="submit" disabled={busy||conflict}>{uncertain?'Confirmar mesma tentativa':'Salvar configuração'}</button>}{!uncertain&&<button type="button" className="team-text-button" disabled={busy||conflict} onClick={()=>{if(dirty){setDraft(draftOf(state));setError('');setFieldIndex(0);setDocumentIndex(0);}else setTick(n=>n+1);}}>{dirty?'Descartar alterações':'Recarregar configuração'}</button>}</div>
+   <div className="category-intake-toolbar">
+    <button className="primary-button" type="submit" value="publish" disabled={busy||conflict}>{uncertain?'Confirmar mesma tentativa':'Salvar e publicar'}</button>
+    {!uncertain&&<>
+     {(!state.enabled||section==='publish')&&<button type="submit" value="draft" className="team-text-button" disabled={busy||conflict}>{state.enabled?'Retirar do portal':'Salvar rascunho'}</button>}
+     <button type="button" className="team-text-button" disabled={busy||conflict} onClick={()=>{if(dirty){setDraft(draftOf(state));setError('');setFieldIndex(0);setDocumentIndex(0);}else setTick(n=>n+1);}}>{dirty?'Descartar alterações':'Recarregar configuração'}</button>
+    </>}
+   </div>
   </form>}</>}
  </section>;
 }
