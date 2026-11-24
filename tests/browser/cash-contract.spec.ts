@@ -38,9 +38,9 @@ for(const source of ['dashboard','configuration'])test(`cash14: falha de ${sourc
 test('cash14: configuração conectada separa espécie e destino PIX, com versão e cancelamento local',async({page})=>{
  await page.setViewportSize({width:360,height:740});await setup(page);let current:CashConfiguration={...config,units:[],accounts:[],payment_methods:[],units_total:0,accounts_total:0,payment_methods_total:0};const bodies:Record<string,any>[]=[];
  await page.route('**/api/cash/configuration',r=>r.fulfill({json:{data:current}}));await page.route('**/api/cash/configure',r=>{const b=r.request().postDataJSON();bodies.push(b);const v=b.configuration;const resource={...v,id:v.id??(v.kind==='unit'?unit:v.kind==='account'?(v.type==='cash'?account:bank):'66666666-6666-4666-8666-666666666666'),version:v.expected_version?v.expected_version+1:1};delete resource.kind;delete resource.expected_version;const key=v.kind==='unit'?'units':v.kind==='account'?'accounts':'payment_methods';current={...current,[key]:[...current[key].filter(x=>x.id!==resource.id),resource]};current={...current,units_total:current.units.length,accounts_total:current.accounts.length,payment_methods_total:current.payment_methods.length};return r.fulfill({json:{data:{resource,configuration:current}}});});
- await page.goto('/caixa');await page.getByRole('tab',{name:'Configuração',exact:true}).click();await page.getByText('Unidades · 0',{exact:true}).click();await page.getByRole('button',{name:'Adicionar unidade',exact:true}).click();await page.getByLabel('Nome',{exact:true}).fill('Unidade Fictícia');await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();await expect(page.getByText('Unidades · 1',{exact:true})).toBeVisible();
- await page.getByText('Contas de destino · 0',{exact:true}).click();for(const [name,type]of [['Espécie Fictícia','cash'],['Destino Digital Fictício','digital']]){await page.getByRole('button',{name:'Adicionar conta',exact:true}).click();await page.getByLabel('Nome',{exact:true}).fill(name);await page.getByRole('combobox',{name:'Tipo',exact:true}).selectOption(type);await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();await expect(page.getByLabel('Nome',{exact:true})).toHaveCount(0);}
- await page.getByText('Formas de pagamento · 0',{exact:true}).click();await page.getByRole('button',{name:'Adicionar forma',exact:true}).click();await page.getByLabel('Nome',{exact:true}).fill('PIX Fictício');await page.getByRole('combobox',{name:'Conta de destino',exact:true}).selectOption(bank);await expect(page.getByRole('combobox',{name:'Conta de destino',exact:true}).locator(`option[value="${account}"]`)).toHaveCount(0);await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();expect(bodies[3].configuration).toMatchObject({kind:'payment_method',type:'pix',destination_account_id:bank});expect(bodies.every(b=>typeof b.idempotency_key==='string')).toBe(true);
+ await page.goto('/caixa');await page.getByRole('tab',{name:'Configuração',exact:true}).click();await page.locator('summary').filter({hasText:/^Unidades · 0$/}).click();await page.getByRole('button',{name:'Adicionar unidade',exact:true}).click();await page.getByLabel('Nome',{exact:true}).fill('Unidade Fictícia');await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();await expect(page.getByRole('heading',{name:'Unidades · 1',exact:true})).toBeVisible();
+ await page.locator('summary').filter({hasText:/^Contas de destino · 0$/}).click();for(const [name,type]of [['Espécie Fictícia','cash'],['Destino Digital Fictício','digital']]){await page.getByRole('button',{name:'Adicionar conta',exact:true}).click();await page.getByLabel('Nome',{exact:true}).fill(name);await page.getByRole('combobox',{name:'Tipo',exact:true}).selectOption(type);await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();await expect(page.getByLabel('Nome',{exact:true})).toHaveCount(0);}
+ await page.locator('summary').filter({hasText:/^Formas de pagamento · 0$/}).click();await page.getByRole('button',{name:'Adicionar forma',exact:true}).click();await page.getByLabel('Nome',{exact:true}).fill('PIX Fictício');await page.getByRole('combobox',{name:'Conta de destino',exact:true}).selectOption(bank);await expect(page.getByRole('combobox',{name:'Conta de destino',exact:true}).locator(`option[value="${account}"]`)).toHaveCount(0);await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();expect(bodies[3].configuration).toMatchObject({kind:'payment_method',type:'pix',destination_account_id:bank});expect(bodies.every(b=>typeof b.idempotency_key==='string')).toBe(true);
  await page.getByRole('listitem').filter({has:page.getByText('Unidade Fictícia',{exact:true})}).getByRole('button',{name:'Editar',exact:true}).click();await page.getByLabel('Nome',{exact:true}).fill('Unidade Renomeada');await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();expect(bodies[4].configuration).toMatchObject({id:unit,expected_version:1,name:'Unidade Renomeada'});
  await page.getByRole('button',{name:'Adicionar unidade',exact:true}).click();await page.getByLabel('Nome',{exact:true}).fill('Rascunho descartado');await page.getByRole('button',{name:'Cancelar',exact:true}).click();expect(bodies).toHaveLength(5);if(process.env.JN_CASH_CAPTURE){await page.getByRole('tab',{name:'Configuração',exact:true}).focus();await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:'docs/evidencias/etapa-14/configuracao-360.png',fullPage:true});}
 });
@@ -62,7 +62,7 @@ test('cash14: consolidação usa consulta autorizada e separa visualmente autori
 test('retorno do caixa distingue reset da abertura e fechamento do editor de configuração',async({page})=>{
  await setup(page);await page.goto('/caixa');const back=page.getByRole('main').getByRole('link',{name:'Voltar ao início',exact:true,includeHidden:true});
  await expect(back).toBeVisible();await page.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(back).toBeVisible();
- await page.getByRole('tab',{name:'Configuração',exact:true}).click();await page.getByText('Unidades · 1',{exact:true}).click();await page.getByRole('button',{name:'Adicionar unidade',exact:true}).click();
+ await page.getByRole('tab',{name:'Configuração',exact:true}).click();await page.locator('summary').filter({hasText:/^Unidades · 1$/}).click();await page.getByRole('button',{name:'Adicionar unidade',exact:true}).click();
  await expect(page.getByRole('heading',{name:'Adicionar unidade',exact:true})).toBeVisible();await expect(back).toHaveCount(1);await expect(back).toBeHidden();await page.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(back).toBeVisible();
 });
 
@@ -76,14 +76,14 @@ test('caixa: sugere unidade pronta e encaminha a unidade sem espécie para confi
   return route.fulfill({json:{data:{...config,unit_id:filter,units:filter?[unitWithoutCash]:[unitWithoutCash,...config.units],accounts:filter?[]:config.accounts,units_total:filter?1:2}}});
  });
  await page.goto('/caixa');
- await expect(page.getByLabel('Unidade',{exact:true})).toHaveValue(unit);
- await page.getByLabel('Unidade',{exact:true}).selectOption(other);
- await expect(page.getByLabel('Conta em espécie',{exact:true})).toHaveValue('');
+ await expect(page.getByRole('combobox',{name:'Unidade',exact:true})).toHaveValue(unit);
+ await page.getByRole('combobox',{name:'Unidade',exact:true}).selectOption(other);
+ await expect(page.getByRole('combobox',{name:'Conta em espécie',exact:true})).toHaveValue('');
  await expect(page.getByRole('button',{name:'Abrir meu caixa',exact:true})).toBeDisabled();
  await page.getByRole('button',{name:'Configurar financeiro',exact:true}).click();
  await page.getByRole('button',{name:'Adicionar conta',exact:true}).click();
- await expect(page.getByLabel('Unidade do cadastro',{exact:true})).toHaveValue(other);
- await expect(page.getByLabel('Tipo',{exact:true})).toHaveValue('cash');
+ await expect(page.getByRole('combobox',{name:'Unidade do cadastro',exact:true})).toHaveValue(other);
+ await expect(page.getByRole('combobox',{name:'Tipo',exact:true})).toHaveValue('cash');
 });
 
 test('caixa: boleto manual lista exclusivamente contas bancárias da unidade',async({page})=>{
@@ -100,8 +100,8 @@ test('caixa: boleto manual lista exclusivamente contas bancárias da unidade',as
  await page.getByRole('tab',{name:'Configuração',exact:true}).click();
  await page.getByRole('button',{name:'Adicionar forma',exact:true}).click();
  await page.getByLabel('Nome',{exact:true}).fill('Boleto da unidade');
- await page.getByLabel('Tipo',{exact:true}).selectOption({label:'Bancária (conta interna / manual) — Boleto'});
- const destinations=page.getByLabel('Conta de destino',{exact:true});
+ await page.getByRole('combobox',{name:'Tipo',exact:true}).selectOption({label:'Bancária (conta interna / manual) — Boleto'});
+ const destinations=page.getByRole('combobox',{name:'Conta de destino',exact:true});
  await expect(destinations.locator('option')).toHaveCount(2);
  await destinations.selectOption(boletoBank);
  await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();
