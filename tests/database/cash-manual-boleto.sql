@@ -36,6 +36,6 @@ SELECT test.assert_true(public.closure_state((:'fixture'::jsonb->>'office')::uui
   'boleto manual: fechamento identifica o crédito bancário');
 SELECT test.assert_true(public.finance_report_page((:'fixture'::jsonb->>'office')::uuid,
   test.report_filter19()||jsonb_build_object('payment_type','boleto','unit_id',:'fixture'::jsonb->'unit'),1)
-  ->'totals' @> '{"received_cents":3000}',
+  ->'summary' @> '{"received_cents":3000}',
   'boleto manual: filtro do relatório encontra somente o recebimento da unidade');
 ROLLBACK;
