@@ -5,8 +5,13 @@ import type {AttachmentClassification,AttachmentMime} from './attachments.js';
 export const categoryFieldTypes=['text','textarea','number','date','email','phone','cpf','cnpj','cpf_cnpj','select'] as const;
 export type CategoryResponseModel={name:string;mask:string};
 export type CategoryField={key:string;label:string;type:typeof categoryFieldTypes[number];required:boolean;options:string[];response_name?:string;model?:CategoryResponseModel};
+export type CategoryResponseType={name:string;type:CategoryField['type']};
+export type CategoryResponseOptions={types:CategoryResponseType[];models:CategoryResponseModel[]};
+export type CategoryResponseOptionCommand=
+ | {kind:'type';option:CategoryResponseType;previous:CategoryResponseType|null}
+ | {kind:'model';option:CategoryResponseModel;previous:CategoryResponseModel|null};
 export type CategoryDocumentSlot={key:string;label:string;required:boolean;max_files:number;max_bytes:number;mime_types:AttachmentMime[];classification:Extract<AttachmentClassification,'documento'|'identificacao'|'comprovante'>};
-export type CategoryForm={category_id:string;revision:number;enabled:boolean;instructions:string;fields:CategoryField[];documents:CategoryDocumentSlot[];can_manage:boolean;has_services:boolean};
+export type CategoryForm={category_id:string;revision:number;enabled:boolean;instructions:string;fields:CategoryField[];documents:CategoryDocumentSlot[];can_manage:boolean;has_services:boolean;response_options?:CategoryResponseOptions};
 export type CategoryFormCommand=Pick<CategoryForm,'enabled'|'instructions'|'fields'|'documents'>&{expected_revision:number;reason:string};
 export type CategoryRequestState={request_id:string;category_id:string;revision:number;version:number;protocol:string;category_name:string;instructions:string;fields:CategoryField[];answers:Record<string,string>;documents:CategoryDocumentSlot[];files:{slot_key:string;file_id:string;name:string;status:string}[];message:string;draft:boolean;can_edit:boolean;can_submit:boolean;hidden:boolean};
 export type CategoryRequestCommand={kind:'save';answers:Record<string,string>;message:string}|{kind:'bind_file';slot_key:string;file_id:string}|{kind:'remove_file';file_id:string}|{kind:'submit'|'hide'};
@@ -25,6 +30,17 @@ export const allowResponseModel=(type:string)=>type==='text'||type==='phone';
 export const responseMaskFitsType=(type:string,mask:string)=>allowResponseModel(type)&&
  (type!=='phone'||(!/[A*]/.test(mask)&&/^0{10,15}$/.test(mask.replace(/[^0]/g,''))));
 export const validResponseModel=(value:unknown):value is CategoryResponseModel=>obj(value)&&exact(value,['name','mask'])&&validResponseName(value.name)&&validResponseMask(value.mask);
+export const validResponseType=(value:unknown):value is CategoryResponseType=>obj(value)&&exact(value,['name','type'])&&validResponseName(value.name)&&categoryFieldTypes.includes(value.type as CategoryField['type']);
+export function validResponseOptionCommand(value:unknown):value is CategoryResponseOptionCommand{
+ if(!obj(value)||!exact(value,['kind','option','previous'])||(value.kind!=='model'&&value.kind!=='type'))return false;
+ const valid=value.kind==='model'?validResponseModel:validResponseType;
+ return valid(value.option)&&(value.previous===null||valid(value.previous));
+}
+export function categoryResponseOptions(value:unknown):CategoryResponseOptions{
+ if(!obj(value)||!exact(value,['types','models'])||!Array.isArray(value.types)||value.types.length>100||!value.types.every(validResponseType)||
+  !Array.isArray(value.models)||value.models.length>100||!value.models.every(validResponseModel))throw Error('Invalid category response options');
+ return {types:value.types,models:value.models};
+}
 export function formatResponseModel(mask:string,input:string){
  const values=input.match(/[A-Za-z0-9]/g)??[];
  let cursor=0,result='',pending='';
@@ -67,7 +83,7 @@ export function categoryAnswerError(fields:CategoryField[],answers:Record<string
  }return undefined;
 }
 export function validCategoryRequestCommand(v:unknown):v is CategoryRequestCommand{if(!obj(v))return false;return v.kind==='save'?exact(v,['kind','answers','message'])&&validCategoryAnswers(v.answers)&&multiline(v.message,2000):v.kind==='bind_file'?exact(v,['kind','slot_key','file_id'])&&categoryKey(v.slot_key)&&id(v.file_id):v.kind==='remove_file'?exact(v,['kind','file_id'])&&id(v.file_id):['submit','hide'].includes(String(v.kind))&&exact(v,['kind']);}
-export function categoryForm(v:unknown):CategoryForm{if(!obj(v)||!id(v.category_id)||!integer(v.revision)||typeof v.enabled!=='boolean'||!text(v.instructions,1000)||!validCategoryFields(v.fields)||!validCategoryDocuments(v.documents)||typeof v.can_manage!=='boolean'||typeof v.has_services!=='boolean')throw Error('Invalid category form');return{category_id:v.category_id,revision:v.revision,enabled:v.enabled,instructions:v.instructions,fields:v.fields,documents:v.documents,can_manage:v.can_manage,has_services:v.has_services};}
+export function categoryForm(v:unknown):CategoryForm{if(!obj(v)||!id(v.category_id)||!integer(v.revision)||typeof v.enabled!=='boolean'||!text(v.instructions,1000)||!validCategoryFields(v.fields)||!validCategoryDocuments(v.documents)||typeof v.can_manage!=='boolean'||typeof v.has_services!=='boolean')throw Error('Invalid category form');return{category_id:v.category_id,revision:v.revision,enabled:v.enabled,instructions:v.instructions,fields:v.fields,documents:v.documents,can_manage:v.can_manage,has_services:v.has_services,...(v.can_manage&&v.response_options!==undefined?{response_options:categoryResponseOptions(v.response_options)}:{})};}
 export function categoryRequestState(v:unknown):CategoryRequestState|null{
  if(v===null)return null;
  if(!obj(v)||!id(v.request_id)||!id(v.category_id)||!integer(v.revision,1)||!integer(v.version,1)||!text(v.protocol,120,1)||!text(v.category_name,60,1)||!text(v.instructions,1000)||!validCategoryFields(v.fields)||!validCategoryDocuments(v.documents)||!validCategoryAnswers(v.answers)||!multiline(v.message,2000)||['draft','can_edit','can_submit','hidden'].some(k=>typeof v[k]!=='boolean')||!Array.isArray(v.files)||v.files.length>120||v.files.some(f=>!obj(f)||!categoryKey(f.slot_key)||!id(f.file_id)||!text(f.name,255,1)||!['aguardando_upload','quarentena','disponivel','rejeitado','removido'].includes(String(f.status))))throw Error('Invalid category request');

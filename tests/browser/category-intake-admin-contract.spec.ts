@@ -1,11 +1,12 @@
 import {test,expect,type Page} from '@playwright/test';
-import type {CategoryForm,CategoryFormCommand} from '../../shared/categoryIntake';
+import type {CategoryForm,CategoryFormCommand,CategoryResponseOptionCommand,CategoryResponseOptions} from '../../shared/categoryIntake';
 test.skip(!process.env.TEAM_UI_CONTRACT,'Contrato local com autoridade e dados fictícios, sem acesso hospedado.');
 const office='11111111-1111-4111-8111-111111111111',user='22222222-2222-4222-8222-222222222222',category='33333333-3333-4333-8333-333333333333';
 const empty:CategoryForm={category_id:category,revision:0,enabled:false,instructions:'',fields:[],documents:[],can_manage:true,has_services:false};
 type Published={office_id:string;category_id:string;command:CategoryFormCommand;key:string};
 async function setup(page:Page,{form=empty,canManage=true,statuses=[] as number[]}={}){
  const writes:Published[]=[],reads:string[]=[];let current=structuredClone(form);
+ const catalog:CategoryResponseOptions={types:[],models:[]};
  const token=`e30.${Buffer.from(JSON.stringify({sub:user,exp:Math.floor(Date.now()/1000)+3600,role:'authenticated',session_id:office})).toString('base64url')}.fixture`;
  await page.addInitScript(({token,user})=>localStorage.setItem('sb-team-ui-auth-token',JSON.stringify({access_token:token,refresh_token:'fixture',token_type:'bearer',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:user,aud:'authenticated',email:'fixture@example.test',app_metadata:{},user_metadata:{}}})),{token,user});
  await page.route('https://team-ui.supabase.co/**',r=>r.fulfill({json:{id:user,aud:'authenticated'}}));
@@ -15,8 +16,14 @@ async function setup(page:Page,{form=empty,canManage=true,statuses=[] as number[
   if(path==='/api/notifications/summary')return r.fulfill({json:{data:{unread:0}}});
   if(path==='/api/document-commercial/presence')return r.fulfill({json:{data:{status:'offline',capacity:1,last_seen:null,session_current:false}}});
   if(path==='/api/categories/state')return r.fulfill({json:{data:{can_manage:canManage,items:[{id:category,name:'Categoria fictícia',revision:1,execution_level:3,is_documents:true,services:0}]}}});
-  if(path==='/api/category-intake/form')return r.fulfill({json:{data:current}});
-  if(path==='/api/category-intake/publish'){const body=r.request().postDataJSON() as Published;writes.push(body);const status=statuses.shift()??200;if(status!==200)return r.fulfill({status,json:{error:{code:'FIXTURE_FAILURE'}}});current={...current,...body.command,revision:current.revision+1};return r.fulfill({json:{data:current}});}
+  if(path==='/api/category-intake/form')return r.fulfill({json:{data:{...current,response_options:catalog}}});
+  if(path==='/api/category-intake/response-option'){
+   const {command}=r.request().postDataJSON() as {command:CategoryResponseOptionCommand};
+   if(command.kind==='model')catalog.models=[...catalog.models.filter(item=>item.name!==command.previous?.name),command.option];
+   else catalog.types=[...catalog.types.filter(item=>item.name!==command.previous?.name),command.option];
+   return r.fulfill({json:{data:catalog}});
+  }
+  if(path==='/api/category-intake/publish'){const body=r.request().postDataJSON() as Published;writes.push(body);const status=statuses.shift()??200;if(status!==200)return r.fulfill({status,json:{error:{code:'FIXTURE_FAILURE'}}});current={...current,...body.command,revision:current.revision+1};return r.fulfill({json:{data:{...current,response_options:catalog}}});}
   return r.fulfill({status:503,json:{error:{code:'FIXTURE_UNAVAILABLE'}}});
  });
  await page.goto('/configuracoes/categorias');await expect(page.getByRole('heading',{level:1,name:'Categorias',exact:true})).toBeVisible();
@@ -34,21 +41,21 @@ for(const width of [320,375,768,1440])test(`editor responsivo e retorno local ${
 test('publica campos e anexos com validação, ordem e chaves estáveis ao renomear',async({page})=>{
  const fixture=await setup(page,{form:{...empty,revision:2,fields:[{key:'original',label:'Nome anterior',type:'text',required:true,options:[]},{key:'segundo',label:'Segundo campo',type:'number',required:false,options:[]}]}});await open(page);
  await page.getByLabel('Nome do campo',{exact:true}).fill('Nome novo');await page.getByRole('button',{name:'Descer campo'}).click();await expect(page.getByLabel('Campo em edição')).toHaveValue('1');
- await page.getByLabel('Tipo de resposta').selectOption('select');await page.getByLabel('Opções, uma por linha (2 a 20)').fill('Uma\nUma');await publishSection(page);await page.getByRole('checkbox',{name:'Disponibilizar formulário e anexos para novas solicitações'}).check();await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();await expect(page.getByRole('alert')).toContainText('sem repetição');expect(fixture.writes).toHaveLength(0);
- await page.getByLabel('Área da configuração').selectOption('fields');await page.getByLabel('Opções, uma por linha (2 a 20)').fill('Uma\nOutra');await page.getByLabel('Área da configuração').selectOption('documents');await page.getByRole('button',{name:'Adicionar anexo',exact:true}).click();await page.getByLabel('Nome do anexo',{exact:true}).fill('Documento fictício');await page.getByLabel('Quantidade máxima de arquivos').fill('2');await page.getByLabel('Tamanho máximo por arquivo (KiB)').fill('2048');await page.getByLabel('Classificação',{exact:true}).selectOption('identificacao');await page.getByRole('checkbox',{name:'PNG',exact:true}).check();await page.getByRole('checkbox',{name:'Anexo obrigatório',exact:true}).check();await publishSection(page);await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();await expect(page.getByRole('status')).toContainText('publicados');
+ await page.getByLabel('Tipo de resposta').selectOption('select');await page.getByLabel('Opções, uma por linha (2 a 20)').fill('Uma\nUma');await publishSection(page);await page.getByRole('button',{name:'Salvar e publicar',exact:true}).click();await expect(page.getByRole('alert')).toContainText('sem repetição');expect(fixture.writes).toHaveLength(0);
+ await page.getByLabel('Área da configuração').selectOption('fields');await page.getByLabel('Opções, uma por linha (2 a 20)').fill('Uma\nOutra');await page.getByLabel('Área da configuração').selectOption('documents');await page.getByRole('button',{name:'Adicionar anexo',exact:true}).click();await page.getByLabel('Nome do anexo',{exact:true}).fill('Documento fictício');await page.getByLabel('Quantidade máxima de arquivos').fill('2');await page.getByLabel('Tamanho máximo por arquivo (KiB)').fill('2048');await page.getByLabel('Classificação',{exact:true}).selectOption('identificacao');await page.getByRole('checkbox',{name:'PNG',exact:true}).check();await page.getByRole('checkbox',{name:'Anexo obrigatório',exact:true}).check();await publishSection(page);await page.getByRole('button',{name:'Salvar e publicar',exact:true}).click();await expect(page.getByRole('status')).toContainText('Formulário publicado');
  expect(fixture.writes).toHaveLength(1);const saved=fixture.writes[0];expect(saved.command.expected_revision).toBe(2);expect(saved.command.fields.map(f=>f.key)).toEqual(['segundo','original']);expect(saved.command.fields[1]).toEqual({key:'original',label:'Nome novo',type:'select',required:true,options:['Uma','Outra']});expect(saved.command.documents[0]).toMatchObject({label:'Documento fictício',max_files:2,max_bytes:2097152,mime_types:['application/pdf','image/png'],required:true,classification:'identificacao'});expect(saved.office_id).toBe(office);expect(saved.category_id).toBe(category);
 });
 test('configuração vazia não publica e anexos exigem formato e limites válidos',async({page})=>{
- const fixture=await setup(page);await open(page);await publishSection(page);await page.getByRole('checkbox',{name:'Disponibilizar formulário e anexos para novas solicitações'}).check();await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();await expect(page.getByRole('alert')).toContainText('ao menos um campo ou anexo');expect(fixture.writes).toHaveLength(0);
- await page.getByLabel('Área da configuração').selectOption('documents');await page.getByRole('button',{name:'Adicionar anexo',exact:true}).click();await page.getByLabel('Nome do anexo',{exact:true}).fill('Arquivo fictício');await page.getByRole('checkbox',{name:'PDF',exact:true}).uncheck();await page.getByLabel('Quantidade máxima de arquivos').fill('11');await page.getByLabel('Tamanho máximo por arquivo (KiB)').fill('10241');await publishSection(page);await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();await expect(page.getByRole('alert')).toContainText('limites dos anexos');expect(fixture.writes).toHaveLength(0);
+ const fixture=await setup(page);await open(page);await publishSection(page);await page.getByRole('button',{name:'Salvar e publicar',exact:true}).click();await expect(page.getByRole('alert')).toContainText('ao menos um campo ou anexo');expect(fixture.writes).toHaveLength(0);
+ await page.getByLabel('Área da configuração').selectOption('documents');await page.getByRole('button',{name:'Adicionar anexo',exact:true}).click();await page.getByLabel('Nome do anexo',{exact:true}).fill('Arquivo fictício');await page.getByRole('checkbox',{name:'PDF',exact:true}).uncheck();await page.getByLabel('Quantidade máxima de arquivos').fill('11');await page.getByLabel('Tamanho máximo por arquivo (KiB)').fill('10241');await publishSection(page);await page.getByRole('button',{name:'Salvar e publicar',exact:true}).click();await expect(page.getByRole('alert')).toContainText('limites dos anexos');expect(fixture.writes).toHaveLength(0);
 });
 test('503 conserva corpo e chave e bloqueia retorno e navegação global até confirmar',async({page})=>{
- const fixture=await setup(page,{statuses:[503,200]});await open(page);await publishSection(page);await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();await expect(page.getByRole('alert').filter({hasText:'Resultado não confirmado'})).toBeVisible();await expect(page.getByRole('button',{name:'Voltar às categorias',exact:true})).toBeDisabled();await expect(page.getByLabel('Motivo da alteração')).toBeDisabled();
- await page.getByRole('navigation',{name:'Navegação da operação',exact:true}).getByRole('link',{name:'Configurações',exact:true}).click({force:true});await expect(page).toHaveURL(/\/configuracoes\/categorias$/);await page.getByRole('button',{name:'Confirmar mesma tentativa'}).click();await expect(page.getByRole('status')).toContainText('Configuração salva');expect(fixture.writes).toHaveLength(2);expect(fixture.writes[1]).toEqual(fixture.writes[0]);await expect(page.getByRole('button',{name:'Voltar às categorias',exact:true})).toBeEnabled();
+ const fixture=await setup(page,{statuses:[503,200]});await open(page);await publishSection(page);await page.getByRole('button',{name:'Salvar rascunho',exact:true}).click();await expect(page.getByRole('alert').filter({hasText:'Resultado não confirmado'})).toBeVisible();await expect(page.getByRole('button',{name:'Voltar às categorias',exact:true})).toBeDisabled();await expect(page.getByLabel('Motivo da alteração')).toBeDisabled();
+ await page.getByRole('navigation',{name:'Navegação da operação',exact:true}).getByRole('link',{name:'Configurações',exact:true}).click({force:true});await expect(page).toHaveURL(/\/configuracoes\/categorias$/);await page.getByRole('button',{name:'Confirmar mesma tentativa'}).click();await expect(page.getByRole('status')).toContainText('Rascunho salvo');expect(fixture.writes).toHaveLength(2);expect(fixture.writes[1]).toEqual(fixture.writes[0]);await expect(page.getByRole('button',{name:'Voltar às categorias',exact:true})).toBeEnabled();
 });
 test('409 preserva rascunho e exige consultar e reconciliar a revisão atual',async({page})=>{
- const fixture=await setup(page,{statuses:[409,200]});await open(page);await page.getByRole('button',{name:'Adicionar campo',exact:true}).click();await page.getByLabel('Nome do campo',{exact:true}).fill('Meu rascunho');await publishSection(page);await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();await expect(page.getByRole('button',{name:'Salvar configuração',exact:true})).toBeDisabled();
- fixture.setCurrent({...empty,revision:4,instructions:'Orientação concorrente',fields:[{key:'concorrente',label:'Campo atual',type:'date',required:true,options:[]}]});await page.getByRole('button',{name:'Conferir versão atual',exact:true}).click();await expect(page.getByText(/Versão atual: revisão 4/)).toBeVisible();await expect(page.getByText('Campo atual · Data · obrigatório')).toBeVisible();await page.getByRole('button',{name:'Conferi a versão atual e quero manter meu rascunho'}).click();await page.getByLabel('Área da configuração').selectOption('fields');await expect(page.getByLabel('Nome do campo',{exact:true})).toHaveValue('Meu rascunho');await publishSection(page);await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();await expect(page.getByRole('status')).toBeVisible();expect(fixture.writes[1].command.expected_revision).toBe(4);expect(fixture.writes[1].key).not.toBe(fixture.writes[0].key);expect(fixture.writes[1].command.fields[0].label).toBe('Meu rascunho');
+ const fixture=await setup(page,{statuses:[409,200]});await open(page);await page.getByRole('button',{name:'Adicionar campo',exact:true}).click();await page.getByLabel('Nome do campo',{exact:true}).fill('Meu rascunho');await publishSection(page);await page.getByRole('button',{name:'Salvar e publicar',exact:true}).click();await expect(page.getByRole('button',{name:'Salvar e publicar',exact:true})).toBeDisabled();
+ fixture.setCurrent({...empty,revision:4,instructions:'Orientação concorrente',fields:[{key:'concorrente',label:'Campo atual',type:'date',required:true,options:[]}]});await page.getByRole('button',{name:'Conferir versão atual',exact:true}).click();await expect(page.getByText(/Versão atual: revisão 4/)).toBeVisible();await expect(page.getByText('Campo atual · Data · obrigatório')).toBeVisible();await page.getByRole('button',{name:'Conferi a versão atual e quero manter meu rascunho'}).click();await page.getByLabel('Área da configuração').selectOption('fields');await expect(page.getByLabel('Nome do campo',{exact:true})).toHaveValue('Meu rascunho');await publishSection(page);await page.getByRole('button',{name:'Salvar e publicar',exact:true}).click();await expect(page.getByRole('status')).toBeVisible();expect(fixture.writes[1].command.expected_revision).toBe(4);expect(fixture.writes[1].key).not.toBe(fixture.writes[0].key);expect(fixture.writes[1].command.fields[0].label).toBe('Meu rascunho');
 });
 test('leitura sem can_manage não oferece configuração nem chama API de formulário',async({page})=>{
  const fixture=await setup(page,{canManage:false});await expect(page.getByRole('list',{name:'Categorias configuradas'})).toBeVisible();await expect(page.getByRole('button',{name:'Formulário e anexos de Categoria fictícia'})).toHaveCount(0);expect(fixture.reads).not.toContain('/api/category-intake/form');
@@ -57,7 +64,7 @@ test('can_manage do formulário nega montagem de controles privados',async({page
  await setup(page,{form:{...empty,can_manage:false}});await page.getByRole('button',{name:'Formulário e anexos de Categoria fictícia'}).click();await expect(page.getByRole('alert')).toContainText('Seu acesso');await expect(page.getByRole('button',{name:'Adicionar campo',exact:true})).toHaveCount(0);await expect(page.getByRole('list',{name:'Categorias configuradas'})).toHaveCount(0);
 });
 test('403 ao publicar descarta formulário privado e bloqueia a área',async({page})=>{
- await setup(page,{statuses:[403]});await open(page);await page.getByRole('button',{name:'Adicionar campo',exact:true}).click();await page.getByLabel('Nome do campo',{exact:true}).fill('Rascunho privado');await publishSection(page);await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Seu acesso');await expect(page.getByLabel('Motivo da alteração')).toHaveCount(0);await expect(page.getByText('Rascunho privado')).toHaveCount(0);await expect(page.getByRole('list',{name:'Categorias configuradas'})).toHaveCount(0);
+ await setup(page,{statuses:[403]});await open(page);await page.getByRole('button',{name:'Adicionar campo',exact:true}).click();await page.getByLabel('Nome do campo',{exact:true}).fill('Rascunho privado');await publishSection(page);await page.getByRole('button',{name:'Salvar e publicar',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Seu acesso');await expect(page.getByLabel('Motivo da alteração')).toHaveCount(0);await expect(page.getByText('Rascunho privado')).toHaveCount(0);await expect(page.getByRole('list',{name:'Categorias configuradas'})).toHaveCount(0);
 });
 
 test('cria subpasta e salva campos, anexos e publicação no escopo selecionado',async({page})=>{
@@ -101,18 +108,18 @@ test('cria subpasta e salva campos, anexos e publicação no escopo selecionado'
   await page.getByLabel('Nome do campo').fill('Nome do imóvel');
   await page.getByLabel('Motivo da alteração').fill('Primeiro campo');
   await expect(page.getByLabel('Subpasta',{exact:true})).toBeDisabled();
-  await page.getByRole('button',{name:'Salvar configuração'}).click();
-  await expect(page.getByRole('status')).toContainText('Configuração salva');
+  await page.getByRole('button',{name:'Salvar rascunho'}).click();
+  await expect(page.getByRole('status')).toContainText('Rascunho salvo');
   await page.getByLabel('Área da configuração').selectOption('documents');
   await page.getByRole('button',{name:'Adicionar anexo'}).click();
   await page.getByLabel('Nome do anexo').fill('Matrícula');
   await page.getByLabel('Motivo da alteração').fill('Incluir anexo');
-  await page.getByRole('button',{name:'Salvar configuração'}).click();
-  await expect(page.getByRole('status')).toContainText('Configuração salva');
+  await page.getByRole('button',{name:'Salvar rascunho'}).click();
+  await expect(page.getByRole('status')).toContainText('Rascunho salvo');
   await publishSection(page);
-  await page.getByRole('checkbox',{name:'Disponibilizar formulário e anexos para novas solicitações'}).check();
-  await page.getByRole('button',{name:'Salvar configuração'}).click();
-  await expect(page.getByRole('status')).toContainText('publicados');
+
+  await page.getByRole('button',{name:'Salvar e publicar'}).click();
+  await expect(page.getByRole('status')).toContainText('Formulário publicado');
   expect(requests.map(r=>r.command.expected_revision)).toEqual([0,1,2]);
   expect(requests[2].command).toMatchObject({enabled:true,fields:[{label:'Nome do imóvel'}],documents:[{label:'Matrícula'}]});
 });
@@ -183,23 +190,50 @@ test('configura tipos e modelos separadamente e salva a máscara do campo',async
  await open(page);
  await page.getByRole('button',{name:'Criar tipo de resposta',exact:true}).click();
  await page.getByLabel('Nome do tipo').fill('Registro de imóvel');
- await page.getByRole('button',{name:'Aplicar ao campo'}).click();
+ await page.getByRole('button',{name:'Salvar na categoria'}).click();
  await page.getByRole('button',{name:'Editar tipo de resposta',exact:true}).click();
  await expect(page.getByLabel('Nome do tipo')).toHaveValue('Registro de imóvel');
  await page.getByLabel('Nome do tipo').fill('Registro da escritura');
- await page.getByRole('button',{name:'Aplicar ao campo'}).click();
+ await page.getByRole('button',{name:'Salvar na categoria'}).click();
  await page.getByRole('button',{name:'Criar modelo',exact:true}).click();
  await page.getByLabel('Nome do modelo').fill('Número da escritura');
  await page.getByLabel('Máscara').fill('000/AA');
- await page.getByRole('button',{name:'Aplicar ao campo'}).click();
+ await page.getByRole('button',{name:'Salvar na categoria'}).click();
  await page.getByRole('button',{name:'Editar modelo',exact:true}).click();
  await expect(page.getByLabel('Máscara')).toHaveValue('000/AA');
  await page.getByLabel('Máscara').fill('00000/AA');
- await page.getByRole('button',{name:'Aplicar ao campo'}).click();
+ await page.getByRole('button',{name:'Salvar na categoria'}).click();
  await page.getByLabel('Motivo da alteração').fill('Ajustar formato da escritura');
- await page.getByRole('button',{name:'Salvar configuração'}).click();
- await expect(page.getByRole('status')).toContainText('Configuração salva');
+ await page.getByRole('button',{name:'Salvar e publicar'}).click();
+ await expect(page.getByRole('status')).toContainText('Formulário publicado');
  expect(fixture.writes[0].command.fields[0]).toMatchObject({
   response_name:'Registro da escritura',type:'text',model:{name:'Número da escritura',mask:'00000/AA'},
  });
+});
+
+
+test('tipos e modelos continuam na categoria sem salvar ou manter o campo de origem',async({page})=>{
+ const fixture=await setup(page,{form:{...empty,revision:1,fields:[{key:'origem',label:'Referência inicial',type:'text',required:false,options:[]}]}});
+ await open(page);
+ await page.getByRole('button',{name:'Criar tipo de resposta',exact:true}).click();
+ await page.getByLabel('Nome do tipo').fill('Referência imobiliária');
+ await page.getByRole('button',{name:'Salvar na categoria'}).click();
+ await expect(page.getByRole('status')).toHaveText('Tipo de resposta salvo na categoria.');
+ await page.getByRole('button',{name:'Criar modelo',exact:true}).click();
+ await page.getByLabel('Nome do modelo').fill('Registro local');
+ await page.getByLabel('Máscara').fill('AAAA/000');
+ await page.getByRole('button',{name:'Salvar na categoria'}).click();
+ await expect(page.getByRole('status')).toHaveText('Modelo salvo na categoria.');
+ expect(fixture.writes).toHaveLength(0);
+
+ await page.reload();await open(page);
+ await page.getByRole('button',{name:'Remover campo'}).click();
+ await page.getByRole('button',{name:'Adicionar campo'}).click();
+ await page.getByLabel('Nome do campo').fill('Novo registro');
+ await page.getByLabel('Tipo de resposta').selectOption({label:'Referência imobiliária'});
+ await page.getByLabel('Modelo de resposta').selectOption({label:'Registro local · AAAA/000'});
+ await page.getByLabel('Motivo da alteração').fill('Publicação pela aba Campos');
+ await page.getByRole('button',{name:'Salvar e publicar'}).click();
+ await expect(page.getByRole('status')).toContainText('Formulário publicado');
+ expect(fixture.writes[0].command).toMatchObject({enabled:true,fields:[{label:'Novo registro',response_name:'Referência imobiliária',model:{name:'Registro local',mask:'AAAA/000'}}]});
 });
