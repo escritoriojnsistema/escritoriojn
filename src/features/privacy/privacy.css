@@ -297,3 +297,5 @@
 .quick-info-actions button { min-height: 44px; }
 .quick-info-dialog .privacy-page, .quick-info-dialog .pwa-main { padding: 0 18px 20px; }
 .quick-info-dialog .privacy-doc-header h2, .quick-info-dialog .pwa-hero h2 { font-size: clamp(22px, 4vw, 32px); }
+
+button.privacy-footer-name { background: none; border: 0; font: inherit; font-weight: 700; color: inherit; cursor: pointer; padding: 0 8px; min-height: 44px; }

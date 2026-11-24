@@ -5,7 +5,7 @@ import {errorResponse} from '../../errors.js';
 import {fields,record,uuid} from '../team/validation.js';
 import {positive,requestStatus,requestText,validCreateRequest,validRequestMutation} from './validation.js';
 import {requestPage,requestDetail,requestOptions,requestMutationResult} from './dto.js';
-import {publicRequestStatusLabels} from '../../../shared/requests.js';
+import {publicRequestStatusLabels,requestHomeCounts} from '../../../shared/requests.js';
 
 export const requestsRouter=Router();
 requestsRouter.use((_req,res,next)=>{res.setHeader('Cache-Control','private, no-store');res.setHeader('CDN-Cache-Control','no-store');res.vary('Authorization');next();});
@@ -16,15 +16,20 @@ const messages:Record<string,[number,string]>={
  REQUEST_RATE_LIMIT:[429,'Limite de pedidos atingido. Consulte suas solicitações e tente novamente mais tarde.'],CHARGE_CONFLICT:[409,'Cancele a cobrança ativa antes de cancelar o atendimento.'],AUTH_REQUIRED:[401,'Entre novamente para continuar.'],REQUESTS_FORBIDDEN:[403,'Seu acesso não permite esta operação nos atendimentos.'],REQUEST_NOT_FOUND:[404,'Atendimento não encontrado.'],REQUEST_CONFLICT:[409,'O atendimento mudou. Reabra antes de alterar.'],REQUEST_IDEMPOTENCY_CONFLICT:[409,'Esta abertura já foi enviada com dados diferentes. Confira a lista antes de abrir outro pedido.'],REQUEST_VALIDATION:[422,'Confira os dados, os itens e o motivo informado.'],REQUESTS_VALIDATION:[422,'Confira os dados, os itens e o motivo informado.'],
  SERVICES_FORBIDDEN:[403,'Seu acesso não permite executar este serviço ou ajuste.'],SERVICES_VALIDATION:[422,'Confira os campos, as quantidades e a política do serviço.'],SERVICE_NOT_FOUND:[404,'Serviço não encontrado.'],SERVICE_NOT_EFFECTIVE:[409,'O serviço ainda não possui versão vigente.'],CUSTOMERS_FORBIDDEN:[403,'Seu acesso não permite usar esta ficha.'],CUSTOMER_NOT_FOUND:[404,'Ficha não encontrada.'],
 };
-async function rpc(res:Response,name:string,args:Record<string,unknown>,kind:'page'|'detail'|'options'|'mutation',status=200){
+async function rpc(res:Response,name:string,args:Record<string,unknown>,kind:'page'|'detail'|'options'|'mutation'|'homeCounts',status=200){
  try{
   const {client}=res.locals.requestsAuth as NonNullable<Awaited<ReturnType<typeof authenticatedClient>>>;
   const {data,error}=await client.rpc(name,args);
   if(error){if(error.code==='PT429')res.setHeader('Retry-After','600');const known=Object.hasOwn(messages,error.message)?messages[error.message]:null;if(known&&error.code===`PT${known[0]}`)errorResponse(res,known[0],error.message,known[1]);else errorResponse(res,503,'REQUESTS_UNAVAILABLE','Não foi possível concluir. Confira a lista antes de repetir a abertura.');return;}
-  const result=kind==='page'?requestPage(data):kind==='options'?requestOptions(data):kind==='mutation'?requestMutationResult(data):requestDetail(data);
+  const result=kind==='homeCounts'?requestHomeCounts(data):kind==='page'?requestPage(data):kind==='options'?requestOptions(data):kind==='mutation'?requestMutationResult(data):requestDetail(data);
   res.status(status).json({data:result});
  }catch{errorResponse(res,503,'REQUESTS_UNAVAILABLE','Não foi possível concluir. Confira a lista antes de repetir a abertura.');}
 }
+requestsRouter.post('/home-counts',async(req,res)=>{
+ const b:unknown=req.body;
+ if(Object.keys(req.query).length||!fields(b,['office_id'])||!uuid(b.office_id)){invalid(res);return;}
+ await rpc(res,'requests_home_counts',{p_office_id:b.office_id},'homeCounts');
+});
 requestsRouter.post('/search',async(req,res)=>{
  const b:unknown=req.body;
  if(Object.keys(req.query).length||!fields(b,['office_id','query','scope','status','page','size'])||!uuid(b.office_id)||!requestText(b.query,120,0)||!['mine','queue'].includes(String(b.scope))||!(b.status===''||requestStatus(b.status)||(typeof b.status==='string'&&Object.hasOwn(publicRequestStatusLabels,b.status)))||!positive(b.page)||![3,5].includes(Number(b.size))||typeof b.size!=='number'){invalid(res);return;}

@@ -2,8 +2,11 @@ import { ArrowRight, LockKeyhole, UserRound } from 'lucide-react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAccountHome } from '../auth/useAccountHome';
 import { paths } from '../../app/routes';
-import { SiteFooter, SiteHeader } from '../../app/SiteLayout';
+import {useInstallPrompt} from '../pwa/useInstallPrompt';
+import {InfoTrigger} from '../privacy/InfoTrigger';
+import { SiteHeader } from '../../app/SiteLayout';
 export default function HomePage() {
+  const {installed}=useInstallPrompt();
   const accountHome = useAccountHome();
   if (accountHome) return <Navigate replace to={accountHome} />;
   return <div className="public-site"><SiteHeader /><main id="conteudo" className="landing-main">
@@ -17,9 +20,10 @@ export default function HomePage() {
           <h2 id="client-title">Área do Cliente</h2><p>Acesse seu espaço no Escritório JN.</p>
           <Link className="primary-button" to={paths.client}>Entrar <ArrowRight size={19} aria-hidden="true" /></Link>
           <Link className="recovery-link" to={`${paths.recovery}?area=client`}>Esqueci minha senha</Link>
+          {!installed&&<InfoTrigger section="install" className="team-text-button"/>}
           <span className="access-footnote"><LockKeyhole size={14} aria-hidden="true" /> Acesso individual e protegido</span>
         </section>
       </div>
     </section>
-  </main><SiteFooter /></div>;
+  </main></div>;
 }

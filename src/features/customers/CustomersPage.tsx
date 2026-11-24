@@ -45,6 +45,18 @@ export default function CustomersPage() {
     media.addEventListener('change', changed); return () => media.removeEventListener('change', changed);
   }, []);
   useEffect(() => {
+    if (view.kind !== 'list' || auth.status !== 'authorized') return;
+    function refresh() {
+      if (document.visibilityState === 'visible') setRevision(value => value + 1);
+    }
+    window.addEventListener('focus', refresh);
+    document.addEventListener('visibilitychange', refresh);
+    return () => {
+      window.removeEventListener('focus', refresh);
+      document.removeEventListener('visibilitychange', refresh);
+    };
+  }, [view.kind, auth.status]);
+  useEffect(() => {
     if (!office || auth.status !== 'authorized' || view.kind !== 'list') return;
     const controller = new AbortController();
     void customersApi.search({ office_id: office, query, page, size }, controller.signal).then(data => {

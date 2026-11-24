@@ -35,3 +35,15 @@ export type RequestMutationResult = RequestDetail|{access_lost:true};
 export type RequestOption = {id:string;label:string;role_code?:'owner'|'admin'|'employee';eligible?:boolean;is_self?:boolean;corrections_eligible?:boolean;definition?:ServiceInput};
 export type RequestOptions = {items:RequestOption[];total:number;page:number;page_size:number};
 export type RequestOptionKind = 'services'|'customers'|'assignees';
+
+export type RequestHomeCounts = Partial<Record<RequestStatus|PublicRequestStatus,number>>;
+export function requestHomeCounts(value:unknown):RequestHomeCounts {
+ if(!value||typeof value!=='object'||Array.isArray(value))throw Error('INVALID_REQUEST_COUNTS');
+ const counts:RequestHomeCounts={};
+ for(const [status,total] of Object.entries(value)){
+  if((!Object.hasOwn(requestStatusLabels,status)&&!Object.hasOwn(publicRequestStatusLabels,status))||
+   typeof total!=='number'||!Number.isSafeInteger(total)||total<0)throw Error('INVALID_REQUEST_COUNTS');
+  counts[status as keyof RequestHomeCounts]=total;
+ }
+ return counts;
+}

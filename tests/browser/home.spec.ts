@@ -18,13 +18,7 @@ for (const width of [320, 768, 1440]) test(`entrada mantém marca e acesso, sem 
   await expect(page.getByRole('region',{name:'Nosso compromisso'})).toHaveCount(0);
   await expect(page.locator('.benefits,.benefit')).toHaveCount(0);
   await expect(page.getByRole('link',{name:'Status do sistema'})).toHaveCount(0);
-  const footer=page.getByRole('contentinfo');
-  await expect(footer.locator('.privacy-footer-row')).toContainText('Escritório JN');
-  await expect(footer.locator('.privacy-footer-row').getByRole('link')).toHaveCount(3);
-  if(width===1440){
-    const row=await footer.locator('.privacy-footer-row').evaluate(element=>[...element.children].map(child=>child.getBoundingClientRect().toJSON()));
-    expect(Math.abs(row[0].y+row[0].height/2-row[1].y-row[1].height/2)).toBeLessThanOrEqual(1);
-  }
+  await expect(page.getByRole('contentinfo')).toHaveCount(0);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   expect(healthReads).toEqual([]);
 });
@@ -37,6 +31,6 @@ for(const path of ['/status','/STATUS/']) test(`rota removida usa página não e
   await expect(page).toHaveTitle('Escritório JN | Página não encontrada');
   await expect(page.locator('.health-panel')).toHaveCount(0);
   await expect(page.getByRole('link',{name:'Status do sistema'})).toHaveCount(0);
-  await expect(page.getByRole('contentinfo')).toHaveCount(1);
+  await expect(page.getByRole('contentinfo')).toHaveCount(0);
   expect(healthReads).toEqual([]);
 });

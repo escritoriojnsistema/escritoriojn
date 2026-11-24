@@ -1,6 +1,7 @@
 import { useId, useState } from 'react';
 import { Download, ShieldCheck, Smartphone } from 'lucide-react';
-import { SiteFooter, SiteHeader } from '../../app/SiteLayout';
+import { SiteHeader } from '../../app/SiteLayout';
+import {AppInfo} from './AppInfo';
 import {useInstallPrompt} from './useInstallPrompt';
 import './pwa.css';
 
@@ -24,6 +25,8 @@ export default function InstallPage({embedded=false}:{embedded?:boolean}){
       setError('Use o menu do navegador e siga as instruções abaixo.');
     }
   }
+
+  if(installed)return embedded?<AppInfo/>:<div className="public-site pwa-shell"><SiteHeader/><main id="conteudo"><AppInfo/></main></div>;
 
   const Page=embedded?'section':'main';
   const content=(
@@ -53,12 +56,7 @@ export default function InstallPage({embedded=false}:{embedded?:boolean}){
               </select>
             </div>
 
-            {installed ? (
-              <p role="status" className="form-feedback">
-                O aplicativo já está aberto no modo instalado.
-              </p>
-            ) : (
-              available && (
+            {available && (
                 <button
                   type="button"
                   className="primary-button button button-primary"
@@ -67,7 +65,6 @@ export default function InstallPage({embedded=false}:{embedded?:boolean}){
                   <Download size={18} aria-hidden="true" />
                   Instalar neste dispositivo
                 </button>
-              )
             )}
 
             {error && (
@@ -124,5 +121,5 @@ export default function InstallPage({embedded=false}:{embedded?:boolean}){
         </div>
       </Page>
   );
-  return embedded?content:<div className="public-site pwa-shell"><SiteHeader/>{content}<SiteFooter/></div>;
+  return embedded?content:<div className="public-site pwa-shell"><SiteHeader/>{content}</div>;
 }

@@ -4,7 +4,6 @@ import { LogOut, RefreshCw, ArrowLeft, ShieldAlert, WifiOff } from 'lucide-react
 import { paths } from '../../app/routes';
 import { useAuth } from '../auth/AuthProvider';
 import './operation.css';
-import { PrivacyFooter } from '../privacy/PrivacyLinks';
 
 export function OperationalFeedback({ status, client = false }: { status: 'loading' | 'denied' | 'unavailable'; client?: boolean }) {
   const auth = useAuth();
@@ -57,7 +56,6 @@ export function OperationalFeedback({ status, client = false }: { status: 'loadi
           </Link>
         </div>
       </main>
-      <PrivacyFooter />
     </div>
   );
 }

@@ -17,13 +17,13 @@ test('cliente: Anexos fica em Solicitações e Conta em Configurações',()=>{
  const contexts=[context([],undefined,'client')],items=operationNavigation(contexts,true);
  assert.ok(items.every(i=>!removed.includes(i.key)));assert.ok(items.some(i=>i.key==='settings'));
  assert.deepEqual(operationSectionNavigation(contexts,true,'/minhas-solicitacoes').map(i=>i.path),['/minhas-solicitacoes','/meus-anexos']);
- assert.deepEqual(settingsNavigation(contexts[0],true).map(i=>i.path),['/minha-conta']);
+ assert.deepEqual(settingsNavigation(contexts[0],true).map(i=>i.path),['/minha-conta','/minhas-configuracoes/leis-e-privacidade']);
  assert.equal(mobileOperationNavigation(items).at(-1)?.key,'settings');
 });
 test('seções autorizadas continuam acessíveis sem concessão geral de Configurações ou Serviços',()=>{
  const c=context(['audit.read','users.manage','requests.read','checklists.read']);
  assert.ok(operationNavigation([c],false).some(i=>i.key==='settings'));
- assert.deepEqual(settingsNavigation(c,false).map(i=>i.key),['audit','team','account']);
+ assert.deepEqual(settingsNavigation(c,false).map(i=>i.key),['legal','audit','team','account']);
  const services=operationNavigation([c],false).find(i=>i.key==='services');assert.equal(services?.path,'/pendencias');
  assert.deepEqual(operationSectionNavigation([c],false,'/pendencias').map(i=>i.key),['checklists']);
 });

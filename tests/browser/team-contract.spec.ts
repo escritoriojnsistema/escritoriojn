@@ -462,10 +462,7 @@ test('Conta compacta mantém recuperação acima dos atalhos em 360x640', async 
   const recovery = page.getByRole('link', { name: 'Recuperar senha', exact: true });
   await expect(recovery).toBeVisible();
   expect((await recovery.boundingBox())!.y + (await recovery.boundingBox())!.height).toBeLessThanOrEqual((await page.getByRole('navigation', { name: 'Atalhos do aplicativo' }).boundingBox())!.y);
-  // The later shared privacy footer remains reachable by natural scrolling;
-  // the primary recovery action above must fit before the mobile shortcuts.
-  await page.getByRole('contentinfo',{name:'Privacidade e uso'}).scrollIntoViewIfNeeded();
-  await expect(page.getByRole('contentinfo',{name:'Privacidade e uso'})).toBeInViewport();
+  await expect(page.getByRole('contentinfo',{name:'Privacidade e uso'})).toHaveCount(0);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 test('arquivo pendente mantém o escritório de início bloqueado para troca',async({page})=>{

@@ -4,6 +4,7 @@ import { defineConfig, loadEnv, type Plugin } from 'vite';
 import express from 'express';
 import { resolve } from 'node:path';
 import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
 import {readFileSync,writeFileSync,readdirSync} from 'node:fs';
 import { app } from './server/app.ts';
 import { drainBackgroundTasks } from './server/background.ts';
@@ -47,7 +48,10 @@ export default defineConfig(({ mode }) => {
   for (const key of ['VITE_SUPABASE_URL', 'VITE_SUPABASE_PUBLISHABLE_KEY']) {
     if (!process.env[key] && local[key]) process.env[key] = local[key];
   }
+  const release=JSON.parse(readFileSync(resolve('package.json'),'utf8')).version;
+  const commit=process.env.VERCEL_GIT_COMMIT_SHA??spawnSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).stdout?.trim();
   return {
+    define:{__JN_APP_VERSION__:JSON.stringify(/^[0-9a-f]{7,64}$/.test(commit??'')?`${release}-${commit!.slice(0,8)}`:release)},
     plugins: [localApi(), react(), tailwindcss(), pwaVersion()],
     server: {
       allowedHosts: true,
