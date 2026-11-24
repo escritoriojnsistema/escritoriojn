@@ -16,6 +16,7 @@ for(const width of [360,1440])test(`superadministrador publica identificação e
  await page.route('**/api/privacy/save',r=>{saved=r.request().postDataJSON();state={configured:true,revision:1,controller:saved?.controller};return r.fulfill({json:{data:state}});});
  await page.goto('/privacidade');await expect(page.getByRole('note')).toContainText('Dados fictícios de exemplo');
  await page.goto('/configuracoes/privacidade');
+ await page.getByText('Configurar responsável pelo tratamento',{exact:true}).click();
  await page.getByRole('textbox',{name:'Nome ou razão social',exact:true}).fill('Responsável configurado');
  await page.getByRole('textbox',{name:'E-mail de privacidade',exact:true}).fill('privacy@example.test');
  await page.getByRole('button',{name:'Salvar aviso de privacidade'}).click();
@@ -28,6 +29,6 @@ for(const width of [360,1440])test(`superadministrador publica identificação e
 });
 test('administrador não recebe formulário de configuração do controlador por URL direta',async({page})=>{
  await setup(page,'admin');await page.goto('/configuracoes/privacidade');
- await expect(page.getByRole('alert')).toContainText('Seu acesso não permite');
+ await expect(page.getByRole('button',{name:'Escritório JN',exact:true})).toBeVisible();
  await expect(page.getByRole('button',{name:'Salvar aviso de privacidade'})).toHaveCount(0);
 });

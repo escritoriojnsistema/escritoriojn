@@ -20,3 +20,17 @@ export function privacySettings(value:unknown):PrivacySettings{
  const {controller_name,cnpj,contact_email,contact_phone,address}=r.controller;
  return{configured:true,revision:Number(r.revision),controller:{controller_name,cnpj,contact_email,contact_phone,address}};
 }
+
+export const defaultCopyright = '© Escritório JN. Todos os direitos reservados.';
+export type CopyrightNotice = {notice:string;revision:number};
+export function validCopyright(value:unknown):value is string {
+ return typeof value==='string' && value===value.trim() && !/[\u0000-\u001f\u007f]/.test(value)
+  && [...value].length>=3 && [...value].length<=400;
+}
+export function copyrightNotice(value:unknown):CopyrightNotice {
+ if(!value||typeof value!=='object'||!('notice' in value)||!('revision' in value)
+  ||!validCopyright(value.notice)||typeof value.revision!=='number'||!Number.isInteger(value.revision)||value.revision<0) {
+  throw Error('INVALID_COPYRIGHT_STATE');
+ }
+ return {notice:value.notice,revision:value.revision};
+}

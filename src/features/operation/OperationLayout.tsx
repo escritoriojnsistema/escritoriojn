@@ -10,12 +10,13 @@ import { useAuth } from '../auth/AuthProvider';
 import { operationNavigation, mobileOperationNavigation, operationRoleNames, operationSectionKey, operationSectionNavigation } from './navigation';
 import {OperationBack,splitOperationReturn} from './OperationBack';
 import './operation.css';
-import {PrivacyFooter} from '../privacy/PrivacyLinks';
+import {useInstallPrompt} from '../pwa/useInstallPrompt';
 import {InfoTrigger} from '../privacy/InfoTrigger';
 
-const icons = {paymentsConfig:Landmark,imports:Archive,operations:ShieldCheck,categories:ClipboardList,access:Settings,privacy:CircleUserRound,rural:LandPlot,settings:Settings,catalog:FileText,portalDocuments:FileText, documents:FileText, templates:FileText, quick:Zap,reports:ChartColumn, expenses: Banknote, payments: Wallet, cash: Banknote, charges: Wallet, home: House, checklists: ClipboardCheck, notifications: Bell, requests: ClipboardList, attachments: Paperclip, customers: UsersRound, services: BriefcaseBusiness, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
+const icons = {paymentsConfig:Landmark,imports:Archive,operations:ShieldCheck,categories:ClipboardList,access:Settings,privacy:CircleUserRound,legal:ShieldCheck,rural:LandPlot,settings:Settings,catalog:FileText,portalDocuments:FileText, documents:FileText, templates:FileText, quick:Zap,reports:ChartColumn, expenses: Banknote, payments: Wallet, cash: Banknote, charges: Wallet, home: House, checklists: ClipboardCheck, notifications: Bell, requests: ClipboardList, attachments: Paperclip, customers: UsersRound, services: BriefcaseBusiness, team: UsersRound, audit: History, archives: Archive, account: CircleUserRound };
 export function OperationLayout({ client = false, busy = false, contextActions, office, children }: { client?: boolean; busy?: boolean; contextActions?: ReactNode; office?: string; children: ReactNode }) {
   const auth = useAuth();
+  const {installed}=useInstallPrompt();
   const items = operationNavigation(auth.contexts, client);
   const contextual = splitOperationReturn(contextActions);
   const home = items[0].path;
@@ -61,13 +62,12 @@ export function OperationLayout({ client = false, busy = false, contextActions, 
   function exit() {
     return <button className="operation-exit" disabled={leaving || busy} onClick={() => void logout()}><LogOut size={20} aria-hidden="true" /><span>Sair da conta</span></button>;
   }
-  function installation(){return <InfoTrigger className="pwa-menu-link" section="install" disabled={busy} onOpen={closeMenu}><Download size={20} aria-hidden="true"/><span>Instalar aplicativo</span></InfoTrigger>;}
+  function installation(){return installed?null:<InfoTrigger className="pwa-menu-link" section="install" disabled={busy} onOpen={closeMenu}><Download size={20} aria-hidden="true"/><span>Instalar aplicativo</span></InfoTrigger>;}
   return <div className="operation-layout">
     <aside className="operation-sidebar" aria-label="Navegação principal"><Brand light to={home} /><p className="operation-area">{client ? 'Área do cliente' : 'Área da equipe'}</p>{navigation('Navegação da operação')}{contextActions&&<div className="operation-context-actions">{contextual.actions}</div>}{!client&&<PresenceControl/>}<div className="operation-sidebar-end">{installation()}{exit()}<p>Acesso individual e protegido.</p></div></aside>
     <div className="operation-body">
       <header className="operation-mobile-bar" aria-label="Barra da conta"><button ref={menuButton} className="operation-icon-button" aria-label="Abrir menu" aria-expanded={open} aria-controls="operation-menu" onClick={() => setOpen(true)}><Menu size={24} aria-hidden="true" /></button><Brand to={home} /><div className="operation-header-actions"><NotificationBell client={client}/><Link to={account} className="operation-icon-button" aria-label="Abrir conta" title="Conta"><CircleUserRound size={25} aria-hidden="true" /></Link></div></header>
       <main id="conteudo" className="operation-main"><OperationBack pathname={pathname} contexts={auth.contexts} client={client} busy={busy} contextual={contextual.back}/>{error && !open && <p role="alert" className="form-feedback error">{error}</p>}{sectionItems.length>1&&<nav className="operation-section-navigation" aria-label={`Áreas de ${sectionKey==='requests'?'solicitações':sectionKey==='customers'?'clientes':'serviços'}`}>{sectionItems.map(item=>{const Icon=icons[item.key];return <Link key={item.key} to={item.path} state={office?{office_id:office}:undefined} aria-current={normalizePathname(pathname)===item.path?'page':undefined} aria-disabled={busy||undefined} onClick={event=>{if(busy)event.preventDefault();}}><Icon size={19} aria-hidden="true"/><span>{item.label}</span></Link>;})}</nav>}{children}</main>
-      <PrivacyFooter className="operation-footer"/>
     </div>
     {navigation('Atalhos do aplicativo', true)}
     <dialog id="operation-menu" ref={drawer} className="operation-drawer" aria-label="Menu de navegação" onClose={() => { setOpen(false); menuButton.current?.focus(); }} onClick={event => {
@@ -78,6 +78,6 @@ export function OperationLayout({ client = false, busy = false, contextActions, 
   </div>;
 }
 
-export function OperationHeading({ context, title, description, showRole = true, action }: { context: AccessContext; title: string; description: string; showRole?: boolean; action?: ReactNode }) {
-  return <header className="operation-heading"><div><p className="eyebrow">{context.office_name}</p><h1>{title}</h1><p>{description}</p></div>{(showRole || action) && <div className="operation-heading-aside">{showRole && <span className="operation-role">{operationRoleNames[context.role_code]}</span>}{action}</div>}</header>;
+export function OperationHeading({ context, title, description, showRole = true, action }: { context: AccessContext; title: string; description?: string; showRole?: boolean; action?: ReactNode }) {
+  return <header className="operation-heading"><div><p className="eyebrow">{context.office_name}</p><h1>{title}</h1>{description&&<p>{description}</p>}</div>{(showRole || action) && <div className="operation-heading-aside">{showRole && <span className="operation-role">{operationRoleNames[context.role_code]}</span>}{action}</div>}</header>;
 }

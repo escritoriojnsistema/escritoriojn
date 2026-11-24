@@ -1,6 +1,5 @@
 import { lazy } from 'react';
 import { Compass } from 'lucide-react';
-import {PrivacyFooter} from '../features/privacy/PrivacyLinks';
 import PanelPage from '../features/auth/PanelPage';
 import { Route, Routes, Navigate, Link } from 'react-router-dom';
 import { paths } from './routes';
@@ -53,6 +52,8 @@ export default function OperationalRoutes({operationKey}:{operationKey:string}){
     <Route path={paths.clientNotifications} element={<NotificationsPage key={`client-notices:${operationKey}`} client />} />
     <Route path={paths.attachments} element={<AttachmentsPage key={`attachments:${operationKey}`} />} />
     <Route path={paths.clientAttachments} element={<AttachmentsPage key={`client-attachments:${operationKey}`} client />} />
+    <Route path={paths.clientLegal} element={<SettingsPage key={`client-legal:${operationKey}`} section="legal" client/>} />
+    <Route path={paths.settingsLegal} element={<SettingsPage key={`legal:${operationKey}`} section="legal"/>} />
     <Route path={paths.clientSettings} element={<SettingsPage key={`client-settings:${operationKey}`} client/>} />
     <Route path={paths.settings} element={<SettingsPage key={`settings:${operationKey}`}/>} />
     <Route path={paths.settingsPayments} element={<SettingsPage key={`payments-settings:${operationKey}`} section="payments"/>} />
@@ -69,6 +70,6 @@ export default function OperationalRoutes({operationKey}:{operationKey:string}){
     <Route path={paths.archives} element={<ArchivesHubPage key={`archives:${operationKey}`} />} />
     <Route path={paths.account} element={<AccountPage key={`team:${operationKey}`} />} />
     <Route path={paths.clientAccount} element={<AccountPage key={`client:${operationKey}`} />} />
-<Route path="*" element={<div className="privacy-screen"><main id="conteudo" className="not-found"><div className="not-found-card"><div className="not-found-icon" aria-hidden="true"><Compass size={24} /></div><h1>Página não encontrada</h1><p>Confira o endereço ou volte ao início.</p><Link className="primary-button" to={paths.home}>Voltar ao início</Link></div></main><PrivacyFooter/></div>}/>
+<Route path="*" element={<div className="privacy-screen"><main id="conteudo" className="not-found"><div className="not-found-card"><div className="not-found-icon" aria-hidden="true"><Compass size={24} /></div><h1>Página não encontrada</h1><p>Confira o endereço ou volte ao início.</p><Link className="primary-button" to={paths.home}>Voltar ao início</Link></div></main></div>}/>
  </Routes>;
 }

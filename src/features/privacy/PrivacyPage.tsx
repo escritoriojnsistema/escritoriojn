@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { SiteFooter, SiteHeader } from '../../app/SiteLayout';
+import { SiteHeader } from '../../app/SiteLayout';
 import { useAccountHome } from '../auth/useAccountHome';
 import { ControllerNotice } from './ControllerNotice';
 import { privacyPolicyVersion, rememberNecessaryPreference } from './policy';
@@ -162,5 +162,5 @@ export default function PrivacyPage({ section, embedded=false }: { section: 'pri
         </p>
       </Page>
   );
-  return embedded?content:<div className="public-site"><SiteHeader/>{content}<SiteFooter/></div>;
+  return embedded?content:<div className="public-site"><SiteHeader/>{content}</div>;
 }

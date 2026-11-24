@@ -37,7 +37,7 @@ function RequestsWorkspace({context,contexts,client,onOffice}:{context:AccessCon
  const location=useLocation();
  const sessionKey=useAuth().sessionKey;
  const office=context.office_id,canCreate=client||context.permissions.some(p=>p==='requests.create'||p==='requests.category_intake');
- const [view,setView]=useState<'list'|'create'|'correction'|'detail'|'document'>('list'),[input,setInput]=useState(''),[query,setQuery]=useState(''),[scope,setScope]=useState<'mine'|'queue'>('mine'),[status,setStatus]=useState<RequestFilterStatus>(''),[page,setPage]=useState(1),[revision,setRevision]=useState(0);
+ const [view,setView]=useState<'list'|'create'|'correction'|'detail'|'document'>('list'),[input,setInput]=useState(''),[query,setQuery]=useState(''),[scope,setScope]=useState<'mine'|'queue'>(()=>!client&&location.state?.request_scope==='queue'?'queue':'mine'),[status,setStatus]=useState<RequestFilterStatus>(''),[page,setPage]=useState(1),[revision,setRevision]=useState(0);
  const [sideActions,setSideActions]=useState<ReactNode>();
  const [archiveTools,setArchiveTools]=useState(false),[nestedPending,setNestedPending]=useState(false),[openingUncertain,setOpeningUncertain]=useState(false);
  useEffect(()=>{const changed=()=>setRevision(n=>n+1);window.addEventListener('jn:request-archives-changed',changed);return()=>window.removeEventListener('jn:request-archives-changed',changed);},[]);

@@ -39,7 +39,7 @@ for(const width of [320,375,768,1440])for(const role of ['owner','admin','employ
   }
  }
  await page.goto(client?'/minhas-configuracoes':'/configuracoes');const options=page.getByRole('navigation',{name:'Opções de configurações'});
- await expect(options.getByRole('link',{name:/^Conta/})).toBeVisible();if(client)await expect(options.getByRole('link')).toHaveCount(1);
+ await expect(options.getByRole('link',{name:/^Conta/})).toBeVisible();if(client)await expect(options.getByRole('link')).toHaveCount(2);
  await options.getByRole('link',{name:/^Conta/}).click();if(client)await expect(page.getByRole('region',{name:'Dados de acesso'})).toContainText('fixture@example.test');else await expect(page.getByLabel('E-mail de acesso',{exact:true})).toHaveValue('fixture@example.test');await expect(sidebar.locator(`a[href="${client?'/minhas-configuracoes':'/configuracoes'}"]`)).toHaveAttribute('aria-current','page');
  if(width<900)await expect(page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link',{name:'Ajustes',exact:true}).locator('svg')).toHaveClass(/lucide-settings/);
  await page.getByRole('main').getByRole('link',{name:'Voltar às configurações',exact:true}).click();await expect(page.getByRole('heading',{name:'Configurações',exact:true})).toBeVisible();await geometry(page,width);
@@ -47,7 +47,7 @@ for(const width of [320,375,768,1440])for(const role of ['owner','admin','employ
 });
 test('concessões independentes permanecem dentro de Configurações e Serviços',async({page})=>{
  await setup(page,'employee',['foundation.access','audit.read','users.manage','requests.read','checklists.read']);await page.goto('/configuracoes');
- const options=page.getByRole('navigation',{name:'Opções de configurações'});await expect(options.getByRole('link')).toHaveCount(3);await expect(options.getByRole('link',{name:/Auditoria/})).toBeVisible();await expect(options.getByRole('link',{name:/Equipe e convites/})).toBeVisible();
+ const options=page.getByRole('navigation',{name:'Opções de configurações'});await expect(options.getByRole('link')).toHaveCount(4);await expect(options.getByRole('link',{name:/Auditoria/})).toBeVisible();await expect(options.getByRole('link',{name:/Equipe e convites/})).toBeVisible();
  await page.getByRole('navigation',{name:'Navegação da operação'}).getByRole('link',{name:'Serviços',exact:true}).click();await expect(page).toHaveURL(/\/pendencias$/);await expect(page.getByRole('heading',{name:'Checklist',exact:true})).toBeVisible();await expect(page.getByRole('navigation',{name:'Áreas de serviços'})).toHaveCount(0);
 });
 test('URL de configurações do outro portal continua bloqueada antes da montagem',async({page})=>{

@@ -1,10 +1,11 @@
 import {test, expect, type Page} from '@playwright/test';
 
-for (const width of [320, 375, 1440]) test(`rodapé de políticas acompanha o fim das telas públicas em ${width}px`, async ({page}) => {
+for (const width of [320, 375, 1440]) test(`rodapé de políticas fica nas duas telas de login em ${width}px`, async ({page}) => {
   await page.setViewportSize({width, height:900});
   for (const path of ['/', '/login', '/login-cliente', '/cadastro', '/recuperar-senha?area=client', '/redefinir-senha', '/auth/callback', '/status', '/privacidade', '/termos', '/cookies', '/nao-existe']) {
     await page.goto(path);
     const footer=page.getByRole('contentinfo');
+    if(path!=='/login'&&path!=='/login-cliente'){await expect(footer).toHaveCount(0);continue;}
     await expect(footer).toHaveCount(1);
     await expect(footer.getByRole('button', {name:'Cookies e preferências'})).toBeVisible();
     await footer.scrollIntoViewIfNeeded();
@@ -78,7 +79,7 @@ test('envio programático sem aceites é recusado e somente o aceite completo se
   expect((writes[0] as {data:unknown}).data).toEqual({display_name:'Cliente de Teste',jn_client_acceptance:{version:'2026-11-12.1',terms:true,privacy:true,cookies:true,optional_cookies:false}});
 });
 
-for(const width of [200,320,375,1440]) test(`rodapé da operação fica depois do conteúdo e acima dos atalhos em ${width}px`,async({page})=>{
+for(const width of [200,320,375,1440]) test(`operação mantém espaço para o conteúdo e os atalhos em ${width}px`,async({page})=>{
   const user='22222222-2222-4222-8222-222222222222',session='11111111-1111-4111-8111-111111111111';
   const token=`e30.${Buffer.from(JSON.stringify({sub:user,exp:Math.floor(Date.now()/1000)+3600,session_id:session,role:'authenticated'})).toString('base64url')}.fixture`;
   await page.addInitScript(({user,token})=>localStorage.setItem('sb-team-ui-auth-token',JSON.stringify({access_token:token,refresh_token:'test-only-refresh',token_type:'bearer',expires_at:Math.floor(Date.now()/1000)+3600,expires_in:3600,user:{id:user,aud:'authenticated',email:'fixture@example.test',app_metadata:{},user_metadata:{},created_at:'2026-10-18T00:00:00Z'}})),{user,token});
@@ -87,11 +88,9 @@ for(const width of [200,320,375,1440]) test(`rodapé da operação fica depois d
   await page.route('**/api/notifications/summary',route=>route.fulfill({json:{data:{unread:0}}}));
   await page.setViewportSize({width,height:900});await page.goto('/painel');
   await expect(page.getByRole('heading',{name:'Área de operação',exact:true})).toBeVisible();
-  const footer=page.getByRole('contentinfo');await expect(footer).toHaveCount(1);
-  await footer.scrollIntoViewIfNeeded();await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));
-  const positions=await page.evaluate(()=>({footer:document.querySelector('footer')!.getBoundingClientRect().toJSON(),main:document.querySelector('main')!.getBoundingClientRect().toJSON(),links:[...document.querySelectorAll('footer button')].map(e=>e.getBoundingClientRect().toJSON()),nav:document.querySelector('.operation-mobile-nav')!.getBoundingClientRect().toJSON(),overflow:document.documentElement.scrollWidth-innerWidth}));
-  expect(positions.footer.top).toBeGreaterThanOrEqual(positions.main.bottom-1);expect(positions.overflow).toBeLessThanOrEqual(0);
-  if(width<900){for(const link of positions.links)expect(link.bottom).toBeLessThanOrEqual(positions.nav.top);expect(await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link').count()).toBeLessThanOrEqual(4);}
+  await expect(page.getByRole('contentinfo')).toHaveCount(0);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  if(width<900)expect(await page.getByRole('navigation',{name:'Atalhos do aplicativo'}).getByRole('link').count()).toBeLessThanOrEqual(4);
   if(width===375){
     const address=page.url();
     const menuButton=page.getByRole('button',{name:'Abrir menu'});
@@ -108,14 +107,13 @@ for(const width of [200,320,375,1440]) test(`rodapé da operação fica depois d
   await page.route('**/api/auth/context',route=>route.fulfill({status:403,json:{error:{code:'ACCESS_DENIED'}}}));
   await page.evaluate(()=>window.dispatchEvent(new Event('focus')));
   await expect(page.getByRole('heading',{name:'Acesso não autorizado',exact:true})).toBeVisible();
-  await expect(page.getByRole('contentinfo')).toHaveCount(1);
-  await expect(page.getByRole('contentinfo').getByRole('button',{name:'Privacidade',exact:true})).toBeVisible();
+  await expect(page.getByRole('contentinfo')).toHaveCount(0);
 });
 
-for(const width of [320,1440])test(`instalação abre na mesma tela e preserva inscrição em ${width}px`,async({page})=>{
+for(const width of [320,1440])test(`instalação abre na mesma tela e preserva o e-mail de acesso em ${width}px`,async({page})=>{
   await page.setViewportSize({width,height:750});
-  await page.goto('/cadastro');
-  await fillIdentity(page);
+  await page.goto('/login-cliente');
+  await page.getByLabel('E-mail',{exact:true}).fill('cliente@example.test');
   const address=page.url();
   const launch=page.getByRole('contentinfo').getByRole('button',{name:'Instalar aplicativo',exact:true});
   await page.evaluate(()=>{
@@ -133,6 +131,6 @@ for(const width of [320,1440])test(`instalação abre na mesma tela e preserva i
   await page.keyboard.press('Escape');
   await expect(dialog).not.toBeVisible();
   await expect(page).toHaveURL(address);
-  await expect(page.getByLabel('Nome',{exact:true})).toHaveValue('Cliente de Teste');
+  await expect(page.getByLabel('E-mail',{exact:true})).toHaveValue('cliente@example.test');
   expect(page.context().pages()).toHaveLength(1);
 });
