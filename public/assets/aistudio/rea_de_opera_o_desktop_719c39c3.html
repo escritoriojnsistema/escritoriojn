@@ -1,0 +1,494 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Área de Operação — Escritório JN</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'brand-navy': '#0F273D',
+        'brand-navy-elevated': '#183652',
+        'brand-navy-border': '#254666',
+        'brand-gold': '#D0A54C',
+        'brand-gold-tint': '#3B3629',
+        'on-brand-navy': '#F8FAFC',
+        'on-brand-navy-muted': '#94A3B8',
+        'success': '#15803D',
+        'success-container': '#DCFCE7',
+        'on-success-container': '#14532D',
+        'warning': '#B45309',
+        'warning-container': '#FEF3C7',
+        'on-warning-container': '#78350F',
+        'light-primary': '#001223',
+        'light-on-primary': '#FFFFFF',
+        'light-primary-container': '#0F273D',
+        'light-on-primary-container': '#D0E4FF',
+        'light-secondary': '#7B5800',
+        'light-on-secondary': '#FFFFFF',
+        'light-secondary-container': '#FDCE70',
+        'light-on-secondary-container': '#412D00',
+        'light-tertiary': '#1C0E00',
+        'light-on-tertiary': '#FFFFFF',
+        'light-tertiary-container': '#372102',
+        'light-on-tertiary-container': '#FFDDB7',
+        'light-error': '#BA1A1A',
+        'light-on-error': '#FFFFFF',
+        'light-error-container': '#FFDAD6',
+        'light-on-error-container': '#93000A',
+        'light-background': '#F5F7FA',
+        'light-on-background': '#1B1C1D',
+        'light-surface': '#F5F7FA',
+        'light-surface-dim': '#DBD9DC',
+        'light-surface-bright': '#FFFFFF',
+        'light-surface-container-lowest': '#FFFFFF',
+        'light-surface-container-low': '#F1F4F8',
+        'light-surface-container': '#E9EEF4',
+        'light-surface-container-high': '#E1E6EE',
+        'light-surface-container-highest': '#D8DEE8',
+        'light-on-surface': '#1B1C1D',
+        'light-surface-variant': '#E0E2E9',
+        'light-on-surface-variant': '#43474D',
+        'light-outline': '#74777D',
+        'light-outline-variant': '#C3C6CD',
+        'light-inverse-surface': '#303032',
+        'light-inverse-on-surface': '#F2F0F2',
+        'light-inverse-primary': '#B2C9E5',
+        'light-shadow': '#000000',
+        'light-scrim': '#000000',
+        'dark-primary': '#B2C9E5',
+        'dark-on-primary': '#1B3248',
+        'dark-primary-container': '#0F273D',
+        'dark-on-primary-container': '#D0E4FF',
+        'dark-secondary': '#EEC064',
+        'dark-on-secondary': '#412D00',
+        'dark-secondary-container': '#7E5B01',
+        'dark-on-secondary-container': '#FFD78C',
+        'dark-tertiary': '#E7C092',
+        'dark-on-tertiary': '#432C0A',
+        'dark-tertiary-container': '#372102',
+        'dark-on-tertiary-container': '#FFDDB7',
+        'dark-error': '#FFB4AB',
+        'dark-on-error': '#690005',
+        'dark-error-container': '#93000A',
+        'dark-on-error-container': '#FFDAD6',
+        'dark-background': '#121315',
+        'dark-on-background': '#E3E2E4',
+        'dark-surface': '#121315',
+        'dark-surface-dim': '#121315',
+        'dark-surface-bright': '#38393B',
+        'dark-surface-container-lowest': '#0D0E10',
+        'dark-surface-container-low': '#1B1C1D',
+        'dark-surface-container': '#1F2021',
+        'dark-surface-container-high': '#292A2C',
+        'dark-surface-container-highest': '#343537',
+        'dark-on-surface': '#E3E2E4',
+        'dark-surface-variant': '#43474D',
+        'dark-on-surface-variant': '#C3C6CD',
+        'dark-outline': '#8D9197',
+        'dark-outline-variant': '#43474D',
+        'dark-inverse-surface': '#E3E2E4',
+        'dark-inverse-on-surface': '#303032',
+        'dark-inverse-primary': '#4A6079',
+        'dark-shadow': '#000000',
+        'dark-scrim': '#000000',
+      },
+      borderRadius: {
+        'sm': '6px',
+        'DEFAULT': '10px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '20px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '40px',
+        'page-margin': '24px',
+      },
+      fontFamily: {
+        'display': ['"Mulish"', 'sans-serif'],
+        'headline': ['"Mulish"', 'sans-serif'],
+        'title': ['"Mulish"', 'sans-serif'],
+        'body': ['"Instrument Sans"', 'sans-serif'],
+        'label': ['"Instrument Sans"', 'sans-serif'],
+        'mono': ['"Source Code Pro"', 'monospace'],
+      },
+      fontSize: {
+        'display-lg': ['36px', { lineHeight: '44px', letterSpacing: '-0.5px', fontWeight: '800' }],
+        'display-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.25px', fontWeight: '800' }],
+        'headline-lg': ['28px', { lineHeight: '36px', letterSpacing: '-0.3px', fontWeight: '800' }],
+        'headline-md': ['20px', { lineHeight: '28px', letterSpacing: '-0.2px', fontWeight: '700' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '700' }],
+        'body-md': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-sm': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-md': ['12px', { lineHeight: '16px', letterSpacing: '0.3px', fontWeight: '600' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.4px', fontWeight: '500' }],
+        'mono-sm': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '600' }],
+      },
+      transitionDuration: {
+        'state-change': '120ms',
+        'surface-enter': '220ms',
+        'surface-exit': '150ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+        'surface-exit': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+        'surface-exit': 'cubic-bezier(0.3, 0, 1, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&amp;family=Mulish:wght@600;700;800&amp;family=Source+Code+Pro:wght@500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>.material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons { display: inline-block; width: 1em; height: 1em; line-height: 1 !important; box-sizing: content-box; overflow: hidden; white-space: nowrap; direction: ltr; vertical-align: middle; }</style>
+</head>
+<body class="bg-light-surface text-light-on-surface font-body antialiased">
+  <div class="min-h-[1024px] flex bg-light-surface" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- Persistent Left Sidebar -->
+    <aside class="w-72 shrink-0 min-h-[1024px] bg-brand-navy text-on-brand-navy flex flex-col justify-between border-r border-brand-navy-border" data-stitch-vh="min-h-[1024px]===min-h-screen">
+      <div class="flex flex-col">
+        <!-- Brand Header -->
+        <div class="px-gutter-lg py-gutter-md border-b border-brand-navy-border flex items-center gap-gutter-md">
+          <span class="font-headline text-headline-md text-on-brand-navy tracking-tight" data-design-text-token="headline-md">JN</span>
+          <span class="w-px h-5 bg-brand-navy-border" aria-hidden="true"></span>
+          <span class="font-label text-label-md text-on-brand-navy tracking-wider uppercase" data-design-text-token="label-md">ESCRITÓRIO JN</span>
+        </div>
+
+        <!-- Primary Navigation -->
+        <nav aria-label="Navegação principal" class="px-gutter-md py-gutter-lg flex flex-col gap-gutter-xs">
+          <p class="px-3 pb-2 font-label text-label-sm text-on-brand-navy-muted uppercase tracking-wider" data-design-text-token="label-sm">Área da equipe</p>
+
+          <a href="#inicio" aria-current="page" class="flex items-center gap-3 px-3 py-2.5 rounded bg-brand-gold-tint border border-brand-gold/40 text-on-brand-navy transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px] text-brand-gold" aria-hidden="true">home</span>
+            <span class="font-label text-label-lg" data-design-text-token="label-lg">Início</span>
+          </a>
+
+          <a href="#solicitacoes" class="flex items-center justify-between gap-3 px-3 py-2.5 rounded text-on-brand-navy-muted hover:bg-brand-navy-elevated hover:text-on-brand-navy transition-colors duration-state-change ease-state-change">
+            <span class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">assignment</span>
+              <span class="font-body text-body-md" data-design-text-token="body-md">Solicitações</span>
+            </span>
+            <span data-component-id="badge-numeric" data-component-type="badge" data-component-variant="numeric" role="status" class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-brand-navy-elevated text-on-brand-navy border border-brand-navy-border tabular-nums">
+              <span class="font-label text-label-sm" data-design-text-token="label-sm">4</span>
+            </span>
+          </a>
+
+          <a href="#clientes" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-brand-navy-muted hover:bg-brand-navy-elevated hover:text-on-brand-navy transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">group</span>
+            <span class="font-body text-body-md" data-design-text-token="body-md">Clientes</span>
+          </a>
+
+          <a href="#documentos" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-brand-navy-muted hover:bg-brand-navy-elevated hover:text-on-brand-navy transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">description</span>
+            <span class="font-body text-body-md" data-design-text-token="body-md">Documentos</span>
+          </a>
+
+          <a href="#servicos" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-brand-navy-muted hover:bg-brand-navy-elevated hover:text-on-brand-navy transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">work</span>
+            <span class="font-body text-body-md" data-design-text-token="body-md">Serviços</span>
+          </a>
+
+          <a href="#caixa" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-brand-navy-muted hover:bg-brand-navy-elevated hover:text-on-brand-navy transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">account_balance_wallet</span>
+            <span class="font-body text-body-md" data-design-text-token="body-md">Caixa</span>
+          </a>
+
+          <a href="#notificacoes" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-brand-navy-muted hover:bg-brand-navy-elevated hover:text-on-brand-navy transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">notifications</span>
+            <span class="font-body text-body-md" data-design-text-token="body-md">Notificações</span>
+          </a>
+
+          <a href="#configuracoes" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-brand-navy-muted hover:bg-brand-navy-elevated hover:text-on-brand-navy transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">settings</span>
+            <span class="font-body text-body-md" data-design-text-token="body-md">Configurações</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Availability Panel & Footer Actions -->
+      <div class="px-gutter-md pb-gutter-lg pt-gutter-sm flex flex-col gap-gutter-md">
+        <!-- Minha disponibilidade -->
+        <section aria-label="Minha disponibilidade" class="bg-brand-navy-elevated border border-brand-navy-border rounded-md p-gutter-md flex flex-col gap-3">
+          <div class="flex items-center gap-2">
+            <span id="status-dot-desktop" data-component-id="badge-dot-status" data-component-type="badge" data-component-variant="dot" role="status" aria-label="Indicador de disponibilidade" class="inline-block w-2.5 h-2.5 rounded-full bg-on-brand-navy-muted"></span>
+            <span class="font-label text-label-md text-on-brand-navy" data-design-text-token="label-md">Minha disponibilidade</span>
+          </div>
+
+          <label data-component-id="select-native" data-component-type="select" data-component-variant="native" class="flex flex-col gap-1">
+            <span class="font-label text-label-sm text-on-brand-navy-muted uppercase tracking-wider" data-design-text-token="label-sm">Status</span>
+            <select id="status-select-desktop" class="w-full rounded bg-brand-navy border border-brand-navy-border text-on-brand-navy font-body text-body-sm py-2 px-3 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold">
+              <option value="offline" selected data-design-text-token="body-sm">Offline</option>
+              <option value="online" data-design-text-token="body-sm">Online</option>
+              <option value="ocupado" data-design-text-token="body-sm">Ocupado</option>
+            </select>
+          </label>
+
+          <div class="flex flex-col gap-1">
+            <span class="font-label text-label-sm text-on-brand-navy-muted uppercase tracking-wider" data-design-text-token="label-sm">Atend. simultâneos</span>
+            <div class="flex items-center justify-between rounded bg-brand-navy border border-brand-navy-border px-2 py-1 h-10">
+              <button type="button" id="dec-slots-desktop" aria-label="Diminuir atendimentos simultâneos" class="w-7 h-7 rounded flex items-center justify-center text-on-brand-navy-muted hover:bg-brand-navy-elevated hover:text-on-brand-navy transition-colors duration-state-change">
+                <span class="material-symbols-outlined text-[16px]" aria-hidden="true">remove</span>
+              </button>
+              <span id="slots-value-desktop" class="font-mono text-mono-sm text-on-brand-navy tabular-nums" data-design-text-token="mono-sm">1</span>
+              <button type="button" id="inc-slots-desktop" aria-label="Aumentar atendimentos simultâneos" class="w-7 h-7 rounded flex items-center justify-center text-on-brand-navy-muted hover:bg-brand-navy-elevated hover:text-on-brand-navy transition-colors duration-state-change">
+                <span class="material-symbols-outlined text-[16px]" aria-hidden="true">add</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Utility Links -->
+        <div class="flex flex-col gap-1 border-t border-brand-navy-border pt-3">
+          <button data-component-id="button-with-icon-navy" data-component-type="button" data-component-variant="with-icon" type="button" class="flex items-center gap-3 px-3 py-2 rounded text-on-brand-navy-muted hover:bg-brand-navy-elevated hover:text-on-brand-navy transition-colors duration-state-change ease-state-change text-left">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">download</span>
+            <span class="font-body text-body-sm" data-design-text-token="body-sm">Instalar aplicativo</span>
+          </button>
+
+          <button data-component-id="button-with-icon-navy" data-component-type="button" data-component-variant="with-icon" type="button" class="flex items-center gap-3 px-3 py-2 rounded text-on-brand-navy-muted hover:bg-brand-navy-elevated hover:text-on-brand-navy transition-colors duration-state-change ease-state-change text-left">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">logout</span>
+            <span class="font-body text-body-sm" data-design-text-token="body-sm">Sair da conta</span>
+          </button>
+
+          <p class="px-3 pt-2 font-label text-label-sm text-on-brand-navy-muted" data-design-text-token="label-sm">
+            Acesso individual e protegido.
+          </p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-w-0">
+      <!-- Top Header -->
+      <header class="sticky top-0 z-10 bg-light-surface/95 border-b border-light-outline-variant/40 px-gutter-xl py-gutter-md flex items-center justify-between gap-gutter-md">
+        <div class="flex items-center gap-gutter-sm min-w-0">
+          <span class="font-label text-label-md text-light-on-surface-variant" data-design-text-token="label-md">Painel operacional</span>
+        </div>
+
+        <div class="flex items-center gap-gutter-md shrink-0">
+          <span data-component-id="badge-status" data-component-type="badge" data-component-variant="status" role="status" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-light-secondary-container text-light-on-secondary-container">
+            <span class="font-label text-label-md" data-design-text-token="label-md">Super administrador</span>
+          </span>
+
+          <button data-component-id="button-icon-light" data-component-type="button" data-component-variant="icon" type="button" aria-label="Abrir notificações" class="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-light-surface-container-lowest text-light-on-surface border border-light-outline-variant/60 hover:bg-light-surface-container-low focus-visible:outline focus-visible:outline-2 focus-visible:outline-light-primary transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">notifications</span>
+            <span aria-hidden="true" class="absolute top-2 right-2.5 inline-block w-2 h-2 rounded-full bg-light-secondary"></span>
+          </button>
+
+          <button data-component-id="button-icon-avatar" data-component-type="button" data-component-variant="icon" type="button" aria-label="Perfil do administrador" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-light-primary-container text-light-on-primary hover:bg-brand-navy-elevated focus-visible:outline focus-visible:outline-2 focus-visible:outline-light-primary transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <main class="flex-1 px-gutter-xl py-gutter-xl max-w-6xl w-full mx-auto flex flex-col gap-gutter-lg">
+        <!-- Page Title -->
+        <section class="flex flex-col gap-1">
+          <span class="font-label text-label-md text-light-secondary uppercase tracking-wider" data-design-text-token="label-md">ESCRITÓRIO JN</span>
+          <h1 class="font-headline text-display-lg text-light-on-surface text-balance" data-design-text-token="display-lg">Área de operação</h1>
+          <p class="font-body text-body-md text-light-on-surface-variant text-pretty" data-design-text-token="body-md">
+            Acesse as funções disponíveis para o seu trabalho.
+          </p>
+        </section>
+
+        <!-- Balanced Bento Grid -->
+        <section aria-label="Módulos operacionais" class="grid grid-cols-12 gap-gutter-lg items-stretch">
+
+          <!-- Card 1: Solicitações (7 columns) -->
+          <a href="#solicitacoes" data-component-id="card-interactive-featured" data-component-type="card" data-component-variant="interactive" class="col-span-7 bg-light-surface-container-lowest rounded-lg p-gutter-lg border border-light-outline-variant/40 shadow-sm hover:border-light-outline-variant hover:shadow-md transition-shadow duration-state-change ease-state-change flex flex-col justify-between gap-gutter-lg">
+            <header class="flex items-start justify-between gap-gutter-md">
+              <div class="flex items-center gap-gutter-md">
+                <div class="w-11 h-11 rounded-md bg-light-surface-container-low flex items-center justify-center text-light-primary-container shrink-0">
+                  <span class="material-symbols-outlined text-[22px]" aria-hidden="true">chat_bubble</span>
+                </div>
+                <div>
+                  <h2 class="font-title text-title-md text-light-on-surface" data-design-text-token="title-md">Solicitações</h2>
+                  <p class="font-body text-body-sm text-light-on-surface-variant" data-design-text-token="body-sm">Acompanhar os atendimentos do escritório</p>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-[20px] text-light-outline" aria-hidden="true">arrow_forward</span>
+            </header>
+
+            <div class="bg-light-surface-container-low rounded-md p-gutter-md flex flex-col gap-3">
+              <div class="flex items-center justify-between gap-2 pb-2 border-b border-light-outline-variant/40">
+                <div class="flex items-baseline gap-1.5">
+                  <span class="font-headline text-headline-md text-light-on-surface tabular-nums" data-design-text-token="headline-md">4</span>
+                  <span class="font-body text-body-sm text-light-on-surface-variant" data-design-text-token="body-sm">solicitações</span>
+                </div>
+                <span class="font-label text-label-sm text-light-on-surface-variant" data-design-text-token="label-sm">Por etapa</span>
+              </div>
+
+              <div class="flex flex-col gap-2.5">
+                <div class="grid grid-cols-12 items-center gap-3">
+                  <span class="col-span-5 font-body text-body-sm text-light-on-surface-variant" data-design-text-token="body-sm">Aberto</span>
+                  <div class="col-span-6 h-2 rounded-full bg-light-surface-container-high overflow-hidden">
+                    <div class="h-full w-0 rounded-full bg-light-primary-container"></div>
+                  </div>
+                  <span class="col-span-1 text-right font-mono text-mono-sm text-light-on-surface tabular-nums" data-design-text-token="mono-sm">0</span>
+                </div>
+
+                <div class="grid grid-cols-12 items-center gap-3">
+                  <span class="col-span-5 font-body text-body-sm text-light-on-surface" data-design-text-token="body-sm">Em atendimento</span>
+                  <div class="col-span-6 h-2 rounded-full bg-light-surface-container-high overflow-hidden">
+                    <div class="h-full w-1/4 rounded-full bg-light-primary-container"></div>
+                  </div>
+                  <span class="col-span-1 text-right font-mono text-mono-sm text-light-on-surface tabular-nums" data-design-text-token="mono-sm">1</span>
+                </div>
+
+                <div class="grid grid-cols-12 items-center gap-3">
+                  <span class="col-span-5 font-body text-body-sm text-light-on-surface-variant" data-design-text-token="body-sm">Aguardando cliente</span>
+                  <div class="col-span-6 h-2 rounded-full bg-light-surface-container-high overflow-hidden">
+                    <div class="h-full w-0 rounded-full bg-light-primary-container"></div>
+                  </div>
+                  <span class="col-span-1 text-right font-mono text-mono-sm text-light-on-surface tabular-nums" data-design-text-token="mono-sm">0</span>
+                </div>
+
+                <div class="grid grid-cols-12 items-center gap-3">
+                  <span class="col-span-5 font-body text-body-sm text-light-on-surface" data-design-text-token="body-sm">Aguardando responsável</span>
+                  <div class="col-span-6 h-2 rounded-full bg-light-surface-container-high overflow-hidden">
+                    <div class="h-full w-1/2 rounded-full bg-light-primary-container"></div>
+                  </div>
+                  <span class="col-span-1 text-right font-mono text-mono-sm text-light-on-surface tabular-nums" data-design-text-token="mono-sm">2</span>
+                </div>
+
+                <div class="grid grid-cols-12 items-center gap-3">
+                  <span class="col-span-5 font-body text-body-sm text-light-on-surface" data-design-text-token="body-sm">Concluído</span>
+                  <div class="col-span-6 h-2 rounded-full bg-light-surface-container-high overflow-hidden">
+                    <div class="h-full w-1/4 rounded-full bg-success"></div>
+                  </div>
+                  <span class="col-span-1 text-right font-mono text-mono-sm text-light-on-surface tabular-nums" data-design-text-token="mono-sm">1</span>
+                </div>
+
+                <div class="grid grid-cols-12 items-center gap-3">
+                  <span class="col-span-5 font-body text-body-sm text-light-on-surface-variant" data-design-text-token="body-sm">Cancelado</span>
+                  <div class="col-span-6 h-2 rounded-full bg-light-surface-container-high overflow-hidden">
+                    <div class="h-full w-0 rounded-full bg-light-primary-container"></div>
+                  </div>
+                  <span class="col-span-1 text-right font-mono text-mono-sm text-light-on-surface tabular-nums" data-design-text-token="mono-sm">0</span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Right Column: Clientes + Anexos privados (5 columns) -->
+          <div class="col-span-5 flex flex-col gap-gutter-lg">
+            <!-- Card 2: Clientes -->
+            <a href="#clientes" data-component-id="card-interactive-compact" data-component-type="card" data-component-variant="interactive" class="flex-1 bg-light-surface-container-lowest rounded-lg p-gutter-lg border border-light-outline-variant/40 shadow-sm hover:border-light-outline-variant hover:shadow-md transition-shadow duration-state-change ease-state-change flex flex-col justify-between gap-gutter-md">
+              <header class="flex items-start justify-between gap-gutter-md">
+                <div class="flex items-center gap-gutter-md">
+                  <div class="w-11 h-11 rounded-md bg-light-surface-container-low flex items-center justify-center text-light-primary-container shrink-0">
+                    <span class="material-symbols-outlined text-[22px]" aria-hidden="true">person_search</span>
+                  </div>
+                  <div>
+                    <h2 class="font-title text-title-md text-light-on-surface" data-design-text-token="title-md">Clientes</h2>
+                    <p class="font-body text-body-sm text-light-on-surface-variant" data-design-text-token="body-sm">Cadastro e busca de fichas do escritório</p>
+                  </div>
+                </div>
+                <span class="material-symbols-outlined text-[20px] text-light-outline" aria-hidden="true">arrow_forward</span>
+              </header>
+
+              <div class="bg-light-surface-container-low rounded-md px-gutter-md py-3 flex items-center justify-between gap-2">
+                <span class="font-body text-body-sm text-light-on-surface-variant" data-design-text-token="body-sm">Fichas ativas</span>
+                <span class="font-label text-label-lg text-light-on-surface tabular-nums" data-design-text-token="label-lg">2 clientes disponíveis</span>
+              </div>
+            </a>
+
+            <!-- Card 3: Anexos privados -->
+            <a href="#anexos" data-component-id="card-interactive-compact" data-component-type="card" data-component-variant="interactive" class="flex-1 bg-light-surface-container-lowest rounded-lg p-gutter-lg border border-light-outline-variant/40 shadow-sm hover:border-light-outline-variant hover:shadow-md transition-shadow duration-state-change ease-state-change flex flex-col justify-between gap-gutter-md">
+              <header class="flex items-start justify-between gap-gutter-md">
+                <div class="flex items-center gap-gutter-md">
+                  <div class="w-11 h-11 rounded-md bg-light-surface-container-low flex items-center justify-center text-light-primary-container shrink-0">
+                    <span class="material-symbols-outlined text-[22px]" aria-hidden="true">attach_file</span>
+                  </div>
+                  <div>
+                    <h2 class="font-title text-title-md text-light-on-surface" data-design-text-token="title-md">Anexos privados</h2>
+                    <p class="font-body text-body-sm text-light-on-surface-variant" data-design-text-token="body-sm">Arquivos dos seus atendimentos</p>
+                  </div>
+                </div>
+                <span class="material-symbols-outlined text-[20px] text-light-outline" aria-hidden="true">arrow_forward</span>
+              </header>
+
+              <div class="bg-light-surface-container-low rounded-md px-gutter-md py-3 flex items-center justify-between gap-2">
+                <span class="font-body text-body-sm text-light-on-surface-variant" data-design-text-token="body-sm">Acesso restrito</span>
+                <span class="font-label text-label-md text-light-primary-container" data-design-text-token="label-md">Abrir arquivos</span>
+              </div>
+            </a>
+          </div>
+
+          <!-- Card 4: Gerenciar equipe e convites (Full 12 columns bottom row) -->
+          <a href="#equipe" data-component-id="card-interactive-wide" data-component-type="card" data-component-variant="interactive" class="col-span-12 bg-light-surface-container-lowest rounded-lg p-gutter-lg border border-light-outline-variant/40 shadow-sm hover:border-light-outline-variant hover:shadow-md transition-shadow duration-state-change ease-state-change flex items-center justify-between gap-gutter-lg">
+            <div class="flex items-center gap-gutter-md">
+              <div class="w-11 h-11 rounded-md bg-light-surface-container-low flex items-center justify-center text-light-primary-container shrink-0">
+                <span class="material-symbols-outlined text-[22px]" aria-hidden="true">manage_accounts</span>
+              </div>
+              <div>
+                <h2 class="font-title text-title-md text-light-on-surface" data-design-text-token="title-md">Gerenciar equipe e convites</h2>
+                <p class="font-body text-body-sm text-light-on-surface-variant" data-design-text-token="body-sm">Pessoas e permissões do escritório</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-gutter-md">
+              <span class="font-label text-label-md text-light-on-surface-variant" data-design-text-token="label-md">Configurar acessos</span>
+              <span class="material-symbols-outlined text-[20px] text-light-outline" aria-hidden="true">arrow_forward</span>
+            </div>
+          </a>
+
+        </section>
+      </main>
+    </div>
+
+  </div>
+
+  <script>
+    (function () {
+      var selectEl = document.getElementById('status-select-desktop');
+      var dotEl = document.getElementById('status-dot-desktop');
+      var decBtn = document.getElementById('dec-slots-desktop');
+      var incBtn = document.getElementById('inc-slots-desktop');
+      var valEl = document.getElementById('slots-value-desktop');
+
+      if (selectEl && dotEl) {
+        selectEl.addEventListener('change', function () {
+          dotEl.classList.remove('bg-on-brand-navy-muted', 'bg-success', 'bg-warning');
+          if (selectEl.value === 'online') {
+            dotEl.classList.add('bg-success');
+          } else if (selectEl.value === 'ocupado') {
+            dotEl.classList.add('bg-warning');
+          } else {
+            dotEl.classList.add('bg-on-brand-navy-muted');
+          }
+        });
+      }
+
+      if (decBtn && incBtn && valEl) {
+        decBtn.addEventListener('click', function () {
+          var current = parseInt(valEl.textContent, 10) || 1;
+          if (current > 1) valEl.textContent = String(current - 1);
+        });
+        incBtn.addEventListener('click', function () {
+          var current = parseInt(valEl.textContent, 10) || 1;
+          if (current < 20) valEl.textContent = String(current + 1);
+        });
+      }
+    })();
+  </script>
+
+
+</body></html>
