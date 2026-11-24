@@ -9,7 +9,7 @@ export function operationParent(pathname:string,contexts:AccessContext[],client:
  const path=normalizePathname(pathname),home=client?paths.clientPanel:paths.panel;
  if(path===home)return undefined;
  const staff=contexts.filter(c=>c.role_code!=='client');
- if(client&&path===paths.clientAccount)return {path:paths.clientSettings,label:'Voltar às configurações'};
+ if(client&&(path===paths.clientAccount||path===paths.clientLegal))return {path:paths.clientSettings,label:'Voltar às configurações'};
  if(!client&&(path.startsWith(`${paths.settings}/`)||[paths.teamManagement,paths.audit,paths.archives,paths.account].some(route=>route===path))&&staff.length>0)return {path:paths.settings,label:'Voltar às configurações'};
  if(path===(client?paths.clientAttachments:paths.attachments)&&(client||staff.some(c=>c.permissions.includes('requests.read'))))return {path:client?paths.clientRequests:paths.requests,label:'Voltar às solicitações'};
  if(!client&&path===paths.rural&&staff.some(c=>c.permissions.includes('customers.read')))return {path:paths.customers,label:'Voltar aos clientes'};

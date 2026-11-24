@@ -24,6 +24,7 @@ for(const [role,editable] of [['owner',true],['admin',true],['admin',false],['em
   await page.goto(client?'/minhas-configuracoes':'/configuracoes');
   await expect(page.getByRole('contentinfo')).toHaveCount(0);
   await page.getByRole('link',{name:editable?/^Privacidade /:/^Leis e privacidade /}).click();
+  await expect(page.getByRole('link',{name:'Voltar às configurações',exact:true})).toBeVisible();
   await page.getByRole('button',{name:'Termos de uso',exact:true}).click();
   const dialog=page.getByRole('dialog',{name:'Termos de uso'});
   await expect(dialog).toBeVisible();
