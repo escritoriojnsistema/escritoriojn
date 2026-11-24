@@ -1061,7 +1061,7 @@
 
 @media (max-width: 900px) {
   .operation-main:has(.operation-account) .operation-account { padding: 14px; }
-  .operation-main:has(.operation-account) .operation-security { flex-wrap: nowrap; gap: 8px; margin-top: 8px; padding-top: 14px; }
+  .operation-main:has(.operation-account) .operation-security { flex-wrap: nowrap; gap: 8px; margin-top: 6px; padding-top: 14px; }
   .operation-main:has(.operation-account) .operation-security.account-closure { flex-wrap: wrap; padding: 14px; margin-top: 12px; }
   .operation-main:has(.operation-account) .operation-security h2 { font-size: 16px; }
   .operation-main:has(.operation-account) .operation-security:not(.account-closure) p { display: none; }
