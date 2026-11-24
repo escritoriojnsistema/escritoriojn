@@ -20,6 +20,7 @@ import { ChargeRequestPicker } from "./ChargeRequestPicker";
 import { chargesApi, ChargesError, chargesError } from "./api";
 import { smartDocumentsApi } from "../smartDocuments/api";
 import { TeamCollectionPanel } from "../cash/TeamCollectionPanel";
+import { ManualPaymentAction } from "../cash/ManualPaymentAction";
 import { DiscountApprovalForm } from "../approvals/DiscountApprovalForm";
 import "../team/team.css";
 import "../customers/customers.css";
@@ -331,17 +332,51 @@ function Workspace({
                 {data.charge &&
                   data.charge.status === "aberta" &&
                   data.charge.balance_cents > 0 && (
-                    <TeamCollectionPanel
-                      office={context.office_id}
-                      officeName={context.office_name}
-                      chargeId={data.charge.id}
-                      chargeVersion={data.charge.version}
-                      protocol={data.protocol}
-                      serviceSummary={data.items.map((i) => i.name).join(" · ")}
-                      balanceCents={data.charge.balance_cents}
-                      disabled={busy}
-                      onPaymentConfirmed={() => setRevision((n) => n + 1)}
-                    />
+                    <>
+                      <ManualPaymentAction
+                        key={`charge-manual:${data.charge.id}:${data.charge.version}`}
+                        office={context.office_id}
+                        requestId={data.request_id}
+                        protocol={data.protocol}
+                        origin="cobrancas"
+                        charge={{
+                          charge_id: data.charge.id,
+                          charge_version: data.charge.version,
+                          request_id: data.request_id,
+                          protocol: data.protocol,
+                          origin: "cobrancas",
+                          service_summary:
+                            data.items.map((i) => i.name).join(" · ") ||
+                            "Serviços do atendimento",
+                          due_cents: data.charge.due_cents,
+                          paid_cents: data.charge.allocated_cents,
+                          balance_cents: data.charge.balance_cents,
+                          status: data.charge.status,
+                          installments: data.charge.installments,
+                        }}
+                        defaultOpen={Boolean(
+                          location.state?.open_manual_payment &&
+                            location.state?.request_id === data.request_id,
+                        )}
+                        disabled={busy}
+                        returnLabel={`Voltar para cobrança ${data.protocol}`}
+                        onPaymentRecorded={(msg) => {
+                          setFeedback(msg);
+                          setRevision((n) => n + 1);
+                        }}
+                      />
+                      <TeamCollectionPanel
+                        office={context.office_id}
+                        officeName={context.office_name}
+                        chargeId={data.charge.id}
+                        chargeVersion={data.charge.version}
+                        protocol={data.protocol}
+                        serviceSummary={data.items.map((i) => i.name).join(" · ")}
+                        balanceCents={data.charge.balance_cents}
+                        disabled={busy}
+                        onPaymentConfirmed={() => setRevision((n) => n + 1)}
+                      />
+                    </>
                   )}
                 {data.charge &&
                   data.charge.status === "aberta" &&

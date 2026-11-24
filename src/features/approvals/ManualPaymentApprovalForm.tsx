@@ -54,6 +54,9 @@ export function ManualPaymentApprovalForm({
   onCancel,
 }: Props) {
   const [approvers, setApprovers] = useState<EligibleApprover[]>([]);
+  const [approversLoading, setApproversLoading] = useState(true);
+  const [approversError, setApproversError] = useState('');
+  const [approversRevision, setApproversRevision] = useState(0);
   const [backendReady, setBackendReady] = useState(true);
   const [approverId, setApproverId] = useState('');
   const [operationDate, setOperationDate] = useState(todayIsoDate);
@@ -65,6 +68,8 @@ export function ManualPaymentApprovalForm({
 
   useEffect(() => {
     const controller = new AbortController();
+    setApproversLoading(true);
+    setApproversError('');
     void financialApprovalsApi
       .approvers(office, 'manual_payment', controller.signal)
       .then((res) => {
@@ -76,10 +81,13 @@ export function ManualPaymentApprovalForm({
       .catch((cause) => {
         if (controller.signal.aborted) return;
         const err = cause instanceof FinancialApprovalsError ? cause : new FinancialApprovalsError(503);
-        setError(err.message);
+        setApproversError(err.message);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setApproversLoading(false);
       });
     return () => controller.abort();
-  }, [office]);
+  }, [office, approversRevision]);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -162,6 +170,28 @@ export function ManualPaymentApprovalForm({
         </p>
       )}
 
+      {approversError && (
+        <div className="jn-inline-alert">
+          <p role="alert" className="form-feedback error">
+            {approversError}
+          </p>
+          <button
+            type="button"
+            className="secondary-button"
+            disabled={approversLoading}
+            onClick={() => setApproversRevision((n) => n + 1)}
+          >
+            Recarregar aprovadores
+          </button>
+        </div>
+      )}
+
+      {backendReady && !approversLoading && !approversError && approvers.length === 0 && (
+        <p role="alert" className="form-feedback error">
+          Nenhum administrador ou super administrador autorizado disponível neste escritório para aprovar pagamentos manuais.
+        </p>
+      )}
+
       <fieldset disabled={busy || disabled || !backendReady}>
         <div className="request-grid">
           <label className="team-field">
@@ -191,8 +221,14 @@ export function ManualPaymentApprovalForm({
 
         <label className="team-field">
           Aprovador autorizado do escritório
-          <select value={approverId} onChange={(e) => setApproverId(e.target.value)}>
-            <option value="">Selecione um aprovador elegível</option>
+          <select value={approverId} disabled={approversLoading || !approvers.length} onChange={(e) => setApproverId(e.target.value)}>
+            <option value="">
+              {approversLoading
+                ? 'Carregando aprovadores elegíveis...'
+                : approvers.length
+                  ? 'Selecione um aprovador elegível'
+                  : 'Nenhum aprovador elegível disponível'}
+            </option>
             {approvers.map((item) => (
               <option key={item.user_id} value={item.user_id}>
                 {item.name} · {item.role_label}
@@ -223,7 +259,11 @@ export function ManualPaymentApprovalForm({
       )}
 
       <div className="account-actions">
-        <button type="submit" className="primary-button" disabled={busy || disabled || !backendReady}>
+        <button
+          type="submit"
+          className="primary-button"
+          disabled={busy || disabled || !backendReady || approversLoading || !approvers.length}
+        >
           Solicitar autorização
         </button>
         <button type="button" className="secondary-button" disabled={busy} onClick={onCancel}>

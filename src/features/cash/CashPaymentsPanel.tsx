@@ -3,6 +3,7 @@ import {useEffect,useRef,useState,type FormEvent,type ReactNode} from 'react';
 import type {CashConfiguration} from '../../../shared/cash';
 import {cashAmountToCents,cashInteger} from '../../../shared/cash';
 import type {FinanceCharge,FinanceCharges,FinanceStatement} from '../../../shared/finance';
+import {filterCompatibleUnitMethods,isChargeEligibleForManualPayment,type ManualPaymentChargeContext} from '../../../shared/manualPaymentFlow';
 import type {Payment,PaymentOperation,PaymentsPage} from '../../../shared/payments';
 import {validPaymentOperation} from '../../../shared/payments';
 import {useAuth} from '../auth/AuthProvider';
@@ -15,6 +16,7 @@ type Props={
  onBusy:(busy:boolean)=>void;onEditing:(editing:boolean)=>void;
  onChanged:(statement:FinanceStatement)=>void;onRefresh:()=>void;onUnavailable:(error:CashError)=>void;
  hidden?:boolean;onCorrect?:()=>void;actions?:ReactNode;
+ preselectedCharge?:ManualPaymentChargeContext;autoOpenRecord?:boolean;onAutoOpenConsumed?:()=>void;
 };
 type AllocationDraft={charge:FinanceCharge;amount:string};
 type Editor={kind:'record'}|{kind:'confirm'|'reject'|'settle';payment:Payment};
@@ -24,7 +26,7 @@ const moneyInput=(cents:number)=>`${Math.trunc(cents/100)},${String(cents%100).p
 const knownMoney=(cents:number|null)=>cents===null?'Sem informação':cashMoney(cents);
 const dateLabel=(date:string)=>date.split('-').reverse().join('/');
 
-export function CashPaymentsPanel({office,statement,configuration,disabled,onBusy,onEditing,onChanged,onRefresh,onUnavailable,hidden=false,onCorrect,actions}:Props){
+export function CashPaymentsPanel({office,statement,configuration,disabled,onBusy,onEditing,onChanged,onRefresh,onUnavailable,hidden=false,onCorrect,actions,preselectedCharge,autoOpenRecord=false,onAutoOpenConsumed}:Props){
  const auth=useAuth(),context=auth.contexts.find(c=>c.office_id===office&&c.role_code!=='client'),s=statement.session;
  const [receiptPayment,setReceiptPayment]=useState<string>(),[editor,setEditor]=useState<Editor>(),[pickerOpen,setPickerOpen]=useState(true),[allocations,setAllocations]=useState<AllocationDraft[]>([]),[methodId,setMethodId]=useState('');
  const [status,setStatus]=useState<'confirmed'|'pending'>('confirmed'),[presented,setPresented]=useState(''),[fee,setFee]=useState(''),[settlement,setSettlement]=useState<'pending'|'settled'>('pending'),[settledOn,setSettledOn]=useState(''),[reference,setReference]=useState(''),[evidence,setEvidence]=useState('');
@@ -33,21 +35,17 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
  const [busy,setBusy]=useState(false),[error,setError]=useState<CashError>(),[feedback,setFeedback]=useState(''),[validation,setValidation]=useState('');
  const mutation=useRef<AbortController|null>(null),historyRead=useRef<AbortController|null>(null),chargeRead=useRef<AbortController|null>(null),alive=useRef(true);
  const attempt=useRef<{signature:string;operation:PaymentOperation}|undefined>(undefined),restoreFocus=useRef(false);
- const callbacks=useRef({onBusy,onEditing,onUnavailable});callbacks.current={onBusy,onEditing,onUnavailable};
+ const callbacks=useRef({onBusy,onEditing,onUnavailable,onAutoOpenConsumed});callbacks.current={onBusy,onEditing,onUnavailable,onAutoOpenConsumed};
  const amountFocus=useRef<HTMLInputElement>(null),pickerFocus=useRef<HTMLInputElement>(null);
  const openButton=useRef<HTMLButtonElement>(null),editorHeading=useRef<HTMLHeadingElement>(null),panelHeading=useRef<HTMLHeadingElement>(null);
- const correctButton=useRef<HTMLButtonElement>(null),wasHidden=useRef(false);
+ const correctButton=useRef<HTMLButtonElement>(null),wasHidden=useRef(false),autoOpenedRef=useRef(false);
  const [requestingApproval,setRequestingApproval]=useState(false);
  const hasAuthority=s.is_self&&['cash.open','charges.read','requests.read'].every(p=>context?.permissions.includes(p));
- const canApproveManualPayment=context?.role_code==='owner'||Boolean(context?.permissions.includes('payments.manual.approve'));
+ const canDirectManualPayment=context?.role_code==='owner'||(context?.role_code==='admin'&&Boolean(context?.permissions.includes('payments.manual.approve')));
  const canRecord=hasAuthority&&s.status==='open'&&s.can_operate&&statement.can_receive;
  const locked=disabled||busy;
- const methods=configuration?.units.some(u=>u.id===s.unit_id&&u.active)?configuration.payment_methods.filter(m=>m.active&&m.unit_id===s.unit_id&&configuration.accounts.some(a=>a.id===m.destination_account_id&&a.unit_id===s.unit_id&&a.active&&(m.type==='cash'?a.type==='cash'&&a.id===s.cash_account_id:a.type!=='cash'))):[];
+ const methods=filterCompatibleUnitMethods(configuration,s.unit_id,s.cash_account_id);
  const method=methods.find(m=>m.id===methodId)||(methodId===''?methods[0]:undefined);
- const canReceiveCash=Boolean(context?.permissions.includes('payments.cash.receive'));
- const canDirectManualPayment=canApproveManualPayment||method?.type==='cash'&&canReceiveCash;
- const canConfirmPayment=(payment:Payment)=>canApproveManualPayment||payment.payment_type==='cash'&&canReceiveCash;
-
  const total=allocations.reduce((sum,a)=>sum+(cashAmountToCents(a.amount)??0),0),totalValid=allocations.length>0&&cashInteger(total,1)&&allocations.every(a=>{const n=cashAmountToCents(a.amount);return n!==null&&cashInteger(n,1)&&n<=a.charge.balance_cents;});
  const presentedCents=cashAmountToCents(presented),feeCents=cashAmountToCents(fee);
 
@@ -56,6 +54,28 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
  useEffect(()=>{if(editor)editorHeading.current?.focus();else if(restoreFocus.current){restoreFocus.current=false;(openButton.current??panelHeading.current)?.focus();}},[editor]);
  useEffect(()=>{if(editor?.kind==='record'){if(pickerOpen)pickerFocus.current?.focus();else amountFocus.current?.focus();}},[editor?.kind,pickerOpen,allocations.length]);
  useEffect(()=>{if(statement.payments){historyRead.current?.abort();setHistoryReading(false);setHistory(statement.payments);setHistoryReady(true);setHistoryError(undefined);}else if(!hidden)loadHistory(1);},[statement]);
+ useEffect(()=>{
+  if(!autoOpenRecord||autoOpenedRef.current||!canRecord||locked||editor)return;
+  autoOpenedRef.current=true;
+  setError(undefined);setFeedback('');setEditor({kind:'record'});callbacks.current.onEditing(true);
+  if(preselectedCharge&&isChargeEligibleForManualPayment(preselectedCharge)){
+   const seeded:FinanceCharge={
+    id:preselectedCharge.charge_id,
+    version:preselectedCharge.charge_version,
+    request_id:preselectedCharge.request_id,
+    protocol:preselectedCharge.protocol,
+    due_cents:preselectedCharge.due_cents,
+    paid_cents:preselectedCharge.paid_cents,
+    balance_cents:preselectedCharge.balance_cents,
+    status:'open',
+    installments:preselectedCharge.installments??[],
+    services:preselectedCharge.service_summary?[preselectedCharge.service_summary]:[],
+   };
+   setAllocations([{charge:seeded,amount:moneyInput(seeded.balance_cents)}]);
+   setPickerOpen(false);
+  }
+  callbacks.current.onAutoOpenConsumed?.();
+ },[autoOpenRecord,canRecord,locked,editor,preselectedCharge]);
  function loadHistory(nextPage:number){
   historyRead.current?.abort();const c=new AbortController();historyRead.current=c;setHistoryReading(true);
   void cashApi.payments(office,s.id,nextPage,c.signal).then(v=>{if(!c.signal.aborted&&alive.current){setHistory(v);setHistoryReady(true);setHistoryError(undefined);}}).catch(cause=>{if(!c.signal.aborted&&alive.current){const e=cashError(cause);setHistoryError(e);if([401,403,404].includes(e.status))callbacks.current.onUnavailable(e);}}).finally(()=>{if(!c.signal.aborted&&alive.current)setHistoryReading(false);});
@@ -83,14 +103,13 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
   event.preventDefault();if(locked||mutation.current||!editor||!hasAuthority)return;
   let details:Omit<Extract<PaymentOperation,{kind:'record'}>,'session_id'|'expected_version'|'idempotency_key'|'evidence'>|{kind:'confirm'|'reject';payment_id:string}|{kind:'settle';payment_id:string;settled_on:string};
   if(editor.kind==='record'){
-   if(!method){setValidation('Cadastre uma forma de pagamento ativa vinculada à conta desta unidade.');return;}
-   if(!canRecord||!totalValid||allocations.length>10){setValidation('Selecione de uma a dez cobranças e informe valores positivos até o saldo disponível.');return;}
-   if(status==='confirmed'&&!canDirectManualPayment){setValidation('Seu perfil precisa de autorização para confirmar este pagamento.');return;}
+   if(status==='confirmed'&&!canDirectManualPayment){setValidation('Seu perfil exige aprovação para confirmar pagamentos manuais. Utilize Solicitar autorização.');return;}
+   if(!canRecord||!method||!totalValid||allocations.length>10){setValidation('Selecione de uma a dez cobranças e informe valores positivos até o saldo disponível.');return;}
    if(method.type==='cash'&&(presentedCents===null||!cashInteger(presentedCents,1)||presentedCents<total)){setValidation('Informe o valor apresentado em dinheiro, igual ou maior que o valor aplicado.');return;}
    if(method.type==='card'&&(feeCents===null||!cashInteger(feeCents)||feeCents>total)){setValidation('Informe a taxa do cartão, de zero até o valor bruto.');return;}
    details={kind:'record',payment_method_id:method.id,status,allocations:allocations.map(a=>({charge_id:a.charge.id,expected_charge_version:a.charge.version,amount_cents:cashAmountToCents(a.amount)!})),presented_cents:method.type==='cash'?presentedCents:null,fee_cents:method.type==='card'?feeCents!:0,settlement:method.type==='card'?settlement:'not_applicable',settled_on:method.type==='card'&&settlement==='settled'?settledOn:null,external_reference:reference.trim()||null};
   }else{
-   if(editor.kind==='confirm'&&(!canRecord||!canConfirmPayment(editor.payment)))return;
+   if(editor.kind==='confirm'&&(!canRecord||!canDirectManualPayment)){setValidation('Apenas o super administrador ou administrador autorizado pode confirmar pagamentos pendentes.');return;}
    details=editor.kind==='settle'?{kind:'settle',payment_id:editor.payment.id,settled_on:settledOn}:{kind:editor.kind,payment_id:editor.payment.id};
   }
   const payload={...details,session_id:s.id,evidence:evidence.trim()};
@@ -126,7 +145,7 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
      {(pickerOpen||allocations.length===0)&&<div className="cash-charge-picker" id="cash-charge-picker"><div className="cash-list-filters"><label className="team-field">Buscar cobrança<input ref={pickerFocus} value={query} maxLength={120} placeholder="Protocolo ou atendimento" onChange={e=>setQuery(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();searchCharges();}}}/></label><button type="button" className="secondary-button" disabled={chargeReading} onClick={searchCharges}>Buscar cobrança</button></div>
      {chargeError&&<p className="form-feedback error" role="alert">{chargeError.message}</p>}
      <label className="team-field">Cobrança<select value="" disabled={chargeReading||allocations.length>=10||!candidates} onChange={e=>addCharge(e.target.value)}><option value="">Selecione para adicionar ao recebimento</option>{candidates?.items.filter(c=>c.balance_cents>0&&c.status==='open'&&!allocations.some(a=>a.charge.id===c.id)).map(c=><option key={c.id} value={c.id}>{c.protocol} · {cashMoney(c.balance_cents)} em aberto</option>)}</select></label>
-     {candidates&&<><p className="customer-note">{allocations.length}/10 cobranças selecionadas. Valores parciais são permitidos.{!candidates.items.length&&' Nenhuma cobrança pendente sob sua responsabilidade neste filtro.'}</p><nav className="team-pagination" aria-label="Cobranças disponíveis"><button type="button" className="team-text-button" disabled={chargeReading||chargePage<=1} onClick={()=>setChargePage(n=>n-1)}>Anterior</button><span>{candidates.total} cobranças · {candidates.page}/{Math.max(1,Math.ceil(candidates.total/5))}</span><button type="button" className="team-text-button" disabled={chargeReading||chargePage*5>=candidates.total} onClick={()=>setChargePage(n=>n+1)}>Próxima</button></nav></>}
+     {candidates&&<><p className="customer-note">{allocations.length}/10 cobranças selecionadas. Valores parciais são permitidos.{!candidates.items.length&&' Nenhuma cobrança elegível encontrada neste filtro.'}</p><nav className="team-pagination" aria-label="Cobranças disponíveis"><button type="button" className="team-text-button" disabled={chargeReading||chargePage<=1} onClick={()=>setChargePage(n=>n-1)}>Anterior</button><span>{candidates.total} cobranças · {candidates.page}/{Math.max(1,Math.ceil(candidates.total/5))}</span><button type="button" className="team-text-button" disabled={chargeReading||chargePage*5>=candidates.total} onClick={()=>setChargePage(n=>n+1)}>Próxima</button></nav></>}
      </div>}
      {allocations.length>0&&allocations.length<10&&<button type="button" className="team-text-button cash-add-charge" aria-expanded={pickerOpen} aria-controls="cash-charge-picker" onClick={()=>setPickerOpen(v=>!v)}>{pickerOpen?'Concluir seleção':'Adicionar cobrança'}</button>}
      <ul className="cash-allocation-list" aria-label="Cobranças selecionadas">{allocations.map(({charge,amount},index)=><li key={charge.id}><div><strong>{charge.protocol}</strong><span className="customer-note">Saldo {cashMoney(charge.balance_cents)}</span></div><label className="team-field">Valor para {charge.protocol} (R$)<input ref={index===allocations.length-1?amountFocus:undefined} inputMode="decimal" maxLength={14} value={amount} onChange={e=>setAllocations(old=>old.map(a=>a.charge.id===charge.id?{...a,amount:e.target.value}:a))}/></label><button type="button" className="team-text-button" aria-label={`Remover ${charge.protocol}`} onClick={()=>{setAllocations(old=>old.filter(a=>a.charge.id!==charge.id));if(allocations.length===1)setPickerOpen(true);}}>Remover</button></li>)}</ul>
@@ -145,10 +164,10 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
    {validation&&<p className="form-feedback error" role="alert">{validation}</p>}
    <div className="account-actions">
     {(editor.kind!=='record'||status==='pending'||canDirectManualPayment)&&<button className="primary-button" disabled={locked||editor.kind==='record'&&chargeReading}>{editor.kind==='record'?(status==='pending'?'Registrar pendência':'Confirmar recebimento'):actionTitle}</button>}
-    {editor.kind==='record'&&status==='confirmed'&&!canDirectManualPayment&&allocations.length===1&&method&&totalValid&&<button type="button" className="primary-button" disabled={locked||chargeReading} onClick={()=>setRequestingApproval(true)}>Solicitar autorização</button>}
+    {editor.kind==='record'&&status==='confirmed'&&!canDirectManualPayment&&<button type="button" className="primary-button" disabled={locked||chargeReading||allocations.length!==1||!method||!totalValid} onClick={()=>setRequestingApproval(true)}>Solicitar autorização</button>}
     <button type="button" className="secondary-button" disabled={locked} onClick={()=>{clearEditor(true);setError(undefined);}}>Cancelar</button>
    </div>
-   {editor.kind==='record'&&status==='confirmed'&&!canDirectManualPayment&&<p className="customer-note">Seu perfil exige aprovação para confirmar este meio de pagamento. Em espécie, o gestor também pode conceder a permissão Registrar recebimentos em dinheiro.</p>}
+   {editor.kind==='record'&&status==='confirmed'&&!canDirectManualPayment&&<p className="customer-note">Seu perfil exige autorização de um administrador ou super administrador do escritório para confirmar pagamentos manuais. Selecione uma cobrança, escolha a forma de pagamento e clique em Solicitar autorização.</p>}
   </form>}
   {editor?.kind==='record'&&requestingApproval&&allocations.length===1&&method&&totalValid&&<ManualPaymentApprovalForm office={office} chargeId={allocations[0].charge.id} chargeVersion={allocations[0].charge.version} requestId={allocations[0].charge.request_id} protocol={allocations[0].charge.protocol} sessionId={s.id} unitId={s.unit_id} unitName={configuration?.units.find(u=>u.id===s.unit_id)?.name} destinationAccountId={method.destination_account_id} destinationAccountName={configuration?.accounts.find(a=>a.id===method.destination_account_id)?.name} paymentMethodId={method.id} paymentMethodName={method.name} amountCents={cashAmountToCents(allocations[0].amount)!} initialExternalReference={reference} initialJustification={evidence} disabled={locked} onSubmitted={()=>{clearEditor(true);setFeedback('Solicitação de autorização de pagamento manual enviada ao aprovador selecionado.');}} onCancel={()=>setRequestingApproval(false)}/>}
   {!editor&&s.status==='closed'&&hasAuthority&&<p className="customer-note">Caixa fechado: novos recebimentos e confirmações estão bloqueados. Pendências podem ser rejeitadas e cartões confirmados podem ter sua liquidação registrada.</p>}
@@ -163,7 +182,7 @@ export function CashPaymentsPanel({office,statement,configuration,disabled,onBus
    {payment.payment_type==='cash'&&<dl className="cash-totals cash-payment-totals"><div><dt>Aplicado no recebimento original</dt><dd>{cashMoney(payment.amount_cents)}</dd></div><div><dt>Apresentado</dt><dd>{knownMoney(payment.presented_cents)}</dd></div><div><dt>Troco</dt><dd>{knownMoney(payment.change_cents)}</dd></div></dl>}
    {payment.payment_type==='card'&&<><dl className="cash-totals cash-payment-totals"><div><dt>Bruto</dt><dd>{cashMoney(payment.amount_cents)}</dd></div><div><dt>Taxa</dt><dd>{knownMoney(payment.fee_cents)}</dd></div><div><dt>Líquido</dt><dd>{knownMoney(payment.net_cents)}</dd></div></dl><p className="customer-note">{payment.settlement==='settled'?`Liquidado em ${payment.settled_on?dateLabel(payment.settled_on):'data sem informação'}`:payment.settlement==='pending'?'Pendente de liquidação':'Liquidação: sem informação'}</p></>}
    <details className="cash-payment-reference"><summary>Detalhes do pagamento</summary><p>Referência lógica: {payment.reference}</p><p>Evidência: {payment.evidence??'Sem informação'}</p>{payment.external_reference&&<p>Referência externa: {payment.external_reference}</p>}<p>Registro de controle interno, sem emissão de nota fiscal.</p>{context?.permissions.includes('receipts.read')&&['confirmed','partially_reversed','reversed'].includes(payment.status)&&<button type="button" className="team-text-button" disabled={locked} onClick={()=>{setReceiptPayment(payment.id);onEditing(true);}}>Abrir recibo</button>}</details>
-   {!editor&&hasAuthority&&<div className="account-actions">{payment.status==='pending'&&<>{canRecord&&canConfirmPayment(payment)&&<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'confirm',payment})}>Confirmar pagamento</button>}<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'reject',payment})}>Rejeitar pagamento</button></>}{payment.payment_type==='card'&&payment.settlement==='pending'&&['confirmed','partially_reversed','reversed'].includes(payment.status)&&<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'settle',payment})}>Registrar liquidação</button>}</div>}
+   {!editor&&hasAuthority&&<div className="account-actions">{payment.status==='pending'&&<>{canRecord&&canDirectManualPayment&&<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'confirm',payment})}>Confirmar pagamento</button>}<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'reject',payment})}>Rejeitar pagamento</button></>}{payment.payment_type==='card'&&payment.settlement==='pending'&&['confirmed','partially_reversed','reversed'].includes(payment.status)&&<button type="button" className="team-text-button" disabled={locked} onClick={()=>start({kind:'settle',payment})}>Registrar liquidação</button>}</div>}
   </li>)}</ul>)}
   {!editor&&historyReady&&<nav className="team-pagination" aria-label="Paginação de pagamentos"><button type="button" className="team-text-button" disabled={locked||historyReading||history.page<=1} onClick={()=>loadHistory(history.page-1)}>Anterior</button><span>{history.total} pagamentos · {history.page}/{Math.max(1,Math.ceil(history.total/5))}</span><button type="button" className="team-text-button" disabled={locked||historyReading||history.page*5>=history.total} onClick={()=>loadHistory(history.page+1)}>Próxima</button></nav>}
  </section>;

@@ -60,6 +60,22 @@ const STATUS_MAP: Record<string, number> = {
   CASH_SESSION_CLOSED: 422,
 };
 
+const CODE_MESSAGES: Record<string, string> = {
+  AUTH_REQUIRED: 'Entre novamente para continuar.',
+  APPROVAL_FORBIDDEN: 'Seu acesso não permite realizar ou aprovar esta solicitação neste escritório.',
+  PERMISSION_REVOKED: 'Sua permissão financeira foi revogada. Atualize sua sessão antes de continuar.',
+  WRONG_APPROVER: 'Esta autorização foi direcionada a outro aprovador do escritório.',
+  APPROVAL_NOT_FOUND: 'Solicitação de autorização não encontrada no seu escopo.',
+  CHARGE_NOT_FOUND: 'Cobrança não encontrada ou fora do seu escopo.',
+  APPROVAL_CONFLICT: 'A solicitação de autorização mudou em outra operação. Atualize a tela.',
+  CHARGE_CHANGED: 'A cobrança foi alterada após o pedido de autorização. Atualize os dados e solicite novamente.',
+  ALREADY_DECIDED: 'Esta solicitação de autorização já recebeu uma decisão anterior.',
+  ALREADY_EXECUTED: 'Este pagamento autorizado já foi executado anteriormente.',
+  APPROVAL_EXPIRED: 'O prazo desta autorização expirou. Envie uma nova solicitação para continuar.',
+  APPROVAL_VALIDATION: 'Confira os valores, a forma de pagamento, o aprovador selecionado e a justificativa.',
+  CASH_SESSION_CLOSED: 'Abra um caixa individual ativo antes de executar o pagamento manual autorizado.',
+};
+
 function mapSafeError(res: Response, error: { code?: string; message?: string }) {
   if (error.code && RPC_MISSING_CODES.has(error.code)) {
     errorResponse(
@@ -73,14 +89,7 @@ function mapSafeError(res: Response, error: { code?: string; message?: string })
   const msg = error.message ?? '';
   const status = STATUS_MAP[msg];
   if (status && error.code === `PT${status}`) {
-    const safeMessages: Record<number, string> = {
-      401: 'Entre novamente para continuar.',
-      403: 'Seu acesso não permite realizar ou aprovar esta solicitação.',
-      404: 'Autorização ou cobrança não disponível no seu escopo.',
-      409: 'A cobrança ou autorização foi alterada, expirou ou já foi utilizada. Atualize a tela.',
-      422: 'Confira os valores, o aprovador selecionado e a justificativa.',
-    };
-    errorResponse(res, status, msg, safeMessages[status] ?? 'Não foi possível concluir a autorização.');
+    errorResponse(res, status, msg, CODE_MESSAGES[msg] ?? 'Não foi possível concluir a autorização.');
     return;
   }
   errorResponse(res, 503, 'APPROVALS_UNAVAILABLE', 'Não foi possível concluir a operação de autorização.');

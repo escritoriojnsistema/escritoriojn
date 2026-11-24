@@ -5,6 +5,7 @@ import {ArrowLeft,RefreshCw} from 'lucide-react';
 import type {CashConfiguration} from '../../../shared/cash';
 import {cashAmountToCents} from '../../../shared/cash';
 import type {FinanceOperation,FinanceStatement} from '../../../shared/finance';
+import type {ManualPaymentChargeContext} from '../../../shared/manualPaymentFlow';
 import {paths} from '../../app/routes';
 import {useAuth} from '../auth/AuthProvider';
 import {noticesChanged} from '../notifications/api';
@@ -14,13 +15,13 @@ import {CashPaymentsPanel} from './CashPaymentsPanel';
 import {CashCorrectionsPanel} from './CashCorrectionsPanel';
 const entryNames={expense_paid:'Despesa paga',transfer_out:'Transferência · saída',transfer_in:'Transferência · entrada',received:'Pagamento recebido',refunded:'Reembolso',reversed:'Devolução com estorno (legado)',allocation_reversed:'Alocação estornada',refund_paid:'Devolução efetiva',reconciled:'Conciliação',closed:'Fechamento'};
 type Mode='reconcile'|'close';
-type Props={closureIntent?:{mode:ClosureMode;nonce:number};onClosureTools:(value:{sessionId:string;canAdjust:boolean}|undefined)=>void;office:string;sessionId:string;configuration?:CashConfiguration;onBack:()=>void;onBusy:(busy:boolean)=>void;onChanged:()=>void};
+type Props={closureIntent?:{mode:ClosureMode;nonce:number};onClosureTools:(value:{sessionId:string;canAdjust:boolean}|undefined)=>void;office:string;sessionId:string;configuration?:CashConfiguration;onBack:()=>void;onBusy:(busy:boolean)=>void;onChanged:()=>void;preselectedCharge?:ManualPaymentChargeContext;autoOpenRecord?:boolean;onAutoOpenConsumed?:()=>void};
 export function CashStatement(props:Props){
  const auth=useAuth(),context=auth.contexts.find(c=>c.office_id===props.office&&c.role_code!=='client');
  const scope=JSON.stringify([auth.sessionKey,props.office,props.sessionId,context?.user_id,context?.role_code,[...(context?.permissions??[])].sort()]);
  return <CashStatementView key={scope} {...props}/>;
 }
-function CashStatementView({closureIntent,onClosureTools,office,sessionId,configuration,onBack,onBusy,onChanged}:Props){
+function CashStatementView({closureIntent,onClosureTools,office,sessionId,configuration,onBack,onBusy,onChanged,preselectedCharge,autoOpenRecord,onAutoOpenConsumed}:Props){
  const auth=useAuth(),context=auth.contexts.find(c=>c.office_id===office&&c.role_code!=='client');
  const viewId=sessionId;
  const [data,setData]=useState<FinanceStatement>(),[error,setError]=useState<CashError>(),[page,setPage]=useState(1),[revision,setRevision]=useState(0),[reading,setReading]=useState(false),[busy,setBusy]=useState(false),[feedback,setFeedback]=useState('');
@@ -57,7 +58,7 @@ function CashStatementView({closureIntent,onClosureTools,office,sessionId,config
 </>}
  {correctionEditing&&<CashCorrectionsPanel office={office} statement={data} disabled={busy||reading} onBusy={paymentBusy} onCancel={()=>setCorrectionEditing(false)} onChanged={(value,message)=>{adopt(value);setPage(value.page);setCorrectionEditing(false);setFeedback(message);onChanged();noticesChanged();}} onRefresh={()=>setRevision(n=>n+1)} onUnavailable={issue=>{readAbort.current?.abort();setReading(false);setError(issue);setCorrectionEditing(false);setData(undefined);}}/>}
  {!editing&&(!s.is_self||s.status==='closed')&&<p className="customer-note">Para corrigir um pagamento deste histórico, volte aos caixas e use Corrigir pagamento no seu próprio caixa aberto da mesma unidade.</p>}
- <CashPaymentsPanel key={s.id} office={office} statement={data} configuration={configuration} disabled={busy||reading||!!mode||correctionEditing||!!closureMode} hidden={correctionEditing||!!closureMode} actions={canOperate&&!mode&&!closureMode?<><button type="button" className="secondary-button" disabled={busy} onClick={()=>{cancel();if(data.closures_enabled){setClosureMode('reconcile');return;}setMode('reconcile');setAmount((s.cash_cents/100).toFixed(2).replace('.',','));}}>Conciliar caixa</button><button type="button" className="secondary-button" disabled={busy} onClick={()=>{cancel();if(data.closures_enabled){setClosureMode('close');return;}setMode('close');setAmount((s.cash_cents/100).toFixed(2).replace('.',','));}}>Fechar caixa</button></>:undefined} onCorrect={canRefund&&!mode&&!closureMode?()=>{setFeedback('');setCorrectionEditing(true);}:undefined} onBusy={paymentBusy} onEditing={setPaymentEditing} onChanged={value=>{adopt(value);setPage(value.page);setFeedback('');onChanged();noticesChanged();}} onRefresh={()=>setRevision(n=>n+1)} onUnavailable={issue=>{readAbort.current?.abort();setReading(false);setError(issue);cancel();setData(undefined);}}/>
+ <CashPaymentsPanel key={s.id} office={office} statement={data} configuration={configuration} disabled={busy||reading||!!mode||correctionEditing||!!closureMode} hidden={correctionEditing||!!closureMode} preselectedCharge={preselectedCharge} autoOpenRecord={autoOpenRecord} onAutoOpenConsumed={onAutoOpenConsumed} actions={canOperate&&!mode&&!closureMode?<><button type="button" className="secondary-button" disabled={busy} onClick={()=>{cancel();if(data.closures_enabled){setClosureMode('reconcile');return;}setMode('reconcile');setAmount((s.cash_cents/100).toFixed(2).replace('.',','));}}>Conciliar caixa</button><button type="button" className="secondary-button" disabled={busy} onClick={()=>{cancel();if(data.closures_enabled){setClosureMode('close');return;}setMode('close');setAmount((s.cash_cents/100).toFixed(2).replace('.',','));}}>Fechar caixa</button></>:undefined} onCorrect={canRefund&&!mode&&!closureMode?()=>{setFeedback('');setCorrectionEditing(true);}:undefined} onBusy={paymentBusy} onEditing={setPaymentEditing} onChanged={value=>{adopt(value);setPage(value.page);setFeedback('');onChanged();noticesChanged();}} onRefresh={()=>setRevision(n=>n+1)} onUnavailable={issue=>{readAbort.current?.abort();setReading(false);setError(issue);cancel();setData(undefined);}}/>
 
  {closureMode&&<CashClosurePanel key={`${closureMode}:${closureIntent?.nonce??0}`} office={office} statement={data} initialMode={closureMode} onBack={()=>setClosureMode(undefined)} onBusy={paymentBusy} onChanged={value=>{adopt(value);setPage(1);onChanged();noticesChanged();}} onRefresh={()=>setRevision(n=>n+1)} onUnavailable={issue=>{readAbort.current?.abort();setReading(false);setError(issue);setClosureMode(undefined);setData(undefined);}}/>}
  {mode&&<form onSubmit={submit} className="finance-operation" noValidate><h3>{mode==='reconcile'?'Conferir espécie':'Encerrar caixa'}</h3>

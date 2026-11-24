@@ -1289,3 +1289,212 @@
     line-height: 1.25;
   }
 }
+
+/* Manual payment entry, guided configuration & return-to-origin banner */
+.jn-manual-payment-entry {
+  margin: 12px 0;
+  min-width: 0;
+}
+
+.jn-manual-payment-card {
+  margin-top: 10px;
+  padding: 16px 18px;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border-strong, #bccad3);
+  border-radius: var(--jn-radius-md, 12px);
+  box-shadow: var(--jn-shadow-xs);
+  min-width: 0;
+}
+
+.jn-manual-payment-card h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+  overflow-wrap: anywhere;
+}
+
+.jn-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 10px 0 12px;
+}
+
+.jn-breakdown-grid > div {
+  background: var(--jn-surface-subtle, #f2f6f8);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-sm, 9px);
+  padding: 8px 10px;
+  min-width: 0;
+}
+
+.jn-breakdown-grid dt {
+  color: var(--jn-muted, #556b7a);
+  font-size: 11.5px;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.jn-breakdown-grid dd {
+  margin: 0;
+  font-size: 14px;
+  color: var(--jn-navy, #103248);
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.jn-setup-checklist {
+  margin: 8px 0 10px;
+  padding-left: 20px;
+  color: var(--jn-text-secondary, #365264);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.jn-config-status-bar {
+  margin-bottom: 14px;
+  padding: 16px 18px;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  box-shadow: var(--jn-shadow-xs);
+}
+
+.jn-config-status-bar h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+}
+
+.jn-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--jn-radius-xs, 6px);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.jn-status-badge.is-ready {
+  background: var(--jn-success-bg, #edf5f0);
+  color: var(--jn-success, #235d43);
+}
+
+.jn-status-badge.is-waiting {
+  background: var(--jn-warn-bg, #fbf6ed);
+  color: var(--jn-warn, #7d5318);
+}
+
+.jn-status-badge.is-incomplete {
+  background: var(--jn-danger-bg, #fff3ee);
+  color: var(--jn-danger, #8e351c);
+}
+
+.jn-config-section {
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border, #dbe3e8);
+  border-radius: var(--jn-radius-md, 12px);
+  box-shadow: var(--jn-shadow-xs);
+}
+
+.jn-config-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.jn-config-header-row > div {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.jn-config-header-row > button {
+  width: auto;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.jn-config-header-row h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--jn-navy, #103248);
+}
+
+.jn-config-section > details {
+  border-top: 1px solid var(--jn-border, #dbe3e8);
+  padding-top: 6px;
+}
+
+.jn-return-banner,
+.jn-manual-cash-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  background: var(--jn-surface, #ffffff);
+  border: 1px solid var(--jn-border-strong, #bccad3);
+  border-left: 4px solid var(--jn-navy, #103248);
+  border-radius: var(--jn-radius-md, 12px);
+  box-shadow: var(--jn-shadow-xs);
+}
+
+.jn-return-banner .account-actions button,
+.jn-manual-cash-banner .account-actions button {
+  width: auto;
+}
+
+.jn-return-banner strong,
+.jn-manual-cash-banner strong {
+  color: var(--jn-navy, #103248);
+  font-size: 14.5px;
+}
+
+.jn-inline-alert {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-block: 8px;
+}
+
+@media (max-width: 900px) {
+  .jn-manual-payment-card,
+  .jn-config-status-bar,
+  .jn-config-section,
+  .jn-return-banner,
+  .jn-manual-cash-banner {
+    padding: 12px;
+  }
+  .jn-breakdown-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .jn-manual-payment-card .team-field input,
+  .jn-manual-payment-card .team-field select,
+  .jn-manual-payment-card .team-field textarea {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .jn-breakdown-grid {
+    grid-template-columns: 1fr;
+  }
+  .jn-config-header-row > button,
+  .jn-return-banner .account-actions button,
+  .jn-manual-cash-banner .account-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+}

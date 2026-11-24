@@ -18,15 +18,32 @@ import '../requests/requests.css';
 
 export default function AccountPage(){
  const client=normalizePathname(useLocation().pathname)===paths.clientAccount;
+ const location=useLocation(),navState=location.state as {office_id?:string}|null;
+ const [selectedOffice,setSelectedOffice]=useState(navState?.office_id??'');
  const [busy,setBusy]=useState(false);
- return <OperationalAccess client={client} busy={busy}>{contexts=><AccountWorkspace key={contexts[0].user_id+contexts[0].office_id} context={contexts[0]} client={client} onPendingChange={setBusy}/>}</OperationalAccess>;
+ return <OperationalAccess client={client} busy={busy}>{contexts=>{
+  const context=contexts.find(c=>c.office_id===selectedOffice)??contexts[0];
+  return <AccountWorkspace key={context.user_id+context.office_id} context={context} contexts={contexts} client={client} onOffice={setSelectedOffice} onPendingChange={setBusy}/>;
+ }}</OperationalAccess>;
 }
-function AccountWorkspace({context,client,onPendingChange}:{context:AccessContext;client:boolean;onPendingChange:(pending:boolean)=>void}){
- const auth=useAuth(),[data,setData]=useState<AccountData>(),[value,setValue]=useState<AccountInput>({name:context.display_name??'',cpf:null,email:''}),[busy,setBusy]=useState(false),[error,setError]=useState(''),[feedback,setFeedback]=useState(''),[revision,setRevision]=useState(0),[blocked,setBlocked]=useState(false),[identityOpen,setIdentityOpen]=useState(false),[identityBusy,setIdentityBusy]=useState(false);
+function AccountWorkspace({context,contexts,client,onOffice,onPendingChange}:{context:AccessContext;contexts:AccessContext[];client:boolean;onOffice:(id:string)=>void;onPendingChange:(pending:boolean)=>void}){
+ const auth=useAuth(),[data,setData]=useState<AccountData>(),[value,setValue]=useState<AccountInput>({name:context.display_name??'',cpf:null,email:''}),[reading,setReading]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(''),[feedback,setFeedback]=useState(''),[revision,setRevision]=useState(0),[blocked,setBlocked]=useState(false),[identityOpen,setIdentityOpen]=useState(false),[identityBusy,setIdentityBusy]=useState(false);
  const pending=useRef<AbortController|null>(null),busyRef=useRef(false),office=context.office_id;
  useEffect(()=>{onPendingChange(busy||identityBusy);return()=>onPendingChange(false);},[busy,identityBusy,onPendingChange]);
  useEffect(()=>()=>pending.current?.abort(),[]);
- useEffect(()=>{const controller=new AbortController();void accountApi.read(office,controller.signal).then(result=>{if(!controller.signal.aborted){setData(result);setValue({name:result.name,cpf:result.cpf,email:result.pending_email??result.email});setError('');}}).catch(cause=>{if(!controller.signal.aborted){setError(cause instanceof Error?cause.message:'Não foi possível consultar a conta.');if(cause instanceof AccountError&&[401,403].includes(cause.status)){setBlocked(true);setData(undefined);setValue({name:'',cpf:null,email:''});}}});return()=>controller.abort();},[office,revision]);
+ useEffect(()=>{
+  const controller=new AbortController();
+  setReading(true);
+  void accountApi.read(office,controller.signal).then(result=>{
+   if(!controller.signal.aborted){setData(result);setValue({name:result.name,cpf:result.cpf,email:result.pending_email??result.email});setError('');}
+  }).catch(cause=>{
+   if(!controller.signal.aborted){
+    setError(cause instanceof Error?cause.message:'Não foi possível consultar a conta.');
+    if(cause instanceof AccountError&&[401,403].includes(cause.status)){setBlocked(true);setData(undefined);setValue({name:'',cpf:null,email:''});}
+   }
+  }).finally(()=>{if(!controller.signal.aborted)setReading(false);});
+  return()=>controller.abort();
+ },[office,revision]);
  const normalized=normalizeAccountInput(value),changed=!!data&&(normalized.name!==data.name||normalized.cpf!==data.cpf||normalized.email!==(data.pending_email??data.email));
  useEffect(()=>{const refresh=()=>{if(!busyRef.current&&(client||!changed)&&document.visibilityState==='visible')setRevision(n=>n+1);};window.addEventListener('focus',refresh);window.addEventListener('jn:inbox-update',refresh);return()=>{window.removeEventListener('focus',refresh);window.removeEventListener('jn:inbox-update',refresh);};},[client,changed]);
  async function emailConfirmation(email:string,signal:AbortSignal){await confirmAccountEmail(email,auth.sessionKey,client,signal);if(!signal.aborted)setFeedback('Confira as instruções de confirmação no e-mail atual e no novo. A troca só termina após a confirmação exigida pelo provedor.');}
@@ -42,12 +59,14 @@ function AccountWorkspace({context,client,onPendingChange}:{context:AccessContex
  if(client&&identityOpen)return <><OperationHeading context={context} title="Vínculo do portal" description="Confirme a identidade e acompanhe suas autorizações." showRole={false}/><button data-operation-local-return className="team-text-button" disabled={identityBusy} onClick={()=>setIdentityOpen(false)}>Voltar à conta</button><PortalIdentityPanel key={auth.sessionKey+office} office={office} onPendingChange={setIdentityBusy} onFatal={()=>setBlocked(true)}/></>;
  return <>
   <OperationHeading context={context} title="Conta" showRole={false} description={client?'Consulte seus dados e solicite correções.':'Edite os dados pessoais do seu acesso ao escritório.'}/>
+  {contexts.length>1&&<label className="team-field team-office">Escritório<select disabled={busy||reading} value={office} onChange={e=>onOffice(e.target.value)}>{contexts.map(c=><option value={c.office_id} key={c.office_id}>{c.office_name}</option>)}</select></label>}
   <section className="operation-account" aria-labelledby="account-title"><div className="operation-section-title"><CircleUserRound size={23} aria-hidden="true"/><h2 id="account-title">Dados de acesso</h2></div>
    {feedback&&<p role="status" className="form-feedback">{feedback}</p>}{error&&<p role="alert" className="form-feedback error">{error}</p>}
+   {reading&&!data&&!error&&<p className="customer-note">Carregando dados da conta...</p>}
    {!blocked&&<>{client?<><dl className="operation-details"><div><dt>Nome</dt><dd>{data?.name??context.display_name??'Não informado'}</dd></div><div><dt>CPF</dt><dd>{data?.cpf?formatCpf(data.cpf):data?.cpf_masked??'Não informado'}</dd></div><div className="account-email-detail"><dt>E-mail de acesso</dt><dd>{data?.email??'Não informado'}</dd></div></dl><p className="operation-note">Para corrigir seus dados, abra uma solicitação.</p></>:<form id="account-edit" className="request-form" onSubmit={save} noValidate><fieldset disabled={busy||!data}><AccountFields value={value} onChange={setValue} masked={data?.cpf_masked}/></fieldset></form>}
    <details className="account-access-info"><summary>Perfil e escritório</summary><dl className="operation-details"><div><dt>Perfil de acesso</dt><dd>{operationRoleNames[context.role_code]}</dd></div><div><dt>Escritório</dt><dd>{context.office_name}</dd></div></dl></details>
    {data?.pending_email&&<div><p className="customer-note">E-mail pendente de confirmação: {data.pending_email}. O acesso atual continua em {data.email} até a confirmação.</p><button className="team-text-button" disabled={busy} onClick={()=>void confirm()}><MailCheck size={18} aria-hidden="true"/>Enviar confirmação</button></div>}
-   {error&&<button className="team-text-button" disabled={busy} onClick={()=>{setError('');setRevision(n=>n+1);}}>Reabrir dados da conta</button>}</>}
+   {error&&<button type="button" className="team-text-button" disabled={busy||reading} onClick={()=>{setError('');setRevision(n=>n+1);}}>Reabrir dados da conta</button>}</>}
   </section>
   {!blocked&&<div className="account-actions">{client?<Link className="primary-button" to={paths.clientRequests} state={{office_id:office,...(data?.correction_request_id?{request_id:data.correction_request_id}:{account_correction:true})}}><FilePenLine size={18} aria-hidden="true"/>{data?.correction_request_id?'Acompanhar correção':'Solicitar correção'}</Link>:changed&&<><button className="primary-button" form="account-edit" disabled={busy}><Save size={18} aria-hidden="true"/>Salvar alterações</button><button data-operation-local-return type="button" className="secondary-button" disabled={busy} onClick={()=>{setError('');setFeedback('');if(data)setValue({name:data.name,cpf:data.cpf,email:data.pending_email??data.email});}}>Cancelar</button></>}</div>}
   <div>{client&&!blocked&&<button className="team-text-button" disabled={busy} onClick={()=>setIdentityOpen(true)}>Meu vínculo no portal</button>}</div>{client&&!blocked&&<AccountClosure key={auth.sessionKey+office} office={office}/>}

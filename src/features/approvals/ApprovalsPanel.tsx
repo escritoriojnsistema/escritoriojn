@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CheckCircle2, RefreshCw, XCircle } from 'lucide-react';
+import { CheckCircle2, DoorOpen, RefreshCw, XCircle } from 'lucide-react';
 import {
   financialApprovalStatusLabels,
   type FinancialApprovalItem,
@@ -14,6 +14,7 @@ type Props = {
   activeSessionId?: string | null;
   highlightApprovalId?: string;
   onChanged?: () => void;
+  onOpenCash?: () => void;
 };
 
 export function ApprovalsPanel({
@@ -21,6 +22,7 @@ export function ApprovalsPanel({
   activeSessionId,
   highlightApprovalId,
   onChanged,
+  onOpenCash,
 }: Props) {
   const [scope, setScope] = useState<'all' | 'assigned_to_me' | 'requested_by_me'>('all');
   const [kind, setKind] = useState<FinancialApprovalKind | 'all'>('all');
@@ -79,6 +81,7 @@ export function ApprovalsPanel({
     } catch (cause) {
       const err = cause instanceof FinancialApprovalsError ? cause : new FinancialApprovalsError(503);
       setError(err.message);
+      if (err.status === 409) setRevision((n) => n + 1);
     } finally {
       setBusyId(null);
     }
@@ -103,6 +106,7 @@ export function ApprovalsPanel({
     } catch (cause) {
       const err = cause instanceof FinancialApprovalsError ? cause : new FinancialApprovalsError(503);
       setError(err.message);
+      if (err.status === 409) setRevision((n) => n + 1);
     } finally {
       setBusyId(null);
     }
@@ -314,9 +318,22 @@ export function ApprovalsPanel({
                       Executar pagamento autorizado no caixa aberto
                     </button>
                     {!activeSessionId && (
-                      <span className="customer-note">
-                        Abra um caixa individual para concluir o lançamento autorizado.
-                      </span>
+                      <>
+                        {onOpenCash && (
+                          <button
+                            type="button"
+                            className="secondary-button"
+                            disabled={isBusy}
+                            onClick={onOpenCash}
+                          >
+                            <DoorOpen size={16} aria-hidden="true" />
+                            <span>Abrir meu caixa</span>
+                          </button>
+                        )}
+                        <span className="customer-note">
+                          Abra um caixa individual para concluir o lançamento autorizado.
+                        </span>
+                      </>
                     )}
                   </div>
                 )}

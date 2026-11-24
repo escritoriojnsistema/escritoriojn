@@ -1,8 +1,10 @@
 import { useEffect, useState, type FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Building2,
   CheckCircle2,
   CreditCard,
+  Plus,
   QrCode,
   RefreshCw,
   ShieldAlert,
@@ -21,7 +23,11 @@ import {
   type ProviderEnvironment,
 } from '../../../shared/paymentCheckout';
 import type { CashConfiguration } from '../../../shared/cash';
-import { cashApi } from '../cash/api';
+import { selectProviderReceivingAccounts, type CashNavigationState } from '../../../shared/manualPaymentFlow';
+import { paths } from '../../app/routes';
+import { useAuth } from '../auth/AuthProvider';
+import { cashError } from '../cash/api';
+import { loadAllCashConfigurationPages } from '../cash/cashConfigLoader';
 import { paymentProvidersApi, PaymentProvidersError } from './paymentProvidersApi';
 import './paymentProviders.css';
 
@@ -63,7 +69,14 @@ export function PaymentProvidersSettings({
   const [error, setError] = useState('');
   const [feedback, setFeedback] = useState('');
 
+  const auth = useAuth();
+  const officeContext = auth.contexts.find((c) => c.office_id === office && c.role_code !== 'client');
+  const canManageCash = Boolean(officeContext?.permissions.includes('cash.manage'));
+
   const [cashConfig, setCashConfig] = useState<CashConfiguration | null>(null);
+  const [cashConfigStatus, setCashConfigStatus] = useState<'loading' | 'ready' | 'forbidden' | 'error'>('loading');
+  const [cashConfigError, setCashConfigError] = useState('');
+  const [cashRevision, setCashRevision] = useState(0);
 
   // Tab A — Provider form
   const [providerCode, setProviderCode] = useState(providerCatalog[0].provider_code);
@@ -104,16 +117,23 @@ export function PaymentProvidersSettings({
 
   useEffect(() => {
     const controller = new AbortController();
-    void cashApi
-      .configuration(office, 1, null, controller.signal)
+    setCashConfigStatus('loading');
+    setCashConfigError('');
+    void loadAllCashConfigurationPages(office, null, controller.signal)
       .then((cfg) => {
-        if (!controller.signal.aborted) setCashConfig(cfg);
+        if (controller.signal.aborted) return;
+        setCashConfig(cfg);
+        setCashConfigStatus('ready');
       })
-      .catch(() => {
-        if (!controller.signal.aborted) setCashConfig(null);
+      .catch((cause) => {
+        if (controller.signal.aborted) return;
+        const err = cashError(cause);
+        setCashConfig(null);
+        setCashConfigError(err.message);
+        setCashConfigStatus(err.status === 401 || err.status === 403 ? 'forbidden' : 'error');
       });
     return () => controller.abort();
-  }, [office]);
+  }, [office, cashRevision, revision]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -172,6 +192,21 @@ export function PaymentProvidersSettings({
   const selectedPixProvider = state?.providers.find((p) => p.id === pixProviderId) ?? null;
   const selectedCardProvider = state?.providers.find((p) => p.id === cardProviderId) ?? null;
   const backendReady = state?.backend_ready ?? false;
+  const accountSelection = selectProviderReceivingAccounts(cashConfig, financialUnitId);
+  const cashConfigLinkState: CashNavigationState = {
+    office_id: office,
+    tab: 'configuration',
+  };
+
+  function handleUnitChange(nextUnitId: string) {
+    setFinancialUnitId(nextUnitId);
+    if (receivingAccountId && nextUnitId) {
+      const stillValid = (cashConfig?.accounts ?? []).some(
+        (a) => a.id === receivingAccountId && a.active && a.type !== 'cash' && a.unit_id === nextUnitId,
+      );
+      if (!stillValid) setReceivingAccountId('');
+    }
+  }
 
   function toggleMethod(method: CheckoutMethod) {
     setEnabledMethods((old) =>
@@ -438,31 +473,109 @@ export function PaymentProvidersSettings({
               <div className="request-grid">
                 <label className="team-field">
                   Unidade / destino financeiro
-                  <select value={financialUnitId} onChange={(e) => setFinancialUnitId(e.target.value)}>
+                  <select
+                    value={financialUnitId}
+                    disabled={cashConfigStatus === 'loading'}
+                    onChange={(e) => handleUnitChange(e.target.value)}
+                  >
                     <option value="">Geral do escritório</option>
-                    {(cashConfig?.units ?? [])
-                      .filter((u) => u.active)
-                      .map((u) => (
-                        <option key={u.id} value={u.id}>
-                          {u.name}
-                        </option>
-                      ))}
+                    {accountSelection.active_units.map((u) => (
+                      <option key={u.id} value={u.id}>
+                        {u.name}
+                      </option>
+                    ))}
                   </select>
                 </label>
 
                 <label className="team-field">
-                  Conta recebedora vinculada
-                  <select value={receivingAccountId} onChange={(e) => setReceivingAccountId(e.target.value)}>
-                    <option value="">Definir na conciliação / padrão do caixa</option>
-                    {(cashConfig?.accounts ?? [])
-                      .filter((a) => a.active && a.type !== 'cash' && (!financialUnitId || a.unit_id === financialUnitId))
-                      .map((a) => (
+                  Conta recebedora vinculada (bancária ou digital ativa)
+                  <select
+                    value={receivingAccountId}
+                    disabled={cashConfigStatus !== 'ready'}
+                    onChange={(e) => setReceivingAccountId(e.target.value)}
+                  >
+                    <option value="">
+                      {cashConfigStatus === 'loading'
+                        ? 'Carregando contas financeiras...'
+                        : cashConfigStatus === 'error'
+                          ? 'Falha ao carregar contas financeiras'
+                          : cashConfigStatus === 'forbidden'
+                            ? 'Sem permissão para consultar contas'
+                            : accountSelection.has_any_active_receiving_account
+                              ? 'Definir na conciliação / padrão do caixa'
+                              : 'Nenhuma conta bancária ou digital ativa disponível'}
+                    </option>
+                    {accountSelection.active_receiving_accounts.map((a) => {
+                      const unitName = cashConfig?.units.find((u) => u.id === a.unit_id)?.name;
+                      return (
                         <option key={a.id} value={a.id}>
                           {a.name}
+                          {!financialUnitId && unitName ? ` · ${unitName}` : ''}
                         </option>
-                      ))}
+                      );
+                    })}
                   </select>
                 </label>
+              </div>
+
+              <div className="jn-inline-alert" role={cashConfigStatus === 'error' || cashConfigStatus === 'forbidden' ? 'alert' : 'note'}>
+                {cashConfigStatus === 'loading' && (
+                  <p className="customer-note">Consultando unidades e contas financeiras ativas deste escritório...</p>
+                )}
+                {cashConfigStatus === 'error' && (
+                  <>
+                    <p className="form-feedback error">
+                      Não foi possível carregar as contas financeiras do escritório: {cashConfigError}
+                    </p>
+                    <button
+                      type="button"
+                      className="secondary-button"
+                      onClick={() => setCashRevision((n) => n + 1)}
+                    >
+                      Tentar novamente
+                    </button>
+                  </>
+                )}
+                {cashConfigStatus === 'forbidden' && (
+                  <p className="form-feedback error">
+                    Seu acesso não permite consultar as contas financeiras do Caixa neste escritório.
+                  </p>
+                )}
+                {cashConfigStatus === 'ready' && !accountSelection.has_any_active_receiving_account && (
+                  <p className="customer-note">
+                    Nenhuma conta bancária ou digital ativa cadastrada
+                    {financialUnitId ? ' para a unidade selecionada' : ' neste escritório'}.
+                    {accountSelection.inactive_receiving_accounts_count > 0
+                      ? ` Há ${accountSelection.inactive_receiving_accounts_count} conta(s) inativa(s) oculta(s) desta lista.`
+                      : ''}
+                    {accountSelection.cash_only_accounts_count > 0
+                      ? ' Contas em espécie não recebem liquidação eletrônica.'
+                      : ''}
+                  </p>
+                )}
+                {cashConfigStatus === 'ready' && accountSelection.inactive_receiving_accounts_count > 0 && accountSelection.has_any_active_receiving_account && (
+                  <p className="customer-note">
+                    {accountSelection.inactive_receiving_accounts_count} conta(s) bancária(s)/digital(is) inativa(s)
+                    foram excluídas da seleção.
+                  </p>
+                )}
+                <div className="account-actions">
+                  <button
+                    type="button"
+                    className="team-text-button"
+                    disabled={cashConfigStatus === 'loading'}
+                    onClick={() => setCashRevision((n) => n + 1)}
+                  >
+                    <RefreshCw size={15} aria-hidden="true" />
+                    <span>Atualizar contas financeiras</span>
+                  </button>
+                  {canManageCash && (
+                    <Link className="team-text-button" to={paths.cash} state={cashConfigLinkState}>
+                      <Plus size={15} aria-hidden="true" />
+                      <span>Criar ou gerenciar contas no Caixa</span>
+                    </Link>
+                  )}
+                </div>
               </div>
 
               <div className="jn-capability-matrix">

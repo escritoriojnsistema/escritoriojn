@@ -179,3 +179,97 @@
 - [x] Copy exato do modal de exclusão e da notificação de exclusão pela equipe preservado.
 - [x] Navegação agrupada e limite de 4 atalhos mobile preservados.
 - [x] Estados `provider_unconfigured` e `backend_ready: false` previstos sem simulação de sucesso.
+
+---
+
+## 7. Especificação das Correções Gerais IA 1 (Fase 8 — 12 Telas e Estados)
+
+> **Nota transparente sobre o Figma**: O arquivo Figma do projeto não está acessível diretamente por ferramenta neste ambiente de execução. Todas as telas, estados, rótulos exatos e diretrizes de responsividade abaixo foram padronizados sobre o design system vigente do Escritório JN (`Executive Navy`, `Brass Gold`, `Alabaster`, tipografia `Newsreader` + `Plus Jakarta Sans`, 4 atalhos no mobile, inputs `16px` no iOS, zero loaders bloqueantes) para sincronização fiel no Figma.
+
+### 7.1 Botão `"Informar pagamento manualmente"` no Detalhe da Solicitação e da Cobrança
+- **Rotas**: `/solicitacoes` (`RequestDetail.tsx`) e `/cobrancas` (`ChargesPage.tsx`), cobrindo solicitações presenciais, via WhatsApp e criadas pelo cliente no portal.
+- **Desktop `1440px`**: Bloco `.jn-manual-payment-entry` posicionado em destaque acima dos ajustes/histórico, com resumo da cobrança aberta (`Valor total`, `Já pago`, `Saldo a receber`), selo de origem e botão primário `"Informar pagamento manualmente"`.
+- **Mobile `390px`**: Cartão de largura total, botão em largura 100% (`min-height: 44px`), valores em grade de 1–2 colunas com `tabular-nums`, sem rolagem horizontal.
+
+### 7.2 Formulário de Pagamento Manual Direto (Super administrador e Administrador com `payments.manual.approve`)
+- **Componente**: `ManualPaymentAction.tsx` (inline na solicitação/cobrança) e `CashPaymentsPanel.tsx` (no Caixa).
+- **Elementos**:
+  - Cobrança pré-selecionada automaticamente pelo clique (sem obrigar busca manual no extrato).
+  - Resumo financeiro em `.jn-breakdown-grid` (`Valor original`, `Já pago`, `Saldo oficial`).
+  - Campos: `Valor (R$)`, `Forma de pagamento` (filtrada por compatibilidade com a unidade do caixa aberto), orientação contextual do método (`Dinheiro`, `Pix manual`, `Cartão maquininha avulsa`, `Transferência`), `Valor entregue em dinheiro` + cálculo automático de `Troco` quando `cash`, `Data da operação`, `Comprovante / referência externa` e `Observação`.
+  - Ação direta: botão primário `"Confirmar pagamento manualmente"` (envia chave idempotente única por tentativa).
+  - Conflito `409`: recarrega saldo oficial e informa atualização necessária antes de reenviar.
+
+### 7.3 Fluxo de Solicitação de Autorização (Administrador sem `payments.manual.approve` e Funcionário autorizado)
+- **Componente**: `ManualPaymentAction.tsx` → `ManualPaymentApprovalForm.tsx` e `CashPaymentsPanel.tsx`.
+- **Diferença visual obrigatória**:
+  - Oculta/impede confirmação direta (`Confirmar pagamento manualmente` / `Confirmar pagamento` em pendentes).
+  - Exibe botão `"Solicitar autorização"` e aviso explícito de que o perfil requer aprovação de um administrador autorizado ou super administrador.
+  - Seletor de aprovador elegível do mesmo escritório, justificativa obrigatória, estado de carregamento textual (`Carregando aprovadores...`), estado de erro com `"Recarregar aprovadores"` e estado vazio explícito quando não houver aprovador elegível configurado.
+
+### 7.4 Mensagem Guiada quando Financeiro ou Caixa Não Está Configurado
+- **Copy obrigatório**:
+  > `"Para informar pagamentos, configure uma unidade financeira, uma conta de destino e uma forma de pagamento. Depois, abra seu Caixa."`
+- **Checklist visual** (`.jn-setup-checklist`): lista item a item o que está concluído e o que falta (`Unidade financeira`, `Conta em espécie`, `Conta de destino`, `Forma de pagamento`, `Caixa individual aberto`).
+- **Ações**:
+  - Para perfis com `cash.manage`: botão `"Configurar financeiro"` que navega para `/caixa` (aba `Configuração`) levando `return_to` com origem da solicitação/cobrança.
+  - Quando a configuração está pronta mas falta abrir o caixa: aviso `"A configuração financeira está pronta. Abra seu Caixa individual..."` + botão `"Abrir meu caixa"`.
+  - Para perfis sem `cash.manage`: orientação clara para solicitar a configuração a um administrador/super administrador.
+
+### 7.5 Fluxo Guiado de Configuração Inicial de Contas e Caixa (5 Passos)
+- **Rota**: `/caixa` → aba `Configuração` (`CashConfigurationPanel.tsx`).
+- **Barra de progresso/status** (`.jn-config-status-bar`): exibe selo (`Configuração incompleta` / `Aguardando abertura do caixa` / `Configuração concluída`) e os 5 passos numerados:
+  1. `Unidade financeira`
+  2. `Contas financeiras`
+  3. `Formas de pagamento`
+  4. `Abertura do caixa`
+  5. `Informar pagamento`
+- **Botões sempre visíveis**: Para perfis com `cash.manage`, os botões `"Adicionar unidade"`, `"Adicionar conta"` e `"Adicionar forma"` ficam sempre visíveis no cabeçalho de cada seção (`.jn-config-header-row`), fora de `<details>` recolhidos.
+- **Estados de erro/permissão**: Nunca renderiza tela em branco — exibe alerta explícito + botão `"Tentar novamente"` em falhas de rede/servidor (`503`) ou aviso de permissão (`403`).
+
+### 7.6 Cadastro de Unidade Financeira
+- **Formulário inline** em `Caixa → Configuração` (aberto imediatamente pelo botão `"Adicionar unidade"`).
+- Campos: nome da unidade financeira (ex.: `Escritório Sede`), estado vazio descritivo quando `units.length === 0` e contagem de unidades inativas quando existirem.
+
+### 7.7 Cadastro de Conta Financeira (Espécie, Bancária Interna e Digital)
+- **Formulário inline** em `Caixa → Configuração` (aberto imediatamente pelo botão `"Adicionar conta"`).
+- **Distinção explícita de negócio**:
+  - `Espécie (caixa físico)` — obrigatória para abertura do caixa individual.
+  - `Conta bancária (registro manual interno)` e `Conta digital (registro manual interno)` — destino para Pix manual, transferência e maquininha avulsa, e elegíveis como conta recebedora em `Bancos e Pagamentos`.
+  - Nota clara explicando que o cadastro interno de conta bancária/digital organiza lançamentos e destinos do escritório e **não** conecta automaticamente a API de um banco nem exige senha bancária.
+
+### 7.8 Cadastro de Forma de Pagamento
+- **Formulário inline** em `Caixa → Configuração` (aberto imediatamente pelo botão `"Adicionar forma"`).
+- Filtra automaticamente contas compatíveis da mesma unidade (`Dinheiro` → conta em espécie; `Pix`, `Cartão`, `Transferência` → conta bancária ou digital). Exibe alerta claro se a unidade ainda não tiver conta compatível.
+
+### 7.9 Abertura de Caixa e Banner de Retorno à Origem
+- **Rota**: `/caixa` → aba `Meu caixa` (`CashOpeningForm.tsx` + `CashPage.tsx`).
+- Quando o usuário veio de uma solicitação ou cobrança via `"Configurar financeiro"` / `"Abrir meu caixa"`, exibe banner `.jn-return-banner` no topo com link/botão `"Voltar para <origem>"` (ex.: `"Voltar para a solicitação JN-2026-000101"`), preservando o escritório e a cobrança selecionada para conclusão do recebimento manual.
+- Quando existe unidade sem conta em espécie ativa, `CashOpeningForm` exibe orientação direta + botão `"Configurar financeiro"`.
+
+### 7.10 Configurações da Conta Pessoal (Equipe Multi-escritório e Cliente)
+- **Rotas**: `/conta` (equipe) e `/minha-conta` (portal do cliente) — `AccountPage.tsx`.
+- **Equipe**: exibe seletor de escritório quando o integrante participa de mais de um escritório, formulário de edição de nome de exibição, estado de carregamento textual (`Carregando dados da conta...`), preservação dos dados digitados em caso de erro transitório (`503`) e botão `"Tentar novamente"`.
+- **Cliente**: exibe dados cadastrais em leitura protegida e bloco claro para solicitar atualização/correção cadastral, sem expor opções internas da equipe.
+
+### 7.11 Configurações → Bancos e Pagamentos (Lista Completa de Contas, Estado Vazio, Erro Real e Link Criar Conta)
+- **Rota**: `/configuracoes/bancos-pagamentos` (`PaymentProvidersSettings.tsx`).
+- **Estados obrigatórios no seletor `Conta recebedora vinculada`**:
+  1. `Carregando`: texto discreto `"Carregando contas financeiras..."` (sem spinner).
+  2. `Lista carregada (multi-página)`: exibe todas as contas ativas não-espécie (mesmo quando há mais de 50 contas), informando quantas contas inativas ou somente em espécie foram excluídas automaticamente.
+  3. `Lista vazia real`: mensagem clara informando ausência de conta bancária/digital ativa e link direto `"Criar ou gerenciar contas no Caixa"` (quando o usuário possui `cash.manage`).
+  4. `Sem permissão (403)`: aviso específico de permissão financeira insuficiente, sem fingir lista vazia.
+  5. `Erro de comunicação (503/500)`: alerta explícito com botão `"Tentar novamente"`, mantendo controle `"Atualizar contas financeiras"` disponível.
+
+### 7.12 Central de Autorizações Financeiras com CTA `"Abrir meu caixa"` e Recarga em Conflito `409`
+- **Rota**: `/caixa` → aba `Autorizações` (`ApprovalsPanel.tsx`).
+- Quando uma autorização de pagamento manual está `Aprovada` (`can_execute === true`) mas o solicitante ainda não possui sessão de caixa aberta, exibe aviso claro e botão `"Abrir meu caixa"` que alterna diretamente para a abertura de caixa.
+- Em conflitos `409` (cobrança alterada, já executada ou já decidida), exibe mensagem clara em PT-BR e recarrega automaticamente a lista de autorizações.
+
+### Checklist Adicional — Fase 8 (Correção Geral IA 1)
+- [x] Botão `"Informar pagamento manualmente"` especificado em Solicitação, Cobrança, Caixa, Presencial, WhatsApp e Portal.
+- [x] Mensagem exata de ausência de configuração financeira + fluxo guiado de 5 passos + botões sempre visíveis fora de `<details>`.
+- [x] Separação explícita entre conta bancária/digital interna manual e integração bancária automática.
+- [x] Estados reais de erro (`403`/`409`/`503`) sem tela em branco nem lista vazia falsa em `Caixa → Configuração` e `Bancos e Pagamentos`.
+- [x] Responsividade Desktop `1440px` e Mobile `390px` validada sem overflow horizontal, com `<= 4` atalhos mobile e zero spinners.
+
