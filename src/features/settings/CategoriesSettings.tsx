@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { ArrowLeft, ArrowRight, ClipboardList, Pencil, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import { validCategoryCommand, type CategoriesState, type CategoryCommand, type ServiceCategory } from '../../../shared/categories';
 import { categoriesApi, categoriesError, CategoriesError } from './categoriesApi';
@@ -26,12 +26,12 @@ function groupCategories(entries: ServiceCategory[]): CategoryGroup[] {
 }
 const levelLabel = (item: ServiceCategory) => item.execution_level ? `Nível ${item.execution_level}` : 'Nível pendente — não distribuir';
 
-export function CategoriesSettings({ office, onDenied, onPendingChange }: { office: string; onDenied?: () => void; onPendingChange?:(pending:boolean)=>void }) {
+export function CategoriesSettings({ office, onDenied, onPendingChange, onHeaderAction }: { office: string; onDenied?: () => void; onPendingChange?:(pending:boolean)=>void; onHeaderAction?: (action: ReactNode) => void }) {
   // The office key also makes the component safe when embedded without a keyed parent.
-  return <CategoriesWorkspace key={office} office={office} onDenied={onDenied} onPendingChange={onPendingChange} />;
+  return <CategoriesWorkspace key={office} office={office} onDenied={onDenied} onPendingChange={onPendingChange} onHeaderAction={onHeaderAction} />;
 }
 export default CategoriesSettings;
-function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: string; onDenied?: () => void; onPendingChange?:(pending:boolean)=>void }) {
+function CategoriesWorkspace({ office, onDenied, onPendingChange, onHeaderAction }: { office: string; onDenied?: () => void; onPendingChange?:(pending:boolean)=>void; onHeaderAction?: (action: ReactNode) => void }) {
   const [level,setLevel]=useState<''|'1'|'2'|'3'>('');
   const [archived,setArchived]=useState(false);
   const [data, setData] = useState<CategoriesState>();
@@ -54,6 +54,8 @@ function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: st
   useEffect(()=>()=>onPending.current?.(false),[]);
   const onDeniedRef = useRef(onDenied);
   onDeniedRef.current = onDenied;
+  const onHeaderActionRef = useRef(onHeaderAction);
+  onHeaderActionRef.current = onHeaderAction;
   function deny(failure: CategoriesError) {
     setData(undefined); setEditor(undefined); setIntakeRoot(''); setIntakeSelection(''); setName(''); setReason(''); intent.current = undefined;
     setUncertain(false); setBlocked(true); setError(failure); onDeniedRef.current?.();
@@ -117,22 +119,41 @@ function CategoriesWorkspace({ office, onDenied, onPendingChange }: { office: st
   const editorGroup=editor?.kind==='rename'?groups.find(group=>group.id===(editor.item.parent_id??editor.item.id)):undefined;
   const creationParent=editor?.kind==='create'&&parentId?categories.find(item=>item.id===parentId):undefined;
   const intakeCategory=categories.find(item=>item.id===intakeSelection);
+  const inIntake=!!(intakeRoot&&data?.can_manage&&!blocked);
   function closeIntake(){setIntakeRoot('');setIntakeSelection('');setIntakeLocked(false);setIntakeDirty(false);}
   function openIntake(item:ServiceCategory){
     setMessage('');setError(undefined);
     setIntakeRoot(item.id);
     setIntakeSelection(categories.some(other=>other.parent_id===item.id)?'':item.id);
   }
-  if(intakeRoot&&data?.can_manage&&!blocked)return <section aria-label="Selecionar configuração de atendimento">
-    <CategorySelection categories={categories} value={intakeSelection} rootId={intakeRoot}
-      label="Categoria do formulário" disabled={intakeLocked||intakeDirty}
-      onChange={(id,parent)=>{setIntakeRoot(parent);setIntakeSelection(id);}}/>
-    {intakeDirty&&<p className="customer-note">Salve ou descarte as alterações para trocar de categoria ou subpasta.</p>}
+  useEffect(()=>{
+    if(!onHeaderActionRef.current)return;
+    if(inIntake){
+      onHeaderActionRef.current(
+        <button type="button" data-operation-local-return className="primary-button categories-return-btn" disabled={intakeLocked} onClick={closeIntake}>
+          <ArrowLeft size={17} aria-hidden="true"/>
+          <span>Voltar às categorias</span>
+        </button>
+      );
+    }else{
+      onHeaderActionRef.current(undefined);
+    }
+  },[inIntake,intakeLocked]);
+  useEffect(()=>()=>onHeaderActionRef.current?.(undefined),[]);
+  if(inIntake)return <section className="categories-intake-shell" aria-label="Selecionar configuração de atendimento">
+    <div className="categories-intake-selector-bar">
+      <CategorySelection categories={categories} value={intakeSelection} rootId={intakeRoot}
+        label="Categoria do formulário" disabled={intakeLocked||intakeDirty}
+        onChange={(id,parent)=>{setIntakeRoot(parent);setIntakeSelection(id);}}/>
+    </div>
+    {intakeDirty&&<p className="customer-note categories-intake-lock-note">Salve ou descarte as alterações para trocar de categoria ou subpasta.</p>}
     {intakeCategory?<CategoryIntakeSettings office={office} categoryId={intakeCategory.id}
       categoryName={[intakeCategory.parent_name,intakeCategory.name].filter(Boolean).join(' › ')}
+      hideBackButton={!!onHeaderAction}
       onBack={closeIntake} onDenied={()=>deny(new CategoriesError(403))}
       onDirtyChange={setIntakeDirty} onPendingChange={value=>{setIntakeLocked(value);onPendingChange?.(value);}}/>
-      :<button type="button" className="team-text-button" onClick={closeIntake}>Voltar às categorias</button>}
+      :!onHeaderAction?<button type="button" data-operation-local-return className="primary-button categories-return-btn" onClick={closeIntake}><ArrowLeft size={17} aria-hidden="true"/><span>Voltar às categorias</span></button>
+      :<p className="team-empty categories-intake-empty">Selecione a subpasta acima para abrir o formulário e os anexos.</p>}
   </section>;
   return <section className="categories-settings" aria-label="Categorias de serviços">
     {error && <p role="alert" className="form-feedback error">{error.message}</p>}

@@ -78,6 +78,6 @@ export function OperationLayout({ client = false, busy = false, contextActions, 
   </div>;
 }
 
-export function OperationHeading({ context, title, description, showRole = true }: { context: AccessContext; title: string; description: string; showRole?: boolean }) {
-  return <header className="operation-heading"><div><p className="eyebrow">{context.office_name}</p><h1>{title}</h1><p>{description}</p></div>{showRole && <span className="operation-role">{operationRoleNames[context.role_code]}</span>}</header>;
+export function OperationHeading({ context, title, description, showRole = true, action }: { context: AccessContext; title: string; description: string; showRole?: boolean; action?: ReactNode }) {
+  return <header className="operation-heading"><div><p className="eyebrow">{context.office_name}</p><h1>{title}</h1><p>{description}</p></div>{(showRole || action) && <div className="operation-heading-aside">{showRole && <span className="operation-role">{operationRoleNames[context.role_code]}</span>}{action}</div>}</header>;
 }

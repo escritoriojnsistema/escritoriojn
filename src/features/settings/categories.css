@@ -2,13 +2,67 @@
   min-width: 0;
 }
 
+.categories-intake-shell {
+  min-width: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.categories-return-btn {
+  width: auto;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #102e44 0%, #0b2133 100%);
+  border-color: #0b2133;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 6px 16px -8px rgba(11, 33, 51, 0.45);
+}
+
+.categories-return-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #173d59 0%, #102e44 100%);
+  border-color: #102e44;
+}
+
+.categories-intake-selector-bar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.categories-intake-selector-bar .team-field {
+  margin-bottom: 0;
+}
+
+.categories-intake-selector-bar .team-field select {
+  min-height: 46px;
+  font-size: 15px;
+  font-weight: 500;
+  background: #ffffff;
+  border: 1px solid #cbd7e2;
+  border-radius: 10px;
+  color: #0e293e;
+  box-shadow: 0 2px 6px -4px rgba(14, 41, 62, 0.14);
+}
+
+.categories-intake-lock-note {
+  margin: -4px 0 0;
+}
+
+.categories-intake-empty {
+  margin: 0;
+}
+
 .categories-settings form {
-  border: 1px solid var(--jn-border, #dbe3e8);
-  border-radius: var(--jn-radius-md, 12px);
-  padding: 20px;
-  background: var(--jn-surface, #ffffff);
-  box-shadow: var(--jn-shadow-xs);
-  max-width: 720px;
+  border: 1px solid #d6e0ea;
+  border-radius: 16px;
+  padding: 24px;
+  background: #ffffff;
+  box-shadow: 0 10px 26px -16px rgba(14, 41, 62, 0.16);
+  max-width: 760px;
 }
 
 .categories-settings fieldset {
@@ -17,14 +71,15 @@
   margin: 0;
   min-width: 0;
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .categories-settings h2 {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  color: var(--jn-navy, #103248);
-  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+  color: #0e293e;
+  margin: 0 0 14px;
 }
 
 .categories-settings .team-field {
@@ -35,6 +90,28 @@
 .categories-settings .team-field select {
   min-height: 44px;
   font-size: 16px;
+  border-radius: 10px;
+  border-color: #cbd7e2;
+}
+
+.categories-settings .customer-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.categories-settings .customer-list > li {
+  background: #ffffff;
+  border: 1px solid #dce5ee;
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 4px 14px -10px rgba(14, 41, 62, 0.14);
+  transition: border-color 160ms var(--jn-ease, ease), box-shadow 160ms var(--jn-ease, ease);
+}
+
+.categories-settings .customer-list > li:hover {
+  border-color: #bcccd9;
+  box-shadow: 0 10px 24px -14px rgba(14, 41, 62, 0.18);
 }
 
 .categories-settings .customer-list li > div:first-child {
@@ -44,11 +121,11 @@
 
 .categories-settings .category-folders {
   display: grid;
-  gap: 4px;
+  gap: 5px;
   list-style: none;
-  margin: 3px 0 0;
-  padding: 0 0 0 9px;
-  border-inline-start: 1px solid var(--jn-border, #dbe3e8);
+  margin: 4px 0 0;
+  padding: 6px 0 6px 12px;
+  border-inline-start: 2px solid #d5e0ea;
 }
 
 .categories-settings .category-folders li {
@@ -62,36 +139,69 @@
 .categories-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
-  margin: 10px 0;
+  margin: 0 0 14px;
 }
 
 .categories-actions .primary-button {
   width: auto;
   margin: 0;
+  border-radius: 10px;
 }
 
 .categories-settings .customer-list .categories-actions {
   flex: 0 0 auto;
   margin: 0;
+  gap: 6px;
 }
 
 .categories-settings .customer-list .categories-actions button {
   min-width: 44px;
   min-height: 44px;
+  border: 1px solid #e0e8f0;
+  background: #f8fafc;
+  border-radius: 10px;
 }
 
-@media (max-width: 600px) {
-  .categories-settings form {
-    padding: 14px;
-  }
+.categories-settings .customer-list .categories-actions button:hover:not(:disabled) {
+  background: #edf3f8;
+  border-color: #bfd0df;
 }
 
 .category-folder-disclosure > summary {
   cursor: pointer;
   min-height: 44px;
   align-content: center;
-  color: var(--jn-navy, #103248);
+  color: #0e293e;
+  font-weight: 600;
+  font-size: 13px;
   width: fit-content;
+}
+
+@media (max-width: 768px) {
+  .categories-intake-selector-bar {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  .categories-intake-selector-bar .team-field select {
+    font-size: 16px;
+  }
+  .categories-return-btn {
+    width: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .categories-settings form {
+    padding: 16px;
+    border-radius: 14px;
+  }
+  .categories-settings .customer-list > li {
+    padding: 14px;
+  }
+  .categories-return-btn {
+    padding: 9px 14px;
+    font-size: 12.5px;
+  }
 }
