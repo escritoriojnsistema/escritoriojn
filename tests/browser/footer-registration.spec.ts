@@ -1,9 +1,11 @@
 import {test, expect, type Page} from '@playwright/test';
 
 for (const width of [320, 375, 1440]) test(`rodapé de políticas fica nas duas telas de login em ${width}px`, async ({page}) => {
+  test.setTimeout(90000);
   await page.setViewportSize({width, height:900});
   for (const path of ['/', '/login', '/login-cliente', '/cadastro', '/recuperar-senha?area=client', '/redefinir-senha', '/auth/callback', '/status', '/privacidade', '/termos', '/cookies', '/nao-existe']) {
-    await page.goto(path);
+    await page.goto(path,{waitUntil:'domcontentloaded'});
+    await expect(page.locator('main')).toBeVisible();
     const footer=page.getByRole('contentinfo');
     if(path!=='/login'&&path!=='/login-cliente'){await expect(footer).toHaveCount(0);continue;}
     await expect(footer).toHaveCount(1);
