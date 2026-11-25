@@ -177,44 +177,58 @@
 .privacy-footer {
   flex-shrink: 0;
   padding: 6px 20px max(6px, env(safe-area-inset-bottom));
-  border-top: 1px solid var(--jn-border, #dbe3e8);
-  color: var(--jn-muted, #556b7a);
-  background: var(--jn-bg, #faf9f6);
-  font-size: 12px;
+  border-top: 1px solid var(--jn-border, #e1e6ee);
+  color: var(--jn-muted, #43474d);
+  background: var(--jn-bg, #f5f7fa);
+  font-size: 12.5px;
   line-height: 1.5;
 }
 .privacy-footer.site-footer {
-  background: var(--jn-navy-deep, #0b2233);
-  color: #c8d7e1;
-  border-top-color: rgba(255, 255, 255, 0.08);
+  margin-top: 0;
+  background: #0f273d;
+  color: #94a3b8;
+  border-top: 1px solid #254666;
+  padding: 6px 24px max(6px, env(safe-area-inset-bottom));
 }
-.privacy-footer.site-footer .privacy-footer-name { color: #e2ebf0; }
-.privacy-footer.site-footer a { color: var(--jn-gold-soft, #e8c488); }
+.privacy-footer.site-footer .privacy-footer-name {
+  color: #f8fafc;
+  font-weight: 600;
+}
+.privacy-footer.site-footer .privacy-links button,
+.privacy-footer.site-footer .privacy-install {
+  color: #94a3b8;
+}
+.privacy-footer.site-footer .privacy-links button:hover,
+.privacy-footer.site-footer .privacy-install:hover {
+  color: #f8fafc;
+  opacity: 1;
+}
 
 .privacy-footer-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 0 18px;
+  gap: 0 20px;
 }
 .privacy-footer-name {
   white-space: nowrap;
   max-width: 100%;
   font-weight: 600;
-  color: var(--jn-text-secondary, #365264);
+  color: var(--jn-text-secondary, #30343a);
 }
-.privacy-footer .privacy-links { justify-content: center; }
+.privacy-footer .privacy-links { justify-content: center; font-size: 13px; }
 .privacy-install {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 400;
   text-decoration: underline;
   text-underline-offset: 3px;
-  transition: opacity 150ms var(--jn-ease, ease);
+  transition: color 120ms ease-out, opacity 120ms ease-out;
 }
-.privacy-install:hover { opacity: 0.82; }
+.privacy-install:hover { opacity: 0.85; }
 .privacy-footer p { max-width: 580px; margin: 0 auto 4px; text-align: center; }
 .public-site > .site-footer { margin-top: auto; }
 

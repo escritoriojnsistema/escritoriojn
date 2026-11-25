@@ -2,9 +2,9 @@ import {InfoTrigger} from './InfoTrigger';
 import {useInstallPrompt} from '../pwa/useInstallPrompt';
 import './privacy.css';
 
-export function AccessPrivacyNotice(){
+export function AccessPrivacyNotice({ variant = 'default' }: { variant?: 'default' | 'navy' } = {}){
  const {installed}=useInstallPrompt();
- return <footer className="privacy-footer access-privacy" aria-label="Privacidade e uso">
+ return <footer className={`privacy-footer access-privacy ${variant === 'navy' ? 'site-footer' : ''}`} aria-label="Privacidade e uso">
   <div className="privacy-footer-row">
    <InfoTrigger className="privacy-footer-name" section="copyright"/>
    <nav className="privacy-links" aria-label="Privacidade e uso">

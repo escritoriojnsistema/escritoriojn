@@ -7,7 +7,7 @@ for (const width of [320, 375, 1440]) test(`rodapé de políticas fica nas duas 
     await page.goto(path,{waitUntil:'domcontentloaded'});
     await expect(page.locator('main')).toBeVisible();
     const footer=page.getByRole('contentinfo');
-    if(path!=='/login'&&path!=='/login-cliente'){await expect(footer).toHaveCount(0);continue;}
+    if(path!=='/'&&path!=='/login'&&path!=='/login-cliente'){await expect(footer).toHaveCount(0);continue;}
     await expect(footer).toHaveCount(1);
     await expect(footer.getByRole('button', {name:'Cookies e preferências'})).toBeVisible();
     await footer.scrollIntoViewIfNeeded();
