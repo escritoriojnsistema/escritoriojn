@@ -1,0 +1,266 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Escritório JN (App Mobile)</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'brand-navy': '#0F273D',
+        'brand-navy-elevated': '#183652',
+        'brand-navy-border': '#254666',
+        'brand-gold': '#D0A54C',
+        'brand-gold-tint': '#3B3629',
+        'on-brand-navy': '#F8FAFC',
+        'on-brand-navy-muted': '#94A3B8',
+        'success': '#15803D',
+        'success-container': '#DCFCE7',
+        'on-success-container': '#14532D',
+        'warning': '#B45309',
+        'warning-container': '#FEF3C7',
+        'on-warning-container': '#78350F',
+        'light-primary': '#001223',
+        'light-on-primary': '#FFFFFF',
+        'light-primary-container': '#0F273D',
+        'light-on-primary-container': '#D0E4FF',
+        'light-secondary': '#7B5800',
+        'light-on-secondary': '#FFFFFF',
+        'light-secondary-container': '#FDCE70',
+        'light-on-secondary-container': '#412D00',
+        'light-tertiary': '#1C0E00',
+        'light-on-tertiary': '#FFFFFF',
+        'light-tertiary-container': '#372102',
+        'light-on-tertiary-container': '#FFDDB7',
+        'light-error': '#BA1A1A',
+        'light-on-error': '#FFFFFF',
+        'light-error-container': '#FFDAD6',
+        'light-on-error-container': '#93000A',
+        'light-background': '#F5F7FA',
+        'light-on-background': '#1B1C1D',
+        'light-surface': '#F5F7FA',
+        'light-surface-dim': '#DBD9DC',
+        'light-surface-bright': '#FFFFFF',
+        'light-surface-container-lowest': '#FFFFFF',
+        'light-surface-container-low': '#F1F4F8',
+        'light-surface-container': '#E9EEF4',
+        'light-surface-container-high': '#E1E6EE',
+        'light-surface-container-highest': '#D8DEE8',
+        'light-on-surface': '#1B1C1D',
+        'light-surface-variant': '#E0E2E9',
+        'light-on-surface-variant': '#43474D',
+        'light-outline': '#74777D',
+        'light-outline-variant': '#C3C6CD',
+        'light-inverse-surface': '#303032',
+        'light-inverse-on-surface': '#F2F0F2',
+        'light-inverse-primary': '#B2C9E5',
+        'light-shadow': '#000000',
+        'light-scrim': '#000000',
+        'dark-primary': '#B2C9E5',
+        'dark-on-primary': '#1B3248',
+        'dark-primary-container': '#0F273D',
+        'dark-on-primary-container': '#D0E4FF',
+        'dark-secondary': '#EEC064',
+        'dark-on-secondary': '#412D00',
+        'dark-secondary-container': '#7E5B01',
+        'dark-on-secondary-container': '#FFD78C',
+        'dark-tertiary': '#E7C092',
+        'dark-on-tertiary': '#432C0A',
+        'dark-tertiary-container': '#372102',
+        'dark-on-tertiary-container': '#FFDDB7',
+        'dark-error': '#FFB4AB',
+        'dark-on-error': '#690005',
+        'dark-error-container': '#93000A',
+        'dark-on-error-container': '#FFDAD6',
+        'dark-background': '#121315',
+        'dark-on-background': '#E3E2E4',
+        'dark-surface': '#121315',
+        'dark-surface-dim': '#121315',
+        'dark-surface-bright': '#38393B',
+        'dark-surface-container-lowest': '#0D0E10',
+        'dark-surface-container-low': '#1B1C1D',
+        'dark-surface-container': '#1F2021',
+        'dark-surface-container-high': '#292A2C',
+        'dark-surface-container-highest': '#343537',
+        'dark-on-surface': '#E3E2E4',
+        'dark-surface-variant': '#43474D',
+        'dark-on-surface-variant': '#C3C6CD',
+        'dark-outline': '#8D9197',
+        'dark-outline-variant': '#43474D',
+        'dark-inverse-surface': '#E3E2E4',
+        'dark-inverse-on-surface': '#303032',
+        'dark-inverse-primary': '#4A6079',
+        'dark-shadow': '#000000',
+        'dark-scrim': '#000000',
+      },
+      borderRadius: {
+        'sm': '6px',
+        'DEFAULT': '10px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '20px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '40px',
+        'page-margin': '24px',
+      },
+      fontFamily: {
+        'display': ['"Mulish"', 'sans-serif'],
+        'headline': ['"Mulish"', 'sans-serif'],
+        'title': ['"Mulish"', 'sans-serif'],
+        'body': ['"Instrument Sans"', 'sans-serif'],
+        'label': ['"Instrument Sans"', 'sans-serif'],
+        'mono': ['"Source Code Pro"', 'monospace'],
+      },
+      fontSize: {
+        'display-lg': ['36px', { lineHeight: '44px', letterSpacing: '-0.5px', fontWeight: '800' }],
+        'display-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.25px', fontWeight: '800' }],
+        'headline-lg': ['28px', { lineHeight: '36px', letterSpacing: '-0.3px', fontWeight: '800' }],
+        'headline-md': ['20px', { lineHeight: '28px', letterSpacing: '-0.2px', fontWeight: '700' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '700' }],
+        'body-md': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-sm': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-md': ['12px', { lineHeight: '16px', letterSpacing: '0.3px', fontWeight: '600' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.4px', fontWeight: '500' }],
+        'mono-sm': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '600' }],
+      },
+      transitionDuration: {
+        'state-change': '120ms',
+        'surface-enter': '220ms',
+        'surface-exit': '150ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+        'surface-exit': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+        'surface-exit': 'cubic-bezier(0.3, 0, 1, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&amp;family=Mulish:wght@600;700;800&amp;family=Source+Code+Pro:wght@500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>.material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons { display: inline-block; width: 1em; height: 1em; line-height: 1 !important; box-sizing: content-box; overflow: hidden; white-space: nowrap; direction: ltr; vertical-align: middle; }</style>
+</head>
+<body class="bg-brand-navy text-light-on-surface font-body antialiased">
+  <!-- Full-bleed App Viewport with Background Reception Image -->
+  <div class="relative min-h-[884px] flex flex-col justify-between overflow-hidden bg-brand-navy" data-stitch-vh="min-h-[884px]===min-h-screen">
+
+    <!-- Full-screen Background Photo + Editorial Scrim -->
+    <img src="https://lh3.googleusercontent.com/aida/ALJJyrAGfL7nwq9vSDOCHBoBJgIj1ejvLxCuxXop7_qgV7_waycH9WN4plwMQzJP4N08l5T3OVpQLJ0mDRMfDXJcqOfKE0lz4cEDVEgRjNFcvXIM5Yd_MyWujLZRxcbHPDNIgILCF5lS_oVAEHJV_77fugMFDiHPcMLz06XEM9upV_PO2yun0kWVAMCZ87oICBVLIEN4Ua-Yzm_mTBf0oBbI-sx9wNTUmOsOywoftE1aqd0_fE_2_UskRWzgF7W-DVoixBE" alt="Recepção corporativa do Escritório JN" class="absolute inset-0 w-full h-full object-cover object-center">
+    <div class="absolute inset-0 bg-gradient-to-b from-brand-navy/70 via-brand-navy/35 to-brand-navy/95" aria-hidden="true"></div>
+
+    <!-- Floating Compact App Top Bar -->
+    <header class="relative z-10 px-gutter-md pt-4 pb-2 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="font-headline text-title-md text-on-brand-navy" data-design-text-token="title-md">JN</span>
+        <span class="w-px h-4 bg-on-brand-navy/30" aria-hidden="true"></span>
+        <span class="font-label text-label-sm text-on-brand-navy tracking-wider uppercase" data-design-text-token="label-sm">ESCRITÓRIO JN</span>
+      </div>
+
+      <a href="../area-operacao-mobile/AreaDeOperacaoMobile.html" data-component-id="button-with-icon" data-component-type="button" data-component-variant="with-icon" class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-navy/80 text-on-brand-navy border border-brand-navy-border">
+        <span class="material-symbols-outlined text-[16px] text-brand-gold" aria-hidden="true">group</span>
+        <span class="font-label text-label-sm" data-design-text-token="label-sm">Portal da Equipe</span>
+      </a>
+    </header>
+
+    <!-- Open Hero Space (shows background reception clearly) -->
+    <section class="relative z-10 flex-1 flex flex-col justify-end px-gutter-md pb-4 pt-16 gap-1.5 bg-gradient-to-t from-brand-navy/90 via-brand-navy/75 to-transparent">
+      <span class="font-label text-label-sm text-brand-gold uppercase tracking-wider" data-design-text-token="label-sm">GESTÃO QUE CUIDA DE VOCÊ</span>
+      <h1 class="font-headline text-display-lg-mobile text-on-brand-navy text-balance" data-design-text-token="display-lg-mobile">Bem-vindo ao Escritório JN</h1>
+      <p class="font-body text-body-sm text-on-brand-navy text-pretty" data-design-text-token="body-sm">
+        Agilidade e segurança em todos os seus processos.
+      </p>
+    </section>
+
+    <!-- Bottom App Sheet + Compact Legal Strip -->
+    <div class="relative z-10 px-3 pb-3 flex flex-col gap-3">
+      <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="w-full bg-light-surface-container-lowest rounded-xl p-5 shadow-xl border border-light-outline-variant/30 flex flex-col gap-4">
+        <!-- Compact App Sheet Header -->
+        <header class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-light-surface-container-low border border-light-outline-variant/40 flex items-center justify-center text-light-primary-container shrink-0">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person</span>
+          </div>
+          <div class="flex flex-col">
+            <h2 class="font-headline text-title-md text-light-on-surface" data-design-text-token="title-md">Área do Cliente</h2>
+            <p class="font-body text-body-sm text-light-on-surface-variant" data-design-text-token="body-sm">Acesse seu espaço no Escritório JN.</p>
+          </div>
+        </header>
+
+        <form action="#entrar" method="post" class="flex flex-col gap-3">
+          <label class="flex flex-col gap-1">
+            <span class="font-label text-label-sm text-light-on-surface" data-design-text-token="label-sm">E-mail ou CPF</span>
+            <input type="text" name="identificador" autocomplete="username" placeholder="nome@exemplo.com" class="w-full rounded bg-light-surface-container-lowest border border-light-outline-variant text-light-on-surface placeholder:text-light-outline font-body text-body-sm py-2 px-3 focus:border-light-primary focus:ring-1 focus:ring-light-primary">
+          </label>
+
+          <label class="flex flex-col gap-1">
+            <span class="font-label text-label-sm text-light-on-surface" data-design-text-token="label-sm">Senha</span>
+            <div class="relative flex items-center">
+              <input id="password-input-app" type="password" name="senha" autocomplete="current-password" placeholder="Digite sua senha" class="w-full rounded bg-light-surface-container-lowest border border-light-outline-variant text-light-on-surface placeholder:text-light-outline font-body text-body-sm py-2 pl-3 pr-10 focus:border-light-primary focus:ring-1 focus:ring-light-primary">
+              <button id="toggle-password-app" type="button" aria-label="Mostrar senha" class="absolute right-1.5 inline-flex items-center justify-center w-8 h-8 rounded text-light-outline hover:text-light-on-surface">
+                <span id="password-icon-app" class="material-symbols-outlined text-[18px]" aria-hidden="true">visibility</span>
+              </button>
+            </div>
+          </label>
+
+          <button data-component-id="button-primary" data-component-type="button" data-component-variant="primary" type="submit" class="mt-1 w-full inline-flex items-center justify-center gap-2 px-gutter-md py-2.5 rounded-full bg-light-primary-container text-light-on-primary hover:bg-brand-navy-elevated focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-primary transition-colors duration-state-change ease-state-change">
+            <span class="font-label text-label-lg" data-design-text-token="label-lg">Entrar</span>
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+          </button>
+        </form>
+
+        <div class="flex items-center justify-between gap-2 pt-1 border-t border-light-outline-variant/30">
+          <a href="#recuperar-senha" class="font-label text-label-sm text-light-secondary hover:underline" data-design-text-token="label-sm">
+            Esqueci minha senha
+          </a>
+          <div class="flex items-center gap-1 text-light-on-surface-variant">
+            <span class="material-symbols-outlined text-[14px]" aria-hidden="true">lock</span>
+            <span class="font-label text-label-sm" data-design-text-token="label-sm">Acesso protegido</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Minimal App Footer Links -->
+      <footer class="flex items-center justify-center gap-4 pb-1">
+        <a href="#privacidade" class="font-label text-label-sm text-on-brand-navy-muted underline" data-design-text-token="label-sm">Privacidade</a>
+        <a href="#termos" class="font-label text-label-sm text-on-brand-navy-muted underline" data-design-text-token="label-sm">Termos</a>
+        <a href="#instalar" class="font-label text-label-sm text-on-brand-navy-muted underline" data-design-text-token="label-sm">Instalar app</a>
+      </footer>
+    </div>
+
+  </div>
+
+  <script>
+    (function () {
+      var input = document.getElementById('password-input-app');
+      var toggle = document.getElementById('toggle-password-app');
+      var icon = document.getElementById('password-icon-app');
+      if (input && toggle && icon) {
+        toggle.addEventListener('click', function () {
+          var isPassword = input.type === 'password';
+          input.type = isPassword ? 'text' : 'password';
+          icon.textContent = isPassword ? 'visibility_off' : 'visibility';
+          toggle.setAttribute('aria-label', isPassword ? 'Ocultar senha' : 'Mostrar senha');
+        });
+      }
+    })();
+  </script>
+
+
+</body></html>

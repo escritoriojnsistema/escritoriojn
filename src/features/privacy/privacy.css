@@ -263,6 +263,31 @@
 .access-pane:has(.registration-acceptance) .access-security { margin-top: 6px; }
 .access-pane:has(.registration-acceptance) > .access-privacy { padding-block: 4px; }
 
+@media (max-width: 768px) {
+  .login-landing > .privacy-footer.site-footer {
+    position: relative;
+    z-index: 10;
+    background: transparent;
+    border-top: 0;
+    padding: 0 12px max(6px, env(safe-area-inset-bottom));
+  }
+  .login-landing > .privacy-footer.site-footer .privacy-footer-row {
+    gap: 0 14px;
+  }
+  .login-landing > .privacy-footer.site-footer .privacy-links {
+    display: contents;
+    font-size: 12px;
+  }
+  .login-landing > .privacy-footer.site-footer .privacy-links button,
+  .login-landing > .privacy-footer.site-footer .privacy-install,
+  .login-landing > .privacy-footer.site-footer .privacy-footer-name {
+    font-size: 12px;
+  }
+  .login-landing > .privacy-footer.site-footer button.privacy-footer-name {
+    padding: 0;
+  }
+}
+
 @media (max-width: 600px) {
   .privacy-footer { padding-inline: 16px; }
   .privacy-footer .privacy-links { gap: 0 14px; font-size: 12px; }

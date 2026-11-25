@@ -91,10 +91,12 @@ export default function HomePage() {
             <article className="client-card">
               <header className="client-card-head">
                 <span className="round-icon" aria-hidden="true">
-                  <UserRound size={25} strokeWidth={1.7} />
+                  <UserRound size={22} strokeWidth={1.75} />
                 </span>
-                <h2 id="client-title">Área do Cliente</h2>
-                <p>Acesse seu espaço no Escritório JN.</p>
+                <div className="client-card-head-copy">
+                  <h2 id="client-title">Área do Cliente</h2>
+                  <p>Acesse seu espaço no Escritório JN.</p>
+                </div>
               </header>
 
               {!supabase && (
