@@ -7,6 +7,7 @@ import {
   buildRequestStageRows,
   resolveHomeFinanceCard,
   resolveHomeLayout,
+  resolveSmartHomePlan,
   summarizeCashDashboard,
   summarizeClientFinance,
 } from '../src/features/auth/homePanelModel';
@@ -200,3 +201,98 @@ test('resolveHomeLayout keeps balanced Bento slots for super admin, client, and 
   assert.deepEqual(minimalEmployeeLayout.sideCards, []);
   assert.deepEqual(minimalEmployeeLayout.bottomCards, ['customers', 'account']);
 });
+
+test('resolveSmartHomePlan matches executive 5-slot layout for Super administrador', () => {
+  const plan = resolveSmartHomePlan(
+    makeContext('owner', [
+      'cash.read',
+      'cash.read_all',
+      'requests.read',
+      'customers.read',
+      'files.read',
+      'documents.read',
+      'services.read',
+      'users.manage',
+      'settings.access',
+      'audit.read',
+    ]),
+    false,
+  );
+  assert.equal(plan.financeMode?.kind, 'cash_all');
+  assert.equal(plan.showRequestsPrimary, true);
+  assert.deepEqual(plan.sideCards, ['customers', 'files']);
+  assert.deepEqual(plan.bottomCards, ['team']);
+  assert.deepEqual(plan.adaptiveGridCards, []);
+});
+
+test('resolveSmartHomePlan adapts intelligently for Administrador without users.manage', () => {
+  const plan = resolveSmartHomePlan(
+    makeContext('admin', [
+      'cash.read',
+      'requests.read',
+      'customers.read',
+      'files.read',
+      'documents.read',
+      'settings.access',
+    ]),
+    false,
+  );
+  assert.equal(plan.financeMode?.kind, 'cash_own');
+  assert.equal(plan.showRequestsPrimary, true);
+  assert.deepEqual(plan.sideCards, ['customers', 'files']);
+  assert.deepEqual(plan.bottomCards, ['settings']);
+});
+
+test('resolveSmartHomePlan adapts for Funcionário with only Documentos and Serviços (no requests/cash)', () => {
+  const plan = resolveSmartHomePlan(
+    makeContext('employee', ['templates.read', 'services.read']),
+    false,
+  );
+  assert.equal(plan.financeMode, null);
+  assert.equal(plan.showRequestsPrimary, false);
+  assert.equal(plan.servicesLabel, 'Serviços');
+  assert.deepEqual(plan.adaptiveGridCards, ['documents', 'services', 'notifications', 'account']);
+});
+
+test('resolveSmartHomePlan adapts for Funcionário with only Caixa individual and Clientes', () => {
+  const plan = resolveSmartHomePlan(
+    makeContext('employee', ['cash.read', 'customers.read']),
+    false,
+  );
+  assert.equal(plan.financeMode?.kind, 'cash_own');
+  assert.equal(plan.showRequestsPrimary, false);
+  assert.deepEqual(plan.adaptiveGridCards, ['customers', 'notifications']);
+  assert.deepEqual(plan.bottomCards, ['account']);
+});
+
+test('resolveSmartHomePlan balances 2x2 adaptive grid for Funcionário with Caixa, Documentos and Serviços', () => {
+  const plan = resolveSmartHomePlan(
+    makeContext('employee', ['cash.read', 'templates.read', 'services.read']),
+    false,
+  );
+  assert.equal(plan.financeMode?.kind, 'cash_own');
+  assert.equal(plan.showRequestsPrimary, false);
+  assert.deepEqual(plan.adaptiveGridCards, ['documents', 'services', 'notifications', 'account']);
+  assert.deepEqual(plan.bottomCards, []);
+});
+
+test('resolveSmartHomePlan adapts for Funcionário with only Solicitações and Checklist', () => {
+  const plan = resolveSmartHomePlan(
+    makeContext('employee', ['requests.read', 'checklists.read']),
+    false,
+  );
+  assert.equal(plan.financeMode, null);
+  assert.equal(plan.showRequestsPrimary, true);
+  assert.equal(plan.servicesLabel, 'Checklist');
+  assert.deepEqual(plan.sideCards, ['services', 'account']);
+  assert.deepEqual(plan.bottomCards, []);
+});
+
+test('resolveSmartHomePlan adapts for Cliente with Meus pagamentos, Minhas solicitações, Anexos, Documentos and Conta', () => {
+  const plan = resolveSmartHomePlan(makeContext('client', []), true);
+  assert.equal(plan.financeMode?.kind, 'client_payments');
+  assert.equal(plan.showRequestsPrimary, true);
+  assert.deepEqual(plan.sideCards, ['files', 'documents']);
+  assert.deepEqual(plan.bottomCards, ['account']);
+});
+
