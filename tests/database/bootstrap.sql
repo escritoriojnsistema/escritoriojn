@@ -25,7 +25,7 @@ CREATE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql STABLE AS $$
   SELECT nullif(current_setting('request.jwt.claims', true)::jsonb ->> 'sub', '')::uuid;
 $$;
 GRANT USAGE ON SCHEMA auth TO migrator, anon, authenticated;
-GRANT SELECT, REFERENCES, TRIGGER ON auth.users TO migrator;
+GRANT SELECT, REFERENCES, TRIGGER, DELETE, UPDATE ON auth.users TO migrator;
 GRANT SELECT ON auth.sessions TO migrator;
 GRANT EXECUTE ON FUNCTION auth.uid() TO migrator, anon, authenticated;
 -- Existing hosted event-trigger function, including its overly broad defaults.

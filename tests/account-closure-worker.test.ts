@@ -69,3 +69,39 @@ test('scheduled retry requires provider credential and independent cron header',
   assert.equal((await worker(new Request('https://worker.invalid',{method:'POST',headers:invalid}))).status,401);
  }
 });
+
+test('scheduled team departure notices retry with one stable key and clear the queue only on success',async()=>{
+ const sentKeys:string[]=[];
+ let recorded=0;
+ let sendStatus=503;
+ const worker=createAccountClosureHandler({...config,noticeApiKey:'mail-fixture',noticeFrom:'Equipe <team@example.test>'},async(input,init)=>{
+  const url=String(input);
+  if(url.endsWith('/auth/v1/user'))return response({id:uid});
+  if(url.endsWith('/account_provider_pending'))return response({ids:[]});
+  if(url.endsWith('/team_departure_notices_claim'))return response([{id:uid,email:'former@example.test'}]);
+  if(url==='https://api.resend.com/emails'){
+   sentKeys.push(new Headers(init?.headers).get('Idempotency-Key')??'');
+   const body=JSON.parse(String(init?.body));
+   assert.deepEqual(body.to,['former@example.test']);
+   assert.match(body.text,/sucesso na sua próxima jornada/);
+   return response({},sendStatus);
+  }
+  if(url.endsWith('/team_departure_notice_complete')){
+   assert.deepEqual(JSON.parse(String(init?.body)),{p_membership_id:uid});
+   recorded++;
+   return response({recorded:true});
+  }
+  throw new Error('unexpected endpoint');
+ });
+ const scheduled=()=>new Request('https://worker.invalid',{method:'POST',headers:{
+  Authorization:'Bearer '+config.serviceRoleKey,'X-Account-Closure-Secret':config.cronSecret,
+ }});
+ assert.equal((await worker(request('valid-user'))).status,200);
+ assert.equal(sentKeys.length,0);
+ assert.equal((await worker(scheduled())).status,200);
+ assert.equal(recorded,0);
+ sendStatus=200;
+ assert.equal((await worker(scheduled())).status,200);
+ assert.equal(recorded,1);
+ assert.deepEqual(sentKeys,['jn-departure-'+uid,'jn-departure-'+uid]);
+});

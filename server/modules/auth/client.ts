@@ -3,6 +3,9 @@ import type { Request, Response } from 'express';
 import { validPublicConnection } from '../../../shared/connection.js';
 import { errorResponse } from '../../errors.js';
 
+type VerifiedUser = Awaited<ReturnType<ReturnType<typeof createClient>['auth']['getUser']>>;
+const pendingVerification = new Map<string, Promise<VerifiedUser>>();
+
 /** A verified provider identity, never a role inferred from user metadata. */
 export async function authenticatedClient(req: Request, res: Response) {
   const token=/^Bearer ([A-Za-z0-9_.-]{1,8192})$/i.exec(req.get('Authorization')??'')?.[1];
@@ -16,7 +19,15 @@ export async function authenticatedClient(req: Request, res: Response) {
         ...init,signal:AbortSignal.any([AbortSignal.timeout(8000),...(init?.signal?[init.signal]:[])]),
       })},
     });
-    const {data,error}=await client.auth.getUser(token);
+    // Dashboard widgets often arrive together. Share only the in-flight provider
+    // check for the same project and token. Subsequent requests verify anew.
+    const requestKey=url+' '+token;
+    let verification=pendingVerification.get(requestKey);
+    if(!verification){
+      verification=client.auth.getUser(token).finally(()=>pendingVerification.delete(requestKey));
+      pendingVerification.set(requestKey,verification);
+    }
+    const {data,error}=await verification;
     if (error || !data.user) {
       const unavailable=error && (!error.status || error.status>=429);
       errorResponse(res,unavailable?503:401,unavailable?'AUTH_UNAVAILABLE':'AUTH_REQUIRED',

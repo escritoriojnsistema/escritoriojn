@@ -475,3 +475,56 @@ test('arquivo pendente mantém o escritório de início bloqueado para troca',as
  await page.goto('/equipe');page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Arquivar acesso de Pessoa da Equipe 3'}).click();await held;
  try{await expect(page.getByRole('combobox',{name:'Escritório',exact:true})).toBeDisabled();}finally{release();}
 });
+
+test('proprietário exclui outro integrante e consulta a fila de avisos nos arquivados',async({page})=>{
+ await session(page);
+ const initial=roster();
+ const member=initial.items[1];
+ if(initial.kind!=='members'||!member)throw new Error('Expected roster fixture');
+ const other='55555555-5555-4555-8555-555555555555';
+ let departed=false;
+ await page.route('**/api/team?**',route=>route.fulfill({json:{data:{...initial,total:1,items:departed?[]:[{...member,user_id:other}]}}}));
+ await page.route('**/api/team/members/*/depart',async route=>{
+  expect(route.request().postDataJSON()).toEqual({office_id:office});
+  expect(route.request().url()).toContain(member.id);
+  departed=true;
+  await route.fulfill({json:{data:{ok:true,archived_requests:2,returned_requests:1}}});
+ });
+ await page.route('**/api/team/lifecycle-archives?**',route=>{
+  const query=new URL(route.request().url()).searchParams;
+  expect(query.get('office_id')).toBe(office);
+  const items=query.get('kind')==='departed'&&departed?[{id:member.id,role_code:'admin',at:'2026-11-26T12:00:00Z',archived_requests:2,returned_requests:1,notice:'pending'}]:[];
+  return route.fulfill({json:{data:{page:1,total:items.length,items}}});
+ });
+ await page.goto('/equipe');
+ page.once('dialog',dialog=>dialog.accept());
+ await page.getByRole('button',{name:/Excluir conta/}).click();
+ await expect(page.getByRole('status')).toContainText('2 atendimento(s) arquivado(s)');
+ await page.goto('/arquivados');
+ await page.getByRole('tab',{name:'Contas da equipe excluídas'}).click();
+ await expect(page.getByText('Aviso pendente de envio',{exact:true})).toBeVisible();
+});
+
+test('convites vencidos saem da lista e os aceitos podem ser movidos para Arquivados',async({page})=>{
+ await session(page);
+ const soon={id:invitation,name:'Convite que vence',email:'vence@example.test',role_code:'employee',status:'pending',
+  delivery_status:'sent',expires_at:new Date(Date.now()+5_000).toISOString(),created_at:new Date().toISOString()};
+ const accepted={...soon,id:'33333333-3333-4333-8333-333333333334',name:'Convite aceito',status:'accepted',email:'aceito@example.test'};
+ let archived=false;
+ await page.route('**/api/team?**',route=>{
+  if(new URL(route.request().url()).searchParams.get('kind')!=='invitations')return route.fulfill({json:{data:roster()}});
+  const items=[...(Date.now()<Date.parse(soon.expires_at)?[soon]:[]),...(archived?[]:[accepted])];
+  return route.fulfill({json:{data:{...roster(),kind:'invitations',total:items.length,items}}});
+ });
+ await page.route('**/api/team/invitations/*/archive',route=>{
+  expect(route.request().url()).toContain(accepted.id);
+  archived=true;
+  return route.fulfill({json:{data:{ok:true}}});
+ });
+ await page.goto('/equipe');
+ await page.getByRole('tab',{name:/Convites/}).click();
+ await expect(page.getByText(soon.name,{exact:true})).toBeVisible();
+ await expect(page.getByText(soon.name,{exact:true})).toHaveCount(0,{timeout:8_000});
+ await page.getByRole('button',{name:/Arquivar convite/}).click();
+ await expect(page.getByRole('status')).toContainText('Convite aceito movido para Arquivados');
+});
