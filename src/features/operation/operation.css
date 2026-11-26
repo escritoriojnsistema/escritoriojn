@@ -1297,7 +1297,33 @@
 .operation-back-control:hover:not(:disabled) { color: var(--jn-navy, #103248); text-decoration: underline; text-underline-offset: 3px; }
 .operation-back-control:hover:not(:disabled) svg { transform: translateX(-2px); }
 .operation-back-control[aria-disabled=true], .operation-back-control:disabled { opacity: .6; cursor: default; text-decoration: none; }
-.operation-main:has([data-operation-local-return]) > .operation-back { display: none; }
+.operation-main:has([data-operation-local-return]) > .operation-back,
+.operation-main:has([data-operation-local-return]) > .operation-top-strip .operation-back { display: none; }
+
+.operation-top-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 0 0 12px;
+  flex-shrink: 0;
+}
+
+.operation-top-strip > .operation-back {
+  margin: 0;
+}
+
+.operation-top-strip .operation-back-control {
+  min-height: 34px;
+  padding: 4px 4px 4px 0;
+  color: #475569;
+  font-weight: 700;
+}
+
+.operation-top-strip .operation-back-control:hover:not(:disabled) {
+  color: #0f172a;
+}
 
 .operation-main .settings-tabs { flex-wrap: wrap; }
 
@@ -1323,44 +1349,81 @@
 
 /* Section Navigation (Sub-views inside parent groups) */
 .operation-section-navigation {
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin: 0 0 14px;
-  border-bottom: 1px solid var(--jn-border, #dbe3e8);
-  padding-bottom: 10px;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 4px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f1f4f8;
 }
 
 .operation-section-navigation a {
-  min-height: 44px;
+  min-height: 32px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 14px;
+  gap: 6px;
+  padding: 5px 12px;
   border: 1px solid transparent;
-  border-radius: var(--jn-radius-sm, 9px);
+  border-radius: 7px;
   font-size: 13px;
   font-weight: 500;
-  color: var(--jn-muted, #556b7a);
-  transition: background-color 150ms var(--jn-ease, ease), color 150ms var(--jn-ease, ease), border-color 150ms var(--jn-ease, ease);
+  color: #475569;
+  transition: background-color 120ms ease-out, color 120ms ease-out, border-color 120ms ease-out;
 }
 
 .operation-section-navigation a:hover {
-  color: var(--jn-navy, #103248);
-  background: var(--jn-surface, #ffffff);
-  border-color: var(--jn-border, #dbe3e8);
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .operation-section-navigation a[aria-current=page] {
-  color: var(--jn-navy, #103248);
-  background: var(--jn-surface, #ffffff);
-  border-color: var(--jn-border-strong, #bccad3);
-  box-shadow: var(--jn-shadow-xs);
+  color: #0f172a;
+  background: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
   font-weight: 700;
 }
 
 .operation-section-navigation a[aria-disabled=true] { opacity: .65; cursor: default; }
 .operation-section-navigation svg { flex-shrink: 0; }
+
+@media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
+  .operation-top-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .operation-top-strip .operation-back-control {
+    min-height: 28px;
+    padding: 2px 0;
+    font-size: 12.5px;
+    gap: 5px;
+  }
+
+  .operation-section-navigation {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    gap: 8px;
+  }
+
+  .operation-section-navigation a {
+    min-height: 32px;
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-size: 12.5px;
+  }
+
+  .operation-section-navigation a[aria-current=page] {
+    border-color: #e2e8f0;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  }
+}
 
 /* Reflow preserves natural scrolling and touch targets when text/zoom grows. */
 .operation-main .team-tabs { flex-wrap: wrap; }
@@ -1387,27 +1450,30 @@
 /* Home Single-Screen Zero-Scroll Executive Bento & Smart Adaptive Layout */
 .home-office { margin: 0; }
 
-/* Zero-scroll desktop viewport lock ONLY on the Home Operational screen */
-.operation-layout.is-home-screen {
+/* Zero-scroll desktop viewport lock for Home & single-screen operational views */
+.operation-layout.is-home-screen,
+.operation-layout.is-viewport-locked {
   height: 100dvh;
   max-height: 100dvh;
   overflow: hidden;
 }
 
-.operation-layout.is-home-screen .operation-body {
+.operation-layout.is-home-screen .operation-body,
+.operation-layout.is-viewport-locked .operation-body {
   height: 100dvh;
   max-height: 100dvh;
   min-height: 0;
   overflow: hidden;
 }
 
-.operation-layout.is-home-screen .operation-main {
+.operation-layout.is-home-screen .operation-main,
+.operation-layout.is-viewport-locked .operation-main {
   flex: 1 1 0;
   min-height: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding: 16px clamp(18px, 2.4vw, 28px) 16px;
+  padding: 14px clamp(18px, 2.4vw, 28px) 16px;
 }
 
 .operation-layout.is-home-screen .operation-heading {
@@ -1831,7 +1897,9 @@
   .operation-exit,
   .pwa-menu-link { min-height: 30px; padding: 4px 9px; font-size: 12px; }
   .operation-mobile-bar { min-height: 46px; padding-block: 6px; }
-  .operation-layout.is-home-screen .operation-main { padding: 10px 20px 10px; }
+  .operation-layout.is-home-screen .operation-main,
+  .operation-layout.is-viewport-locked .operation-main { padding: 10px 20px 10px; }
+  .operation-layout.is-viewport-locked .operation-top-strip { margin-bottom: 6px; }
   .operation-layout.is-home-screen .operation-heading { margin-bottom: 8px; }
   .operation-layout.is-home-screen .operation-heading h1 { font-size: 22px; }
   .operation-layout.is-home-screen .operation-heading p:not(.eyebrow) { font-size: 12.5px; }
@@ -1850,7 +1918,8 @@
 
 /* Mobile Single-Screen Zero-Scroll Home (<= 900px) matching Reference Mobile HTML */
 @media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
-  .operation-layout.is-home-screen {
+  .operation-layout.is-home-screen,
+  .operation-layout.is-viewport-locked {
     height: 100dvh;
     max-height: 100dvh;
     overflow: hidden;
@@ -1858,7 +1927,8 @@
     flex-direction: column;
   }
 
-  .operation-layout.is-home-screen .operation-body {
+  .operation-layout.is-home-screen .operation-body,
+  .operation-layout.is-viewport-locked .operation-body {
     flex: 1 1 0;
     min-height: 0;
     height: auto;
@@ -1875,11 +1945,28 @@
     padding: max(6px, env(safe-area-inset-top)) 14px 4px;
   }
 
+  .operation-layout.is-viewport-locked .operation-mobile-bar {
+    position: static;
+    flex-shrink: 0;
+    min-height: 48px;
+    padding: max(6px, env(safe-area-inset-top)) 14px 6px;
+  }
+
   .operation-layout.is-home-screen .operation-main {
     flex: 1 1 0;
     min-height: 0;
     overflow: hidden;
     padding: 0;
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .operation-layout.is-viewport-locked .operation-main {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: hidden;
+    padding: 8px 14px 10px;
     max-width: none;
     display: flex;
     flex-direction: column;
@@ -2195,7 +2282,8 @@
     font-size: 11.5px;
   }
 
-  .operation-layout.is-home-screen .operation-mobile-nav {
+  .operation-layout.is-home-screen .operation-mobile-nav,
+  .operation-layout.is-viewport-locked .operation-mobile-nav {
     position: static;
     flex-shrink: 0;
   }

@@ -79,12 +79,14 @@ const icons = {
 export function OperationLayout({
   client = false,
   busy = false,
+  viewportLock = false,
   contextActions,
   office,
   children,
 }: {
   client?: boolean;
   busy?: boolean;
+  viewportLock?: boolean;
   contextActions?: ReactNode;
   office?: string;
   children: ReactNode;
@@ -201,7 +203,11 @@ export function OperationLayout({
   }
 
   return (
-    <div className={`operation-layout${isHome ? ' is-home-screen' : ''}`}>
+    <div
+      className={`operation-layout${isHome ? ' is-home-screen' : ''}${
+        viewportLock && !isHome ? ' is-viewport-locked' : ''
+      }`}
+    >
       <aside className="operation-sidebar" aria-label="Navegação principal">
         <div className="operation-sidebar-top">
           <Brand light emblem="scale" to={home} />
@@ -251,48 +257,58 @@ export function OperationLayout({
         </header>
 
         <main id="conteudo" className="operation-main">
-          <OperationBack
-            pathname={pathname}
-            contexts={auth.contexts}
-            client={client}
-            busy={busy}
-            contextual={contextual.back}
-          />
+          {sectionItems.length > 1 ? (
+            <div className="operation-top-strip">
+              <OperationBack
+                pathname={pathname}
+                contexts={auth.contexts}
+                client={client}
+                busy={busy}
+                contextual={contextual.back}
+              />
+              <nav
+                className="operation-section-navigation"
+                aria-label={`Áreas de ${
+                  sectionKey === 'requests'
+                    ? 'solicitações'
+                    : sectionKey === 'customers'
+                      ? 'clientes'
+                      : 'serviços'
+                }`}
+              >
+                {sectionItems.map(item => {
+                  const Icon = icons[item.key];
+                  return (
+                    <Link
+                      key={item.key}
+                      to={item.path}
+                      state={office ? { office_id: office } : undefined}
+                      aria-current={normalizedPath === item.path ? 'page' : undefined}
+                      aria-disabled={busy || undefined}
+                      onClick={event => {
+                        if (busy) event.preventDefault();
+                      }}
+                    >
+                      <Icon size={16} aria-hidden="true" />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </nav>
+            </div>
+          ) : (
+            <OperationBack
+              pathname={pathname}
+              contexts={auth.contexts}
+              client={client}
+              busy={busy}
+              contextual={contextual.back}
+            />
+          )}
           {error && !open && (
             <p role="alert" className="form-feedback error">
               {error}
             </p>
-          )}
-          {sectionItems.length > 1 && (
-            <nav
-              className="operation-section-navigation"
-              aria-label={`Áreas de ${
-                sectionKey === 'requests'
-                  ? 'solicitações'
-                  : sectionKey === 'customers'
-                    ? 'clientes'
-                    : 'serviços'
-              }`}
-            >
-              {sectionItems.map(item => {
-                const Icon = icons[item.key];
-                return (
-                  <Link
-                    key={item.key}
-                    to={item.path}
-                    state={office ? { office_id: office } : undefined}
-                    aria-current={normalizedPath === item.path ? 'page' : undefined}
-                    aria-disabled={busy || undefined}
-                    onClick={event => {
-                      if (busy) event.preventDefault();
-                    }}
-                  >
-                    <Icon size={19} aria-hidden="true" />
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
-            </nav>
           )}
           {children}
         </main>
