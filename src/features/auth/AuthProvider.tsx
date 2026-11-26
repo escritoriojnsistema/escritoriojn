@@ -58,9 +58,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => { data.subscription.unsubscribe(); unsubscribeEnd(); };
   }, []);
   useEffect(() => {
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') refresh();
+    };
     window.addEventListener('focus', refresh);
+    document.addEventListener('visibilitychange', onVisibility);
     const timer = window.setInterval(refresh, 60_000);
-    return () => { window.removeEventListener('focus', refresh); window.clearInterval(timer); };
+    return () => {
+      window.removeEventListener('focus', refresh);
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.clearInterval(timer);
+    };
   }, [refresh]);
   useEffect(() => {
     if (session === undefined) return;
