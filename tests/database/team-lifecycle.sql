@@ -31,6 +31,10 @@ SELECT test.assert_true(EXISTS(SELECT FROM private.team_invite_credentials WHERE
 UPDATE private.team_invitations SET expires_at=clock_timestamp()-interval '1 second',delivery_lease_until=clock_timestamp()-interval '1 second' WHERE id=:'expired_invite';
 SELECT test.expect_error(format('UPDATE auth.users SET email_confirmed_at=clock_timestamp() WHERE id=%L',:'placeholder'),'PT410',
  'convites: confirmação expirada é negada no Auth');
+SET LOCAL ROLE service_role;
+SELECT test.assert_true(public.team_login_guidance('placeholder@example.test',NULL)='invitation_expired',
+ 'login: conta pendente sem convite válido recebe aviso de expiração');
+RESET ROLE;
 SET LOCAL ROLE authenticated;
 SELECT test.assert_true(public.team_lifecycle_archives(:'office','expired',1)->>'total'='1' AND
  public.team_dashboard(:'office','invitations',1,'','all')->>'total'='0','convites: vencido aparece somente no arquivo e filtro histórico');
@@ -38,6 +42,18 @@ SELECT test.expect_error(format('SELECT public.team_lifecycle_archives(%L,%L,1)'
 RESET ROLE;
 SELECT test.assert_true(private.team_purge_expired_auth()=1,'convites: manutenção elimina somente a conta provisória vencida');
 SELECT test.assert_true(NOT EXISTS(SELECT FROM auth.users WHERE id=:'placeholder'),'convites: e-mail livre no Auth');
+SET LOCAL ROLE service_role;
+SELECT test.assert_true(public.team_login_guidance('placeholder@example.test',:'expired_invite')='invitation_expired',
+ 'login: o link correto identifica o vencimento mesmo depois da limpeza');
+SELECT test.assert_true(public.team_login_guidance('different@example.test',:'expired_invite')='unavailable'
+ AND public.team_login_guidance('placeholder@example.test',NULL)='unavailable',
+ 'login: link de outro e-mail e conta removida sem prova não revelam convite');
+RESET ROLE;
+SET LOCAL ROLE anon;
+SELECT test.expect_error($q$SELECT public.team_login_guidance('placeholder@example.test',NULL)$q$,'42501',
+ 'login: anônimo não consegue consultar e-mail na RPC');
+RESET ROLE;
+
 SET LOCAL ROLE authenticated;
 SELECT public.team_create_invitation(:'office','placeholder@example.test','Pessoa Convidada','52998224725','admin',
  ARRAY['foundation.access'],now()+interval '1 day',gen_random_uuid())->>'id' AS fresh_invite \gset
@@ -45,6 +61,11 @@ SELECT public.team_claim_delivery(:'office',:'fresh_invite',gen_random_uuid());
 RESET ROLE;
 INSERT INTO auth.users(id,email) VALUES (:'placeholder','placeholder@example.test');
 UPDATE auth.users SET invited_at=clock_timestamp() WHERE id=:'placeholder';
+SET LOCAL ROLE service_role;
+SELECT test.assert_true(public.team_login_guidance('placeholder@example.test',NULL)='confirm_email'
+ AND public.team_login_guidance('placeholder@example.test',:'fresh_invite')='confirm_email',
+ 'login: um novo convite válido prevalece sobre o anterior');
+RESET ROLE;
 UPDATE auth.users SET email_confirmed_at=clock_timestamp() WHERE id=:'placeholder';
 UPDATE private.team_invitations SET status='accepted',accepted_at=clock_timestamp(),accepted_user_id=:'placeholder' WHERE id=:'fresh_invite';
 SET LOCAL ROLE authenticated;

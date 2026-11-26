@@ -8,6 +8,30 @@ import {rememberSessionPortal} from './sessionPortal';
 
 export class PortalAccessError extends Error {}
 
+const requestNewInvite = 'Se você é funcionário novo, por favor solicite um novo convite ao responsável.';
+const expiredInvite = `Conta com convite expirado. ${requestNewInvite}`;
+
+async function teamLoginError(email: string, password: string, invitation: string | null, code: string, signal: AbortSignal) {
+  const fallback = code === 'invalid_credentials'
+    ? 'E-mail ou senha incorretos. Se o seu convite expirou, solicite um novo convite ao responsável.'
+    : 'Se o seu convite ainda estiver válido, confirme o e-mail pelo link recebido. Se expirou, solicite um novo convite ao responsável.';
+  const proof = invitation ? { invitation_id: invitation } : code === 'email_not_confirmed' ? { password } : null;
+  if (!proof) return fallback;
+  try {
+    const response = await fetch('/api/auth/team-login-guidance', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, ...proof }), signal: AbortSignal.any([signal, AbortSignal.timeout(7500)]),
+    });
+    if (response.ok) {
+      const { guidance } = await response.json();
+      if (guidance === 'invitation_expired') return expiredInvite;
+      if (guidance === 'confirm_email' && code === 'email_not_confirmed') return 'Confirme seu e-mail antes de entrar.';
+      if (guidance === 'invitation_required') return `Esta conta não tem um convite ativo para a equipe. ${requestNewInvite}`;
+    }
+  } catch { signal.throwIfAborted(); }
+  return fallback;
+}
+
 export async function portalLogin(email: string, password: string, team: boolean, invite: string | null, signal: AbortSignal): Promise<string> {
   const attempt = createPortalClient();
   if (!supabase || !attempt) throw new PortalAccessError('Não foi possível verificar seu acesso. Tente novamente em instantes.');
@@ -29,11 +53,16 @@ export async function portalLogin(email: string, password: string, team: boolean
     const previousToken = previousSession?.access_token ?? null;
     previousScope = previousSession ? sessionScope(previousSession) : undefined;
     current.throwIfAborted();
-    const { data, error } = await attempt.auth.signInWithPassword({ email, password });
-    if (error) throw error;
-    current.throwIfAborted();
-    if (!data.session) throw new PortalAccessError('Não foi possível verificar seu acesso. Tente novamente em instantes.');
     const invitation = team && invite && uuidPattern.test(invite) ? invite : null;
+    const { data, error } = await attempt.auth.signInWithPassword({ email, password });
+    current.throwIfAborted();
+    if (error) {
+      if (team && (error.code === 'invalid_credentials' || error.code === 'email_not_confirmed')) {
+        throw new PortalAccessError(await teamLoginError(email, password, invitation, error.code, current));
+      }
+      throw error;
+    }
+    if (!data.session) throw new PortalAccessError('Não foi possível verificar seu acesso. Tente novamente em instantes.');
     if (!invitation) {
       let allowed = false;
       let denied = false;
