@@ -81,3 +81,16 @@ export type SetDelegation = {
   office_id: string; allowed_roles: TeamRole[]; allowed_permissions: TeamPermission[];
   can_create_owner: boolean; expires_at: string;
 };
+
+export type TeamArchiveKind='expired'|'accepted'|'departed';
+export type TeamArchiveItem={
+ id:string;
+ at:string;
+ role_code:TeamRole;
+ name?:string;
+ email?:string;
+ archived_requests?:number;
+ returned_requests?:number;
+ notice?:'pending'|'sent'|'unavailable';
+};
+export type TeamArchivePage={items:TeamArchiveItem[];total:number;page:number};

@@ -768,6 +768,9 @@ try {
     if (allMigrations.some(name => name.includes('_category_response_models'))) {
       result += sql(database, 'postgres', readFileSync(`${root}tests/database/category-response-models.sql`, 'utf8'));
     }
+    if (allMigrations.some(name => name.includes('_team_lifecycle_and_dashboard'))) {
+      result += sql(database, 'postgres', readFileSync(`${root}tests/database/team-lifecycle.sql`, 'utf8'));
+    }
     if (allMigrations.some(name => name.includes('_legal_notice_and_home_counts'))) {
       result += sql(database, 'postgres', readFileSync(`${root}tests/database/legal-home.sql`, 'utf8'));
     }

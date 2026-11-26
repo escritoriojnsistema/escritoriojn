@@ -42,7 +42,7 @@ export function settingsNavigation(context: AccessContext, client: boolean): Ope
   if (admin && has('settings.access')) items.push({ key:'privacy', label:'Privacidade', path:paths.settingsPrivacy });
   else items.push({key:'legal',label:'Leis e privacidade',path:paths.settingsLegal});
   if (has('audit.read')) items.push({ key:'audit', label:'Auditoria', path:paths.audit });
-  if (has('archives.manage') || admin && has('requests.read','requests.archives.manage')) items.push({ key:'archives', label:'Arquivados', path:paths.settingsArchives });
+  if (has('archives.manage') || admin && (has('requests.read','requests.archives.manage')||has('users.manage'))) items.push({ key:'archives', label:'Arquivados', path:paths.settingsArchives });
   if (has('users.manage')) items.push({ key:'team', label:'Equipe e convites', path:paths.teamManagement });
   if (admin && has('settings.access','categories.manage')) items.push({ key:'categories', label:'Categorias', path:paths.settingsCategories });
   if (admin && has('settings.access','access.manage')) items.push({ key:'access', label:'Acessos', path:paths.settingsAccess });

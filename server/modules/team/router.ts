@@ -28,6 +28,7 @@ const invalid=(res:Response)=>errorResponse(res,422,'TEAM_VALIDATION','Confira o
 const emptyQuery=(req:Request)=>Object.keys(req.query).length===0;
 const messages:Record<string,string>={
   AUTH_REQUIRED:'Entre novamente para continuar.',TEAM_FORBIDDEN:'Você não tem permissão para esta operação.',
+  TEAM_OPEN_CASH:'Encerre o caixa aberto deste integrante antes de excluir a conta.',
   LAST_OWNER:'Mantenha ao menos um proprietário ativo.',SELF_CHANGE:'Seu próprio acesso não pode ser alterado por esta operação.',
   TEAM_CONFLICT:'Os dados foram alterados. Atualize a lista antes de continuar.',
   INVITATION_INVALID:'Este convite não está disponível. Peça um novo convite ao escritório.',
@@ -96,6 +97,24 @@ teamRouter.post('/invitations/:id/revoke',async(req,res)=>{
   if(!emptyQuery(req) || !v.uuid(req.params.id) || !v.fields(req.body,['office_id']) || !v.uuid(req.body.office_id)) {invalid(res);return;}
   const data=await rpc(res,'team_revoke_invitation',{p_office_id:req.body.office_id,p_invitation_id:req.params.id,p_request_id:randomUUID()});
   if(data)res.json({data});
+});
+teamRouter.post('/invitations/:id/archive',async(req,res)=>{
+ if(!emptyQuery(req)||!v.uuid(req.params.id)||!v.fields(req.body,['office_id'])||!v.uuid(req.body.office_id)){invalid(res);return;}
+ const data=await rpc(res,'team_archive_invitation',{p_office_id:req.body.office_id,p_invitation_id:req.params.id});
+ if(data)res.json({data});
+});
+teamRouter.post('/members/:id/depart',async(req,res)=>{
+ if(!emptyQuery(req)||!v.uuid(req.params.id)||!v.fields(req.body,['office_id'])||!v.uuid(req.body.office_id)){invalid(res);return;}
+ const data=await rpc(res,'team_depart_member',{p_office_id:req.body.office_id,p_membership_id:req.params.id});
+ if(data)res.json({data});
+});
+teamRouter.get('/lifecycle-archives',async(req,res)=>{
+ const {office_id,kind,page='1'}=req.query;
+ if(Object.keys(req.query).some(key=>!['office_id','kind','page'].includes(key))||!v.uuid(office_id)
+  ||!['expired','accepted','departed'].includes(String(kind))||typeof kind!=='string'
+  ||typeof page!=='string'||!(/^[1-9]\d{0,5}$/.test(page))){invalid(res);return;}
+ const data=await rpc(res,'team_lifecycle_archives',{p_office_id:office_id,p_kind:kind,p_page:Number(page)});
+ if(data)res.json({data});
 });
 teamRouter.patch('/members/:id',async(req,res)=>{
   const b:unknown=req.body;

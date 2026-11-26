@@ -1,4 +1,4 @@
-export type ClosureWorkerConfig={url:string;anonKey:string;serviceRoleKey:string;cronSecret:string};
+export type ClosureWorkerConfig={url:string;anonKey:string;serviceRoleKey:string;cronSecret:string;noticeApiKey?:string;noticeFrom?:string};
 /** Auth admin credentials stay exclusively inside the Edge runtime. */
 export function createAccountClosureHandler(config:ClosureWorkerConfig,transport:typeof fetch=fetch){return async(req:Request)=>{
  const json=(v:unknown,status=200)=>new Response(JSON.stringify(v),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});
@@ -24,6 +24,30 @@ export function createAccountClosureHandler(config:ClosureWorkerConfig,transport
  // Auth UUID referenced by immutable business history. A ban alone keeps sessions.
  const result=await transport(config.url+'/auth/v1/admin/users/'+id,{method:'DELETE',headers:{Authorization:'Bearer '+config.serviceRoleKey,apikey:config.serviceRoleKey,'Content-Type':'application/json'},body:JSON.stringify({should_soft_delete:true}),signal:AbortSignal.timeout(15000)});
  if(result.ok){const saved=await rpc('account_provider_complete',{p_user_id:id});if(saved.ok)completed++;}
+ }
+ if(scheduled&&config.noticeApiKey&&config.noticeFrom){
+  // Scheduled service call only. Human invocations cannot claim recipients.
+  try{
+   const batch=await rpc('team_departure_notices_claim',{});
+   if(batch.ok){
+    const notices:unknown=await batch.json();
+    if(Array.isArray(notices)&&notices.length<=5)await Promise.all(notices.map(async row=>{
+     if(typeof row.id!=='string'||!/^[a-f0-9-]{36}$/.test(row.id)||typeof row.email!=='string'
+       ||row.email.length>254||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(row.email))return;
+     try{
+      const sent=await transport('https://api.resend.com/emails',{
+       method:'POST',headers:{Authorization:'Bearer '+config.noticeApiKey,
+        'Content-Type':'application/json','Idempotency-Key':'jn-departure-'+row.id},
+       body:JSON.stringify({from:config.noticeFrom,to:[row.email],
+        subject:'Encerramento do acesso ao Escritório JN',
+        text:'Olá. Seu acesso à equipe do Escritório JN foi encerrado. Agradecemos sua contribuição e desejamos sucesso na sua próxima jornada.\n\nEscritório JN'}),
+       signal:AbortSignal.timeout(8000),
+      });
+      if(sent.ok)await rpc('team_departure_notice_complete',{p_membership_id:row.id});
+     }catch{/* The restricted queue retains the pending attempt for the next scheduled run. */}
+    }));
+   }
+  }catch{/* Mail failures must never undo identity cleanup. */}
  }
  return json({data:{processed:completed,pending:data.ids.length-completed}});
  }catch{return json({error:'UNAVAILABLE'},503);}
