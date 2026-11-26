@@ -25,7 +25,6 @@ import {
   Plus,
   RefreshCw,
   Search,
-  X,
 } from 'lucide-react';
 import type { AccessContext } from '../../../shared/access';
 import {
@@ -38,7 +37,6 @@ import {
   type RequestMutation,
 } from '../../../shared/requests';
 import { paths } from '../../app/routes';
-import { Brand } from '../../ui/Brand';
 import { useAuth } from '../auth/AuthProvider';
 import { OperationHeading, OperationLayout } from '../operation/OperationLayout';
 import { OperationalFeedback } from '../operation/OperationalAccess';
@@ -46,11 +44,14 @@ import { AccountCorrectionForm } from './AccountCorrectionForm';
 import { RequestForm } from './RequestForm';
 import { RequestDetail } from './RequestDetail';
 import { RequestArchivesPanel } from './RequestArchivesPanel';
+import { RequestsPanelModal } from './RequestsPanelModal';
 import { requestsApi, requestsError, RequestsError } from './api';
 import {
   formatRequestsResultCount,
   formatRequestsTotal,
   getRequestStatusPresentation,
+  HISTORY_AUTO_LOAD_CAP,
+  mergeItemsByKey,
   mergeRequestPages,
   REQUESTS_AUTO_LOAD_CAP,
   REQUESTS_BATCH_SIZE,
@@ -117,74 +118,6 @@ export default function RequestsPage({ client = false }: { client?: boolean }) {
       client={client}
       onOffice={setSelected}
     />
-  );
-}
-
-function RequestsPanelModal({
-  open,
-  title,
-  locked = false,
-  onClose,
-  children,
-}: {
-  open: boolean;
-  title: string;
-  locked?: boolean;
-  onClose: () => void;
-  children: ReactNode;
-}) {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
-    else if (!open && dialog.open) dialog.close();
-  }, [open]);
-
-  if (!open) return null;
-
-  return (
-    <dialog
-      ref={dialogRef}
-      className="requests-panel-dialog"
-      aria-label={title}
-      onCancel={event => {
-        if (locked) event.preventDefault();
-      }}
-      onClose={() => {
-        if (!locked) onClose();
-      }}
-      onClick={event => {
-        if (locked || event.target !== event.currentTarget) return;
-        const bounds = event.currentTarget.getBoundingClientRect();
-        if (
-          event.clientX < bounds.left ||
-          event.clientX > bounds.right ||
-          event.clientY < bounds.top ||
-          event.clientY > bounds.bottom
-        ) {
-          dialogRef.current?.close();
-        }
-      }}
-    >
-      <div className="requests-panel-dialog-bar">
-        <div className="requests-panel-dialog-brand">
-          <Brand light emblem="scale" decorative />
-          <h2>{title}</h2>
-        </div>
-        <button
-          type="button"
-          className="requests-panel-dialog-close"
-          disabled={locked}
-          onClick={() => dialogRef.current?.close()}
-        >
-          <X size={16} aria-hidden="true" />
-          <span>Fechar</span>
-        </button>
-      </div>
-      <div className="requests-panel-dialog-body">{children}</div>
-    </dialog>
   );
 }
 
@@ -435,6 +368,87 @@ function RequestsWorkspace({
       window.removeEventListener('focus', refresh);
     };
   }, [client, view, detail?.id, office, blocked, fail, unavailableDetail]);
+
+  useEffect(() => {
+    if (view !== 'detail' || !detail || blocked) return;
+    if (detail.portal) {
+      const ph = detail.portal_history;
+      if (!ph || ph.items.length >= ph.total || ph.items.length >= HISTORY_AUTO_LOAD_CAP) {
+        return;
+      }
+      const nextPage = ph.page + 1;
+      const controller = new AbortController();
+      const targetId = detail.id;
+      void requestsApi
+        .detail(office, targetId, nextPage, controller.signal)
+        .then(next => {
+          if (controller.signal.aborted || !next.portal || !next.portal_history) return;
+          setDetail(prev => {
+            if (!prev || !prev.portal || prev.id !== targetId || !prev.portal_history) {
+              return prev;
+            }
+            const merged = mergeItemsByKey(
+              prev.portal_history.items,
+              next.portal_history!.items,
+              h => `${h.at}:${h.status}`,
+            );
+            if (merged.length <= prev.portal_history.items.length) return prev;
+            return {
+              ...next,
+              portal_history: {
+                ...next.portal_history!,
+                items: merged,
+                page: nextPage,
+              },
+            };
+          });
+        })
+        .catch(() => {
+          // Keep currently loaded history entries.
+        });
+      return () => controller.abort();
+    }
+    if (
+      detail.history.length >= detail.history_total ||
+      detail.history.length >= HISTORY_AUTO_LOAD_CAP
+    ) {
+      return;
+    }
+    const nextPage = detail.history_page + 1;
+    const controller = new AbortController();
+    const targetId = detail.id;
+    void requestsApi
+      .detail(office, targetId, nextPage, controller.signal)
+      .then(next => {
+        if (controller.signal.aborted || next.portal) return;
+        setDetail(prev => {
+          if (!prev || prev.portal || prev.id !== targetId) return prev;
+          const merged = mergeItemsByKey(
+            prev.history,
+            next.history,
+            h => h.id,
+          );
+          if (merged.length <= prev.history.length) return prev;
+          return {
+            ...next,
+            history: merged,
+            history_page: nextPage,
+          };
+        });
+      })
+      .catch(() => {
+        // Keep currently loaded history entries.
+      });
+    return () => controller.abort();
+  }, [
+    view,
+    office,
+    blocked,
+    detail?.id,
+    detail && detail.portal ? detail.portal_history?.page : detail?.history_page,
+    detail && detail.portal ? detail.portal_history?.items.length : detail?.history.length,
+    detail && detail.portal ? detail.portal_history?.total : detail?.history_total,
+  ]);
 
   function transition(next: typeof view, allowBusy = false) {
     if (!allowBusy && (busyRef.current || nestedPending)) return false;
@@ -687,14 +701,18 @@ function RequestsWorkspace({
     <OperationLayout
       office={office}
       client={client}
-      viewportLock={isListView}
+      viewportLock
       busy={busy || nestedPending || openingUncertain}
       contextActions={view === 'detail' ? sideActions : undefined}
     >
-      <div className={`requests-main${isListView ? ' is-list-view' : ''}`}>
+      <div
+        className={`requests-main is-viewport-screen${
+          isListView ? ' is-list-view' : ' is-sub-view'
+        }`}
+      >
         <OperationHeading
           context={context}
-          showRole={isListView}
+          showRole
           action={officeAction}
           title={
             view === 'list'
@@ -732,15 +750,15 @@ function RequestsWorkspace({
         ) : (
           <>
             {view !== 'list' && (
-              <div className="customer-view-toolbar">
+              <div className="requests-subview-bar">
                 <button
                   data-operation-local-return
-                  className="team-text-button"
+                  className="requests-subview-back"
                   disabled={busy || nestedPending || openingUncertain}
                   onClick={() => back()}
                 >
-                  <ArrowLeft size={18} aria-hidden="true" />
-                  Voltar à lista
+                  <ArrowLeft size={16} aria-hidden="true" />
+                  <span>Voltar à lista</span>
                 </button>
               </div>
             )}

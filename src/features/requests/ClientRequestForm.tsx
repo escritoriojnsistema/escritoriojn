@@ -1,31 +1,180 @@
-import {CategorySelection} from '../settings/CategorySelection';
-import {CategoryRequestForm} from '../categoryIntake/CategoryRequestForm';
-import {IntakeCompletion33} from '../portalIntake/IntakeCompletion33';
-import {peekIntakeNonce33,clearIntakeNonce33} from '../portalIntake/nonce';
-import {intakeApi33} from '../portalIntake/api';
-import {CommercialError} from '../documentCommercial/api';
-import {useAuth} from '../auth/AuthProvider';
-import type {DocumentBookingResult} from '../../../shared/modelCommercial';
-import {useEffect,useRef,useState} from 'react';
-import type {ServiceCategory} from '../../../shared/categories';
-import type {CreateRequestInput} from '../../../shared/requests';
-import {categoriesApi,CategoriesError} from '../settings/categoriesApi';
+import { CategorySelection } from '../settings/CategorySelection';
+import { CategoryRequestForm } from '../categoryIntake/CategoryRequestForm';
+import { IntakeCompletion33 } from '../portalIntake/IntakeCompletion33';
+import { peekIntakeNonce33, clearIntakeNonce33 } from '../portalIntake/nonce';
+import { intakeApi33 } from '../portalIntake/api';
+import { CommercialError } from '../documentCommercial/api';
+import { useAuth } from '../auth/AuthProvider';
+import type { DocumentBookingResult } from '../../../shared/modelCommercial';
+import { useEffect, useRef, useState } from 'react';
+import type { ServiceCategory } from '../../../shared/categories';
+import type { CreateRequestInput } from '../../../shared/requests';
+import { categoriesApi, CategoriesError } from '../settings/categoriesApi';
+import { RequestsError } from './api';
 
-import {RequestsError} from './api';
-export function ClientRequestForm({office,busy,onSave,onFailure,onPendingChange}:{office:string;busy:boolean;onSave:(v:CreateRequestInput)=>void;onFailure:(e:RequestsError)=>void;onPendingChange?:(pending:boolean)=>void}){
- const auth=useAuth(),[resume,setResume]=useState<DocumentBookingResult>(),[resumeError,setResumeError]=useState(false),[resumeTick,setResumeTick]=useState(0);
- const [categories,setCategories]=useState<ServiceCategory[]>([]),[category,setCategory]=useState(''),[root,setRoot]=useState(''),[error,setError]=useState(''),[tick,setTick]=useState(0),[nested,setNested]=useState(false);
- const onPending=useRef(onPendingChange);onPending.current=onPendingChange;
- useEffect(()=>{onPending.current?.(nested);},[nested]);
- useEffect(()=>()=>{onPending.current?.(false);},[]);
- useEffect(()=>{const c=new AbortController();setError('');void categoriesApi.state(office,c.signal).then(v=>{if(!c.signal.aborted)setCategories(v.items);}).catch(e=>{if(c.signal.aborted)return;setError(e instanceof Error?e.message:'Não foi possível consultar as categorias.');if(e instanceof CategoriesError&&[401,403].includes(e.status)){setCategories([]);onFailure(new RequestsError(e.status));}});return()=>c.abort();},[office,tick]);
- useEffect(()=>{const key=peekIntakeNonce33(auth.sessionKey,office);if(!key)return;const c=new AbortController();setNested(true);setResumeError(false);void intakeApi33.resume(office,key,c.signal).then(v=>{if(!c.signal.aborted){if(v)setResume(v);else clearIntakeNonce33(auth.sessionKey,office);setNested(false);setError('');}}).catch(e=>{if(!c.signal.aborted){setError(e instanceof Error?e.message:'Não foi possível conferir a tentativa anterior.');if(e instanceof CommercialError&&[401,403].includes(e.status)){setResume(undefined);setCategories([]);setNested(false);clearIntakeNonce33(auth.sessionKey,office);onFailure(new RequestsError(e.status));}else setResumeError(true);}});return()=>c.abort();},[office,auth.sessionKey,resumeTick]);
- const selected=categories.find(c=>c.id===category),locked=busy||nested;
- void onSave;
- if(resume)return <IntakeCompletion33 office={office} result={resume} onFailure={onFailure} onPendingChange={setNested} onReset={()=>{setResume(undefined);setNested(false);}}/>;
- return <div className="request-form"><CategorySelection categories={categories} value={category} rootId={root}
-   disabled={locked} label="Categoria da solicitação" onChange={(id,parent)=>{setRoot(parent);setCategory(id);setError('');}}/>
- {error&&<p role="alert" className="form-feedback error">{error} <button className="team-text-button" disabled={locked} onClick={()=>setTick(n=>n+1)}>Atualizar categorias</button></p>}
- {resumeError?<button className="team-text-button" onClick={()=>setResumeTick(n=>n+1)}>Conferir tentativa anterior</button>:selected&&<CategoryRequestForm key={category} office={office} category={selected} busy={busy} onBack={()=>{setCategory('');setRoot('');}} onFailure={onFailure} onPendingChange={setNested}/>}
- </div>;
+export function ClientRequestForm({
+  office,
+  busy,
+  onSave,
+  onFailure,
+  onPendingChange,
+}: {
+  office: string;
+  busy: boolean;
+  onSave: (v: CreateRequestInput) => void;
+  onFailure: (e: RequestsError) => void;
+  onPendingChange?: (pending: boolean) => void;
+}) {
+  const auth = useAuth();
+  const [resume, setResume] = useState<DocumentBookingResult>();
+  const [resumeError, setResumeError] = useState(false);
+  const [resumeTick, setResumeTick] = useState(0);
+  const [categories, setCategories] = useState<ServiceCategory[]>([]);
+  const [category, setCategory] = useState('');
+  const [root, setRoot] = useState('');
+  const [error, setError] = useState('');
+  const [tick, setTick] = useState(0);
+  const [nested, setNested] = useState(false);
+
+  const onPending = useRef(onPendingChange);
+  onPending.current = onPendingChange;
+  useEffect(() => {
+    onPending.current?.(nested);
+  }, [nested]);
+  useEffect(() => () => onPending.current?.(false), []);
+
+  useEffect(() => {
+    const c = new AbortController();
+    setError('');
+    void categoriesApi
+      .state(office, c.signal)
+      .then(v => {
+        if (!c.signal.aborted) setCategories(v.items);
+      })
+      .catch(e => {
+        if (c.signal.aborted) return;
+        setError(
+          e instanceof Error
+            ? e.message
+            : 'Não foi possível consultar as categorias.',
+        );
+        if (e instanceof CategoriesError && [401, 403].includes(e.status)) {
+          setCategories([]);
+          onFailure(new RequestsError(e.status));
+        }
+      });
+    return () => c.abort();
+  }, [office, tick, onFailure]);
+
+  useEffect(() => {
+    const key = peekIntakeNonce33(auth.sessionKey, office);
+    if (!key) return;
+    const c = new AbortController();
+    setNested(true);
+    setResumeError(false);
+    void intakeApi33
+      .resume(office, key, c.signal)
+      .then(v => {
+        if (!c.signal.aborted) {
+          if (v) setResume(v);
+          else clearIntakeNonce33(auth.sessionKey, office);
+          setNested(false);
+          setError('');
+        }
+      })
+      .catch(e => {
+        if (!c.signal.aborted) {
+          setError(
+            e instanceof Error
+              ? e.message
+              : 'Não foi possível conferir a tentativa anterior.',
+          );
+          if (e instanceof CommercialError && [401, 403].includes(e.status)) {
+            setResume(undefined);
+            setCategories([]);
+            setNested(false);
+            clearIntakeNonce33(auth.sessionKey, office);
+            onFailure(new RequestsError(e.status));
+          } else {
+            setResumeError(true);
+          }
+        }
+      });
+    return () => c.abort();
+  }, [office, auth.sessionKey, resumeTick, onFailure]);
+
+  const selected = categories.find(c => c.id === category);
+  const locked = busy || nested;
+  void onSave;
+
+  return (
+    <div className="request-form requests-subview-card">
+      <div className="requests-subview-scroll">
+        {resume ? (
+          <IntakeCompletion33
+            office={office}
+            result={resume}
+            onFailure={onFailure}
+            onPendingChange={setNested}
+            onReset={() => {
+              setResume(undefined);
+              setNested(false);
+            }}
+          />
+        ) : (
+          <>
+            <CategorySelection
+              categories={categories}
+              value={category}
+              rootId={root}
+              disabled={locked}
+              label="Categoria da solicitação"
+              onChange={(id, parent) => {
+                setRoot(parent);
+                setCategory(id);
+                setError('');
+              }}
+            />
+            {error && (
+              <p role="alert" className="form-feedback error">
+                {error}{' '}
+                <button
+                  type="button"
+                  className="team-text-button"
+                  disabled={locked}
+                  onClick={() => setTick(n => n + 1)}
+                >
+                  Atualizar categorias
+                </button>
+              </p>
+            )}
+            {resumeError ? (
+              <button
+                type="button"
+                className="team-text-button"
+                onClick={() => setResumeTick(n => n + 1)}
+              >
+                Conferir tentativa anterior
+              </button>
+            ) : (
+              selected && (
+                <CategoryRequestForm
+                  key={category}
+                  office={office}
+                  category={selected}
+                  busy={busy}
+                  onBack={() => {
+                    setCategory('');
+                    setRoot('');
+                  }}
+                  onFailure={onFailure}
+                  onPendingChange={setNested}
+                />
+              )
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
 }
