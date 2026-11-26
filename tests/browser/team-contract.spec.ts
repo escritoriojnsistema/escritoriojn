@@ -539,9 +539,9 @@ for(const scenario of [
 ])test(`Login e validade do convite: ${scenario.portal} / ${scenario.code} / ${scenario.guidance}`,async({page})=>{
  const email='login-fixture@example.test',password='fixture-password';
  let reads=0;
- await page.route('https://team-ui.supabase.co/auth/v1/token?grant_type=password',route=>route.fulfill({
-  status:400,headers:{'x-supabase-api-version':'2024-01-01'},
-  json:{code:scenario.code,msg:'test provider result'},
+ await page.route(url=>url.origin==='https://team-ui.supabase.co' && url.pathname==='/auth/v1/token' && url.searchParams.get('grant_type')==='password',route=>route.fulfill({
+  status:400,headers:{'access-control-allow-origin':'*','access-control-expose-headers':'x-supabase-api-version','x-supabase-api-version':'2024-01-01'},
+  json:{code:scenario.code,error_code:scenario.code,msg:'test provider result'},
  }));
  await page.route('**/api/auth/team-login-guidance',route=>{
   reads++;

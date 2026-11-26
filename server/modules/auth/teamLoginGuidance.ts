@@ -6,7 +6,7 @@ import { errorResponse } from '../../errors.js';
 
 const providerOptions = {
   auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
-  global: { fetch: (input: RequestInfo | URL, init?: RequestInit) => fetch(input, {
+  global: { fetch: (input: Parameters<typeof fetch>[0], init?: RequestInit) => fetch(input, {
     ...init, signal: AbortSignal.any([AbortSignal.timeout(3500), ...(init?.signal ? [init.signal] : [])]),
   }) },
 };
