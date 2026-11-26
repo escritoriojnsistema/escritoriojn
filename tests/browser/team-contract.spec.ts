@@ -526,5 +526,5 @@ test('convites vencidos saem da lista e os aceitos podem ser movidos para Arquiv
  await expect(page.getByText(soon.name,{exact:true})).toBeVisible();
  await expect(page.getByText(soon.name,{exact:true})).toHaveCount(0,{timeout:8_000});
  await page.getByRole('button',{name:/Arquivar convite/}).click();
- await expect(page.getByRole('status')).toContainText('Convite aceito movido para Arquivados');
+ await expect(page.getByText('Convite aceito movido para Arquivados.',{exact:true})).toBeVisible();
 });
