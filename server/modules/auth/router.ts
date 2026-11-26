@@ -4,6 +4,7 @@ import { projectAccessContexts, uuidPattern, type AccessResponse } from '../../.
 import { validPublicConnection } from '../../../shared/connection.js';
 import { errorResponse } from '../../errors.js';
 import { authenticatedClient } from './client.js';
+import { teamLoginGuidance } from './teamLoginGuidance.js';
 import { activitySnapshot } from '../../../shared/sessionActivity.js';
 
 export const authRouter=Router();
@@ -12,6 +13,10 @@ authRouter.use((_req,res,next)=>{
   res.setHeader('CDN-Cache-Control','no-store');
   res.vary('Authorization'); next();
 });
+authRouter.post('/team-login-guidance', (req,res,next) => {
+  if (!req.is('application/json')) { res.sendStatus(415); return; }
+  next();
+}, json({ limit: '2kb' }), teamLoginGuidance);
 authRouter.get('/context',async(req,res)=>{
   const token=/^Bearer ([A-Za-z0-9_.-]{1,8192})$/i.exec(req.get('Authorization')??'')?.[1];
   if (!token) {errorResponse(res,401,'AUTH_REQUIRED','Entre novamente para continuar.');return;}

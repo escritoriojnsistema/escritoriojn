@@ -528,3 +528,30 @@ test('convites vencidos saem da lista e os aceitos podem ser movidos para Arquiv
  await page.getByRole('button',{name:/Arquivar convite/}).click();
  await expect(page.getByText('Convite aceito movido para Arquivados.',{exact:true})).toBeVisible();
 });
+
+for(const scenario of [
+ {portal:'/login', code:'email_not_confirmed', guidance:'invitation_expired', expected:'Conta com convite expirado. Se você é funcionário novo, por favor solicite um novo convite ao responsável.', proof:'password'},
+ {portal:'/login', code:'email_not_confirmed', guidance:'confirm_email', expected:'Confirme seu e-mail antes de entrar.', proof:'password'},
+ {portal:'/login', code:'email_not_confirmed', guidance:'invitation_required', expected:'Esta conta não tem um convite ativo para a equipe. Se você é funcionário novo, por favor solicite um novo convite ao responsável.', proof:'password'},
+ {portal:'/login?invite='+invitation, code:'invalid_credentials', guidance:'invitation_expired', expected:'Conta com convite expirado. Se você é funcionário novo, por favor solicite um novo convite ao responsável.', proof:'link'},
+ {portal:'/login', code:'invalid_credentials', guidance:'unavailable', expected:'E-mail ou senha incorretos. Se o seu convite expirou, solicite um novo convite ao responsável.', proof:'none'},
+ {portal:'/login-cliente', code:'email_not_confirmed', guidance:'unavailable', expected:'Confirme seu e-mail antes de entrar.', proof:'none'},
+])test(`Login e validade do convite: ${scenario.portal} / ${scenario.code} / ${scenario.guidance}`,async({page})=>{
+ const email='login-fixture@example.test',password='fixture-password';
+ let reads=0;
+ await page.route(url=>url.origin==='https://team-ui.supabase.co' && url.pathname==='/auth/v1/token' && url.searchParams.get('grant_type')==='password',route=>route.fulfill({
+  status:400,headers:{'access-control-allow-origin':'*','access-control-expose-headers':'x-supabase-api-version','x-supabase-api-version':'2024-01-01'},
+  json:{code:scenario.code,error_code:scenario.code,msg:'test provider result'},
+ }));
+ await page.route('**/api/auth/team-login-guidance',route=>{
+  reads++;
+  expect(route.request().postDataJSON()).toEqual(scenario.proof==='link'?{email,invitation_id:invitation}:{email,password});
+  return route.fulfill({json:{guidance:scenario.guidance}});
+ });
+ await page.goto(scenario.portal);
+ await page.getByLabel('E-mail',{exact:true}).fill(email);
+ await page.getByLabel('Senha',{exact:true}).fill(password);
+ await page.getByRole('button',{name:/Entrar na área/}).click();
+ await expect(page.getByRole('alert')).toHaveText(scenario.expected);
+ expect(reads).toBe(scenario.proof==='none'?0:1);
+});
