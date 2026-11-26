@@ -75,7 +75,6 @@ export type HomeCardKey =
   | 'team'
   | 'settings'
   | 'audit'
-  | 'archives'
   | 'notifications'
   | 'account';
 
@@ -90,11 +89,9 @@ export type SmartHomePlan = HomeLayoutPlan & {
   financeMode: HomeFinanceCardMode | null;
   canRequests: boolean;
   canCustomers: boolean;
-  hasRural: boolean;
   servicesPath: string;
   servicesLabel: string;
   servicesDescription: string;
-  settingsDescription: string;
   adaptiveGridCards: HomeCardKey[];
 };
 
@@ -296,8 +293,8 @@ export function resolveHomeLayout(flags: {
 /**
  * Intelligently builds the single-screen operational home layout for every
  * role (Super administrador, Administrador, Funcionário with any subset of
- * permissions, and Cliente). Every genuinely granted module is surfaced
- * without dropping permissions or overflowing the single-screen viewport.
+ * permissions, and Cliente) so the dashboard automatically adapts to what the
+ * user is allowed to access without ever overflowing a single viewport.
  */
 export function resolveSmartHomePlan(
   context: AccessContext,
@@ -307,10 +304,8 @@ export function resolveSmartHomePlan(
   const has = (...permissions: string[]) =>
     permissions.every(permission => context.permissions.includes(permission));
 
-  const isAdminRole = !client && (context.role_code === 'owner' || context.role_code === 'admin');
   const canRequests = client || has('requests.read');
   const canCustomers = !client && has('customers.read');
-  const hasRural = canCustomers && has('rural.read');
   const canFiles = client || has('requests.read', 'files.read');
   const canDocuments =
     client ||
@@ -320,11 +315,11 @@ export function resolveSmartHomePlan(
   const hasChecklistsOnly = !client && !hasServicesCatalog && has('requests.read', 'checklists.read');
   const canServices = hasServicesCatalog || hasChecklistsOnly;
   const canTeam = !client && has('users.manage');
-  const canSettings = isAdminRole && has('settings.access');
-  const canAudit = !client && has('audit.read');
-  const canArchives =
+  const canSettings =
     !client &&
-    (has('archives.manage') || (isAdminRole && has('requests.read', 'requests.archives.manage')));
+    (context.role_code === 'owner' || context.role_code === 'admin') &&
+    has('settings.access');
+  const canAudit = !client && has('audit.read');
 
   const servicesPath = hasServicesCatalog ? paths.services : paths.checklists;
   const servicesLabel = hasServicesCatalog ? 'Serviços' : 'Checklist';
@@ -332,25 +327,14 @@ export function resolveSmartHomePlan(
     ? 'Catálogo, prazos e checklists operacionais'
     : 'Pendências e itens de conferência dos atendimentos';
 
-  const settingsParts: string[] = [];
-  if (has('categories.manage')) settingsParts.push('categorias');
-  if (has('access.manage')) settingsParts.push('acessos');
-  if (has('payments.providers.manage')) settingsParts.push('pagamentos');
-  const settingsDescription =
-    settingsParts.length > 0
-      ? `Gestão de ${settingsParts.join(', ')} e privacidade`
-      : 'Privacidade e parâmetros do escritório';
-
   if (client) {
     return {
       financeMode,
       canRequests: true,
       canCustomers: false,
-      hasRural: false,
       servicesPath,
       servicesLabel,
       servicesDescription,
-      settingsDescription,
       showFinanceBanner: Boolean(financeMode),
       showRequestsPrimary: true,
       sideCards: ['files', 'documents'],
@@ -366,23 +350,25 @@ export function resolveSmartHomePlan(
   if (canDocuments) dailyPool.push('documents');
   if (canServices) dailyPool.push('services');
 
-  // Management & governance cards prioritized in the bottom dock when Requests is primary.
+  // Management & governance cards prioritized in the full-width bottom banner when Requests is primary.
   const managementPool: HomeCardKey[] = [];
   if (canTeam) managementPool.push('team');
   if (canSettings) managementPool.push('settings');
   if (canAudit) managementPool.push('audit');
-  if (canArchives) managementPool.push('archives');
 
-  // Case 1: User has Solicitações access -> 7+5 executive Bento + dynamic bottom module dock
+  // Case 1: User has Solicitações access -> 7+5 executive Bento + bottom banner
   if (canRequests) {
     const orderedForSide = [...dailyPool, ...managementPool];
     const sideCards = orderedForSide.slice(0, 2);
 
     const used = new Set<HomeCardKey>(sideCards);
-    const remainingDaily = dailyPool.filter(card => !used.has(card));
     const remainingManagement = managementPool.filter(card => !used.has(card));
-    // Surface EVERY remaining authorized module dynamically — never drop newly granted permissions.
-    const bottomCards = [...remainingDaily, ...remainingManagement];
+    const remainingDaily = dailyPool.filter(card => !used.has(card));
+    const bottomPool = [...remainingManagement, ...remainingDaily];
+
+    // Keep single-screen budget: 1 wide bottom banner when finance is shown, up to 2 when no finance banner.
+    const maxBottom = financeMode ? 1 : 2;
+    const bottomCards = bottomPool.slice(0, maxBottom);
 
     // Balance the 5-col stack beside Solicitações when fewer than 2 extra modules are granted.
     if (sideCards.length === 0) {
@@ -395,11 +381,9 @@ export function resolveSmartHomePlan(
       financeMode,
       canRequests: true,
       canCustomers,
-      hasRural,
       servicesPath,
       servicesLabel,
       servicesDescription,
-      settingsDescription,
       showFinanceBanner: Boolean(financeMode),
       showRequestsPrimary: true,
       sideCards,
@@ -409,10 +393,9 @@ export function resolveSmartHomePlan(
   }
 
   // Case 2: Employee/Admin WITHOUT Solicitações -> Smart Adaptive Full-Height Grid
-  // Surface every genuinely permitted module; top 4 fill the primary grid and extras sit in the bottom dock.
-  const authorizedCards: HomeCardKey[] = [...dailyPool, ...managementPool];
-  const adaptiveCards: HomeCardKey[] = authorizedCards.slice(0, 4);
-  const bottomCards: HomeCardKey[] = authorizedCards.slice(4);
+  // Gather all genuinely permitted modules and organize them into a balanced single-screen grid (max 4 cards).
+  const adaptiveCards: HomeCardKey[] = [...dailyPool, ...managementPool].slice(0, 4);
+  const bottomCards: HomeCardKey[] = [];
 
   if (adaptiveCards.length === 0) {
     adaptiveCards.push('notifications', 'account');
@@ -430,11 +413,9 @@ export function resolveSmartHomePlan(
     financeMode,
     canRequests: false,
     canCustomers,
-    hasRural,
     servicesPath,
     servicesLabel,
     servicesDescription,
-    settingsDescription,
     showFinanceBanner: Boolean(financeMode),
     showRequestsPrimary: false,
     sideCards: [],

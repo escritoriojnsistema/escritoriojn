@@ -202,40 +202,26 @@ test('resolveHomeLayout keeps balanced Bento slots for super admin, client, and 
   assert.deepEqual(minimalEmployeeLayout.bottomCards, ['customers', 'account']);
 });
 
-test('resolveSmartHomePlan surfaces all authorized modules in dock for Super administrador', () => {
+test('resolveSmartHomePlan matches executive 5-slot layout for Super administrador', () => {
   const plan = resolveSmartHomePlan(
     makeContext('owner', [
       'cash.read',
       'cash.read_all',
       'requests.read',
       'customers.read',
-      'rural.read',
       'files.read',
       'documents.read',
       'services.read',
       'users.manage',
       'settings.access',
-      'categories.manage',
-      'access.manage',
-      'payments.providers.manage',
       'audit.read',
-      'archives.manage',
     ]),
     false,
   );
   assert.equal(plan.financeMode?.kind, 'cash_all');
   assert.equal(plan.showRequestsPrimary, true);
-  assert.equal(plan.hasRural, true);
-  assert.equal(plan.settingsDescription, 'Gestão de categorias, acessos, pagamentos e privacidade');
   assert.deepEqual(plan.sideCards, ['customers', 'files']);
-  assert.deepEqual(plan.bottomCards, [
-    'documents',
-    'services',
-    'team',
-    'settings',
-    'audit',
-    'archives',
-  ]);
+  assert.deepEqual(plan.bottomCards, ['team']);
   assert.deepEqual(plan.adaptiveGridCards, []);
 });
 
@@ -254,59 +240,7 @@ test('resolveSmartHomePlan adapts intelligently for Administrador without users.
   assert.equal(plan.financeMode?.kind, 'cash_own');
   assert.equal(plan.showRequestsPrimary, true);
   assert.deepEqual(plan.sideCards, ['customers', 'files']);
-  assert.deepEqual(plan.bottomCards, ['documents', 'settings']);
-});
-
-test('resolveSmartHomePlan reacts to every added or removed permission for Funcionário', () => {
-  const requestsOnly = resolveSmartHomePlan(
-    makeContext('employee', ['requests.read']),
-    false,
-  );
-  assert.equal(requestsOnly.financeMode, null);
-  assert.equal(requestsOnly.showRequestsPrimary, true);
-  assert.deepEqual(requestsOnly.sideCards, ['notifications', 'account']);
-  assert.deepEqual(requestsOnly.bottomCards, []);
-
-  const withCustomers = resolveSmartHomePlan(
-    makeContext('employee', ['requests.read', 'customers.read']),
-    false,
-  );
-  assert.deepEqual(withCustomers.sideCards, ['customers', 'account']);
-  assert.deepEqual(withCustomers.bottomCards, []);
-
-  const withFilesAndServices = resolveSmartHomePlan(
-    makeContext('employee', ['requests.read', 'customers.read', 'files.read', 'services.read']),
-    false,
-  );
-  assert.deepEqual(withFilesAndServices.sideCards, ['customers', 'files']);
-  assert.deepEqual(withFilesAndServices.bottomCards, ['services']);
-
-  const withTemplatesAndAudit = resolveSmartHomePlan(
-    makeContext('employee', [
-      'requests.read',
-      'customers.read',
-      'files.read',
-      'services.read',
-      'templates.read',
-      'audit.read',
-    ]),
-    false,
-  );
-  assert.deepEqual(withTemplatesAndAudit.sideCards, ['customers', 'files']);
-  assert.deepEqual(withTemplatesAndAudit.bottomCards, ['documents', 'services', 'audit']);
-
-  // Removing services.read immediately drops services from bottomCards
-  const afterRemovingServices = resolveSmartHomePlan(
-    makeContext('employee', [
-      'requests.read',
-      'customers.read',
-      'files.read',
-      'templates.read',
-      'audit.read',
-    ]),
-    false,
-  );
-  assert.deepEqual(afterRemovingServices.bottomCards, ['documents', 'audit']);
+  assert.deepEqual(plan.bottomCards, ['settings']);
 });
 
 test('resolveSmartHomePlan adapts for Funcionário with only Documentos and Serviços (no requests/cash)', () => {
@@ -318,27 +252,6 @@ test('resolveSmartHomePlan adapts for Funcionário with only Documentos and Serv
   assert.equal(plan.showRequestsPrimary, false);
   assert.equal(plan.servicesLabel, 'Serviços');
   assert.deepEqual(plan.adaptiveGridCards, ['documents', 'services', 'notifications', 'account']);
-  assert.deepEqual(plan.bottomCards, []);
-});
-
-test('resolveSmartHomePlan overflows extra modules into bottom dock when no requests.read', () => {
-  const plan = resolveSmartHomePlan(
-    makeContext('admin', [
-      'cash.read',
-      'customers.read',
-      'templates.read',
-      'services.read',
-      'users.manage',
-      'settings.access',
-      'audit.read',
-      'archives.manage',
-    ]),
-    false,
-  );
-  assert.equal(plan.financeMode?.kind, 'cash_own');
-  assert.equal(plan.showRequestsPrimary, false);
-  assert.deepEqual(plan.adaptiveGridCards, ['customers', 'documents', 'services', 'team']);
-  assert.deepEqual(plan.bottomCards, ['settings', 'audit', 'archives']);
 });
 
 test('resolveSmartHomePlan adapts for Funcionário with only Caixa individual and Clientes', () => {

@@ -1,6 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import {
-  Archive,
   ArrowRight,
   Bell,
   BriefcaseBusiness,
@@ -33,11 +32,9 @@ import {
 } from './homePanelModel';
 import { OperationalAccess, OperationalFeedback } from '../operation/OperationalAccess';
 import { OperationHeading } from '../operation/OperationLayout';
-import { operationRoleNames } from '../operation/navigation';
 import { customersApi } from '../customers/api';
 import { cashApi } from '../cash/api';
 import { commercialRequest } from '../documentCommercial/api';
-import { notificationsApi } from '../notifications/api';
 
 function RequestsChart({ counts, client }: { counts: RequestHomeCounts; client: boolean }) {
   const { total, rows } = buildRequestStageRows(counts, client);
@@ -82,7 +79,7 @@ function BentoCard({
   title: string;
   description: string;
   icon: ReactNode;
-  variant?: 'finance' | 'featured' | 'compact' | 'wide' | 'adaptive' | 'dock';
+  variant?: 'finance' | 'featured' | 'compact' | 'wide' | 'adaptive';
   cardKey?: string;
   trailingText?: string;
   statusBadge?: { label: string; tone: 'active' | 'success' | 'warning' | 'neutral' };
@@ -93,7 +90,6 @@ function BentoCard({
       className={`operation-card home-bento-card is-${variant}${cardKey ? ` home-card-${cardKey}` : ''}`}
       to={path}
       state={state}
-      title={variant === 'dock' ? `${title} — ${description}` : undefined}
     >
       <div className="operation-card-head">
         <span className="operation-card-icon" aria-hidden="true">
@@ -108,11 +104,7 @@ function BentoCard({
             <span className={`home-status-pill tone-${statusBadge.tone}`}>{statusBadge.label}</span>
           )}
           {trailingText && <span className="home-card-cta">{trailingText}</span>}
-          <ArrowRight
-            className="operation-card-arrow"
-            size={variant === 'dock' ? 15 : 18}
-            aria-hidden="true"
-          />
+          <ArrowRight className="operation-card-arrow" size={18} aria-hidden="true" />
         </span>
       </div>
       {children}
@@ -265,26 +257,13 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
   const office = context.office_id;
   const plan = resolveSmartHomePlan(context, client);
   const { financeMode, canRequests, canCustomers } = plan;
-  const showNotificationsCard =
-    plan.sideCards.includes('notifications') ||
-    plan.adaptiveGridCards.includes('notifications') ||
-    plan.bottomCards.includes('notifications');
 
   const [counts, setCounts] = useState<RequestHomeCounts | null | undefined>();
   const [totalCustomers, setTotalCustomers] = useState<number | null | undefined>();
   const [cashData, setCashData] = useState<CashDashboard | null | undefined>();
   const [clientFinance, setClientFinance] = useState<ClientFinance | null | undefined>();
-  const [unreadNotifications, setUnreadNotifications] = useState<number | null | undefined>();
 
   const financeKind = financeMode?.kind ?? 'none';
-
-  useEffect(() => {
-    if (!canRequests) setCounts(undefined);
-    if (!canCustomers) setTotalCustomers(undefined);
-    if (financeKind !== 'cash_all' && financeKind !== 'cash_own') setCashData(undefined);
-    if (financeKind !== 'client_payments') setClientFinance(undefined);
-    if (!showNotificationsCard) setUnreadNotifications(undefined);
-  }, [canRequests, canCustomers, financeKind, showNotificationsCard]);
 
   useEffect(() => {
     let running: AbortController | undefined;
@@ -356,19 +335,6 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
         );
       }
 
-      if (showNotificationsCard) {
-        tasks.push(
-          notificationsApi
-            .summary(office, controller.signal)
-            .then(data => {
-              if (!controller.signal.aborted) setUnreadNotifications(data.unread);
-            })
-            .catch(() => {
-              if (!controller.signal.aborted) setUnreadNotifications(null);
-            }),
-        );
-      }
-
       void Promise.all(tasks).finally(() => {
         if (running === controller) running = undefined;
       });
@@ -378,29 +344,21 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
     const timer = window.setInterval(refresh, 60_000);
     window.addEventListener('focus', refresh);
     document.addEventListener('visibilitychange', refresh);
-    window.addEventListener('jn:notices-changed', refresh);
     return () => {
       running?.abort();
       window.clearInterval(timer);
       window.removeEventListener('focus', refresh);
       document.removeEventListener('visibilitychange', refresh);
-      window.removeEventListener('jn:notices-changed', refresh);
     };
-  }, [office, canRequests, canCustomers, financeKind, showNotificationsCard]);
+  }, [office, canRequests, canCustomers, financeKind]);
 
   function renderSecondaryCard(key: HomeCardKey, placement: 'side' | 'bottom' | 'adaptive') {
-    const isDock = placement === 'bottom' && plan.bottomCards.length >= 2;
-    const isDenseDock = isDock && plan.bottomCards.length >= 5;
     const variant =
       placement === 'adaptive'
         ? 'adaptive'
-        : isDock
-          ? 'dock'
-          : placement === 'bottom' && plan.bottomCards.length === 1
-            ? 'wide'
-            : 'compact';
-    const iconSize = isDock ? 17 : 20;
-    const showStrip = variant !== 'wide' && variant !== 'dock';
+        : placement === 'bottom' && plan.bottomCards.length === 1
+          ? 'wide'
+          : 'compact';
 
     if (key === 'customers') {
       return (
@@ -411,17 +369,13 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
           path={paths.customers}
           state={{ office_id: office }}
           title="Clientes"
-          description={
-            plan.hasRural
-              ? 'Cadastro, fichas e imóveis rurais'
-              : 'Cadastro e busca de fichas do escritório'
-          }
-          icon={<UserRoundSearch size={iconSize} />}
+          description="Cadastro e busca de fichas do escritório"
+          icon={<UserRoundSearch size={20} />}
           trailingText={variant === 'wide' ? 'Abrir fichas' : undefined}
         >
-          {showStrip && (
+          {variant !== 'wide' && (
             <div className="home-card-strip">
-              <span>{plan.hasRural ? 'Fichas e imóveis' : 'Fichas ativas'}</span>
+              <span>Fichas ativas</span>
               {typeof totalCustomers === 'number' ? (
                 <strong className="home-customer-count">
                   {totalCustomers === 0
@@ -447,12 +401,12 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
           variant={variant}
           path={client ? paths.clientAttachments : paths.attachments}
           state={{ office_id: office }}
-          title={isDenseDock ? 'Anexos' : 'Anexos privados'}
+          title="Anexos privados"
           description="Arquivos dos seus atendimentos"
-          icon={<Paperclip size={iconSize} />}
+          icon={<Paperclip size={20} />}
           trailingText={variant === 'wide' ? 'Abrir arquivos' : undefined}
         >
-          {showStrip && (
+          {variant !== 'wide' && (
             <div className="home-card-strip">
               <span>Acesso restrito</span>
               <strong className="is-link-accent">Abrir arquivos</strong>
@@ -476,10 +430,10 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
               ? 'Modelos disponíveis e entregas do escritório'
               : 'Modelos, elaboração e entregas documentais'
           }
-          icon={<FileText size={iconSize} />}
+          icon={<FileText size={20} />}
           trailingText={variant === 'wide' ? 'Abrir documentos' : undefined}
         >
-          {showStrip && (
+          {variant !== 'wide' && (
             <div className="home-card-strip">
               <span>{client ? 'Portal documental' : 'Biblioteca e entregas'}</span>
               <strong className="is-link-accent">Abrir documentos</strong>
@@ -499,10 +453,10 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
           state={{ office_id: office }}
           title={plan.servicesLabel}
           description={plan.servicesDescription}
-          icon={<BriefcaseBusiness size={iconSize} />}
+          icon={<BriefcaseBusiness size={20} />}
           trailingText={variant === 'wide' ? `Abrir ${plan.servicesLabel.toLowerCase()}` : undefined}
         >
-          {showStrip && (
+          {variant !== 'wide' && (
             <div className="home-card-strip">
               <span>Escopo autorizado</span>
               <strong className="is-link-accent">Abrir {plan.servicesLabel.toLowerCase()}</strong>
@@ -520,12 +474,12 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
           variant={variant}
           path={paths.teamManagement}
           state={{ office_id: office }}
-          title={isDenseDock ? 'Equipe' : isDock ? 'Equipe e convites' : 'Gerenciar equipe e convites'}
+          title="Gerenciar equipe e convites"
           description="Pessoas e permissões do escritório"
-          icon={<UsersRound size={iconSize} />}
+          icon={<UsersRound size={20} />}
           trailingText={variant === 'wide' ? 'Configurar acessos' : undefined}
         >
-          {showStrip && (
+          {variant !== 'wide' && (
             <div className="home-card-strip">
               <span>Equipe do escritório</span>
               <strong className="is-link-accent">Configurar acessos</strong>
@@ -543,12 +497,12 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
           variant={variant}
           path={paths.settings}
           state={{ office_id: office }}
-          title={isDock ? 'Configurações' : 'Configurações do escritório'}
-          description={plan.settingsDescription}
-          icon={<Settings size={iconSize} />}
+          title="Configurações do escritório"
+          description="Categorias, acessos, privacidade e parâmetros"
+          icon={<Settings size={20} />}
           trailingText={variant === 'wide' ? 'Abrir configurações' : undefined}
         >
-          {showStrip && (
+          {variant !== 'wide' && (
             <div className="home-card-strip">
               <span>Administração</span>
               <strong className="is-link-accent">Abrir configurações</strong>
@@ -568,10 +522,10 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
           state={{ office_id: office }}
           title="Auditoria"
           description="Histórico oficial de registros do escritório"
-          icon={<History size={iconSize} />}
+          icon={<History size={20} />}
           trailingText={variant === 'wide' ? 'Ver registros' : undefined}
         >
-          {showStrip && (
+          {variant !== 'wide' && (
             <div className="home-card-strip">
               <span>Trilha de controle</span>
               <strong className="is-link-accent">Ver registros</strong>
@@ -581,39 +535,7 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
       );
     }
 
-    if (key === 'archives') {
-      return (
-        <BentoCard
-          key="archives"
-          cardKey="archives"
-          variant={variant}
-          path={paths.settingsArchives}
-          state={{ office_id: office }}
-          title="Arquivados"
-          description="Registros arquivados e retenção do escritório"
-          icon={<Archive size={iconSize} />}
-          trailingText={variant === 'wide' ? 'Abrir arquivados' : undefined}
-        >
-          {showStrip && (
-            <div className="home-card-strip">
-              <span>Acervo arquivado</span>
-              <strong className="is-link-accent">Abrir arquivados</strong>
-            </div>
-          )}
-        </BentoCard>
-      );
-    }
-
     if (key === 'notifications') {
-      const unreadBadge =
-        typeof unreadNotifications === 'number' && !isDock
-          ? unreadNotifications > 0
-            ? {
-                label: `${unreadNotifications} ${unreadNotifications === 1 ? 'novo' : 'novos'}`,
-                tone: 'warning' as const,
-              }
-            : { label: 'Em dia', tone: 'neutral' as const }
-          : undefined;
       return (
         <BentoCard
           key="notifications"
@@ -623,19 +545,12 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
           state={{ office_id: office }}
           title="Notificações"
           description="Avisos e movimentações recentes da sua conta"
-          icon={<Bell size={iconSize} />}
-          statusBadge={unreadBadge}
+          icon={<Bell size={20} />}
           trailingText={variant === 'wide' ? 'Ver avisos' : undefined}
         >
-          {showStrip && (
+          {variant !== 'wide' && (
             <div className="home-card-strip">
-              <span>
-                {typeof unreadNotifications === 'number'
-                  ? unreadNotifications === 0
-                    ? 'Nenhum aviso não lido'
-                    : `${unreadNotifications} ${unreadNotifications === 1 ? 'aviso não lido' : 'avisos não lidos'}`
-                  : 'Central de avisos'}
-              </span>
+              <span>Central de avisos</span>
               <strong className="is-link-accent">Ver avisos</strong>
             </div>
           )}
@@ -650,16 +565,14 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
         variant={variant}
         path={client ? paths.clientAccount : paths.account}
         state={{ office_id: office }}
-        title={isDock ? 'Minha conta' : 'Ver minha conta'}
+        title="Ver minha conta"
         description="Dados de acesso e segurança"
-        icon={<CircleUserRound size={iconSize} />}
+        icon={<CircleUserRound size={20} />}
         trailingText={variant === 'wide' ? 'Gerenciar conta' : undefined}
       >
-        {showStrip && (
+        {variant !== 'wide' && (
           <div className="home-card-strip">
-            <span>
-              {context.display_name || operationRoleNames[context.role_code] || 'Acesso pessoal'}
-            </span>
+            <span>Acesso pessoal</span>
             <strong className="is-link-accent">Abrir conta</strong>
           </div>
         )}
@@ -670,7 +583,7 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
   return (
     <section className="operation-shortcuts" aria-label="Acesso rápido">
       <div
-        className={`home-bento-grid${!plan.showFinanceBanner ? ' is-no-finance' : ''}${!plan.showRequestsPrimary ? ' is-adaptive-only' : ''}${plan.bottomCards.length === 0 ? ' is-no-bottom' : ''}${plan.bottomCards.length >= 2 ? ' has-dock' : ''}`}
+        className={`home-bento-grid${!plan.showFinanceBanner ? ' is-no-finance' : ''}${!plan.showRequestsPrimary ? ' is-adaptive-only' : ''}`}
       >
         {financeMode && (
           <div className="home-bento-finance">
@@ -715,7 +628,7 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
             </div>
 
             {plan.sideCards.length > 0 && (
-              <div className="home-bento-stack" data-count={plan.sideCards.length}>
+              <div className="home-bento-stack">
                 {plan.sideCards.map(key => renderSecondaryCard(key, 'side'))}
               </div>
             )}
@@ -733,8 +646,7 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
 
         {plan.bottomCards.length > 0 && (
           <div
-            className={`home-bento-bottom${plan.bottomCards.length >= 2 ? ' is-dock' : ''}`}
-            data-count={plan.bottomCards.length}
+            className={`home-bento-bottom${plan.bottomCards.length > 1 ? ' is-multi' : ''}`}
           >
             {plan.bottomCards.map(key => renderSecondaryCard(key, 'bottom'))}
           </div>
@@ -744,17 +656,8 @@ function HomeCards({ context, client }: { context: AccessContext; client: boolea
   );
 }
 
-function PanelContent({
-  contexts,
-  client,
-  office,
-  onOfficeChange,
-}: {
-  contexts: AccessContext[];
-  client: boolean;
-  office: string;
-  onOfficeChange: (officeId: string) => void;
-}) {
+function PanelContent({ contexts, client }: { contexts: AccessContext[]; client: boolean }) {
+  const [office, setOffice] = useState('');
   const context = contexts.find(item => item.office_id === office) ?? contexts[0];
   return (
     <>
@@ -770,10 +673,7 @@ function PanelContent({
           contexts.length > 1 ? (
             <label className="team-field home-office">
               Escritório
-              <select
-                value={context.office_id}
-                onChange={event => onOfficeChange(event.target.value)}
-              >
+              <select value={context.office_id} onChange={event => setOffice(event.target.value)}>
                 {contexts.map(item => (
                   <option key={item.office_id} value={item.office_id}>
                     {item.office_name}
@@ -792,7 +692,6 @@ function PanelContent({
 export default function PanelPage() {
   const auth = useAuth();
   const pathname = normalizePathname(useLocation().pathname);
-  const [selectedOffice, setSelectedOffice] = useState('');
   const client =
     pathname === paths.clientPanel ||
     (pathname === paths.authenticated && auth.portal === 'client');
@@ -811,21 +710,9 @@ export default function PanelPage() {
       );
     }
   }
-  const activeOffice =
-    auth.status === 'authorized'
-      ? (auth.contexts.find(context => context.office_id === selectedOffice)?.office_id ??
-        auth.contexts[0]?.office_id)
-      : undefined;
   return (
-    <OperationalAccess client={client} office={activeOffice}>
-      {contexts => (
-        <PanelContent
-          contexts={contexts}
-          client={client}
-          office={selectedOffice}
-          onOfficeChange={setSelectedOffice}
-        />
-      )}
+    <OperationalAccess client={client}>
+      {contexts => <PanelContent contexts={contexts} client={client} />}
     </OperationalAccess>
   );
 }

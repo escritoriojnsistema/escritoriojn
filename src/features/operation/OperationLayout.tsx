@@ -93,11 +93,7 @@ export function OperationLayout({
 }) {
   const auth = useAuth();
   const { installed } = useInstallPrompt();
-  const scopedContexts = office
-    ? auth.contexts.filter(context => context.office_id === office)
-    : auth.contexts;
-  const activeContexts = scopedContexts.length > 0 ? scopedContexts : auth.contexts;
-  const items = operationNavigation(activeContexts, client);
+  const items = operationNavigation(auth.contexts, client);
   const contextual = splitOperationReturn(contextActions);
   const home = items[0].path;
   const account = client ? paths.clientAccount : paths.account;
@@ -105,7 +101,7 @@ export function OperationLayout({
   const normalizedPath = normalizePathname(pathname);
   const isHome = normalizedPath === home;
   const sectionKey = operationSectionKey(pathname);
-  const sectionItems = operationSectionNavigation(activeContexts, client, pathname);
+  const sectionItems = operationSectionNavigation(auth.contexts, client, pathname);
   const drawer = useRef<HTMLDialogElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
