@@ -1,0 +1,325 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clientes — Escritório JN (Desktop)</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'brand-navy': '#112236',
+        'on-brand-navy': '#FFFFFF',
+        'brand-navy-elevated': '#182D46',
+        'brand-navy-border': '#253D59',
+        'brand-navy-muted': '#94A3B8',
+        'brand-gold': '#C5963A',
+        'brand-gold-pill': '#F4CE6A',
+        'on-brand-gold-pill': '#1B1B1D',
+        'brand-gold-tint': '#4B3A1D',
+        'brand-gold-border': '#7C5E28',
+        'success': '#16A34A',
+        'on-success': '#272727',
+        'progress-navy': '#162A41',
+        'track-bg': '#DDE3EA',
+        'inner-panel': '#F1F4F8',
+        'badge-red': '#EF4444',
+        'light-primary': '#000B1B',
+        'light-on-primary': '#FFFFFF',
+        'light-primary-container': '#112236',
+        'light-on-primary-container': '#FFFFFF',
+        'light-secondary': '#7C5800',
+        'light-on-secondary': '#FFFFFF',
+        'light-secondary-container': '#F4CE6A',
+        'light-on-secondary-container': '#1B1B1D',
+        'light-error': '#BA1A1A',
+        'light-on-error': '#FFFFFF',
+        'light-background': '#F1F5F9',
+        'light-on-background': '#0F172A',
+        'light-surface': '#FFFFFF',
+        'light-on-surface': '#0F172A',
+        'light-surface-container-low': '#F8FAFC',
+        'light-surface-container': '#F1F4F8',
+        'light-surface-container-high': '#E2E8F0',
+        'light-on-surface-variant': '#475569',
+        'light-outline': '#64748B',
+        'light-outline-variant': '#E2E8F0',
+        'dark-primary': '#B7C8E2',
+        'dark-on-primary': '#112236',
+        'dark-primary-container': '#182D46',
+        'dark-on-primary-container': '#FFFFFF',
+        'dark-secondary': '#F4CE6A',
+        'dark-on-secondary': '#271900',
+        'dark-secondary-container': '#4B3A1D',
+        'dark-on-secondary-container': '#FFE5BB',
+        'dark-error': '#FFB4AB',
+        'dark-on-error': '#690005',
+        'dark-background': '#0B131E',
+        'dark-on-background': '#F1F5F9',
+        'dark-surface': '#112236',
+        'dark-on-surface': '#F8FAFC',
+        'dark-surface-container-low': '#182D46',
+        'dark-surface-container': '#1E3552',
+        'dark-surface-container-high': '#253D59',
+        'dark-on-surface-variant': '#CBD5E1',
+        'dark-outline': '#94A3B8',
+        'dark-outline-variant': '#253D59',
+      },
+      borderRadius: {
+        'sm': '6px',
+        'DEFAULT': '8px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '20px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '12px',
+        'gutter-lg': '16px',
+        'gutter-xl': '20px',
+        'section': '24px',
+        'page-margin': '24px',
+      },
+      fontFamily: {
+        'headline': ['"Titillium Web"', 'sans-serif'],
+        'title': ['"PT Sans"', 'sans-serif'],
+        'body': ['"PT Sans"', 'sans-serif'],
+        'label': ['"PT Sans"', 'sans-serif'],
+        'mono': ['"Spline Sans Mono"', 'monospace'],
+      },
+      fontSize: {
+        'headline-lg': ['32px', { lineHeight: '38px', letterSpacing: '-0.4px', fontWeight: '700' }],
+        'headline-lg-mobile': ['26px', { lineHeight: '32px', letterSpacing: '-0.25px', fontWeight: '700' }],
+        'headline-md': ['20px', { lineHeight: '26px', letterSpacing: '-0.2px', fontWeight: '700' }],
+        'headline-sm': ['18px', { lineHeight: '24px', letterSpacing: '-0.1px', fontWeight: '700' }],
+        'title-md': ['16px', { lineHeight: '22px', letterSpacing: '0px', fontWeight: '700' }],
+        'title-sm': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '700' }],
+        'body-md': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-sm': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '700' }],
+        'label-md': ['13px', { lineHeight: '16px', letterSpacing: '0px', fontWeight: '700' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.4px', fontWeight: '700' }],
+        'mono-sm': ['12px', { lineHeight: '16px', letterSpacing: '0px', fontWeight: '400' }],
+      },
+      transitionDuration: {
+        'state-change': '120ms',
+        'surface-enter': '200ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&amp;family=Spline+Sans+Mono&amp;family=Titillium+Web:wght@600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>.material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons { display: inline-block; width: 1em; height: 1em; line-height: 1 !important; box-sizing: content-box; overflow: hidden; white-space: nowrap; direction: ltr; vertical-align: middle; }</style>
+</head>
+<body class="bg-light-background text-light-on-background font-body antialiased">
+  <div class="min-h-[1024px] flex bg-light-background" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- Sidebar (Shell Parity) -->
+    <aside class="w-60 shrink-0 bg-brand-navy text-on-brand-navy flex flex-col gap-gutter-md p-gutter-md min-h-[1024px]" data-stitch-vh="min-h-[1024px]===min-h-screen">
+      <div class="flex flex-col gap-gutter-md">
+        <!-- Brand -->
+        <div class="flex flex-col items-center gap-gutter-xs py-gutter-xs">
+          <span class="material-symbols-outlined text-brand-gold text-[26px]" aria-hidden="true">balance</span>
+          <span data-design-text-token="title-md" class="font-headline text-title-md tracking-wider uppercase text-on-brand-navy">ESCRITÓRIO JN</span>
+        </div>
+
+        <!-- Team Navigation -->
+        <div class="flex flex-col gap-gutter-xs">
+          <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-brand-navy-muted tracking-wider px-gutter-md pb-gutter-xs">ÁREA DA EQUIPE</span>
+          <nav aria-label="Navegação principal" class="flex flex-col gap-gutter-xs">
+            <a href="#inicio" class="flex items-center gap-gutter-md px-gutter-md py-gutter-xs rounded-md text-on-brand-navy/90 hover:bg-brand-navy-elevated transition-colors duration-state-change">
+              <span class="material-symbols-outlined text-[20px] text-brand-navy-muted" aria-hidden="true">home</span>
+              <span data-design-text-token="body-md" class="font-body text-body-md">Início</span>
+            </a>
+            <a href="#solicitacoes" class="flex items-center gap-gutter-md px-gutter-md py-gutter-xs rounded-md text-on-brand-navy/90 hover:bg-brand-navy-elevated transition-colors duration-state-change">
+              <span class="material-symbols-outlined text-[20px] text-brand-navy-muted" aria-hidden="true">receipt_long</span>
+              <span data-design-text-token="body-md" class="font-body text-body-md">Solicitações</span>
+            </a>
+            <a href="#clientes" class="flex items-center gap-gutter-md px-gutter-md py-gutter-xs rounded-md bg-brand-gold-tint border border-brand-gold-border text-brand-gold-pill transition-colors duration-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">group</span>
+              <span data-design-text-token="label-md" class="font-label text-label-md">Clientes</span>
+            </a>
+            <a href="#documentos" class="flex items-center gap-gutter-md px-gutter-md py-gutter-xs rounded-md text-on-brand-navy/90 hover:bg-brand-navy-elevated transition-colors duration-state-change">
+              <span class="material-symbols-outlined text-[20px] text-brand-navy-muted" aria-hidden="true">description</span>
+              <span data-design-text-token="body-md" class="font-body text-body-md">Documentos</span>
+            </a>
+            <a href="#servicos" class="flex items-center gap-gutter-md px-gutter-md py-gutter-xs rounded-md text-on-brand-navy/90 hover:bg-brand-navy-elevated transition-colors duration-state-change">
+              <span class="material-symbols-outlined text-[20px] text-brand-navy-muted" aria-hidden="true">work</span>
+              <span data-design-text-token="body-md" class="font-body text-body-md">Serviços</span>
+            </a>
+            <a href="#caixa" class="flex items-center gap-gutter-md px-gutter-md py-gutter-xs rounded-md text-on-brand-navy/90 hover:bg-brand-navy-elevated transition-colors duration-state-change">
+              <span class="material-symbols-outlined text-[20px] text-brand-navy-muted" aria-hidden="true">payments</span>
+              <span data-design-text-token="body-md" class="font-body text-body-md">Caixa</span>
+            </a>
+            <a href="#notificacoes" class="flex items-center gap-gutter-md px-gutter-md py-gutter-xs rounded-md text-on-brand-navy/90 hover:bg-brand-navy-elevated transition-colors duration-state-change">
+              <span class="material-symbols-outlined text-[20px] text-brand-navy-muted" aria-hidden="true">notifications</span>
+              <span data-design-text-token="body-md" class="font-body text-body-md">Notificações</span>
+            </a>
+            <a href="#configuracoes" class="flex items-center gap-gutter-md px-gutter-md py-gutter-xs rounded-md text-on-brand-navy/90 hover:bg-brand-navy-elevated transition-colors duration-state-change">
+              <span class="material-symbols-outlined text-[20px] text-brand-navy-muted" aria-hidden="true">settings</span>
+              <span data-design-text-token="body-md" class="font-body text-body-md">Configurações</span>
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Bottom Availability & Account Controls -->
+      <div class="flex flex-col gap-gutter-sm">
+        <div class="bg-brand-navy-elevated border border-brand-navy-border rounded-lg p-gutter-md flex flex-col gap-gutter-md">
+          <div class="flex items-center gap-gutter-sm">
+            <span class="w-2 h-2 rounded-full bg-brand-gold shrink-0" aria-hidden="true"></span>
+            <span data-design-text-token="label-md" class="font-label text-label-md text-on-brand-navy">Minha disponibilidade</span>
+          </div>
+
+          <div class="flex flex-col gap-gutter-xs">
+            <label for="status-select" data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-brand-navy-muted">STATUS</label>
+            <select id="status-select" class="w-full bg-brand-navy border border-brand-navy-border rounded-md px-gutter-md py-gutter-sm text-on-brand-navy font-body text-body-sm focus:outline-none focus:ring-2 focus:ring-brand-gold">
+              <option value="offline" selected>Offline</option>
+              <option value="disponivel">Disponível</option>
+              <option value="ausente">Ausente</option>
+              <option value="ocupado">Ocupado</option>
+            </select>
+          </div>
+
+          <div class="flex flex-col gap-gutter-xs">
+            <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase text-brand-navy-muted">ATENDIMENTOS SIMULTÂNEOS</span>
+            <div class="flex items-center justify-between bg-brand-navy border border-brand-navy-border rounded-md px-gutter-sm py-gutter-xs">
+              <button type="button" id="btn-dec" aria-label="Diminuir atendimentos" class="w-7 h-7 rounded flex items-center justify-center text-brand-navy-muted hover:text-on-brand-navy hover:bg-brand-navy-elevated transition-colors duration-state-change">
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">remove</span>
+              </button>
+              <span id="concurrent-count" data-design-text-token="label-md" class="font-label text-label-md text-on-brand-navy tabular-nums">1</span>
+              <button type="button" id="btn-inc" aria-label="Aumentar atendimentos" class="w-7 h-7 rounded flex items-center justify-center text-brand-navy-muted hover:text-on-brand-navy hover:bg-brand-navy-elevated transition-colors duration-state-change">
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">add</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-gutter-sm">
+          <!-- COMPONENT: button-with-icon -->
+          <button data-component-id="button-with-icon" data-component-type="button" data-component-variant="with-icon" type="button" class="w-full inline-flex items-center gap-gutter-sm px-gutter-md py-gutter-sm rounded-md bg-brand-navy-elevated border border-brand-navy-border text-on-brand-navy hover:border-brand-gold transition-colors duration-state-change">
+            <span class="material-symbols-outlined text-[18px] text-brand-navy-muted" aria-hidden="true">download</span>
+            <span data-design-text-token="label-md" class="font-label text-label-md">Instalar aplicativo</span>
+          </button>
+
+          <button data-component-id="button-with-icon-logout" data-component-type="button" data-component-variant="with-icon" type="button" class="w-full inline-flex items-center gap-gutter-sm px-gutter-md py-gutter-sm rounded-md bg-brand-navy-elevated border border-brand-navy-border text-on-brand-navy hover:border-brand-gold transition-colors duration-state-change">
+            <span class="material-symbols-outlined text-[18px] text-brand-navy-muted" aria-hidden="true">logout</span>
+            <span data-design-text-token="label-md" class="font-label text-label-md">Sair da conta</span>
+          </button>
+        </div>
+
+        <p data-design-text-token="body-sm" class="font-body text-body-sm text-brand-navy-muted text-center">Acesso individual e protegido.</p>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <div class="flex-1 flex flex-col min-w-0">
+      <!-- Top Bar (Shell Parity) -->
+      <header class="sticky top-0 z-10 bg-light-surface border-b border-light-outline-variant px-page-margin py-gutter-md flex items-center justify-between">
+        <span data-design-text-token="title-md" class="font-title text-title-md text-light-on-surface">Painel operacional</span>
+        <div class="flex items-center gap-gutter-sm">
+          <!-- COMPONENT: button-icon -->
+          <button data-component-id="button-icon" data-component-type="button" data-component-variant="icon" type="button" aria-label="Notificações" class="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-light-surface border border-light-outline-variant text-light-on-surface hover:bg-light-surface-container transition-colors duration-state-change focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-navy">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">notifications</span>
+          </button>
+          <button type="button" aria-label="Perfil do usuário" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-brand-navy text-on-brand-navy hover:bg-brand-navy-elevated transition-colors duration-state-change focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <main class="flex-1 p-page-margin flex flex-col gap-gutter-lg max-w-6xl w-full mx-auto">
+
+        <!-- Top Breadcrumb + Sub-tabs + Title Row -->
+        <section class="flex flex-col gap-gutter-md">
+          <div class="flex items-center justify-between gap-gutter-md">
+            <a href="#inicio" class="inline-flex items-center gap-gutter-xs text-light-on-surface-variant hover:text-light-on-surface transition-colors duration-state-change">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_back</span>
+              <span data-design-text-token="label-md" class="font-label text-label-md">Voltar ao início</span>
+            </a>
+
+            <!-- Segmented Tabs -->
+            <div class="inline-flex items-center gap-gutter-xs bg-inner-panel p-gutter-xs rounded-md border border-light-outline-variant" role="tablist" aria-label="Visualização">
+              <button type="button" role="tab" aria-selected="true" class="inline-flex items-center gap-gutter-xs px-gutter-md py-gutter-xs rounded-sm bg-light-surface text-light-on-surface shadow-sm">
+                <span class="material-symbols-outlined text-[16px]" aria-hidden="true">group</span>
+                <span data-design-text-token="label-md" class="font-label text-label-md">Clientes</span>
+              </button>
+              <button type="button" role="tab" aria-selected="false" class="inline-flex items-center gap-gutter-xs px-gutter-md py-gutter-xs rounded-sm text-light-on-surface-variant hover:text-light-on-surface transition-colors duration-state-change">
+                <span class="material-symbols-outlined text-[16px]" aria-hidden="true">landscape</span>
+                <span data-design-text-token="body-sm" class="font-body text-body-sm">Imóveis rurais</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-gutter-xs">
+            <span data-design-text-token="label-sm" class="font-label text-label-sm uppercase tracking-wider text-light-secondary">ESCRITÓRIO JN</span>
+            <!-- COMPONENT: typography-display -->
+            <h1 data-component-id="typography-display" data-component-type="typography" data-component-variant="display" data-design-text-token="headline-lg" class="font-headline text-headline-lg text-light-on-surface">Clientes</h1>
+            <p data-design-text-token="body-md" class="font-body text-body-md text-light-on-surface-variant">Cadastre e consulte as fichas do escritório.</p>
+          </div>
+        </section>
+
+        <!-- Search & Action Toolbar -->
+        <section class="flex flex-col gap-gutter-xs border-b border-light-outline-variant pb-gutter-lg">
+          <label for="search-clients-desktop" data-design-text-token="label-sm" class="font-label text-label-sm text-light-on-surface">Buscar por nome, CPF ou CNPJ</label>
+          <div class="flex items-center gap-gutter-sm">
+            <input id="search-clients-desktop" type="search" aria-label="Buscar por nome, CPF ou CNPJ" class="w-full rounded-md border border-light-outline-variant bg-light-surface px-gutter-md py-gutter-sm font-body text-body-md text-light-on-surface focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/20">
+            <button type="button" aria-label="Buscar cliente" class="w-10 h-10 shrink-0 rounded-full border border-light-outline-variant bg-light-surface flex items-center justify-center text-light-on-surface hover:bg-light-surface-container transition-colors duration-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">search</span>
+            </button>
+            <button type="button" aria-label="Atualizar lista" class="w-10 h-10 shrink-0 rounded-full border border-light-outline-variant bg-light-surface flex items-center justify-center text-light-on-surface hover:bg-light-surface-container transition-colors duration-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">refresh</span>
+            </button>
+            <!-- COMPONENT: button-action-md -->
+            <button data-component-id="button-action-md" data-component-type="button" data-component-variant="primary" type="button" class="shrink-0 inline-flex items-center justify-center gap-gutter-sm px-gutter-lg py-gutter-sm rounded-md bg-brand-navy text-on-brand-navy hover:bg-brand-navy-elevated transition-colors duration-state-change focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">add</span>
+              <span data-design-text-token="label-lg" class="font-label text-label-lg">Novo cliente</span>
+            </button>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var countEl = document.getElementById('concurrent-count');
+      var decBtn = document.getElementById('btn-dec');
+      var incBtn = document.getElementById('btn-inc');
+      var count = 1;
+      if (decBtn && incBtn && countEl) {
+        decBtn.addEventListener('click', function () {
+          if (count > 1) {
+            count -= 1;
+            countEl.textContent = String(count);
+          }
+        });
+        incBtn.addEventListener('click', function () {
+          if (count < 10) {
+            count += 1;
+            countEl.textContent = String(count);
+          }
+        });
+      }
+    })();
+  </script>
+
+
+</body></html>
