@@ -392,7 +392,7 @@ END $$;
 DO $$
 DECLARE v_admin text := current_user; v jsonb; v_req uuid; v_charge uuid; v_ap uuid; v_ap2 uuid;
         v_session uuid; v_unit uuid; v_acc uuid; v_method uuid; v_el jsonb; v_caught boolean;
-        v_cat uuid;
+        v_cat uuid; v_card_acc uuid; v_card_method uuid;
 BEGIN
   SELECT val INTO v_cat FROM evo_ctx WHERE k='category';
   SELECT val INTO v_unit FROM evo_ctx WHERE k='unit';
@@ -433,9 +433,27 @@ BEGIN
 
   PERFORM set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-a000-0000000ee001","session_id":"00000000-0000-4000-c000-0000000ee001"}', true);
   PERFORM set_config('role','authenticated',true);
+  v := public.cash_configure('00000000-0000-4000-e000-0000000ee001',
+    jsonb_build_object('kind','account','id',null,'expected_version',null,'name','Conta cartão Evo',
+      'active',true,'type','bank','unit_id',v_unit),gen_random_uuid());
+  v_card_acc := (v->'resource'->>'id')::uuid;
+  v := public.cash_configure('00000000-0000-4000-e000-0000000ee001',
+    jsonb_build_object('kind','payment_method','id',null,'expected_version',null,'name','Cartão Evo',
+      'active',true,'type','card','unit_id',v_unit,'destination_account_id',v_card_acc),gen_random_uuid());
+  v_card_method := (v->'resource'->>'id')::uuid;
   v := public.financial_approval_request_manual_payment('00000000-0000-4000-e000-0000000ee001', v_charge, 1, v_req,
-    v_session, v_unit, v_acc, v_method, '00000000-0000-4000-a000-0000000ee002', 10000, current_date, 'evo-ref',
-    'Recebimento fictício', 'evo-manual-1');
+    v_session, v_unit, v_card_acc, v_card_method, '00000000-0000-4000-a000-0000000ee002', 10000, current_date, 'evo-ref',
+    'Recebimento fictício', 'evo-manual-1',jsonb_build_object('fee_cents',250,'settled_on',current_date::text));
+  IF v->'card_details' IS DISTINCT FROM jsonb_build_object('fee_cents',250,'settled_on',current_date::text) THEN
+    RAISE EXCEPTION 'EVOLUTION FAIL EVO-09: pedido de autorização perdeu a taxa ou a data de liquidação';
+  END IF;
+  BEGIN
+    PERFORM public.financial_approval_request_manual_payment('00000000-0000-4000-e000-0000000ee001', v_charge, 1, v_req,
+      v_session, v_unit, v_card_acc, v_card_method, '00000000-0000-4000-a000-0000000ee002', 10000, current_date, 'evo-ref',
+      'Recebimento fictício', 'evo-manual-1',jsonb_build_object('fee_cents',200,'settled_on',current_date::text));
+    RAISE EXCEPTION 'EVOLUTION FAIL EVO-09: retry alterou a taxa da autorização';
+  EXCEPTION WHEN SQLSTATE 'PT409' THEN NULL;
+  END;
   v_ap := (v->>'id')::uuid;
   IF v->>'status' <> 'pending' THEN
     RAISE EXCEPTION 'EVOLUTION FAIL EVO-09: autorização não ficou pendente (%)', v->>'status';
@@ -461,6 +479,12 @@ BEGIN
     RAISE EXCEPTION 'EVOLUTION FAIL EVO-09: execução não concluiu (%)', v->>'status';
   END IF;
   PERFORM set_config('role', v_admin, true);
+
+  IF NOT EXISTS (SELECT FROM private.payments p JOIN private.payment_allocations a ON a.office_id=p.office_id AND a.payment_id=p.id
+    WHERE a.charge_id=v_charge AND p.payment_type='card' AND p.amount_cents=10000 AND p.fee_cents=250
+      AND p.settlement='settled' AND p.settled_on=current_date) THEN
+    RAISE EXCEPTION 'EVOLUTION FAIL EVO-09: execução perdeu a taxa ou a liquidação do cartão';
+  END IF;
 
   -- a execução criou exatamente um pagamento e uma alocação, zerando o saldo
   IF (SELECT count(*) FROM private.payment_allocations WHERE charge_id = v_charge) <> 1 THEN
@@ -516,7 +540,7 @@ END $$;
 
 -- EVO-10: provedor de pagamento só é gerenciado por quem possui a permissão; ativação e leitura do checkout funcionam.
 DO $$
-DECLARE v_admin text := current_user; v jsonb; v_state jsonb; v_provider uuid; v_charge uuid; v_req uuid;
+DECLARE v_admin text := current_user; v jsonb; v_state jsonb; v_provider uuid; v_terminal uuid; v_charge uuid; v_req uuid;
         v_session uuid; v_unit uuid; v_acc uuid; v_method uuid; v_caught boolean;
 BEGIN
   SELECT val INTO v_session FROM evo_ctx WHERE k='session';
@@ -551,6 +575,17 @@ BEGIN
   IF v_state->'providers'->0->>'status' <> 'configured' THEN
     RAISE EXCEPTION 'EVOLUTION FAIL EVO-10: verificação local habilitou o provedor (%)', v_state->'providers'->0->>'status';
   END IF;
+  IF v_state->'providers'->0->>'last_validated_at' IS NOT NULL THEN
+    RAISE EXCEPTION 'EVOLUTION FAIL EVO-10: consulta local registrou validação externa';
+  END IF;
+  v_state := public.payment_terminal_save('00000000-0000-4000-e000-0000000ee001',NULL,v_provider,
+    'Balcão de teste','Fabricante de teste','Modelo de teste','Operadora de teste','local_agent_connector',v_unit,'evo-terminal-1');
+  v_terminal := (v_state->'terminals'->0->>'id')::uuid;
+  BEGIN
+    PERFORM public.payment_terminal_test('00000000-0000-4000-e000-0000000ee001',v_terminal);
+    RAISE EXCEPTION 'EVOLUTION FAIL EVO-10: terminal sem heartbeat foi apresentado como disponível';
+  EXCEPTION WHEN SQLSTATE 'PT503' THEN NULL;
+  END;
   PERFORM set_config('role', v_admin, true);
   IF EXISTS (SELECT 1 FROM private.payment_providers WHERE id = v_provider AND credential_ref IS NOT NULL AND credential_ref !~ '^vault://') THEN
     RAISE EXCEPTION 'EVOLUTION FAIL EVO-10: credencial armazenada fora de referência segura';

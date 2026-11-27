@@ -228,6 +228,7 @@ export type ConfiguredProvider = {
   institution_label: string;
   environment: ProviderEnvironment;
   status: 'unconfigured' | 'configured' | 'validated' | 'active' | 'disabled' | 'error';
+  connection_ready?: boolean;
   enabled_methods: CheckoutMethod[];
   receiving_account_id: string | null;
   receiving_account_name: string | null;

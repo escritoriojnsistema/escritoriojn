@@ -228,7 +228,13 @@ test('Etapas 4 e 5 (Cenários 15-18): API /api/financial-approvals contrato, fai
     ...overrides,
   });
 
-  const provider = createServer((req, res) => {
+  let manualRequestBody: Record<string, unknown> | undefined;
+  const provider = createServer(async (req, res) => {
+    if (req.url?.endsWith('financial_approval_request_manual_payment')) {
+      let raw = '';
+      for await (const chunk of req) raw += chunk;
+      manualRequestBody = JSON.parse(raw);
+    }
     res.setHeader('Content-Type', 'application/json');
     if (req.url === '/auth/v1/user') {
       res.end(JSON.stringify({ id: REQUESTER_ID, aud: 'authenticated' }));
@@ -354,7 +360,7 @@ test('Etapas 4 e 5 (Cenários 15-18): API /api/financial-approvals contrato, fai
     });
     assert.equal(invalidDateReq.status, 422);
 
-    const manualReq = await send('/manual-payment/request', {
+    const manualRequest = {
       office_id: OFFICE_ID,
       charge_id: CHARGE_ID,
       charge_version: 2,
@@ -369,12 +375,23 @@ test('Etapas 4 e 5 (Cenários 15-18): API /api/financial-approvals contrato, fai
       external_reference: 'E2E-123456789',
       justification: 'Recebimento presencial em espécie',
       idempotency_key: 'man-req-0001',
-    });
+    };
+    const manualReq = await send('/manual-payment/request', manualRequest);
     assert.equal(manualReq.status, 201);
     const manualJson = await manualReq.json();
     assert.equal(manualJson.data.operation_date, '2026-11-21');
     assert.equal(manualJson.data.external_reference, 'E2E-123456789');
     assert.equal(manualJson.data.destination_account_name, 'Caixa Balcão 01');
+    assert.equal(Object.hasOwn(manualRequestBody!, 'p_card_details'), false);
+    const cardDetails = { fee_cents: 250, settled_on: '2026-11-22' };
+    assert.equal((await send('/manual-payment/request', {
+      ...manualRequest, card_details: cardDetails, idempotency_key: 'man-req-card-0001',
+    })).status, 201);
+    assert.deepEqual(manualRequestBody?.p_card_details, cardDetails);
+    assert.equal((await send('/manual-payment/request', {
+      ...manualRequest, card_details: { fee_cents: 10001, settled_on: null },
+    })).status, 422);
+
 
     const discountReq = await send('/discount/request', {
       office_id: OFFICE_ID,

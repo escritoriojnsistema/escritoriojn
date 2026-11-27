@@ -1,8 +1,10 @@
 import { Router, json, type Response } from 'express';
 import { authenticatedClient } from '../auth/client.js';
 import { errorResponse } from '../../errors.js';
-import { fields, uuid } from '../team/validation.js';
+import { fields, record, uuid } from '../team/validation.js';
 import { positive, requestText } from '../requests/validation.js';
+import { cashInteger } from '../../../shared/cash.js';
+import { validChargeDate } from '../../../shared/charges.js';
 import { isValidIdempotencyKey } from '../../../shared/requestDeletion.js';
 import {
   financialApprovalKinds,
@@ -140,6 +142,10 @@ function projectApprovalItem(raw: unknown): FinancialApprovalItem {
     discount_percent: typeof d.discount_percent === 'number' && Number.isFinite(d.discount_percent) ? d.discount_percent : null,
     final_cents: Number.isSafeInteger(d.final_cents) ? Number(d.final_cents) : 0,
     card_fee_cents: Number.isSafeInteger(d.card_fee_cents) ? Number(d.card_fee_cents) : 0,
+    ...(fields(d.card_details, ['fee_cents', 'settled_on']) && cashInteger(d.card_details.fee_cents) &&
+      (d.card_details.settled_on === null || validChargeDate(d.card_details.settled_on))
+      ? { card_details: { fee_cents: d.card_details.fee_cents, settled_on: d.card_details.settled_on } }
+      : {}),
     payment_method_id: typeof d.payment_method_id === 'string' ? d.payment_method_id : null,
     payment_method_name: typeof d.payment_method_name === 'string' ? d.payment_method_name : null,
     session_id: typeof d.session_id === 'string' ? d.session_id : null,
@@ -251,6 +257,8 @@ financialApprovalsRouter.post('/list', async (req, res) => {
  */
 financialApprovalsRouter.post('/manual-payment/request', async (req, res) => {
   const b: unknown = req.body;
+  const hasCardDetails = record(b) && Object.hasOwn(b, 'card_details');
+  const card = hasCardDetails ? b.card_details : undefined;
   if (
     Object.keys(req.query).length ||
     !fields(b, [
@@ -264,6 +272,7 @@ financialApprovalsRouter.post('/manual-payment/request', async (req, res) => {
       'payment_method_id',
       'approver_user_id',
       'amount_cents',
+      ...(hasCardDetails ? ['card_details'] : []),
       'operation_date',
       'external_reference',
       'justification',
@@ -279,6 +288,9 @@ financialApprovalsRouter.post('/manual-payment/request', async (req, res) => {
     !uuid(b.payment_method_id) ||
     !uuid(b.approver_user_id) ||
     !positive(b.amount_cents, 1000000000) ||
+    (hasCardDetails && !(fields(card, ['fee_cents', 'settled_on']) && cashInteger(card.fee_cents) &&
+      Number(card.fee_cents) <= Number(b.amount_cents) &&
+      (card.settled_on === null || validChargeDate(card.settled_on)))) ||
     !isValidIsoDate(b.operation_date) ||
     !(
       b.external_reference === null ||
@@ -319,6 +331,7 @@ financialApprovalsRouter.post('/manual-payment/request', async (req, res) => {
           : null,
       p_justification: String(b.justification).trim(),
       p_idempotency_key: b.idempotency_key,
+      ...(hasCardDetails ? { p_card_details: card } : {}),
     });
     if (error) {
       mapSafeError(res, error);

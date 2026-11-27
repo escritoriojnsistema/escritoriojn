@@ -237,3 +237,20 @@ test('tipos e modelos continuam na categoria sem salvar ou manter o campo de ori
  await expect(page.getByRole('status')).toContainText('Formulário publicado');
  expect(fixture.writes[0].command).toMatchObject({enabled:true,fields:[{label:'Novo registro',response_name:'Referência imobiliária',model:{name:'Registro local',mask:'AAAA/000'}}]});
 });
+
+test('cria e publica um modelo de resposta para o código do CAR',async({page})=>{
+ const mask='AA-0000000-HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH';
+ const fixture=await setup(page,{form:{...empty,revision:1,fields:[{key:'car',label:'Código do CAR',type:'text',required:true,options:[]}]}});
+ await open(page);
+ const model=page.getByLabel('Modelo de resposta');
+ await expect(model.locator('option').filter({hasText:'Código do CAR'})).toHaveText(`Código do CAR · ${mask}`);
+ await page.getByRole('button',{name:'Criar modelo',exact:true}).click();
+ await page.getByLabel('Nome do modelo').fill('Cadastro Ambiental Rural');
+ await page.getByLabel('Máscara').fill(mask);
+ await page.getByRole('button',{name:'Salvar na categoria'}).click();
+ await expect(model).toHaveValue(JSON.stringify(['Cadastro Ambiental Rural',mask]));
+ await page.getByLabel('Motivo da alteração').fill('Publicar código do CAR');
+ await page.getByRole('button',{name:'Salvar e publicar'}).click();
+ await expect(page.getByRole('status')).toContainText('Formulário publicado');
+ expect(fixture.writes[0].command.fields[0].model).toEqual({name:'Cadastro Ambiental Rural',mask});
+});

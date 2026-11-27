@@ -48,5 +48,16 @@ SELECT public.category_intake_publish(:'office',:'rural','{"expected_revision":1
 SELECT test.assert_true(:'nofields'::jsonb#>>'{response_options,models,0,name}'='Registro atualizado'
  AND :'nofields'::jsonb#>>'{response_options,types,0,name}'='Identificação rural',
  'response catalog: deleting source field does not remove model or type');
+SELECT test.assert_true(public.category_response_option_save(:'office',:'legal',
+  '{"kind":"model","option":{"name":"Código do CAR","mask":"AA-0000000-HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH"},"previous":null}',gen_random_uuid())
+  #>>'{models,0,name}'='Código do CAR','response catalog: saves the complete CAR mask');
+SELECT public.category_intake_publish(:'office',:'legal',jsonb_build_object('expected_revision',0,'enabled',true,'instructions','','fields',
+  '[{"key":"car","label":"Código do CAR","type":"text","options":[],"required":true,"model":{"name":"Código do CAR","mask":"AA-0000000-HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH"}}]'::jsonb,
+  'documents','[]'::jsonb,'reason','Publicação fictícia do CAR'),gen_random_uuid()) AS car_form \gset
+SELECT test.assert_true(:'car_form'::jsonb->>'enabled'='true','response catalog: publishes a field with a CAR mask');
 RESET ROLE;
+SELECT test.assert_true(private.category_response_matches('AA-0000000-HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH',
+  'UF-1302405-E6D3.395B.6D27.4F42.AE22.DD56.987C.DD52') AND NOT
+  private.category_response_matches('AA-0000000-HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH',
+  'UF-1302405-X6D3.395B.6D27.4F42.AE22.DD56.987C.DD52'),'response catalog: accepts the complete CAR and rejects non-hexadecimal digits');
 ROLLBACK;

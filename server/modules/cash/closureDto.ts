@@ -19,7 +19,7 @@ function group(v:unknown,line:boolean):ClosureGroup|ClosureLine{
 function groups(v:unknown,line:false):ClosureGroup[];
 function groups(v:unknown,line:true):ClosureLine[];
 function groups(v:unknown,line:boolean):(ClosureGroup|ClosureLine)[]{
- if(!Array.isArray(v)||v.length<1||v.length>100)return bad();const result=v.map(x=>group(x,line));if(new Set(result.map(g=>g.key)).size!==result.length)return bad();return result;
+ if(!Array.isArray(v)||v.length>100)return bad();const result=v.map(x=>group(x,line));if(new Set(result.map(g=>g.key)).size!==result.length)return bad();return result;
 }
 export function closureRecord(v:unknown):ClosureRecord{
  if(!record(v)||!uuid(v.id)||!uuid(v.session_id)||!(v.source_id===null||uuid(v.source_id))||!['reconcile','close','adjust'].includes(String(v.kind))||(v.kind==='adjust')!==(v.source_id!==null)||![1,2].includes(Number(v.version))||!time(v.created_at)||!text(v.actor_name,1,120)||!text(v.reason,5,500)||typeof v.has_difference!=='boolean'||!integer(v.differences_count,0)||!integer(v.absolute_difference_cents,0)||typeof v.can_review!=='boolean')return bad();

@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Building2,
+  Banknote,
   CheckCircle2,
   CreditCard,
   Plus,
@@ -29,7 +30,7 @@ import { useAuth } from '../auth/AuthProvider';
 import { paymentProvidersApi, PaymentProvidersError } from './paymentProvidersApi';
 import './paymentProviders.css';
 
-type Tab = 'providers' | 'pix' | 'cards' | 'terminals' | 'diagnostics';
+type Tab = 'manual' | 'providers' | 'pix' | 'cards' | 'terminals' | 'diagnostics';
 
 const ENV_LABELS: Record<ProviderEnvironment, string> = {
   sandbox: 'Sandbox / Testes',
@@ -305,7 +306,7 @@ export function PaymentProvidersSettings({
           unit_id: termUnitId || null,
           idempotency_key: `termcfg-${crypto.randomUUID()}`,
         }),
-      'Maquininha registrada. Execute o teste de comunicação antes de usar no caixa.',
+      'Cadastro da maquininha salvo. Ainda é necessário integrar o modelo com a operadora.',
     );
   }
 
@@ -341,6 +342,10 @@ export function PaymentProvidersSettings({
 
       <div className="team-toolbar">
         <div role="tablist" aria-label="Abas de Bancos e Pagamentos" className="team-tabs">
+          <button type="button" role="tab" aria-selected={tab === 'manual'} onClick={() => setTab('manual')}>
+            <Banknote size={16} aria-hidden="true" />
+            <span>Pagamentos manuais</span>
+          </button>
           <button type="button" role="tab" aria-selected={tab === 'providers'} onClick={() => setTab('providers')}>
             <Building2 size={16} aria-hidden="true" />
             <span>Bancos e provedores</span>
@@ -373,11 +378,27 @@ export function PaymentProvidersSettings({
         </button>
       </div>
 
+      {tab === 'manual' && (
+        <section className="jn-provider-card" aria-label="Pagamentos manuais no Caixa">
+          <h3>Pix, boleto e cartão</h3>
+          <ul className="finance-ledger">
+            <li><strong>Pix manual</strong><p>Confira o crédito no extrato e informe o pagamento no Caixa.</p></li>
+            <li><strong>Boleto manual</strong><p>Vincule a forma Boleto a uma conta bancária. Registre o recebimento depois de conferir o crédito.</p></li>
+            <li><strong>Cartão na maquininha</strong><p>Realize a venda no terminal e informe o valor, a taxa e a referência do comprovante no Caixa.</p></li>
+          </ul>
+          <div className="account-actions">
+            {canManageCash && <Link className="secondary-button" to={paths.cash} state={{ office_id: office, tab: 'configuration' }}>Configurar formas no Caixa</Link>}
+            {officeContext?.permissions.includes('cash.read') && <Link className="primary-button" to={paths.cash} state={{ office_id: office, tab: 'own' }}>Abrir meu Caixa</Link>}
+          </div>
+        </section>
+      )}
+
       {/* TAB A — BANCOS E PROVEDORES */}
       {tab === 'providers' && (
         <div className="jn-providers-grid">
           <div className="jn-provider-card">
-            <h3>Integrações cadastradas</h3>
+            <h3>Bancos e provedores cadastrados</h3>
+            <p className="customer-note">A ativação automática depende da integração oficial com a instituição.</p>
             {!state?.providers.length ? (
               <p className="team-empty">Nenhum banco ou provedor configurado neste escritório.</p>
             ) : (
@@ -414,12 +435,12 @@ export function PaymentProvidersSettings({
                         onClick={() =>
                           void runAction(
                             () => paymentProvidersApi.validateProvider(office, p.id),
-                            `Validação de conexão executada para ${p.institution_label}.`,
+                            `Disponibilidade atualizada para ${p.institution_label}.`,
                           )
                         }
                       >
                         <CheckCircle2 size={16} aria-hidden="true" />
-                        <span>Validar conexão</span>
+                        <span>Consultar situação do cadastro</span>
                       </button>
                     </div>
                   </li>
@@ -470,7 +491,7 @@ export function PaymentProvidersSettings({
                   Referência de credencial no servidor (sem segredo)
                   <input
                     maxLength={120}
-                    placeholder="Ex.: VAULT_OFFICE_PIX_01"
+                    placeholder="Ex.: vault://escritorio/pix"
                     value={credentialRef}
                     onChange={(e) => setCredentialRef(e.target.value)}
                   />
@@ -574,14 +595,14 @@ export function PaymentProvidersSettings({
               </div>
 
               <div className="jn-capability-matrix">
-                <h4>Recursos suportados por este adaptador</h4>
+                <h4>Recursos previstos no perfil do provedor</h4>
                 <ul>
                   {ALL_CAPABILITIES.map((cap) => {
                     const supported = isCapabilitySupported(selectedCatalog.supported_capabilities, cap);
                     return (
                       <li key={cap} className={supported ? 'cap-yes' : 'cap-no'}>
                         <span>{capabilityLabels[cap]}</span>
-                        <strong>{supported ? 'Disponível' : UNSUPPORTED_CAPABILITY_LABEL}</strong>
+                        <strong>{supported ? 'Requer integração oficial' : UNSUPPORTED_CAPABILITY_LABEL}</strong>
                       </li>
                     );
                   })}
@@ -834,7 +855,7 @@ export function PaymentProvidersSettings({
           <div className="jn-provider-card">
             <h3>Maquininhas cadastradas</h3>
             {!state?.terminals.length ? (
-              <p className="team-empty">Nenhuma maquininha integrada registrada neste escritório.</p>
+              <p className="team-empty">Nenhuma maquininha cadastrada neste escritório.</p>
             ) : (
               <ul className="finance-ledger" aria-label="Lista de maquininhas">
                 {state.terminals.map((t) => (
@@ -863,11 +884,11 @@ export function PaymentProvidersSettings({
                         onClick={() =>
                           void runAction(
                             () => paymentProvidersApi.testTerminal(office, t.id),
-                            `Teste de comunicação executado para ${t.label}.`,
+                            `Disponibilidade atualizada para ${t.label}.`,
                           )
                         }
                       >
-                        Testar comunicação
+                        Verificar disponibilidade
                       </button>
                       {t.status !== 'inactive' && (
                         <button
@@ -894,8 +915,9 @@ export function PaymentProvidersSettings({
           <form className="jn-provider-card" onSubmit={handleSaveTerminal} noValidate>
             <h3>Cadastrar maquininha</h3>
             <p className="customer-note">
-              A conexão exige API oficial do adquirente ou conector/agente local autorizado. O navegador não acessa
-              dispositivos de pagamento diretamente sem protocolo seguro homologado.
+              Para cobrar, parcelar ou pedir um QR Code Pix por Bluetooth ou Wi-Fi, o Escritório JN precisa de
+              um conector compatível com o modelo e a operadora. Enquanto isso, registre no Caixa as vendas
+              concluídas em qualquer maquininha.
             </p>
             <fieldset disabled={busy || !backendReady}>
               <label className="team-field">
@@ -976,8 +998,7 @@ export function PaymentProvidersSettings({
                 </label>
               </div>
               <p className="customer-note">
-                Protocolos suportados: API em nuvem do adquirente (webhook assinado) ou conector/agente local
-                autorizado (TEF/SDK homologado).
+                O cadastro identifica o equipamento para uma integração futura.
               </p>
             </fieldset>
             <button type="submit" className="primary-button" disabled={busy || !backendReady}>

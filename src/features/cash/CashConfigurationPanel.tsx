@@ -5,7 +5,7 @@ import {evaluateCashSetupReadiness} from '../../../shared/manualPaymentFlow';
 type Kind=CashConfigure['kind'];
 type Draft={kind:Kind;id:string|null;expected_version:number|null;name:string;active:boolean;unit_id:string;type:string;destination_account_id:string};
 const accountTypes={cash:'Espécie (dinheiro físico)',bank:'Bancária (conta interna / manual)',digital:'Digital (carteira ou conta digital)'};
-const methodTypes={cash:'Dinheiro',pix:'PIX manual',card:'Cartão',transfer:'Transferência',boleto:'Bancária (conta interna / manual) — Boleto'};
+const methodTypes={cash:'Dinheiro',pix:'PIX manual',card:'Cartão',transfer:'Transferência',boleto:'Boleto manual'};
 const emptyMessages:Record<Kind,string>={
  unit:'Nenhuma unidade cadastrada.',
  account:'Nenhuma conta cadastrada.',
@@ -55,7 +55,7 @@ export function CashConfigurationPanel({data,references,sessions=[],busy,size,on
    </div>
    <ol className="cash-setup-steps" aria-label="Preparação do caixa">
     <li>Unidade financeira: {readiness.has_active_unit?'cadastrada':'cadastre sua unidade'}</li>
-    <li>Contas de destino: {readiness.has_active_cash_account?(readiness.has_active_non_cash_account?'espécie e bancária/digital cadastradas':'espécie cadastrada (adicione bancária/digital para Pix ou cartão)'):'adicione uma conta em espécie para abrir caixa'}</li>
+    <li>Contas de destino: {readiness.has_active_cash_account?(readiness.has_active_non_cash_account?'espécie e bancária/digital cadastradas':'espécie cadastrada (adicione uma conta bancária ou digital para receber outros meios)'):readiness.has_active_non_cash_account?'conta bancária ou digital cadastrada':'cadastre a conta em que você recebe'}</li>
     <li>Formas de pagamento: {readiness.has_active_payment_method?'cadastradas':'vincule às contas para receber'}</li>
     <li>Abertura do caixa: {readiness.has_open_own_session?'caixa individual aberto':'abra seu Caixa para informar pagamentos'}</li>
    </ol>
@@ -74,7 +74,7 @@ export function CashConfigurationPanel({data,references,sessions=[],busy,size,on
   {draft.kind==='payment_method'&&draft.unit_id&&!destinations.length&&<p className="customer-note">Nenhuma conta ativa compatível cadastrada para esta unidade e tipo. Cadastre uma conta em espécie para dinheiro, uma bancária para boleto ou uma bancária/digital para Pix, cartão e transferência.</p>}
   {error&&<p role="alert" className="form-feedback error">{error}</p>}<div className="account-actions"><button className="primary-button" disabled={busy}><Save size={18} aria-hidden="true"/>Salvar configuração</button><button data-operation-local-return type="button" className="secondary-button" disabled={busy} onClick={()=>{setDraft(undefined);setError('');attempt.current=undefined;onClear();}}><X size={18} aria-hidden="true"/>Cancelar</button></div></form>}
   <List key={`units:${data.page}:${data.unit_id}`} kind="unit" title="Unidades" hint="Passo 1: cadastre a unidade financeira do escritório (ex.: Unidade Matriz)." items={data.units} total={data.units_total} size={size} disabled={busy||!!draft} onEdit={edit}/>
-  <List key={`accounts:${data.page}:${data.unit_id}`} kind="account" title="Contas de destino" hint="Passo 2: crie uma conta em espécie para o caixa físico e contas bancárias/digitais para Pix, cartão e transferências." items={data.accounts} total={data.accounts_total} size={size} disabled={busy||!!draft} onEdit={edit}/>
+  <List key={`accounts:${data.page}:${data.unit_id}`} kind="account" title="Contas de destino" hint="Passo 2: crie uma conta em espécie para o caixa físico e conta bancária para boleto, ou bancária/digital para Pix, cartão e transferência." items={data.accounts} total={data.accounts_total} size={size} disabled={busy||!!draft} onEdit={edit}/>
   <List key={`methods:${data.page}:${data.unit_id}`} kind="payment_method" title="Formas de pagamento" hint="Passo 3: vincule Dinheiro, Pix manual, Cartão, Transferência ou Boleto manual a uma conta ativa compatível." items={data.payment_methods} total={data.payment_methods_total} size={size} disabled={busy||!!draft} onEdit={edit}/>
   {pages>1&&<nav className="team-pagination" aria-label="Páginas de cadastros financeiros"><button className="team-text-button" disabled={busy||pending||!!draft||data.page<=1} onClick={()=>onPage(data.page-1)}>Cadastros anteriores</button><span>{data.page}/{pages} · até50 por lista</span><button className="team-text-button" disabled={busy||pending||!!draft||data.page>=pages} onClick={()=>onPage(data.page+1)}>Mais cadastros</button></nav>}
  </section>;

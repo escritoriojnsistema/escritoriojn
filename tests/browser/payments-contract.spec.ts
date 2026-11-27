@@ -191,3 +191,26 @@ test('funcionário autorizado confirma dinheiro e mantém aprovação para Pix',
  expect(state.posted).toHaveLength(1);
  expect(state.posted[0]).toMatchObject({kind:'record',payment_method_id:cashMethod,status:'confirmed',presented_cents:3000});
 });
+
+test('solicitação de cartão preserva taxa e data de liquidação',async({page})=>{
+ const state=await setup(page,{role:'employee'});
+ state.value.session={...state.value.session,cash_account_id:null,opening_cents:0,cash_cents:0};
+ await page.route('**/api/financial-approvals/approvers',route=>route.fulfill({json:{data:{
+  backend_ready:true,items:[{user_id:id(999),name:'Gestor de teste',role_label:'Administrador'}],
+ }}}));
+ await page.route('**/api/financial-approvals/manual-payment/request',route=>route.fulfill({
+  status:201,json:{data:{id:id(998),status:'pending'}},
+ }));
+ await openStatement(page);
+ await record(page,cardMethod);
+ await page.getByLabel('Taxa do cartão (R$)',{exact:true}).fill('2,50');
+ await page.getByRole('combobox',{name:/Liquidação do cartão/}).selectOption('settled');
+ await page.getByLabel('Data de liquidação',{exact:true}).fill('2026-11-22');
+ await page.getByRole('button',{name:'Solicitar autorização',exact:true}).click();
+ await expect(page.getByText('Liquidado em 22/11/2026',{exact:true})).toBeVisible();
+ const submitted=page.waitForRequest(request=>request.url().endsWith('/api/financial-approvals/manual-payment/request'));
+ await page.getByRole('button',{name:'Solicitar autorização',exact:true}).click();
+ expect((await submitted).postDataJSON()).toMatchObject({payment_method_id:cardMethod,amount_cents:3000,
+  card_details:{fee_cents:250,settled_on:'2026-11-22'}});
+ await expect(page.getByRole('status').filter({hasText:'Solicitação de autorização de pagamento manual enviada'})).toBeVisible();
+});

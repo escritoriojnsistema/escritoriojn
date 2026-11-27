@@ -464,3 +464,12 @@ test('Fase 4 & 6 — API Express mapeia erros específicos de Caixa e Autorizaç
     provider.close();
   }
 });
+
+test('Caixa sem espécie libera Pix e cartão na unidade da sessão', () => {
+  const config = makeConfig();
+  const session = { ...makeOpenSession(), cash_account_id: null, opening_cents: 0 };
+  assert.equal(evaluateCashSetupReadiness(config, [session]).ready_to_record, true);
+  assert.deepEqual(filterCompatibleUnitMethods(config, UNIT_1, null).map(method => method.id), [METHOD_PIX, METHOD_CARD]);
+  const withoutCash = { ...config, accounts: config.accounts.filter(account => account.type !== 'cash') };
+  assert.equal(evaluateCashSetupReadiness(withoutCash, []).current_step, 4);
+});

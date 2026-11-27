@@ -111,7 +111,7 @@ function CashWorkspace({context,contexts,onOffice}:{context:AccessContext;contex
   catch(cause){if(!c.signal.aborted&&alive.current)fail(cause);return false;}
   finally{if(alive.current&&mutation.current===c){mutation.current=null;setBusy(false);}}
  }
- const open=(input:CashOpen)=>command(signal=>cashApi.open(office,input,signal),v=>{setData(v);setPage(1);setScope('own');setTab('own');setFeedback('Seu caixa foi aberto. O fundo em espécie não é receita.');});
+ const open=(input:CashOpen)=>command(signal=>cashApi.open(office,input,signal),v=>{setData(v);setPage(1);setScope('own');setTab('own');setFeedback(input.cash_account_id?'Seu caixa foi aberto. O fundo em espécie não é receita.':'Seu caixa sem espécie foi aberto.');});
  const configure=(input:CashConfigure,key:string)=>command(signal=>cashApi.configure(office,input,key,signal),()=>{setRevision(n=>n+1);setFeedback('Configuração financeira registrada.');});
  const canAll=(data?.can_read_all??true)&&context.permissions.includes('cash.read_all'),canManage=(data?.can_manage??true)&&context.permissions.includes('cash.manage');
  const canCharges=context.permissions.includes('requests.read')&&context.permissions.includes('charges.read'),canExpenses=mayCash&&['expenses.read','cash.transfer'].some(permission=>context.permissions.includes(permission)),canReports=context.permissions.includes('finance.reports.read')&&context.permissions.includes('cash.read');
@@ -164,10 +164,10 @@ function CashWorkspace({context,contexts,onOffice}:{context:AccessContext;contex
     {tab==='own'&&canRecordPayment&&openingOptions&&<div className="jn-manual-cash-banner">
      <div>
       <strong>Informar pagamento manualmente</strong>
-      <p className="customer-note">{!readiness.setup_complete?MANUAL_PAYMENT_SETUP_GUIDANCE:openOwnSession?`Caixa aberto em ${openOwnSession.unit_name}. Informe pagamentos presenciais, Pix manual, boleto, cartão avulso ou transferência diretamente no extrato.`:'Abra seu caixa individual abaixo para informar ou solicitar a confirmação de pagamentos manuais.'}</p>
+      <p className="customer-note">{(!readiness.setup_complete||openOwnSession&&!readiness.ready_to_record)?MANUAL_PAYMENT_SETUP_GUIDANCE:openOwnSession?`Caixa aberto em ${openOwnSession.unit_name}. Informe pagamentos presenciais, Pix manual, boleto, cartão avulso ou transferência diretamente no extrato.`:'Abra seu caixa individual abaixo para informar ou solicitar a confirmação de pagamentos manuais.'}</p>
      </div>
      <div className="account-actions">
-      {!readiness.setup_complete?(canManage&&<button type="button" className="primary-button" disabled={controlsBusy} onClick={()=>changeTab('configuration')}><Settings size={17} aria-hidden="true"/>Configurar financeiro</button>):openOwnSession?<button type="button" className="primary-button" disabled={controlsBusy} onClick={openManualPaymentInCash}><Banknote size={17} aria-hidden="true"/>Informar pagamento manualmente</button>:null}
+      {(!readiness.setup_complete||openOwnSession&&!readiness.ready_to_record)?(canManage&&<button type="button" className="primary-button" disabled={controlsBusy} onClick={()=>changeTab('configuration')}><Settings size={17} aria-hidden="true"/>Configurar financeiro</button>):openOwnSession?<button type="button" className="primary-button" disabled={controlsBusy} onClick={openManualPaymentInCash}><Banknote size={17} aria-hidden="true"/>Informar pagamento manualmente</button>:null}
      </div>
     </div>}
     {tab==='own'&&shown&&openingOptions&&shown.can_open&&<CashOpeningForm canManage={canManage} onConfigure={id=>{setConfigPage(1);setUnitFilter(id??null);changeTab('configuration');}} configuration={openingOptions} sessions={shown.sessions} busy={busy||referencesReading} onOpen={open} onClear={()=>{setIssues({});setFeedback('');}}/>}

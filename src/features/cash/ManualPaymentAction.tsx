@@ -1,3 +1,4 @@
+import { validChargeDate } from '../../../shared/charges';
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Banknote, CheckCircle2, RefreshCw, Settings, DoorOpen, X } from 'lucide-react';
@@ -765,6 +766,13 @@ export function ManualPaymentAction({
                               className="primary-button"
                               disabled={busy || disabled || !selectedMethod || !amountValid}
                               onClick={() => {
+                                if (selectedMethod?.type === 'card' && (
+                                  feeCents === null || amountCents === null || feeCents < 0 || feeCents > amountCents ||
+                                  (settlement === 'settled' && !validChargeDate(settledOn))
+                                )) {
+                                  setValidation('Informe a taxa e confira a data de liquidação do cartão.');
+                                  return;
+                                }
                                 setValidation('');
                                 setShowApprovalForm(true);
                               }}
@@ -799,6 +807,10 @@ export function ManualPaymentAction({
                           paymentMethodId={selectedMethod.id}
                           paymentMethodName={selectedMethod.name}
                           amountCents={amountCents}
+                          cardDetails={selectedMethod.type === 'card' && feeCents !== null ? {
+                            fee_cents: feeCents,
+                            settled_on: settlement === 'settled' ? settledOn : null,
+                          } : undefined}
                           initialExternalReference={externalReference}
                           initialJustification={evidence}
                           disabled={busy || disabled}

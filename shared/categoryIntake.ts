@@ -22,13 +22,18 @@ const multiline=(v:unknown,max:number):v is string=>typeof v==='string'&&[...v].
 const integer=(v:unknown,min=0,max=2147483645):v is number=>typeof v==='number'&&Number.isSafeInteger(v)&&v>=min&&v<=max;
 const id=(v:unknown):v is string=>typeof v==='string'&&uuidPattern.test(v);
 export const categoryKey=(v:unknown):v is string=>typeof v==='string'&&/^[a-z][a-z0-9_]{0,31}$/.test(v);
-const modelSlots:Record<string,RegExp>={'0':/^[0-9]$/,'A':/^[A-Za-z]$/,'*':/^[A-Za-z0-9]$/};
+export const categoryResponseMaskMaxLength = 50;
+export const carResponseModel: CategoryResponseModel = {
+ name: 'Código do CAR',
+ mask: 'AA-0000000-HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH',
+};
+const modelSlots:Record<string,RegExp>={'0':/^[0-9]$/,'A':/^[A-Za-z]$/,'H':/^[A-Fa-f0-9]$/,'*':/^[A-Za-z0-9]$/};
 export const identifiesCredential=(value:string)=>/(^|[^\p{L}\p{N}])(senha|password|passcode|otp|c[oó]digo de (verifica[cç][aã]o|autentica[cç][aã]o)|token de acesso)(?=$|[^\p{L}\p{N}])/iu.test(value);
 export const validResponseName=(value:unknown)=>text(value,80,1)&&!identifiesCredential(value);
-export const validResponseMask=(value:unknown):value is string=>typeof value==='string'&&/^[0A* .\/()-]{1,48}$/.test(value)&&/[0A*]$/.test(value)&&value===value.trim();
+export const validResponseMask=(value:unknown):value is string=>typeof value==='string'&&value.length<=categoryResponseMaskMaxLength&&/^[0AH* .\/()-]+$/.test(value)&&/[0AH*]$/.test(value)&&value===value.trim();
 export const allowResponseModel=(type:string)=>type==='text'||type==='phone';
 export const responseMaskFitsType=(type:string,mask:string)=>allowResponseModel(type)&&
- (type!=='phone'||(!/[A*]/.test(mask)&&/^0{10,15}$/.test(mask.replace(/[^0]/g,''))));
+ (type!=='phone'||(!/[AH*]/.test(mask)&&/^0{10,15}$/.test(mask.replace(/[^0]/g,''))));
 export const validResponseModel=(value:unknown):value is CategoryResponseModel=>obj(value)&&exact(value,['name','mask'])&&validResponseName(value.name)&&validResponseMask(value.mask);
 export const validResponseType=(value:unknown):value is CategoryResponseType=>obj(value)&&exact(value,['name','type'])&&validResponseName(value.name)&&categoryFieldTypes.includes(value.type as CategoryField['type']);
 export function validResponseOptionCommand(value:unknown):value is CategoryResponseOptionCommand{
@@ -42,7 +47,7 @@ export function categoryResponseOptions(value:unknown):CategoryResponseOptions{
  return {types:value.types,models:value.models};
 }
 export function formatResponseModel(mask:string,input:string){
- const values=input.match(/[A-Za-z0-9]/g)??[];
+ const values=(mask===carResponseModel.mask?input.toUpperCase():input).match(/[A-Za-z0-9]/g)??[];
  let cursor=0,result='',pending='';
  for(const token of mask){
   const rule=modelSlots[token];

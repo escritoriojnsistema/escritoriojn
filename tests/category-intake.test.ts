@@ -1,5 +1,5 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
-import {categoryAnswerError,categoryForm,categoryRequestState,validCategoryFormCommand,validCategoryRequestCommand,type CategoryField,type CategoryDocumentSlot} from '../shared/categoryIntake';
+import {categoryAnswerError,categoryForm,formatResponseModel,categoryRequestState,validCategoryFormCommand,validCategoryRequestCommand,type CategoryField,type CategoryDocumentSlot} from '../shared/categoryIntake';
 const id='00000000-0000-4000-8000-000000000001';
 const field:CategoryField={key:'cadastro',label:'Cadastro',type:'cpf',required:true,options:[]};
 const slot:CategoryDocumentSlot={key:'identidade',label:'Documento de identificação',required:true,max_files:2,max_bytes:1048576,mime_types:['application/pdf'],classification:'identificacao'};
@@ -33,4 +33,14 @@ test('category intake: masks and custom types preserve one fiscal identifier and
  assert.match(categoryAnswerError([rural],{rural:'AB12CD3/0'})!,/formato/);
  assert.equal(validCategoryFormCommand({...command,fields:[{...rural,label:'Senha gov.br'}]}),false);
  assert.equal(validCategoryFormCommand({...command,fields:[{...rural,model:{name:'Formato livre',mask:'^(.*)+$'}}]}),false);
+});
+
+test('category intake: the CAR mask accepts the full registration code', () => {
+ const car:CategoryField={...field,type:'text',model:{name:'Código do CAR',mask:'AA-0000000-HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH.HHHH'}};
+ assert.equal(validCategoryFormCommand({...command,fields:[car]}),true);
+ assert.equal(categoryAnswerError([car],{cadastro:'UF-1302405-E6D3.395B.6D27.4F42.AE22.DD56.987C.DD52'}),undefined);
+ assert.match(categoryAnswerError([car],{cadastro:'UF-1302405-E6D3.395B.6D27.4F42.AE22.DD56.987C'})!,/formato/);
+ assert.match(categoryAnswerError([car],{cadastro:'UF-1302405-X6D3.395B.6D27.4F42.AE22.DD56.987C.DD52'})!,/formato/);
+ assert.equal(formatResponseModel(car.model!.mask,'uf1302405e6d3395b6d274f42ae22dd56987cdd52'),
+  'UF-1302405-E6D3.395B.6D27.4F42.AE22.DD56.987C.DD52');
 });

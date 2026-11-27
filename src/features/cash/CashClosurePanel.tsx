@@ -22,7 +22,7 @@ export function CashClosurePanel({office,statement,initialMode,onBack,onBusy,onC
  const locked=busy||reading,lines=mode==='adjust'?selected?.groups:data?.groups,editing=(mode==='close'||mode==='reconcile'||mode==='adjust'&&!!selected)&&!reviewing;
  const mayRecord=data?.can_record&&statement.session.is_self&&statement.session.status==='open',mayAdjust=data?.can_adjust&&mayRecord;
  const allowed=reviewing?selected?.can_review:mode==='adjust'?mayAdjust:mayRecord;
- const complete=!!lines?.length&&lines.every(g=>counted(counts[g.key]??'',g)!==null),differences=lines?.map(g=>{const n=counted(counts[g.key]??'',g);return n===null?null:n-g.expected_cents;})??[],diffCount=differences.filter(d=>d!==null&&d!==0).length,absolute=differences.reduce<number>((n,d)=>n+Math.abs(d??0),0);
+ const complete=!!lines&&lines.every(g=>counted(counts[g.key]??'',g)!==null),differences=lines?.map(g=>{const n=counted(counts[g.key]??'',g);return n===null?null:n-g.expected_cents;})??[],diffCount=differences.filter(d=>d!==null&&d!==0).length,absolute=differences.reduce<number>((n,d)=>n+Math.abs(d??0),0);
  async function selectSource(id:string){if(locked)return;const c=new AbortController();read.current?.abort();read.current=c;setReading(true);setError(undefined);reset();try{const value=await cashApi.closureRecord(office,id,c.signal);if(!c.signal.aborted)setSelected(value);}catch(cause){if(!c.signal.aborted){const e=cashError(cause);setError(e);if([401,403,404].includes(e.status))onUnavailable(e);}}finally{if(!c.signal.aborted)setReading(false);}}
  async function submit(event:FormEvent){
   event.preventDefault();if(locked||mutation.current||!data||!allowed)return;

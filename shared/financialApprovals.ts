@@ -30,6 +30,8 @@ export type EligibleApprover = {
 
 export type DiscountMode = 'amount_cents' | 'percent';
 
+export type ManualCardDetails = { fee_cents: number; settled_on: string | null };
+
 export type ManualPaymentApprovalRequestInput = {
   office_id: string;
   charge_id: string;
@@ -41,6 +43,7 @@ export type ManualPaymentApprovalRequestInput = {
   payment_method_id: string;
   approver_user_id: string;
   amount_cents: number;
+  card_details?: ManualCardDetails;
   operation_date: string;
   external_reference: string | null;
   justification: string;
@@ -96,6 +99,7 @@ export type FinancialApprovalItem = {
   discount_percent: number | null;
   final_cents: number;
   card_fee_cents: number;
+  card_details?: ManualCardDetails;
   payment_method_id: string | null;
   payment_method_name: string | null;
   session_id: string | null;
