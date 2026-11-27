@@ -1,18 +1,19 @@
 .portal-identity {
-  margin-top: 10px;
   min-width: 0;
-  border: 1px solid var(--jn-border, #dbe3e8);
-  border-radius: var(--jn-radius-md, 12px);
-  padding: 18px 20px;
-  background: var(--jn-surface, #ffffff);
-  box-shadow: var(--jn-shadow-xs);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px 18px;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .portal-identity h3 {
   font-size: 16px;
   font-weight: 700;
-  color: var(--jn-navy, #103248);
-  margin: 0 0 8px;
+  color: #0f172a;
+  margin: 0;
 }
 
 .portal-identity-form {
@@ -29,8 +30,15 @@
   min-width: 0;
 }
 
-.portal-identity .primary-button {
+.portal-identity-form .team-field {
+  margin: 0;
+}
+
+.portal-identity .customers-primary-btn,
+.portal-identity .primary-button,
+.portal-identity > .relation-back-btn {
   justify-self: start;
+  align-self: flex-start;
   width: auto;
 }
 
@@ -39,52 +47,52 @@
 .portal-identity textarea {
   max-width: 100%;
   min-width: 0;
+  min-height: 44px;
 }
 
 .portal-token {
-  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .portal-token textarea {
   width: 100%;
   padding: 10px 12px;
-  background: var(--jn-surface-subtle, #f2f6f8);
-  border: 1px solid var(--jn-border-strong, #bccad3);
-  border-radius: var(--jn-radius-sm, 9px);
-  color: var(--jn-navy, #103248);
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  color: #0f172a;
   font: 13.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
   overflow-wrap: anywhere;
   word-break: break-all;
   resize: vertical;
   font-variant-numeric: tabular-nums;
-  transition: border-color 150ms var(--jn-ease, ease);
+  transition: border-color 120ms ease-out;
 }
 
 .portal-token textarea:focus {
-  border-color: var(--jn-navy, #103248);
+  border-color: #112236;
   outline: none;
 }
 
 .portal-identity small {
   display: block;
   font-size: 12px;
-  line-height: 1.5;
-  color: var(--jn-muted, #556b7a);
+  line-height: 1.45;
+  color: #475569;
   font-variant-numeric: tabular-nums;
-}
-
-.portal-identity .relation-list {
-  margin-top: 10px;
 }
 
 @media (max-width: 600px) {
   .portal-identity {
-    padding: 14px;
+    padding: 12px;
   }
   .portal-identity input,
   .portal-identity select {
     font-size: 16px;
   }
+  .portal-identity .customers-primary-btn,
   .portal-identity .primary-button {
     width: 100%;
   }
