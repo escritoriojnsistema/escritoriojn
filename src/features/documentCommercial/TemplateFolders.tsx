@@ -1,24 +1,324 @@
-import {useEffect,useRef,useState} from 'react';
-import type {TemplateFolderCommand,TemplateFolderState} from '../../../shared/modelCommercial';
-import {commercialApi,CommercialError} from './api';
-export type FolderFilter={folder_id:string|null;unfiled:boolean};
-export const allFolders:FolderFilter={folder_id:null,unfiled:false};
-export function TemplateFolders({office,filter,onFilter,templateId,onChanged,onRefresh,onDenied,onPendingChange}:{office:string;filter:FolderFilter;onFilter:(v:FolderFilter)=>void;templateId?:string;onChanged:()=>void;onRefresh:(signal:AbortSignal)=>Promise<void>;onDenied:(status:number)=>void;onPendingChange?:(pending:boolean)=>void}){
- const [state,setState]=useState<TemplateFolderState>(),[name,setName]=useState(''),[editing,setEditing]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false),[success,setSuccess]=useState('');
- const flight=useRef(false),pending=useRef<{command:TemplateFolderCommand;key:string}|undefined>(undefined),controller=useRef<AbortController|null>(null),alive=useRef(true);
- useEffect(()=>{alive.current=true;return()=>{alive.current=false;controller.current?.abort();};},[]);
- function fail(e:unknown){const s=e instanceof CommercialError?e.status:503;setError(e instanceof Error?e.message:'Não foi possível atualizar as pastas.');if(s===401||s===403){setState(undefined);pending.current=undefined;onDenied(s);}else if(s!==503)pending.current=undefined;}
- useEffect(()=>{const c=new AbortController();void commercialApi.folders(office,c.signal).then(s=>{if(!c.signal.aborted)setState(s);}).catch(e=>{if(!c.signal.aborted)fail(e);});return()=>c.abort();},[office]);
- async function command(next:TemplateFolderCommand){if(flight.current)return;const a=pending.current??{command:next,key:crypto.randomUUID()};pending.current=a;const c=new AbortController();controller.current=c;flight.current=true;setBusy(true);setError('');setSuccess('');try{const s=await commercialApi.folderCommand(office,a.command,a.key,c.signal);if(!alive.current||c.signal.aborted)return;setState(s);pending.current=undefined;setName('');setEditing('');setSuccess('Organização atualizada.');onChanged();if(a.command.kind==='delete'&&filter.folder_id===a.command.folder_id)onFilter(allFolders);}catch(e){if(alive.current&&!c.signal.aborted)fail(e);}finally{if(alive.current){flight.current=false;setBusy(false);}}}
- async function refresh(){if(flight.current||pending.current)return;const c=new AbortController();controller.current=c;flight.current=true;setBusy(true);setError('');setSuccess('');try{const [next]=await Promise.all([commercialApi.folders(office,c.signal),onRefresh(c.signal)]);if(alive.current&&!c.signal.aborted){setState(next);setSuccess('Pastas e modelos atualizados.');}}catch(e){if(alive.current&&!c.signal.aborted)fail(e);}finally{if(alive.current){flight.current=false;setBusy(false);}}}
- const onPending=useRef(onPendingChange);onPending.current=onPendingChange;
- useEffect(()=>{onPending.current?.(busy||!!pending.current);},[busy,error]);
- useEffect(()=>()=>onPending.current?.(false),[]);
- const selected=state?.folders.find(f=>f.id===editing),location=state?.locations.find(l=>l.template_id===templateId);
- return <section className="template-folders" aria-label="Pastas de modelos">
- <div className="template-folder-controls"><label className="team-field">Pasta<select disabled={busy} value={filter.unfiled?'unfiled':filter.folder_id??'all'} onChange={e=>onFilter({...filter,folder_id:['all','unfiled'].includes(e.target.value)?null:e.target.value,unfiled:e.target.value==='unfiled'})}><option value="all">Todas as pastas</option><option value="unfiled">Sem pasta</option>{state?.folders.map(f=><option key={f.id} value={f.id}>{f.name} · {f.category}</option>)}</select></label><button type="button" className="team-text-button" disabled={busy||!!pending.current} onClick={()=>void refresh()}>Atualizar pastas</button></div>
- {state?.can_manage&&<details><summary>Organizar pastas</summary><form onSubmit={e=>{e.preventDefault();if(selected)void command({kind:'rename',folder_id:selected.id,expected_revision:selected.revision,name:name.trim()});else void command({kind:'create',name:name.trim()});}}><div className="template-folder-controls"><label className="team-field">Pasta para alterar<select value={editing} disabled={busy||!!pending.current} onChange={e=>{setEditing(e.target.value);setName(state.folders.find(f=>f.id===e.target.value)?.name??'');}}><option value="">Criar nova pasta</option>{state.folders.map(f=><option key={f.id} value={f.id}>{f.name}</option>)}</select></label><label className="team-field">Nome da pasta<input value={name} maxLength={120} disabled={busy||!!pending.current} onChange={e=>setName(e.target.value)}/></label></div><div className="template-folder-actions"><button className="primary-button" disabled={busy||!name.trim()}>{selected?'Renomear pasta':'Criar pasta'}</button>{selected&&<button type="button" className="team-text-button" disabled={busy||!!pending.current} onClick={()=>void command({kind:'delete',folder_id:selected.id,expected_revision:selected.revision})}>Excluir pasta</button>}</div></form><p className="document-hint">A categoria da pasta vem dos modelos que ela contém. A pasta só pode ser excluída quando não houver modelos ativos nela; modelos já excluídos não bloqueiam.</p></details>}
- {templateId&&state?.can_manage&&<label className="team-field">Mover este modelo para<select disabled={busy||!!pending.current} value={location?.folder_id??''} onChange={e=>void command({kind:'move',template_id:templateId,folder_id:e.target.value||null,expected_revision:location?.revision??0})}><option value="">Sem pasta</option>{state.folders.map(f=><option key={f.id} value={f.id}>{f.name}</option>)}</select></label>}
- {success&&<p role="status" className="form-feedback">{success}</p>}{error&&<p role="alert" className="form-feedback error">{error}</p>}{pending.current&&!busy&&<button className="team-text-button" onClick={()=>void command(pending.current!.command)}>Repetir tentativa</button>}
- </section>;
+import { useEffect, useId, useRef, useState } from 'react';
+import type {
+  TemplateFolderCommand,
+  TemplateFolderState,
+} from '../../../shared/modelCommercial';
+import { commercialApi, CommercialError } from './api';
+
+export type FolderFilter = { folder_id: string | null; unfiled: boolean };
+export const allFolders: FolderFilter = { folder_id: null, unfiled: false };
+
+export function TemplateFolders({
+  office,
+  filter,
+  onFilter,
+  templateId,
+  onChanged,
+  onRefresh,
+  onDenied,
+  onPendingChange,
+}: {
+  office: string;
+  filter: FolderFilter;
+  onFilter: (v: FolderFilter) => void;
+  templateId?: string;
+  onChanged: () => void;
+  onRefresh: (signal: AbortSignal) => Promise<void>;
+  onDenied: (status: number) => void;
+  onPendingChange?: (pending: boolean) => void;
+}) {
+  const selectId = useId();
+  const [state, setState] = useState<TemplateFolderState>();
+  const [name, setName] = useState('');
+  const [editing, setEditing] = useState('');
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [success, setSuccess] = useState('');
+
+  const flight = useRef(false);
+  const pending = useRef<{ command: TemplateFolderCommand; key: string } | undefined>(
+    undefined,
+  );
+  const controller = useRef<AbortController | null>(null);
+  const alive = useRef(true);
+
+  useEffect(() => {
+    alive.current = true;
+    return () => {
+      alive.current = false;
+      controller.current?.abort();
+    };
+  }, []);
+
+  function fail(e: unknown) {
+    const s = e instanceof CommercialError ? e.status : 503;
+    setError(
+      e instanceof Error ? e.message : 'Não foi possível atualizar as pastas.',
+    );
+    if (s === 401 || s === 403) {
+      setState(undefined);
+      pending.current = undefined;
+      onDenied(s);
+    } else if (s !== 503) {
+      pending.current = undefined;
+    }
+  }
+
+  useEffect(() => {
+    const c = new AbortController();
+    void commercialApi
+      .folders(office, c.signal)
+      .then(s => {
+        if (!c.signal.aborted) setState(s);
+      })
+      .catch(e => {
+        if (!c.signal.aborted) fail(e);
+      });
+    return () => c.abort();
+  }, [office]);
+
+  async function command(next: TemplateFolderCommand) {
+    if (flight.current) return;
+    const a = pending.current ?? { command: next, key: crypto.randomUUID() };
+    pending.current = a;
+    const c = new AbortController();
+    controller.current = c;
+    flight.current = true;
+    setBusy(true);
+    setError('');
+    setSuccess('');
+    try {
+      const s = await commercialApi.folderCommand(
+        office,
+        a.command,
+        a.key,
+        c.signal,
+      );
+      if (!alive.current || c.signal.aborted) return;
+      setState(s);
+      pending.current = undefined;
+      setName('');
+      setEditing('');
+      setSuccess('Organização atualizada.');
+      onChanged();
+      if (a.command.kind === 'delete' && filter.folder_id === a.command.folder_id) {
+        onFilter(allFolders);
+      }
+    } catch (e) {
+      if (alive.current && !c.signal.aborted) fail(e);
+    } finally {
+      if (alive.current) {
+        flight.current = false;
+        setBusy(false);
+      }
+    }
+  }
+
+  async function refresh() {
+    if (flight.current || pending.current) return;
+    const c = new AbortController();
+    controller.current = c;
+    flight.current = true;
+    setBusy(true);
+    setError('');
+    setSuccess('');
+    try {
+      const [next] = await Promise.all([
+        commercialApi.folders(office, c.signal),
+        onRefresh(c.signal),
+      ]);
+      if (alive.current && !c.signal.aborted) {
+        setState(next);
+        setSuccess('Pastas e modelos atualizados.');
+      }
+    } catch (e) {
+      if (alive.current && !c.signal.aborted) fail(e);
+    } finally {
+      if (alive.current) {
+        flight.current = false;
+        setBusy(false);
+      }
+    }
+  }
+
+  const onPending = useRef(onPendingChange);
+  onPending.current = onPendingChange;
+  useEffect(() => {
+    onPending.current?.(busy || !!pending.current);
+  }, [busy, error]);
+  useEffect(() => () => onPending.current?.(false), []);
+
+  const selected = state?.folders.find(f => f.id === editing);
+  const location = state?.locations.find(l => l.template_id === templateId);
+
+  return (
+    <section className="template-folders" aria-label="Pastas de modelos">
+      <div className="template-folder-grid">
+        <label className="template-folder-label" htmlFor={selectId}>
+          Pasta
+        </label>
+        <select
+          id={selectId}
+          className="template-folder-select"
+          disabled={busy}
+          value={filter.unfiled ? 'unfiled' : (filter.folder_id ?? 'all')}
+          onChange={e =>
+            onFilter({
+              ...filter,
+              folder_id: ['all', 'unfiled'].includes(e.target.value)
+                ? null
+                : e.target.value,
+              unfiled: e.target.value === 'unfiled',
+            })
+          }
+        >
+          <option value="all">Todas as pastas</option>
+          <option value="unfiled">Sem pasta</option>
+          {state?.folders.map(f => (
+            <option key={f.id} value={f.id}>
+              {f.name} · {f.category}
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          className="template-folder-refresh"
+          disabled={busy || !!pending.current}
+          onClick={() => void refresh()}
+        >
+          Atualizar pastas
+        </button>
+      </div>
+
+      {state?.can_manage && (
+        <details className="template-folder-manage">
+          <summary>Organizar pastas</summary>
+          <form
+            className="template-folder-form"
+            onSubmit={e => {
+              e.preventDefault();
+              if (selected) {
+                void command({
+                  kind: 'rename',
+                  folder_id: selected.id,
+                  expected_revision: selected.revision,
+                  name: name.trim(),
+                });
+              } else {
+                void command({ kind: 'create', name: name.trim() });
+              }
+            }}
+          >
+            <div className="template-folder-controls">
+              <label className="team-field">
+                Pasta para alterar
+                <select
+                  value={editing}
+                  disabled={busy || !!pending.current}
+                  onChange={e => {
+                    setEditing(e.target.value);
+                    setName(
+                      state.folders.find(f => f.id === e.target.value)?.name ?? '',
+                    );
+                  }}
+                >
+                  <option value="">Criar nova pasta</option>
+                  {state.folders.map(f => (
+                    <option key={f.id} value={f.id}>
+                      {f.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="team-field">
+                Nome da pasta
+                <input
+                  value={name}
+                  maxLength={120}
+                  disabled={busy || !!pending.current}
+                  onChange={e => setName(e.target.value)}
+                />
+              </label>
+            </div>
+            <div className="template-folder-actions">
+              <button
+                className="documents-primary-btn"
+                type="submit"
+                disabled={busy || !name.trim()}
+              >
+                {selected ? 'Renomear pasta' : 'Criar pasta'}
+              </button>
+              {selected && (
+                <button
+                  type="button"
+                  className="team-text-button"
+                  disabled={busy || !!pending.current}
+                  onClick={() =>
+                    void command({
+                      kind: 'delete',
+                      folder_id: selected.id,
+                      expected_revision: selected.revision,
+                    })
+                  }
+                >
+                  Excluir pasta
+                </button>
+              )}
+            </div>
+          </form>
+          <p className="document-hint">
+            A categoria da pasta vem dos modelos que ela contém. A pasta só pode ser
+            excluída quando não houver modelos ativos nela; modelos já excluídos não
+            bloqueiam.
+          </p>
+        </details>
+      )}
+
+      {templateId && state?.can_manage && (
+        <label className="team-field template-folder-move">
+          Mover este modelo para
+          <select
+            disabled={busy || !!pending.current}
+            value={location?.folder_id ?? ''}
+            onChange={e =>
+              void command({
+                kind: 'move',
+                template_id: templateId,
+                folder_id: e.target.value || null,
+                expected_revision: location?.revision ?? 0,
+              })
+            }
+          >
+            <option value="">Sem pasta</option>
+            {state.folders.map(f => (
+              <option key={f.id} value={f.id}>
+                {f.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
+
+      {success && (
+        <p role="status" className="form-feedback documents-folder-feedback">
+          {success}
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="form-feedback error documents-folder-feedback">
+          {error}
+        </p>
+      )}
+      {pending.current && !busy && (
+        <button
+          type="button"
+          className="team-text-button"
+          onClick={() => void command(pending.current!.command)}
+        >
+          Repetir tentativa
+        </button>
+      )}
+    </section>
+  );
 }
+

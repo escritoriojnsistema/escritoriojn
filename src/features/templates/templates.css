@@ -2,6 +2,22 @@
   min-width: 0;
 }
 
+.templates-main.is-embedded,
+.templates-main.is-viewport-screen {
+  flex: 1 1 0;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.templates-main.is-viewport-screen .operation-heading {
+  flex-shrink: 0;
+  margin-bottom: 0;
+}
+
 .templates-main .operation-heading {
   margin-bottom: 12px;
 }
@@ -206,12 +222,117 @@
 }
 
 .template-folders {
-  margin: 14px 0;
-  padding: 12px 16px;
-  background: var(--jn-surface, #ffffff);
-  border: 1px solid var(--jn-border, #dbe3e8);
-  border-radius: var(--jn-radius-md, 12px);
-  box-shadow: var(--jn-shadow-xs);
+  flex-shrink: 0;
+  margin: 0;
+  padding: 12px 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.template-folder-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px 16px;
+  align-items: center;
+}
+
+.template-folder-label {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  line-height: 1.3;
+}
+
+.template-folder-select {
+  grid-column: 1;
+  grid-row: 2;
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 6px 12px;
+  font-size: 14px;
+  transition: border-color 120ms ease-out, box-shadow 120ms ease-out;
+}
+
+.template-folder-select:focus {
+  border-color: #112236;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(17, 34, 54, 0.16);
+}
+
+.template-folder-refresh {
+  grid-column: 2;
+  grid-row: 2;
+  border: 0;
+  background: transparent;
+  padding: 4px 2px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 120ms ease-out;
+}
+
+.template-folder-refresh:hover:not(:disabled) {
+  color: #112236;
+  text-decoration: underline;
+}
+
+.template-folder-refresh:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.template-folder-manage {
+  margin: 0;
+}
+
+.template-folder-manage > summary {
+  cursor: pointer;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  list-style: none;
+}
+
+.template-folder-manage > summary::-webkit-details-marker {
+  display: none;
+}
+
+.template-folder-manage[open] {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 8px;
+  max-height: 210px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.template-folder-form {
+  margin-top: 8px;
+}
+
+.template-folder-move {
+  margin-top: 4px !important;
+}
+
+.documents-folder-feedback {
+  margin: 0;
 }
 
 .template-folder-controls,
@@ -223,22 +344,12 @@
 }
 
 .template-folder-controls > .team-field {
-  flex: 1 1 220px;
+  flex: 1 1 200px;
 }
 
 .template-folder-controls .template-check {
   min-height: 44px;
   align-items: center;
-}
-
-.template-folders summary {
-  cursor: pointer;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--jn-navy, #103248);
 }
 
 .template-folder-actions {
@@ -258,26 +369,68 @@
   font-weight: 700;
 }
 
+@media (min-width: 901px) and (max-height: 800px) {
+  .templates-main.is-embedded,
+  .templates-main.is-viewport-screen {
+    gap: 8px;
+  }
+  .template-folders {
+    padding: 9px 12px;
+    gap: 5px;
+  }
+  .template-folder-select {
+    min-height: 34px;
+    padding: 4px 10px;
+    font-size: 13.5px;
+  }
+  .template-folder-manage > summary {
+    min-height: 20px;
+    font-size: 12.5px;
+  }
+}
+
 @media (max-width: 900px), (hover: none) and (pointer: coarse) and (max-width: 1200px) {
-  .operation-main:has(.templates-main) {
-    padding-top: 8px;
-    padding-bottom: 12px;
+  .templates-main.is-embedded,
+  .templates-main.is-viewport-screen {
+    gap: 8px;
   }
-  .templates-main .operation-heading {
-    margin-bottom: 4px;
+  .template-folders {
+    padding: 9px 11px;
+    gap: 6px;
+    border-radius: 12px;
   }
-  .templates-main .operation-heading h1 {
-    margin-bottom: 3px;
+  .template-folder-grid {
+    gap: 5px 10px;
   }
-  .templates-main .operation-heading p:not(.eyebrow) {
+  .template-folder-label {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .template-folder-refresh {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    font-size: 12px;
+    padding: 0;
+  }
+  .template-folder-select {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    min-height: 36px;
+    padding: 5px 10px;
+    font-size: 14px;
+    line-height: 1.3;
+    border-radius: 10px;
+  }
+  .template-folder-manage > summary {
+    min-height: 22px;
     font-size: 12px;
   }
-  .templates-main:has(.template-form) .operation-heading p:not(.eyebrow) {
-    display: none;
+  .template-folder-manage[open] {
+    max-height: 175px;
   }
   .template-form,
-  .template-approval,
-  .template-folders {
+  .template-approval {
     padding: 12px;
   }
   .templates-main .team-field {
