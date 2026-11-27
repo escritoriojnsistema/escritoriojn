@@ -43,7 +43,7 @@ export function CategoryFields({fields,answers,onChange,disabled}:{fields:Catego
    {field.type==='select'?<select aria-label={label} required={field.required} disabled={disabled} value={raw} onChange={event=>change(event.target.value)}><option value="">Selecione</option>{field.options.map(option=><option key={option}>{option}</option>)}</select>
    :field.type==='textarea'?<textarea required={field.required} disabled={disabled} rows={2} maxLength={2000} value={raw} onChange={event=>change(event.target.value)}/>
    :<input aria-label={label} aria-describedby={field.model?prefix+field.key:undefined} required={field.required} disabled={disabled} type={field.type==='date'?'date':field.type==='email'?'email':field.type==='phone'?'tel':'text'}
-     inputMode={field.type==='number'?'decimal':field.model&&!/[A*]/.test(field.model.mask)?'numeric':undefined}
+     inputMode={field.type==='number'?'decimal':field.model&&!/[AH*]/.test(field.model.mask)?'numeric':undefined}
      placeholder={field.model?.mask} maxLength={500} value={raw}
      onChange={event=>change(field.model?formatResponseModel(field.model.mask,event.target.value):event.target.value)}/>}
    {field.model&&<small id={prefix+field.key}>{field.model.name} · {field.model.mask}</small>}

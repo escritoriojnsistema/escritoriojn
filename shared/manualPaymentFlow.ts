@@ -167,7 +167,7 @@ export function filterCompatibleUnitMethods(
         return false;
       }
       if (method.type === 'cash') {
-        return account.type === 'cash' && (!cashAccountId || account.id === cashAccountId);
+        return account.type === 'cash' && (cashAccountId === undefined || account.id === cashAccountId);
       }
       return isCashPaymentDestination(method.type, account.type);
     });
@@ -233,7 +233,6 @@ export function evaluateCashSetupReadiness(
 
   const missing: string[] = [];
   if (!hasActiveUnit) missing.push('Unidade financeira ativa');
-  if (!hasActiveCashAccount) missing.push('Conta em espécie ativa para abertura do caixa');
   if (!hasActiveDestinationAccount) missing.push('Conta de destino ativa');
   if (!hasActivePaymentMethod) missing.push('Forma de pagamento ativa vinculada a uma conta compatível');
   if (!hasOpenOwnSession) missing.push('Caixa individual aberto');
@@ -241,12 +240,12 @@ export function evaluateCashSetupReadiness(
     missing.push('Forma de pagamento ativa compatível com a unidade do caixa aberto');
   }
 
-  const setupComplete = hasActiveUnit && hasActiveCashAccount && hasActivePaymentMethod;
+  const setupComplete = hasActiveUnit && hasActivePaymentMethod;
   const readyToRecord = setupComplete && hasOpenOwnSession && compatibleForSession.length > 0;
 
   let currentStep: 1 | 2 | 3 | 4 | 5 = 5;
   if (!hasActiveUnit) currentStep = 1;
-  else if (!hasActiveCashAccount) currentStep = 2;
+  else if (!hasActiveDestinationAccount) currentStep = 2;
   else if (!hasActivePaymentMethod) currentStep = 3;
   else if (!hasOpenOwnSession) currentStep = 4;
   else if (compatibleForSession.length === 0) currentStep = 3;

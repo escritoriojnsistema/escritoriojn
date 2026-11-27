@@ -12,7 +12,8 @@ const state={session_id:id,session_version:2,status:'open',can_record:true,can_a
 const base={kind:'close',session_id:id,expected_version:2,idempotency_key:other,reason:'Contagem conferida',counts:[{key:group.key,counted_cents:12900}]};
 test('fecho18: contrato exato, contagens integrais e chave por meio/destino sem autoridade do navegador',()=>{
  assert.equal(validClosureOperation(base),true);
- for(const change of [{counts:[]},{counts:[base.counts[0],base.counts[0]]},{counts:[{key:group.key,counted_cents:-1}]},{counts:[{key:group.key,counted_cents:1.2}]},{counts:[{key:group.key,counted_cents:1e12+1}]},{actor_id:id},{reason:' motivo '},{expected_version:0},{counts:[{key:`pix:${id}`,counted_cents:0,expected_cents:0}]}])assert.equal(validClosureOperation({...base,...change}),false);
+ assert.equal(validClosureOperation({...base,counts:[]}),true);
+ for(const change of [{counts:[base.counts[0],base.counts[0]]},{counts:[{key:group.key,counted_cents:-1}]},{counts:[{key:group.key,counted_cents:1.2}]},{counts:[{key:group.key,counted_cents:1e12+1}]},{actor_id:id},{reason:' motivo '},{expected_version:0},{counts:[{key:`pix:${id}`,counted_cents:0,expected_cents:0}]}])assert.equal(validClosureOperation({...base,...change}),false);
  assert.equal(validClosureOperation({...base,counts:[{key:`pix:${id}`,counted_cents:-100}]}),true);
  assert.equal(validClosureOperation({...base,kind:'adjust',source_id:id}),true);
  assert.equal(validClosureOperation({...base,kind:'review',record_id:id,expected_record_version:1,decision:'approve',counts:undefined}),false);

@@ -1,3 +1,11 @@
+# Caixa sem espécie, pagamentos manuais e código do CAR (27/11/2026)
+
+O Caixa individual pode abrir sem conta em espécie e com fundo zero quando a unidade tem uma forma de recebimento digital ativa e uma conta compatível. Pix, cartão e boleto recebidos fora do sistema usam o lançamento manual, com as permissões e a conferência do Caixa. Boleto manual usa conta bancária. A autorização de cartão preserva a taxa e a data de liquidação informadas. Em Categorias, o modelo Código do CAR aceita o identificador completo com oito grupos hexadecimais.
+
+Bancos e Pagamentos orienta o lançamento manual e indica disponibilidade da maquininha a partir do sinal recente do terminal e da integração verificada. Cobrança, parcelamento e QR Code na maquininha por Bluetooth ou Wi-Fi dependem de um conector da operadora para o modelo contratado.
+
+Verificação local com build, 498 testes Node, replay PostgreSQL com 2.454 verificações, nova validação das suítes de Caixa, Categorias e autorizações após a revisão, e 13 cenários focados no navegador. Próximo checkpoint é a publicação autorizada pelo fluxo GitHub → Vercel, com conferência das migrations no histórico do Supabase.
+
 # Etapa 40 — evolução futura documentada, integrações desativadas (16/11/2026)
 
 Pedido40 sobre main711beb9 após conferir Livro/AGENTS, fecho39 na branch preservada, manualDrive40, operação/financeiro e prevenção. [Contrato40](docs/etapas/etapa-40.md) · [Backlog](docs/backlog/README.md) · [Fronteiras/eventos](docs/backlog/integracoes/contratos.md) · [Fecho](docs/etapas/fecho-40.md). PR136 da39 permanece aberto/rascunho/headed6a3a1, semmerge; não integrar seu código por esta etapa. O pedido autoriza o contrato documental independente40, sem aprovar piloto39, custos, treinamento, integrações ou recuperação externa36.

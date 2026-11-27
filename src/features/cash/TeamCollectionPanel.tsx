@@ -60,7 +60,9 @@ export function TeamCollectionPanel({
         if (controller.signal.aborted) return;
         const active = res.terminals.filter((t) => t.status === 'active');
         setTerminals(active);
-        setPixAvailable(Boolean(res.backend_ready && res.pix.enabled && res.pix.provider_id));
+        setPixAvailable(res.backend_ready && res.pix.enabled && res.pix.dynamic_qr_enabled && res.providers.some(provider =>
+          provider.id === res.pix.provider_id && provider.connection_ready === true && provider.enabled_methods.includes('pix_qr'),
+        ));
         if (active.length === 1) setTerminalId(active[0].id);
       })
       .catch(() => {
@@ -91,7 +93,9 @@ export function TeamCollectionPanel({
         idempotency_key: attemptRef.current.key,
       });
       setIntent(created);
-      setFeedback('Cobrança Pix dinâmica gerada na mesma obrigação oficial. Compartilhe o código e acompanhe a confirmação real.');
+      setFeedback(created.pix_copy_paste
+        ? 'Código Pix disponível. Compartilhe e acompanhe a confirmação do pagamento.'
+        : 'Solicitação Pix registrada. Aguarde o código do provedor.');
     } catch (cause) {
       const err = cause instanceof PaymentCheckoutError ? cause : new PaymentCheckoutError(503);
       setError(err.message);
@@ -126,7 +130,7 @@ export function TeamCollectionPanel({
         idempotency_key: attemptRef.current.key,
       });
       setIntent(created);
-      setFeedback('Cobrança enviada para a maquininha selecionada. Acompanhe autorização, captura e liquidação.');
+      setFeedback('Solicitação registrada. Acompanhe o retorno da maquininha.');
     } catch (cause) {
       const err = cause instanceof PaymentCheckoutError ? cause : new PaymentCheckoutError(503);
       setError(err.message);

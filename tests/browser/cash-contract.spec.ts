@@ -100,11 +100,28 @@ test('caixa: boleto manual lista exclusivamente contas bancárias da unidade',as
  await page.getByRole('tab',{name:'Configuração',exact:true}).click();
  await page.getByRole('button',{name:'Adicionar forma',exact:true}).click();
  await page.getByLabel('Nome',{exact:true}).fill('Boleto da unidade');
- await page.getByRole('combobox',{name:'Tipo',exact:true}).selectOption({label:'Bancária (conta interna / manual) — Boleto'});
+ await page.getByRole('combobox',{name:'Tipo',exact:true}).selectOption({label:'Boleto manual'});
  const destinations=page.getByRole('combobox',{name:'Conta de destino',exact:true});
  await expect(destinations.locator('option')).toHaveCount(2);
  await destinations.selectOption(boletoBank);
  await page.getByRole('button',{name:'Salvar configuração',exact:true}).click();
  await expect(page.getByLabel('Nome',{exact:true})).toHaveCount(0);
  expect(body).toMatchObject({configuration:{kind:'payment_method',type:'boleto',destination_account_id:boletoBank}});
+});
+
+test('caixa: abre unidade com Pix e sem conta em espécie',async({page})=>{
+ await setup(page);
+ await page.route('**/api/cash/configuration',route=>route.fulfill({json:{data:{
+  ...config,accounts:config.accounts.filter(item=>item.type!=='cash'),accounts_total:1,
+ }}}));
+ await page.route('**/api/cash/open',route=>route.fulfill({json:{data:{...empty,total:1,sessions:[
+  {...session,cash_account_id:null,account_name:'Caixa sem espécie',opening_cents:0,numerario_cents:0},
+ ]}}}));
+ await page.goto('/caixa');
+ await expect(page.getByRole('combobox',{name:'Conta em espécie',exact:true})).toHaveValue('digital');
+ await expect(page.getByLabel('Fundo inicial (R$)',{exact:true})).toHaveCount(0);
+ const opening=page.waitForRequest(request=>request.url().endsWith('/api/cash/open'));
+ await page.getByRole('button',{name:'Abrir meu caixa',exact:true}).click();
+ expect((await opening).postDataJSON()).toMatchObject({office_id:office,unit_id:unit,cash_account_id:null,opening_cents:0});
+ await expect(page.getByText('Seu caixa sem espécie foi aberto.',{exact:true})).toBeVisible();
 });

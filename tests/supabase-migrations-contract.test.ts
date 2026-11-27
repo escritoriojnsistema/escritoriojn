@@ -62,8 +62,11 @@ function extractRouterRpcCalls(source: string): Array<{ fn: string; params: stri
 }
 
 test('IA 2 SQL Migrations: todos os RPCs e parâmetros chamados pelos 4 routers Express existem em public.* com SECURITY INVOKER e search_path vazio', () => {
-  const sql = [readAllEvolutionSql(), readFileSync(resolve(ROOT,
-    'supabase/migrations/20261122193331_cash_receiving_scope_and_provider_options.sql'), 'utf8')].join('\n\n');
+  const sql = [
+    readAllEvolutionSql(),
+    readFileSync(resolve(ROOT, 'supabase/migrations/20261122193331_cash_receiving_scope_and_provider_options.sql'), 'utf8'),
+    readFileSync(resolve(ROOT, 'supabase/migrations/20261127204107_manual_card_approval.sql'), 'utf8'),
+  ].join('\n\n');
   const publicFns = parsePublicFunctions(sql);
 
   let totalVerifiedCalls = 0;

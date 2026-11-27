@@ -2,6 +2,8 @@ import { useState } from 'react';
 import {
   allowResponseModel,
   categoryFieldTypes,
+  categoryResponseMaskMaxLength,
+  carResponseModel,
   responseMaskFitsType,
   validResponseMask,
   validResponseName,
@@ -29,6 +31,7 @@ const presets: CategoryResponseModel[] = [
   { name: 'Telefone fixo brasileiro', mask: '(00) 0000-0000' },
   { name: 'NIRF', mask: '0.000.000-0' },
   { name: 'CIB', mask: '*******-0' },
+  carResponseModel,
 ];
 
 const modelKey = (option: CategoryResponseModel) => JSON.stringify([option.name, option.mask]);
@@ -110,7 +113,7 @@ export function ResponseSettings({
     if (editor === 'model') {
       if (!validResponseMask(mask.trim())) {
         setError(
-          'Use 0 para dígitos, A para letras, * para ambos e apenas espaços, pontos, barras, parênteses ou hífens como separadores. Termine com 0, A ou *.',
+          'Use 0 para dígitos, A para letras, H para 0–9 ou A–F e * para letras ou dígitos. Termine com um desses caracteres.',
         );
         return;
       }
@@ -251,7 +254,7 @@ export function ResponseSettings({
             <>
               <label className="team-field">
                 Máscara
-                <input maxLength={48} placeholder="00000/AAAA" value={mask} onChange={event => setMask(event.target.value)} />
+                <input maxLength={categoryResponseMaskMaxLength} placeholder="00000/AAAA" value={mask} onChange={event => setMask(event.target.value)} />
               </label>
               <p className="customer-note">
                 Use 0 para dígitos, A para letras e * para ambos. Exemplo de número de escritura: 00000/AAAA.

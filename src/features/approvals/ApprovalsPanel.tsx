@@ -233,6 +233,12 @@ export function ApprovalsPanel({
                         <dt>Valor a registrar</dt>
                         <dd><strong>{cashMoney(item.requested_amount_cents)}</strong></dd>
                       </div>
+                      {item.card_details && <>
+                        <div><dt>Taxa do cartão</dt><dd>{cashMoney(item.card_details.fee_cents)}</dd></div>
+                        <div><dt>Liquidação do cartão</dt><dd>{item.card_details.settled_on
+                          ? `Liquidado em ${item.card_details.settled_on.split('-').reverse().join('/')}`
+                          : 'Pendente de liquidação'}</dd></div>
+                      </>}
                       <div>
                         <dt>Forma de pagamento</dt>
                         <dd>{item.payment_method_name ?? 'Não informada'}</dd>

@@ -52,6 +52,7 @@ const STATUS_MAP: Record<string, number> = {
   TERMINAL_NOT_FOUND: 404,
   PROVIDER_CONFLICT: 409,
   PROVIDER_VALIDATION: 422,
+  PROVIDER_NOT_CONFIGURED: 503,
 };
 
 function mapSafeError(res: Response, error: { code?: string; message?: string }) {
@@ -73,6 +74,7 @@ function mapSafeError(res: Response, error: { code?: string; message?: string })
       404: 'Integração ou maquininha não encontrada no escritório selecionado.',
       409: 'A configuração foi atualizada em outra sessão. Recarregue antes de salvar.',
       422: 'Confira os dados da integração antes de salvar.',
+      503: 'A conexão exige uma integração oficial com o banco ou com a operadora da maquininha.',
     };
     errorResponse(res, status, msg, safeMessages[status] ?? 'Não foi possível concluir a configuração.');
     return;
@@ -145,6 +147,7 @@ function projectState(officeId: string, raw: unknown): PaymentProvidersState {
           status: (['unconfigured', 'configured', 'validated', 'active', 'disabled', 'error'].includes(String(p.status))
             ? (p.status as ConfiguredProvider['status'])
             : 'configured'),
+          connection_ready: p.connection_ready === true,
           enabled_methods: Array.isArray(p.enabled_methods)
             ? p.enabled_methods.filter((m): m is CheckoutMethod => checkoutMethods.includes(m as CheckoutMethod))
             : [],

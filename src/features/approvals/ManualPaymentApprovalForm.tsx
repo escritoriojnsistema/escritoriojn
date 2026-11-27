@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { isValidIsoDate, type EligibleApprover } from '../../../shared/financialApprovals';
+import { isValidIsoDate, type EligibleApprover, type ManualCardDetails } from '../../../shared/financialApprovals';
 import { cashMoney } from '../cash/CashSessions';
 import { financialApprovalsApi, FinancialApprovalsError } from './api';
 import '../settings/paymentProviders.css';
@@ -18,6 +18,7 @@ type Props = {
   paymentMethodId: string;
   paymentMethodName: string;
   amountCents: number;
+  cardDetails?: ManualCardDetails;
   initialExternalReference?: string;
   initialJustification?: string;
   disabled?: boolean;
@@ -47,6 +48,7 @@ export function ManualPaymentApprovalForm({
   paymentMethodId,
   paymentMethodName,
   amountCents,
+  cardDetails,
   initialExternalReference = '',
   initialJustification = '',
   disabled = false,
@@ -119,6 +121,7 @@ export function ManualPaymentApprovalForm({
         payment_method_id: paymentMethodId,
         approver_user_id: approverId,
         amount_cents: amountCents,
+        ...(cardDetails ? { card_details: cardDetails } : {}),
         operation_date: operationDate,
         external_reference: externalReference.trim() || null,
         justification: justification.trim(),
@@ -156,6 +159,12 @@ export function ManualPaymentApprovalForm({
           <dt>Valor recebido</dt>
           <dd><strong>{cashMoney(amountCents)}</strong></dd>
         </div>
+        {cardDetails && <>
+          <div><dt>Taxa do cartão</dt><dd>{cashMoney(cardDetails.fee_cents)}</dd></div>
+          <div><dt>Liquidação do cartão</dt><dd>{cardDetails.settled_on
+            ? `Liquidado em ${cardDetails.settled_on.split('-').reverse().join('/')}`
+            : 'Pendente de liquidação'}</dd></div>
+        </>}
         {(destinationAccountName || unitName) && (
           <div>
             <dt>Conta / unidade de destino</dt>

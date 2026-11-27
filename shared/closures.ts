@@ -20,7 +20,7 @@ export function validClosureOperation(v:unknown):v is ClosureOperation{
  if(!object(v)||!uuid(v.session_id)||!uuid(v.idempotency_key)||!Number.isInteger(v.expected_version)||Number(v.expected_version)<1||Number(v.expected_version)>=2147483646||typeof v.reason!=='string'||v.reason!==v.reason.trim()||Array.from(v.reason).length<5||Array.from(v.reason).length>500||/[\u0000-\u001f\u007f]/.test(v.reason))return false;
  const base=['kind','session_id','expected_version','idempotency_key','reason'];
  if(v.kind==='review')return exact(v,[...base,'record_id','expected_record_version','decision'])&&uuid(v.record_id)&&v.expected_record_version===1&&['approve','reject'].includes(String(v.decision));
- if(!['reconcile','close','adjust'].includes(String(v.kind))||!exact(v,[...base,'counts',...(v.kind==='adjust'?['source_id']:[])])||v.kind==='adjust'&&!uuid(v.source_id)||!Array.isArray(v.counts)||!v.counts.length||v.counts.length>100)return false;
+ if(!['reconcile','close','adjust'].includes(String(v.kind))||!exact(v,[...base,'counts',...(v.kind==='adjust'?['source_id']:[])])||v.kind==='adjust'&&!uuid(v.source_id)||!Array.isArray(v.counts)||v.counts.length>100)return false;
  const keys=new Set<string>();
  return v.counts.every(c=>{if(!object(c)||!exact(c,['key','counted_cents'])||!closureKey(c.key)||!cashInteger(c.counted_cents,c.key.startsWith('cash:')?0:-1e12)||keys.has(c.key))return false;keys.add(c.key);return true;});
 }
