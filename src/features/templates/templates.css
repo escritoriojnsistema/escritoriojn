@@ -30,11 +30,11 @@
 
 .template-form,
 .template-approval {
-  background: var(--jn-surface, #ffffff);
-  border: 1px solid var(--jn-border, #dbe3e8);
-  border-radius: var(--jn-radius-md, 12px);
-  padding: 18px 20px;
-  box-shadow: var(--jn-shadow-xs);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
 .template-form fieldset,
@@ -151,19 +151,33 @@
 
 .template-version-line {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 10px 12px;
 }
 
 .template-version-line .team-field {
-  flex: 1;
+  flex: 1 1 220px;
 }
 
 .template-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
   font-size: 12px;
   font-weight: 700;
-  color: var(--jn-navy, #103248);
+  color: #334155;
   font-variant-numeric: tabular-nums;
+}
+
+.template-status.is-approved {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
 }
 
 .template-literal {

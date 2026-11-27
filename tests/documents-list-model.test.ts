@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  collectAllDocumentPages,
   DOCUMENTS_AUTO_LOAD_CAP,
   DOCUMENTS_BATCH_SIZE,
   formatDocumentsCount,
@@ -129,4 +130,50 @@ test('formatIssuedDocumentMeta and formatDocumentsCount format counts and status
   assert.equal(formatDocumentsCount(0, 'modelo', 'modelos'), '0 modelos');
   assert.equal(formatDocumentsCount(1, 'modelo', 'modelos'), '1 modelo');
   assert.equal(formatDocumentsCount(7, 'revisão', 'revisões'), '7 revisões');
+});
+
+test('collectAllDocumentPages merges pages, deduplicates keys, and respects maxItems cap', async () => {
+  const pages = new Map<number, { items: { id: string }[]; total: number }>([
+    [1, { items: [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }, { id: '5' }], total: 8 }],
+    [2, { items: [{ id: '5' }, { id: '6' }, { id: '7' }, { id: '8' }], total: 8 }],
+  ]);
+  const calls: number[] = [];
+  const result = await collectAllDocumentPages({
+    fetchPage: async page => {
+      calls.push(page);
+      return pages.get(page) ?? { items: [], total: 8 };
+    },
+    getItems: p => p.items,
+    getTotal: p => p.total,
+    getKey: item => item.id,
+    pageSize: 5,
+    maxItems: 50,
+  });
+
+  assert.deepEqual(calls, [1, 2]);
+  assert.equal(result.total, 8);
+  assert.deepEqual(
+    result.items.map(i => i.id),
+    ['1', '2', '3', '4', '5', '6', '7', '8'],
+  );
+
+  const cappedCalls: number[] = [];
+  const capped = await collectAllDocumentPages({
+    fetchPage: async page => {
+      cappedCalls.push(page);
+      const start = (page - 1) * 5;
+      return {
+        items: Array.from({ length: 5 }, (_, i) => ({ id: String(start + i + 1) })),
+        total: 30,
+      };
+    },
+    getItems: p => p.items,
+    getTotal: p => p.total,
+    getKey: item => item.id,
+    pageSize: 5,
+    maxItems: 10,
+  });
+
+  assert.deepEqual(cappedCalls, [1, 2]);
+  assert.equal(capped.items.length, 10);
 });

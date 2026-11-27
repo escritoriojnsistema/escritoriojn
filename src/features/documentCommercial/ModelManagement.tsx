@@ -1,47 +1,685 @@
-import {useEffect,useRef,useState} from 'react';
-import {Link} from 'react-router-dom';
-import type {TemplateDetail} from '../../../shared/templates';
-import type {ModelCommercialState,DocumentOfferInput} from '../../../shared/modelCommercial';
-import type {ServicePage} from '../../../shared/services';
-import {servicesApi} from '../services/api';
-import {paths} from '../../app/routes';
-import {isCustomTemplateKey} from '../../../shared/templates';
-import {modelApi} from './modelApi';
-import {CommercialError} from './api';
-import {TemplateForm} from '../templates/TemplateForm';
-import {SmartConfigEditor} from '../smartDocuments/SmartConfigEditor';
-export function ModelManagement({office,detail,selectedNumber,onSelected,onDuplicate,onUpdated,onChanged,onName,onArchived,onDenied,onPendingChange}:{office:string;detail:TemplateDetail;selectedNumber?:number;onSelected?:(number:number)=>void;onDuplicate:(v:TemplateDetail)=>void;onUpdated?:(v:TemplateDetail)=>void;onChanged:()=>void;onName:(name:string)=>void;onArchived:()=>void;onDenied:(status:number)=>void;onPendingChange?:(pending:boolean)=>void}){
- const [state,setState]=useState<ModelCommercialState>(),[name,setName]=useState(''),[code,setCode]=useState(''),[duplicateName,setDuplicateName]=useState(''),[source,setSource]=useState(detail.versions[0]?.id??''),[versionId,setVersionId]=useState(detail.versions.find(v=>v.number===selectedNumber)?.id??detail.versions[0]?.id??''),[editing,setEditing]=useState(false),[versionReason,setVersionReason]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[message,setMessage]=useState(''),[tick,setTick]=useState(0);
- const [offer,setOffer]=useState<DocumentOfferInput>({service_id:'',instructions:'',execution_level:3,portal_enabled:false,intake_keys:[],required_intake_keys:[],allow_self_approval:false}),[services,setServices]=useState<ServicePage>(),[query,setQuery]=useState(''),[page,setPage]=useState(1);
- const alive=useRef(true),flight=useRef(false),c=useRef<AbortController|null>(null),attempt=useRef<{key:string;work:(key:string,s:AbortSignal)=>Promise<void>}|null>(null);
- useEffect(()=>{alive.current=true;return()=>{alive.current=false;c.current?.abort();};},[]);
- function fail(e:unknown){setError(e instanceof Error?e.message:'Não foi possível atualizar o modelo.');if(e instanceof CommercialError&&e.status!==503)attempt.current=null;if(e instanceof CommercialError&&[401,403].includes(e.status)){setState(undefined);onDenied(e.status);}}
- useEffect(()=>{const a=new AbortController();void modelApi.state(office,detail.id,a.signal).then(v=>{if(!a.signal.aborted){setState(v);setName(v.metadata.display_name);onName(v.metadata.display_name);setOffer(v.offer??{service_id:'',instructions:'',execution_level:3,portal_enabled:false,intake_keys:[],required_intake_keys:[],allow_self_approval:false});}}).catch(e=>{if(!a.signal.aborted)fail(e);});return()=>a.abort();},[office,detail.id,tick]);
- useEffect(()=>{if(!state?.can_manage)return;const a=new AbortController();const t=setTimeout(()=>void servicesApi.search(office,query,page,5,a.signal).then(v=>{if(!a.signal.aborted)setServices(v);}).catch(e=>{if(!a.signal.aborted)fail(e);}),250);return()=>{clearTimeout(t);a.abort();};},[office,query,page,state?.can_manage]);
- async function run(work:(key:string,s:AbortSignal)=>Promise<void>){if(flight.current)return;const a=attempt.current??{key:crypto.randomUUID(),work};attempt.current=a;const controller=new AbortController();c.current=controller;flight.current=true;setBusy(true);setError('');setMessage('');try{await a.work(a.key,controller.signal);if(alive.current&&!controller.signal.aborted){attempt.current=null;setMessage('Alteração registrada.');onChanged();}}catch(e){if(alive.current&&!controller.signal.aborted)fail(e);}finally{if(alive.current){flight.current=false;setBusy(false);}}}
- useEffect(()=>{if(!editing&&!flight.current){const selected=detail.versions.find(v=>v.number===selectedNumber);if(selected)setVersionId(selected.id);}},[selectedNumber,detail.versions,editing]);
- const onPending=useRef(onPendingChange);onPending.current=onPendingChange;
- useEffect(()=>{onPending.current?.(busy||!!attempt.current);},[busy,error]);
- useEffect(()=>()=>onPending.current?.(false),[]);
- const locked=busy||!!attempt.current,selectedVersion=detail.versions.find(v=>v.id===versionId)??detail.versions[0],version=detail.versions.find(v=>v.id===source)??detail.versions[0],fields=version?.variables.filter(v=>isCustomTemplateKey(v.key))??[];
- if(!state)return <section>{error&&<p role="alert" className="form-feedback error">{error}</p>}<button className="team-text-button" onClick={()=>setTick(x=>x+1)}>Consultar configuração do modelo</button></section>;
- return <section className="model-management" aria-label="Configuração do modelo"><h2>{state.metadata.display_name}</h2>{message&&<p role="status" className="form-feedback">{message}</p>}{error&&<p role="alert" className="form-feedback error">{error}</p>}
- {attempt.current&&!busy&&<button className="team-text-button" onClick={()=>void run(attempt.current!.work)}>Repetir alteração</button>}
- {state.can_manage_metadata&&<details><summary>Nome, duplicação e exclusão</summary><form onSubmit={e=>{e.preventDefault();void run(async(k,s)=>{const metadata=await modelApi.metadata(office,detail.id,{kind:'rename',name:name.trim()},state.metadata.revision,k,s);if(!s.aborted&&alive.current){setState({...state,metadata});onName(metadata.display_name);}});}}><label className="team-field">Título do modelo<input value={name} maxLength={120} disabled={locked} onChange={e=>setName(e.target.value)}/></label><div className="template-folder-actions"><button className="primary-button" disabled={locked||!name.trim()}>Renomear modelo</button><button type="button" className="team-text-button" disabled={locked} onClick={()=>void run(async(k,s)=>{const metadata=await modelApi.metadata(office,detail.id,{kind:'archive'},state.metadata.revision,k,s);if(!s.aborted&&alive.current){setState({...state,metadata});onArchived();}})}>Excluir da biblioteca ativa</button></div><p className="document-hint">A exclusão retira o modelo das novas solicitações e conserva o histórico dos atendimentos existentes.</p></form>
- <form onSubmit={e=>{e.preventDefault();void run(async(k,s)=>{const d=await modelApi.duplicate(office,detail.id,source,code,duplicateName.trim(),k,s);if(alive.current&&!s.aborted)onDuplicate(d);});}}><label className="team-field">Versão para duplicar<select value={source} disabled={locked} onChange={e=>setSource(e.target.value)}>{detail.versions.map(v=><option key={v.id} value={v.id}>Versão {v.number} · {v.name}</option>)}</select></label><div className="template-folder-controls"><label className="team-field">Novo código<input value={code} maxLength={32} disabled={locked} onChange={e=>setCode(e.target.value.toUpperCase())}/></label><label className="team-field">Título da cópia<input value={duplicateName} maxLength={120} disabled={locked} onChange={e=>setDuplicateName(e.target.value)}/></label></div><button className="team-text-button" disabled={locked||!source||!/^[A-Z0-9][A-Z0-9_-]{1,31}$/.test(code)||!duplicateName.trim()}>Duplicar como rascunho</button></form></details>}
- {state.can_manage_metadata&&selectedVersion&&<details open><summary>Editar ou excluir versão</summary>
-  <label className="team-field">Versão<select value={selectedVersion.id} disabled={locked||editing} onChange={e=>{setVersionId(e.target.value);const selected=detail.versions.find(v=>v.id===e.target.value);if(selected)onSelected?.(selected.number);setVersionReason('');}}>{detail.versions.map(v=><option key={v.id} value={v.id}>Versão {v.number} · {v.approved_at?'Aprovada':'Rascunho'} · {v.name}</option>)}</select></label>
-  {editing?<TemplateForm initial={{...selectedVersion,name:state.metadata.display_name}} mode="edit" busy={locked} locked={false} conflict={false} onCancel={()=>setEditing(false)} onSave={(definition,reason)=>void run(async(k,s)=>{const d=await modelApi.versionCommand(office,detail.id,{kind:'edit',version_id:selectedVersion.id,expected_edited_at:selectedVersion.edited_at??null,definition,reason},detail.latest_version,k,s);if(alive.current&&!s.aborted){setEditing(false);setState(undefined);setVersionId(selectedVersion.id);setTick(x=>x+1);onUpdated?.(d);onName(definition.name);}})}/>:<>
-   <p className="document-hint">Editar altera esta mesma versão, mantém a aprovação existente e guarda o texto anterior na auditoria. Excluir retira a versão da biblioteca e das novas solicitações; se for a última, o modelo sai da biblioteca ativa.</p>
-   <div className="template-folder-actions"><button type="button" className="primary-button" disabled={locked} onClick={()=>setEditing(true)}>Editar conteúdo desta versão</button></div>
-   <label className="team-field">Motivo da exclusão<input maxLength={500} value={versionReason} disabled={locked} onChange={e=>setVersionReason(e.target.value)}/></label>
-   <button type="button" className="team-text-button" disabled={locked||!versionReason.trim()} onClick={()=>void run(async(k,s)=>{const d=await modelApi.versionCommand(office,detail.id,{kind:'delete',version_id:selectedVersion.id,expected_edited_at:selectedVersion.edited_at??null,reason:versionReason.trim()},detail.latest_version,k,s);if(alive.current&&!s.aborted){setVersionReason('');if(!d.versions.length)onArchived();else{setState(undefined);setVersionId(d.versions[0].id);setTick(x=>x+1);onUpdated?.(d);}}})}>Excluir esta versão</button>
-  </>}
- </details>}
- {state.can_manage&&<details><summary>Serviço, preço e campos da solicitação</summary><form onSubmit={e=>{e.preventDefault();void run(async(k,s)=>{const saved=await modelApi.offer(office,detail.id,offer,state.offer?.revision??state.offer_revision??0,k,s);if(alive.current&&!s.aborted)setState({...state,offer:saved,offer_revision:saved.revision});});}}><label className="team-field">Buscar serviço pelo código ou nome<input value={query} disabled={locked} maxLength={120} onChange={e=>{setQuery(e.target.value);setPage(1);}}/></label><label className="team-field">Serviço vinculado<select value={offer.service_id} disabled={locked} onChange={e=>setOffer({...offer,service_id:e.target.value})}><option value="">Selecione o serviço</option>{offer.service_id&&!services?.items.some(x=>x.id===offer.service_id)&&<option value={offer.service_id}>Serviço vinculado atual</option>}{services?.items.map(v=><option key={v.id} value={v.id}>{v.code} · {v.name}</option>)}</select></label>{services&&<div className="team-pagination"><button type="button" className="team-text-button" disabled={locked||page<=1} onClick={()=>setPage(x=>x-1)}>Anterior</button><span>{services.total} serviços</span><button type="button" className="team-text-button" disabled={locked||page*5>=services.total} onClick={()=>setPage(x=>x+1)}>Próxima</button></div>}
- <p className="document-hint">O preço vigente será usado nas novas solicitações. <Link to={paths.services}>Cadastrar serviço ou alterar valor</Link></p><label className="team-field">Nível de execução<select value={offer.execution_level} disabled={locked} onChange={e=>setOffer({...offer,execution_level:Number(e.target.value) as 1|2|3})}><option value={1}>Nível 1 · Super administrador</option><option value={2}>Nível 2 · Administrador</option><option value={3}>Nível 3 · Funcionário</option></select></label><label className="team-field">Informações necessárias para o cliente<textarea value={offer.instructions} disabled={locked} maxLength={2000} rows={3} onChange={e=>setOffer({...offer,instructions:e.target.value})}/></label>
- <fieldset disabled={locked}><legend>Campos solicitados ao cliente</legend>{fields.map(v=><div key={v.key}><label className="template-check"><input type="checkbox" checked={offer.intake_keys.includes(v.key)} onChange={e=>setOffer({...offer,intake_keys:e.target.checked?[...offer.intake_keys,v.key]:offer.intake_keys.filter(k=>k!==v.key),required_intake_keys:offer.required_intake_keys.filter(k=>k!==v.key)})}/>{v.label}</label>{offer.intake_keys.includes(v.key)&&<label className="template-check"><input type="checkbox" checked={offer.required_intake_keys.includes(v.key)} onChange={e=>setOffer({...offer,required_intake_keys:e.target.checked?[...offer.required_intake_keys,v.key]:offer.required_intake_keys.filter(k=>k!==v.key)})}/>Obrigatório para solicitar</label>}</div>)}</fieldset>
- <label className="template-check"><input type="checkbox" disabled={locked} checked={offer.portal_enabled} onChange={e=>setOffer({...offer,portal_enabled:e.target.checked})}/>Disponível no catálogo do cliente</label><label className="template-check"><input type="checkbox" disabled={locked} checked={offer.allow_self_approval} onChange={e=>setOffer({...offer,allow_self_approval:e.target.checked})}/>Permitir que o super administrador revise documento preparado por ele mesmo</label><button className="primary-button" disabled={locked||!offer.service_id}>Salvar vínculo e configuração</button></form></details>}
- {selectedVersion&&<SmartConfigEditor office={office} templateId={detail.id} version={selectedVersion} canManage={state.can_manage||state.can_manage_metadata} onDenied={onDenied}/>}
- </section>;
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import type { TemplateDetail } from '../../../shared/templates';
+import type {
+  ModelCommercialState,
+  DocumentOfferInput,
+} from '../../../shared/modelCommercial';
+import type { ServiceSummary } from '../../../shared/services';
+import { servicesApi } from '../services/api';
+import { paths } from '../../app/routes';
+import { isCustomTemplateKey } from '../../../shared/templates';
+import { modelApi } from './modelApi';
+import { CommercialError } from './api';
+import { TemplateForm } from '../templates/TemplateForm';
+import { SmartConfigEditor } from '../smartDocuments/SmartConfigEditor';
+import {
+  collectAllDocumentPages,
+  DOCUMENTS_AUTO_LOAD_CAP,
+  DOCUMENTS_BATCH_SIZE,
+  formatDocumentsCount,
+} from '../documents/documentsListModel';
+
+export function ModelManagement({
+  office,
+  detail,
+  selectedNumber,
+  onSelected,
+  onDuplicate,
+  onUpdated,
+  onChanged,
+  onName,
+  onArchived,
+  onDenied,
+  onPendingChange,
+}: {
+  office: string;
+  detail: TemplateDetail;
+  selectedNumber?: number;
+  onSelected?: (number: number) => void;
+  onDuplicate: (v: TemplateDetail) => void;
+  onUpdated?: (v: TemplateDetail) => void;
+  onChanged: () => void;
+  onName: (name: string) => void;
+  onArchived: () => void;
+  onDenied: (status: number) => void;
+  onPendingChange?: (pending: boolean) => void;
+}) {
+  const [state, setState] = useState<ModelCommercialState>();
+  const [name, setName] = useState('');
+  const [code, setCode] = useState('');
+  const [duplicateName, setDuplicateName] = useState('');
+  const [source, setSource] = useState(detail.versions[0]?.id ?? '');
+  const [versionId, setVersionId] = useState(
+    detail.versions.find(v => v.number === selectedNumber)?.id ??
+      detail.versions[0]?.id ??
+      '',
+  );
+  const [editing, setEditing] = useState(false);
+  const [versionReason, setVersionReason] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const [tick, setTick] = useState(0);
+  const [offer, setOffer] = useState<DocumentOfferInput>({
+    service_id: '',
+    instructions: '',
+    execution_level: 3,
+    portal_enabled: false,
+    intake_keys: [],
+    required_intake_keys: [],
+    allow_self_approval: false,
+  });
+  const [services, setServices] = useState<{ items: ServiceSummary[]; total: number }>();
+  const [query, setQuery] = useState('');
+
+  const alive = useRef(true);
+  const flight = useRef(false);
+  const c = useRef<AbortController | null>(null);
+  const attempt = useRef<{
+    key: string;
+    work: (key: string, s: AbortSignal) => Promise<void>;
+  } | null>(null);
+
+  useEffect(() => {
+    alive.current = true;
+    return () => {
+      alive.current = false;
+      c.current?.abort();
+    };
+  }, []);
+
+  function fail(e: unknown) {
+    setError(
+      e instanceof Error ? e.message : 'Não foi possível atualizar o modelo.',
+    );
+    if (e instanceof CommercialError && e.status !== 503) attempt.current = null;
+    if (e instanceof CommercialError && [401, 403].includes(e.status)) {
+      setState(undefined);
+      onDenied(e.status);
+    }
+  }
+
+  useEffect(() => {
+    const a = new AbortController();
+    void modelApi
+      .state(office, detail.id, a.signal)
+      .then(v => {
+        if (!a.signal.aborted) {
+          setState(v);
+          setName(v.metadata.display_name);
+          onName(v.metadata.display_name);
+          setOffer(
+            v.offer ?? {
+              service_id: '',
+              instructions: '',
+              execution_level: 3,
+              portal_enabled: false,
+              intake_keys: [],
+              required_intake_keys: [],
+              allow_self_approval: false,
+            },
+          );
+        }
+      })
+      .catch(e => {
+        if (!a.signal.aborted) fail(e);
+      });
+    return () => a.abort();
+  }, [office, detail.id, tick]);
+
+  useEffect(() => {
+    if (!state?.can_manage) return;
+    const a = new AbortController();
+    const t = setTimeout(() => {
+      void collectAllDocumentPages({
+        fetchPage: (page, s) =>
+          servicesApi.search(office, query, page, DOCUMENTS_BATCH_SIZE, s),
+        getItems: p => p.items,
+        getTotal: p => p.total,
+        getKey: item => item.id,
+        pageSize: DOCUMENTS_BATCH_SIZE,
+        maxItems: DOCUMENTS_AUTO_LOAD_CAP,
+        signal: a.signal,
+      })
+        .then(res => {
+          if (!a.signal.aborted) {
+            setServices({ items: res.items, total: res.total });
+          }
+        })
+        .catch(e => {
+          if (!a.signal.aborted) fail(e);
+        });
+    }, 250);
+    return () => {
+      clearTimeout(t);
+      a.abort();
+    };
+  }, [office, query, state?.can_manage]);
+
+  async function run(work: (key: string, s: AbortSignal) => Promise<void>) {
+    if (flight.current) return;
+    const a = attempt.current ?? { key: crypto.randomUUID(), work };
+    attempt.current = a;
+    const controller = new AbortController();
+    c.current = controller;
+    flight.current = true;
+    setBusy(true);
+    setError('');
+    setMessage('');
+    try {
+      await a.work(a.key, controller.signal);
+      if (alive.current && !controller.signal.aborted) {
+        attempt.current = null;
+        setMessage('Alteração registrada.');
+        onChanged();
+      }
+    } catch (e) {
+      if (alive.current && !controller.signal.aborted) fail(e);
+    } finally {
+      if (alive.current) {
+        flight.current = false;
+        setBusy(false);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (!editing && !flight.current) {
+      const selected = detail.versions.find(v => v.number === selectedNumber);
+      if (selected) setVersionId(selected.id);
+    }
+  }, [selectedNumber, detail.versions, editing]);
+
+  const onPending = useRef(onPendingChange);
+  onPending.current = onPendingChange;
+  useEffect(() => {
+    onPending.current?.(busy || !!attempt.current);
+  }, [busy, error]);
+  useEffect(() => () => onPending.current?.(false), []);
+
+  const locked = busy || !!attempt.current;
+  const selectedVersion =
+    detail.versions.find(v => v.id === versionId) ?? detail.versions[0];
+  const version =
+    detail.versions.find(v => v.id === source) ?? detail.versions[0];
+  const fields =
+    version?.variables.filter(v => isCustomTemplateKey(v.key)) ?? [];
+
+  if (!state) {
+    return (
+      <section className="documents-detail-card">
+        {error && (
+          <p role="alert" className="form-feedback error">
+            {error}
+          </p>
+        )}
+        <button className="team-text-button" onClick={() => setTick(x => x + 1)}>
+          Consultar configuração do modelo
+        </button>
+      </section>
+    );
+  }
+
+  return (
+    <section
+      className="model-management documents-detail-card"
+      aria-label="Configuração do modelo"
+    >
+      <h2>{state.metadata.display_name}</h2>
+      {message && (
+        <p role="status" className="form-feedback">
+          {message}
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="form-feedback error">
+          {error}
+        </p>
+      )}
+      {attempt.current && !busy && (
+        <button
+          className="team-text-button"
+          onClick={() => void run(attempt.current!.work)}
+        >
+          Repetir alteração
+        </button>
+      )}
+      {state.can_manage_metadata && (
+        <details>
+          <summary>Nome, duplicação e exclusão</summary>
+          <form
+            onSubmit={e => {
+              e.preventDefault();
+              void run(async (k, s) => {
+                const metadata = await modelApi.metadata(
+                  office,
+                  detail.id,
+                  { kind: 'rename', name: name.trim() },
+                  state.metadata.revision,
+                  k,
+                  s,
+                );
+                if (!s.aborted && alive.current) {
+                  setState({ ...state, metadata });
+                  onName(metadata.display_name);
+                }
+              });
+            }}
+          >
+            <label className="team-field">
+              Título do modelo
+              <input
+                value={name}
+                maxLength={120}
+                disabled={locked}
+                onChange={e => setName(e.target.value)}
+              />
+            </label>
+            <div className="template-folder-actions">
+              <button
+                className="primary-button"
+                disabled={locked || !name.trim()}
+              >
+                Renomear modelo
+              </button>
+              <button
+                type="button"
+                className="team-text-button"
+                disabled={locked}
+                onClick={() =>
+                  void run(async (k, s) => {
+                    const metadata = await modelApi.metadata(
+                      office,
+                      detail.id,
+                      { kind: 'archive' },
+                      state.metadata.revision,
+                      k,
+                      s,
+                    );
+                    if (!s.aborted && alive.current) {
+                      setState({ ...state, metadata });
+                      onArchived();
+                    }
+                  })
+                }
+              >
+                Excluir da biblioteca ativa
+              </button>
+            </div>
+            <p className="document-hint">
+              A exclusão retira o modelo das novas solicitações e conserva o
+              histórico dos atendimentos existentes.
+            </p>
+          </form>
+          <form
+            onSubmit={e => {
+              e.preventDefault();
+              void run(async (k, s) => {
+                const d = await modelApi.duplicate(
+                  office,
+                  detail.id,
+                  source,
+                  code,
+                  duplicateName.trim(),
+                  k,
+                  s,
+                );
+                if (alive.current && !s.aborted) onDuplicate(d);
+              });
+            }}
+          >
+            <label className="team-field">
+              Versão para duplicar
+              <select
+                value={source}
+                disabled={locked}
+                onChange={e => setSource(e.target.value)}
+              >
+                {detail.versions.map(v => (
+                  <option key={v.id} value={v.id}>
+                    Versão {v.number} · {v.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="template-folder-controls">
+              <label className="team-field">
+                Novo código
+                <input
+                  value={code}
+                  maxLength={32}
+                  disabled={locked}
+                  onChange={e => setCode(e.target.value.toUpperCase())}
+                />
+              </label>
+              <label className="team-field">
+                Título da cópia
+                <input
+                  value={duplicateName}
+                  maxLength={120}
+                  disabled={locked}
+                  onChange={e => setDuplicateName(e.target.value)}
+                />
+              </label>
+            </div>
+            <button
+              className="team-text-button"
+              disabled={
+                locked ||
+                !source ||
+                !/^[A-Z0-9][A-Z0-9_-]{1,31}$/.test(code) ||
+                !duplicateName.trim()
+              }
+            >
+              Duplicar como rascunho
+            </button>
+          </form>
+        </details>
+      )}
+      {state.can_manage_metadata && selectedVersion && (
+        <details open>
+          <summary>Editar ou excluir versão</summary>
+          <label className="team-field">
+            Versão
+            <select
+              value={selectedVersion.id}
+              disabled={locked || editing}
+              onChange={e => {
+                setVersionId(e.target.value);
+                const selected = detail.versions.find(
+                  v => v.id === e.target.value,
+                );
+                if (selected) onSelected?.(selected.number);
+                setVersionReason('');
+              }}
+            >
+              {detail.versions.map(v => (
+                <option key={v.id} value={v.id}>
+                  Versão {v.number} · {v.approved_at ? 'Aprovada' : 'Rascunho'}{' '}
+                  · {v.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          {editing ? (
+            <TemplateForm
+              initial={{ ...selectedVersion, name: state.metadata.display_name }}
+              mode="edit"
+              busy={locked}
+              locked={false}
+              conflict={false}
+              onCancel={() => setEditing(false)}
+              onSave={(definition, reason) =>
+                void run(async (k, s) => {
+                  const d = await modelApi.versionCommand(
+                    office,
+                    detail.id,
+                    {
+                      kind: 'edit',
+                      version_id: selectedVersion.id,
+                      expected_edited_at: selectedVersion.edited_at ?? null,
+                      definition,
+                      reason,
+                    },
+                    detail.latest_version,
+                    k,
+                    s,
+                  );
+                  if (alive.current && !s.aborted) {
+                    setEditing(false);
+                    setState(undefined);
+                    setVersionId(selectedVersion.id);
+                    setTick(x => x + 1);
+                    onUpdated?.(d);
+                    onName(definition.name);
+                  }
+                })
+              }
+            />
+          ) : (
+            <>
+              <p className="document-hint">
+                Editar altera esta mesma versão, mantém a aprovação existente e
+                guarda o texto anterior na auditoria. Excluir retira a versão da
+                biblioteca e das novas solicitações; se for a última, o modelo
+                sai da biblioteca ativa.
+              </p>
+              <div className="template-folder-actions">
+                <button
+                  type="button"
+                  className="primary-button"
+                  disabled={locked}
+                  onClick={() => setEditing(true)}
+                >
+                  Editar conteúdo desta versão
+                </button>
+              </div>
+              <label className="team-field">
+                Motivo da exclusão
+                <input
+                  maxLength={500}
+                  value={versionReason}
+                  disabled={locked}
+                  onChange={e => setVersionReason(e.target.value)}
+                />
+              </label>
+              <button
+                type="button"
+                className="team-text-button"
+                disabled={locked || !versionReason.trim()}
+                onClick={() =>
+                  void run(async (k, s) => {
+                    const d = await modelApi.versionCommand(
+                      office,
+                      detail.id,
+                      {
+                        kind: 'delete',
+                        version_id: selectedVersion.id,
+                        expected_edited_at: selectedVersion.edited_at ?? null,
+                        reason: versionReason.trim(),
+                      },
+                      detail.latest_version,
+                      k,
+                      s,
+                    );
+                    if (alive.current && !s.aborted) {
+                      setVersionReason('');
+                      if (!d.versions.length) onArchived();
+                      else {
+                        setState(undefined);
+                        setVersionId(d.versions[0].id);
+                        setTick(x => x + 1);
+                        onUpdated?.(d);
+                      }
+                    }
+                  })
+                }
+              >
+                Excluir esta versão
+              </button>
+            </>
+          )}
+        </details>
+      )}
+      {state.can_manage && (
+        <details>
+          <summary>Serviço, preço e campos da solicitação</summary>
+          <form
+            onSubmit={e => {
+              e.preventDefault();
+              void run(async (k, s) => {
+                const saved = await modelApi.offer(
+                  office,
+                  detail.id,
+                  offer,
+                  state.offer?.revision ?? state.offer_revision ?? 0,
+                  k,
+                  s,
+                );
+                if (alive.current && !s.aborted) {
+                  setState({ ...state, offer: saved, offer_revision: saved.revision });
+                }
+              });
+            }}
+          >
+            <label className="team-field">
+              Buscar serviço pelo código ou nome
+              <input
+                value={query}
+                disabled={locked}
+                maxLength={120}
+                onChange={e => setQuery(e.target.value)}
+              />
+            </label>
+            <label className="team-field">
+              Serviço vinculado
+              <select
+                value={offer.service_id}
+                disabled={locked}
+                onChange={e => setOffer({ ...offer, service_id: e.target.value })}
+              >
+                <option value="">Selecione o serviço</option>
+                {offer.service_id &&
+                  !services?.items.some(x => x.id === offer.service_id) && (
+                    <option value={offer.service_id}>
+                      Serviço vinculado atual
+                    </option>
+                  )}
+                {services?.items.map(v => (
+                  <option key={v.id} value={v.id}>
+                    {v.code} · {v.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {services && (
+              <p className="document-hint">
+                {formatDocumentsCount(
+                  services.total,
+                  'serviço disponível',
+                  'serviços disponíveis',
+                )}
+                .
+              </p>
+            )}
+            <p className="document-hint">
+              O preço vigente será usado nas novas solicitações.{' '}
+              <Link to={paths.services}>Cadastrar serviço ou alterar valor</Link>
+            </p>
+            <label className="team-field">
+              Nível de execução
+              <select
+                value={offer.execution_level}
+                disabled={locked}
+                onChange={e =>
+                  setOffer({
+                    ...offer,
+                    execution_level: Number(e.target.value) as 1 | 2 | 3,
+                  })
+                }
+              >
+                <option value={1}>Nível 1 · Super administrador</option>
+                <option value={2}>Nível 2 · Administrador</option>
+                <option value={3}>Nível 3 · Funcionário</option>
+              </select>
+            </label>
+            <label className="team-field">
+              Informações necessárias para o cliente
+              <textarea
+                value={offer.instructions}
+                disabled={locked}
+                maxLength={2000}
+                rows={3}
+                onChange={e =>
+                  setOffer({ ...offer, instructions: e.target.value })
+                }
+              />
+            </label>
+            <fieldset disabled={locked}>
+              <legend>Campos solicitados ao cliente</legend>
+              {fields.map(v => (
+                <div key={v.key}>
+                  <label className="template-check">
+                    <input
+                      type="checkbox"
+                      checked={offer.intake_keys.includes(v.key)}
+                      onChange={e =>
+                        setOffer({
+                          ...offer,
+                          intake_keys: e.target.checked
+                            ? [...offer.intake_keys, v.key]
+                            : offer.intake_keys.filter(k => k !== v.key),
+                          required_intake_keys:
+                            offer.required_intake_keys.filter(k => k !== v.key),
+                        })
+                      }
+                    />
+                    {v.label}
+                  </label>
+                  {offer.intake_keys.includes(v.key) && (
+                    <label className="template-check">
+                      <input
+                        type="checkbox"
+                        checked={offer.required_intake_keys.includes(v.key)}
+                        onChange={e =>
+                          setOffer({
+                            ...offer,
+                            required_intake_keys: e.target.checked
+                              ? [...offer.required_intake_keys, v.key]
+                              : offer.required_intake_keys.filter(
+                                  k => k !== v.key,
+                                ),
+                          })
+                        }
+                      />
+                      Obrigatório para solicitar
+                    </label>
+                  )}
+                </div>
+              ))}
+            </fieldset>
+            <label className="template-check">
+              <input
+                type="checkbox"
+                disabled={locked}
+                checked={offer.portal_enabled}
+                onChange={e =>
+                  setOffer({ ...offer, portal_enabled: e.target.checked })
+                }
+              />
+              Disponível no catálogo do cliente
+            </label>
+            <label className="template-check">
+              <input
+                type="checkbox"
+                disabled={locked}
+                checked={offer.allow_self_approval}
+                onChange={e =>
+                  setOffer({ ...offer, allow_self_approval: e.target.checked })
+                }
+              />
+              Permitir que o super administrador revise documento preparado por
+              ele mesmo
+            </label>
+            <button
+              className="primary-button"
+              disabled={locked || !offer.service_id}
+            >
+              Salvar vínculo e configuração
+            </button>
+          </form>
+        </details>
+      )}
+      {selectedVersion && (
+        <SmartConfigEditor
+          office={office}
+          templateId={detail.id}
+          version={selectedVersion}
+          canManage={state.can_manage || state.can_manage_metadata}
+          onDenied={onDenied}
+        />
+      )}
+    </section>
+  );
 }

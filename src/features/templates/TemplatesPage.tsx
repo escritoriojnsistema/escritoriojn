@@ -22,6 +22,7 @@ import {
 import { TemplateForm } from './TemplateForm';
 import { TemplateDetail } from './TemplateDetail';
 import {
+  collectAllDocumentPages,
   DOCUMENTS_AUTO_LOAD_CAP,
   DOCUMENTS_BATCH_SIZE,
   formatTemplateMeta,
@@ -384,12 +385,35 @@ function Workspace({
     }
   }
 
+  async function fetchFullTemplateDetail(
+    id: string,
+    signal: AbortSignal,
+    number?: number,
+  ): Promise<Detail> {
+    const collected = await collectAllDocumentPages({
+      fetchPage: (page, s) =>
+        templatesApi.detail(office, id, page, s, page === 1 ? number : undefined),
+      getItems: d => d.versions,
+      getTotal: d => d.history_total,
+      getKey: v => v.id,
+      pageSize: DOCUMENTS_BATCH_SIZE,
+      maxItems: DOCUMENTS_AUTO_LOAD_CAP,
+      signal,
+    });
+    return {
+      ...collected.firstPage,
+      versions: collected.items,
+      history_total: collected.total,
+      history_page: 1,
+    };
+  }
+
   function open(id: string, number?: number, name?: string) {
     transition('detail');
     setDetail(undefined);
     setDisplayName(name ?? '');
     setConsultedVersion(number);
-    void run(s => templatesApi.detail(office, id, 1, s, number), setDetail);
+    void run(s => fetchFullTemplateDetail(id, s, number), setDetail);
   }
 
   function back() {
@@ -404,7 +428,7 @@ function Workspace({
       transition('edit');
     } else {
       void run(
-        s => templatesApi.detail(office, detail.id, 1, s),
+        s => fetchFullTemplateDetail(detail.id, s),
         d => {
           setDetail(d);
           setConsultedVersion(d.versions[0]?.number);
@@ -666,7 +690,7 @@ function Workspace({
             ) : (
               detail && (
                 <TemplateDetail
-                  key={`${detail.id}:${detail.history_page}:${detail.latest_version}`}
+                  key={`${detail.id}:${detail.latest_version}:${detail.versions.length}`}
                   data={detail}
                   selectedNumber={consultedVersion}
                   onSelected={setConsultedVersion}
@@ -679,15 +703,6 @@ function Workspace({
                     ['owner', 'admin'].includes(context.role_code)
                   }
                   onApprove={approve}
-                  onHistory={p =>
-                    void run(
-                      s => templatesApi.detail(office, detail.id, p, s),
-                      d => {
-                        setDetail(d);
-                        setConsultedVersion(d.versions[0]?.number);
-                      },
-                    )
-                  }
                 />
               )
             )}

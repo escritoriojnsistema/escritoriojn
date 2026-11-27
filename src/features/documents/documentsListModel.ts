@@ -78,3 +78,56 @@ export function formatDocumentsCount(
   const safe = Math.max(0, Math.floor(total));
   return safe === 1 ? `1 ${singular}` : `${safe} ${plural}`;
 }
+
+export async function collectAllDocumentPages<TPage, TItem>(params: {
+  fetchPage: (page: number, signal?: AbortSignal) => Promise<TPage>;
+  getItems: (page: TPage) => readonly TItem[];
+  getTotal: (page: TPage) => number;
+  getKey: (item: TItem) => string;
+  pageSize?: number;
+  maxItems?: number;
+  signal?: AbortSignal;
+}): Promise<{
+  firstPage: TPage;
+  items: TItem[];
+  total: number;
+  loadedPage: number;
+  lastBatchSize: number;
+}> {
+  const pageSize = params.pageSize ?? DOCUMENTS_BATCH_SIZE;
+  const maxItems = params.maxItems ?? DOCUMENTS_AUTO_LOAD_CAP;
+  const firstPage = await params.fetchPage(1, params.signal);
+  let items = [...params.getItems(firstPage)];
+  let total = params.getTotal(firstPage);
+  let loadedPage = 1;
+  let lastBatchSize = items.length;
+
+  while (
+    !params.signal?.aborted &&
+    shouldLoadMoreDocumentPages({
+      loadedCount: items.length,
+      total,
+      lastBatchSize,
+      pageSize,
+      maxItems,
+    })
+  ) {
+    const nextPage = loadedPage + 1;
+    const response = await params.fetchPage(nextPage, params.signal);
+    if (params.signal?.aborted) break;
+    const batch = params.getItems(response);
+    items = mergeByKey(items, batch, params.getKey);
+    total = params.getTotal(response);
+    loadedPage = nextPage;
+    lastBatchSize = batch.length;
+    if (batch.length === 0) break;
+  }
+
+  return {
+    firstPage,
+    items,
+    total,
+    loadedPage,
+    lastBatchSize,
+  };
+}

@@ -8,7 +8,7 @@ import {
   type UIEvent,
 } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
-import { Eye, Plus, RefreshCw, Search } from 'lucide-react';
+import { ArrowLeft, Eye, History, Plus, RefreshCw, RotateCcw, Search, Users } from 'lucide-react';
 import type { AccessContext } from '../../../shared/access';
 import {
   validParticipants,
@@ -24,6 +24,7 @@ import { documentsApi, documentsError, DocumentsError } from './api';
 import { DocumentEditor } from './DocumentEditor';
 import { OptionPicker, ParticipantsForm } from './DocumentOptions';
 import {
+  collectAllDocumentPages,
   DOCUMENTS_AUTO_LOAD_CAP,
   DOCUMENTS_BATCH_SIZE,
   formatIssuedDocumentMeta,
@@ -366,16 +367,37 @@ function Workspace({
     }
   }
 
+  async function fetchFullDocumentDetail(
+    id: string,
+    revision: number | null,
+    signal: AbortSignal,
+  ): Promise<DocumentDetail> {
+    const collected = await collectAllDocumentPages({
+      fetchPage: (page, s) => documentsApi.detail(office, id, revision, page, s),
+      getItems: d => d.history,
+      getTotal: d => d.history_total,
+      getKey: h => String(h.revision),
+      pageSize: DOCUMENTS_BATCH_SIZE,
+      maxItems: DOCUMENTS_AUTO_LOAD_CAP,
+      signal,
+    });
+    return {
+      ...collected.firstPage,
+      history: collected.items,
+      history_total: collected.total,
+      history_page: 1,
+    };
+  }
+
   function open(
     id: string,
     revision: number | null = null,
-    history_page = 1,
     nextEntry: 'text' | 'review' = 'text',
   ) {
     setEntry(nextEntry);
     setDetail(undefined);
     setView('editor');
-    void run(s => documentsApi.detail(office, id, revision, history_page, s));
+    void run(s => fetchFullDocumentDetail(id, revision, s));
   }
 
   useEffect(() => {
@@ -388,7 +410,6 @@ function Workspace({
       open(
         id,
         null,
-        1,
         location.state?.document_entry === 'review' ? 'review' : 'text',
       );
     }
@@ -546,91 +567,171 @@ function Workspace({
           </Link>
         </div>
       ) : view === 'editor' ? (
-        <div className="documents-subview-scroll">
-          {detail && (
-            <DocumentEditor
-              key={`${detail.id}:${epoch}`}
-              initial={detail}
-              entry={entry}
-              office={office}
-              onState={setQueueState}
-              onDenied={denied}
-              onError={fail}
-              sideView={sideView}
-              onSideView={setSideView}
-              onHistory={(r, p) => open(detail.id, r, p)}
-            />
-          )}
-        </div>
-      ) : view === 'create' ? (
-        <div className="documents-subview-scroll">
-          <form
-            className="documents-create-card"
-            onSubmit={e => {
-              e.preventDefault();
-              create();
-            }}
-          >
-            <div className="document-create-grid">
-              <OptionPicker
+        <>
+          <div className="documents-subview-bar">
+            <button
+              type="button"
+              data-operation-local-return
+              className="documents-subview-back"
+              disabled={editorBusy || queueState.dirty || uncertain}
+              onClick={back}
+            >
+              <ArrowLeft size={16} aria-hidden="true" />
+              Voltar à lista
+            </button>
+            {detail && (
+              <div className="documents-subview-actions">
+                <button
+                  type="button"
+                  className={`documents-subview-action${sideView === 'history' ? ' is-active' : ''}`}
+                  disabled={editorBusy || queueState.dirty || queueState.conflict}
+                  onClick={() =>
+                    setSideView(current => (current === 'history' ? 'none' : 'history'))
+                  }
+                >
+                  <History size={15} aria-hidden="true" />
+                  Histórico
+                </button>
+                {detail.can_edit && (
+                  <button
+                    type="button"
+                    className={`documents-subview-action${sideView === 'participants' ? ' is-active' : ''}`}
+                    disabled={editorBusy || queueState.dirty || queueState.conflict}
+                    onClick={() =>
+                      setSideView(current =>
+                        current === 'participants' ? 'none' : 'participants',
+                      )
+                    }
+                  >
+                    <Users size={15} aria-hidden="true" />
+                    Participantes
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="documents-subview-action"
+                  disabled={editorBusy}
+                  onClick={() => {
+                    setSideView('none');
+                    open(detail.id);
+                  }}
+                >
+                  <RotateCcw size={15} aria-hidden="true" />
+                  Reabrir
+                </button>
+                {queueState.retryable && (
+                  <button
+                    type="button"
+                    className="documents-subview-action is-primary"
+                    disabled={editorBusy}
+                    onClick={queueState.retry}
+                  >
+                    Repetir
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+          <div className="documents-subview-scroll">
+            {detail && (
+              <DocumentEditor
+                key={`${detail.id}:${epoch}`}
+                initial={detail}
+                entry={entry}
                 office={office}
-                kind="requests"
-                label="Atendimento"
-                value={request}
-                disabled={locked}
-                onChange={id => {
-                  setRequest(id);
-                  setItem('');
-                }}
+                onState={setQueueState}
+                onDenied={denied}
                 onError={fail}
+                sideView={sideView}
+                onSideView={setSideView}
+                onHistory={r => open(detail.id, r)}
               />
-              {request && (
+            )}
+          </div>
+        </>
+      ) : view === 'create' ? (
+        <>
+          <div className="documents-subview-bar">
+            <button
+              type="button"
+              data-operation-local-return
+              className="documents-subview-back"
+              disabled={editorBusy || queueState.dirty || uncertain}
+              onClick={back}
+            >
+              <ArrowLeft size={16} aria-hidden="true" />
+              Voltar à lista
+            </button>
+          </div>
+          <div className="documents-subview-scroll">
+            <form
+              className="documents-create-card"
+              onSubmit={e => {
+                e.preventDefault();
+                create();
+              }}
+            >
+              <div className="document-create-grid">
                 <OptionPicker
-                  key={request}
                   office={office}
-                  kind="items"
-                  requestId={request}
-                  label="Item do atendimento"
-                  value={item}
+                  kind="requests"
+                  label="Atendimento"
+                  value={request}
                   disabled={locked}
-                  onChange={setItem}
+                  onChange={id => {
+                    setRequest(id);
+                    setItem('');
+                  }}
                   onError={fail}
                 />
-              )}
-              <OptionPicker
-                office={office}
-                kind="templates"
-                label="Modelo aprovado"
-                value={template}
-                disabled={locked}
-                onChange={setTemplate}
-                onError={fail}
-              />
-            </div>
-            <details className="document-create-parties" open>
-              <summary>Participantes e papéis</summary>
-              <ParticipantsForm
-                office={office}
-                value={parts}
-                onChange={setParts}
-                disabled={locked}
-                onError={fail}
-              />
-            </details>
-            <button
-              className="documents-primary-btn"
-              type="submit"
-              disabled={
-                busy || !request || !item || !template || !validParticipants(parts)
-              }
-            >
-              Criar rascunho
-            </button>
-            <p className="document-hint">
-              O atendimento, o modelo vigente e as fontes serão conferidos no servidor.
-            </p>
-          </form>
-        </div>
+                {request && (
+                  <OptionPicker
+                    key={request}
+                    office={office}
+                    kind="items"
+                    requestId={request}
+                    label="Item do atendimento"
+                    value={item}
+                    disabled={locked}
+                    onChange={setItem}
+                    onError={fail}
+                  />
+                )}
+                <OptionPicker
+                  office={office}
+                  kind="templates"
+                  label="Modelo aprovado"
+                  value={template}
+                  disabled={locked}
+                  onChange={setTemplate}
+                  onError={fail}
+                />
+              </div>
+              <details className="document-create-parties" open>
+                <summary>Participantes e papéis</summary>
+                <ParticipantsForm
+                  office={office}
+                  value={parts}
+                  onChange={setParts}
+                  disabled={locked}
+                  onError={fail}
+                />
+              </details>
+              <button
+                className="documents-primary-btn"
+                type="submit"
+                disabled={
+                  busy || !request || !item || !template || !validParticipants(parts)
+                }
+              >
+                Criar rascunho
+              </button>
+              <p className="document-hint">
+                O atendimento, o modelo vigente e as fontes serão conferidos no servidor.
+              </p>
+            </form>
+          </div>
+        </>
       ) : (
         <>
           <section
